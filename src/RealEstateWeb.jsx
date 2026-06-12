@@ -9920,6 +9920,10 @@ export default function BricksyTravel() {
 
   const getCEFVal = (cKey) => editContent[cKey] !== undefined ? editContent[cKey] : data.content[cKey];
 
+  const navItems = [
+    { key: "home",  label: data.content.nav1 || "Home" },
+    { key: "about", label: data.content.nav2 || "About" },
+    { key: "news",  label: data.content.nav3 || "Portfolio" },
   ];
   // Dropdown: Layanan Developer
   const navDropdownLayanan = [
@@ -10316,6 +10320,9 @@ export default function BricksyTravel() {
                 overflowY: "auto",
                 WebkitOverflowScrolling: "touch"
               }}>
+                {navItems.map(item => (
+                  <button key={item.key} onClick={() => { navigateTo(item.key); setMobileMenu(false); }}
+                    style={{
                       fontSize: ".8rem", letterSpacing: ".14em", textTransform: "uppercase", fontFamily: "'Jost',sans-serif",
                       color: page === item.key ? "var(--re-black)" : "var(--re-grey-dk)",
                       fontWeight: page === item.key ? 700 : 400,
@@ -11395,4 +11402,3 @@ export default function BricksyTravel() {
     </div>
   );
 }
-
