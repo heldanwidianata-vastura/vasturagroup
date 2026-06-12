@@ -549,13 +549,13 @@ const DEFAULT_POSTS = {
     },
     {
       id: 3, section: "news", status: "published",
-      title: "Kenangan Tak Terlupakan Bersama Real Estate Web",
+      title: "Kenangan Tak Terlupakan Bersama VASTURA GROUP",
       date: "2026-04-15", author: "writer1", category: "Experience",
       coverImage: "",
-      excerpt: "Setiap perjalanan bersama RealEstate adalah cerita yang akan selalu dikenang.",
+      excerpt: "Setiap perjalanan bersama VASTURA adalah cerita yang akan selalu dikenang.",
       content: [
         { type: "paragraph", value: "Perjalanan bukan sekadar soal destinasi — melainkan tentang momen yang membuat hati terasa penuh. Saat matahari terbenam di Pura Tanah Lot, saat pertama kali menginjakkan kaki di hamparan sawah Tegalalang, atau saat tawa riang di tengah petualangan bersama orang-orang tersayang." },
-        { type: "paragraph", value: "Bersama Real Estate Web, setiap detail perjalanan Anda direncanakan dengan penuh perhatian. Kami percaya bahwa kenangan terbaik lahir dari pengalaman yang dirancang dengan hati." },
+        { type: "paragraph", value: "Bersama VASTURA GROUP, setiap detail perjalanan Anda direncanakan dengan penuh perhatian. Kami percaya bahwa kenangan terbaik lahir dari pengalaman yang dirancang dengan hati." },
       ],
       tags: ["kenangan", "realestate", "wisata", "bali"],
     },
@@ -649,11 +649,11 @@ const DEFAULT_DATA = {
     bookSub: "Tim ahli kami siap membantu dari perencanaan hingga serah terima kunci — gratis konsultasi pertama.",
     newsletterTitle: "Dapatkan Update Proyek & Promo Terbaru",
     foundingYear: "2026",
-    aboutText: "Real Estate Web adalah developer perumahan dan penyedia jasa desain terpercaya sejak 2026. Kami membangun hunian impian dengan standar kualitas tinggi dan harga transparan.",
-    contactText: "Hubungi kami untuk konsultasi gratis. Tim Real Estate Web siap membantu mewujudkan hunian impian Anda — dari desain, RAB, interior, pagar, kanopi, hingga landscape.",
+    aboutText: "VASTURA GROUP adalah developer perumahan dan penyedia jasa desain terpercaya sejak 2026. Kami membangun hunian impian dengan standar kualitas tinggi dan harga transparan.",
+    contactText: "Hubungi kami untuk konsultasi gratis. Tim VASTURA GROUP siap membantu mewujudkan hunian impian Anda — dari desain, RAB, interior, pagar, kanopi, hingga landscape.",
     aboutHeroLabel: "About Us",
     aboutHeroTitle: "Membangun Hunian, Mewujudkan Impian",
-    aboutHeroSub: "Real Estate Web adalah developer perumahan dan jasa desain terpercaya. Kami berkomitmen menghadirkan hunian berkualitas dengan layanan lengkap dari desain hingga finishing.",
+    aboutHeroSub: "VASTURA GROUP adalah developer perumahan dan jasa desain terpercaya. Kami berkomitmen menghadirkan hunian berkualitas dengan layanan lengkap dari desain hingga finishing.",
     aboutWhyTitle: "Why Choose Us",
     aboutV1Icon: "🏠", aboutV1Title: "Desain Profesional", aboutV1Desc: "Tim arsitek & desainer interior berpengalaman untuk setiap proyek.",
     aboutV2Icon: "🛡",  aboutV2Title: "Terpercaya & Legal", aboutV2Desc: "Semua proyek dilaksanakan sesuai perizinan dan standar konstruksi yang berlaku.",
@@ -679,11 +679,11 @@ const DEFAULT_DATA = {
     logoColor: "#111111",
     logoShadow: "0 1px 6px rgba(0,0,0,.35), 0 2px 14px rgba(0,0,0,.18)",
     loginBtnText: "LOGIN",
-    nav1: "Home", nav2: "About", nav3: "Portfolio", nav4: "Traveling", nav5: "Wedding Organizer", nav6: "Layanan Kami",
+    nav1: "Home", nav2: "About", nav3: "Program Affiliate", nav4: "Traveling", nav5: "Wedding Organizer", nav6: "Layanan Kami",
     nav7: "Jasa Desain & RAB", nav8: "Tema Rumah",
     nav9: "Interior", nav10: "Pagar Rumah", nav11: "Kanopi", nav12: "Aluminium", nav13: "Landscape & Taman",
     servicesPageTitle: "Paket Layanan Kami",
-    servicesPageSub: "Pilih paket yang sesuai dengan kebutuhan Anda. Setiap paket dirancang untuk memberikan pengalaman terbaik bersama Real Estate Web.",
+    servicesPageSub: "Pilih paket yang sesuai dengan kebutuhan Anda. Setiap paket dirancang untuk memberikan pengalaman terbaik bersama VASTURA GROUP.",
   },
   posts: DEFAULT_POSTS,
   cats: ["Experience Thailand", "Best Adventures", "Sea & Beach", "Hiking Tours", "Kayaking Tours", "Winter Destinations"],
@@ -3825,7 +3825,7 @@ function ArticleDetail({ post, onBack, allPosts = [], onReadPost }) {
             <div className="art-content-inner">
               {/* Breadcrumb */}
               <div className="art-breadcrumb">
-                Real Estate Web / <span>{breadSection}</span>
+                VASTURA GROUP / <span>{breadSection}</span>
               </div>
 
               {/* Title */}
@@ -3965,7 +3965,7 @@ function ArticleDetail({ post, onBack, allPosts = [], onReadPost }) {
           {/* ── Ad Placeholder ── */}
           <div style={{ background: "#fff", borderRadius: 6, border: "1px dashed #ddd", marginBottom: 20, height: 240, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", color: "#bbb", gap: 8 }}>
             <div style={{ fontSize: 28 }}>🏔</div>
-            <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: "1px", textTransform: "uppercase" }}>Real Estate Web</div>
+            <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: "1px", textTransform: "uppercase" }}>VASTURA GROUP</div>
             <div style={{ fontSize: 11, color: "#ccc", textAlign: "center", padding: "0 20px", lineHeight: 1.6 }}>
               Wujudkan perjalanan impian & momen spesialmu bersama kami
             </div>
@@ -4126,7 +4126,7 @@ function SectionPage({ section, posts, onReadPost }) {
       <div style={{ background: "linear-gradient(135deg, #0891b2 0%, #0ea5c5 100%)", padding: "60px 5%", color: "#fff" }}>
         <div style={{ maxWidth: 1200, margin: "0 auto" }}>
           <div style={{ fontSize: "0.6875rem", letterSpacing: "2px", color: "#7dc8de", textTransform: "uppercase", marginBottom: 12, fontWeight: 600 }}>
-            {meta.icon} Real Estate Web
+            {meta.icon} VASTURA GROUP
           </div>
           <h1 className="display" style={{ fontSize: "clamp(2rem, 5vw, 3.5rem)", fontWeight: 900, lineHeight: 1.08, marginBottom: 16, color: "#fff" }}>
             {meta.title}
@@ -4299,7 +4299,7 @@ function EventWeddingCustomCardWide({ svc, onDetail, onWaOpen }) {
             onMouseLeave={e => { e.currentTarget.style.opacity = "1"; e.currentTarget.style.transform = "scale(1)"; }}>
             Lihat Detail &amp; Konsultasi
           </button>
-          <button onClick={() => onWaOpen && onWaOpen(`Halo Real Estate Web! 👋\n\nSaya tertarik dengan paket:\n*${svc.title}*\n\nMohon informasi lebih lanjut. Terima kasih!`)}
+          <button onClick={() => onWaOpen && onWaOpen(`Halo VASTURA GROUP! 👋\n\nSaya tertarik dengan paket:\n*${svc.title}*\n\nMohon informasi lebih lanjut. Terima kasih!`)}
             style={{ padding: "12px 24px", background: "#25d366", color: "#fff", borderRadius: 10, fontSize: "0.9375rem", fontWeight: 700, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 8, border: "none", transition: "opacity .2s", width: isMobile ? "100%" : "auto" }}
             onMouseEnter={e => e.currentTarget.style.opacity = ".85"}
             onMouseLeave={e => e.currentTarget.style.opacity = "1"}>
@@ -4632,7 +4632,7 @@ function TravelPackageCardWide({ svc, onDetail, onWaOpen }) {
             onMouseLeave={e => e.currentTarget.style.opacity = "1"}>
             Lihat Detail &amp; Konsultasi
           </button>
-          <button onClick={() => onWaOpen && onWaOpen(`Halo Real Estate Web! 👋\n\nSaya tertarik dengan paket:\n*${svc.title}*\n\nMohon informasi lebih lanjut. Terima kasih!`)}
+          <button onClick={() => onWaOpen && onWaOpen(`Halo VASTURA GROUP! 👋\n\nSaya tertarik dengan paket:\n*${svc.title}*\n\nMohon informasi lebih lanjut. Terima kasih!`)}
             style={{ padding: "12px 24px", background: "#25d366", color: "#fff", borderRadius: 10, fontSize: "0.9375rem", fontWeight: 700, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 8, border: "none", transition: "opacity .2s", width: isMobile ? "100%" : "auto" }}
             onMouseEnter={e => e.currentTarget.style.opacity = ".85"}
             onMouseLeave={e => e.currentTarget.style.opacity = "1"}>
@@ -5080,7 +5080,7 @@ function TravelPackageDetailModal({ svc, onClose, onWaOpen }) {
             <p style={{ color: "rgba(255,255,255,.8)", fontSize: "0.875rem", marginBottom: 16, lineHeight: 1.65 }}>Tertarik dengan paket ini? Hubungi kami untuk konsultasi gratis dan penawaran terbaik!</p>
             <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
               <button
-                onClick={() => onWaOpen && onWaOpen(`Halo Real Estate Web! 👋\n\nSaya tertarik dengan:\n*${svc.title}*\nHarga: ${svc.price} ${svc.priceNote}\n\nMohon informasi lebih lanjut. Terima kasih!`)}
+                onClick={() => onWaOpen && onWaOpen(`Halo VASTURA GROUP! 👋\n\nSaya tertarik dengan:\n*${svc.title}*\nHarga: ${svc.price} ${svc.priceNote}\n\nMohon informasi lebih lanjut. Terima kasih!`)}
                 style={{ padding: "11px 28px", background: "#25D366", color: "#fff", border: "none", borderRadius: 8, fontSize: "0.875rem", fontWeight: 700, cursor: "pointer", display: "flex", alignItems: "center", gap: 6 }}>
                 💬 WhatsApp Sekarang
               </button>
@@ -5512,7 +5512,7 @@ function ServicesPage({ content, services, navigateTo, activePaket, onOpenPaket,
   }, [activePaket, services.length]);
 
   const handleBook = (svc) => {
-    const text = `Halo Real Estate Web! 👋\n\nSaya tertarik dengan:\n*${svc.title}*\nHarga: ${svc.price} ${svc.priceNote}${svc._extraMsg || ""}\n\nMohon informasi lebih lanjut.\n\nTerima kasih!`;
+    const text = `Halo VASTURA GROUP! 👋\n\nSaya tertarik dengan:\n*${svc.title}*\nHarga: ${svc.price} ${svc.priceNote}${svc._extraMsg || ""}\n\nMohon informasi lebih lanjut.\n\nTerima kasih!`;
     if (onWaOpen) onWaOpen(text);
   };
 
@@ -7307,7 +7307,7 @@ function AboutPage({ content, images, teamMembers, onWaOpen }) {
   const handleContactSubmit = () => {
     if (!contactForm.name || !contactForm.message) return;
     const lines = [
-      "Halo Real Estate Web! 👋",
+      "Halo VASTURA GROUP! 👋",
       "",
       "Nama: " + contactForm.name,
       "Email: " + (contactForm.email || "-"),
@@ -7332,7 +7332,7 @@ function AboutPage({ content, images, teamMembers, onWaOpen }) {
   ];
 
   const timeline = [
-    { year: "2018", title: "Real Estate Web Berdiri", desc: "Didirikan dengan visi memberikan layanan travel & event berkualitas di Malang." },
+    { year: "2018", title: "VASTURA GROUP Berdiri", desc: "Didirikan dengan visi memberikan layanan travel & event berkualitas di Malang." },
     { year: "2019", title: "Ekspansi Wedding", desc: "Membuka divisi Wedding Organizer dan langsung mendapat respons positif dari pasar." },
     { year: "2021", title: "100+ Klien", desc: "Mencapai 100+ klien puas meskipun pandemi, dengan inovasi layanan virtual event." },
     { year: "2023", title: "Platform Digital", desc: "Meluncurkan platform digital untuk memudahkan pemesanan dan komunikasi dengan klien." },
@@ -7359,7 +7359,7 @@ function AboutPage({ content, images, teamMembers, onWaOpen }) {
               <span style={{ fontSize: 10, letterSpacing: "2px", color: "rgba(255,255,255,.80)", textTransform: "uppercase", fontWeight: 700 }}>Tentang Kami</span>
             </div>
             <h1 className="display" style={{ fontSize: "clamp(2.25rem,5vw,3.75rem)", fontWeight: 900, lineHeight: 1.06, color: "#fff", marginBottom: 24 }}>
-              {content.aboutHeroTitle || "Real Estate Web"}
+              {content.aboutHeroTitle || "VASTURA GROUP"}
             </h1>
             <p style={{ fontSize: "1.0625rem", color: "rgba(255,255,255,.85)", lineHeight: 1.9, maxWidth: 420, marginBottom: 32, whiteSpace: "pre-line" }}>
               {content.aboutHeroSub || content.aboutText || "Mitra terpercaya Anda untuk perjalanan wisata, pernikahan impian, dan event berkesan. Kami hadir untuk mewujudkan setiap momen menjadi kenangan tak terlupakan."}
@@ -7371,7 +7371,14 @@ function AboutPage({ content, images, teamMembers, onWaOpen }) {
                 onMouseLeave={e => e.currentTarget.style.background = "#0d3b66"}>
                 💬 Hubungi Kami
               </button>
-              <WaPhoneDropdown admins={content.waAdmins} phone={content.phone} />
+              {content.phone && (
+                <a href={`https://wa.me/${content.phone.replace(/\D/g,'')}`} target="_blank" rel="noopener noreferrer"
+                  style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "13px 28px", background: "rgba(255,255,255,.15)", color: "#fff", borderRadius: 4, fontSize: "0.8125rem", fontWeight: 700, letterSpacing: ".08em", textTransform: "uppercase", border: "1px solid rgba(255,255,255,.3)", cursor: "pointer", textDecoration: "none", transition: "background .2s" }}
+                  onMouseEnter={e => e.currentTarget.style.background = "rgba(255,255,255,.25)"}
+                  onMouseLeave={e => e.currentTarget.style.background = "rgba(255,255,255,.15)"}>
+                  📱 Hubungi via WhatsApp
+                </a>
+              )}
             </div>
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
@@ -7431,7 +7438,7 @@ function AboutPage({ content, images, teamMembers, onWaOpen }) {
         <div style={{ maxWidth: 1200, margin: "0 auto" }}>
           <div style={{ textAlign: "center", marginBottom: 52 }}>
             <div style={{ fontSize: "0.6875rem", letterSpacing: "2px", color: "rgba(255,255,255,.75)", textTransform: "uppercase", fontWeight: 700, marginBottom: 12 }}>Keunggulan Kami</div>
-            <h2 className="display" style={{ fontSize: "clamp(1.75rem,4vw,2.75rem)", fontWeight: 900, color: "#fff" }}>{content.aboutWhyTitle || "Mengapa Memilih Real Estate Web?"}</h2>
+            <h2 className="display" style={{ fontSize: "clamp(1.75rem,4vw,2.75rem)", fontWeight: 900, color: "#fff" }}>{content.aboutWhyTitle || "Mengapa Memilih VASTURA GROUP?"}</h2>
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 24 }}>
             {values.map((v, i) => (
@@ -7650,7 +7657,7 @@ function AboutPage({ content, images, teamMembers, onWaOpen }) {
       {/* ── MAP LOKASI ── */}
       <div style={{ padding: "0" }}>
         <iframe
-          title="Lokasi Real Estate Web"
+          title="Lokasi VASTURA GROUP"
           src="https://www.google.com/maps?q=Malang,Jawa+Timur,Indonesia&output=embed&z=12"
           width="100%" height="300"
           style={{ border: 0, display: "block" }}
@@ -8016,7 +8023,7 @@ function HeroSlideshow({ data, navigateTo }) {
         <div style={{ position: "absolute", inset: 0, zIndex: 10, display: "flex", alignItems: "center", justifyContent: "center", padding: "0 6%", textAlign: "center" }}>
           <div style={{ maxWidth: 780 }}>
             <div style={{ display: "inline-block", background: "#e8a020", color: "#fff", fontSize: "0.6875rem", fontWeight: 800, letterSpacing: ".18em", textTransform: "uppercase", padding: "5px 14px", borderRadius: 2, marginBottom: 18 }}>
-              Real Estate Web
+              VASTURA GROUP
             </div>
             <h1 style={{ fontFamily: "'Playfair Display',serif", fontSize: "clamp(1.75rem,4.2vw,2.8rem)", fontWeight: 900, color: "#fff", lineHeight: 1.18, marginBottom: 18, textShadow: "0 2px 16px rgba(0,0,0,.5)" }}>
               {data.content?.heroTitle || "Travel & Relax"}
@@ -8114,7 +8121,7 @@ function HeroSlideshow({ data, navigateTo }) {
         <div style={{ maxWidth: 780, animation: animating ? "none" : "heroTxtIn .6s ease both" }} key={current}>
           {/* Label */}
           <div style={{ display: "inline-block", background: "#e8a020", color: "#fff", fontSize: "0.6875rem", fontWeight: 800, letterSpacing: ".18em", textTransform: "uppercase", padding: "5px 14px", borderRadius: 2, marginBottom: 18 }}>
-            {SECTION_LABEL[sl.section] || "Real Estate Web"}
+            {SECTION_LABEL[sl.section] || "VASTURA GROUP"}
           </div>
           {/* Title — max 2 baris, potong sisanya */}
           <h1 style={{
@@ -8230,7 +8237,7 @@ function ReviewForm({ token, onSubmitDone, data, save, notify, isLoading }) {
       <div style={{ textAlign: "center", background: "#fff", borderRadius: 20, padding: "56px 48px", maxWidth: 440, boxShadow: "0 16px 56px rgba(13,59,102,.12)" }}>
         <div style={{ fontSize: 64, marginBottom: 20 }}>🎉</div>
         <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.875rem", fontWeight: 900, color: "#0d3b66", marginBottom: 14 }}>Terima Kasih!</h2>
-        <p style={{ color: "#1a5a78", fontSize: "1rem", lineHeight: 1.8 }}>Ulasan Anda telah berhasil dikirim. Kami sangat menghargai kepercayaan Anda kepada Real Estate Web.</p>
+        <p style={{ color: "#1a5a78", fontSize: "1rem", lineHeight: 1.8 }}>Ulasan Anda telah berhasil dikirim. Kami sangat menghargai kepercayaan Anda kepada VASTURA GROUP.</p>
         <div style={{ width: 48, height: 3, background: "#0891b2", borderRadius: 2, margin: "28px auto 0" }} />
       </div>
     </div>
@@ -8289,7 +8296,7 @@ function ReviewForm({ token, onSubmitDone, data, save, notify, isLoading }) {
         <div style={{ textAlign: "center", marginBottom: 36 }}>
           <div style={{ width: 64, height: 64, borderRadius: "50%", background: "linear-gradient(130deg,#063d5c 0%,#0875a8 50%,#0aa8bf 100%)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 16px", fontSize: 28 }}>⭐</div>
           <h1 style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.75rem", fontWeight: 900, color: "#0d3b66", marginBottom: 8 }}>Berikan Ulasan Anda</h1>
-          <p style={{ color: "#4a7f98", fontSize: "0.9375rem", lineHeight: 1.6 }}>Bagikan pengalaman Anda bersama {content_data.logoText?.replace("\n"," ") || "Real Estate Web"}</p>
+          <p style={{ color: "#4a7f98", fontSize: "0.9375rem", lineHeight: 1.6 }}>Bagikan pengalaman Anda bersama {content_data.logoText?.replace("\n"," ") || "VASTURA GROUP"}</p>
           {tokenObj.label && <div style={{ marginTop: 10, display: "inline-block", background: "#e8f9fc", border: "1px solid #86cad8", color: "#0891b2", fontSize: "0.75rem", fontWeight: 600, padding: "4px 14px", borderRadius: 20 }}>{tokenObj.label}</div>}
         </div>
 
@@ -8858,7 +8865,7 @@ const getInitialShowAdmin = () => {
 
 /* ─────────────── REUSABLE SERVICE PAGE TEMPLATE ─────────────── */
 function DevServicePage({ pageKey, title, subtitle, icon, heroColor, sections, ctaText, onWaOpen }) {
-  const waText = `Halo! Saya tertarik dengan layanan *${title}* dari Real Estate Web. Mohon informasi lebih lanjut. Terima kasih!`;
+  const waText = `Halo! Saya tertarik dengan layanan *${title}* dari VASTURA GROUP. Mohon informasi lebih lanjut. Terima kasih!`;
   return (
     <div style={{ paddingTop: 72, minHeight: "100vh", background: "#f8fbfd" }}>
       {/* Hero Banner */}
@@ -9205,6 +9212,7 @@ export default function BricksyTravel() {
   const [adminSection, setAdminSection] = useState("news");
   const [loginForm, setLoginForm] = useState({ username: "", password: "" });
   const [loginErr, setLoginErr] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   // Forgot password flow: null | "input_user" | "input_email" | "input_otp" | "input_newpass"
   const [forgotStep, setForgotStep] = useState(null);
   const [forgotUser, setForgotUser] = useState("");
@@ -9888,7 +9896,7 @@ export default function BricksyTravel() {
     const msg = { ...contact, id: Date.now(), date: new Date().toLocaleDateString("id-ID"), read: false, replies: [] };
     save({ ...data, messages: [...data.messages, msg] });
     // Redirect to WhatsApp
-    const text = `Halo Real Estate Web! 👋\n\nNama: ${contact.name}\nEmail: ${contact.email}\n\nPesan:\n${contact.message}\n\nSalam,\n${contact.name}`;
+    const text = `Halo VASTURA GROUP! 👋\n\nNama: ${contact.name}\nEmail: ${contact.email}\n\nPesan:\n${contact.message}\n\nSalam,\n${contact.name}`;
     openWaPicker(text);
     setContact({ name: "", email: "", message: "" });
     notify("Mengarahkan ke WhatsApp...");
@@ -9928,7 +9936,7 @@ export default function BricksyTravel() {
   const navItems = [
     { key: "home",  label: data.content.nav1 || "Home" },
     { key: "about", label: data.content.nav2 || "About" },
-    { key: "news",  label: data.content.nav3 || "Portfolio" },
+    { key: "news",  label: data.content.nav3 || "Program Affiliate" },
   ];
   // Dropdown: Layanan Developer (termasuk Interior & Eksterior)
   const navDropdownLayanan = [
@@ -10108,14 +10116,39 @@ export default function BricksyTravel() {
                   </div>
                   <div>
                     <label style={{ display: "block", fontSize: 12, fontWeight: 600, color: "#0d3b66", marginBottom: 6, letterSpacing: ".5px" }}>PASSWORD</label>
-                    <input type="password" value={loginForm.password} onChange={e => setLoginForm(p => ({ ...p, password: e.target.value }))}
-                      placeholder="••••••••"
-                      onKeyDown={e => e.key === "Enter" && login()}
-                      style={{ width: "100%", padding: "11px 14px", border: "1.5px solid #c0e8f0", borderRadius: 8, 
-                        fontSize: 13, outline: "none", background: "#f5fdff", color: "#0d3b66",
-                        transition: "border .2s" }}
-                      onFocus={e => e.target.style.borderColor = "#0891b2"}
-                      onBlur={e => e.target.style.borderColor = "#c0e8f0"} />
+                    <div style={{ position: "relative", display: "flex", alignItems: "center" }}>
+                      <input type={showPassword ? "text" : "password"} value={loginForm.password} onChange={e => setLoginForm(p => ({ ...p, password: e.target.value }))}
+                        placeholder="••••••••"
+                        onKeyDown={e => e.key === "Enter" && login()}
+                        style={{ width: "100%", padding: "11px 14px", paddingRight: 42, border: "1.5px solid #c0e8f0", borderRadius: 8, 
+                          fontSize: 13, outline: "none", background: "#f5fdff", color: "#0d3b66",
+                          transition: "border .2s" }}
+                        onFocus={e => e.target.style.borderColor = "#0891b2"}
+                        onBlur={e => e.target.style.borderColor = "#c0e8f0"} />
+                      <button onClick={() => setShowPassword(!showPassword)}
+                        type="button"
+                        style={{ position: "absolute", right: 8, background: "none", border: "none", 
+                          cursor: "pointer", padding: "6px 8px", borderRadius: "50%", 
+                          display: "flex", alignItems: "center", justifyContent: "center",
+                          width: 36, height: 36, transition: "all .2s",
+                          color: "#0891b2", fontSize: 18 }}
+                        onMouseEnter={e => { e.currentTarget.style.background = "rgba(8,145,178,.1)"; }}
+                        onMouseLeave={e => { e.currentTarget.style.background = "none"; }}>
+                        {showPassword ? (
+                          // Eye open icon
+                          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                            <circle cx="12" cy="12" r="3" />
+                          </svg>
+                        ) : (
+                          // Eye closed icon with slash
+                          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" />
+                            <line x1="1" y1="1" x2="23" y2="23" />
+                          </svg>
+                        )}
+                      </button>
+                    </div>
                   </div>
                 </div>
 
@@ -10738,7 +10771,7 @@ export default function BricksyTravel() {
                       <div className="re-sash" style={{ top:"65%",right:"0",width:"45%",left:"auto",animationDelay:"2s" }} />
                     </div>
                     <div className="re-hero-content">
-                      <div className="re-hero-eyebrow">Real Estate Web</div>
+                      <div className="re-hero-eyebrow">VASTURA GROUP</div>
                       <h1 className="re-hero-h1">
                         Ubah rumah impian<br />menjadi kenyataan
                       </h1>
@@ -10758,7 +10791,7 @@ export default function BricksyTravel() {
                     <div className="re-smoke-orb" style={{ width:340,height:340,bottom:"-60px",left:"-60px",animationDelay:"4s" }} />
                     <p className="re-about-label re-reveal">Tentang Kami</p>
                     <h2 className="re-about-h2 re-reveal delay-1">
-                      Selama 20 tahun lebih, Real Estate Web telah melakukan jual-beli properti. Kami bangga menjadi salah satu perusahaan real estat terkemuka di kota.
+                      Selama 20 tahun lebih, VASTURA GROUP telah melakukan jual-beli properti. Kami bangga menjadi salah satu perusahaan real estat terkemuka di kota.
                     </h2>
                     <div className="re-sash" style={{ bottom:0,left:"20%",width:"60%",opacity:.5 }} />
                   </section>
@@ -10865,7 +10898,7 @@ export default function BricksyTravel() {
                       <div className="re-slide-left">
                         <div className="re-contact-logo">Real Estate<br />Web</div>
                         <p style={{ fontFamily:"'Jost',sans-serif", fontSize:".85rem", color:"var(--re-grey-md)", lineHeight:1.8, marginBottom:14 }}>
-                          {data.content.email || "halo@realEstateweb.co.id"}
+                          {data.content.email || "halo@vastura.co.id"}
                         </p>
                       </div>
                       <div className="re-slide-right" style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:"32px 48px" }}>
@@ -10880,12 +10913,12 @@ export default function BricksyTravel() {
                           <div className="re-contact-label">Telepon</div>
                           <div className="re-contact-val">{data.content.phone || "021 123 456 7890"}</div>
                           <div className="re-contact-label" style={{ marginTop:20 }}>Email</div>
-                          <div className="re-contact-val">{data.content.email || "halo@realEstateweb.co.id"}</div>
+                          <div className="re-contact-val">{data.content.email || "halo@vastura.co.id"}</div>
                         </div>
                         <div style={{ gridColumn:"1 / -1", marginTop:8 }}>
                           <button
                             className="re-btn re-btn-dark"
-                            onClick={() => openWaPicker("Halo Real Estate Web! Saya ingin berkonsultasi mengenai properti.")}
+                            onClick={() => openWaPicker("Halo VASTURA GROUP! Saya ingin berkonsultasi mengenai properti.")}
                           >
                             Hubungi Kami
                           </button>
@@ -10905,14 +10938,14 @@ export default function BricksyTravel() {
                     <div className="re-smoke-orb" style={{ width:360,height:360,top:"5%",right:"15%",zIndex:1,animationDelay:"0s" }} />
                     <div className="re-flare" style={{ width:140,height:140,top:"20%",right:"30%",zIndex:1,animationDelay:"3s" }} />
                     <div className="re-closing-content" style={{ zIndex:2 }}>
-                      <p className="re-closing-label">Real Estate Web</p>
+                      <p className="re-closing-label">VASTURA GROUP</p>
                       <h2 className="re-closing-h2">Wujudkan rumah<br />impian Anda</h2>
                     </div>
                   </section>
 
                   {/* ══ FOOTER BAR ══ */}
                   <div className="re-footer-bar">
-                    <span>© 2026 Real Estate Web. All Rights Reserved</span>
+                    <span>© 2026 VASTURA GROUP. All Rights Reserved</span>
                     <button onClick={() => setShowDevProfile(true)}
                       style={{ background:"none",border:"none",cursor:"pointer",color:"rgba(255,255,255,.35)",fontSize:".7rem",letterSpacing:".08em",fontFamily:"'Jost',sans-serif",transition:"color .2s" }}
                       onMouseEnter={e => e.currentTarget.style.color = "rgba(255,255,255,.65)"}
