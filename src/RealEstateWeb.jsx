@@ -514,8 +514,8 @@ const SECTIONS = ["news", "shop", "destinations"];
 
 const SECTION_LABELS = {
   news: "Program Affiliate",
-  shop: "Traveling",
-  destinations: "Wedding Organizer",
+  shop: "Gedung & Rumah",
+  destinations: "Interior",
 };
 
 const DEFAULT_POSTS = {
@@ -679,7 +679,7 @@ const DEFAULT_DATA = {
     logoColor: "#111111",
     logoShadow: "0 1px 6px rgba(0,0,0,.35), 0 2px 14px rgba(0,0,0,.18)",
     loginBtnText: "LOGIN",
-    nav1: "Home", nav2: "About", nav3: "Program Affiliate", nav4: "Traveling", nav5: "Wedding Organizer", nav6: "Layanan Kami",
+    nav1: "Home", nav2: "About", nav3: "Program Affiliate", nav4: "Gedung & Rumah", nav5: "Interior", nav6: "Layanan Kami",
     nav7: "Jasa Desain & RAB", nav8: "Tema Rumah",
     nav9: "Interior", nav10: "Pagar Rumah", nav11: "Kanopi", nav12: "Aluminium", nav13: "Landscape & Taman",
     servicesPageTitle: "Paket Layanan Kami",
@@ -3291,9 +3291,9 @@ function CMSEditor({ post, onSave, onCancel, section, onSectionChange, user, not
             </p>
             <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
               {[
-                { key: "shop", icon: "✈", label: "Traveling", desc: "Paket perjalanan & tips wisata" },
-                { key: "news", icon: "📅", label: "Event Plan", desc: "Berita & rencana acara terbaru" },
-                { key: "destinations", icon: "💍", label: "Wedding Organizer", desc: "Venue & paket pernikahan" },
+                { key: "shop", icon: "🏠", label: "Gedung & Rumah", desc: "Proyek rumah, gedung & properti" },
+                { key: "news", icon: "🔧", label: "Exterior", desc: "Pagar, kanopi, landscape & eksterior" },
+                { key: "destinations", icon: "🛋️", label: "Interior", desc: "Desain & dekorasi interior rumah" },
               ].map(opt => (
                 <button key={opt.key} onClick={() => {
                   if (onSectionChange) onSectionChange(opt.key);
@@ -3787,7 +3787,7 @@ function ArticleDetail({ post, onBack, allPosts = [], onReadPost }) {
     setTimeout(() => setCopied(false), 1800);
   };
 
-  const sectionLabel = { news: "Event Plan", shop: "Traveling", destinations: "Wedding Organizer" };
+  const sectionLabel = { news: "Exterior", shop: "Gedung & Rumah", destinations: "Interior" };
   const breadSection = sectionLabel[post.section] || post.section || "Artikel";
 
   return (
@@ -4007,9 +4007,9 @@ function ArticleDetail({ post, onBack, allPosts = [], onReadPost }) {
             <div style={{ position: "absolute", top: -20, right: -20, width: 90, height: 90, borderRadius: "50%", background: "rgba(255,255,255,.08)" }} />
             <div style={{ fontSize: 11, fontWeight: 700, color: "rgba(255,255,255,.7)", textTransform: "uppercase", letterSpacing: "1px", marginBottom: 12 }}>🌟 Layanan Kami</div>
             {[
-              { icon: "✈", txt: "Traveling & Tour" },
-              { icon: "💍", txt: "Wedding Organizer" },
-              { icon: "🎉", txt: "Event Planning" },
+              { icon: "🏠", txt: "Gedung & Rumah" },
+              { icon: "🛋️", txt: "Interior" },
+              { icon: "🔧", txt: "Exterior" },
               { icon: "🏨", txt: "Hotel & Villa" },
             ].map(s => (
               <div key={s.txt} style={{ display: "flex", alignItems: "center", gap: 9, marginBottom: 10 }}>
@@ -4048,7 +4048,7 @@ function ArticleDetail({ post, onBack, allPosts = [], onReadPost }) {
                     })()}
                     <div style={{ flex: 1, minWidth: 0 }}>
                       <p style={{ fontSize: 12, fontWeight: 600, color: "#1a2e3b", lineHeight: 1.45, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden", marginBottom: 4 }}>{p.title}</p>
-                      <span style={{ fontSize: 10, color: "#8B6914", fontWeight: 600 }}>{p.category || (p.section === "news" ? "Event Plan" : p.section === "shop" ? "Traveling" : "Wedding")}</span>
+                      <span style={{ fontSize: 10, color: "#8B6914", fontWeight: 600 }}>{p.category || (p.section === "news" ? "Exterior" : p.section === "shop" ? "Gedung & Rumah" : "Interior")}</span>
                     </div>
                   </div>
                 ))}
@@ -4114,9 +4114,9 @@ function SectionPage({ section, posts, onReadPost }) {
   const popular = [...published].sort((a, b) => b.id - a.id).slice(0, 8);
 
   const sectionMeta = {
-    news: { title: "Event Plan", sub: "Latest event planning news, tips, and inspiring stories from around the world.", icon: "📅" },
-    shop: { title: "Traveling", sub: "Curated travel packages, adventures, and essentials for every type of traveler.", icon: "✈" },
-    destinations: { title: "Wedding Organizer", sub: "Explore our hand-picked wedding venues and organizer packages across every destination.", icon: "💍" },
+    news: { title: "Exterior", sub: "Pagar, kanopi, landscape, aluminium & semua layanan eksterior hunian Anda.", icon: "🔧" },
+    shop: { title: "Gedung & Rumah", sub: "Proyek pembangunan, renovasi, dan pengembangan properti hunian berkualitas.", icon: "🏠" },
+    destinations: { title: "Interior", sub: "Desain dan dekorasi interior profesional untuk setiap ruangan — dari konsep hingga finishing.", icon: "🛋️" },
   };
   const meta = sectionMeta[section] || { title: section, sub: "", icon: "◈" };
 
@@ -4378,7 +4378,7 @@ function EventWeddingPackageCard({ svc, onDetail, onWaOpen, isWide, categoryPack
         <div style={{ flex: 1, display: "flex", flexDirection: "column", minWidth: 0 }}>
           <div style={{ padding: "16px 20px 8px", display: "flex", gap: 14, flexWrap: "wrap" }}>
             {imgs.length > 1 && <span style={{ fontSize: "0.8125rem", color: "#5A6A6C" }}>🖼 {imgs.length} Foto Kegiatan</span>}
-            <span style={{ fontSize: "0.8125rem", color: "#5A6A6C" }}>{svc.category === "wedding" ? "💍 Wedding Organizer" : "📅 Event Organizer"}</span>
+            <span style={{ fontSize: "0.8125rem", color: "#5A6A6C" }}>{svc.category === "wedding" ? "🛋️ Interior" : "🔧 Exterior"}</span>
           </div>
           <p style={{ fontSize: "0.875rem", color: "#5A6A6C", lineHeight: 1.65, padding: "0 20px 12px" }}>{svc.description}</p>
           {(svc.features || []).length > 0 && (
@@ -4487,7 +4487,7 @@ function EventWeddingPackageCard({ svc, onDetail, onWaOpen, isWide, categoryPack
       <div style={{ padding: "10px 14px 0", display: "flex", gap: 14, flexWrap: "wrap" }}>
         {imgs.length > 1 && <span style={{ fontSize: "0.75rem", color: "#5A6A6C" }}>🖼 {imgs.length} Foto Kegiatan</span>}
         <span style={{ fontSize: "0.75rem", color: "#5A6A6C", textTransform: "capitalize" }}>
-          {svc.category === "wedding" ? "💍 Wedding Organizer" : "📅 Event Organizer"}
+          {svc.category === "wedding" ? "🛋️ Interior" : "🔧 Exterior"}
         </span>
       </div>
 
@@ -5482,9 +5482,9 @@ function ServicesPage({ content, services, navigateTo, activePaket, onOpenPaket,
   const [activePaketTypeId, setActivePaketTypeId] = useState(null);
 
   const CATEGORIES = [
-    { key: "traveling", label: "✈️ Traveling", color: "#27ae60" },
-    { key: "event",     label: "🎉 Event Plan", color: "#8B6914" },
-    { key: "wedding",   label: "💍 Wedding Organizer", color: "#8e44ad" },
+    { key: "traveling", label: "🏠 Gedung & Rumah", color: "#8B6914" },
+    { key: "event",     label: "🔧 Exterior", color: "#3D5254" },
+    { key: "wedding",   label: "🛋️ Interior", color: "#C9AA71" },
   ];
 
   const openDetail = (svc) => {
@@ -6360,9 +6360,9 @@ function ServicesAdmin({ data, save, notify, uploadToCloudinary, onEditStateChan
             <label style={{ display: "block", fontSize: 11, fontWeight: 700, color: "#5A6A6C", textTransform: "uppercase", letterSpacing: "1px", marginBottom: 6 }}>Kategori *</label>
             <select value={svcForm.category || "traveling"} onChange={e => setSvcForm(p => ({ ...p, category: e.target.value }))}
               style={{ width: "100%", padding: "10px 12px", border: "1.5px solid #D4C4A0", borderRadius: 8, fontSize: 13, outline: "none", background: "#fff" }}>
-              <option value="traveling">✈️ Traveling</option>
-              <option value="event">🎉 Event Plan</option>
-              <option value="wedding">💍 Wedding Organizer</option>
+              <option value="traveling">🏠 Gedung & Rumah</option>
+              <option value="event">🔧 Exterior</option>
+              <option value="wedding">🛋️ Interior</option>
             </select>
           </div>
           {[
@@ -6859,9 +6859,9 @@ function ServicesAdmin({ data, save, notify, uploadToCloudinary, onEditStateChan
                 <label style={{ display: "block", fontSize: 11, fontWeight: 700, color: "#5A6A6C", letterSpacing: "1px", textTransform: "uppercase", marginBottom: 8 }}>Kategori *</label>
                 <select value={svcForm.category || "traveling"} onChange={e => setSvcForm(p => ({ ...p, category: e.target.value }))}
                   style={{ width: "100%", padding: "11px 14px", border: "1.5px solid #D4C4A0", borderRadius: 8, fontSize: 14, outline: "none", background: "#fff" }}>
-                  <option value="traveling">✈️ Traveling</option>
-                  <option value="event">🎉 Event Plan</option>
-                  <option value="wedding">💍 Wedding Organizer</option>
+                  <option value="traveling">🏠 Gedung & Rumah</option>
+                  <option value="event">🔧 Exterior</option>
+                  <option value="wedding">🛋️ Interior</option>
                 </select>
               </div>
 
@@ -7239,9 +7239,9 @@ function ServicesAdmin({ data, save, notify, uploadToCloudinary, onEditStateChan
       ) : (
         <div style={{ display: "flex", flexDirection: "column", gap: 28 }}>
           {[
-            { key: "traveling", label: "Traveling",          icon: "✈️", color: "#8B6914", light: "#FAF7F0", border: "#D4C4A0" },
-            { key: "event",     label: "Event Plan",         icon: "🎉", color: "#f39c12", light: "#fff8e1", border: "#fde68a" },
-            { key: "wedding",   label: "Wedding Organizer",  icon: "💍", color: "#db2777", light: "#fff0f7", border: "#fbcfe8" },
+            { key: "traveling", label: "Gedung & Rumah",     icon: "🏠", color: "#8B6914", light: "#FAF7F0", border: "#D4C4A0" },
+            { key: "event",     label: "Exterior",           icon: "🔧", color: "#3D5254", light: "#F5F0E8", border: "#D4C4A0" },
+            { key: "wedding",   label: "Interior",           icon: "🛋️", color: "#C9AA71", light: "#FAF7F0", border: "#E8DCC8" },
           ].map(cat => {
             const catSvcs = svcs.filter(s => (s.category || "traveling") === cat.key);
             if (catSvcs.length === 0) return null;
@@ -7324,8 +7324,8 @@ function AboutPage({ content, images, teamMembers, onWaOpen }) {
 
   const values = [
     { icon: "✈️", title: "Expert Travel Planning", desc: "Kami merencanakan setiap detail perjalanan Anda — dari tiket, akomodasi, hingga tur lokal — agar Anda bisa menikmati tanpa khawatir." },
-    { icon: "💍", title: "Wedding Organizer", desc: "Wujudkan pernikahan impian Anda bersama tim profesional kami yang berpengalaman menangani ratusan momen spesial." },
-    { icon: "🎉", title: "Event Organizer", desc: "Dari gathering kantor hingga pesta ulang tahun besar, kami siap menjadi mitra terpercaya untuk event tak terlupakan." },
+    { icon: "🛋️", title: "Interior", desc: "Transformasi ruang hidup Anda dengan desain interior profesional — dari konsep, pemilihan material, hingga pemasangan." },
+    { icon: "🔧", title: "Exterior", desc: "Pagar, kanopi, aluminium, dan landscape yang mempercantik fasad dan halaman rumah Anda secara menyeluruh." },
     { icon: "🛡️", title: "Terpercaya & Aman", desc: "Kepercayaan klien adalah prioritas kami. Setiap layanan dirancang dengan standar keamanan dan profesionalisme tinggi." },
     { icon: "🌟", title: "Pengalaman Bertahun-tahun", desc: "Didukung tim berpengalaman yang telah melayani ratusan klien puas di seluruh Indonesia." },
     { icon: "💬", title: "Layanan 24/7", desc: "Tim customer service kami siap membantu kapan saja, memastikan setiap pertanyaan dan kebutuhan Anda terpenuhi." },
@@ -7333,7 +7333,7 @@ function AboutPage({ content, images, teamMembers, onWaOpen }) {
 
   const timeline = [
     { year: "2018", title: "VASTURA GROUP Berdiri", desc: "Didirikan dengan visi memberikan layanan travel & event berkualitas di Malang." },
-    { year: "2019", title: "Ekspansi Wedding", desc: "Membuka divisi Wedding Organizer dan langsung mendapat respons positif dari pasar." },
+    { year: "2019", title: "Ekspansi Interior & Exterior", desc: "Membuka divisi Interior dan Exterior yang langsung mendapat respons positif dari pasar." },
     { year: "2021", title: "100+ Klien", desc: "Mencapai 100+ klien puas meskipun pandemi, dengan inovasi layanan virtual event." },
     { year: "2023", title: "Platform Digital", desc: "Meluncurkan platform digital untuk memudahkan pemesanan dan komunikasi dengan klien." },
     { year: "2025", title: "Berkembang Pesat", desc: "Hadir di berbagai kota besar Indonesia dengan jaringan mitra lokal yang kuat." },
@@ -7341,7 +7341,7 @@ function AboutPage({ content, images, teamMembers, onWaOpen }) {
 
   const team = [
     { name: "Tim Kreatif", role: "Event & Dekorasi", icon: "🎨" },
-    { name: "Tim Traveling", role: "Perencana Wisata", icon: "🗺️" },
+    { name: "Tim Konstruksi", role: "Gedung & Rumah", icon: "🏗️" },
     { name: "Tim Wedding", role: "Koordinator Pernikahan", icon: "💐" },
     { name: "Tim CS", role: "Layanan Pelanggan", icon: "🤝" },
   ];
@@ -7496,17 +7496,20 @@ function AboutPage({ content, images, teamMembers, onWaOpen }) {
       </div>
 
       {/* ── LAYANAN KAMI ── */}
-      <div style={{ padding: "80px 5%", background: "linear-gradient(130deg,#0a5c88 0%,#0d95b8 55%,#12c8dc 100%)" }}>
+      <div style={{ padding: "80px 5%", background: "linear-gradient(130deg,#2E3D3F 0%,#3D5254 55%,#8B6914 100%)" }}>
         <div style={{ maxWidth: 1200, margin: "0 auto" }}>
           <div style={{ textAlign: "center", marginBottom: 52 }}>
             <div style={{ fontSize: "0.6875rem", letterSpacing: "2px", color: "rgba(255,255,255,.75)", textTransform: "uppercase", fontWeight: 700, marginBottom: 12 }}>Apa yang Kami Tawarkan</div>
             <h2 className="display" style={{ fontSize: "clamp(1.75rem,4vw,2.75rem)", fontWeight: 900, color: "#fff" }}>Layanan Lengkap Kami</h2>
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: 28 }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 24 }}>
             {[
-              { icon: "✈️", title: "Travel & Wisata", color: "#8B6914", items: ["Paket Wisata Lokal & Mancanegara", "Tiket Pesawat & Hotel", "Tour Guide Profesional", "Itinerary Kustom", "Transportasi Pribadi"] },
-              { icon: "💍", title: "Wedding Organizer", color: "#8e44ad", items: ["Konsultasi & Perencanaan", "Dekorasi & Venue", "Koordinasi Hari H", "Dokumentasi & Foto", "Catering & Entertainment"] },
-              { icon: "🎉", title: "Event Organizer", color: "#e67e22", items: ["Corporate Event", "Birthday & Anniversary", "Gathering & Outbound", "Seminar & Conference", "Pesta Perpisahan & Reunian"] },
+              { icon: "🏠", title: "Gedung & Rumah", color: "#2E3D3F", items: ["Pembangunan Rumah Baru", "Renovasi & Pengembangan", "Konstruksi Gedung Komersial", "RAB & Perencanaan Anggaran", "Konsultasi Teknis Gratis"] },
+              { icon: "🛋️", title: "Interior", color: "#8B6914", items: ["Desain Interior Profesional", "Pemilihan Material & Furnitur", "Custom Kitchen Set & Lemari", "Dekorasi & Aksesoris Ruang", "3D Visualisasi Sebelum Eksekusi"] },
+              { icon: "🔧", title: "Exterior", color: "#3D5254", items: ["Pagar & Pintu Gerbang Custom", "Kanopi & Pergola", "Aluminium & Kusen", "Carport & Teras", "Fasad & Cat Eksterior"] },
+              { icon: "📐", title: "Jasa RAB", color: "#C9AA71", items: ["Rancangan Anggaran Biaya Detail", "Estimasi Material & Upah", "Bill of Quantity (BQ)", "Laporan Progres Biaya", "Revisi RAB Tanpa Batas"] },
+              { icon: "🏛️", title: "Design Rumah / Arsitek", color: "#5A6A6C", items: ["Desain Arsitektur Konseptual", "Gambar Kerja & Denah Lengkap", "Tampak Depan / Samping / Belakang", "IMB & Perizinan Bangunan", "3D Render Eksterior Realistis"] },
+              { icon: "🌿", title: "Taman", color: "#27ae60", items: ["Desain Taman Tropis & Modern", "Penanaman & Perawatan Tanaman", "Sistem Drainase & Irigasi", "Taman Rooftop & Vertikal", "Pembuatan Kolam & Ornamen"] },
             ].map(s => (
               <div key={s.title} style={{ border: "1px solid rgba(255,255,255,.25)", borderRadius: 12, overflow: "hidden", boxShadow: "0 4px 20px rgba(0,0,0,.12)" }}>
                 <div style={{ background: s.color, padding: "24px 28px", display: "flex", alignItems: "center", gap: 14 }}>
@@ -7624,9 +7627,9 @@ function AboutPage({ content, images, teamMembers, onWaOpen }) {
                     <select value={contactForm.subject} onChange={e => setContactForm(p => ({ ...p, subject: e.target.value }))}
                       style={{ width: "100%", padding: "11px 14px", border: "1.5px solid #D4C4A0", borderRadius: 8, fontSize: "0.9rem", outline: "none", background: "#fff", color: contactForm.subject ? "#2E3D3F" : "#7ab5cc" }}>
                       <option value="">-- Pilih keperluan --</option>
-                      <option value="Travel & Wisata">✈️ Travel & Wisata</option>
-                      <option value="Wedding Organizer">💍 Wedding Organizer</option>
-                      <option value="Event Organizer">🎉 Event Organizer</option>
+                      <option value="Gedung & Rumah">🏠 Gedung & Rumah</option>
+                      <option value="Interior">🛋️ Interior</option>
+                      <option value="Exterior">🔧 Exterior</option>
                       <option value="Konsultasi">💬 Konsultasi Umum</option>
                       <option value="Lainnya">📋 Lainnya</option>
                     </select>
@@ -8049,7 +8052,7 @@ function HeroSlideshow({ data, navigateTo }) {
   // MODE SLIDESHOW
   if (slides.length === 0) return null;
 
-  const SECTION_LABEL = { news: "Event Plan", shop: "Traveling", destinations: "Wedding Organizer", home: "Travel & Organizer" };
+  const SECTION_LABEL = { news: "Exterior", shop: "Gedung & Rumah", destinations: "Interior", home: "Gedung & Properti" };
 
   const getEnterStyle = (a) => {
     const base = { position: "absolute", inset: 0, transition: "all 0.7s cubic-bezier(.77,0,.18,1)", zIndex: 2 };
