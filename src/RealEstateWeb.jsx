@@ -19,12 +19,12 @@ function DashTabs({ user, allPosts, publishedCount, draftCount, data, canEdit, c
       {/* Left column */}
       <div>
         <div style={{ background: "#fff", borderRadius: 10, overflow: "hidden", boxShadow: "0 2px 10px rgba(0,0,0,.06)", marginBottom: 16 }}>
-          <div style={{ display: "flex", borderBottom: "2px solid #edfafc" }} className="dash-tab-row">
+          <div style={{ display: "flex", borderBottom: "2px solid #FAF7F0" }} className="dash-tab-row">
             {tabs.map(t => (
               <button key={t.id} onClick={() => setDashTab(t.id)}
                 style={{ flex: 1, padding: "14px 8px", fontSize: "0.8125rem", fontWeight: dashTab === t.id ? 700 : 500,
-                  color: dashTab === t.id ? "#0d3b66" : "#4a7f98", background: dashTab === t.id ? "#fff" : "#f5fdff",
-                  border: "none", borderBottom: dashTab === t.id ? "2px solid #0d3b66" : "2px solid transparent",
+                  color: dashTab === t.id ? "#2E3D3F" : "#5A6A6C", background: dashTab === t.id ? "#fff" : "#FDFAF4",
+                  border: "none", borderBottom: dashTab === t.id ? "2px solid #2E3D3F" : "2px solid transparent",
                   marginBottom: -2, cursor: "pointer", transition: "all .15s" }}>
                 {t.label}
               </button>
@@ -34,15 +34,15 @@ function DashTabs({ user, allPosts, publishedCount, draftCount, data, canEdit, c
           {dashTab === "notifications" && (
             <div style={{ padding: "8px 0" }}>
               {data.messages.length === 0 ? (
-                <div style={{ padding: "32px", textAlign: "center", color: "#4a7f98", fontSize: "0.875rem" }}>🔔 Belum ada notifikasi.</div>
+                <div style={{ padding: "32px", textAlign: "center", color: "#5A6A6C", fontSize: "0.875rem" }}>🔔 Belum ada notifikasi.</div>
               ) : data.messages.slice().reverse().slice(0, 5).map(m => (
-                <div key={m.id} style={{ display: "flex", gap: 14, padding: "16px 20px", borderBottom: "1px solid #edfafc", alignItems: "flex-start" }}>
-                  <div style={{ width: 44, height: 44, borderRadius: 8, background: "#edfafc", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18 }}>✉️</div>
+                <div key={m.id} style={{ display: "flex", gap: 14, padding: "16px 20px", borderBottom: "1px solid #FAF7F0", alignItems: "flex-start" }}>
+                  <div style={{ width: 44, height: 44, borderRadius: 8, background: "#FAF7F0", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18 }}>✉️</div>
                   <div style={{ flex: 1 }}>
-                    <p style={{ fontSize: "0.875rem", color: "#0d3b66", lineHeight: 1.6, marginBottom: 4 }}>
-                      Pesan baru dari <strong>{m.name}</strong> ({m.email}): <em style={{ color: "#1a5a78" }}>{m.message?.slice(0, 80)}{m.message?.length > 80 ? "…" : ""}</em>
+                    <p style={{ fontSize: "0.875rem", color: "#2E3D3F", lineHeight: 1.6, marginBottom: 4 }}>
+                      Pesan baru dari <strong>{m.name}</strong> ({m.email}): <em style={{ color: "#3D5254" }}>{m.message?.slice(0, 80)}{m.message?.length > 80 ? "…" : ""}</em>
                     </p>
-                    <span style={{ fontSize: "0.75rem", color: "#4a7f98" }}>{m.date}</span>
+                    <span style={{ fontSize: "0.75rem", color: "#5A6A6C" }}>{m.date}</span>
                     {!m.read && <span style={{ marginLeft: 8, fontSize: "0.625rem", background: "#e74c3c", color: "#fff", borderRadius: 8, padding: "1px 7px", fontWeight: 700 }}>BARU</span>}
                   </div>
                 </div>
@@ -53,20 +53,20 @@ function DashTabs({ user, allPosts, publishedCount, draftCount, data, canEdit, c
           {dashTab === "articles" && canEdit && (
             <div style={{ padding: "16px 20px" }}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
-                <span style={{ fontSize: "0.875rem", fontWeight: 600, color: "#0d3b66" }}>Artikel Terbaru</span>
+                <span style={{ fontSize: "0.875rem", fontWeight: 600, color: "#2E3D3F" }}>Artikel Terbaru</span>
                 <button onClick={() => { navigateAdminTab("cms"); setCmsEditPost("new"); }}
-                  style={{ fontSize: "0.75rem", background: "linear-gradient(130deg,#063d5c 0%,#0875a8 45%,#0aa8bf 78%,#10d0e0 100%)", color: "#fff", border: "none", borderRadius: 16, padding: "5px 14px", fontWeight: 600, cursor: "pointer" }}>+ Baru</button>
+                  style={{ fontSize: "0.75rem", background: "linear-gradient(130deg,#2E3D3F 0%,#3D5254 45%,#8B6914 78%,#C9AA71 100%)", color: "#fff", border: "none", borderRadius: 16, padding: "5px 14px", fontWeight: 600, cursor: "pointer" }}>+ Baru</button>
               </div>
               {allPosts.length === 0 ? (
-                <p style={{ fontSize: "0.875rem", color: "#4a7f98" }}>Belum ada artikel.</p>
+                <p style={{ fontSize: "0.875rem", color: "#5A6A6C" }}>Belum ada artikel.</p>
               ) : allPosts.slice(-5).reverse().map(p => (
-                <div key={p.id} style={{ display: "flex", alignItems: "center", gap: 12, padding: "10px 0", borderBottom: "1px solid #edfafc" }}>
-                  <div style={{ width: 42, height: 42, borderRadius: 6, overflow: "hidden", flexShrink: 0, background: "#edfafc", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18 }}>
+                <div key={p.id} style={{ display: "flex", alignItems: "center", gap: 12, padding: "10px 0", borderBottom: "1px solid #FAF7F0" }}>
+                  <div style={{ width: 42, height: 42, borderRadius: 6, overflow: "hidden", flexShrink: 0, background: "#FAF7F0", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18 }}>
                     {(() => { const img = (p.content||[]).find(b=>b.type==="image")?.value; return img ? <img loading="lazy" src={img} alt="" style={{ width:"100%", height:"100%", objectFit:"cover" }} onError={e=>e.target.style.display="none"} /> : "📄"; })()}
                   </div>
                   <div style={{ flex: 1, minWidth: 0 }}>
-                    <p style={{ fontSize: "0.875rem", fontWeight: 600, color: "#0d3b66", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{p.title}</p>
-                    <span style={{ fontSize: "0.75rem", color: "#4a7f98" }}>{p.section} · {formatDate(p.date)}</span>
+                    <p style={{ fontSize: "0.875rem", fontWeight: 600, color: "#2E3D3F", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{p.title}</p>
+                    <span style={{ fontSize: "0.75rem", color: "#5A6A6C" }}>{p.section} · {formatDate(p.date)}</span>
                   </div>
                   <span style={{ fontSize: "0.6875rem", padding: "2px 10px", borderRadius: 10, fontWeight: 600, background: p.status === "published" ? "#e8f8ef" : "#fff8e1", color: p.status === "published" ? "#27ae60" : "#f39c12" }}>
                     {p.status === "published" ? "Tayang" : "Draft"}
@@ -80,19 +80,19 @@ function DashTabs({ user, allPosts, publishedCount, draftCount, data, canEdit, c
             <div style={{ padding: "20px" }}>
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 20 }}>
                 {[
-                  { label: "Total Artikel", value: allPosts.length, icon: "📄", color: "#0891b2" },
+                  { label: "Total Artikel", value: allPosts.length, icon: "📄", color: "#8B6914" },
                   { label: "Tayang", value: publishedCount, icon: "✅", color: "#27ae60" },
                   { label: "Draft", value: draftCount, icon: "📋", color: "#f39c12" },
                   { label: "Pesan Masuk", value: data.messages.length, icon: "✉️", color: "#8e44ad" },
                 ].map(s => (
                   <div key={s.label} style={{ background: "rgba(255,255,255,.1)", borderRadius: 10, padding: "16px 18px", backdropFilter: "blur(6px)", borderLeft: `3px solid ${s.color}` }}>
                     <div style={{ fontSize: "1.5rem", fontWeight: 900, color: s.color, fontFamily: "'Playfair Display',serif" }}>{s.value}</div>
-                    <div style={{ fontSize: "0.8125rem", color: "#4a7f98", marginTop: 2 }}>{s.icon} {s.label}</div>
+                    <div style={{ fontSize: "0.8125rem", color: "#5A6A6C", marginTop: 2 }}>{s.icon} {s.label}</div>
                   </div>
                 ))}
               </div>
-              <div style={{ background: "#edfafc", borderRadius: 10, padding: "14px 18px" }}>
-                <div style={{ fontSize: "0.75rem", fontWeight: 700, color: "#4a7f98", letterSpacing: ".06em", textTransform: "uppercase", marginBottom: 10 }}>Distribusi per Seksi</div>
+              <div style={{ background: "#FAF7F0", borderRadius: 10, padding: "14px 18px" }}>
+                <div style={{ fontSize: "0.75rem", fontWeight: 700, color: "#5A6A6C", letterSpacing: ".06em", textTransform: "uppercase", marginBottom: 10 }}>Distribusi per Seksi</div>
                 {["news","shop","destinations"].map(s => {
                   const total = allPosts.length || 1;
                   const count = (data.posts?.[s] || []).length;
@@ -100,11 +100,11 @@ function DashTabs({ user, allPosts, publishedCount, draftCount, data, canEdit, c
                   return (
                     <div key={s} style={{ marginBottom: 10 }}>
                       <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 4 }}>
-                        <span style={{ fontSize: "0.8125rem", color: "#0d3b66", fontWeight: 600 }}>{SECTION_LABELS[s]}</span>
-                        <span style={{ fontSize: "0.8125rem", color: "#4a7f98" }}>{count}</span>
+                        <span style={{ fontSize: "0.8125rem", color: "#2E3D3F", fontWeight: 600 }}>{SECTION_LABELS[s]}</span>
+                        <span style={{ fontSize: "0.8125rem", color: "#5A6A6C" }}>{count}</span>
                       </div>
-                      <div style={{ height: 6, background: "#c0e8f0", borderRadius: 3, overflow: "hidden" }}>
-                        <div style={{ width: `${pct}%`, height: "100%", background: "#0891b2", borderRadius: 3, transition: "width .5s" }} />
+                      <div style={{ height: 6, background: "#E8DCC8", borderRadius: 3, overflow: "hidden" }}>
+                        <div style={{ width: `${pct}%`, height: "100%", background: "#8B6914", borderRadius: 3, transition: "width .5s" }} />
                       </div>
                     </div>
                   );
@@ -122,9 +122,9 @@ function DashTabs({ user, allPosts, publishedCount, draftCount, data, canEdit, c
                 { q: "Bagaimana cara mengganti teks di website?", a: "Masuk ke menu 'Site Content' (khusus admin) untuk mengedit semua teks halaman." },
                 { q: "Apa perbedaan Draft dan Published?", a: "Draft hanya terlihat di admin panel. Published akan tampil di website untuk pengunjung umum." },
               ].map((faq, i) => (
-                <div key={i} style={{ marginBottom: 14, padding: "14px 16px", background: "#edfafc", borderRadius: 8, borderLeft: "3px solid #0891b2" }}>
-                  <p style={{ fontSize: "0.875rem", fontWeight: 700, color: "#0d3b66", marginBottom: 6 }}>❓ {faq.q}</p>
-                  <p style={{ fontSize: "0.8125rem", color: "#1a5a78", lineHeight: 1.65 }}>{faq.a}</p>
+                <div key={i} style={{ marginBottom: 14, padding: "14px 16px", background: "#FAF7F0", borderRadius: 8, borderLeft: "3px solid #8B6914" }}>
+                  <p style={{ fontSize: "0.875rem", fontWeight: 700, color: "#2E3D3F", marginBottom: 6 }}>❓ {faq.q}</p>
+                  <p style={{ fontSize: "0.8125rem", color: "#3D5254", lineHeight: 1.65 }}>{faq.a}</p>
                 </div>
               ))}
             </div>
@@ -136,9 +136,9 @@ function DashTabs({ user, allPosts, publishedCount, draftCount, data, canEdit, c
       <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
         {/* Top Kontributor */}
         <div style={{ background: "#fff", borderRadius: 10, overflow: "hidden", boxShadow: "0 2px 10px rgba(0,0,0,.06)" }}>
-          <div style={{ padding: "16px 20px", borderBottom: "1px solid #edfafc", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-            <span style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.125rem", fontWeight: 800, color: "#0d3b66" }}>Top Kontributor</span>
-            <span style={{ fontSize: "0.6875rem", color: "#4a7f98" }}>Artikel tayang</span>
+          <div style={{ padding: "16px 20px", borderBottom: "1px solid #FAF7F0", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            <span style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.125rem", fontWeight: 800, color: "#2E3D3F" }}>Top Kontributor</span>
+            <span style={{ fontSize: "0.6875rem", color: "#5A6A6C" }}>Artikel tayang</span>
           </div>
           <div style={{ padding: "8px 0" }}>
             {(() => {
@@ -146,29 +146,29 @@ function DashTabs({ user, allPosts, publishedCount, draftCount, data, canEdit, c
               allPosts.filter(p => p.status === "published").forEach(p => { authorMap[p.author] = (authorMap[p.author] || 0) + 1; });
               const sorted = Object.entries(authorMap).sort((a,b) => b[1]-a[1]).slice(0, 3);
               const medals = ["🥇","🥈","🥉"];
-              if (!sorted.length) return <p style={{ padding: "16px 20px", fontSize: "0.8125rem", color: "#4a7f98" }}>Belum ada artikel tayang.</p>;
+              if (!sorted.length) return <p style={{ padding: "16px 20px", fontSize: "0.8125rem", color: "#5A6A6C" }}>Belum ada artikel tayang.</p>;
               return sorted.map(([author, count], i) => (
-                <div key={author} style={{ display: "flex", alignItems: "center", gap: 12, padding: "10px 20px", borderBottom: "1px solid #edfafc" }}>
+                <div key={author} style={{ display: "flex", alignItems: "center", gap: 12, padding: "10px 20px", borderBottom: "1px solid #FAF7F0" }}>
                   <span style={{ fontSize: "1.25rem", flexShrink: 0, minWidth: 28 }}>{medals[i]}</span>
-                  <div style={{ width: 34, height: 34, borderRadius: "50%", background: "linear-gradient(130deg,#063d5c 0%,#0875a8 50%,#0aa8bf 100%)", display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", fontWeight: 700, fontSize: "0.875rem", flexShrink: 0 }}>
+                  <div style={{ width: 34, height: 34, borderRadius: "50%", background: "linear-gradient(130deg,#2E3D3F 0%,#3D5254 50%,#8B6914 100%)", display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", fontWeight: 700, fontSize: "0.875rem", flexShrink: 0 }}>
                     {author.charAt(0).toUpperCase()}
                   </div>
                   <div style={{ flex: 1 }}>
-                    <div style={{ fontSize: "0.875rem", fontWeight: 700, color: "#0d3b66" }}>{author}</div>
-                    <div style={{ fontSize: "0.75rem", color: "#4a7f98" }}>Artikel: {count}</div>
+                    <div style={{ fontSize: "0.875rem", fontWeight: 700, color: "#2E3D3F" }}>{author}</div>
+                    <div style={{ fontSize: "0.75rem", color: "#5A6A6C" }}>Artikel: {count}</div>
                   </div>
                   {author === user.username && <span style={{ fontSize: "0.625rem", background: "#e8f8ef", color: "#27ae60", borderRadius: 8, padding: "2px 7px", fontWeight: 700 }}>YOU</span>}
                 </div>
               ));
             })()}
-            <div style={{ display: "flex", alignItems: "center", gap: 12, padding: "10px 20px", background: "#edfafc" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 12, padding: "10px 20px", background: "#FAF7F0" }}>
               <span style={{ fontSize: "1.25rem", minWidth: 28 }}>—</span>
-              <div style={{ width: 34, height: 34, borderRadius: "50%", background: "linear-gradient(135deg,#0891b2,#22d3ee)", display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", fontWeight: 700, fontSize: "0.875rem", flexShrink: 0 }}>
+              <div style={{ width: 34, height: 34, borderRadius: "50%", background: "linear-gradient(135deg,#3D5254,#C9AA71)", display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", fontWeight: 700, fontSize: "0.875rem", flexShrink: 0 }}>
                 {user.username.charAt(0).toUpperCase()}
               </div>
               <div style={{ flex: 1 }}>
-                <div style={{ fontSize: "0.875rem", fontWeight: 700, color: "#0d3b66" }}>You ({user.username})</div>
-                <div style={{ fontSize: "0.75rem", color: "#4a7f98" }}>Artikel: {allPosts.filter(p => p.author === user.username && p.status === "published").length}</div>
+                <div style={{ fontSize: "0.875rem", fontWeight: 700, color: "#2E3D3F" }}>You ({user.username})</div>
+                <div style={{ fontSize: "0.75rem", color: "#5A6A6C" }}>Artikel: {allPosts.filter(p => p.author === user.username && p.status === "published").length}</div>
               </div>
             </div>
           </div>
@@ -176,8 +176,8 @@ function DashTabs({ user, allPosts, publishedCount, draftCount, data, canEdit, c
 
         {/* Akses Cepat */}
         <div style={{ background: "#fff", borderRadius: 10, overflow: "hidden", boxShadow: "0 2px 10px rgba(0,0,0,.06)" }}>
-          <div style={{ padding: "16px 20px", borderBottom: "1px solid #edfafc" }}>
-            <span style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.125rem", fontWeight: 800, color: "#0d3b66" }}>Akses Cepat</span>
+          <div style={{ padding: "16px 20px", borderBottom: "1px solid #FAF7F0" }}>
+            <span style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.125rem", fontWeight: 800, color: "#2E3D3F" }}>Akses Cepat</span>
           </div>
           <div style={{ padding: "12px 16px", display: "flex", flexDirection: "column", gap: 8 }}>
             {[
@@ -188,9 +188,9 @@ function DashTabs({ user, allPosts, publishedCount, draftCount, data, canEdit, c
               ...(isAdmin ? [{ label: "⚙ Pengaturan", action: () => setAdminTab("settings") }] : []),
             ].map(item => (
               <button key={item.label} onClick={item.action}
-                style={{ textAlign: "left", padding: "9px 12px", background: "#edfafc", border: "none", borderRadius: 7, fontSize: "0.8125rem", color: "#0d3b66", fontWeight: 500, cursor: "pointer", transition: "background .15s" }}
-                onMouseEnter={e => e.currentTarget.style.background = "#c0e8f0"}
-                onMouseLeave={e => e.currentTarget.style.background = "#edfafc"}>
+                style={{ textAlign: "left", padding: "9px 12px", background: "#FAF7F0", border: "none", borderRadius: 7, fontSize: "0.8125rem", color: "#2E3D3F", fontWeight: 500, cursor: "pointer", transition: "background .15s" }}
+                onMouseEnter={e => e.currentTarget.style.background = "#E8DCC8"}
+                onMouseLeave={e => e.currentTarget.style.background = "#FAF7F0"}>
                 {item.label}
               </button>
             ))}
@@ -335,22 +335,22 @@ function GalleryImageTile({ src, onUrlEdit, onUploaded, onError }) {
           opacity: isUploading ? 0.5 : 1, transition: "opacity .2s" }} />
         {isUploading && (
           <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center",
-            background: "rgba(8,145,178,.12)", borderRadius: 6 }}>
-            <span style={{ fontSize: 11, fontWeight: 700, color: "#0891b2" }}>{item.pct}%</span>
+            background: "rgba(139,105,20,.12)", borderRadius: 6 }}>
+            <span style={{ fontSize: 11, fontWeight: 700, color: "#8B6914" }}>{item.pct}%</span>
           </div>
         )}
       </div>
       {/* Progress bar — muncul saat upload */}
       {item && (
         <div style={{ marginTop: 4 }}>
-          <div style={{ height: 5, background: "#c0e8f0", borderRadius: 3, overflow: "hidden" }}>
+          <div style={{ height: 5, background: "#E8DCC8", borderRadius: 3, overflow: "hidden" }}>
             <div style={{
               height: "100%", borderRadius: 3, transition: "width .2s ease",
               width: `${item.pct}%`,
-              background: item.error ? "#e74c3c" : item.done ? "#27ae60" : "linear-gradient(90deg,#0891b2,#10d0e0)"
+              background: item.error ? "#e74c3c" : item.done ? "#27ae60" : "linear-gradient(90deg,#8B6914,#E8C96A)"
             }} />
           </div>
-          <div style={{ fontSize: 9, fontWeight: 700, color: item.error ? "#e74c3c" : item.done ? "#27ae60" : "#0891b2",
+          <div style={{ fontSize: 9, fontWeight: 700, color: item.error ? "#e74c3c" : item.done ? "#27ae60" : "#8B6914",
             textAlign: "right", marginTop: 2 }}>
             {item.error ? "❌ Gagal" : item.done ? "✅ Selesai" : `📤 ${item.pct}%`}
           </div>
@@ -358,12 +358,12 @@ function GalleryImageTile({ src, onUrlEdit, onUploaded, onError }) {
       )}
       <div style={{ display: "flex", gap: 3, marginTop: 5 }}>
         <button onClick={onUrlEdit} style={{
-          flex: 1, background: "#edfafc", color: "#0ea5c5",
-          border: "1px solid #b0dce8", borderRadius: 4, padding: "4px 0", fontSize: 10, fontWeight: 600, cursor: "pointer" }}>🔗 URL</button>
+          flex: 1, background: "#FAF7F0", color: "#C9AA71",
+          border: "1px solid #D4C4A0", borderRadius: 4, padding: "4px 0", fontSize: 10, fontWeight: 600, cursor: "pointer" }}>🔗 URL</button>
         <label style={{
           flex: 1, background: isUploading ? "#e0f7ff" : "#eeffee",
-          color: isUploading ? "#5090aa" : "#27ae60",
-          border: "1px solid #b0dce8", borderRadius: 4, padding: "4px 0", fontSize: 10, fontWeight: 600,
+          color: isUploading ? "#5A6A6C" : "#27ae60",
+          border: "1px solid #D4C4A0", borderRadius: 4, padding: "4px 0", fontSize: 10, fontWeight: 600,
           cursor: isUploading ? "not-allowed" : "pointer", textAlign: "center", display: "block",
           pointerEvents: isUploading ? "none" : "auto" }}>
           {isUploading ? "⏳..." : "⬆ Upload"}
@@ -421,18 +421,18 @@ function UploadButton({ accept = "image/*", multiple = false, label = "📁 Uplo
       {items.map((it, i) => (
         <div key={i}>
           <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 3 }}>
-            <span style={{ fontSize: 11, fontWeight: 600, color: it.error ? "#e74c3c" : "#0d3b66", maxWidth: 200, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+            <span style={{ fontSize: 11, fontWeight: 600, color: it.error ? "#e74c3c" : "#2E3D3F", maxWidth: 200, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
               {it.error ? "❌ " : it.done ? "✅ " : "📤 "}{it.name}
             </span>
-            <span style={{ fontSize: 11, fontWeight: 800, color: it.error ? "#e74c3c" : it.done ? "#27ae60" : "#0891b2" }}>
+            <span style={{ fontSize: 11, fontWeight: 800, color: it.error ? "#e74c3c" : it.done ? "#27ae60" : "#8B6914" }}>
               {it.error ? "Gagal" : it.done ? "Selesai" : `${it.pct}%`}
             </span>
           </div>
-          <div style={{ height: 6, background: "#c0e8f0", borderRadius: 3, overflow: "hidden" }}>
+          <div style={{ height: 6, background: "#E8DCC8", borderRadius: 3, overflow: "hidden" }}>
             <div style={{
               height: "100%", borderRadius: 3,
               width: `${it.pct}%`,
-              background: it.error ? "#e74c3c" : it.done ? "#27ae60" : "linear-gradient(90deg,#0891b2,#10d0e0)",
+              background: it.error ? "#e74c3c" : it.done ? "#27ae60" : "linear-gradient(90deg,#8B6914,#E8C96A)",
               transition: "width .2s ease"
             }} />
           </div>
@@ -445,7 +445,7 @@ function UploadButton({ accept = "image/*", multiple = false, label = "📁 Uplo
     <div>
       <label style={{
         display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
-        gap: 8, padding: "22px 16px", border: "2px dashed #0ea5c5", borderRadius: 10,
+        gap: 8, padding: "22px 16px", border: "2px dashed #C9AA71", borderRadius: 10,
         background: isUploading ? "#e0f7ff" : "#f0fafe", cursor: isUploading ? "not-allowed" : "pointer",
         transition: "background .15s", pointerEvents: isUploading ? "none" : "auto",
         ...styleProp
@@ -453,8 +453,8 @@ function UploadButton({ accept = "image/*", multiple = false, label = "📁 Uplo
         onMouseEnter={e => { if (!isUploading) e.currentTarget.style.background = "#daf4fb"; }}
         onMouseLeave={e => { if (!isUploading) e.currentTarget.style.background = "#f0fafe"; }}>
         <span style={{ fontSize: 28 }}>{isUploading ? "⏳" : "🖼️"}</span>
-        <span style={{ fontSize: 13, fontWeight: 700, color: "#0891b2" }}>{isUploading ? "Sedang mengupload..." : label}</span>
-        <span style={{ fontSize: 11, color: "#5090aa" }}>JPG, PNG, WEBP</span>
+        <span style={{ fontSize: 13, fontWeight: 700, color: "#8B6914" }}>{isUploading ? "Sedang mengupload..." : label}</span>
+        <span style={{ fontSize: 11, color: "#5A6A6C" }}>JPG, PNG, WEBP</span>
         <input ref={inputRef} type="file" accept={accept} multiple={multiple} onChange={onChange} style={{ display: "none" }} disabled={isUploading} />
       </label>
       {progressArea}
@@ -465,9 +465,9 @@ function UploadButton({ accept = "image/*", multiple = false, label = "📁 Uplo
     <div>
       <label style={{
         display: "flex", alignItems: "center", justifyContent: "center", gap: 6,
-        padding: "9px 14px", border: "1.5px dashed #0ea5c5", borderRadius: 8,
-        background: isUploading ? "#e0f7ff" : "#e8f9fc", cursor: isUploading ? "not-allowed" : "pointer",
-        fontSize: 12, fontWeight: 600, color: isUploading ? "#5090aa" : "#0ea5c5",
+        padding: "9px 14px", border: "1.5px dashed #C9AA71", borderRadius: 8,
+        background: isUploading ? "#e0f7ff" : "#FAF7F0", cursor: isUploading ? "not-allowed" : "pointer",
+        fontSize: 12, fontWeight: 600, color: isUploading ? "#5A6A6C" : "#C9AA71",
         pointerEvents: isUploading ? "none" : "auto",
         ...styleProp
       }}>
@@ -719,7 +719,7 @@ const DEFAULT_DATA = {
       category: "event",
       title: "Paket Event Profesional",
       badge: "Populer",
-      badgeColor: "#0891b2",
+      badgeColor: "#8B6914",
       price: "Rp 12.500.000",
       priceNote: "/ event",
       images: [],
@@ -1443,7 +1443,7 @@ const DEFAULT_DATA = {
       category: "event",
       title: "Paket Reunian",
       badge: "Hangat & Berkesan",
-      badgeColor: "#0891b2",
+      badgeColor: "#8B6914",
       price: "Rp 5.500.000",
       priceNote: "/ acara",
       images: [],
@@ -1665,15 +1665,15 @@ const GS = () => (
       color-scheme: only light !important;
       forced-color-adjust: none !important;
       -webkit-forced-color-adjust: none !important;
-      background-color: #063d5c !important;
+      background-color: #2E3D3F !important;
       filter: none !important;
     }
     body {
       color-scheme: only light !important;
       forced-color-adjust: none !important;
       -webkit-forced-color-adjust: none !important;
-      background-color: #063d5c !important;
-      color: #0d3b66 !important;
+      background-color: #2E3D3F !important;
+      color: #111111 !important;
       filter: none !important;
     }
     /* Semua elemen tidak boleh dibalik warnanya oleh browser/OS */
@@ -1690,14 +1690,14 @@ const GS = () => (
       }
       html {
         color-scheme: only light !important;
-        background-color: #063d5c !important;
+        background-color: #2E3D3F !important;
         filter: none !important;
         -webkit-filter: none !important;
       }
       body {
         color-scheme: only light !important;
-        background-color: #063d5c !important;
-        color: #0d3b66 !important;
+        background-color: #2E3D3F !important;
+        color: #2E3D3F !important;
         filter: none !important;
         -webkit-filter: none !important;
       }
@@ -1711,10 +1711,10 @@ const GS = () => (
 
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
     html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
-    body{font-family:'DM Sans',sans-serif;background:#063d5c;color:#0d3b66;line-height:1.6;font-size:16px}
-    ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-thumb{background:rgba(56,197,216,.5);border-radius:10px}
+    body{font-family:'DM Sans',sans-serif;background:#FAF7F0;color:#111111;line-height:1.6;font-size:16px}
+    ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-thumb{background:rgba(201,170,113,.5);border-radius:10px}
     a{text-decoration:none;color:inherit}
-    a:focus-visible,button:focus-visible{outline:2px solid #0ea5c5;outline-offset:3px;border-radius:3px}
+    a:focus-visible,button:focus-visible{outline:2px solid #C9AA71;outline-offset:3px;border-radius:3px}
     img{max-width:100%;display:block;object-fit:cover}
     input,textarea,select,button{font-family:'DM Sans',sans-serif}
     button{cursor:pointer;border:none;background:none}
@@ -1724,8 +1724,8 @@ const GS = () => (
     @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
     @keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
     @keyframes galScroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
-    @keyframes navNamePulse{0%,100%{color:#fff}33%{color:#10d0e0}66%{color:#0d3b66}}
-    @keyframes navPulse{0%{color:#fff}30%{color:#fff}33%{color:#10d0e0}63%{color:#10d0e0}66%{color:#0d3b66}96%{color:#0d3b66}100%{color:#fff}}
+    @keyframes navNamePulse{0%,100%{color:#fff}33%{color:#E8C96A}66%{color:#2E3D3F}}
+    @keyframes navPulse{0%{color:#fff}30%{color:#fff}33%{color:#E8C96A}63%{color:#E8C96A}66%{color:#2E3D3F}96%{color:#2E3D3F}100%{color:#fff}}
 
     /* Gallery ticker — desktop only */
     .gal-ticker{overflow:hidden;margin-bottom:40px;mask-image:linear-gradient(to right,transparent 0%,#000 6%,#000 94%,transparent 100%);-webkit-mask-image:linear-gradient(to right,transparent 0%,#000 6%,#000 94%,transparent 100%)}
@@ -1749,18 +1749,18 @@ const GS = () => (
 
     .nav-link{position:relative;padding-bottom:3px;font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;font-weight:600;color:var(--re-grey-dk);transition:color .2s;font-family:'Jost',sans-serif}
     .nav-dropdown-panel{animation:fadeIn .18s ease}
-    .nav-link::after{content:'';position:absolute;bottom:0;left:0;width:0;height:1.5px;background:var(--re-black);transition:width .3s;border-radius:2px}
+    .nav-link::after{content:'';position:absolute;bottom:0;left:0;width:0;height:1.5px;background:#C9AA71;transition:width .3s;border-radius:2px}
     .nav-link:hover{color:var(--re-black)}
     .nav-link:hover::after,.nav-link.active::after{width:100%}
-    .nav-link.active{color:var(--re-black)!important;font-weight:700}
+    .nav-link.active{color:#C9AA71!important;font-weight:700}
 
     .hover-lift{transition:transform .3s,box-shadow .3s}
-    .hover-lift:hover{transform:translateY(-4px);box-shadow:0 16px 40px rgba(13,59,102,.12)}
+    .hover-lift:hover{transform:translateY(-4px);box-shadow:0 16px 40px rgba(46,61,63,.12)}
     .img-zoom{overflow:hidden}
     .img-zoom img{transition:transform .6s cubic-bezier(.25,.46,.45,.94)}
     .img-zoom:hover img{transform:scale(1.07)}
-    .cms-toolbar button:hover{background:rgba(8,145,178,.12)!important}
-    .post-card:hover .post-card-title{color:#38c5d8}
+    .cms-toolbar button:hover{background:rgba(139,105,20,.12)!important}
+    .post-card:hover .post-card-title{color:#C9AA71}
 
     /* DESKTOP-ONLY ANIMATIONS */
     @media(min-width:901px){
@@ -1769,9 +1769,9 @@ const GS = () => (
       .anim-zoom{opacity:0;transform:scale(.94);transition:opacity .65s ease,transform .65s ease}
       .anim-zoom.visible{opacity:1;transform:scale(1)}
       .btn-magnetic{transition:transform .25s cubic-bezier(.34,1.56,.64,1),box-shadow .25s}
-      .btn-magnetic:hover{transform:scale(1.045) translateY(-2px);box-shadow:0 12px 32px rgba(13,59,102,.18)}
+      .btn-magnetic:hover{transform:scale(1.045) translateY(-2px);box-shadow:0 12px 32px rgba(46,61,63,.18)}
       .post-card{transition:transform .35s cubic-bezier(.22,1,.36,1),box-shadow .35s;transform-style:preserve-3d}
-      .post-card:hover{transform:translateY(-6px) rotate3d(1,1,0,.8deg);box-shadow:0 20px 48px rgba(13,59,102,.14)}
+      .post-card:hover{transform:translateY(-6px) rotate3d(1,1,0,.8deg);box-shadow:0 20px 48px rgba(46,61,63,.14)}
       @keyframes heroReveal{from{opacity:0;letter-spacing:-.05em;filter:blur(6px)}to{opacity:1;letter-spacing:-.01em;filter:blur(0)}}
       @keyframes flareShift{0%,100%{transform:scale(1) translate(0,0);opacity:.7}50%{transform:scale(1.15) translate(5px,-5px);opacity:1}}
       .hero-title-anim{animation:heroReveal .9s cubic-bezier(.22,1,.36,1) .15s both}
@@ -1788,7 +1788,7 @@ const GS = () => (
     .logo-brand-footer{font-family:'Playfair Display',serif;font-weight:900;font-size:1.15rem;line-height:1.15;letter-spacing:.06em;text-transform:uppercase;color:#111;text-shadow:0 1px 3px rgba(0,0,0,.12)}
     .logo-brand-admin{font-family:'Playfair Display',serif;font-weight:800;font-size:.9rem;line-height:1.1;letter-spacing:.06em;text-transform:uppercase;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,.3)}
     .label-xs{font-size:.6875rem;letter-spacing:.1em;text-transform:uppercase;font-weight:600;color:rgba(255,255,255,.65)}
-    .card-title{font-family:'Playfair Display',serif;font-weight:700;font-size:1.15rem;line-height:1.3;color:#0d3b66}
+    .card-title{font-family:'Playfair Display',serif;font-weight:700;font-size:1.15rem;line-height:1.3;color:#2E3D3F}
 
     /* ── Visibility helpers ── */
     @media(max-width:900px){.hide-md{display:none!important}}
@@ -1826,35 +1826,35 @@ const GS = () => (
     .mag-img-main{grid-column:1;grid-row:1/3;border-radius:6px;overflow:hidden;position:relative}
     .mag-img-main img{width:100%;height:100%;min-height:320px;object-fit:cover;display:block;transition:transform .6s ease}
     .mag-img-main:hover img{transform:scale(1.04)}
-    .mag-img-main .foto-label{position:absolute;bottom:12px;left:12px;background:rgba(13,59,102,.82);color:#fff;font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;padding:5px 10px;border-radius:3px;font-weight:600}
+    .mag-img-main .foto-label{position:absolute;bottom:12px;left:12px;background:rgba(46,61,63,.82);color:#fff;font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;padding:5px 10px;border-radius:3px;font-weight:600}
     .mag-img-sm1{grid-column:2;grid-row:1;border-radius:6px;overflow:hidden}
     .mag-img-sm1 img{width:100%;height:155px;object-fit:cover;display:block;transition:transform .6s ease}
     .mag-img-sm1:hover img{transform:scale(1.04)}
-    .mag-card-text{grid-column:2;grid-row:2;background:linear-gradient(135deg,#063d5c,#0875a8);border-radius:6px;padding:16px 18px;display:flex;flex-direction:column;justify-content:space-between;min-height:155px}
+    .mag-card-text{grid-column:2;grid-row:2;background:linear-gradient(135deg,#2E3D3F,#3D5254);border-radius:6px;padding:16px 18px;display:flex;flex-direction:column;justify-content:space-between;min-height:155px}
     .adv-stats-row{display:flex;gap:32px;margin-bottom:28px;padding-bottom:28px;border-bottom:1px solid #eef3f7}
-    .adv-stat .num{font-family:'Playfair Display',serif;font-size:1.75rem;font-weight:900;color:#38c5d8;line-height:1;margin-bottom:3px}
-    .adv-stat .lbl{font-size:.6875rem;letter-spacing:.1em;text-transform:uppercase;color:#6aaec8;font-weight:600}
+    .adv-stat .num{font-family:'Playfair Display',serif;font-size:1.75rem;font-weight:900;color:#C9AA71;line-height:1;margin-bottom:3px}
+    .adv-stat .lbl{font-size:.6875rem;letter-spacing:.1em;text-transform:uppercase;color:#9A8A5A;font-weight:600}
     .adv-eyebrow{display:flex;align-items:center;gap:14px;margin-bottom:22px}
-    .adv-eyebrow .ey-line{width:36px;height:1.5px;background:#38c5d8;flex-shrink:0}
-    .adv-quote{font-size:.9375rem;color:#1a5a78;line-height:1.9;font-style:italic;max-width:400px;margin-bottom:28px;padding-left:18px;border-left:2px solid #38c5d8;white-space:pre-line}
+    .adv-eyebrow .ey-line{width:36px;height:1.5px;background:#C9AA71;flex-shrink:0}
+    .adv-quote{font-size:.9375rem;color:#2E3D3F;line-height:1.9;font-style:italic;max-width:400px;margin-bottom:28px;padding-left:18px;border-left:2px solid #C9AA71;white-space:pre-line}
 
     /* Margin dekorasi kiri-kanan */
     .adv-margin-deco{position:absolute;top:0;bottom:0;width:52px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;padding:20px 0}
-    .adv-margin-deco.left{left:0;border-right:1px solid #daf0f5}
-    .adv-margin-deco.right{right:0;border-left:1px solid #daf0f5}
-    .adv-margin-deco .issue-text{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#9ed4e0;writing-mode:vertical-rl;transform:rotate(180deg);font-weight:600}
+    .adv-margin-deco.left{left:0;border-right:1px solid #F0E8D8}
+    .adv-margin-deco.right{right:0;border-left:1px solid #F0E8D8}
+    .adv-margin-deco .issue-text{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:#C9AA71;writing-mode:vertical-rl;transform:rotate(180deg);font-weight:600}
     .adv-margin-deco .dot-col{display:flex;flex-direction:column;gap:6px;align-items:center}
-    .adv-margin-deco .dot{width:4px;height:4px;border-radius:50%;background:#c0e8f0}
-    .adv-margin-deco .dot.on{background:#0d3b66}
-    .deco-corner-tr{position:absolute;top:20px;right:60px;width:70px;height:70px;border-top:1.5px solid #daf0f5;border-right:1.5px solid #daf0f5;pointer-events:none}
-    .deco-corner-bl{position:absolute;bottom:20px;left:60px;width:50px;height:50px;border-bottom:1.5px solid #daf0f5;border-left:1.5px solid #daf0f5;pointer-events:none}
+    .adv-margin-deco .dot{width:4px;height:4px;border-radius:50%;background:#E8DCC8}
+    .adv-margin-deco .dot.on{background:#2E3D3F}
+    .deco-corner-tr{position:absolute;top:20px;right:60px;width:70px;height:70px;border-top:1.5px solid #F0E8D8;border-right:1.5px solid #F0E8D8;pointer-events:none}
+    .deco-corner-bl{position:absolute;bottom:20px;left:60px;width:50px;height:50px;border-bottom:1.5px solid #F0E8D8;border-left:1.5px solid #F0E8D8;pointer-events:none}
     @media(max-width:900px){.adv-margin-deco{display:none}.deco-corner-tr,.deco-corner-bl{display:none}.section-inner{padding:0 24px!important}}
     @media(max-width:768px){.mag-grid{display:none}.adv-stats-row{gap:20px}}
 
     /* ── Hero Intro Section (Title + Subtitle after slideshow) ── */
     .hero-intro{background:#ffffff;padding:56px 5% 48px;overflow:hidden;position:relative;border-bottom:1px solid #e8f5f8}
     .hero-intro-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center}
-    .hero-intro-img{position:relative;border-radius:16px;overflow:hidden;box-shadow:0 24px 64px rgba(13,59,102,.14)}
+    .hero-intro-img{position:relative;border-radius:16px;overflow:hidden;box-shadow:0 24px 64px rgba(46,61,63,.14)}
     .hero-intro-img img{width:100%;height:380px;object-fit:cover;display:block;transition:transform .8s cubic-bezier(.25,.46,.45,.94)}
     .hero-intro-img:hover img{transform:scale(1.04)}
     /* Ornamen shape */
@@ -1862,11 +1862,11 @@ const GS = () => (
     .hero-intro-img::after{content:"";position:absolute;bottom:-14px;right:-14px;width:60px;height:60px;border:3px solid rgba(8,145,178,.25);border-radius:50%;z-index:0;pointer-events:none}
     .hero-intro-txt{position:relative;z-index:1}
     .hero-intro-eyebrow{display:flex;align-items:center;gap:12px;margin-bottom:18px}
-    .hero-intro-eyebrow .line{width:36px;height:2px;background:linear-gradient(90deg,#0891b2,rgba(8,145,178,0));border-radius:1px}
-    .hero-intro-h1{font-family:"Playfair Display",serif;font-size:clamp(1.9rem,4.5vw,3.2rem);font-weight:900;color:#0d3b66;line-height:1.08;margin-bottom:20px;letter-spacing:-.02em}
-    .hero-intro-p{font-size:1rem;color:#4a7f98;line-height:1.85;margin-bottom:32px;max-width:400px}
+    .hero-intro-eyebrow .line{width:36px;height:2px;background:linear-gradient(90deg,#8B6914,rgba(8,145,178,0));border-radius:1px}
+    .hero-intro-h1{font-family:"Playfair Display",serif;font-size:clamp(1.9rem,4.5vw,3.2rem);font-weight:900;color:#2E3D3F;line-height:1.08;margin-bottom:20px;letter-spacing:-.02em}
+    .hero-intro-p{font-size:1rem;color:#5A6A6C;line-height:1.85;margin-bottom:32px;max-width:400px}
     /* Deco blobs background */
-    .hero-intro-blob1{position:absolute;top:-60px;right:-80px;width:280px;height:280px;border-radius:50%;background:radial-gradient(circle,rgba(8,145,178,.1) 0%,rgba(8,145,178,0) 70%);pointer-events:none}
+    .hero-intro-blob1{position:absolute;top:-60px;right:-80px;width:280px;height:280px;border-radius:50%;background:radial-gradient(circle,rgba(139,105,20,.1) 0%,rgba(8,145,178,0) 70%);pointer-events:none}
     .hero-intro-blob2{position:absolute;bottom:-40px;left:40%;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(56,197,216,.09) 0%,rgba(56,197,216,0) 70%);pointer-events:none}
     /* Ornamen dekoratif teks */
     .hero-intro-deco-line{position:absolute;top:0;right:0;width:1px;height:100%;background:linear-gradient(to bottom,rgba(13,59,102,0),rgba(13,59,102,.08),rgba(13,59,102,0));pointer-events:none}
@@ -1901,23 +1901,23 @@ const GS = () => (
     .adv2-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;max-width:1100px;margin:0 auto}
     /* Teks kiri */
     .adv2-eyebrow{display:flex;align-items:center;gap:12px;margin-bottom:18px}
-    .adv2-eyebrow .line{width:36px;height:1.5px;background:#38c5d8;flex-shrink:0}
-    .adv2-eyebrow span{font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:#38c5d8;font-weight:700}
+    .adv2-eyebrow .line{width:36px;height:1.5px;background:#C9AA71;flex-shrink:0}
+    .adv2-eyebrow span{font-size:.65rem;letter-spacing:.2em;text-transform:uppercase;color:#C9AA71;font-weight:700}
     .adv2-title{font-family:"Playfair Display",serif;font-size:clamp(1.8rem,3.8vw,2.8rem);font-weight:900;color:#fff;line-height:1.08;margin-bottom:14px}
     /* Quote slideshow */
-    .adv2-quote-wrap{position:relative;min-height:56px;margin-bottom:28px;padding-left:16px;border-left:2px solid #38c5d8}
+    .adv2-quote-wrap{position:relative;min-height:56px;margin-bottom:28px;padding-left:16px;border-left:2px solid #C9AA71}
     .adv2-quote-item{position:absolute;top:0;left:16px;right:0;font-size:.9375rem;color:rgba(255,255,255,.75);line-height:1.85;font-style:italic;opacity:0;transition:opacity .6s ease;pointer-events:none}
     .adv2-quote-item.active{opacity:1;position:relative;left:0}
     .adv2-quote-dots{display:flex;gap:6px;margin-bottom:28px}
     .adv2-qdot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.25);border:none;cursor:pointer;transition:background .3s,width .3s}
-    .adv2-qdot.on{width:18px;border-radius:3px;background:#38c5d8}
+    .adv2-qdot.on{width:18px;border-radius:3px;background:#C9AA71}
     .adv2-stats{display:flex;gap:28px;margin-bottom:28px;padding-bottom:24px;border-bottom:1px solid rgba(255,255,255,.12)}
-    .adv2-stat .num{font-family:"Playfair Display",serif;font-size:1.75rem;font-weight:900;color:#38c5d8;line-height:1;margin-bottom:3px}
+    .adv2-stat .num{font-family:"Playfair Display",serif;font-size:1.75rem;font-weight:900;color:#C9AA71;line-height:1;margin-bottom:3px}
     .adv2-stat .lbl{font-size:.625rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.72);font-weight:600}
     .adv2-btns{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:20px}
     .adv2-btn-pill{padding:8px 16px;background:rgba(255,255,255,.08);color:rgba(255,255,255,.85);border:1px solid rgba(255,255,255,.15);border-radius:20px;font-size:.75rem;font-weight:600;cursor:pointer;transition:all .2s;white-space:nowrap}
     .adv2-btn-pill:hover{background:rgba(255,255,255,.16);color:#fff}
-    .adv2-cta{display:inline-flex;align-items:center;gap:10px;padding:12px 24px;background:linear-gradient(135deg,#0ea5c5,#22d3ee);color:#063d5c;border:none;border-radius:6px;font-size:.8125rem;font-weight:800;cursor:pointer;letter-spacing:.06em;text-transform:uppercase;transition:opacity .2s,transform .2s;font-family:"Playfair Display",serif}
+    .adv2-cta{display:inline-flex;align-items:center;gap:10px;padding:12px 24px;background:linear-gradient(135deg,#C9AA71,#E8C96A);color:#2E3D3F;border:none;border-radius:6px;font-size:.8125rem;font-weight:800;cursor:pointer;letter-spacing:.06em;text-transform:uppercase;transition:opacity .2s,transform .2s;font-family:"Playfair Display",serif}
     .adv2-cta:hover{opacity:.9;transform:translateY(-1px)}
     /* Puzzle grid kanan */
     .adv2-puzzle{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:8px;height:480px}
@@ -1965,7 +1965,7 @@ const GS = () => (
 
     /* Admin panel: sidebar + main */
     .admin-body{display:flex;flex:1;overflow:hidden}
-    .admin-sidebar{width:240px;background:linear-gradient(160deg,#04263d 0%,#063d5c 40%,#0a5278 100%);flex-shrink:0;overflow-y:auto;display:flex;flex-direction:column;transition:transform .25s;box-shadow:4px 0 24px rgba(0,0,0,.25)}
+    .admin-sidebar{width:240px;background:linear-gradient(160deg,#1A2425 0%,#2E3D3F 40%,#3D5254 100%);flex-shrink:0;overflow-y:auto;display:flex;flex-direction:column;transition:transform .25s;box-shadow:4px 0 24px rgba(0,0,0,.25)}
     .admin-main{flex:1;overflow-y:auto;padding:32px}
     @media(max-width:768px){
       .admin-sidebar{position:fixed;top:58px;left:0;bottom:0;z-index:200;transform:translateX(-100%)}
@@ -1974,10 +1974,10 @@ const GS = () => (
     }
     /* Sidebar nav items */
     .snav-btn{width:100%;padding:11px 20px;text-align:left;background:none;color:rgba(255,255,255,.6);font-size:13px;font-weight:700;letter-spacing:.2px;border:none;border-left:3px solid transparent;border-radius:0 10px 10px 0;cursor:pointer;display:flex;align-items:center;gap:11px;transition:all .18s cubic-bezier(.4,0,.2,1);margin-bottom:2px;position:relative;overflow:hidden}
-    .snav-btn::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,rgba(16,208,224,.15),transparent);opacity:0;transition:opacity .18s}
-    .snav-btn:hover{color:#fff;background:rgba(255,255,255,.08);border-left-color:rgba(16,208,224,.5);transform:translateX(4px) scale(1.01);box-shadow:0 2px 12px rgba(0,0,0,.18)}
+    .snav-btn::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,rgba(201,170,113,.15),transparent);opacity:0;transition:opacity .18s}
+    .snav-btn:hover{color:#fff;background:rgba(255,255,255,.08);border-left-color:rgba(201,170,113,.5);transform:translateX(4px) scale(1.01);box-shadow:0 2px 12px rgba(0,0,0,.18)}
     .snav-btn:hover::before{opacity:1}
-    .snav-btn.active{color:#10d0e0;background:rgba(16,208,224,.12);border-left-color:#10d0e0;font-weight:800;box-shadow:inset 0 0 0 1px rgba(16,208,224,.12),0 2px 12px rgba(0,0,0,.15)}
+    .snav-btn.active{color:#C9AA71;background:rgba(201,170,113,.12);border-left-color:#E8C96A;font-weight:800;box-shadow:inset 0 0 0 1px rgba(201,170,113,.12),0 2px 12px rgba(0,0,0,.15)}
     .snav-icon{font-size:16px;width:22px;text-align:center;flex-shrink:0}
 
     /* Admin hamburger toggle — shown only on mobile */
@@ -1991,10 +1991,10 @@ const GS = () => (
     /* CMS Editor: editor + sidebar */
     .cms-editor-grid{display:grid;grid-template-columns:1fr 300px;min-height:700px}
     @media(max-width:900px){.cms-editor-grid{grid-template-columns:1fr}}
-    .cms-editor-left{padding:32px 40px;border-right:1px solid #e0f7fa;overflow-y:auto}
-    .cms-editor-right{padding:16px 16px;background:#f5fdff;display:flex;flex-direction:column;gap:12px;overflow-y:auto;max-height:calc(100vh - 60px);position:sticky;top:0;scrollbar-width:thin}
+    .cms-editor-left{padding:32px 40px;border-right:1px solid #F5EDD8;overflow-y:auto}
+    .cms-editor-right{padding:16px 16px;background:#FDFAF4;display:flex;flex-direction:column;gap:12px;overflow-y:auto;max-height:calc(100vh - 60px);position:sticky;top:0;scrollbar-width:thin}
     @media(max-width:900px){
-      .cms-editor-left{padding:20px 16px;border-right:none;border-bottom:1px solid #e0f7fa}
+      .cms-editor-left{padding:20px 16px;border-right:none;border-bottom:1px solid #F5EDD8}
       .cms-editor-right{padding:16px;max-height:none;position:static}
     }
 
@@ -2024,7 +2024,7 @@ const GS = () => (
     .section-filter-row{display:flex;gap:8px;flex-wrap:wrap}
 
     /* CMS top bar */
-    .cms-topbar{background:#0d3b66;padding:14px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+    .cms-topbar{background:#2E3D3F;padding:14px 24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
     @media(max-width:640px){.cms-topbar{padding:12px 14px}.cms-topbar-btns{gap:6px}}
 
     /* Login modal */
@@ -2051,7 +2051,7 @@ const GS = () => (
 
     /* 1. Navbar — compact on mobile, fully opaque */
     @media(max-width:640px){
-      nav{background:linear-gradient(105deg,#ffffff 0%,#e8f9fb 30%,#a8dde8 62%,#0aa8bf 100%)!important;backdrop-filter:none!important;padding:0 4%!important;overflow:visible!important}
+      nav{background:linear-gradient(105deg,#ffffff 0%,#e8f9fb 30%,#a8dde8 62%,#B8962A 100%)!important;backdrop-filter:none!important;padding:0 4%!important;overflow:visible!important}
       nav>div:not(.mobile-dropdown){height:60px!important;gap:10px!important}
       /* Fix 10: logo lebih kecil di mobile */
       nav img{height:42px!important;max-width:86px!important;width:auto!important}
@@ -2095,8 +2095,8 @@ const GS = () => (
     @media(max-width:768px){
       .book-img-grid{display:none!important}
       /* Book section: single column */
-      section[style*="#c5dde9"] > div.grid-2{display:block!important}
-      section[style*="#c5dde9"] > div > div:last-child{padding-top:0!important}
+      section[style*="#E8DCC8"] > div.grid-2{display:block!important}
+      section[style*="#E8DCC8"] > div > div:last-child{padding-top:0!important}
     }
 
     /* 6. Contact / Globe section */
@@ -2146,7 +2146,7 @@ const GS = () => (
     @media(max-width:480px){
       .footer-grid{gap:18px!important}
       /* Footer bottom bar: stack */
-      div[style*="borderTop: \"1px solid #c0e8f0\""] > div{flex-direction:column!important;gap:10px!important;align-items:flex-start!important}
+      div[style*="borderTop: \"1px solid #E8DCC8\""] > div{flex-direction:column!important;gap:10px!important;align-items:flex-start!important}
     }
 
     /* 12. Navbar mobile menu — tidak tumpang tindih konten */
@@ -2165,9 +2165,9 @@ const GS = () => (
     /* 15. Buttons: solid color, NO transparent background on mobile */
     @media(max-width:640px){
       /* About Us ghost button di hero → solid gelap */
-      button.hero-cta-btn[style*="transparent"]{background:#0d3b66!important;border-color:#0d3b66!important;color:#fff!important}
+      button.hero-cta-btn[style*="transparent"]{background:#2E3D3F!important;border-color:#2E3D3F!important;color:#fff!important}
       /* Explore All & Book Now ghost buttons → solid */
-      button[style*='"transparent"']{background:#0d3b66!important;color:#fff!important}
+      button[style*='"transparent"']{background:#2E3D3F!important;color:#fff!important}
     }
 
     /* Explore dropdown: di mobile tidak absolute agar tidak overlap konten */
@@ -2306,21 +2306,21 @@ const GS = () => (
     .art-content-card{ background:#fff; border-radius:6px; overflow:hidden; }
     .art-content-inner{ padding:24px 28px 32px; }
     .art-breadcrumb{ font-size:11px; color:#888; margin-bottom:10px; }
-    .art-breadcrumb span{ color:#0891b2; }
+    .art-breadcrumb span{ color:#8B6914; }
     .art-h1{ font-size:clamp(1.25rem,2vw,1.6rem); font-weight:700; color:#111; line-height:1.35; margin-bottom:16px; font-family:'Playfair Display',serif; }
     .art-meta-row{ display:flex; align-items:center; justify-content:space-between; margin-bottom:18px; padding-bottom:16px; border-bottom:1px solid #eee; flex-wrap:wrap; gap:10px; }
     .art-author{ display:flex; align-items:center; gap:10px; }
-    .art-avatar{ width:38px; height:38px; border-radius:50%; background:linear-gradient(135deg,#0875a8,#10d0e0); display:flex; align-items:center; justify-content:center; color:#fff; font-size:13px; font-weight:700; flex-shrink:0; }
+    .art-avatar{ width:38px; height:38px; border-radius:50%; background:linear-gradient(135deg,#3D5254,#E8C96A); display:flex; align-items:center; justify-content:center; color:#fff; font-size:13px; font-weight:700; flex-shrink:0; }
     .art-actions{ display:flex; gap:6px; }
     .art-action-btn{ width:32px; height:32px; border-radius:50%; border:1px solid #ddd; background:#fff; display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:14px; transition:background .15s; }
     .art-action-btn:hover{ background:#f0f0f0; }
-    .art-excerpt{ font-size:1.0625rem; color:#333; line-height:1.85; margin-bottom:24px; font-style:italic; font-family:'Cormorant Garamond',serif; padding:14px 18px; background:#f8fafc; border-left:3px solid #0891b2; border-radius:0 6px 6px 0; }
+    .art-excerpt{ font-size:1.0625rem; color:#333; line-height:1.85; margin-bottom:24px; font-style:italic; font-family:'Cormorant Garamond',serif; padding:14px 18px; background:#f8fafc; border-left:3px solid #8B6914; border-radius:0 6px 6px 0; }
     .art-divider{ border:none; border-top:1px solid #eee; margin:28px 0; }
 
     /* Artikel Terkait */
     .art-terkait-scroll{ display:flex; gap:14px; overflow-x:auto; padding-bottom:8px; -webkit-overflow-scrolling:touch; scrollbar-width:thin; }
     .art-terkait-scroll::-webkit-scrollbar{ height:4px; }
-    .art-terkait-scroll::-webkit-scrollbar-thumb{ background:#c0e8f0; border-radius:2px; }
+    .art-terkait-scroll::-webkit-scrollbar-thumb{ background:#E8DCC8; border-radius:2px; }
     .art-terkait-card{ flex-shrink:0; width:220px; cursor:pointer; border-radius:6px; overflow:hidden; background:#fff; border:1px solid #eee; transition:box-shadow .15s; }
     .art-terkait-card:hover{ box-shadow:0 4px 14px rgba(0,0,0,.1); }
 
@@ -2431,11 +2431,11 @@ const GS = () => (
 
     :root {
       --re-white: #ffffff;
-      --re-off: #f8f7f5;
-      --re-grey-lt: #e8e6e2;
-      --re-grey-md: #9e9b96;
-      --re-grey-dk: #4a4845;
-      --re-black: #141210;
+      --re-off: #FAF7F0;
+      --re-grey-lt: #E8DCC8;
+      --re-grey-md: #8B8070;
+      --re-grey-dk: #3D5254;
+      --re-black: #111111;
       --re-smoke: rgba(20,18,16,.55);
     }
 
@@ -2731,7 +2731,7 @@ const VirtualList = React.memo(function VirtualList({
    ═══════════════════════════════════════════════════════════════════════════ */
 const LazyImage = React.memo(function LazyImage({
   src, alt = "", style = {}, className = "",
-  placeholderColor = "#edfafc", onError,
+  placeholderColor = "#FAF7F0", onError,
 }) {
   const [loaded, setLoaded] = useState(false);
   const [error, setError]   = useState(false);
@@ -2754,7 +2754,7 @@ const LazyImage = React.memo(function LazyImage({
       {!loaded && (
         <div style={{
           position: "absolute", inset: 0,
-          background: "linear-gradient(90deg,#dff0f5 25%,#edfafc 50%,#dff0f5 75%)",
+          background: "linear-gradient(90deg,#F5EDD8 25%,#FAF7F0 50%,#F5EDD8 75%)",
           backgroundSize: "800px 100%",
           animation: "shimmer 1.5s infinite",
         }} />
@@ -2784,12 +2784,12 @@ function CEF({ val, multiline, onChange, onSave }) {
     <div style={{ display: "flex", gap: 8, alignItems: "flex-start", width: "100%" }}>
       {multiline
         ? <textarea value={val} onChange={onChange}
-            style={{ flex: 1, padding: "8px 10px", border: "1px solid #86cad8", borderRadius: 6, fontSize: 14, resize: "vertical", minHeight: 80 }} />
+            style={{ flex: 1, padding: "8px 10px", border: "1px solid #A89070", borderRadius: 6, fontSize: 14, resize: "vertical", minHeight: 80 }} />
         : <input value={val} onChange={onChange}
-            style={{ flex: 1, padding: "8px 10px", border: "1px solid #86cad8", borderRadius: 6, fontSize: 14 }} />
+            style={{ flex: 1, padding: "8px 10px", border: "1px solid #A89070", borderRadius: 6, fontSize: 14 }} />
       }
       <button onClick={onSave}
-        style={{ padding: "8px 14px", background: "#0ea5c5", color: "#fff", borderRadius: 6, fontSize: 12, border: "none" }}>Save</button>
+        style={{ padding: "8px 14px", background: "#C9AA71", color: "#fff", borderRadius: 6, fontSize: 12, border: "none" }}>Save</button>
     </div>
   );
 }
@@ -2827,11 +2827,11 @@ function LogoDisplay({ content, size = "nav" }) {
       <div style={{
         width: iconSz, height: iconSz,
         borderRadius: size === "nav" ? 12 : 8,
-        border: `1.5px dashed ${size === "admin" ? "rgba(255,255,255,.3)" : "#86cad8"}`,
+        border: `1.5px dashed ${size === "admin" ? "rgba(255,255,255,.3)" : "#A89070"}`,
         display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
         background: size === "admin" ? "rgba(255,255,255,.06)" : "rgba(61,143,171,.06)"
       }}>
-        <svg viewBox="0 0 24 24" fill="none" stroke={size === "admin" ? "rgba(255,255,255,.4)" : "#7bd3e4"} strokeWidth="1.5"
+        <svg viewBox="0 0 24 24" fill="none" stroke={size === "admin" ? "rgba(255,255,255,.4)" : "#C9AA71"} strokeWidth="1.5"
           width={size === "nav" ? 32 : 18} height={size === "nav" ? 32 : 18}>
           <rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/>
           <polyline points="21 15 16 10 5 21"/>
@@ -2854,57 +2854,57 @@ const formatDate = (d) => {
 
 /* ─────────────── RICH TEXT RENDERER ─────────────── */
 function RichRenderer({ blocks }) {
-  if (!blocks || !blocks.length) return <p style={{ color: "#4a7f98", fontStyle: "italic" }}>No content yet.</p>;
+  if (!blocks || !blocks.length) return <p style={{ color: "#5A6A6C", fontStyle: "italic" }}>No content yet.</p>;
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 22 }}>
       {blocks.map((b, i) => {
         if (b.type === "paragraph") return (
-          <div key={i} style={{ fontSize: "1rem", lineHeight: 1.85, color: "#1a4a72" }}
+          <div key={i} style={{ fontSize: "1rem", lineHeight: 1.85, color: "#2E3D3F" }}
             dangerouslySetInnerHTML={{ __html: b.value }} />
         );
         if (b.type === "heading") return (
-          <h2 key={i} className="display" style={{ fontSize: "1.625rem", fontWeight: 800, color: "#0d3b66", marginTop: 12 }}>{b.value}</h2>
+          <h2 key={i} className="display" style={{ fontSize: "1.625rem", fontWeight: 800, color: "#2E3D3F", marginTop: 12 }}>{b.value}</h2>
         );
         if (b.type === "image") return (
           <figure key={i} style={{ margin: "10px 0" }}>
             <img loading="lazy" src={b.value} alt={b.caption || ""} style={{ width: "100%", maxHeight: 460, objectFit: "cover", borderRadius: 8 }} />
-            {b.caption && <figcaption style={{ fontSize: "0.8125rem", color: "#1a5a78", textAlign: "center", marginTop: 10, fontStyle: "italic", lineHeight: 1.5 }}>{b.caption}</figcaption>}
+            {b.caption && <figcaption style={{ fontSize: "0.8125rem", color: "#3D5254", textAlign: "center", marginTop: 10, fontStyle: "italic", lineHeight: 1.5 }}>{b.caption}</figcaption>}
           </figure>
         );
         if (b.type === "quote") return (
-          <blockquote key={i} style={{ borderLeft: "3px solid #0891b2", paddingLeft: 22, margin: "10px 0" }}>
-            <p style={{ fontSize: "1.125rem", fontStyle: "italic", color: "#1a4a72", lineHeight: 1.75, fontFamily: "'Cormorant Garamond',serif" }}>{b.value}</p>
+          <blockquote key={i} style={{ borderLeft: "3px solid #8B6914", paddingLeft: 22, margin: "10px 0" }}>
+            <p style={{ fontSize: "1.125rem", fontStyle: "italic", color: "#2E3D3F", lineHeight: 1.75, fontFamily: "'Cormorant Garamond',serif" }}>{b.value}</p>
           </blockquote>
         );
         if (b.type === "embed_instagram") return (
           <div key={i} style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-            <div style={{ background: "#edfafc", border: "1px solid #c0e8f0", borderRadius: 8, padding: 16, fontSize: "0.8125rem", color: "#1a5a78" }}>
-              📸 <strong>Instagram Embed:</strong> <a href={b.value} target="_blank" rel="noopener noreferrer" style={{ color: "#0891b2" }}>{b.value}</a>
-              <blockquote className="instagram-media" data-instgrm-permalink={b.value} data-instgrm-version="14" style={{ border: "1px solid #b0dce8", borderRadius: 6, padding: 10, marginTop: 8, background: "#fff" }}>
-                <a href={b.value} target="_blank" rel="noopener noreferrer" style={{ color: "#0891b2", display: "block", marginTop: 6 }}>View on Instagram</a>
+            <div style={{ background: "#FAF7F0", border: "1px solid #E8DCC8", borderRadius: 8, padding: 16, fontSize: "0.8125rem", color: "#3D5254" }}>
+              📸 <strong>Instagram Embed:</strong> <a href={b.value} target="_blank" rel="noopener noreferrer" style={{ color: "#8B6914" }}>{b.value}</a>
+              <blockquote className="instagram-media" data-instgrm-permalink={b.value} data-instgrm-version="14" style={{ border: "1px solid #D4C4A0", borderRadius: 6, padding: 10, marginTop: 8, background: "#fff" }}>
+                <a href={b.value} target="_blank" rel="noopener noreferrer" style={{ color: "#8B6914", display: "block", marginTop: 6 }}>View on Instagram</a>
               </blockquote>
             </div>
           </div>
         );
         if (b.type === "embed_tiktok") return (
           <div key={i} style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-            <div style={{ background: "#edfafc", border: "1px solid #c0e8f0", borderRadius: 8, padding: 16, fontSize: "0.8125rem", color: "#1a5a78" }}>
-              🎵 <strong>TikTok Embed:</strong> <a href={b.value} target="_blank" rel="noopener noreferrer" style={{ color: "#0891b2" }}>{b.value}</a>
-              <div style={{ background: "#fff", borderRadius: 6, border: "1px solid #b0dce8", padding: "12px 14px", marginTop: 8 }}>
+            <div style={{ background: "#FAF7F0", border: "1px solid #E8DCC8", borderRadius: 8, padding: 16, fontSize: "0.8125rem", color: "#3D5254" }}>
+              🎵 <strong>TikTok Embed:</strong> <a href={b.value} target="_blank" rel="noopener noreferrer" style={{ color: "#8B6914" }}>{b.value}</a>
+              <div style={{ background: "#fff", borderRadius: 6, border: "1px solid #D4C4A0", padding: "12px 14px", marginTop: 8 }}>
                 <blockquote className="tiktok-embed" cite={b.value} data-video-id={b.value.split("/video/")[1]?.split("?")[0] || ""}>
-                  <section><a href={b.value} target="_blank" rel="noopener noreferrer" style={{ color: "#0891b2" }}>View on TikTok</a></section>
+                  <section><a href={b.value} target="_blank" rel="noopener noreferrer" style={{ color: "#8B6914" }}>View on TikTok</a></section>
                 </blockquote>
               </div>
             </div>
           </div>
         );
-        if (b.type === "divider") return <hr key={i} style={{ border: "none", borderTop: "1px solid #c0e8f0" }} />;
+        if (b.type === "divider") return <hr key={i} style={{ border: "none", borderTop: "1px solid #E8DCC8" }} />;
         if (b.type === "baca_juga") return (
-          <div key={i} style={{ borderLeft: "4px solid #0891b2", background: "linear-gradient(90deg,#edfafc 0%,#f8fdff 100%)", borderRadius: "0 10px 10px 0", padding: "14px 18px", display: "flex", alignItems: "center", gap: 14 }}>
+          <div key={i} style={{ borderLeft: "4px solid #8B6914", background: "linear-gradient(90deg,#FAF7F0 0%,#f8fdff 100%)", borderRadius: "0 10px 10px 0", padding: "14px 18px", display: "flex", alignItems: "center", gap: 14 }}>
             <span style={{ fontSize: 18 }}>📖</span>
             <div style={{ flex: 1, minWidth: 0 }}>
-              <div style={{ fontSize: "0.6875rem", fontWeight: 700, color: "#0891b2", letterSpacing: ".08em", textTransform: "uppercase", marginBottom: 4 }}>Baca Juga</div>
-              <div style={{ fontSize: "0.9375rem", fontWeight: 700, color: "#0d3b66", lineHeight: 1.4, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{b.title}</div>
+              <div style={{ fontSize: "0.6875rem", fontWeight: 700, color: "#8B6914", letterSpacing: ".08em", textTransform: "uppercase", marginBottom: 4 }}>Baca Juga</div>
+              <div style={{ fontSize: "0.9375rem", fontWeight: 700, color: "#2E3D3F", lineHeight: 1.4, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{b.title}</div>
             </div>
             {b.coverImage && <img loading="lazy" src={b.coverImage} alt="" style={{ width: 64, height: 48, objectFit: "cover", borderRadius: 6, flexShrink: 0 }} onError={e => e.target.style.display = "none"} />}
           </div>
@@ -2973,26 +2973,26 @@ function RichParagraphEditor({ value, onChange, placeholder = "Write your conten
 
   const TB = ({ cmd, val = null, title, children, extraStyle = {} }) => (
     <button title={title} onMouseDown={e => { e.preventDefault(); exec(cmd, val); }}
-      style={{ padding: "3px 7px", fontSize: 13, border: "1px solid #b0dce8", borderRadius: 4, background: "#fff", color: "#4a6680", cursor: "pointer", lineHeight: 1.4, display: "inline-flex", alignItems: "center", justifyContent: "center", minHeight: 26, ...extraStyle }}>
+      style={{ padding: "3px 7px", fontSize: 13, border: "1px solid #D4C4A0", borderRadius: 4, background: "#fff", color: "#3D5254", cursor: "pointer", lineHeight: 1.4, display: "inline-flex", alignItems: "center", justifyContent: "center", minHeight: 26, ...extraStyle }}>
       {children}
     </button>
   );
-  const SEP = () => <span style={{ width: 1, height: 20, background: "#b0dce8", display: "inline-block", margin: "0 3px", verticalAlign: "middle" }} />;
+  const SEP = () => <span style={{ width: 1, height: 20, background: "#D4C4A0", display: "inline-block", margin: "0 3px", verticalAlign: "middle" }} />;
 
-  const textColors = ["#000000","#0d3b66","#0891b2","#e74c3c","#27ae60","#f39c12","#8e44ad","#e67e22","#7f8c8d","#ffffff"];
+  const textColors = ["#000000","#2E3D3F","#8B6914","#e74c3c","#27ae60","#f39c12","#8e44ad","#e67e22","#7f8c8d","#ffffff"];
   const hlColors  = ["#ffff00","#00ff7f","#ff9900","#ffcccc","#cce5ff","#e2ccff","transparent"];
   const fontSizeMap = {"8":1,"10":2,"12":3,"14":4,"18":5,"24":6,"36":7};
 
   return (
-    <div style={{ border: "1.5px solid #b0dce8", borderRadius: 8, overflow: "visible", background: "#fff", boxShadow: "0 1px 4px rgba(0,0,0,.04)" }}>
+    <div style={{ border: "1.5px solid #D4C4A0", borderRadius: 8, overflow: "visible", background: "#fff", boxShadow: "0 1px 4px rgba(0,0,0,.04)" }}>
       {/* ── Toolbar Row 1: Font, Size, Basic Formatting ── */}
-      <div style={{ background: "#edfafc", borderBottom: "1px solid #c0e8f0", padding: "6px 10px", display: "flex", gap: 5, flexWrap: "wrap", alignItems: "center" }}>
+      <div style={{ background: "#FAF7F0", borderBottom: "1px solid #E8DCC8", padding: "6px 10px", display: "flex", gap: 5, flexWrap: "wrap", alignItems: "center" }}>
         <select onChange={e => exec("fontName", e.target.value)}
-          style={{ height: 26, fontSize: 12, padding: "1px 4px", border: "1px solid #b0dce8", borderRadius: 4, background: "#fff", color: "#0d3b66", maxWidth: 130, cursor: "pointer" }}>
+          style={{ height: 26, fontSize: 12, padding: "1px 4px", border: "1px solid #D4C4A0", borderRadius: 4, background: "#fff", color: "#2E3D3F", maxWidth: 130, cursor: "pointer" }}>
           {["Calibri (Body)","Arial","Times New Roman","Georgia","Verdana","Courier New","Trebuchet MS"].map(f => <option key={f} value={f}>{f}</option>)}
         </select>
         <select onChange={e => exec("fontSize", fontSizeMap[e.target.value] || 3)}
-          style={{ height: 26, fontSize: 12, padding: "1px 4px", border: "1px solid #b0dce8", borderRadius: 4, background: "#fff", color: "#0d3b66", width: 52, cursor: "pointer" }}>
+          style={{ height: 26, fontSize: 12, padding: "1px 4px", border: "1px solid #D4C4A0", borderRadius: 4, background: "#fff", color: "#2E3D3F", width: 52, cursor: "pointer" }}>
           {["8","10","11","12","14","16","18","20","24","28","32","36"].map(s => <option key={s} value={s}>{s}</option>)}
         </select>
         <SEP />
@@ -3004,16 +3004,16 @@ function RichParagraphEditor({ value, onChange, placeholder = "Write your conten
         {/* Text Color */}
         <div style={{position:"relative"}} data-richpicker="1">
           <button title="Font Color" onMouseDown={e=>{e.preventDefault();setColorMenuOpen(p=>!p);setHighlightMenuOpen(false);}}
-            style={{padding:"2px 7px",border:"1px solid #b0dce8",borderRadius:4,background:"#fff",cursor:"pointer",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:2,minHeight:26,lineHeight:1}}>
-            <span style={{fontSize:13,fontWeight:900,color:"#0d3b66",lineHeight:1}}>A</span>
+            style={{padding:"2px 7px",border:"1px solid #D4C4A0",borderRadius:4,background:"#fff",cursor:"pointer",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:2,minHeight:26,lineHeight:1}}>
+            <span style={{fontSize:13,fontWeight:900,color:"#2E3D3F",lineHeight:1}}>A</span>
             <span style={{width:14,height:3,background:"#e74c3c",borderRadius:1}}/>
           </button>
           {colorMenuOpen && (
-            <div style={{position:"absolute",top:32,left:0,background:"#fff",border:"1px solid #b0dce8",borderRadius:8,padding:8,zIndex:9999,display:"flex",gap:4,flexWrap:"wrap",width:132,boxShadow:"0 6px 20px rgba(0,0,0,.15)"}}>
-              <div style={{width:"100%",fontSize:10,color:"#5090aa",fontWeight:600,letterSpacing:".5px",textTransform:"uppercase",marginBottom:2}}>Warna Teks</div>
+            <div style={{position:"absolute",top:32,left:0,background:"#fff",border:"1px solid #D4C4A0",borderRadius:8,padding:8,zIndex:9999,display:"flex",gap:4,flexWrap:"wrap",width:132,boxShadow:"0 6px 20px rgba(0,0,0,.15)"}}>
+              <div style={{width:"100%",fontSize:10,color:"#5A6A6C",fontWeight:600,letterSpacing:".5px",textTransform:"uppercase",marginBottom:2}}>Warna Teks</div>
               {textColors.map(c=>(
                 <button key={c} onMouseDown={e=>{e.preventDefault();exec("foreColor",c);setColorMenuOpen(false);}}
-                  style={{width:22,height:22,borderRadius:4,background:c,border:"1.5px solid #b0dce8",cursor:"pointer",outline:"none"}}/>
+                  style={{width:22,height:22,borderRadius:4,background:c,border:"1.5px solid #D4C4A0",cursor:"pointer",outline:"none"}}/>
               ))}
             </div>
           )}
@@ -3021,16 +3021,16 @@ function RichParagraphEditor({ value, onChange, placeholder = "Write your conten
         {/* Highlight */}
         <div style={{position:"relative"}} data-richpicker="1">
           <button title="Sorot Teks" onMouseDown={e=>{e.preventDefault();setHighlightMenuOpen(p=>!p);setColorMenuOpen(false);}}
-            style={{padding:"2px 7px",border:"1px solid #b0dce8",borderRadius:4,background:"#fff",cursor:"pointer",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:2,minHeight:26,lineHeight:1}}>
+            style={{padding:"2px 7px",border:"1px solid #D4C4A0",borderRadius:4,background:"#fff",cursor:"pointer",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:2,minHeight:26,lineHeight:1}}>
             <span style={{fontSize:11,color:"#333",lineHeight:1,fontWeight:600}}>ab</span>
             <span style={{width:14,height:3,background:"#ffff00",border:"1px solid #ccc",borderRadius:1}}/>
           </button>
           {highlightMenuOpen && (
-            <div style={{position:"absolute",top:32,left:0,background:"#fff",border:"1px solid #b0dce8",borderRadius:8,padding:8,zIndex:9999,display:"flex",gap:4,flexWrap:"wrap",width:110,boxShadow:"0 6px 20px rgba(0,0,0,.15)"}}>
-              <div style={{width:"100%",fontSize:10,color:"#5090aa",fontWeight:600,letterSpacing:".5px",textTransform:"uppercase",marginBottom:2}}>Sorotan</div>
+            <div style={{position:"absolute",top:32,left:0,background:"#fff",border:"1px solid #D4C4A0",borderRadius:8,padding:8,zIndex:9999,display:"flex",gap:4,flexWrap:"wrap",width:110,boxShadow:"0 6px 20px rgba(0,0,0,.15)"}}>
+              <div style={{width:"100%",fontSize:10,color:"#5A6A6C",fontWeight:600,letterSpacing:".5px",textTransform:"uppercase",marginBottom:2}}>Sorotan</div>
               {hlColors.map(c=>(
                 <button key={c} onMouseDown={e=>{e.preventDefault();exec("hiliteColor",c);setHighlightMenuOpen(false);}}
-                  style={{width:22,height:22,borderRadius:4,background:c,border:"1.5px solid #b0dce8",cursor:"pointer",outline:"none"}} title={c === "transparent" ? "Hapus Sorotan" : c}/>
+                  style={{width:22,height:22,borderRadius:4,background:c,border:"1.5px solid #D4C4A0",cursor:"pointer",outline:"none"}} title={c === "transparent" ? "Hapus Sorotan" : c}/>
               ))}
             </div>
           )}
@@ -3041,7 +3041,7 @@ function RichParagraphEditor({ value, onChange, placeholder = "Write your conten
       </div>
 
       {/* ── Toolbar Row 2: Lists, Indent, Paragraph, Alignment ── */}
-      <div style={{ background: "#edfafc", borderBottom: "1px solid #c0e8f0", padding: "5px 10px", display: "flex", gap: 5, alignItems: "center", flexWrap: "wrap" }}>
+      <div style={{ background: "#FAF7F0", borderBottom: "1px solid #E8DCC8", padding: "5px 10px", display: "flex", gap: 5, alignItems: "center", flexWrap: "wrap" }}>
         <TB cmd="insertUnorderedList" title="Daftar Bullet">
           <span style={{display:"flex",flexDirection:"column",gap:2,alignItems:"flex-start"}}>
             <span style={{display:"flex",alignItems:"center",gap:3}}><span style={{width:4,height:4,borderRadius:"50%",background:"currentColor"}}/>
@@ -3097,7 +3097,7 @@ function RichParagraphEditor({ value, onChange, placeholder = "Write your conten
           onFocus={() => setIsEmpty(false)}
           onBlur={() => setIsEmpty(!editorRef.current?.textContent?.trim())}
           style={{
-            minHeight: 220, padding: "16px 18px", fontSize: 14, color: "#0d3b66",
+            minHeight: 220, padding: "16px 18px", fontSize: 14, color: "#2E3D3F",
             lineHeight: 1.85, outline: "none", background: "#fff",
             fontFamily: "'Calibri', Arial, sans-serif",
             borderRadius: "0 0 6px 6px",
@@ -3283,10 +3283,10 @@ function CMSEditor({ post, onSave, onCancel, section, onSectionChange, user, not
             <div style={{ textAlign: "center", marginBottom: 8 }}>
               <span style={{ fontSize: 32 }}>🚀</span>
             </div>
-            <h2 style={{ fontSize: 20, fontWeight: 800, color: "#0d3b66", textAlign: "center", marginBottom: 6, fontFamily: "'Playfair Display',serif" }}>
+            <h2 style={{ fontSize: 20, fontWeight: 800, color: "#2E3D3F", textAlign: "center", marginBottom: 6, fontFamily: "'Playfair Display',serif" }}>
               Pilih Tujuan Publish
             </h2>
-            <p style={{ fontSize: 13, color: "#4a7f98", textAlign: "center", marginBottom: 24, lineHeight: 1.6 }}>
+            <p style={{ fontSize: 13, color: "#5A6A6C", textAlign: "center", marginBottom: 24, lineHeight: 1.6 }}>
               Artikel akan ditayangkan di seksi yang kamu pilih di bawah ini.
             </p>
             <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
@@ -3301,37 +3301,37 @@ function CMSEditor({ post, onSave, onCancel, section, onSectionChange, user, not
                   handleSave("published", opt.key);
                 }} style={{
                   display: "flex", alignItems: "center", gap: 16, padding: "14px 18px",
-                  border: section === opt.key ? "2px solid #0d3b66" : "1.5px solid #c0e8f0",
+                  border: section === opt.key ? "2px solid #2E3D3F" : "1.5px solid #E8DCC8",
                   borderRadius: 10, background: section === opt.key ? "#f0f5fa" : "#fff",
                   cursor: "pointer", textAlign: "left", transition: "all .15s"
                 }}
-                  onMouseEnter={e => { e.currentTarget.style.borderColor = "#0891b2"; e.currentTarget.style.background = "#edfafc"; }}
-                  onMouseLeave={e => { e.currentTarget.style.borderColor = section === opt.key ? "#0d3b66" : "#c0e8f0"; e.currentTarget.style.background = section === opt.key ? "#f0f5fa" : "#fff"; }}>
+                  onMouseEnter={e => { e.currentTarget.style.borderColor = "#8B6914"; e.currentTarget.style.background = "#FAF7F0"; }}
+                  onMouseLeave={e => { e.currentTarget.style.borderColor = section === opt.key ? "#2E3D3F" : "#E8DCC8"; e.currentTarget.style.background = section === opt.key ? "#f0f5fa" : "#fff"; }}>
                   <span style={{ fontSize: 28, flexShrink: 0 }}>{opt.icon}</span>
                   <div>
-                    <div style={{ fontSize: 15, fontWeight: 700, color: "#0d3b66" }}>{opt.label}</div>
-                    <div style={{ fontSize: 12, color: "#4a7f98", marginTop: 2 }}>{opt.desc}</div>
+                    <div style={{ fontSize: 15, fontWeight: 700, color: "#2E3D3F" }}>{opt.label}</div>
+                    <div style={{ fontSize: 12, color: "#5A6A6C", marginTop: 2 }}>{opt.desc}</div>
                   </div>
                   {section === opt.key && <span style={{ marginLeft: "auto", fontSize: 16, color: "#27ae60" }}>✓</span>}
                 </button>
               ))}
             </div>
             <button onClick={() => setPublishModal(false)} style={{
-              width: "100%", marginTop: 16, padding: "10px", border: "1px solid #b0dce8",
-              borderRadius: 8, fontSize: 13, color: "#4a7f98", background: "#f5fdff", cursor: "pointer"
+              width: "100%", marginTop: 16, padding: "10px", border: "1px solid #D4C4A0",
+              borderRadius: 8, fontSize: 13, color: "#5A6A6C", background: "#FDFAF4", cursor: "pointer"
             }}>Batal</button>
           </div>
         </div>
       )}
 
       {/* CMS Top Bar */}
-      <div style={{ background: "linear-gradient(130deg,#063d5c 0%,#0875a8 45%,#0aa8bf 78%,#10d0e0 100%)", padding: "14px 24px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+      <div style={{ background: "linear-gradient(130deg,#2E3D3F 0%,#3D5254 45%,#8B6914 78%,#C9AA71 100%)", padding: "14px 24px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
         <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
           <span style={{ color: "#fff", fontSize: 14, fontWeight: 500 }}>
-            {post?.id ? "Edit Post" : "Add New Post"} — <span style={{ color: "#7dc8de" }}>{SECTION_LABELS[section] || section}</span>
+            {post?.id ? "Edit Post" : "Add New Post"} — <span style={{ color: "#C9AA71" }}>{SECTION_LABELS[section] || section}</span>
           </span>
           {autoSaveStatus && (
-            <span style={{ fontSize: 11, color: autoSaveStatus.startsWith("✓") ? "#7dc8de" : "rgba(255,255,255,.5)", letterSpacing: ".3px" }}>
+            <span style={{ fontSize: 11, color: autoSaveStatus.startsWith("✓") ? "#C9AA71" : "rgba(255,255,255,.5)", letterSpacing: ".3px" }}>
               {autoSaveStatus}
             </span>
           )}
@@ -3360,7 +3360,7 @@ function CMSEditor({ post, onSave, onCancel, section, onSectionChange, user, not
             placeholder="Masukkan judul artikel di sini..."
             rows={2}
             style={{ width: "100%", fontSize: 28, fontFamily: "'Cormorant Garamond',serif", fontWeight: 600,
-              color: "#0d3b66", border: "none", outline: "none", borderBottom: "2px solid #e0f7fa",
+              color: "#2E3D3F", border: "none", outline: "none", borderBottom: "2px solid #F5EDD8",
               paddingBottom: 14, marginBottom: 24, background: "transparent",
               resize: "none", overflow: "hidden", lineHeight: 1.3, boxSizing: "border-box",
               fontStyle: "normal" }}
@@ -3370,27 +3370,27 @@ function CMSEditor({ post, onSave, onCancel, section, onSectionChange, user, not
           <textarea value={form.excerpt} onChange={e => setForm(p => ({ ...p, excerpt: e.target.value }))}
             placeholder="Ringkasan singkat artikel..."
             rows={3}
-            style={{ width: "100%", fontSize: 14, color: "#4a7f98", border: "1px solid #e0f7fa",
+            style={{ width: "100%", fontSize: 14, color: "#5A6A6C", border: "1px solid #F5EDD8",
               borderRadius: 6, padding: "12px 14px", outline: "none", resize: "vertical",
-              marginBottom: 28, lineHeight: 1.65, background: "#f5fdff" }} />
+              marginBottom: 28, lineHeight: 1.65, background: "#FDFAF4" }} />
 
           {/* Blocks */}
           <div style={{ marginBottom: 24 }}>
-            <div style={{ fontSize: 11, fontWeight: 600, color: "#5090aa", letterSpacing: "1px", textTransform: "uppercase", marginBottom: 12 }}>Content Blocks</div>
+            <div style={{ fontSize: 11, fontWeight: 600, color: "#5A6A6C", letterSpacing: "1px", textTransform: "uppercase", marginBottom: 12 }}>Content Blocks</div>
             {blocks.length === 0 && (
-              <div style={{ background: "#f5fdff", border: "2px dashed #b0dce8", borderRadius: 8, padding: "32px", textAlign: "center", color: "#5090aa", fontSize: 13 }}>
+              <div style={{ background: "#FDFAF4", border: "2px dashed #D4C4A0", borderRadius: 8, padding: "32px", textAlign: "center", color: "#5A6A6C", fontSize: 13 }}>
                 No content yet. Add your first block below.
               </div>
             )}
             {blocks.map((b, i) => (
-              <div key={i} style={{ background: "#f5fdff", border: `1px solid ${editBlockIdx === i ? "#0ea5c5" : "#e0f7fa"}`, borderRadius: 8, padding: "14px 16px", marginBottom: 10, position: "relative" }}>
+              <div key={i} style={{ background: "#FDFAF4", border: `1px solid ${editBlockIdx === i ? "#C9AA71" : "#F5EDD8"}`, borderRadius: 8, padding: "14px 16px", marginBottom: 10, position: "relative" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
-                  <span style={{ fontSize: 11, background: "#e8f4fd", color: "#0ea5c5", padding: "2px 8px", borderRadius: 10, fontWeight: 500 }}>{blockLabels[b.type] || b.type}</span>
+                  <span style={{ fontSize: 11, background: "#F5EDD8", color: "#C9AA71", padding: "2px 8px", borderRadius: 10, fontWeight: 500 }}>{blockLabels[b.type] || b.type}</span>
                   <div style={{ marginLeft: "auto", display: "flex", gap: 4 }}>
-                    <button onClick={() => moveBlock(i, -1)} title="Naik" style={{ padding: "3px 8px", fontSize: 11, border: "1px solid #b0dce8", borderRadius: 4, color: "#5090aa", background: "#fff" }}>↑</button>
-                    <button onClick={() => moveBlock(i, 1)} title="Turun" style={{ padding: "3px 8px", fontSize: 11, border: "1px solid #b0dce8", borderRadius: 4, color: "#5090aa", background: "#fff" }}>↓</button>
+                    <button onClick={() => moveBlock(i, -1)} title="Naik" style={{ padding: "3px 8px", fontSize: 11, border: "1px solid #D4C4A0", borderRadius: 4, color: "#5A6A6C", background: "#fff" }}>↑</button>
+                    <button onClick={() => moveBlock(i, 1)} title="Turun" style={{ padding: "3px 8px", fontSize: 11, border: "1px solid #D4C4A0", borderRadius: 4, color: "#5A6A6C", background: "#fff" }}>↓</button>
                     {b.type !== "divider" && b.type !== "image" && b.type !== "baca_juga" && (
-                      <button onClick={() => { setEditBlockIdx(i); setEditBlockVal(b.value || ""); }} title="Edit" style={{ padding: "3px 8px", fontSize: 11, border: "1px solid #0ea5c5", background: "#e8f9fc", color: "#0ea5c5", borderRadius: 4 }}>✏</button>
+                      <button onClick={() => { setEditBlockIdx(i); setEditBlockVal(b.value || ""); }} title="Edit" style={{ padding: "3px 8px", fontSize: 11, border: "1px solid #C9AA71", background: "#FAF7F0", color: "#C9AA71", borderRadius: 4 }}>✏</button>
                     )}
                     <button onClick={() => { if (editBlockIdx === i) { setEditBlockIdx(null); setEditBlockVal(""); } removeBlock(i); }} title="Hapus" style={{ padding: "3px 8px", fontSize: 11, border: "none", background: "#fee", color: "#e74c3c", borderRadius: 4 }}>✕</button>
                   </div>
@@ -3407,34 +3407,34 @@ function CMSEditor({ post, onSave, onCancel, section, onSectionChange, user, not
                     ) : (
                       <input value={editBlockVal} onChange={e => setEditBlockVal(e.target.value)}
                         autoFocus
-                        style={{ width: "100%", padding: "10px 12px", border: "1px solid #0ea5c5", borderRadius: 6, fontSize: 13, outline: "none", boxSizing: "border-box" }} />
+                        style={{ width: "100%", padding: "10px 12px", border: "1px solid #C9AA71", borderRadius: 6, fontSize: 13, outline: "none", boxSizing: "border-box" }} />
                     )}
                     <div style={{ display: "flex", gap: 8, marginTop: 8 }}>
                       <button onClick={() => saveEditBlock(i)} style={{ padding: "6px 16px", background: "#27ae60", color: "#fff", border: "none", borderRadius: 6, fontSize: 12, fontWeight: 600, cursor: "pointer" }}>✓ Simpan</button>
-                      <button onClick={() => { setEditBlockIdx(null); setEditBlockVal(""); }} style={{ padding: "6px 12px", background: "#eee", color: "#5090aa", border: "none", borderRadius: 6, fontSize: 12, cursor: "pointer" }}>Batal</button>
+                      <button onClick={() => { setEditBlockIdx(null); setEditBlockVal(""); }} style={{ padding: "6px 12px", background: "#eee", color: "#5A6A6C", border: "none", borderRadius: 6, fontSize: 12, cursor: "pointer" }}>Batal</button>
                     </div>
                   </div>
                 ) : b.type === "image" ? (
                   <div>
-                    <img loading="lazy" src={b.value} alt="" style={{ width: "100%", maxHeight: 480, objectFit: "contain", borderRadius: 6, background: "#f5fdff" }} onError={e => { e.target.style.display = "none"; }} />
-                    {b.caption && <p style={{ fontSize: 11, color: "#5090aa", marginTop: 4, fontStyle: "italic" }}>{b.caption}</p>}
+                    <img loading="lazy" src={b.value} alt="" style={{ width: "100%", maxHeight: 480, objectFit: "contain", borderRadius: 6, background: "#FDFAF4" }} onError={e => { e.target.style.display = "none"; }} />
+                    {b.caption && <p style={{ fontSize: 11, color: "#5A6A6C", marginTop: 4, fontStyle: "italic" }}>{b.caption}</p>}
                   </div>
                 ) : b.type === "divider" ? (
-                  <hr style={{ border: "none", borderTop: "2px solid #b0dce8" }} />
+                  <hr style={{ border: "none", borderTop: "2px solid #D4C4A0" }} />
                 ) : b.type === "baca_juga" ? (
-                  <div style={{ display: "flex", alignItems: "center", gap: 10, background: "#edfafc", borderLeft: "3px solid #0891b2", borderRadius: "0 6px 6px 0", padding: "8px 12px" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 10, background: "#FAF7F0", borderLeft: "3px solid #8B6914", borderRadius: "0 6px 6px 0", padding: "8px 12px" }}>
                     <span style={{ fontSize: 15 }}>📖</span>
                     <div style={{ flex: 1, minWidth: 0 }}>
-                      <div style={{ fontSize: 10, fontWeight: 700, color: "#0891b2", textTransform: "uppercase", letterSpacing: ".06em" }}>Baca Juga</div>
-                      <div style={{ fontSize: 12, fontWeight: 600, color: "#0d3b66", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{b.title}</div>
+                      <div style={{ fontSize: 10, fontWeight: 700, color: "#8B6914", textTransform: "uppercase", letterSpacing: ".06em" }}>Baca Juga</div>
+                      <div style={{ fontSize: 12, fontWeight: 600, color: "#2E3D3F", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{b.title}</div>
                     </div>
                     {b.coverImage && <img loading="lazy" src={b.coverImage} alt="" style={{ width: 40, height: 30, objectFit: "cover", borderRadius: 4, flexShrink: 0 }} onError={e => e.target.style.display = "none"} />}
                   </div>
                 ) : b.type === "paragraph" ? (
-                  <div style={{ fontSize: 13, color: "#4a6680", lineHeight: 1.6, wordBreak: "break-word" }}
+                  <div style={{ fontSize: 13, color: "#3D5254", lineHeight: 1.6, wordBreak: "break-word" }}
                     dangerouslySetInnerHTML={{ __html: b.value }} />
                 ) : (
-                  <p style={{ fontSize: 13, color: "#4a6680", lineHeight: 1.6, wordBreak: "break-word" }}>
+                  <p style={{ fontSize: 13, color: "#3D5254", lineHeight: 1.6, wordBreak: "break-word" }}>
                     {b.value}
                   </p>
                 )}
@@ -3443,15 +3443,15 @@ function CMSEditor({ post, onSave, onCancel, section, onSectionChange, user, not
           </div>
 
           {/* Add Block Toolbar */}
-          <div style={{ background: "#edfafc", border: "1px solid #c0e8f0", borderRadius: 10, padding: "18px 20px" }}>
-            <div style={{ fontSize: 11, fontWeight: 600, color: "#5090aa", letterSpacing: "1px", textTransform: "uppercase", marginBottom: 14 }}>Add Block</div>
+          <div style={{ background: "#FAF7F0", border: "1px solid #E8DCC8", borderRadius: 10, padding: "18px 20px" }}>
+            <div style={{ fontSize: 11, fontWeight: 600, color: "#5A6A6C", letterSpacing: "1px", textTransform: "uppercase", marginBottom: 14 }}>Add Block</div>
             <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 12 }}>
               {Object.entries(blockLabels).map(([k, label]) => (
                 <button key={k} onClick={() => setAddType(k)} style={{
                   padding: "5px 12px", fontSize: 12, borderRadius: 20,
-                  border: addType === k ? "none" : "1px solid #b0dce8",
-                  background: addType === k ? "#0ea5c5" : "#fff",
-                  color: addType === k ? "#fff" : "#4a6680", fontWeight: addType === k ? 600 : 400,
+                  border: addType === k ? "none" : "1px solid #D4C4A0",
+                  background: addType === k ? "#C9AA71" : "#fff",
+                  color: addType === k ? "#fff" : "#3D5254", fontWeight: addType === k ? 600 : 400,
                   transition: "all .15s"
                 }}>{label}</button>
               ))}
@@ -3464,9 +3464,9 @@ function CMSEditor({ post, onSave, onCancel, section, onSectionChange, user, not
                     {["url", "upload"].map(m => (
                       <button key={m} onClick={() => setImgUploadMode(m)} style={{
                         padding: "4px 12px", fontSize: 11, borderRadius: 4,
-                        border: imgUploadMode === m ? "none" : "1px solid #b0dce8",
-                        background: imgUploadMode === m ? "#0d3b66" : "#fff",
-                        color: imgUploadMode === m ? "#fff" : "#4a7f98"
+                        border: imgUploadMode === m ? "none" : "1px solid #D4C4A0",
+                        background: imgUploadMode === m ? "#2E3D3F" : "#fff",
+                        color: imgUploadMode === m ? "#fff" : "#5A6A6C"
                       }}>{m === "url" ? "URL" : "Upload File"}</button>
                     ))}
                   </div>
@@ -3477,24 +3477,24 @@ function CMSEditor({ post, onSave, onCancel, section, onSectionChange, user, not
                     <input ref={fileRef} type="file" accept="image/*" onChange={handleImageUpload} style={{ display: "none" }} />
                     <button onClick={() => fileRef.current?.click()} disabled={imgUploadItems.some(it => !it.done && !it.error)}
                       style={{
-                        padding: "10px 20px", border: "1.5px dashed #0ea5c5", borderRadius: 8,
-                        color: imgUploadItems.some(it => !it.done && !it.error) ? "#5090aa" : "#0ea5c5",
-                        fontSize: 13, background: "#e8f9fc", width: "100%", marginBottom: 8,
+                        padding: "10px 20px", border: "1.5px dashed #C9AA71", borderRadius: 8,
+                        color: imgUploadItems.some(it => !it.done && !it.error) ? "#5A6A6C" : "#C9AA71",
+                        fontSize: 13, background: "#FAF7F0", width: "100%", marginBottom: 8,
                         cursor: imgUploadItems.some(it => !it.done && !it.error) ? "not-allowed" : "pointer"
                       }}>{imgUploadItems.some(it => !it.done && !it.error) ? "⏳ Mengupload..." : "📁 Click to Upload Image"}</button>
                     {imgUploadItems.length > 0 && imgUploadItems.map((it, i) => (
                       <div key={i} style={{ marginBottom: 8 }}>
                         <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 3 }}>
-                          <span style={{ fontSize: 11, fontWeight: 600, color: it.error ? "#e74c3c" : "#0d3b66", maxWidth: 200, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                          <span style={{ fontSize: 11, fontWeight: 600, color: it.error ? "#e74c3c" : "#2E3D3F", maxWidth: 200, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                             {it.error ? "❌ " : it.done ? "✅ " : "📤 "}{it.name}
                           </span>
-                          <span style={{ fontSize: 11, fontWeight: 800, color: it.error ? "#e74c3c" : it.done ? "#27ae60" : "#0891b2" }}>
+                          <span style={{ fontSize: 11, fontWeight: 800, color: it.error ? "#e74c3c" : it.done ? "#27ae60" : "#8B6914" }}>
                             {it.error ? "Gagal" : it.done ? "Selesai" : `${it.pct}%`}
                           </span>
                         </div>
-                        <div style={{ height: 6, background: "#c0e8f0", borderRadius: 3, overflow: "hidden" }}>
+                        <div style={{ height: 6, background: "#E8DCC8", borderRadius: 3, overflow: "hidden" }}>
                           <div style={{ height: "100%", borderRadius: 3, width: `${it.pct}%`,
-                            background: it.error ? "#e74c3c" : it.done ? "#27ae60" : "linear-gradient(90deg,#0891b2,#10d0e0)",
+                            background: it.error ? "#e74c3c" : it.done ? "#27ae60" : "linear-gradient(90deg,#8B6914,#E8C96A)",
                             transition: "width .2s ease" }} />
                         </div>
                       </div>
@@ -3513,7 +3513,7 @@ function CMSEditor({ post, onSave, onCancel, section, onSectionChange, user, not
                   <textarea value={addVal} onChange={e => setAddVal(e.target.value)}
                     placeholder="Teks kutipan..."
                     rows={4}
-                    style={{ width: "100%", padding: "10px 12px", border: "1px solid #b0dce8",
+                    style={{ width: "100%", padding: "10px 12px", border: "1px solid #D4C4A0",
                       borderRadius: 6, fontSize: 13, outline: "none", resize: "vertical", marginBottom: 8, lineHeight: 1.6 }} />
                 ) : (
                   <input value={addVal} onChange={e => setAddVal(e.target.value)}
@@ -3523,14 +3523,14 @@ function CMSEditor({ post, onSave, onCancel, section, onSectionChange, user, not
                       addType === "embed_instagram" ? "https://www.instagram.com/p/..." :
                       addType === "embed_tiktok" ? "https://www.tiktok.com/@user/video/..." : ""
                     }
-                    style={{ width: "100%", padding: "10px 12px", border: "1px solid #b0dce8",
+                    style={{ width: "100%", padding: "10px 12px", border: "1px solid #D4C4A0",
                       borderRadius: 6, fontSize: 13, outline: "none", marginBottom: 8 }} />
                 )}
 
                 {addType === "image" && (
                   <input value={addCaption} onChange={e => setAddCaption(e.target.value)}
                     placeholder="Image caption (optional)"
-                    style={{ width: "100%", padding: "8px 12px", border: "1px solid #b0dce8",
+                    style={{ width: "100%", padding: "8px 12px", border: "1px solid #D4C4A0",
                       borderRadius: 6, fontSize: 12, outline: "none", marginBottom: 8 }} />
                 )}
               </>
@@ -3547,29 +3547,29 @@ function CMSEditor({ post, onSave, onCancel, section, onSectionChange, user, not
                     value={bacaJugaSearch}
                     onChange={e => { setBacaJugaSearch(e.target.value); setBacaJugaSelected(null); }}
                     placeholder="🔍 Cari judul artikel..."
-                    style={{ width: "100%", padding: "9px 12px", border: "1px solid #b0dce8", borderRadius: 6, fontSize: 13, outline: "none", marginBottom: 8, boxSizing: "border-box" }}
+                    style={{ width: "100%", padding: "9px 12px", border: "1px solid #D4C4A0", borderRadius: 6, fontSize: 13, outline: "none", marginBottom: 8, boxSizing: "border-box" }}
                   />
                   {bacaJugaSelected ? (
-                    <div style={{ display: "flex", alignItems: "center", gap: 10, padding: "10px 12px", background: "#e8f9fc", borderRadius: 8, border: "1.5px solid #0ea5c5" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: 10, padding: "10px 12px", background: "#FAF7F0", borderRadius: 8, border: "1.5px solid #C9AA71" }}>
                       {bacaJugaSelected.coverImage && <img loading="lazy" src={bacaJugaSelected.coverImage} alt="" style={{ width: 48, height: 36, objectFit: "cover", borderRadius: 4, flexShrink: 0 }} onError={e => e.target.style.display = "none"} />}
-                      <span style={{ fontSize: 13, fontWeight: 600, color: "#0d3b66", flex: 1 }}>{bacaJugaSelected.title}</span>
+                      <span style={{ fontSize: 13, fontWeight: 600, color: "#2E3D3F", flex: 1 }}>{bacaJugaSelected.title}</span>
                       <button onClick={() => setBacaJugaSelected(null)} style={{ fontSize: 11, color: "#e74c3c", background: "none", border: "none", cursor: "pointer", fontWeight: 700 }}>✕</button>
                     </div>
                   ) : (
-                    <div style={{ maxHeight: 180, overflowY: "auto", border: "1px solid #c0e8f0", borderRadius: 8, background: "#fff" }}>
+                    <div style={{ maxHeight: 180, overflowY: "auto", border: "1px solid #E8DCC8", borderRadius: 8, background: "#fff" }}>
                       {filtered.length === 0 ? (
-                        <div style={{ padding: "14px 12px", fontSize: 12, color: "#4a7f98", textAlign: "center" }}>
+                        <div style={{ padding: "14px 12px", fontSize: 12, color: "#5A6A6C", textAlign: "center" }}>
                           {otherPosts.length === 0 ? "Belum ada artikel published lain." : "Artikel tidak ditemukan."}
                         </div>
                       ) : filtered.map(p => (
                         <div key={p.id} onClick={() => { setBacaJugaSelected(p); setBacaJugaSearch(""); }}
-                          style={{ display: "flex", alignItems: "center", gap: 10, padding: "9px 12px", cursor: "pointer", borderBottom: "1px solid #edfafc", transition: "background .12s" }}
-                          onMouseEnter={e => e.currentTarget.style.background = "#edfafc"}
+                          style={{ display: "flex", alignItems: "center", gap: 10, padding: "9px 12px", cursor: "pointer", borderBottom: "1px solid #FAF7F0", transition: "background .12s" }}
+                          onMouseEnter={e => e.currentTarget.style.background = "#FAF7F0"}
                           onMouseLeave={e => e.currentTarget.style.background = "transparent"}>
                           {p.coverImage && <img loading="lazy" src={p.coverImage} alt="" style={{ width: 40, height: 30, objectFit: "cover", borderRadius: 4, flexShrink: 0 }} onError={e => e.target.style.display = "none"} />}
                           <div style={{ flex: 1, minWidth: 0 }}>
-                            <div style={{ fontSize: 13, fontWeight: 600, color: "#0d3b66", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{p.title}</div>
-                            <div style={{ fontSize: 11, color: "#4a7f98" }}>{p.section}</div>
+                            <div style={{ fontSize: 13, fontWeight: 600, color: "#2E3D3F", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{p.title}</div>
+                            <div style={{ fontSize: 11, color: "#5A6A6C" }}>{p.section}</div>
                           </div>
                         </div>
                       ))}
@@ -3580,7 +3580,7 @@ function CMSEditor({ post, onSave, onCancel, section, onSectionChange, user, not
             })()}
 
             <button onClick={addBlock} style={{
-              padding: "9px 22px", background: "linear-gradient(130deg,#063d5c 0%,#0875a8 45%,#0aa8bf 78%,#10d0e0 100%)", color: "#fff",
+              padding: "9px 22px", background: "linear-gradient(130deg,#2E3D3F 0%,#3D5254 45%,#8B6914 78%,#C9AA71 100%)", color: "#fff",
               borderRadius: 6, fontSize: 13, border: "none", fontWeight: 500
             }}>+ Add Block</button>
           </div>
@@ -3589,17 +3589,17 @@ function CMSEditor({ post, onSave, onCancel, section, onSectionChange, user, not
         {/* Right: Meta / Publish */}
         <div className="cms-editor-right">
           {/* Section Selector */}
-          <div style={{ background: "#fff", borderRadius: 8, border: "1px solid #e0f7fa", overflow: "hidden" }}>
-            <div style={{ background: "#edfafc", padding: "8px 14px", borderBottom: "1px solid #e0f7fa" }}>
-              <span style={{ fontSize: 11, fontWeight: 600, color: "#0d3b66", letterSpacing: ".5px" }}>PUBLISH TO</span>
+          <div style={{ background: "#fff", borderRadius: 8, border: "1px solid #F5EDD8", overflow: "hidden" }}>
+            <div style={{ background: "#FAF7F0", padding: "8px 14px", borderBottom: "1px solid #F5EDD8" }}>
+              <span style={{ fontSize: 11, fontWeight: 600, color: "#2E3D3F", letterSpacing: ".5px" }}>PUBLISH TO</span>
             </div>
             <div style={{ padding: "8px 12px", display: "flex", flexDirection: "column", gap: 5 }}>
               {Object.entries(SECTION_LABELS).map(([key, label]) => (
                 <button key={key} onClick={() => onSectionChange && onSectionChange(key)} style={{
                   padding: "6px 10px", borderRadius: 6, fontSize: 12, fontWeight: section === key ? 600 : 400,
-                  border: section === key ? "none" : "1px solid #b0dce8",
-                  background: section === key ? "#0d3b66" : "#fff",
-                  color: section === key ? "#fff" : "#4a6680",
+                  border: section === key ? "none" : "1px solid #D4C4A0",
+                  background: section === key ? "#2E3D3F" : "#fff",
+                  color: section === key ? "#fff" : "#3D5254",
                   textAlign: "left", transition: "all .15s", cursor: "pointer"
                 }}>{section === key ? "✓ " : ""}{label}</button>
               ))}
@@ -3607,29 +3607,29 @@ function CMSEditor({ post, onSave, onCancel, section, onSectionChange, user, not
           </div>
 
           {/* Publish Box */}
-          <div style={{ background: "#fff", borderRadius: 8, border: "1px solid #e0f7fa", overflow: "hidden" }}>
-            <div style={{ background: "#edfafc", padding: "8px 14px", borderBottom: "1px solid #e0f7fa" }}>
-              <span style={{ fontSize: 11, fontWeight: 600, color: "#0d3b66", letterSpacing: ".5px" }}>PUBLISH</span>
+          <div style={{ background: "#fff", borderRadius: 8, border: "1px solid #F5EDD8", overflow: "hidden" }}>
+            <div style={{ background: "#FAF7F0", padding: "8px 14px", borderBottom: "1px solid #F5EDD8" }}>
+              <span style={{ fontSize: 11, fontWeight: 600, color: "#2E3D3F", letterSpacing: ".5px" }}>PUBLISH</span>
             </div>
             <div style={{ padding: "10px 12px", display: "flex", flexDirection: "column", gap: 8 }}>
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                <span style={{ fontSize: 12, color: "#5090aa" }}>Status:</span>
+                <span style={{ fontSize: 12, color: "#5A6A6C" }}>Status:</span>
                 <span style={{ fontSize: 11, fontWeight: 500, color: form.status === "published" ? "#27ae60" : "#f39c12",
                   background: form.status === "published" ? "#eeffee" : "#fff9ee", padding: "2px 9px", borderRadius: 10 }}>
                   {form.status === "published" ? "Published" : "Draft"}
                 </span>
               </div>
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                <span style={{ fontSize: 12, color: "#5090aa" }}>Visibility:</span>
-                <span style={{ fontSize: 12, color: "#4a6680", fontWeight: 500 }}>Public</span>
+                <span style={{ fontSize: 12, color: "#5A6A6C" }}>Visibility:</span>
+                <span style={{ fontSize: 12, color: "#3D5254", fontWeight: 500 }}>Public</span>
               </div>
-              <div style={{ borderTop: "1px solid #e0f7fa", paddingTop: 8, display: "flex", flexDirection: "column", gap: 6 }}>
+              <div style={{ borderTop: "1px solid #F5EDD8", paddingTop: 8, display: "flex", flexDirection: "column", gap: 6 }}>
                 <button onClick={() => handleSave("draft")} style={{
-                  padding: "7px 0", border: "1px solid #b0dce8", borderRadius: 6,
-                  fontSize: 12, color: "#4a6680", background: "#fff", fontWeight: 500, cursor: "pointer"
+                  padding: "7px 0", border: "1px solid #D4C4A0", borderRadius: 6,
+                  fontSize: 12, color: "#3D5254", background: "#fff", fontWeight: 500, cursor: "pointer"
                 }}>Save Draft</button>
                 <button onClick={() => setPublishModal(true)} style={{
-                  padding: "8px 0", background: "linear-gradient(130deg,#063d5c 0%,#0875a8 45%,#0aa8bf 78%,#10d0e0 100%)", border: "none",
+                  padding: "8px 0", background: "linear-gradient(130deg,#2E3D3F 0%,#3D5254 45%,#8B6914 78%,#C9AA71 100%)", border: "none",
                   borderRadius: 6, fontSize: 12, color: "#fff", fontWeight: 600, letterSpacing: ".5px", cursor: "pointer"
                 }}>🚀 Publish…</button>
               </div>
@@ -3642,39 +3642,39 @@ function CMSEditor({ post, onSave, onCancel, section, onSectionChange, user, not
             { label: "Category", key: "category", placeholder: "e.g. Beach, Gear, Asia" },
           ].map(f => (
             <div key={f.key}>
-              <label style={{ display: "block", fontSize: 10, fontWeight: 600, color: "#5090aa", letterSpacing: "1px", textTransform: "uppercase", marginBottom: 4 }}>{f.label}</label>
+              <label style={{ display: "block", fontSize: 10, fontWeight: 600, color: "#5A6A6C", letterSpacing: "1px", textTransform: "uppercase", marginBottom: 4 }}>{f.label}</label>
               <input type={f.type || "text"} value={form[f.key] || ""} placeholder={f.placeholder || ""}
                 onChange={e => setForm(p => ({ ...p, [f.key]: e.target.value }))}
-                style={{ width: "100%", padding: "7px 10px", border: "1px solid #b0dce8", borderRadius: 6, fontSize: 12, outline: "none", boxSizing: "border-box" }} />
+                style={{ width: "100%", padding: "7px 10px", border: "1px solid #D4C4A0", borderRadius: 6, fontSize: 12, outline: "none", boxSizing: "border-box" }} />
             </div>
           ))}
 
           {/* Author — auto dari akun yang login */}
           <div>
-            <label style={{ display: "block", fontSize: 10, fontWeight: 600, color: "#5090aa", letterSpacing: "1px", textTransform: "uppercase", marginBottom: 4 }}>
+            <label style={{ display: "block", fontSize: 10, fontWeight: 600, color: "#5A6A6C", letterSpacing: "1px", textTransform: "uppercase", marginBottom: 4 }}>
               Author <span style={{ fontSize: 10, color: "#27ae60", fontWeight: 500, textTransform: "none", letterSpacing: 0 }}>· otomatis</span>
             </label>
             <div style={{ position: "relative" }}>
               <input value={form.author || ""} readOnly
-                style={{ width: "100%", padding: "7px 28px 7px 10px", border: "1px solid #b0dce8", borderRadius: 6, fontSize: 12, outline: "none", background: "#edfafc", color: "#0d3b66", fontWeight: 600, cursor: "default", boxSizing: "border-box" }} />
+                style={{ width: "100%", padding: "7px 28px 7px 10px", border: "1px solid #D4C4A0", borderRadius: 6, fontSize: 12, outline: "none", background: "#FAF7F0", color: "#2E3D3F", fontWeight: 600, cursor: "default", boxSizing: "border-box" }} />
               <span style={{ position: "absolute", right: 8, top: "50%", transform: "translateY(-50%)", fontSize: 11 }}>🔒</span>
             </div>
-            <p style={{ fontSize: 10, color: "#5090aa", marginTop: 3 }}>Diisi otomatis dari akun yang login</p>
+            <p style={{ fontSize: 10, color: "#5A6A6C", marginTop: 3 }}>Diisi otomatis dari akun yang login</p>
           </div>
 
           {/* Tags */}
           <div>
-            <label style={{ display: "block", fontSize: 10, fontWeight: 600, color: "#5090aa", letterSpacing: "1px", textTransform: "uppercase", marginBottom: 4 }}>Tags</label>
+            <label style={{ display: "block", fontSize: 10, fontWeight: 600, color: "#5A6A6C", letterSpacing: "1px", textTransform: "uppercase", marginBottom: 4 }}>Tags</label>
             <input value={typeof form.tags === "string" ? form.tags : (form.tags || []).join(", ")}
               onChange={e => setForm(p => ({ ...p, tags: e.target.value }))}
               placeholder="beach, travel, gear"
-              style={{ width: "100%", padding: "7px 10px", border: "1px solid #b0dce8", borderRadius: 6, fontSize: 12, outline: "none", boxSizing: "border-box" }} />
-            <p style={{ fontSize: 10, color: "#5090aa", marginTop: 3 }}>Separate with commas</p>
+              style={{ width: "100%", padding: "7px 10px", border: "1px solid #D4C4A0", borderRadius: 6, fontSize: 12, outline: "none", boxSizing: "border-box" }} />
+            <p style={{ fontSize: 10, color: "#5A6A6C", marginTop: 3 }}>Separate with commas</p>
           </div>
 
           {/* Section badge */}
-          <div style={{ fontSize: 11, color: "#5090aa", fontStyle: "italic", textAlign: "center", paddingBottom: 8 }}>
-            Posting to: <strong style={{ color: "#0ea5c5" }}>{SECTION_LABELS[section] || section}</strong>
+          <div style={{ fontSize: 11, color: "#5A6A6C", fontStyle: "italic", textAlign: "center", paddingBottom: 8 }}>
+            Posting to: <strong style={{ color: "#C9AA71" }}>{SECTION_LABELS[section] || section}</strong>
           </div>
         </div>
       </div>
@@ -3697,14 +3697,14 @@ function PostCard({ post, onClick, view = "grid" }) {
         </div>
       )}
       <div style={{ padding: "14px 16px 14px 0", flex: 1 }}>
-        {post.category && <span className="label-xs" style={{ color: "#0891b2" }}>{post.category}</span>}
+        {post.category && <span className="label-xs" style={{ color: "#8B6914" }}>{post.category}</span>}
         <h3 className="post-card-title" style={{ fontFamily: "'Playfair Display',serif", fontWeight: 700,
-          fontSize: "1.1rem", color: "#0d3b66", margin: "6px 0 8px", lineHeight: 1.35, transition: "color .2s",
+          fontSize: "1.1rem", color: "#2E3D3F", margin: "6px 0 8px", lineHeight: 1.35, transition: "color .2s",
           display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>{post.title}</h3>
-        <p style={{ fontSize: "0.875rem", color: "#1a5a78", lineHeight: 1.65, marginBottom: 10 }}>
+        <p style={{ fontSize: "0.875rem", color: "#3D5254", lineHeight: 1.65, marginBottom: 10 }}>
           {post.excerpt?.length > 100 ? post.excerpt.slice(0, 100) + "…" : post.excerpt}
         </p>
-        <span style={{ fontSize: "0.75rem", color: "#4a7f98" }}>{formatDate(post.date)}</span>
+        <span style={{ fontSize: "0.75rem", color: "#5A6A6C" }}>{formatDate(post.date)}</span>
       </div>
     </article>
   );
@@ -3721,21 +3721,21 @@ function PostCard({ post, onClick, view = "grid" }) {
       )}
       <div style={{ padding: "18px 20px" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
-          {post.category && <span className="label-xs" style={{ color: "#0891b2" }}>{post.category}</span>}
+          {post.category && <span className="label-xs" style={{ color: "#8B6914" }}>{post.category}</span>}
           {post.badge && <span style={{ fontSize: "0.6875rem", background: "#fff3cd", color: "#7a5c00", padding: "2px 9px", borderRadius: 10, fontWeight: 600, letterSpacing: ".03em" }}>{post.badge}</span>}
-          <span style={{ fontSize: "0.75rem", color: "#4a7f98" }}>{formatDate(post.date)}</span>
+          <span style={{ fontSize: "0.75rem", color: "#5A6A6C" }}>{formatDate(post.date)}</span>
         </div>
         <h3 className="post-card-title" style={{ fontFamily: "'Playfair Display',serif", fontWeight: 700,
-          fontSize: "1.15rem", color: "#0d3b66", marginBottom: 10, lineHeight: 1.35, transition: "color .2s",
+          fontSize: "1.15rem", color: "#2E3D3F", marginBottom: 10, lineHeight: 1.35, transition: "color .2s",
           display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>{post.title}</h3>
-        <p style={{ fontSize: "0.875rem", color: "#1a5a78", lineHeight: 1.7 }}>
+        <p style={{ fontSize: "0.875rem", color: "#3D5254", lineHeight: 1.7 }}>
           {post.excerpt?.length > 110 ? post.excerpt.slice(0, 110) + "…" : post.excerpt}
         </p>
 
         {post.tags?.length > 0 && (
           <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginTop: 12 }}>
             {post.tags.slice(0, 3).map(t => (
-              <span key={t} style={{ fontSize: "0.6875rem", padding: "3px 9px", background: "#edfafc", border: "1px solid #c0e8f0", borderRadius: 10, color: "#1a5a78", fontWeight: 500 }}>#{t}</span>
+              <span key={t} style={{ fontSize: "0.6875rem", padding: "3px 9px", background: "#FAF7F0", border: "1px solid #E8DCC8", borderRadius: 10, color: "#3D5254", fontWeight: 500 }}>#{t}</span>
             ))}
           </div>
         )}
@@ -3795,7 +3795,7 @@ function ArticleDetail({ post, onBack, allPosts = [], onReadPost }) {
 
       {/* ══ SHARE BAR (sticky) ══ */}
       <div className="art-share-bar">
-        <button onClick={onBack} style={{ fontSize: 12, color: "#0891b2", fontWeight: 600, background: "none", border: "none", cursor: "pointer", whiteSpace: "nowrap", display: "flex", alignItems: "center", gap: 4 }}>
+        <button onClick={onBack} style={{ fontSize: 12, color: "#8B6914", fontWeight: 600, background: "none", border: "none", cursor: "pointer", whiteSpace: "nowrap", display: "flex", alignItems: "center", gap: 4 }}>
           ← Kembali
         </button>
         <span style={{ color: "#ddd" }}>|</span>
@@ -3872,7 +3872,7 @@ function ArticleDetail({ post, onBack, allPosts = [], onReadPost }) {
                 <div className="art-tags">
                   <span style={{ fontSize: 12, color: "#888", fontWeight: 600 }}>Tags:</span>
                   {post.tags.map(t => (
-                    <span key={t} style={{ fontSize: 12, padding: "3px 12px", background: "#edfafc", border: "1px solid #c0e8f0", borderRadius: 20, color: "#0875a8", fontWeight: 500 }}>#{t}</span>
+                    <span key={t} style={{ fontSize: 12, padding: "3px 12px", background: "#FAF7F0", border: "1px solid #E8DCC8", borderRadius: 20, color: "#3D5254", fontWeight: 500 }}>#{t}</span>
                   ))}
                 </div>
               )}
@@ -3905,7 +3905,7 @@ function ArticleDetail({ post, onBack, allPosts = [], onReadPost }) {
           {/* ── Artikel Terkait (horizontal scroll) ── */}
           {artikelTerkait.length > 0 && (
             <div className="art-content-card" style={{ marginBottom: 20, padding: "20px 24px" }}>
-              <h3 style={{ fontSize: 15, fontWeight: 700, color: "#111", marginBottom: 16, paddingBottom: 10, borderBottom: "2px solid #0891b2", display: "inline-block" }}>
+              <h3 style={{ fontSize: 15, fontWeight: 700, color: "#111", marginBottom: 16, paddingBottom: 10, borderBottom: "2px solid #8B6914", display: "inline-block" }}>
                 Artikel Terkait
               </h3>
               <div className="art-terkait-scroll">
@@ -3913,10 +3913,10 @@ function ArticleDetail({ post, onBack, allPosts = [], onReadPost }) {
                   <div key={p.id} className="art-terkait-card" onClick={() => handlePost(p)}>
                     {(() => { const img = (p.content||[]).find(b=>b.type==="image")?.value; return img
                       ? <div style={{ height: 120, overflow: "hidden" }}><img loading="lazy" src={img} alt="" style={{ width:"100%", height:"100%", objectFit:"cover", transition:"transform .3s" }} onMouseEnter={e=>e.target.style.transform="scale(1.05)"} onMouseLeave={e=>e.target.style.transform="scale(1)"} onError={e=>e.target.style.display="none"} /></div>
-                      : <div style={{ height: 120, background: "linear-gradient(135deg,#edfafc,#c0e8f0)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 28 }}>📄</div>;
+                      : <div style={{ height: 120, background: "linear-gradient(135deg,#FAF7F0,#E8DCC8)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 28 }}>📄</div>;
                     })()}
                     <div style={{ padding: "10px 12px 14px" }}>
-                      {p.category && <div style={{ fontSize: 10, color: "#0891b2", fontWeight: 700, textTransform: "uppercase", letterSpacing: ".5px", marginBottom: 5 }}>{p.category}</div>}
+                      {p.category && <div style={{ fontSize: 10, color: "#8B6914", fontWeight: 700, textTransform: "uppercase", letterSpacing: ".5px", marginBottom: 5 }}>{p.category}</div>}
                       <p style={{ fontSize: 12.5, fontWeight: 600, color: "#222", lineHeight: 1.45,
                         display: "-webkit-box", WebkitLineClamp: 3, WebkitBoxOrient: "vertical", overflow: "hidden" }}>
                         {p.title}
@@ -3939,10 +3939,10 @@ function ArticleDetail({ post, onBack, allPosts = [], onReadPost }) {
                   <div key={p.id} className="art-pilihan-card" onClick={() => handlePost(p)}>
                     {(() => { const img = (p.content||[]).find(b=>b.type==="image")?.value; return img
                       ? <div style={{ height: 140, overflow: "hidden" }}><img loading="lazy" src={img} alt="" style={{ width:"100%", height:"100%", objectFit:"cover", transition:"transform .3s" }} onMouseEnter={e=>e.target.style.transform="scale(1.05)"} onMouseLeave={e=>e.target.style.transform="scale(1)"} onError={e=>e.target.style.display="none"} /></div>
-                      : <div style={{ height: 140, background: "linear-gradient(135deg,#f5fdff,#edfafc)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 32 }}>🌟</div>;
+                      : <div style={{ height: 140, background: "linear-gradient(135deg,#FDFAF4,#FAF7F0)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 32 }}>🌟</div>;
                     })()}
                     <div style={{ padding: "12px 14px 16px" }}>
-                      {p.category && <div style={{ fontSize: 10, color: "#0891b2", fontWeight: 700, textTransform: "uppercase", letterSpacing: ".5px", marginBottom: 5 }}>{p.category}</div>}
+                      {p.category && <div style={{ fontSize: 10, color: "#8B6914", fontWeight: 700, textTransform: "uppercase", letterSpacing: ".5px", marginBottom: 5 }}>{p.category}</div>}
                       <p style={{ fontSize: 13, fontWeight: 600, color: "#222", lineHeight: 1.45,
                         display: "-webkit-box", WebkitLineClamp: 3, WebkitBoxOrient: "vertical", overflow: "hidden" }}>
                         {p.title}
@@ -3969,7 +3969,7 @@ function ArticleDetail({ post, onBack, allPosts = [], onReadPost }) {
             <div style={{ fontSize: 11, color: "#ccc", textAlign: "center", padding: "0 20px", lineHeight: 1.6 }}>
               Wujudkan perjalanan impian & momen spesialmu bersama kami
             </div>
-            <a href="#" style={{ marginTop: 6, fontSize: 11, padding: "6px 16px", background: "#0891b2", color: "#fff", borderRadius: 4, fontWeight: 600, textDecoration: "none" }}>
+            <a href="#" style={{ marginTop: 6, fontSize: 11, padding: "6px 16px", background: "#8B6914", color: "#fff", borderRadius: 4, fontWeight: 600, textDecoration: "none" }}>
               Hubungi Kami
             </a>
           </div>
@@ -3977,7 +3977,7 @@ function ArticleDetail({ post, onBack, allPosts = [], onReadPost }) {
           {/* ── Berita Populer sidebar cards ── */}
           {sidebarCards.length > 0 && (
             <div style={{ background: "#fff", borderRadius: 6, overflow: "hidden", marginBottom: 20 }}>
-              <div style={{ padding: "12px 16px", borderBottom: "2px solid #0891b2" }}>
+              <div style={{ padding: "12px 16px", borderBottom: "2px solid #8B6914" }}>
                 <span style={{ fontSize: 13, fontWeight: 700, color: "#111" }}>Berita Terpopuler</span>
               </div>
               <div style={{ padding: "8px 16px" }}>
@@ -3986,7 +3986,7 @@ function ArticleDetail({ post, onBack, allPosts = [], onReadPost }) {
                     <div className="art-sb-thumb">
                       {(() => { const img = (p.content||[]).find(b=>b.type==="image")?.value; return img
                         ? <img loading="lazy" src={img} alt="" onError={e=>e.target.style.display="none"} />
-                        : <div style={{ width:"100%", height:"100%", background:"#edfafc", display:"flex", alignItems:"center", justifyContent:"center", fontSize:18 }}>📄</div>;
+                        : <div style={{ width:"100%", height:"100%", background:"#FAF7F0", display:"flex", alignItems:"center", justifyContent:"center", fontSize:18 }}>📄</div>;
                       })()}
                     </div>
                     <div style={{ flex: 1, minWidth: 0 }}>
@@ -3994,7 +3994,7 @@ function ArticleDetail({ post, onBack, allPosts = [], onReadPost }) {
                         display: "-webkit-box", WebkitLineClamp: 3, WebkitBoxOrient: "vertical", overflow: "hidden" }}>
                         {p.title}
                       </p>
-                      {p.category && <div style={{ fontSize: 10, color: "#0891b2", marginTop: 5, fontWeight: 600 }}>{p.category}</div>}
+                      {p.category && <div style={{ fontSize: 10, color: "#8B6914", marginTop: 5, fontWeight: 600 }}>{p.category}</div>}
                     </div>
                   </div>
                 ))}
@@ -4003,7 +4003,7 @@ function ArticleDetail({ post, onBack, allPosts = [], onReadPost }) {
           )}
 
           {/* ── Layanan Unggulan sidebar ── */}
-          <div style={{ background: "linear-gradient(135deg,#063d5c 0%,#0875a8 55%,#10d0e0 100%)", borderRadius: 6, padding: "20px 18px", position: "relative", overflow: "hidden" }}>
+          <div style={{ background: "linear-gradient(135deg,#2E3D3F 0%,#3D5254 55%,#E8C96A 100%)", borderRadius: 6, padding: "20px 18px", position: "relative", overflow: "hidden" }}>
             <div style={{ position: "absolute", top: -20, right: -20, width: 90, height: 90, borderRadius: "50%", background: "rgba(255,255,255,.08)" }} />
             <div style={{ fontSize: 11, fontWeight: 700, color: "rgba(255,255,255,.7)", textTransform: "uppercase", letterSpacing: "1px", marginBottom: 12 }}>🌟 Layanan Kami</div>
             {[
@@ -4032,7 +4032,7 @@ function ArticleDetail({ post, onBack, allPosts = [], onReadPost }) {
           {/* ── Saran Postingan ── */}
           {sidebarCards.length > 0 && (
             <div style={{ background: "#fff", borderRadius: 8, overflow: "hidden", marginTop: 20, boxShadow: "0 2px 10px rgba(0,0,0,.06)" }}>
-              <div style={{ background: "linear-gradient(130deg,#063d5c 0%,#0875a8 60%,#10d0e0 100%)", padding: "12px 16px", display: "flex", alignItems: "center", gap: 7 }}>
+              <div style={{ background: "linear-gradient(130deg,#2E3D3F 0%,#3D5254 60%,#E8C96A 100%)", padding: "12px 16px", display: "flex", alignItems: "center", gap: 7 }}>
                 <span style={{ fontSize: 14 }}>✨</span>
                 <span style={{ fontSize: 11, fontWeight: 700, color: "#fff", textTransform: "uppercase", letterSpacing: "1px" }}>Saran Postingan</span>
               </div>
@@ -4040,15 +4040,15 @@ function ArticleDetail({ post, onBack, allPosts = [], onReadPost }) {
                 {sidebarCards.slice(0, 3).map(p => (
                   <div key={p.id} onClick={() => handlePost(p)}
                     style={{ display: "flex", gap: 10, cursor: "pointer", padding: "6px 0", borderBottom: "1px solid #f0f9fb" }}
-                    onMouseEnter={e => e.currentTarget.style.background = "#f5fdff"}
+                    onMouseEnter={e => e.currentTarget.style.background = "#FDFAF4"}
                     onMouseLeave={e => e.currentTarget.style.background = "transparent"}>
                     {(() => { const img = (p.content||[]).find(b=>b.type==="image")?.value; return img
                       ? <div style={{ width:36, height:36, borderRadius:6, overflow:"hidden", flexShrink:0 }}><img loading="lazy" src={img} alt="" style={{ width:"100%", height:"100%", objectFit:"cover" }} onError={e=>e.target.style.display="none"} /></div>
-                      : <div style={{ width:36, height:36, borderRadius:6, background:"#edfafc", flexShrink:0, display:"flex", alignItems:"center", justifyContent:"center", fontSize:16 }}>📄</div>;
+                      : <div style={{ width:36, height:36, borderRadius:6, background:"#FAF7F0", flexShrink:0, display:"flex", alignItems:"center", justifyContent:"center", fontSize:16 }}>📄</div>;
                     })()}
                     <div style={{ flex: 1, minWidth: 0 }}>
                       <p style={{ fontSize: 12, fontWeight: 600, color: "#1a2e3b", lineHeight: 1.45, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden", marginBottom: 4 }}>{p.title}</p>
-                      <span style={{ fontSize: 10, color: "#0891b2", fontWeight: 600 }}>{p.category || (p.section === "news" ? "Event Plan" : p.section === "shop" ? "Traveling" : "Wedding")}</span>
+                      <span style={{ fontSize: 10, color: "#8B6914", fontWeight: 600 }}>{p.category || (p.section === "news" ? "Event Plan" : p.section === "shop" ? "Traveling" : "Wedding")}</span>
                     </div>
                   </div>
                 ))}
@@ -4063,13 +4063,13 @@ function ArticleDetail({ post, onBack, allPosts = [], onReadPost }) {
             if (allTags.length === 0) return null;
             return (
               <div style={{ background: "#fff", borderRadius: 8, overflow: "hidden", marginTop: 16, boxShadow: "0 2px 10px rgba(0,0,0,.06)" }}>
-                <div style={{ padding: "12px 16px", borderBottom: "1px solid #edfafc", display: "flex", alignItems: "center", gap: 7 }}>
+                <div style={{ padding: "12px 16px", borderBottom: "1px solid #FAF7F0", display: "flex", alignItems: "center", gap: 7 }}>
                   <span style={{ fontSize: 13 }}>🗂</span>
-                  <span style={{ fontSize: 11, fontWeight: 700, color: "#0d3b66", textTransform: "uppercase", letterSpacing: "1px" }}>Topik</span>
+                  <span style={{ fontSize: 11, fontWeight: 700, color: "#2E3D3F", textTransform: "uppercase", letterSpacing: "1px" }}>Topik</span>
                 </div>
                 <div style={{ padding: "12px 14px", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 7 }}>
                   {allTags.slice(0, 14).map(tag => (
-                    <span key={tag} style={{ fontSize: 11, padding: "4px 11px", background: "#edfafc", border: "1px solid #b6dff0", borderRadius: 20, color: "#0875a8", fontWeight: 500 }}>#{tag}</span>
+                    <span key={tag} style={{ fontSize: 11, padding: "4px 11px", background: "#FAF7F0", border: "1px solid #b6dff0", borderRadius: 20, color: "#3D5254", fontWeight: 500 }}>#{tag}</span>
                   ))}
                 </div>
               </div>
@@ -4079,7 +4079,7 @@ function ArticleDetail({ post, onBack, allPosts = [], onReadPost }) {
           {/* ── Tips Perjalanan ── */}
           <div style={{ background: "linear-gradient(135deg,#0a3d55 0%,#0d5a7a 100%)", borderRadius: 8, overflow: "hidden", marginTop: 16, marginBottom: 4, boxShadow: "0 2px 10px rgba(0,0,0,.1)" }}>
             <div style={{ padding: "12px 16px", borderBottom: "1px solid rgba(255,255,255,.12)", display: "flex", alignItems: "center", gap: 8 }}>
-              <span style={{ width: 8, height: 8, borderRadius: "50%", background: "#22d3ee", display: "inline-block", boxShadow: "0 0 6px #22d3ee" }} />
+              <span style={{ width: 8, height: 8, borderRadius: "50%", background: "#D4AF37", display: "inline-block", boxShadow: "0 0 6px #D4AF37" }} />
               <span style={{ fontSize: 11, fontWeight: 700, color: "#fff", textTransform: "uppercase", letterSpacing: "1px" }}>Tips Perjalanan</span>
             </div>
             <div style={{ padding: "12px 14px", display: "flex", flexDirection: "column", gap: 10 }}>
@@ -4121,11 +4121,11 @@ function SectionPage({ section, posts, onReadPost }) {
   const meta = sectionMeta[section] || { title: section, sub: "", icon: "◈" };
 
   return (
-    <div className="fade-in" style={{ minHeight: "100vh", background: "#edfafc" }}>
+    <div className="fade-in" style={{ minHeight: "100vh", background: "#FAF7F0" }}>
       {/* Hero Banner */}
-      <div style={{ background: "linear-gradient(135deg, #0891b2 0%, #0ea5c5 100%)", padding: "60px 5%", color: "#fff" }}>
+      <div style={{ background: "linear-gradient(135deg, #2E3D3F 0%, #3D5254 100%)", padding: "60px 5%", color: "#fff" }}>
         <div style={{ maxWidth: 1200, margin: "0 auto" }}>
-          <div style={{ fontSize: "0.6875rem", letterSpacing: "2px", color: "#7dc8de", textTransform: "uppercase", marginBottom: 12, fontWeight: 600 }}>
+          <div style={{ fontSize: "0.6875rem", letterSpacing: "2px", color: "#C9AA71", textTransform: "uppercase", marginBottom: 12, fontWeight: 600 }}>
             {meta.icon} VASTURA GROUP
           </div>
           <h1 className="display" style={{ fontSize: "clamp(2rem, 5vw, 3.5rem)", fontWeight: 900, lineHeight: 1.08, marginBottom: 16, color: "#fff" }}>
@@ -4145,9 +4145,9 @@ function SectionPage({ section, posts, onReadPost }) {
                 {cats.map(c => (
                   <button key={c} onClick={() => setFilter(c)} style={{
                     padding: "6px 16px", fontSize: 12, borderRadius: 20,
-                    border: filter === c ? "none" : "1px solid #b0dce8",
-                    background: filter === c ? "#0891b2" : "#fff",
-                    color: filter === c ? "#fff" : "#4a6680", fontWeight: filter === c ? 500 : 400,
+                    border: filter === c ? "none" : "1px solid #D4C4A0",
+                    background: filter === c ? "#8B6914" : "#fff",
+                    color: filter === c ? "#fff" : "#3D5254", fontWeight: filter === c ? 500 : 400,
                     transition: "all .2s"
                   }}>{c}</button>
                 ))}
@@ -4156,16 +4156,16 @@ function SectionPage({ section, posts, onReadPost }) {
                 {[["grid", "▦"], ["list", "☰"]].map(([mode, icon]) => (
                   <button key={mode} onClick={() => setViewMode(mode)} style={{
                     padding: "7px 12px", fontSize: 14,
-                    border: `1px solid ${viewMode === mode ? "#0ea5c5" : "#b0dce8"}`,
-                    borderRadius: 6, background: viewMode === mode ? "#e8f4fd" : "#fff",
-                    color: viewMode === mode ? "#0ea5c5" : "#5090aa"
+                    border: `1px solid ${viewMode === mode ? "#C9AA71" : "#D4C4A0"}`,
+                    borderRadius: 6, background: viewMode === mode ? "#F5EDD8" : "#fff",
+                    color: viewMode === mode ? "#C9AA71" : "#5A6A6C"
                   }}>{icon}</button>
                 ))}
               </div>
             </div>
 
             {filtered.length === 0 ? (
-              <div style={{ textAlign: "center", padding: "60px 0", color: "#5090aa" }}>
+              <div style={{ textAlign: "center", padding: "60px 0", color: "#5A6A6C" }}>
                 <div style={{ fontSize: 40, marginBottom: 16 }}>📭</div>
                 <p style={{ fontSize: 15 }}>No posts published yet.</p>
               </div>
@@ -4182,17 +4182,17 @@ function SectionPage({ section, posts, onReadPost }) {
           <aside>
             {/* Popular / Recent */}
             <div style={{ background: "#fff", borderRadius: 10, overflow: "hidden", boxShadow: "0 2px 12px rgba(0,0,0,.06)", marginBottom: 24 }}>
-              <div style={{ background: "linear-gradient(130deg,#063d5c 0%,#0875a8 45%,#0aa8bf 78%,#10d0e0 100%)", padding: "14px 20px" }}>
+              <div style={{ background: "linear-gradient(130deg,#2E3D3F 0%,#3D5254 45%,#8B6914 78%,#C9AA71 100%)", padding: "14px 20px" }}>
                 <span style={{ fontSize: 12, fontWeight: 600, color: "#fff", letterSpacing: "1px", textTransform: "uppercase" }}>Most Popular</span>
               </div>
               <div style={{ padding: "8px 0" }}>
                 {popular.map((p, i) => (
                   <div key={p.id} onClick={() => onReadPost(p)}
-                    style={{ display: "flex", gap: 12, padding: "10px 20px", cursor: "pointer", borderBottom: "1px solid #edfafc", transition: "background .15s" }}
-                    onMouseEnter={e => e.currentTarget.style.background = "#edfafc"}
+                    style={{ display: "flex", gap: 12, padding: "10px 20px", cursor: "pointer", borderBottom: "1px solid #FAF7F0", transition: "background .15s" }}
+                    onMouseEnter={e => e.currentTarget.style.background = "#FAF7F0"}
                     onMouseLeave={e => e.currentTarget.style.background = "transparent"}>
-                    <span style={{ fontSize: 22, fontWeight: 700, color: i < 3 ? "#e74c3c" : "#86cad8", fontFamily: "'Cormorant Garamond',serif", lineHeight: 1, minWidth: 24 }}>{i + 1}</span>
-                    <span style={{ fontSize: 13, color: "#0d3b66", lineHeight: 1.5, fontWeight: 400 }}>{p.title}</span>
+                    <span style={{ fontSize: 22, fontWeight: 700, color: i < 3 ? "#e74c3c" : "#A89070", fontFamily: "'Cormorant Garamond',serif", lineHeight: 1, minWidth: 24 }}>{i + 1}</span>
+                    <span style={{ fontSize: 13, color: "#2E3D3F", lineHeight: 1.5, fontWeight: 400 }}>{p.title}</span>
                   </div>
                 ))}
               </div>
@@ -4200,8 +4200,8 @@ function SectionPage({ section, posts, onReadPost }) {
 
             {/* Categories */}
             <div style={{ background: "#fff", borderRadius: 10, overflow: "hidden", boxShadow: "0 2px 12px rgba(0,0,0,.06)" }}>
-              <div style={{ background: "#edfafc", padding: "14px 20px", borderBottom: "1px solid #e0f7fa" }}>
-                <span style={{ fontSize: 12, fontWeight: 600, color: "#0d3b66", letterSpacing: "1px", textTransform: "uppercase" }}>Categories</span>
+              <div style={{ background: "#FAF7F0", padding: "14px 20px", borderBottom: "1px solid #F5EDD8" }}>
+                <span style={{ fontSize: 12, fontWeight: 600, color: "#2E3D3F", letterSpacing: "1px", textTransform: "uppercase" }}>Categories</span>
               </div>
               <div style={{ padding: "12px 20px", display: "flex", flexDirection: "column", gap: 8 }}>
                 {cats.filter(c => c !== "All").map(c => {
@@ -4209,10 +4209,10 @@ function SectionPage({ section, posts, onReadPost }) {
                   return (
                     <button key={c} onClick={() => setFilter(c)}
                       style={{ display: "flex", justifyContent: "space-between", alignItems: "center",
-                        padding: "6px 0", borderBottom: "1px solid #edfafc", background: "none",
+                        padding: "6px 0", borderBottom: "1px solid #FAF7F0", background: "none",
                         border: "none", cursor: "pointer", textAlign: "left" }}>
-                      <span style={{ fontSize: 13, color: "#0ea5c5" }}>→ {c}</span>
-                      <span style={{ fontSize: 11, background: "#edfafc", color: "#5090aa", padding: "2px 8px", borderRadius: 10 }}>{count}</span>
+                      <span style={{ fontSize: 13, color: "#C9AA71" }}>→ {c}</span>
+                      <span style={{ fontSize: 11, background: "#FAF7F0", color: "#5A6A6C", padding: "2px 8px", borderRadius: 10 }}>{count}</span>
                     </button>
                   );
                 })}
@@ -4246,7 +4246,7 @@ function EventWeddingCustomCardWide({ svc, onDetail, onWaOpen }) {
   const isWedding = svc.category === "wedding";
   const gradientBg = isWedding
     ? `linear-gradient(135deg, #2d1b4e 0%, #5b2d8e 50%, ${ac} 100%)`
-    : `linear-gradient(135deg, #0a2e52 0%, #1a5a78 50%, ${ac} 100%)`;
+    : `linear-gradient(135deg, #0a2e52 0%, #3D5254 50%, ${ac} 100%)`;
   const icon = isWedding ? "💍" : "🎉";
   return (
     <div
@@ -4318,8 +4318,8 @@ function EventWeddingPackageCard({ svc, onDetail, onWaOpen, isWide, categoryPack
   const [priceOpen, setPriceOpen] = useState(false);
   const [openPkgIdx, setOpenPkgIdx] = useState(null);
   const isMobile = useIsMobile();
-  const ac = svc.accent || (svc.category === "wedding" ? "#db2777" : "#0891b2");
-  const al = svc.accentLight || (svc.category === "wedding" ? "#fff0f7" : "#edfafc");
+  const ac = svc.accent || (svc.category === "wedding" ? "#db2777" : "#8B6914");
+  const al = svc.accentLight || (svc.category === "wedding" ? "#fff0f7" : "#FAF7F0");
   const fmt = n => {
     if (!n) return n;
     const str = String(n);
@@ -4359,7 +4359,7 @@ function EventWeddingPackageCard({ svc, onDetail, onWaOpen, isWide, categoryPack
             <div style={{ position: "absolute", top: 14, left: 14, background: svc.badgeColor || ac, color: "#fff", borderRadius: 20, padding: "4px 14px", fontSize: "0.625rem", fontWeight: 700, letterSpacing: ".1em", textTransform: "uppercase" }}>{svc.badge}</div>
           )}
           {svc.highlight && (
-            <div style={{ position: "absolute", top: 14, right: 0, background: "linear-gradient(130deg,#063d5c,#0891b2)", color: "#fff", borderRadius: "20px 0 0 20px", padding: "4px 12px 4px 14px", fontSize: "0.625rem", fontWeight: 700 }}>⭐ Pilihan Utama</div>
+            <div style={{ position: "absolute", top: 14, right: 0, background: "linear-gradient(130deg,#2E3D3F,#8B6914)", color: "#fff", borderRadius: "20px 0 0 20px", padding: "4px 12px 4px 14px", fontSize: "0.625rem", fontWeight: 700 }}>⭐ Pilihan Utama</div>
           )}
           {/* Dots navigasi gambar */}
           {imgs.length > 1 && (
@@ -4377,26 +4377,26 @@ function EventWeddingPackageCard({ svc, onDetail, onWaOpen, isWide, categoryPack
         {/* Konten kanan */}
         <div style={{ flex: 1, display: "flex", flexDirection: "column", minWidth: 0 }}>
           <div style={{ padding: "16px 20px 8px", display: "flex", gap: 14, flexWrap: "wrap" }}>
-            {imgs.length > 1 && <span style={{ fontSize: "0.8125rem", color: "#4a7f98" }}>🖼 {imgs.length} Foto Kegiatan</span>}
-            <span style={{ fontSize: "0.8125rem", color: "#4a7f98" }}>{svc.category === "wedding" ? "💍 Wedding Organizer" : "📅 Event Organizer"}</span>
+            {imgs.length > 1 && <span style={{ fontSize: "0.8125rem", color: "#5A6A6C" }}>🖼 {imgs.length} Foto Kegiatan</span>}
+            <span style={{ fontSize: "0.8125rem", color: "#5A6A6C" }}>{svc.category === "wedding" ? "💍 Wedding Organizer" : "📅 Event Organizer"}</span>
           </div>
-          <p style={{ fontSize: "0.875rem", color: "#4a7f98", lineHeight: 1.65, padding: "0 20px 12px" }}>{svc.description}</p>
+          <p style={{ fontSize: "0.875rem", color: "#5A6A6C", lineHeight: 1.65, padding: "0 20px 12px" }}>{svc.description}</p>
           {(svc.features || []).length > 0 && (
             <div style={{ padding: "0 20px 14px", display: "flex", flexWrap: "wrap", gap: "5px 18px" }}>
               {(svc.features || []).slice(0, 4).map((f, i) => (
                 <div key={i} style={{ display: "flex", gap: 5, alignItems: "center" }}>
                   <span style={{ color: "#27ae60", fontWeight: 700, fontSize: "0.875rem" }}>✓</span>
-                  <span style={{ fontSize: "0.8125rem", color: "#1a5a78", fontWeight: 500, whiteSpace: "pre-wrap" }}>{f}</span>
+                  <span style={{ fontSize: "0.8125rem", color: "#3D5254", fontWeight: 500, whiteSpace: "pre-wrap" }}>{f}</span>
                 </div>
               ))}
-              {(svc.features || []).length > 4 && <span style={{ fontSize: "0.75rem", color: "#0891b2", fontWeight: 600 }}>+{svc.features.length - 4} lainnya</span>}
+              {(svc.features || []).length > 4 && <span style={{ fontSize: "0.75rem", color: "#8B6914", fontWeight: 600 }}>+{svc.features.length - 4} lainnya</span>}
             </div>
           )}
           <div style={{ flex: 1 }} />
           <div style={{ display: "flex", alignItems: "stretch", borderTop: "1px solid #edf5f8", flexDirection: "column" }}>
             <div style={{
                 display: "flex", alignItems: "center", justifyContent: "space-between",
-                padding: "14px 20px", background: `linear-gradient(135deg,#0d3b66 0%,#1a5a78 55%,${ac} 100%)`,
+                padding: "14px 20px", background: `linear-gradient(135deg,#2E3D3F 0%,#3D5254 55%,${ac} 100%)`,
                 position: "relative",
               }}>
               <div style={{ position: "absolute", right: -12, top: -12, width: 80, height: 80, borderRadius: "50%", background: "rgba(255,255,255,.05)" }} />
@@ -4413,7 +4413,7 @@ function EventWeddingPackageCard({ svc, onDetail, onWaOpen, isWide, categoryPack
                   💬 WA
                 </button>
                 <button onClick={e => { e.stopPropagation(); onDetail(); }}
-                  style={{ padding: "8px 20px", background: `linear-gradient(135deg,#0d3b66,${ac})`, color: "#fff", border: "none", fontSize: "0.8125rem", fontWeight: 700, cursor: "pointer", transition: "opacity .2s" }}
+                  style={{ padding: "8px 20px", background: `linear-gradient(135deg,#2E3D3F,${ac})`, color: "#fff", border: "none", fontSize: "0.8125rem", fontWeight: 700, cursor: "pointer", transition: "opacity .2s" }}
                   onMouseEnter={e => e.currentTarget.style.opacity = ".85"}
                   onMouseLeave={e => e.currentTarget.style.opacity = "1"}>
                   Lihat Detail →
@@ -4429,8 +4429,8 @@ function EventWeddingPackageCard({ svc, onDetail, onWaOpen, isWide, categoryPack
                     const isUtama = pt.id === (svc.utamaTipeId || svc.paketTypes?.[0]?.id);
                     const isContact = String(pt.price || "").toLowerCase().includes("hubungi");
                     return (
-                      <span key={pt.id} style={{ display: "flex", alignItems: "center", gap: 4, padding: "5px 9px", borderRadius: 20, boxSizing: "border-box", border: `1.5px solid ${isUtama ? ac : ac + "40"}`, background: isUtama ? `${ac}12` : "#fff", fontSize: "0.6875rem", fontWeight: 600, color: "#0d3b66", minWidth: 0, maxWidth: "100%", flexShrink: 1 }}>
-                        {isUtama && <span style={{ fontSize: "0.4rem", fontWeight: 800, letterSpacing: ".05em", textTransform: "uppercase", padding: "1px 5px", borderRadius: 8, background: "#10d0e0", color: "#0d3b66", flexShrink: 0 }}>UTAMA</span>}
+                      <span key={pt.id} style={{ display: "flex", alignItems: "center", gap: 4, padding: "5px 9px", borderRadius: 20, boxSizing: "border-box", border: `1.5px solid ${isUtama ? ac : ac + "40"}`, background: isUtama ? `${ac}12` : "#fff", fontSize: "0.6875rem", fontWeight: 600, color: "#2E3D3F", minWidth: 0, maxWidth: "100%", flexShrink: 1 }}>
+                        {isUtama && <span style={{ fontSize: "0.4rem", fontWeight: 800, letterSpacing: ".05em", textTransform: "uppercase", padding: "1px 5px", borderRadius: 8, background: "#E8C96A", color: "#2E3D3F", flexShrink: 0 }}>UTAMA</span>}
                         <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{pt.name}</span>
                         {pt.price && <span style={{ fontFamily: "'Playfair Display',serif", fontSize: "0.625rem", fontWeight: 700, color: ac, flexShrink: 0 }}>{isContact ? "Konsultasi" : formatRp(pt.price) || pt.price}</span>}
                       </span>
@@ -4450,7 +4450,7 @@ function EventWeddingPackageCard({ svc, onDetail, onWaOpen, isWide, categoryPack
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       style={{ background: "#fff", borderRadius: 16, overflow: "visible",
-        boxShadow: hovered ? "0 16px 48px rgba(13,59,102,.18)" : "0 4px 20px rgba(13,59,102,.09)",
+        boxShadow: hovered ? "0 16px 48px rgba(46,61,63,.18)" : "0 4px 20px rgba(13,59,102,.09)",
         border: `2px solid ${hovered ? ac : svc.highlight ? ac + "80" : "transparent"}`,
         fontFamily: "'DM Sans',sans-serif", transition: "all .3s cubic-bezier(.22,1,.36,1)",
         transform: hovered ? "translateY(-5px)" : "none", position: "relative" }}>
@@ -4467,7 +4467,7 @@ function EventWeddingPackageCard({ svc, onDetail, onWaOpen, isWide, categoryPack
           </div>
         )}
         {svc.highlight && (
-          <div style={{ position: "absolute", top: 12, right: 12, background: "linear-gradient(130deg,#063d5c,#0891b2)", color: "#fff", borderRadius: 20, padding: "3px 10px", fontSize: "0.625rem", fontWeight: 700 }}>⭐ Pilihan Utama</div>
+          <div style={{ position: "absolute", top: 12, right: 12, background: "linear-gradient(130deg,#2E3D3F,#8B6914)", color: "#fff", borderRadius: 20, padding: "3px 10px", fontSize: "0.625rem", fontWeight: 700 }}>⭐ Pilihan Utama</div>
         )}
         {/* Image thumbnails nav (if multiple) */}
         {imgs.length > 1 && (
@@ -4485,14 +4485,14 @@ function EventWeddingPackageCard({ svc, onDetail, onWaOpen, isWide, categoryPack
 
       {/* Info row: foto kegiatan count + category label */}
       <div style={{ padding: "10px 14px 0", display: "flex", gap: 14, flexWrap: "wrap" }}>
-        {imgs.length > 1 && <span style={{ fontSize: "0.75rem", color: "#4a7f98" }}>🖼 {imgs.length} Foto Kegiatan</span>}
-        <span style={{ fontSize: "0.75rem", color: "#4a7f98", textTransform: "capitalize" }}>
+        {imgs.length > 1 && <span style={{ fontSize: "0.75rem", color: "#5A6A6C" }}>🖼 {imgs.length} Foto Kegiatan</span>}
+        <span style={{ fontSize: "0.75rem", color: "#5A6A6C", textTransform: "capitalize" }}>
           {svc.category === "wedding" ? "💍 Wedding Organizer" : "📅 Event Organizer"}
         </span>
       </div>
 
       {/* Description */}
-      <p style={{ fontSize: "0.8125rem", color: "#4a7f98", lineHeight: 1.6, padding: "8px 14px 10px" }}>{svc.description}</p>
+      <p style={{ fontSize: "0.8125rem", color: "#5A6A6C", lineHeight: 1.6, padding: "8px 14px 10px" }}>{svc.description}</p>
 
       {/* Top features */}
       {(svc.features || []).length > 0 && (
@@ -4500,18 +4500,18 @@ function EventWeddingPackageCard({ svc, onDetail, onWaOpen, isWide, categoryPack
           {(svc.features || []).slice(0, 3).map((f, i) => (
             <div key={i} style={{ display: "flex", gap: 7, alignItems: "flex-start", marginBottom: 5 }}>
               <span style={{ color: "#27ae60", fontWeight: 700, fontSize: "0.875rem", flexShrink: 0, marginTop: 1 }}>✓</span>
-              <span style={{ fontSize: "0.75rem", color: "#1a5a78", fontWeight: 500, lineHeight: 1.45, whiteSpace: "pre-wrap" }}>{f}</span>
+              <span style={{ fontSize: "0.75rem", color: "#3D5254", fontWeight: 500, lineHeight: 1.45, whiteSpace: "pre-wrap" }}>{f}</span>
             </div>
           ))}
           {(svc.features || []).length > 3 && (
-            <div style={{ fontSize: "0.6875rem", color: "#0891b2", fontWeight: 600, marginTop: 2 }}>+{svc.features.length - 3} fitur lainnya</div>
+            <div style={{ fontSize: "0.6875rem", color: "#8B6914", fontWeight: 600, marginTop: 2 }}>+{svc.features.length - 3} fitur lainnya</div>
           )}
         </div>
       )}
 
       {/* Price block */}
       <div style={{
-          background: `linear-gradient(135deg,#0d3b66 0%,#1a5a78 55%,${ac} 100%)`,
+          background: `linear-gradient(135deg,#2E3D3F 0%,#3D5254 55%,${ac} 100%)`,
           padding: "14px 14px 16px", position: "relative",
           borderTop: "3px solid rgba(255,255,255,.15)",
           boxShadow: "inset 0 1px 0 rgba(255,255,255,.18)",
@@ -4545,8 +4545,8 @@ function EventWeddingPackageCard({ svc, onDetail, onWaOpen, isWide, categoryPack
               const isUtama = pt.id === (svc.utamaTipeId || svc.paketTypes?.[0]?.id);
               const isContact = String(pt.price || "").toLowerCase().includes("hubungi");
               return (
-                <span key={pt.id} style={{ display: "flex", alignItems: "center", gap: 4, padding: "5px 9px", borderRadius: 20, boxSizing: "border-box", border: `1.5px solid ${isUtama ? ac : ac + "40"}`, background: isUtama ? `${ac}12` : "#fff", fontSize: "0.6875rem", fontWeight: 600, color: "#0d3b66", minWidth: 0, maxWidth: "100%", flexShrink: 1 }}>
-                  {isUtama && <span style={{ fontSize: "0.4rem", fontWeight: 800, letterSpacing: ".05em", textTransform: "uppercase", padding: "1px 5px", borderRadius: 8, background: "#10d0e0", color: "#0d3b66", flexShrink: 0 }}>UTAMA</span>}
+                <span key={pt.id} style={{ display: "flex", alignItems: "center", gap: 4, padding: "5px 9px", borderRadius: 20, boxSizing: "border-box", border: `1.5px solid ${isUtama ? ac : ac + "40"}`, background: isUtama ? `${ac}12` : "#fff", fontSize: "0.6875rem", fontWeight: 600, color: "#2E3D3F", minWidth: 0, maxWidth: "100%", flexShrink: 1 }}>
+                  {isUtama && <span style={{ fontSize: "0.4rem", fontWeight: 800, letterSpacing: ".05em", textTransform: "uppercase", padding: "1px 5px", borderRadius: 8, background: "#E8C96A", color: "#2E3D3F", flexShrink: 0 }}>UTAMA</span>}
                   <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{pt.name}</span>
                   {pt.price && <span style={{ fontFamily: "'Playfair Display',serif", fontSize: "0.625rem", fontWeight: 700, color: ac, flexShrink: 0 }}>{isContact ? "Konsultasi" : formatRp(pt.price) || pt.price}</span>}
                 </span>
@@ -4564,7 +4564,7 @@ function EventWeddingPackageCard({ svc, onDetail, onWaOpen, isWide, categoryPack
           💬 WA
         </button>
         <button onClick={onDetail}
-          style={{ flex: 3, padding: "10px 0", background: `linear-gradient(135deg,#0d3b66,${ac})`, color: "#fff", border: "none", borderRadius: 8, fontSize: "0.8125rem", fontWeight: 700, cursor: "pointer", transition: "opacity .2s" }}
+          style={{ flex: 3, padding: "10px 0", background: `linear-gradient(135deg,#2E3D3F,${ac})`, color: "#fff", border: "none", borderRadius: 8, fontSize: "0.8125rem", fontWeight: 700, cursor: "pointer", transition: "opacity .2s" }}
           onMouseEnter={e => e.currentTarget.style.opacity = ".85"}
           onMouseLeave={e => e.currentTarget.style.opacity = "1"}>
           Lihat Detail →
@@ -4585,7 +4585,7 @@ function TravelPackageCardWide({ svc, onDetail, onWaOpen }) {
       style={{
         background: "#fff", borderRadius: 18,
         overflow: "visible",
-        boxShadow: hovered ? "0 20px 60px rgba(13,59,102,.18)" : "0 4px 24px rgba(13,59,102,.10)",
+        boxShadow: hovered ? "0 20px 60px rgba(46,61,63,.18)" : "0 4px 24px rgba(46,61,63,.10)",
         border: `2px solid ${hovered ? ac : ac + "50"}`,
         transition: "all .3s cubic-bezier(.22,1,.36,1)",
         transform: hovered ? "translateY(-4px)" : "none",
@@ -4608,26 +4608,26 @@ function TravelPackageCardWide({ svc, onDetail, onWaOpen }) {
       {/* Content */}
       <div style={{ flex: 1, padding: isMobile ? "20px 18px 24px" : "28px 36px", display: "flex", flexDirection: "column", justifyContent: "center", gap: 0 }}>
         <div style={{ display: "flex", alignItems: isMobile ? "flex-start" : "center", flexDirection: isMobile ? "column" : "row", gap: isMobile ? 6 : 14, marginBottom: 10 }}>
-          <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: isMobile ? "1.4rem" : "1.75rem", fontWeight: 900, color: "#0d3b66", lineHeight: 1.1, margin: 0 }}>{svc.title}</h2>
+          <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: isMobile ? "1.4rem" : "1.75rem", fontWeight: 900, color: "#2E3D3F", lineHeight: 1.1, margin: 0 }}>{svc.title}</h2>
           <span style={{ fontSize: "0.75rem", background: ac + "18", color: ac, borderRadius: 20, padding: "4px 14px", fontWeight: 700, letterSpacing: ".05em" }}>{svc.tagline}</span>
         </div>
-        <p style={{ fontSize: "0.9375rem", color: "#4a7f98", lineHeight: 1.75, marginBottom: 18 }}>{svc.description}</p>
+        <p style={{ fontSize: "0.9375rem", color: "#5A6A6C", lineHeight: 1.75, marginBottom: 18 }}>{svc.description}</p>
         <div style={{ display: "flex", flexWrap: "wrap", gap: 10, marginBottom: 20 }}>
           {(svc.features || []).map((feat, i) => (
             <div key={i} style={{ display: "flex", gap: 6, alignItems: "center", background: "#f0f7fb", borderRadius: 8, padding: "5px 12px" }}>
               <span style={{ color: "#27ae60", fontWeight: 700, fontSize: "0.875rem" }}>✓</span>
-              <span style={{ fontSize: "0.8125rem", color: "#1a5a78", fontWeight: 500, whiteSpace: "pre-wrap" }}>{feat}</span>
+              <span style={{ fontSize: "0.8125rem", color: "#3D5254", fontWeight: 500, whiteSpace: "pre-wrap" }}>{feat}</span>
             </div>
           ))}
         </div>
         <div style={{ display: "flex", alignItems: isMobile ? "stretch" : "center", flexDirection: isMobile ? "column" : "row", gap: 12, flexWrap: "wrap" }}>
           <div style={{ marginBottom: isMobile ? 4 : 0 }}>
-            <div style={{ fontSize: "0.625rem", color: "#5090aa", fontWeight: 700, textTransform: "uppercase", letterSpacing: ".08em", marginBottom: 2 }}>Harga</div>
-            <div style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.5rem", fontWeight: 900, color: "#0d3b66" }}>{(()=>{ const uPt=(svc.paketTypes||[]).find(pt=>pt.id===(svc.utamaTipeId||svc.paketTypes?.[0]?.id)); const rp=uPt?.price||svc.price; return formatRp(rp)||rp; })()}</div>
-            <div style={{ fontSize: "0.6875rem", color: "#4a7f98", fontStyle: "italic" }}>{svc.priceNote}</div>
+            <div style={{ fontSize: "0.625rem", color: "#5A6A6C", fontWeight: 700, textTransform: "uppercase", letterSpacing: ".08em", marginBottom: 2 }}>Harga</div>
+            <div style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.5rem", fontWeight: 900, color: "#2E3D3F" }}>{(()=>{ const uPt=(svc.paketTypes||[]).find(pt=>pt.id===(svc.utamaTipeId||svc.paketTypes?.[0]?.id)); const rp=uPt?.price||svc.price; return formatRp(rp)||rp; })()}</div>
+            <div style={{ fontSize: "0.6875rem", color: "#5A6A6C", fontStyle: "italic" }}>{svc.priceNote}</div>
           </div>
           <button onClick={onDetail}
-            style={{ padding: "12px 28px", background: `linear-gradient(135deg,${ac},#0891b2)`, color: "#fff", border: "none", borderRadius: 10, fontSize: "0.9375rem", fontWeight: 700, cursor: "pointer", letterSpacing: ".03em", transition: "opacity .2s", width: isMobile ? "100%" : "auto" }}
+            style={{ padding: "12px 28px", background: `linear-gradient(135deg,${ac},#8B6914)`, color: "#fff", border: "none", borderRadius: 10, fontSize: "0.9375rem", fontWeight: 700, cursor: "pointer", letterSpacing: ".03em", transition: "opacity .2s", width: isMobile ? "100%" : "auto" }}
             onMouseEnter={e => e.currentTarget.style.opacity = ".85"}
             onMouseLeave={e => e.currentTarget.style.opacity = "1"}>
             Lihat Detail &amp; Konsultasi
@@ -4687,7 +4687,7 @@ function TravelPackageCard({ svc, onDetail, onWaOpen, isWide }) {
             </div>
           )}
           {svc.highlight && (
-            <div style={{ position: "absolute", top: 14, right: 0, background: "linear-gradient(130deg,#063d5c,#0891b2)", color: "#fff", borderRadius: "20px 0 0 20px", padding: "4px 12px 4px 14px", fontSize: "0.625rem", fontWeight: 700 }}>⭐ Pilihan Utama</div>
+            <div style={{ position: "absolute", top: 14, right: 0, background: "linear-gradient(130deg,#2E3D3F,#8B6914)", color: "#fff", borderRadius: "20px 0 0 20px", padding: "4px 12px 4px 14px", fontSize: "0.625rem", fontWeight: 700 }}>⭐ Pilihan Utama</div>
           )}
           {/* Judul di atas gambar bawah kiri */}
           <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, padding: "32px 16px 16px", background: "linear-gradient(to top, rgba(0,0,0,.72) 0%, transparent 100%)" }}>
@@ -4701,22 +4701,22 @@ function TravelPackageCard({ svc, onDetail, onWaOpen, isWide }) {
           {/* Info row */}
           <div style={{ padding: "18px 20px 8px", display: "flex", gap: 16, flexWrap: "wrap" }}>
             {[`⏱ ${svc.duration}`, `👥 Min. ${svc.minPeserta} peserta`, ...(svc.destinations?.length ? [`🗺 ${svc.destinations.length} Destinasi`] : [])].map(m => (
-              <span key={m} style={{ fontSize: "0.8125rem", color: "#4a7f98" }}>{m}</span>
+              <span key={m} style={{ fontSize: "0.8125rem", color: "#5A6A6C" }}>{m}</span>
             ))}
           </div>
           {/* Description */}
-          <p style={{ fontSize: "0.875rem", color: "#4a7f98", lineHeight: 1.65, padding: "0 20px 12px" }}>{svc.description}</p>
+          <p style={{ fontSize: "0.875rem", color: "#5A6A6C", lineHeight: 1.65, padding: "0 20px 12px" }}>{svc.description}</p>
           {/* Facilities */}
           {(svc.facilities || []).length > 0 && (
             <div style={{ padding: "0 20px 14px", display: "flex", flexWrap: "wrap", gap: "6px 20px" }}>
               {(svc.facilities || []).slice(0, 4).map((f, i) => (
                 <div key={i} style={{ display: "flex", gap: 6, alignItems: "center" }}>
                   <span style={{ fontSize: 14 }}>{f.icon}</span>
-                  <span style={{ fontSize: "0.8125rem", color: "#1a5a78", fontWeight: 500 }}>{f.label}</span>
+                  <span style={{ fontSize: "0.8125rem", color: "#3D5254", fontWeight: 500 }}>{f.label}</span>
                 </div>
               ))}
               {(svc.facilities || []).length > 4 && (
-                <span style={{ fontSize: "0.75rem", color: "#0891b2", fontWeight: 600 }}>+{svc.facilities.length - 4} lainnya</span>
+                <span style={{ fontSize: "0.75rem", color: "#8B6914", fontWeight: 600 }}>+{svc.facilities.length - 4} lainnya</span>
               )}
             </div>
           )}
@@ -4727,7 +4727,7 @@ function TravelPackageCard({ svc, onDetail, onWaOpen, isWide }) {
             {/* Price block */}
             <div style={{
                 flex: 1, padding: "14px 20px",
-                background: `linear-gradient(135deg,#0d3b66 0%,#1a5a78 55%,${ac} 100%)`,
+                background: `linear-gradient(135deg,#2E3D3F 0%,#3D5254 55%,${ac} 100%)`,
                 position: "relative",
               }}>
               <div style={{ position: "absolute", right: -12, top: -12, width: 80, height: 80, borderRadius: "50%", background: "rgba(255,255,255,.06)" }} />
@@ -4758,7 +4758,7 @@ function TravelPackageCard({ svc, onDetail, onWaOpen, isWide }) {
                 💬 WA
               </button>
               <button onClick={onDetail}
-                style={{ flex: 1, padding: "0 24px", background: `linear-gradient(135deg,#0d3b66,${ac})`, color: "#fff", border: "none", fontSize: "0.8125rem", fontWeight: 700, cursor: "pointer", transition: "opacity .2s" }}
+                style={{ flex: 1, padding: "0 24px", background: `linear-gradient(135deg,#2E3D3F,${ac})`, color: "#fff", border: "none", fontSize: "0.8125rem", fontWeight: 700, cursor: "pointer", transition: "opacity .2s" }}
                 onMouseEnter={e => e.currentTarget.style.opacity = ".85"}
                 onMouseLeave={e => e.currentTarget.style.opacity = "1"}>
                 Lihat Detail →
@@ -4774,8 +4774,8 @@ function TravelPackageCard({ svc, onDetail, onWaOpen, isWide }) {
                   const isUtama = pt.id === (svc.utamaTipeId || svc.paketTypes?.[0]?.id);
                   const isContact = String(pt.price || "").toLowerCase().includes("hubungi");
                   return (
-                    <span key={pt.id} style={{ display: "flex", alignItems: "center", gap: 4, padding: "5px 9px", borderRadius: 20, boxSizing: "border-box", border: `1.5px solid ${isUtama ? ac : ac + "40"}`, background: isUtama ? `${ac}12` : "#fff", fontSize: "0.6875rem", fontWeight: 600, color: "#0d3b66", minWidth: 0, maxWidth: "100%", flexShrink: 1 }}>
-                      {isUtama && <span style={{ fontSize: "0.4rem", fontWeight: 800, letterSpacing: ".05em", textTransform: "uppercase", padding: "1px 5px", borderRadius: 8, background: "#10d0e0", color: "#0d3b66", flexShrink: 0 }}>UTAMA</span>}
+                    <span key={pt.id} style={{ display: "flex", alignItems: "center", gap: 4, padding: "5px 9px", borderRadius: 20, boxSizing: "border-box", border: `1.5px solid ${isUtama ? ac : ac + "40"}`, background: isUtama ? `${ac}12` : "#fff", fontSize: "0.6875rem", fontWeight: 600, color: "#2E3D3F", minWidth: 0, maxWidth: "100%", flexShrink: 1 }}>
+                      {isUtama && <span style={{ fontSize: "0.4rem", fontWeight: 800, letterSpacing: ".05em", textTransform: "uppercase", padding: "1px 5px", borderRadius: 8, background: "#E8C96A", color: "#2E3D3F", flexShrink: 0 }}>UTAMA</span>}
                       <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{pt.name}</span>
                       {pt.price && <span style={{ fontFamily: "'Playfair Display',serif", fontSize: "0.625rem", fontWeight: 700, color: ac, flexShrink: 0 }}>{isContact ? "Konsultasi" : formatRp(pt.price) || pt.price}</span>}
                     </span>
@@ -4794,7 +4794,7 @@ function TravelPackageCard({ svc, onDetail, onWaOpen, isWide }) {
     <div
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      style={{ background: "#fff", borderRadius: 16, overflow: "visible", boxShadow: hovered ? "0 16px 48px rgba(13,59,102,.18)" : "0 4px 20px rgba(13,59,102,.09)", border: `2px solid ${hovered ? ac : svc.highlight ? ac + "80" : "transparent"}`, fontFamily: "'DM Sans',sans-serif", transition: "all .3s cubic-bezier(.22,1,.36,1)", transform: hovered ? "translateY(-5px)" : "none", position: "relative" }}>
+      style={{ background: "#fff", borderRadius: 16, overflow: "visible", boxShadow: hovered ? "0 16px 48px rgba(46,61,63,.18)" : "0 4px 20px rgba(13,59,102,.09)", border: `2px solid ${hovered ? ac : svc.highlight ? ac + "80" : "transparent"}`, fontFamily: "'DM Sans',sans-serif", transition: "all .3s cubic-bezier(.22,1,.36,1)", transform: hovered ? "translateY(-5px)" : "none", position: "relative" }}>
 
       {/* Hero image */}
       <div onClick={onDetail} style={{ position: "relative", height: 180, overflow: "hidden", borderRadius: "14px 14px 0 0", cursor: "pointer" }}>
@@ -4808,7 +4808,7 @@ function TravelPackageCard({ svc, onDetail, onWaOpen, isWide }) {
           </div>
         )}
         {svc.highlight && (
-          <div style={{ position: "absolute", top: 12, right: 12, background: "linear-gradient(130deg,#063d5c,#0891b2)", color: "#fff", borderRadius: 20, padding: "3px 10px", fontSize: "0.625rem", fontWeight: 700 }}>⭐ Pilihan Utama</div>
+          <div style={{ position: "absolute", top: 12, right: 12, background: "linear-gradient(130deg,#2E3D3F,#8B6914)", color: "#fff", borderRadius: 20, padding: "3px 10px", fontSize: "0.625rem", fontWeight: 700 }}>⭐ Pilihan Utama</div>
         )}
         <div style={{ position: "absolute", bottom: 12, left: 14, right: 14 }}>
           <h3 style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.125rem", fontWeight: 700, color: "#fff", lineHeight: 1.2, marginBottom: 2, textShadow: "0 2px 12px rgba(0,0,0,.8), 0 1px 4px rgba(0,0,0,.6)" }}>{svc.title}</h3>
@@ -4819,12 +4819,12 @@ function TravelPackageCard({ svc, onDetail, onWaOpen, isWide }) {
       {/* Info row */}
       <div style={{ padding: "12px 16px 0", display: "flex", gap: 14, flexWrap: "wrap" }}>
         {[`⏱ ${svc.duration}`, `👥 Min. ${svc.minPeserta} peserta`, ...(svc.destinations?.length ? [`🗺 ${svc.destinations.length} Destinasi`] : [])].map(m => (
-          <span key={m} style={{ fontSize: "0.75rem", color: "#4a7f98" }}>{m}</span>
+          <span key={m} style={{ fontSize: "0.75rem", color: "#5A6A6C" }}>{m}</span>
         ))}
       </div>
 
       {/* Description */}
-      <p style={{ fontSize: "0.8125rem", color: "#4a7f98", lineHeight: 1.6, padding: "8px 16px 10px" }}>{svc.description}</p>
+      <p style={{ fontSize: "0.8125rem", color: "#5A6A6C", lineHeight: 1.6, padding: "8px 16px 10px" }}>{svc.description}</p>
 
       {/* Top facilities with icons */}
       {(svc.facilities || []).length > 0 && (
@@ -4832,11 +4832,11 @@ function TravelPackageCard({ svc, onDetail, onWaOpen, isWide }) {
           {(svc.facilities || []).slice(0, 3).map((f, i) => (
             <div key={i} style={{ display: "flex", gap: 7, alignItems: "center", marginBottom: 5 }}>
               <span style={{ fontSize: 13 }}>{f.icon}</span>
-              <span style={{ fontSize: "0.75rem", color: "#1a5a78", fontWeight: 500 }}>{f.label}</span>
+              <span style={{ fontSize: "0.75rem", color: "#3D5254", fontWeight: 500 }}>{f.label}</span>
             </div>
           ))}
           {(svc.facilities || []).length > 3 && (
-            <div style={{ fontSize: "0.6875rem", color: "#0891b2", fontWeight: 600, marginTop: 2 }}>+{svc.facilities.length - 3} fasilitas lainnya</div>
+            <div style={{ fontSize: "0.6875rem", color: "#8B6914", fontWeight: 600, marginTop: 2 }}>+{svc.facilities.length - 3} fasilitas lainnya</div>
           )}
         </div>
       )}
@@ -4844,7 +4844,7 @@ function TravelPackageCard({ svc, onDetail, onWaOpen, isWide }) {
       {/* Price block */}
       <div style={{
           position: "relative",
-          background: `linear-gradient(135deg,#0d3b66 0%,#1a5a78 50%,${ac} 100%)`,
+          background: `linear-gradient(135deg,#2E3D3F 0%,#3D5254 50%,${ac} 100%)`,
           padding: "16px 16px 18px",
           borderTop: "3px solid rgba(255,255,255,.18)",
         }}>
@@ -4881,8 +4881,8 @@ function TravelPackageCard({ svc, onDetail, onWaOpen, isWide }) {
               const isUtama = pt.id === (svc.utamaTipeId || svc.paketTypes?.[0]?.id);
               const isContact = String(pt.price || "").toLowerCase().includes("hubungi");
               return (
-                <span key={pt.id} style={{ display: "flex", alignItems: "center", gap: 4, padding: "5px 9px", borderRadius: 20, boxSizing: "border-box", border: `1.5px solid ${isUtama ? ac : ac + "40"}`, background: isUtama ? `${ac}12` : "#fff", fontSize: "0.6875rem", fontWeight: 600, color: "#0d3b66", minWidth: 0, maxWidth: "100%", flexShrink: 1 }}>
-                  {isUtama && <span style={{ fontSize: "0.4rem", fontWeight: 800, letterSpacing: ".05em", textTransform: "uppercase", padding: "1px 5px", borderRadius: 8, background: "#10d0e0", color: "#0d3b66", flexShrink: 0 }}>UTAMA</span>}
+                <span key={pt.id} style={{ display: "flex", alignItems: "center", gap: 4, padding: "5px 9px", borderRadius: 20, boxSizing: "border-box", border: `1.5px solid ${isUtama ? ac : ac + "40"}`, background: isUtama ? `${ac}12` : "#fff", fontSize: "0.6875rem", fontWeight: 600, color: "#2E3D3F", minWidth: 0, maxWidth: "100%", flexShrink: 1 }}>
+                  {isUtama && <span style={{ fontSize: "0.4rem", fontWeight: 800, letterSpacing: ".05em", textTransform: "uppercase", padding: "1px 5px", borderRadius: 8, background: "#E8C96A", color: "#2E3D3F", flexShrink: 0 }}>UTAMA</span>}
                   <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{pt.name}</span>
                   {pt.price && <span style={{ fontFamily: "'Playfair Display',serif", fontSize: "0.625rem", fontWeight: 700, color: ac, flexShrink: 0 }}>{isContact ? "Konsultasi" : formatRp(pt.price) || pt.price}</span>}
                 </span>
@@ -4900,7 +4900,7 @@ function TravelPackageCard({ svc, onDetail, onWaOpen, isWide }) {
           💬 WA
         </button>
         <button onClick={onDetail}
-          style={{ flex: 3, padding: "9px 0", background: `linear-gradient(135deg,#0d3b66,${ac})`, color: "#fff", border: "none", borderRadius: 8, fontSize: "0.8125rem", fontWeight: 700, cursor: "pointer", transition: "opacity .2s" }}
+          style={{ flex: 3, padding: "9px 0", background: `linear-gradient(135deg,#2E3D3F,${ac})`, color: "#fff", border: "none", borderRadius: 8, fontSize: "0.8125rem", fontWeight: 700, cursor: "pointer", transition: "opacity .2s" }}
           onMouseEnter={e => e.currentTarget.style.opacity = ".85"}
           onMouseLeave={e => e.currentTarget.style.opacity = "1"}>
           Lihat Detail →
@@ -4931,7 +4931,7 @@ function TravelPackageDetailModal({ svc, onClose, onWaOpen }) {
       <div style={{ width: 4, height: 26, background: `linear-gradient(to bottom,${ac},transparent)`, borderRadius: 2, flexShrink: 0 }} />
       <div>
         <div style={{ fontSize: "0.5625rem", letterSpacing: "3px", color: ac, fontWeight: 700, textTransform: "uppercase", marginBottom: 1 }}>{label}</div>
-        <div style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.0625rem", fontWeight: 800, color: "#0d3b66" }}>{title}</div>
+        <div style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.0625rem", fontWeight: 800, color: "#2E3D3F" }}>{title}</div>
       </div>
     </div>
   );
@@ -4958,7 +4958,7 @@ function TravelPackageDetailModal({ svc, onClose, onWaOpen }) {
             <img loading="lazy" src={svc.images?.[0] || svc.image} alt={svc.title}
               style={{ width: "100%", height: "100%", objectFit: "cover", opacity: .5 }}
               onError={e => { e.target.style.opacity = 0; }} />
-            <div style={{ position: "absolute", inset: 0, background: `linear-gradient(135deg,#0d3b66ee,${ac}bb)` }} />
+            <div style={{ position: "absolute", inset: 0, background: `linear-gradient(135deg,#2E3D3Fee,${ac}bb)` }} />
 
             {/* Close */}
             <button onClick={onClose} style={{ position: "absolute", top: 14, right: 14, width: 34, height: 34, borderRadius: "50%", background: "rgba(255,255,255,.18)", border: "1px solid rgba(255,255,255,.3)", color: "#fff", fontSize: 16, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", backdropFilter: "blur(4px)", zIndex: 2 }}>✕</button>
@@ -5021,8 +5021,8 @@ function TravelPackageDetailModal({ svc, onClose, onWaOpen }) {
                     </div>
                     <div style={{ flex: 1, padding: "16px 18px", minWidth: 180 }}>
                       <div style={{ fontSize: "0.5625rem", color: ac, fontWeight: 800, letterSpacing: ".1em", textTransform: "uppercase", marginBottom: 3 }}>{dest.tag}</div>
-                      <h3 style={{ fontFamily: "'Playfair Display',serif", fontSize: "0.9375rem", fontWeight: 800, color: "#0d3b66", marginBottom: 4, lineHeight: 1.3 }}>{dest.title}</h3>
-                      <div style={{ fontSize: "0.6875rem", color: "#4a7f98", marginBottom: 7 }}>📍 {dest.sub} &nbsp;·&nbsp; ⏱ {dest.duration}</div>
+                      <h3 style={{ fontFamily: "'Playfair Display',serif", fontSize: "0.9375rem", fontWeight: 800, color: "#2E3D3F", marginBottom: 4, lineHeight: 1.3 }}>{dest.title}</h3>
+                      <div style={{ fontSize: "0.6875rem", color: "#5A6A6C", marginBottom: 7 }}>📍 {dest.sub} &nbsp;·&nbsp; ⏱ {dest.duration}</div>
                       <p style={{ fontSize: "0.78125rem", color: "#3a5266", lineHeight: 1.65, marginBottom: 9 }}>{dest.desc}</p>
                       <div style={{ display: "flex", flexWrap: "wrap", gap: "4px 12px" }}>
                         {(dest.points || []).map((pt, pi) => (
@@ -5049,8 +5049,8 @@ function TravelPackageDetailModal({ svc, onClose, onWaOpen }) {
                     <div style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: 3, background: ac, borderRadius: "10px 0 0 10px" }} />
                     <span style={{ fontSize: 18, flexShrink: 0 }}>{f.icon}</span>
                     <div>
-                      <div style={{ fontSize: "0.78125rem", fontWeight: 700, color: "#0d3b66", marginBottom: 1 }}>{f.label}</div>
-                      <div style={{ fontSize: "0.625rem", color: "#5090aa", lineHeight: 1.4 }}>{f.detail}</div>
+                      <div style={{ fontSize: "0.78125rem", fontWeight: 700, color: "#2E3D3F", marginBottom: 1 }}>{f.label}</div>
+                      <div style={{ fontSize: "0.625rem", color: "#5A6A6C", lineHeight: 1.4 }}>{f.detail}</div>
                     </div>
                   </div>
                 ))}
@@ -5076,7 +5076,7 @@ function TravelPackageDetailModal({ svc, onClose, onWaOpen }) {
           )}
 
           {/* ─ CTA ─ */}
-          <div style={{ background: `linear-gradient(135deg,#0d3b66,#1a5a78 40%,${ac})`, borderRadius: 14, padding: "22px 24px", textAlign: "center" }}>
+          <div style={{ background: `linear-gradient(135deg,#2E3D3F,#3D5254 40%,${ac})`, borderRadius: 14, padding: "22px 24px", textAlign: "center" }}>
             <p style={{ color: "rgba(255,255,255,.8)", fontSize: "0.875rem", marginBottom: 16, lineHeight: 1.65 }}>Tertarik dengan paket ini? Hubungi kami untuk konsultasi gratis dan penawaran terbaik!</p>
             <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
               <button
@@ -5119,10 +5119,10 @@ function DestinationsSection({ svc, catInfo, activePt }) {
         <div style={{ width: 4, height: 30, background: `linear-gradient(to bottom, ${ac}, transparent)`, borderRadius: 2, flexShrink: 0 }} />
         <div>
           <div style={{ fontSize: "0.5625rem", letterSpacing: "3px", color: ac, fontWeight: 700, textTransform: "uppercase", marginBottom: 2 }}>Itinerary</div>
-          <div style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.2rem", fontWeight: 800, color: "#0d3b66", lineHeight: 1.1 }}>Pilihan Destinasi yang tersedia</div>
-          <div style={{ fontSize: "0.75rem", color: "#4a7f98", fontWeight: 400, marginTop: 3 }}>pilih sesuai kesepakatan harga</div>
+          <div style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.2rem", fontWeight: 800, color: "#2E3D3F", lineHeight: 1.1 }}>Pilihan Destinasi yang tersedia</div>
+          <div style={{ fontSize: "0.75rem", color: "#5A6A6C", fontWeight: 400, marginTop: 3 }}>pilih sesuai kesepakatan harga</div>
         </div>
-        <div style={{ flex: 1, height: 1, background: "linear-gradient(to right, #c0e8f0, transparent)" }} />
+        <div style={{ flex: 1, height: 1, background: "linear-gradient(to right, #E8DCC8, transparent)" }} />
       </div>
 
       {/* Tab selector */}
@@ -5186,12 +5186,12 @@ function DestinationsSection({ svc, catInfo, activePt }) {
           </div>
           <div style={{ padding: "20px 24px 24px" }}>
             <div style={{ fontSize: "0.5625rem", color: ac, fontWeight: 800, letterSpacing: ".1em", textTransform: "uppercase", marginBottom: 6 }}>{dest.tag}</div>
-            <h3 style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.125rem", fontWeight: 800, color: "#0d3b66", marginBottom: 6, lineHeight: 1.3 }}>{dest.title}</h3>
-            <div style={{ fontSize: "0.75rem", color: "#4a7f98", marginBottom: 12 }}>📍 {dest.sub} &nbsp;·&nbsp; ⏱ {dest.duration}</div>
+            <h3 style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.125rem", fontWeight: 800, color: "#2E3D3F", marginBottom: 6, lineHeight: 1.3 }}>{dest.title}</h3>
+            <div style={{ fontSize: "0.75rem", color: "#5A6A6C", marginBottom: 12 }}>📍 {dest.sub} &nbsp;·&nbsp; ⏱ {dest.duration}</div>
             <p style={{ fontSize: "0.875rem", color: "#3a5266", lineHeight: 1.75, marginBottom: 14 }}>{dest.desc}</p>
             <div style={{ display: "flex", flexWrap: "wrap", gap: "6px 20px" }}>
               {(dest.points || []).map((pt, pi) => (
-                <div key={pi} style={{ display: "flex", gap: 6, alignItems: "center", fontSize: "0.8125rem", color: "#1a5a78" }}>
+                <div key={pi} style={{ display: "flex", gap: 6, alignItems: "center", fontSize: "0.8125rem", color: "#3D5254" }}>
                   <span style={{ color: ac, fontWeight: 700 }}>✓</span> {pt}
                 </div>
               ))}
@@ -5199,7 +5199,7 @@ function DestinationsSection({ svc, catInfo, activePt }) {
           </div>
         </div>
       ) : (
-        <div style={{ textAlign: "center", padding: "40px 20px", background: "#f8fbfd", borderRadius: 14, border: `2px dashed ${ac}40`, color: "#4a7f98" }}>
+        <div style={{ textAlign: "center", padding: "40px 20px", background: "#f8fbfd", borderRadius: 14, border: `2px dashed ${ac}40`, color: "#5A6A6C" }}>
           <div style={{ fontSize: "2rem", marginBottom: 8 }}>🗺</div>
           <div style={{ fontWeight: 600, fontSize: "0.875rem" }}>Belum ada destinasi ditambahkan</div>
         </div>
@@ -5221,9 +5221,9 @@ function FacilitiesSection({ svc, catInfo, activePt }) {
         <div style={{ width: 4, height: 30, background: `linear-gradient(to bottom, ${ac}, transparent)`, borderRadius: 2, flexShrink: 0 }} />
         <div>
           <div style={{ fontSize: "0.5625rem", letterSpacing: "3px", color: ac, fontWeight: 700, textTransform: "uppercase", marginBottom: 2 }}>Yang Sudah Termasuk</div>
-          <div style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.2rem", fontWeight: 800, color: "#0d3b66", lineHeight: 1.1 }}>Fasilitas Perjalanan</div>
+          <div style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.2rem", fontWeight: 800, color: "#2E3D3F", lineHeight: 1.1 }}>Fasilitas Perjalanan</div>
         </div>
-        <div style={{ flex: 1, height: 1, background: "linear-gradient(to right, #c0e8f0, transparent)" }} />
+        <div style={{ flex: 1, height: 1, background: "linear-gradient(to right, #E8DCC8, transparent)" }} />
       </div>
       {facilities.length > 0 ? (
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(min(200px, 100%), 1fr))", gap: 10 }}>
@@ -5232,14 +5232,14 @@ function FacilitiesSection({ svc, catInfo, activePt }) {
               <div style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: 3, background: ac, borderRadius: "10px 0 0 10px" }} />
               <span style={{ fontSize: 22, flexShrink: 0 }}>{f.icon}</span>
               <div>
-                <div style={{ fontSize: "0.8125rem", fontWeight: 700, color: "#0d3b66", marginBottom: 2 }}>{f.label}</div>
-                {f.detail && <div style={{ fontSize: "0.75rem", color: "#4a7f98", lineHeight: 1.5 }}>{f.detail}</div>}
+                <div style={{ fontSize: "0.8125rem", fontWeight: 700, color: "#2E3D3F", marginBottom: 2 }}>{f.label}</div>
+                {f.detail && <div style={{ fontSize: "0.75rem", color: "#5A6A6C", lineHeight: 1.5 }}>{f.detail}</div>}
               </div>
             </div>
           ))}
         </div>
       ) : (
-        <div style={{ textAlign: "center", padding: "32px 20px", background: "#f8fbfd", borderRadius: 10, border: `2px dashed ${ac}40`, color: "#4a7f98" }}>
+        <div style={{ textAlign: "center", padding: "32px 20px", background: "#f8fbfd", borderRadius: 10, border: `2px dashed ${ac}40`, color: "#5A6A6C" }}>
           <div style={{ fontSize: "2rem", marginBottom: 6 }}>🎒</div>
           <div style={{ fontWeight: 600, fontSize: "0.875rem" }}>Belum ada fasilitas ditambahkan</div>
         </div>
@@ -5366,20 +5366,20 @@ function DestGallerySlideshow({ slides, catColor, svcTitle }) {
         <div style={{ width: 4, height: 30, background: `linear-gradient(to bottom, ${catColor}, transparent)`, borderRadius: 2, flexShrink: 0 }} />
         <div>
           <div style={{ fontSize: "0.5625rem", letterSpacing: "3px", color: "#7ab5cc", fontWeight: 700, textTransform: "uppercase", marginBottom: 2 }}>Dokumentasi</div>
-          <div style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.2rem", fontWeight: 800, color: "#0d3b66", lineHeight: 1.1 }}>Fasilitas &amp; Suasana</div>
+          <div style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.2rem", fontWeight: 800, color: "#2E3D3F", lineHeight: 1.1 }}>Fasilitas &amp; Suasana</div>
         </div>
-        <div style={{ flex: 1, height: 1, background: "linear-gradient(to right, #c0e8f0, transparent)" }} />
+        <div style={{ flex: 1, height: 1, background: "linear-gradient(to right, #E8DCC8, transparent)" }} />
         <div style={{ display: "flex", gap: 4, flexShrink: 0 }}>
           {slides.map((_, i) => (
             <div key={i} onClick={() => goTo(i, i > cur ? 1 : -1)}
-              style={{ width: i === cur ? 18 : 6, height: 6, borderRadius: 3, background: i === cur ? catColor : "#c0e8f0", cursor: "pointer", transition: "all .35s ease" }} />
+              style={{ width: i === cur ? 18 : 6, height: 6, borderRadius: 3, background: i === cur ? catColor : "#E8DCC8", cursor: "pointer", transition: "all .35s ease" }} />
           ))}
         </div>
       </div>
 
       {/* Slideshow frame */}
       <div
-        style={{ position: "relative", borderRadius: 14, overflow: "hidden", boxShadow: "0 8px 36px rgba(13,59,102,.16)", height: "min(420px, 56vw)", minHeight: 220, background: "#0d3b66", cursor: "pointer" }}
+        style={{ position: "relative", borderRadius: 14, overflow: "hidden", boxShadow: "0 8px 36px rgba(13,59,102,.16)", height: "min(420px, 56vw)", minHeight: 220, background: "#2E3D3F", cursor: "pointer" }}
         onMouseEnter={() => setPaused(true)}
         onMouseLeave={() => setPaused(false)}
       >
@@ -5460,11 +5460,11 @@ function PaketBackBar({ svc, onClose }) {
     setTimeout(() => setCopied(false), 1800);
   };
   return (
-    <div style={{ background: "linear-gradient(90deg,#063d5c,#0891b2)", padding: "0 5%", position: "sticky", top: 96, zIndex: 90, borderBottom: "1px solid #c0e8f0", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+    <div style={{ background: "linear-gradient(90deg,#2E3D3F,#8B6914)", padding: "0 5%", position: "sticky", top: 96, zIndex: 90, borderBottom: "1px solid #E8DCC8", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
       <button onClick={onClose} style={{ display: "flex", alignItems: "center", gap: 8, background: "none", border: "none", color: "#7ab8d0", fontWeight: 600, fontSize: "0.8125rem", cursor: "pointer", padding: "13px 0", letterSpacing: ".04em", textTransform: "uppercase" }}>
         <span style={{ fontSize: 18, lineHeight: 1 }}>←</span> Kembali ke Layanan
       </button>
-      <button onClick={copy} style={{ display: "flex", alignItems: "center", gap: 6, background: copied ? "rgba(16,208,224,.25)" : "rgba(255,255,255,.10)", border: "1px solid rgba(255,255,255,.20)", borderRadius: 20, color: copied ? "#10d0e0" : "#b8dde8", fontSize: "0.75rem", fontWeight: 600, padding: "6px 14px", cursor: "pointer", transition: "all .2s", letterSpacing: ".04em" }}>
+      <button onClick={copy} style={{ display: "flex", alignItems: "center", gap: 6, background: copied ? "rgba(16,208,224,.25)" : "rgba(255,255,255,.10)", border: "1px solid rgba(255,255,255,.20)", borderRadius: 20, color: copied ? "#E8C96A" : "#b8dde8", fontSize: "0.75rem", fontWeight: 600, padding: "6px 14px", cursor: "pointer", transition: "all .2s", letterSpacing: ".04em" }}>
         🔗 {copied ? "Tersalin!" : "Salin Link Paket"}
       </button>
     </div>
@@ -5483,7 +5483,7 @@ function ServicesPage({ content, services, navigateTo, activePaket, onOpenPaket,
 
   const CATEGORIES = [
     { key: "traveling", label: "✈️ Traveling", color: "#27ae60" },
-    { key: "event",     label: "🎉 Event Plan", color: "#0891b2" },
+    { key: "event",     label: "🎉 Event Plan", color: "#8B6914" },
     { key: "wedding",   label: "💍 Wedding Organizer", color: "#8e44ad" },
   ];
 
@@ -5578,7 +5578,7 @@ function ServicesPage({ content, services, navigateTo, activePaket, onOpenPaket,
         <PaketBackBar svc={svc} onClose={closeDetail} />
 
         {/* ── MAGAZINE HERO ── */}
-        <div className="mg-fade" style={{ position: "relative", background: "linear-gradient(130deg,#063d5c 0%,#0875a8 50%,#0aa8bf 100%)", overflow: "hidden" }}>
+        <div className="mg-fade" style={{ position: "relative", background: "linear-gradient(130deg,#2E3D3F 0%,#3D5254 50%,#8B6914 100%)", overflow: "hidden" }}>
           {/* Deco grid lines */}
           <div style={{ position: "absolute", inset: 0, backgroundImage: "repeating-linear-gradient(90deg, rgba(255,255,255,.025) 0, rgba(255,255,255,.025) 1px, transparent 1px, transparent 80px)", pointerEvents: "none" }} />
           <div style={{ position: "absolute", top: 32, left: "5%", width: 1, height: "calc(100% - 32px)", background: "rgba(255,255,255,.08)", pointerEvents: "none" }} />
@@ -5591,14 +5591,14 @@ function ServicesPage({ content, services, navigateTo, activePaket, onOpenPaket,
               <div style={{ padding: "clamp(32px,5vw,56px) clamp(0px,3vw,40px) clamp(32px,5vw,48px) 0", display: "flex", flexDirection: "column", justifyContent: "center", borderRight: "1px solid rgba(255,255,255,.09)" }}>
                 {/* Category tag */}
                 <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 22 }}>
-                  <div style={{ width: 28, height: 2, background: catInfo.color || "#0891b2" }} />
-                  <span style={{ fontSize: "0.625rem", letterSpacing: "3px", color: catInfo.color || "#22d3ee", fontWeight: 700, textTransform: "uppercase" }}>
+                  <div style={{ width: 28, height: 2, background: catInfo.color || "#8B6914" }} />
+                  <span style={{ fontSize: "0.625rem", letterSpacing: "3px", color: catInfo.color || "#D4AF37", fontWeight: 700, textTransform: "uppercase" }}>
                     {(catInfo.label || svc.category).replace(/[^\w\s]/g, "").trim()}
                   </span>
                 </div>
                 {/* Badge */}
                 {svc.badge && (
-                  <div style={{ display: "inline-flex", alignItems: "center", background: svc.badgeColor || "#0891b2", color: "#fff", borderRadius: 4, padding: "4px 14px", fontSize: "0.625rem", fontWeight: 800, letterSpacing: ".12em", textTransform: "uppercase", marginBottom: 18, alignSelf: "flex-start", boxShadow: `0 4px 18px ${svc.badgeColor || "#0891b2"}55` }}>
+                  <div style={{ display: "inline-flex", alignItems: "center", background: svc.badgeColor || "#8B6914", color: "#fff", borderRadius: 4, padding: "4px 14px", fontSize: "0.625rem", fontWeight: 800, letterSpacing: ".12em", textTransform: "uppercase", marginBottom: 18, alignSelf: "flex-start", boxShadow: `0 4px 18px ${svc.badgeColor || "#8B6914"}55` }}>
                     ★ {svc.badge}
                   </div>
                 )}
@@ -5606,8 +5606,8 @@ function ServicesPage({ content, services, navigateTo, activePaket, onOpenPaket,
                 <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: "clamp(1.8rem,4vw,3rem)", fontWeight: 900, color: "#fff", lineHeight: 1.1, marginBottom: 22, letterSpacing: "-.01em" }}>{svc.title}</h1>
                 {/* Ornamental divider */}
                 <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 22 }}>
-                  <div style={{ height: 1, width: 40, background: catInfo.color || "#22d3ee", opacity: .8 }} />
-                  <div style={{ width: 5, height: 5, borderRadius: "50%", background: catInfo.color || "#22d3ee" }} />
+                  <div style={{ height: 1, width: 40, background: catInfo.color || "#D4AF37", opacity: .8 }} />
+                  <div style={{ width: 5, height: 5, borderRadius: "50%", background: catInfo.color || "#D4AF37" }} />
                   <div style={{ width: 5, height: 5, borderRadius: "50%", background: "rgba(255,255,255,.3)" }} />
                   <div style={{ width: 5, height: 5, borderRadius: "50%", background: "rgba(255,255,255,.15)" }} />
                   <div style={{ height: 1, flex: 1, background: "rgba(255,255,255,.12)" }} />
@@ -5643,7 +5643,7 @@ function ServicesPage({ content, services, navigateTo, activePaket, onOpenPaket,
                 const allSlides = heroSlides.length > 0
                   ? heroSlides
                   : fallbackSlides.map((img, i) => ({ img, name: svc.title, no: String(i+1).padStart(2,"0"), title: svc.title }));
-                return <ServiceHeroSlideshow key={svc.id} slides={allSlides} catColor={catInfo.color || "#22d3ee"} />;
+                return <ServiceHeroSlideshow key={svc.id} slides={allSlides} catColor={catInfo.color || "#D4AF37"} />;
               })()}
               </div>
             </div>
@@ -5690,7 +5690,7 @@ function ServicesPage({ content, services, navigateTo, activePaket, onOpenPaket,
                   <DestGallerySlideshow
                     key={svc.id}
                     slides={slideImgs}
-                    catColor={catInfo.color || "#0891b2"}
+                    catColor={catInfo.color || "#8B6914"}
                     svcTitle={svc.title}
                   />
                 );
@@ -5717,21 +5717,21 @@ function ServicesPage({ content, services, navigateTo, activePaket, onOpenPaket,
                 return (
                   <div className="mg-fade-3" style={{ marginBottom: 48 }}>
                     <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 26 }}>
-                      <div style={{ width: 4, height: 30, background: `linear-gradient(to bottom, ${catInfo.color || "#0891b2"}, transparent)`, borderRadius: 2, flexShrink: 0 }} />
+                      <div style={{ width: 4, height: 30, background: `linear-gradient(to bottom, ${catInfo.color || "#8B6914"}, transparent)`, borderRadius: 2, flexShrink: 0 }} />
                       <div>
                         <div style={{ fontSize: "0.5625rem", letterSpacing: "3px", color: "#7ab5cc", fontWeight: 700, textTransform: "uppercase", marginBottom: 2 }}>Sudah Termasuk</div>
-                        <div style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.2rem", fontWeight: 800, color: "#0d3b66", lineHeight: 1.1 }}>Yang Anda Dapatkan</div>
+                        <div style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.2rem", fontWeight: 800, color: "#2E3D3F", lineHeight: 1.1 }}>Yang Anda Dapatkan</div>
                       </div>
-                      <div style={{ flex: 1, height: 1, background: "linear-gradient(to right, #c0e8f0, transparent)" }} />
+                      <div style={{ flex: 1, height: 1, background: "linear-gradient(to right, #E8DCC8, transparent)" }} />
                     </div>
                     <div className="mg-feat-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
                       {filteredFeats.map((feat, i) => (
                         <div key={i} className="mg-feat-row" style={{ display: "flex", gap: 11, alignItems: "flex-start", background: "#fff", borderRadius: 10, padding: "13px 15px 13px 18px", border: "1px solid #c8eaf2", transition: "background .18s", position: "relative", overflow: "hidden" }}>
-                          <div style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: 3, background: catInfo.color || "#0891b2", borderRadius: "10px 0 0 10px" }} />
+                          <div style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: 3, background: catInfo.color || "#8B6914", borderRadius: "10px 0 0 10px" }} />
                           <div style={{ width: 20, height: 20, borderRadius: "50%", background: catInfo.color ? `${catInfo.color}15` : "#e4f2f8", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, marginTop: 1 }}>
-                            <span style={{ color: catInfo.color || "#0891b2", fontSize: "0.6875rem", fontWeight: 900 }}>✓</span>
+                            <span style={{ color: catInfo.color || "#8B6914", fontSize: "0.6875rem", fontWeight: 900 }}>✓</span>
                           </div>
-                          <span style={{ fontSize: "0.85rem", color: "#0ea5c5", lineHeight: 1.5, fontWeight: 500, whiteSpace: "pre-wrap" }}>{feat}</span>
+                          <span style={{ fontSize: "0.85rem", color: "#C9AA71", lineHeight: 1.5, fontWeight: 500, whiteSpace: "pre-wrap" }}>{feat}</span>
                         </div>
                       ))}
                     </div>
@@ -5745,9 +5745,9 @@ function ServicesPage({ content, services, navigateTo, activePaket, onOpenPaket,
             <div className="mg-pkg-sidebar" style={{ position: "sticky", top: 128 }}>
 
               {/* Price Card */}
-              <div className="mg-fade-2" style={{ background: "linear-gradient(145deg,#0d1f35 0%,#0d3b66 55%,#0875a8 100%)", borderRadius: 16, overflow: "visible", boxShadow: "0 24px 64px rgba(12,26,40,.5)", marginBottom: 18 }}>
+              <div className="mg-fade-2" style={{ background: "linear-gradient(145deg,#0d1f35 0%,#2E3D3F 55%,#3D5254 100%)", borderRadius: 16, overflow: "visible", boxShadow: "0 24px 64px rgba(12,26,40,.5)", marginBottom: 18 }}>
                 {/* Top gradient bar */}
-                <div style={{ height: 4, background: `linear-gradient(to right, ${catInfo.color || "#0891b2"}, ${svc.badgeColor || catInfo.color || "#10d0e0"})`, borderRadius: "16px 16px 0 0" }} />
+                <div style={{ height: 4, background: `linear-gradient(to right, ${catInfo.color || "#8B6914"}, ${svc.badgeColor || catInfo.color || "#E8C96A"})`, borderRadius: "16px 16px 0 0" }} />
 
                 <div style={{ padding: "20px 18px 0" }}>
                   {/* Header label */}
@@ -5774,7 +5774,7 @@ function ServicesPage({ content, services, navigateTo, activePaket, onOpenPaket,
                         >
                           <div style={{ display: "flex", alignItems: "center", gap: 7, minWidth: 0 }}>
                             {isUtamaActive && (
-                              <span style={{ fontSize: "0.4375rem", fontWeight: 800, letterSpacing: ".06em", textTransform: "uppercase", padding: "2px 7px", borderRadius: 20, background: "#10d0e0", color: "#0d3b66", flexShrink: 0 }}>UTAMA</span>
+                              <span style={{ fontSize: "0.4375rem", fontWeight: 800, letterSpacing: ".06em", textTransform: "uppercase", padding: "2px 7px", borderRadius: 20, background: "#E8C96A", color: "#2E3D3F", flexShrink: 0 }}>UTAMA</span>
                             )}
                             <div style={{ display: "flex", flexDirection: "column", minWidth: 0, flex: 1 }}>
                               <span style={{ fontSize: "0.8rem", fontWeight: 700, color: "#fff", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{activePt2?.name}</span>
@@ -5790,7 +5790,7 @@ function ServicesPage({ content, services, navigateTo, activePaket, onOpenPaket,
                         {pkgDropOpen && (
                           <div style={{
                             position: "absolute", top: "calc(100% + 6px)", left: 0, right: 0, zIndex: 99,
-                            background: "linear-gradient(145deg,#0d1f35,#0d3b66)",
+                            background: "linear-gradient(145deg,#0d1f35,#2E3D3F)",
                             borderRadius: 12, overflow: "hidden",
                             boxShadow: "0 12px 40px rgba(0,0,0,.55)",
                             border: "1px solid rgba(255,255,255,.1)",
@@ -5809,7 +5809,7 @@ function ServicesPage({ content, services, navigateTo, activePaket, onOpenPaket,
                                     padding: "10px 14px", border: "none", cursor: "pointer",
                                     borderBottom: idx < paketTypes.length - 1 ? "1px solid rgba(255,255,255,.06)" : "none",
                                     background: isActive
-                                      ? `linear-gradient(135deg,${catInfo.color || "#0891b2"}cc,${catInfo.color || "#0891b2"}66)`
+                                      ? `linear-gradient(135deg,${catInfo.color || "#8B6914"}cc,${catInfo.color || "#8B6914"}66)`
                                       : "transparent",
                                     transition: "background .15s",
                                   }}
@@ -5817,7 +5817,7 @@ function ServicesPage({ content, services, navigateTo, activePaket, onOpenPaket,
                                   onMouseLeave={e => { if (!isActive) e.currentTarget.style.background = "transparent"; }}>
                                   <div style={{ display: "flex", alignItems: "center", gap: 7, minWidth: 0 }}>
                                     {isUtama && (
-                                      <span style={{ fontSize: "0.4375rem", fontWeight: 800, letterSpacing: ".06em", textTransform: "uppercase", padding: "2px 7px", borderRadius: 20, background: isActive ? "rgba(255,255,255,.25)" : "#10d0e0", color: isActive ? "#fff" : "#0d3b66", flexShrink: 0 }}>UTAMA</span>
+                                      <span style={{ fontSize: "0.4375rem", fontWeight: 800, letterSpacing: ".06em", textTransform: "uppercase", padding: "2px 7px", borderRadius: 20, background: isActive ? "rgba(255,255,255,.25)" : "#E8C96A", color: isActive ? "#fff" : "#2E3D3F", flexShrink: 0 }}>UTAMA</span>
                                     )}
                                     <div style={{ display: "flex", flexDirection: "column", minWidth: 0 }}>
                                       <span style={{ fontSize: "0.8rem", fontWeight: isActive ? 700 : 500, color: isActive ? "#fff" : "rgba(255,255,255,.75)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", maxWidth: 130 }}>{pt.name}</span>
@@ -5875,7 +5875,7 @@ function ServicesPage({ content, services, navigateTo, activePaket, onOpenPaket,
                     const priceStr = (() => { const raw = activePrice; const isC = String(raw||"").toLowerCase().includes("hubungi"); return isC ? "Hubungi Kami" : (formatRp(raw)||raw); })();
                     handleBook({ ...activeSidebarPkg, price: priceStr });
                   }}
-                    style={{ width: "100%", padding: "15px 20px", background: "linear-gradient(135deg,#0891b2,#0ea5c5)", color: "#fff", border: "none", borderRadius: 10, fontSize: "0.9rem", fontWeight: 700, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 8, marginBottom: 10, transition: "all .2s", letterSpacing: ".01em" }}>
+                    style={{ width: "100%", padding: "15px 20px", background: "linear-gradient(135deg,#8B6914,#C9AA71)", color: "#fff", border: "none", borderRadius: 10, fontSize: "0.9rem", fontWeight: 700, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 8, marginBottom: 10, transition: "all .2s", letterSpacing: ".01em" }}>
                     <span style={{ fontSize: "1.1rem" }}>💬</span> Pesan via WhatsApp
                   </button>
                   <button onClick={() => onWaOpen && onWaOpen()} className="mg-cta-tel"
@@ -5886,17 +5886,17 @@ function ServicesPage({ content, services, navigateTo, activePaket, onOpenPaket,
               </div>
 
               {/* Why Us — dark card with deco border */}
-              <div className="mg-fade-3" style={{ background: "linear-gradient(135deg,#063d5c,#0875a8)", borderRadius: 14, padding: "2px", overflow: "hidden", position: "relative" }}>
+              <div className="mg-fade-3" style={{ background: "linear-gradient(135deg,#2E3D3F,#3D5254)", borderRadius: 14, padding: "2px", overflow: "hidden", position: "relative" }}>
                 {/* Gradient border effect */}
-                <div style={{ position: "absolute", inset: 0, background: `linear-gradient(145deg, ${catInfo.color || "#0891b2"}44, transparent, rgba(255,255,255,.06))`, borderRadius: 14, pointerEvents: "none" }} />
-                <div style={{ background: "linear-gradient(135deg,#063d5c,#0875a8)", borderRadius: 12, padding: "22px 20px", position: "relative" }}>
+                <div style={{ position: "absolute", inset: 0, background: `linear-gradient(145deg, ${catInfo.color || "#8B6914"}44, transparent, rgba(255,255,255,.06))`, borderRadius: 14, pointerEvents: "none" }} />
+                <div style={{ background: "linear-gradient(135deg,#2E3D3F,#3D5254)", borderRadius: 12, padding: "22px 20px", position: "relative" }}>
                   {/* Inner deco frame */}
                   <div style={{ position: "absolute", top: 10, left: 10, right: 10, bottom: 10, border: "1px solid rgba(255,255,255,.05)", borderRadius: 8, pointerEvents: "none" }} />
                   {/* BG shapes */}
-                  <div style={{ position: "absolute", bottom: -25, right: -25, width: 90, height: 90, borderRadius: "50%", background: `${catInfo.color || "#0891b2"}18`, pointerEvents: "none" }} />
+                  <div style={{ position: "absolute", bottom: -25, right: -25, width: 90, height: 90, borderRadius: "50%", background: `${catInfo.color || "#8B6914"}18`, pointerEvents: "none" }} />
                   <div style={{ position: "relative" }}>
-                    <div style={{ fontSize: "0.5625rem", letterSpacing: "3px", color: catInfo.color || "#22d3ee", fontWeight: 700, textTransform: "uppercase", marginBottom: 8 }}>Keunggulan Kami</div>
-                    <div style={{ width: 28, height: 2, background: catInfo.color || "#22d3ee", borderRadius: 1, marginBottom: 18 }} />
+                    <div style={{ fontSize: "0.5625rem", letterSpacing: "3px", color: catInfo.color || "#D4AF37", fontWeight: 700, textTransform: "uppercase", marginBottom: 8 }}>Keunggulan Kami</div>
+                    <div style={{ width: 28, height: 2, background: catInfo.color || "#D4AF37", borderRadius: 1, marginBottom: 18 }} />
                     {[
                       { icon: "🏆", label: "Tim Profesional", desc: "Berpengalaman di bidangnya" },
                       { icon: "🤝", label: "Konsultasi Gratis", desc: "Diskusi tanpa biaya apapun" },
@@ -5925,26 +5925,26 @@ function ServicesPage({ content, services, navigateTo, activePaket, onOpenPaket,
                 <div style={{ width: 4, height: 30, background: "linear-gradient(to bottom, #7ab5cc, transparent)", borderRadius: 2, flexShrink: 0 }} />
                 <div>
                   <div style={{ fontSize: "0.5625rem", letterSpacing: "3px", color: "#7ab5cc", fontWeight: 700, textTransform: "uppercase", marginBottom: 2 }}>Lihat Juga</div>
-                  <div style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.2rem", fontWeight: 800, color: "#0d3b66", lineHeight: 1.1 }}>Paket Serupa</div>
+                  <div style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.2rem", fontWeight: 800, color: "#2E3D3F", lineHeight: 1.1 }}>Paket Serupa</div>
                 </div>
               </div>
               <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 10 }}>
                 {relatedSvcs.map(s => (
                   <div key={s.id} className="mg-related" onClick={() => openDetail(s)}
                     style={{ display: "flex", gap: 0, alignItems: "stretch", background: "#fff", borderRadius: 12, overflow: "hidden", cursor: "pointer", boxShadow: "0 2px 10px rgba(13,59,102,.07)", border: "1px solid #c8eaf2" }}
-                    onMouseEnter={e => e.currentTarget.style.boxShadow = "0 8px 28px rgba(13,59,102,.14)"}
+                    onMouseEnter={e => e.currentTarget.style.boxShadow = "0 8px 28px rgba(46,61,63,.14)"}
                     onMouseLeave={e => e.currentTarget.style.boxShadow = "0 2px 10px rgba(13,59,102,.07)"}>
                     <div style={{ width: 90, flexShrink: 0, overflow: "hidden" }}>
                       <img loading="lazy" src={s.images?.[0] || s.image} alt={s.title} style={{ width: "100%", height: "100%", objectFit: "cover", transition: "transform .3s" }}
                         onError={e => e.target.src = ""} />
                     </div>
-                    <div style={{ width: 3, flexShrink: 0, background: `linear-gradient(to bottom, ${s.badgeColor || "#0891b2"}, transparent)` }} />
+                    <div style={{ width: 3, flexShrink: 0, background: `linear-gradient(to bottom, ${s.badgeColor || "#8B6914"}, transparent)` }} />
                     <div style={{ padding: "12px 14px", flex: 1, minWidth: 0 }}>
-                      {s.badge && <div style={{ fontSize: "0.5625rem", color: s.badgeColor || "#0891b2", fontWeight: 800, letterSpacing: ".1em", textTransform: "uppercase", marginBottom: 3 }}>{s.badge}</div>}
-                      <div style={{ fontSize: "0.875rem", fontWeight: 700, color: "#0d3b66", marginBottom: 4, lineHeight: 1.3, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{s.title}</div>
-                      <div style={{ fontSize: "0.8125rem", color: s.badgeColor || "#0891b2", fontWeight: 800 }}>{s.price} <span style={{ color: "#7ab5cc", fontWeight: 400, fontSize: "0.75rem" }}>{s.priceNote}</span></div>
+                      {s.badge && <div style={{ fontSize: "0.5625rem", color: s.badgeColor || "#8B6914", fontWeight: 800, letterSpacing: ".1em", textTransform: "uppercase", marginBottom: 3 }}>{s.badge}</div>}
+                      <div style={{ fontSize: "0.875rem", fontWeight: 700, color: "#2E3D3F", marginBottom: 4, lineHeight: 1.3, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{s.title}</div>
+                      <div style={{ fontSize: "0.8125rem", color: s.badgeColor || "#8B6914", fontWeight: 800 }}>{s.price} <span style={{ color: "#7ab5cc", fontWeight: 400, fontSize: "0.75rem" }}>{s.priceNote}</span></div>
                     </div>
-                    <div style={{ display: "flex", alignItems: "center", paddingRight: 14, color: "#9ed4e0", fontSize: "1.125rem", flexShrink: 0 }}>›</div>
+                    <div style={{ display: "flex", alignItems: "center", paddingRight: 14, color: "#C9AA71", fontSize: "1.125rem", flexShrink: 0 }}>›</div>
                   </div>
                 ))}
               </div>
@@ -5959,9 +5959,9 @@ function ServicesPage({ content, services, navigateTo, activePaket, onOpenPaket,
   const filteredServices = activeCategory ? services.filter(s => s.category === activeCategory) : [];
 
   return (
-    <div className="fade-in" style={{ minHeight: "100vh", background: "#edfafc", /* overflowX removed */ }}>
+    <div className="fade-in" style={{ minHeight: "100vh", background: "#FAF7F0", /* overflowX removed */ }}>
       {/* Header — gradient + radial flare like reference */}
-      <div style={{ background: "linear-gradient(120deg,#063d5c 0%,#0875a8 40%,#0aa8bf 72%,#1ed8e8 100%)", padding: "clamp(40px,8vw,72px) 5% clamp(48px,8vw,80px)", textAlign: "center", position: "relative", overflow: "hidden" }}>
+      <div style={{ background: "linear-gradient(120deg,#2E3D3F 0%,#3D5254 40%,#B8962A 72%,#1ed8e8 100%)", padding: "clamp(40px,8vw,72px) 5% clamp(48px,8vw,80px)", textAlign: "center", position: "relative", overflow: "hidden" }}>
         {/* Flare glow center-right */}
         <div style={{ position: "absolute", top: "50%", right: "18%", transform: "translateY(-50%)", width: 480, height: 480, borderRadius: "50%", background: "radial-gradient(circle, rgba(30,216,232,.38) 0%, rgba(10,168,191,.18) 40%, transparent 70%)", pointerEvents: "none", filter: "blur(12px)" }} />
         {/* Flare glow left */}
@@ -5976,7 +5976,7 @@ function ServicesPage({ content, services, navigateTo, activePaket, onOpenPaket,
       </div>
 
       {/* Category Buttons */}
-      <div style={{ background: "#fff", borderBottom: "1px solid #c0e8f0", padding: "0 5%" }}>
+      <div style={{ background: "#fff", borderBottom: "1px solid #E8DCC8", padding: "0 5%" }}>
         <div style={{ maxWidth: 1200, margin: "0 auto", display: "flex", gap: 0, overflowX: "auto", WebkitOverflowScrolling: "touch", scrollbarWidth: "none", msOverflowStyle: "none" }}>
           {CATEGORIES.map(cat => {
             const isActive = activeCategory === cat.key;
@@ -5984,10 +5984,10 @@ function ServicesPage({ content, services, navigateTo, activePaket, onOpenPaket,
             return (
               <button key={cat.key} onClick={() => setActiveCategory(isActive ? null : cat.key)}
                 style={{ padding: "16px 20px", border: "none", background: "none", fontSize: "0.875rem", fontWeight: isActive ? 700 : 500,
-                  color: isActive ? cat.color : "#1a5a78", borderBottom: isActive ? `3px solid ${cat.color}` : "3px solid transparent",
+                  color: isActive ? cat.color : "#3D5254", borderBottom: isActive ? `3px solid ${cat.color}` : "3px solid transparent",
                   cursor: "pointer", whiteSpace: "nowrap", transition: "all .25s", display: "flex", alignItems: "center", gap: 6, flexShrink: 0 }}>
                 {cat.label}
-                <span style={{ fontSize: "0.6875rem", background: isActive ? cat.color : "#edfafc", color: isActive ? "#fff" : "#4a7f98", borderRadius: 12, padding: "2px 7px", fontWeight: 700, transition: "all .25s" }}>{count}</span>
+                <span style={{ fontSize: "0.6875rem", background: isActive ? cat.color : "#FAF7F0", color: isActive ? "#fff" : "#5A6A6C", borderRadius: 12, padding: "2px 7px", fontWeight: 700, transition: "all .25s" }}>{count}</span>
               </button>
             );
           })}
@@ -5999,8 +5999,8 @@ function ServicesPage({ content, services, navigateTo, activePaket, onOpenPaket,
         {!activeCategory && (
           <div style={{ textAlign: "center", padding: "60px 20px" }}>
             <div style={{ fontSize: 56, marginBottom: 20 }}>👆</div>
-            <h2 className="display" style={{ fontSize: "1.75rem", fontWeight: 900, color: "#0d3b66", marginBottom: 12 }}>Pilih Kategori Layanan</h2>
-            <p style={{ fontSize: "1rem", color: "#4a7f98" }}>Klik salah satu tab di atas untuk melihat paket layanan yang tersedia.</p>
+            <h2 className="display" style={{ fontSize: "1.75rem", fontWeight: 900, color: "#2E3D3F", marginBottom: 12 }}>Pilih Kategori Layanan</h2>
+            <p style={{ fontSize: "1rem", color: "#5A6A6C" }}>Klik salah satu tab di atas untuk melihat paket layanan yang tersedia.</p>
           </div>
         )}
 
@@ -6010,10 +6010,10 @@ function ServicesPage({ content, services, navigateTo, activePaket, onOpenPaket,
             {/* Header row: judul + toggle kolom */}
             <div style={{ marginBottom: 32, display: "flex", alignItems: "flex-end", justifyContent: "space-between", flexWrap: "wrap", gap: 12 }}>
               <div>
-                <h2 className="display" style={{ fontSize: "1.5rem", fontWeight: 900, color: "#0d3b66", marginBottom: 6 }}>
+                <h2 className="display" style={{ fontSize: "1.5rem", fontWeight: 900, color: "#2E3D3F", marginBottom: 6 }}>
                   {CATEGORIES.find(c => c.key === activeCategory)?.label}
                 </h2>
-                <p style={{ fontSize: "0.9375rem", color: "#4a7f98" }}>{filteredServices.length} paket tersedia</p>
+                <p style={{ fontSize: "0.9375rem", color: "#5A6A6C" }}>{filteredServices.length} paket tersedia</p>
               </div>
               {/* Toggle Kolom */}
               <div style={{ display: "flex", gap: 4, background: "#e4f4f8", borderRadius: 10, padding: 4 }}>
@@ -6027,9 +6027,9 @@ function ServicesPage({ content, services, navigateTo, activePaket, onOpenPaket,
                       width: 38, height: 38, borderRadius: 7, border: "none", cursor: "pointer",
                       fontSize: cols === 3 ? "1.05rem" : cols === 2 ? "1.1rem" : "1.25rem",
                       background: colLayout === cols
-                        ? (CATEGORIES.find(c => c.key === activeCategory)?.color || "#0891b2")
+                        ? (CATEGORIES.find(c => c.key === activeCategory)?.color || "#8B6914")
                         : "transparent",
-                      color: colLayout === cols ? "#fff" : "#4a7f98",
+                      color: colLayout === cols ? "#fff" : "#5A6A6C",
                       fontWeight: 700, transition: "all .18s",
                       display: "flex", alignItems: "center", justifyContent: "center",
                       boxShadow: colLayout === cols ? "0 2px 8px rgba(0,0,0,.15)" : "none",
@@ -6040,7 +6040,7 @@ function ServicesPage({ content, services, navigateTo, activePaket, onOpenPaket,
               </div>
             </div>
             {filteredServices.length === 0 ? (
-              <div style={{ textAlign: "center", padding: "60px 0", color: "#5090aa" }}>Belum ada paket untuk kategori ini.</div>
+              <div style={{ textAlign: "center", padding: "60px 0", color: "#5A6A6C" }}>Belum ada paket untuk kategori ini.</div>
             ) : activeCategory === "traveling" ? (
               /* ── TRAVELING: 2-col grid with price accordion cards ── */
               (() => {
@@ -6087,14 +6087,14 @@ function ServicesPage({ content, services, navigateTo, activePaket, onOpenPaket,
       </div>
 
       {/* CTA Banner */}
-      <section style={{ background: "linear-gradient(130deg,#063d5c 0%,#0875a8 50%,#0aa8bf 100%)", padding: "72px 5%", textAlign: "center" }}>
+      <section style={{ background: "linear-gradient(130deg,#2E3D3F 0%,#3D5254 50%,#8B6914 100%)", padding: "72px 5%", textAlign: "center" }}>
         <div style={{ maxWidth: 600, margin: "0 auto" }}>
           <h2 className="display" style={{ fontSize: "clamp(1.75rem,4vw,2.5rem)", fontWeight: 900, color: "#fff", marginBottom: 16, lineHeight: 1.15 }}>Tidak Menemukan Paket yang Cocok?</h2>
           <p style={{ color: "rgba(255,255,255,.75)", fontSize: "1rem", marginBottom: 36, lineHeight: 1.7 }}>Kami siap membuat paket khusus sesuai kebutuhan dan budget Anda.</p>
           <div style={{ display: "flex", gap: 16, justifyContent: "center", flexWrap: "wrap" }}>
             <button onClick={() => onWaOpen && onWaOpen()}
-              style={{ padding: "14px 32px", background: "#fff", color: "#0d3b66", border: "none", borderRadius: 8, fontSize: "0.875rem", fontWeight: 700, cursor: "pointer", transition: "background .2s" }}
-              onMouseEnter={e => e.currentTarget.style.background = "#c5dde9"}
+              style={{ padding: "14px 32px", background: "#fff", color: "#2E3D3F", border: "none", borderRadius: 8, fontSize: "0.875rem", fontWeight: 700, cursor: "pointer", transition: "background .2s" }}
+              onMouseEnter={e => e.currentTarget.style.background = "#E8DCC8"}
               onMouseLeave={e => e.currentTarget.style.background = "#fff"}>
               💬 WhatsApp Kami
             </button>
@@ -6132,7 +6132,7 @@ function ServicesAdmin({ data, save, notify, uploadToCloudinary, onEditStateChan
 
   const openNew = () => {
     setSvcForm({
-      id: Date.now(), category: "traveling", title: "", badge: "", badgeColor: "#0891b2",
+      id: Date.now(), category: "traveling", title: "", badge: "", badgeColor: "#8B6914",
       accent: "#e8a020", accentLight: "#fff8e6", duration: "3 Hari 2 Malam", minPeserta: "20",
       price: "", priceNote: "/ orang", images: [], image: "", coverIndex: 0,
       description: "", features: [], highlight: false,
@@ -6296,9 +6296,9 @@ function ServicesAdmin({ data, save, notify, uploadToCloudinary, onEditStateChan
 
   /* ── Shared form JSX (dipakai baik new maupun edit) ── */
   const renderForm = (isNew) => (
-    <div className="fade-in" style={{ background: "#f5fdff", minHeight: "100%" }}>
+    <div className="fade-in" style={{ background: "#FDFAF4", minHeight: "100%" }}>
       {/* ── Sticky header ── */}
-      <div style={{ position: "sticky", top: 0, zIndex: 10, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "16px 28px", background: "linear-gradient(130deg,#063d5c 0%,#0875a8 55%,#0aa8bf 100%)", boxShadow: "0 4px 16px rgba(0,0,0,.18)" }}>
+      <div style={{ position: "sticky", top: 0, zIndex: 10, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "16px 28px", background: "linear-gradient(130deg,#2E3D3F 0%,#3D5254 55%,#8B6914 100%)", boxShadow: "0 4px 16px rgba(0,0,0,.18)" }}>
         <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
           <button onClick={cancelEdit} style={{ width: 36, height: 36, borderRadius: "50%", background: "rgba(255,255,255,.15)", color: "#fff", border: "1px solid rgba(255,255,255,.3)", cursor: "pointer", fontSize: 16, display: "flex", alignItems: "center", justifyContent: "center" }}>←</button>
           <div>
@@ -6307,19 +6307,19 @@ function ServicesAdmin({ data, save, notify, uploadToCloudinary, onEditStateChan
           </div>
         </div>
         <div style={{ display: "flex", gap: 10 }}>
-          <button onClick={saveSvc} style={{ padding: "9px 24px", background: "#10d0e0", color: "#fff", border: "none", borderRadius: 8, fontSize: 13, fontWeight: 800, cursor: "pointer", boxShadow: "0 2px 8px rgba(0,0,0,.25)" }}>💾 Simpan Paket</button>
+          <button onClick={saveSvc} style={{ padding: "9px 24px", background: "#E8C96A", color: "#fff", border: "none", borderRadius: 8, fontSize: 13, fontWeight: 800, cursor: "pointer", boxShadow: "0 2px 8px rgba(0,0,0,.25)" }}>💾 Simpan Paket</button>
           <button onClick={cancelEdit} style={{ padding: "9px 16px", background: "rgba(255,255,255,.15)", color: "#fff", border: "1px solid rgba(255,255,255,.3)", borderRadius: 8, fontSize: 13, cursor: "pointer" }}>✕ Batal</button>
         </div>
       </div>
 
       {/* ── Tipe Paket Tab Bar ── */}
-      <div style={{ padding:"0 28px", background:"#f0f9fc", borderBottom:"2px solid #e0f7fa", display:"flex", alignItems:"center", gap:0, overflowX:"auto", flexWrap:"nowrap" }}>
+      <div style={{ padding:"0 28px", background:"#f0f9fc", borderBottom:"2px solid #F5EDD8", display:"flex", alignItems:"center", gap:0, overflowX:"auto", flexWrap:"nowrap" }}>
         {/* Master Paket */}
         <button onClick={() => setActivePaketTab("master")}
           style={{ padding:"12px 20px", fontSize:12, fontWeight: activePaketTab==="master" ? 800 : 600,
-            color: activePaketTab==="master" ? "#0d3b66" : "#5090aa",
+            color: activePaketTab==="master" ? "#2E3D3F" : "#5A6A6C",
             background: activePaketTab==="master" ? "#fff" : "transparent",
-            border:"none", borderBottom: activePaketTab==="master" ? "3px solid #0891b2" : "3px solid transparent",
+            border:"none", borderBottom: activePaketTab==="master" ? "3px solid #8B6914" : "3px solid transparent",
             cursor:"pointer", whiteSpace:"nowrap", transition:"all .15s", flexShrink:0 }}>
           📦 Master Paket
         </button>
@@ -6328,13 +6328,13 @@ function ServicesAdmin({ data, save, notify, uploadToCloudinary, onEditStateChan
           <div key={pt.id} style={{ display:"flex", alignItems:"center", flexShrink:0 }}>
             <button onClick={() => setActivePaketTab(pt.id)}
               style={{ padding:"12px 12px 12px 16px", fontSize:12, fontWeight: activePaketTab===pt.id ? 800 : 600,
-                color: activePaketTab===pt.id ? "#8e44ad" : "#5090aa",
+                color: activePaketTab===pt.id ? "#8e44ad" : "#5A6A6C",
                 background: activePaketTab===pt.id ? "#fff" : "transparent",
                 border:"none", borderBottom: activePaketTab===pt.id ? "3px solid #8e44ad" : "3px solid transparent",
                 cursor:"pointer", whiteSpace:"nowrap", transition:"all .15s", display:"flex", alignItems:"center", gap:5 }}>
               🏷 {pt.name}
               {ptIdx === 0 && (
-                <span style={{ fontSize:9, background:"#10d0e0", color:"#0d3b66", borderRadius:8, padding:"2px 7px", fontWeight:800, letterSpacing:".08em" }}>UTAMA</span>
+                <span style={{ fontSize:9, background:"#E8C96A", color:"#2E3D3F", borderRadius:8, padding:"2px 7px", fontWeight:800, letterSpacing:".08em" }}>UTAMA</span>
               )}
             </button>
             <button onClick={() => { if(window.confirm(`Hapus ${pt.name}?`)) removePaketType(pt.id); }}
@@ -6354,12 +6354,12 @@ function ServicesAdmin({ data, save, notify, uploadToCloudinary, onEditStateChan
       {/* ── 3×3 Grid utama (Master Paket only) ── */}
       {activePaketTab === "master" && (
       <div style={{ padding: "24px 28px", display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 20 }}>
-        <div style={{ background: "#fff", borderRadius: 12, padding: "22px 20px", boxShadow: "0 2px 10px rgba(0,0,0,.06)", borderTop: "3px solid #0891b2" }}>
-          <div style={{ fontSize: 12, fontWeight: 800, color: "#0891b2", textTransform: "uppercase", letterSpacing: "1px", marginBottom: 16 }}>📋 Informasi Dasar</div>
+        <div style={{ background: "#fff", borderRadius: 12, padding: "22px 20px", boxShadow: "0 2px 10px rgba(0,0,0,.06)", borderTop: "3px solid #8B6914" }}>
+          <div style={{ fontSize: 12, fontWeight: 800, color: "#8B6914", textTransform: "uppercase", letterSpacing: "1px", marginBottom: 16 }}>📋 Informasi Dasar</div>
           <div style={{ marginBottom: 14 }}>
-            <label style={{ display: "block", fontSize: 11, fontWeight: 700, color: "#5090aa", textTransform: "uppercase", letterSpacing: "1px", marginBottom: 6 }}>Kategori *</label>
+            <label style={{ display: "block", fontSize: 11, fontWeight: 700, color: "#5A6A6C", textTransform: "uppercase", letterSpacing: "1px", marginBottom: 6 }}>Kategori *</label>
             <select value={svcForm.category || "traveling"} onChange={e => setSvcForm(p => ({ ...p, category: e.target.value }))}
-              style={{ width: "100%", padding: "10px 12px", border: "1.5px solid #b0dce8", borderRadius: 8, fontSize: 13, outline: "none", background: "#fff" }}>
+              style={{ width: "100%", padding: "10px 12px", border: "1.5px solid #D4C4A0", borderRadius: 8, fontSize: 13, outline: "none", background: "#fff" }}>
               <option value="traveling">✈️ Traveling</option>
               <option value="event">🎉 Event Plan</option>
               <option value="wedding">💍 Wedding Organizer</option>
@@ -6370,34 +6370,34 @@ function ServicesAdmin({ data, save, notify, uploadToCloudinary, onEditStateChan
             { label: "Keterangan Harga", key: "priceNote", placeholder: "/ orang (mulai)" },
           ].map(f => (
             <div key={f.key} style={{ marginBottom: 14 }}>
-              <label style={{ display: "block", fontSize: 11, fontWeight: 700, color: "#5090aa", textTransform: "uppercase", letterSpacing: "1px", marginBottom: 6 }}>{f.label}</label>
+              <label style={{ display: "block", fontSize: 11, fontWeight: 700, color: "#5A6A6C", textTransform: "uppercase", letterSpacing: "1px", marginBottom: 6 }}>{f.label}</label>
               <input value={svcForm[f.key] || ""} onChange={e => setSvcForm(p => ({ ...p, [f.key]: e.target.value }))} placeholder={f.placeholder}
-                style={{ width: "100%", padding: "10px 12px", border: "1.5px solid #b0dce8", borderRadius: 8, fontSize: 13, outline: "none", boxSizing: "border-box" }} />
+                style={{ width: "100%", padding: "10px 12px", border: "1.5px solid #D4C4A0", borderRadius: 8, fontSize: 13, outline: "none", boxSizing: "border-box" }} />
             </div>
           ))}
           <div style={{ marginBottom: 14 }}>
-            <label style={{ display: "block", fontSize: 11, fontWeight: 700, color: "#5090aa", textTransform: "uppercase", letterSpacing: "1px", marginBottom: 6 }}>👥 Jumlah Minimal Peserta</label>
+            <label style={{ display: "block", fontSize: 11, fontWeight: 700, color: "#5A6A6C", textTransform: "uppercase", letterSpacing: "1px", marginBottom: 6 }}>👥 Jumlah Minimal Peserta</label>
             <div style={{ position: "relative" }}>
               <input
                 type="number" min="1"
                 value={svcForm.minPeserta || ""}
                 onChange={e => setSvcForm(p => ({ ...p, minPeserta: e.target.value }))}
                 placeholder="mis: 20"
-                style={{ width: "100%", padding: "10px 12px 10px 42px", border: "1.5px solid #b0dce8", borderRadius: 8, fontSize: 13, outline: "none", boxSizing: "border-box" }}
+                style={{ width: "100%", padding: "10px 12px 10px 42px", border: "1.5px solid #D4C4A0", borderRadius: 8, fontSize: 13, outline: "none", boxSizing: "border-box" }}
               />
-              <span style={{ position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)", fontSize: 12, fontWeight: 700, color: "#5090aa", pointerEvents: "none" }}>org</span>
+              <span style={{ position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)", fontSize: 12, fontWeight: 700, color: "#5A6A6C", pointerEvents: "none" }}>org</span>
             </div>
             {svcForm.minPeserta && <div style={{ fontSize: 11, color: "#27ae60", fontWeight: 600, marginTop: 4 }}>✓ Min. {svcForm.minPeserta} peserta</div>}
           </div>
           <div style={{ marginBottom: 14 }}>
-            <label style={{ display: "block", fontSize: 11, fontWeight: 700, color: "#5090aa", textTransform: "uppercase", letterSpacing: "1px", marginBottom: 6 }}>Deskripsi</label>
+            <label style={{ display: "block", fontSize: 11, fontWeight: 700, color: "#5A6A6C", textTransform: "uppercase", letterSpacing: "1px", marginBottom: 6 }}>Deskripsi</label>
             <textarea value={svcForm.description || ""} onChange={e => setSvcForm(p => ({ ...p, description: e.target.value }))}
               rows={4} placeholder="Deskripsi singkat paket layanan..."
-              style={{ width: "100%", padding: "10px 12px", border: "1.5px solid #b0dce8", borderRadius: 8, fontSize: 13, outline: "none", resize: "vertical", lineHeight: 1.7, boxSizing: "border-box" }} />
+              style={{ width: "100%", padding: "10px 12px", border: "1.5px solid #D4C4A0", borderRadius: 8, fontSize: 13, outline: "none", resize: "vertical", lineHeight: 1.7, boxSizing: "border-box" }} />
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-            <input type="checkbox" id="svc-highlight-fp" checked={!!svcForm.highlight} onChange={e => setSvcForm(p => ({ ...p, highlight: e.target.checked }))} style={{ width: 18, height: 18, cursor: "pointer", accentColor: "#0891b2" }} />
-            <label htmlFor="svc-highlight-fp" style={{ fontSize: 13, color: "#0d3b66", fontWeight: 600, cursor: "pointer" }}>⭐ Pilihan Utama (highlight)</label>
+            <input type="checkbox" id="svc-highlight-fp" checked={!!svcForm.highlight} onChange={e => setSvcForm(p => ({ ...p, highlight: e.target.checked }))} style={{ width: 18, height: 18, cursor: "pointer", accentColor: "#8B6914" }} />
+            <label htmlFor="svc-highlight-fp" style={{ fontSize: 13, color: "#2E3D3F", fontWeight: 600, cursor: "pointer" }}>⭐ Pilihan Utama (highlight)</label>
           </div>
         </div>
 
@@ -6405,14 +6405,14 @@ function ServicesAdmin({ data, save, notify, uploadToCloudinary, onEditStateChan
         <div style={{ background: "#fff", borderRadius: 12, padding: "22px 20px", boxShadow: "0 2px 10px rgba(0,0,0,.06)", borderTop: "3px solid #8e44ad" }}>
           <div style={{ fontSize: 12, fontWeight: 800, color: "#8e44ad", textTransform: "uppercase", letterSpacing: "1px", marginBottom: 16 }}>🎨 Badge & Tampilan</div>
           <div style={{ marginBottom: 14 }}>
-            <label style={{ display: "block", fontSize: 11, fontWeight: 700, color: "#5090aa", textTransform: "uppercase", letterSpacing: "1px", marginBottom: 6 }}>Teks Badge</label>
+            <label style={{ display: "block", fontSize: 11, fontWeight: 700, color: "#5A6A6C", textTransform: "uppercase", letterSpacing: "1px", marginBottom: 6 }}>Teks Badge</label>
             <input value={svcForm.badge || ""} onChange={e => setSvcForm(p => ({ ...p, badge: e.target.value }))} placeholder="Best Seller / Rekomendasi"
-              style={{ width: "100%", padding: "10px 12px", border: "1.5px solid #b0dce8", borderRadius: 8, fontSize: 13, outline: "none", boxSizing: "border-box" }} />
+              style={{ width: "100%", padding: "10px 12px", border: "1.5px solid #D4C4A0", borderRadius: 8, fontSize: 13, outline: "none", boxSizing: "border-box" }} />
           </div>
           <div style={{ marginBottom: 14 }}>
-            <label style={{ display: "block", fontSize: 11, fontWeight: 700, color: "#5090aa", textTransform: "uppercase", letterSpacing: "1px", marginBottom: 8 }}>Warna Badge</label>
+            <label style={{ display: "block", fontSize: 11, fontWeight: 700, color: "#5A6A6C", textTransform: "uppercase", letterSpacing: "1px", marginBottom: 8 }}>Warna Badge</label>
             <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 10 }}>
-              {["#0891b2","#27ae60","#e67e22","#c0392b","#8e44ad","#e84393","#1abc9c","#f39c12","#0d3b66"].map(c => (
+              {["#8B6914","#27ae60","#e67e22","#c0392b","#8e44ad","#e84393","#1abc9c","#f39c12","#2E3D3F"].map(c => (
                 <button key={c} onClick={() => setSvcForm(p => ({ ...p, badgeColor: c }))}
                   style={{ width: 26, height: 26, borderRadius: "50%", background: c, border: "none", cursor: "pointer",
                     boxShadow: svcForm.badgeColor === c ? `0 0 0 3px #fff, 0 0 0 5px ${c}` : "0 1px 3px rgba(0,0,0,.2)",
@@ -6420,15 +6420,15 @@ function ServicesAdmin({ data, save, notify, uploadToCloudinary, onEditStateChan
               ))}
             </div>
             <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-              <input type="color" value={svcForm.badgeColor || "#0891b2"} onChange={e => setSvcForm(p => ({ ...p, badgeColor: e.target.value }))}
+              <input type="color" value={svcForm.badgeColor || "#8B6914"} onChange={e => setSvcForm(p => ({ ...p, badgeColor: e.target.value }))}
                 style={{ width: 36, height: 36, border: "none", background: "none", cursor: "pointer", padding: 0 }} />
-              <input value={svcForm.badgeColor || "#0891b2"} onChange={e => setSvcForm(p => ({ ...p, badgeColor: e.target.value }))} maxLength={7}
-                style={{ flex: 1, padding: "8px 10px", border: "1.5px solid #b0dce8", borderRadius: 8, fontSize: 13, outline: "none", fontFamily: "monospace" }} />
+              <input value={svcForm.badgeColor || "#8B6914"} onChange={e => setSvcForm(p => ({ ...p, badgeColor: e.target.value }))} maxLength={7}
+                style={{ flex: 1, padding: "8px 10px", border: "1.5px solid #D4C4A0", borderRadius: 8, fontSize: 13, outline: "none", fontFamily: "monospace" }} />
             </div>
             {svcForm.badge && (
               <div style={{ marginTop: 12, padding: "10px 14px", background: "#f5f0ff", borderRadius: 8, display: "flex", alignItems: "center", gap: 10 }}>
-                <span style={{ fontSize: 11, color: "#5090aa" }}>Preview:</span>
-                <span style={{ background: svcForm.badgeColor || "#0891b2", color: "#fff", borderRadius: 10, padding: "3px 10px", fontSize: 11, fontWeight: 800 }}>{svcForm.badge}</span>
+                <span style={{ fontSize: 11, color: "#5A6A6C" }}>Preview:</span>
+                <span style={{ background: svcForm.badgeColor || "#8B6914", color: "#fff", borderRadius: 10, padding: "3px 10px", fontSize: 11, fontWeight: 800 }}>{svcForm.badge}</span>
               </div>
             )}
           </div>
@@ -6441,15 +6441,15 @@ function ServicesAdmin({ data, save, notify, uploadToCloudinary, onEditStateChan
             {(svcForm.images || []).length > 0 && <span style={{ fontSize: 11, color: "#27ae60", fontWeight: 600 }}>Cover: Foto #{(svcForm.coverIndex||0)+1}</span>}
           </div>
           {uploadProgresses.length > 0 && (
-            <div style={{ background: "#f0fafe", border: "1px solid #b0dce8", borderRadius: 8, padding: "12px 14px", marginBottom: 12 }}>
+            <div style={{ background: "#f0fafe", border: "1px solid #D4C4A0", borderRadius: 8, padding: "12px 14px", marginBottom: 12 }}>
               {uploadProgresses.map((up, i) => (
                 <div key={i} style={{ marginBottom: 8 }}>
                   <div style={{ display: "flex", justifyContent: "space-between", fontSize: 11, marginBottom: 3 }}>
-                    <span style={{ color: up.error?"#e74c3c":"#0d3b66", fontWeight:600, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap", maxWidth:160 }}>{up.error?"❌ ":up.done?"✅ ":"📤 "}{up.name}</span>
-                    <span style={{ color: up.error?"#e74c3c":up.done?"#27ae60":"#0891b2", fontWeight:700 }}>{up.error?"Gagal":up.done?"✓":`${up.pct}%`}</span>
+                    <span style={{ color: up.error?"#e74c3c":"#2E3D3F", fontWeight:600, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap", maxWidth:160 }}>{up.error?"❌ ":up.done?"✅ ":"📤 "}{up.name}</span>
+                    <span style={{ color: up.error?"#e74c3c":up.done?"#27ae60":"#8B6914", fontWeight:700 }}>{up.error?"Gagal":up.done?"✓":`${up.pct}%`}</span>
                   </div>
-                  <div style={{ height:5, background:"#c0e8f0", borderRadius:3, overflow:"hidden" }}>
-                    <div style={{ height:"100%", width:`${up.pct}%`, borderRadius:3, background: up.error?"#e74c3c":up.done?"#27ae60":"linear-gradient(90deg,#0891b2,#10d0e0)", transition:"width .3s" }} />
+                  <div style={{ height:5, background:"#E8DCC8", borderRadius:3, overflow:"hidden" }}>
+                    <div style={{ height:"100%", width:`${up.pct}%`, borderRadius:3, background: up.error?"#e74c3c":up.done?"#27ae60":"linear-gradient(90deg,#8B6914,#E8C96A)", transition:"width .3s" }} />
                   </div>
                 </div>
               ))}
@@ -6460,11 +6460,11 @@ function ServicesAdmin({ data, save, notify, uploadToCloudinary, onEditStateChan
               {(svcForm.images||[]).map((img,i) => {
                 const isCover=(svcForm.coverIndex||0)===i;
                 return (
-                  <div key={i} style={{ position:"relative", borderRadius:7, overflow:"hidden", border:isCover?"3px solid #0891b2":"2px solid #c0e8f0" }}>
+                  <div key={i} style={{ position:"relative", borderRadius:7, overflow:"hidden", border:isCover?"3px solid #8B6914":"2px solid #E8DCC8" }}>
                     <img loading="lazy" src={img} alt="" style={{ width:"100%", height:68, objectFit:"cover", display:"block" }} />
                     {isCover && <div style={{ position:"absolute", top:0, left:0, right:0, background:"rgba(8,145,178,.85)", color:"#fff", fontSize:9, fontWeight:800, textAlign:"center", padding:"2px 0" }}>✔ COVER</div>}
                     <div style={{ position:"absolute", bottom:0, left:0, right:0, display:"flex", gap:2, padding:"4px", background:"linear-gradient(0deg,rgba(0,0,0,.65),transparent)" }}>
-                      {!isCover && <button onClick={()=>setSvcForm(p=>({...p,coverIndex:i,image:p.images[i]}))} style={{ flex:1, fontSize:8, fontWeight:800, background:"#0891b2", color:"#fff", border:"none", borderRadius:3, padding:"3px 1px", cursor:"pointer" }}>📌</button>}
+                      {!isCover && <button onClick={()=>setSvcForm(p=>({...p,coverIndex:i,image:p.images[i]}))} style={{ flex:1, fontSize:8, fontWeight:800, background:"#8B6914", color:"#fff", border:"none", borderRadius:3, padding:"3px 1px", cursor:"pointer" }}>📌</button>}
                       <button onClick={()=>setSvcForm(p=>{const n=p.images.filter((_,j)=>j!==i);const c=p.coverIndex>=n.length?Math.max(0,n.length-1):(p.coverIndex>i?p.coverIndex-1:p.coverIndex);return{...p,images:n,coverIndex:c,image:n[c]||""};} )} style={{ width:20, fontSize:8, fontWeight:800, background:"#e74c3c", color:"#fff", border:"none", borderRadius:3, padding:"3px 1px", cursor:"pointer" }}>✕</button>
                     </div>
                   </div>
@@ -6472,10 +6472,10 @@ function ServicesAdmin({ data, save, notify, uploadToCloudinary, onEditStateChan
               })}
             </div>
           )}
-          <label style={{ display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", gap:6, padding:"16px 12px", border:"2px dashed #0ea5c5", borderRadius:10, background:"#f0fafe", cursor:"pointer" }}>
+          <label style={{ display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", gap:6, padding:"16px 12px", border:"2px dashed #C9AA71", borderRadius:10, background:"#f0fafe", cursor:"pointer" }}>
             <span style={{ fontSize:24 }}>🖼️</span>
-            <span style={{ fontSize:13, fontWeight:800, color:"#0891b2" }}>Klik Upload Foto</span>
-            <span style={{ fontSize:10, color:"#5090aa", textAlign:"center" }}>JPG, PNG, WEBP · Multi-file</span>
+            <span style={{ fontSize:13, fontWeight:800, color:"#8B6914" }}>Klik Upload Foto</span>
+            <span style={{ fontSize:10, color:"#5A6A6C", textAlign:"center" }}>JPG, PNG, WEBP · Multi-file</span>
             <input type="file" accept="image/*" multiple onChange={handleImageUpload} style={{ display:"none" }} />
           </label>
         </div>
@@ -6491,7 +6491,7 @@ function ServicesAdmin({ data, save, notify, uploadToCloudinary, onEditStateChan
               <div key={i} style={{ display:"flex", gap:8, alignItems:"flex-start" }}>
                 <textarea value={feat} onChange={e=>updateFeature(i,e.target.value)} placeholder={`Fitur ${i+1}...`}
                   rows={feat.split("\n").length || 1}
-                  style={{ flex:1, padding:"9px 11px", border:"1px solid #b0dce8", borderRadius:7, fontSize:13, outline:"none", resize:"none", fontFamily:"inherit", lineHeight:1.5, overflow:"hidden", minHeight:38, boxSizing:"border-box" }}
+                  style={{ flex:1, padding:"9px 11px", border:"1px solid #D4C4A0", borderRadius:7, fontSize:13, outline:"none", resize:"none", fontFamily:"inherit", lineHeight:1.5, overflow:"hidden", minHeight:38, boxSizing:"border-box" }}
                   onInput={e=>{ e.target.style.height="auto"; e.target.style.height=e.target.scrollHeight+"px"; }} />
                 <button onClick={()=>removeFeature(i)} style={{ padding:"9px 12px", background:"#fee", color:"#e74c3c", border:"none", borderRadius:7, cursor:"pointer", fontWeight:700, flexShrink:0, marginTop:0 }}>✕</button>
               </div>
@@ -6510,22 +6510,22 @@ function ServicesAdmin({ data, save, notify, uploadToCloudinary, onEditStateChan
             ? <p style={{ fontSize:12, color:"#a0c4d8", textAlign:"center", padding:"20px 0" }}>Belum ada fasilitas.</p>
             : <div style={{ display:"flex", flexDirection:"column", gap:10 }}>
                 {(svcForm.facilities||[]).map((fac,fi)=>(
-                  <div key={fi} style={{ background:"#f5fffe", borderRadius:8, border:"1px solid #b0dce8", padding:"10px 12px" }}>
+                  <div key={fi} style={{ background:"#f5fffe", borderRadius:8, border:"1px solid #D4C4A0", padding:"10px 12px" }}>
                     <div style={{ display:"flex", alignItems:"center", gap:8, marginBottom:8 }}>
                       <input value={fac.icon||""} onChange={e=>updateFac(fi,"icon",e.target.value)} placeholder="🏨" maxLength={4}
-                        style={{ width:38, height:34, textAlign:"center", border:"1.5px solid #b0dce8", borderRadius:7, fontSize:"1.1rem", outline:"none" }} />
+                        style={{ width:38, height:34, textAlign:"center", border:"1.5px solid #D4C4A0", borderRadius:7, fontSize:"1.1rem", outline:"none" }} />
                       <input value={fac.label||""} onChange={e=>updateFac(fi,"label",e.target.value)} placeholder="Nama Fasilitas"
-                        style={{ flex:1, padding:"7px 10px", border:"1.5px solid #b0dce8", borderRadius:7, fontSize:12, outline:"none" }} />
+                        style={{ flex:1, padding:"7px 10px", border:"1.5px solid #D4C4A0", borderRadius:7, fontSize:12, outline:"none" }} />
                       <button onClick={()=>removeFac(fi)} style={{ width:28, height:28, background:"#fee", color:"#e74c3c", border:"none", borderRadius:6, cursor:"pointer", flexShrink:0 }}>✕</button>
                     </div>
                     <div style={{ display:"flex", flexWrap:"wrap", gap:3, marginBottom:7 }}>
                       {FAC_ICONS.map(ic=>(
                         <button key={ic} onClick={()=>updateFac(fi,"icon",ic)}
-                          style={{ width:26, height:26, fontSize:"0.85rem", borderRadius:5, border:`1px solid ${fac.icon===ic?"#0891b2":"#e0f0f5"}`, background:fac.icon===ic?"#edfafc":"#fff", cursor:"pointer" }}>{ic}</button>
+                          style={{ width:26, height:26, fontSize:"0.85rem", borderRadius:5, border:`1px solid ${fac.icon===ic?"#8B6914":"#e0f0f5"}`, background:fac.icon===ic?"#FAF7F0":"#fff", cursor:"pointer" }}>{ic}</button>
                       ))}
                     </div>
                     <input value={fac.detail||""} onChange={e=>updateFac(fi,"detail",e.target.value)} placeholder="Keterangan (opsional)"
-                      style={{ width:"100%", padding:"6px 10px", border:"1.5px solid #b0dce8", borderRadius:7, fontSize:12, outline:"none", boxSizing:"border-box" }} />
+                      style={{ width:"100%", padding:"6px 10px", border:"1.5px solid #D4C4A0", borderRadius:7, fontSize:12, outline:"none", boxSizing:"border-box" }} />
                   </div>
                 ))}
               </div>
@@ -6546,7 +6546,7 @@ function ServicesAdmin({ data, save, notify, uploadToCloudinary, onEditStateChan
                     <div key={di} style={{ background:"#fffbeb", borderRadius:10, border:"1.5px solid #fde68a", overflow:"hidden" }}>
                       <div style={{ background:"linear-gradient(90deg,#fffbeb,#fff8dc)", padding:"10px 14px", display:"flex", alignItems:"center", gap:10, borderBottom:"1px solid #fde68a" }}>
                         <span style={{ background:"#e8a020", color:"#fff", borderRadius:"50%", width:26, height:26, display:"flex", alignItems:"center", justifyContent:"center", fontSize:11, fontWeight:800, flexShrink:0 }}>{dest.no||di+1}</span>
-                        <span style={{ fontWeight:700, color:"#0d3b66", fontSize:13, flex:1 }}>{dest.name||((svcForm.category==="event"||svcForm.category==="wedding") ? `Fasilitas ${di+1}` : `Destinasi ${di+1}`)}</span>
+                        <span style={{ fontWeight:700, color:"#2E3D3F", fontSize:13, flex:1 }}>{dest.name||((svcForm.category==="event"||svcForm.category==="wedding") ? `Fasilitas ${di+1}` : `Destinasi ${di+1}`)}</span>
                         <button onClick={()=>removeDest(di)} style={{ padding:"4px 10px", background:"#fee", color:"#e74c3c", border:"none", borderRadius:5, cursor:"pointer", fontSize:12, fontWeight:700 }}>✕</button>
                       </div>
                       <div style={{ padding:"14px 16px", display:"flex", flexDirection:"column", gap:10 }}>
@@ -6554,53 +6554,53 @@ function ServicesAdmin({ data, save, notify, uploadToCloudinary, onEditStateChan
                         <div style={{ display:"grid", gridTemplateColumns:"100px 1fr", gap:10 }}>
                           {[["no","No.","01"],["name",(svcForm.category==="event"||svcForm.category==="wedding") ? "Nama Fasilitas" : "Nama Tab",(svcForm.category==="event"||svcForm.category==="wedding") ? "Aula Utama" : "Tanah Lot"]].map(([k,lbl,ph])=>(
                             <div key={k}>
-                              <label style={{ fontSize:10, fontWeight:700, color:"#5090aa", textTransform:"uppercase", letterSpacing:"1px", display:"block", marginBottom:4 }}>{lbl}</label>
+                              <label style={{ fontSize:10, fontWeight:700, color:"#5A6A6C", textTransform:"uppercase", letterSpacing:"1px", display:"block", marginBottom:4 }}>{lbl}</label>
                               <input value={dest[k]||""} onChange={e=>updateDest(di,k,e.target.value)} placeholder={ph}
-                                style={{ width:"100%", padding:"7px 9px", border:"1.5px solid #b0dce8", borderRadius:6, fontSize:12, outline:"none", boxSizing:"border-box" }} />
+                                style={{ width:"100%", padding:"7px 9px", border:"1.5px solid #D4C4A0", borderRadius:6, fontSize:12, outline:"none", boxSizing:"border-box" }} />
                             </div>
                           ))}
                         </div>
                         {/* Row 2: Tag full width */}
                         <div>
-                          <label style={{ fontSize:10, fontWeight:700, color:"#5090aa", textTransform:"uppercase", letterSpacing:"1px", display:"block", marginBottom:4 }}>{(svcForm.category==="event"||svcForm.category==="wedding") ? "Kategori" : "Tag / Kategori"}</label>
+                          <label style={{ fontSize:10, fontWeight:700, color:"#5A6A6C", textTransform:"uppercase", letterSpacing:"1px", display:"block", marginBottom:4 }}>{(svcForm.category==="event"||svcForm.category==="wedding") ? "Kategori" : "Tag / Kategori"}</label>
                           <input value={dest.tag||""} onChange={e=>updateDest(di,"tag",e.target.value)} placeholder={(svcForm.category==="event"||svcForm.category==="wedding") ? "Dekorasi · Sound System" : "Pura Hindu · Keindahan Alam"}
-                            style={{ width:"100%", padding:"7px 9px", border:"1.5px solid #b0dce8", borderRadius:6, fontSize:12, outline:"none", boxSizing:"border-box" }} />
+                            style={{ width:"100%", padding:"7px 9px", border:"1.5px solid #D4C4A0", borderRadius:6, fontSize:12, outline:"none", boxSizing:"border-box" }} />
                         </div>
                         {/* Row 3: Judul Lengkap full width */}
                         <div>
-                          <label style={{ fontSize:10, fontWeight:700, color:"#5090aa", textTransform:"uppercase", letterSpacing:"1px", display:"block", marginBottom:4 }}>{(svcForm.category==="event"||svcForm.category==="wedding") ? "Keterangan" : "Judul Lengkap"}</label>
+                          <label style={{ fontSize:10, fontWeight:700, color:"#5A6A6C", textTransform:"uppercase", letterSpacing:"1px", display:"block", marginBottom:4 }}>{(svcForm.category==="event"||svcForm.category==="wedding") ? "Keterangan" : "Judul Lengkap"}</label>
                           <input value={dest.title||""} onChange={e=>updateDest(di,"title",e.target.value)} placeholder={(svcForm.category==="event"||svcForm.category==="wedding") ? "Tersedia sound system profesional" : "Pura Megah di Atas Batu Karang"}
-                            style={{ width:"100%", padding:"7px 9px", border:"1.5px solid #b0dce8", borderRadius:6, fontSize:12, outline:"none", boxSizing:"border-box" }} />
+                            style={{ width:"100%", padding:"7px 9px", border:"1.5px solid #D4C4A0", borderRadius:6, fontSize:12, outline:"none", boxSizing:"border-box" }} />
                         </div>
                         {/* Row 4: Lokasi + Durasi */}
                         <div style={{ display:"grid", gridTemplateColumns:"1fr 120px", gap:10 }}>
                           {[["sub",(svcForm.category==="event"||svcForm.category==="wedding") ? "Area / Ruang" : "Lokasi",(svcForm.category==="event"||svcForm.category==="wedding") ? "Ballroom Lantai 2" : "Tabanan, Bali"],["duration",(svcForm.category==="event"||svcForm.category==="wedding") ? "Kapasitas" : "Durasi",(svcForm.category==="event"||svcForm.category==="wedding") ? "500 pax" : "2–3 jam"]].map(([k,lbl,ph])=>(
                             <div key={k}>
-                              <label style={{ fontSize:10, fontWeight:700, color:"#5090aa", textTransform:"uppercase", letterSpacing:"1px", display:"block", marginBottom:4 }}>{lbl}</label>
+                              <label style={{ fontSize:10, fontWeight:700, color:"#5A6A6C", textTransform:"uppercase", letterSpacing:"1px", display:"block", marginBottom:4 }}>{lbl}</label>
                               <input value={dest[k]||""} onChange={e=>updateDest(di,k,e.target.value)} placeholder={ph}
-                                style={{ width:"100%", padding:"7px 9px", border:"1.5px solid #b0dce8", borderRadius:6, fontSize:12, outline:"none", boxSizing:"border-box" }} />
+                                style={{ width:"100%", padding:"7px 9px", border:"1.5px solid #D4C4A0", borderRadius:6, fontSize:12, outline:"none", boxSizing:"border-box" }} />
                             </div>
                           ))}
                         </div>
                         {/* Row 5: Deskripsi full width */}
                         <div>
-                          <label style={{ fontSize:10, fontWeight:700, color:"#5090aa", textTransform:"uppercase", letterSpacing:"1px", display:"block", marginBottom:4 }}>Deskripsi</label>
+                          <label style={{ fontSize:10, fontWeight:700, color:"#5A6A6C", textTransform:"uppercase", letterSpacing:"1px", display:"block", marginBottom:4 }}>Deskripsi</label>
                           <textarea value={dest.desc||""} onChange={e=>updateDest(di,"desc",e.target.value)} rows={4} placeholder={(svcForm.category==="event"||svcForm.category==="wedding") ? "Deskripsi fasilitas..." : "Deskripsi destinasi..."}
-                            style={{ width:"100%", padding:"7px 9px", border:"1.5px solid #b0dce8", borderRadius:6, fontSize:12, outline:"none", resize:"vertical", lineHeight:1.6, boxSizing:"border-box" }} />
+                            style={{ width:"100%", padding:"7px 9px", border:"1.5px solid #D4C4A0", borderRadius:6, fontSize:12, outline:"none", resize:"vertical", lineHeight:1.6, boxSizing:"border-box" }} />
                         </div>
                         {/* Row 6: Foto + Highlight side by side */}
                         <div style={{ display:"grid", gridTemplateColumns:"140px 1fr", gap:12 }}>
                           <div>
-                            <label style={{ fontSize:10, fontWeight:700, color:"#5090aa", textTransform:"uppercase", letterSpacing:"1px", display:"block", marginBottom:4 }}>{(svcForm.category==="event"||svcForm.category==="wedding") ? "Foto Fasilitas" : "Foto Destinasi"}</label>
+                            <label style={{ fontSize:10, fontWeight:700, color:"#5A6A6C", textTransform:"uppercase", letterSpacing:"1px", display:"block", marginBottom:4 }}>{(svcForm.category==="event"||svcForm.category==="wedding") ? "Foto Fasilitas" : "Foto Destinasi"}</label>
                             {/* Progress bar */}
                             {destUploadProgress[di] && !destUploadProgress[di].done && !destUploadProgress[di].error && (
-                              <div style={{ marginBottom:6, background:"#f0fafe", border:"1px solid #b0dce8", borderRadius:7, padding:"8px 10px" }}>
-                                <div style={{ display:"flex", justifyContent:"space-between", fontSize:10, fontWeight:600, color:"#0891b2", marginBottom:4 }}>
+                              <div style={{ marginBottom:6, background:"#f0fafe", border:"1px solid #D4C4A0", borderRadius:7, padding:"8px 10px" }}>
+                                <div style={{ display:"flex", justifyContent:"space-between", fontSize:10, fontWeight:600, color:"#8B6914", marginBottom:4 }}>
                                   <span>📤 {destUploadProgress[di].name?.slice(0,24)}{destUploadProgress[di].name?.length>24?"…":""}</span>
                                   <span>{destUploadProgress[di].pct}%</span>
                                 </div>
-                                <div style={{ height:5, background:"#c0e8f0", borderRadius:3, overflow:"hidden" }}>
-                                  <div style={{ height:"100%", width:`${destUploadProgress[di].pct}%`, background:"linear-gradient(90deg,#0891b2,#10d0e0)", borderRadius:3, transition:"width .3s" }} />
+                                <div style={{ height:5, background:"#E8DCC8", borderRadius:3, overflow:"hidden" }}>
+                                  <div style={{ height:"100%", width:`${destUploadProgress[di].pct}%`, background:"linear-gradient(90deg,#8B6914,#E8C96A)", borderRadius:3, transition:"width .3s" }} />
                                 </div>
                               </div>
                             )}
@@ -6620,7 +6620,7 @@ function ServicesAdmin({ data, save, notify, uploadToCloudinary, onEditStateChan
                           </div>
                           <div>
                             <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:4 }}>
-                              <label style={{ fontSize:10, fontWeight:700, color:"#5090aa", textTransform:"uppercase", letterSpacing:"1px" }}>{(svcForm.category==="event"||svcForm.category==="wedding") ? "Keunggulan (✓)" : "Highlight (✓)"}</label>
+                              <label style={{ fontSize:10, fontWeight:700, color:"#5A6A6C", textTransform:"uppercase", letterSpacing:"1px" }}>{(svcForm.category==="event"||svcForm.category==="wedding") ? "Keunggulan (✓)" : "Highlight (✓)"}</label>
                               <button onClick={()=>addDestPoint(di)} style={{ fontSize:12, padding:"5px 12px", background:"#27ae60", color:"#fff", border:"none", borderRadius:6, cursor:"pointer", fontWeight:800 }}>+ Tambah</button>
                             </div>
                             <div style={{ display:"flex", flexDirection:"column", gap:5 }}>
@@ -6628,7 +6628,7 @@ function ServicesAdmin({ data, save, notify, uploadToCloudinary, onEditStateChan
                                 <div key={pi} style={{ display:"flex", gap:5, alignItems:"center" }}>
                                   <span style={{ color:"#e8a020", fontWeight:700, flexShrink:0 }}>✓</span>
                                   <input value={pt} onChange={e=>updateDestPoint(di,pi,e.target.value)} placeholder={`Highlight ${pi+1}`}
-                                    style={{ flex:1, padding:"5px 7px", border:"1px solid #b0dce8", borderRadius:5, fontSize:11, outline:"none" }} />
+                                    style={{ flex:1, padding:"5px 7px", border:"1px solid #D4C4A0", borderRadius:5, fontSize:11, outline:"none" }} />
                                   <button onClick={()=>removeDestPoint(di,pi)} style={{ width:22, height:22, background:"#fee", color:"#e74c3c", border:"none", borderRadius:4, cursor:"pointer", flexShrink:0, fontSize:10 }}>✕</button>
                                 </div>
                               ))}
@@ -6663,7 +6663,7 @@ function ServicesAdmin({ data, save, notify, uploadToCloudinary, onEditStateChan
           <div style={{ padding:"24px 28px" }} className="fade-in">
             {/* UTAMA banner — hanya untuk index 0 */}
             {isUtama && (
-              <div style={{ display:"flex", alignItems:"center", gap:10, background:"linear-gradient(130deg,#0d3b66,#0875a8 55%,#10d0e0)", borderRadius:10, padding:"12px 18px", marginBottom:18 }}>
+              <div style={{ display:"flex", alignItems:"center", gap:10, background:"linear-gradient(130deg,#2E3D3F,#3D5254 55%,#E8C96A)", borderRadius:10, padding:"12px 18px", marginBottom:18 }}>
                 <span style={{ fontSize:18 }}>⭐</span>
                 <div>
                   <div style={{ fontSize:13, fontWeight:800, color:"#fff" }}>Paket UTAMA (Tampil Pertama di Website)</div>
@@ -6674,45 +6674,45 @@ function ServicesAdmin({ data, save, notify, uploadToCloudinary, onEditStateChan
             {/* Paket Name + Price */}
             <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr 1fr", gap:20, marginBottom:20 }}>
               {/* Nama Paket */}
-              <div style={{ background:"#fff", borderRadius:12, padding:"22px 20px", boxShadow:"0 2px 10px rgba(0,0,0,.06)", borderTop:`3px solid ${isUtama?"#10d0e0":"#8e44ad"}` }}>
+              <div style={{ background:"#fff", borderRadius:12, padding:"22px 20px", boxShadow:"0 2px 10px rgba(0,0,0,.06)", borderTop:`3px solid ${isUtama?"#E8C96A":"#8e44ad"}` }}>
                 <div style={{ display:"flex", alignItems:"center", gap:8, marginBottom:16 }}>
-                  <div style={{ fontSize:12, fontWeight:800, color: isUtama?"#0891b2":"#8e44ad", textTransform:"uppercase", letterSpacing:"1px" }}>🏷 Identitas Tipe Paket</div>
-                  {isUtama && <span style={{ fontSize:9, background:"#10d0e0", color:"#0d3b66", borderRadius:8, padding:"2px 7px", fontWeight:800 }}>UTAMA</span>}
+                  <div style={{ fontSize:12, fontWeight:800, color: isUtama?"#8B6914":"#8e44ad", textTransform:"uppercase", letterSpacing:"1px" }}>🏷 Identitas Tipe Paket</div>
+                  {isUtama && <span style={{ fontSize:9, background:"#E8C96A", color:"#2E3D3F", borderRadius:8, padding:"2px 7px", fontWeight:800 }}>UTAMA</span>}
                 </div>
                 <div style={{ marginBottom:14 }}>
-                  <label style={{ display:"block", fontSize:11, fontWeight:700, color:"#5090aa", textTransform:"uppercase", letterSpacing:"1px", marginBottom:6 }}>Nama Tipe Paket</label>
+                  <label style={{ display:"block", fontSize:11, fontWeight:700, color:"#5A6A6C", textTransform:"uppercase", letterSpacing:"1px", marginBottom:6 }}>Nama Tipe Paket</label>
                   <input value={pt.name} onChange={e => updatePaketTypeField(pt.id,"name",e.target.value)}
                     placeholder="Paket A"
                     style={{ width:"100%", padding:"10px 12px", border:`1.5px solid ${isUtama?"#7dd3fc":"#d8b4fe"}`, borderRadius:8, fontSize:13, outline:"none", boxSizing:"border-box" }} />
                 </div>
                 <div style={{ marginBottom:14 }}>
-                  <label style={{ display:"block", fontSize:11, fontWeight:700, color:"#5090aa", textTransform:"uppercase", letterSpacing:"1px", marginBottom:6 }}>Harga Khusus Paket Ini</label>
+                  <label style={{ display:"block", fontSize:11, fontWeight:700, color:"#5A6A6C", textTransform:"uppercase", letterSpacing:"1px", marginBottom:6 }}>Harga Khusus Paket Ini</label>
                   <input value={pt.price||""} onChange={e => updatePaketTypeField(pt.id,"price",e.target.value)}
                     placeholder={isEventOrWedding ? "Rp 5.000.000" : "Rp 1.500.000"}
                     style={{ width:"100%", padding:"10px 12px", border:`1.5px solid ${isUtama?"#7dd3fc":"#d8b4fe"}`, borderRadius:8, fontSize:13, outline:"none", boxSizing:"border-box" }} />
                 </div>
                 <div style={{ marginBottom:14 }}>
-                  <label style={{ display:"block", fontSize:11, fontWeight:700, color:"#5090aa", textTransform:"uppercase", letterSpacing:"1px", marginBottom:6 }}>Keterangan Harga</label>
+                  <label style={{ display:"block", fontSize:11, fontWeight:700, color:"#5A6A6C", textTransform:"uppercase", letterSpacing:"1px", marginBottom:6 }}>Keterangan Harga</label>
                   <input value={pt.priceNote||""} onChange={e => updatePaketTypeField(pt.id,"priceNote",e.target.value)}
                     placeholder={isEventOrWedding ? "/ event" : "/ orang (mulai)"}
                     style={{ width:"100%", padding:"10px 12px", border:`1.5px solid ${isUtama?"#7dd3fc":"#d8b4fe"}`, borderRadius:8, fontSize:13, outline:"none", boxSizing:"border-box" }} />
                 </div>
                 <div>
-                  <label style={{ display:"block", fontSize:11, fontWeight:700, color:"#5090aa", textTransform:"uppercase", letterSpacing:"1px", marginBottom:6 }}>👥 Minimal Peserta</label>
+                  <label style={{ display:"block", fontSize:11, fontWeight:700, color:"#5A6A6C", textTransform:"uppercase", letterSpacing:"1px", marginBottom:6 }}>👥 Minimal Peserta</label>
                   <div style={{ position:"relative" }}>
                     <input type="number" min="1" value={pt.minPeserta||""} onChange={e => updatePaketTypeField(pt.id,"minPeserta",e.target.value)}
                       placeholder="mis: 20"
                       style={{ width:"100%", padding:"10px 12px 10px 42px", border:`1.5px solid ${isUtama?"#7dd3fc":"#d8b4fe"}`, borderRadius:8, fontSize:13, outline:"none", boxSizing:"border-box" }} />
-                    <span style={{ position:"absolute", left:12, top:"50%", transform:"translateY(-50%)", fontSize:11, fontWeight:700, color:"#5090aa", pointerEvents:"none" }}>org</span>
+                    <span style={{ position:"absolute", left:12, top:"50%", transform:"translateY(-50%)", fontSize:11, fontWeight:700, color:"#5A6A6C", pointerEvents:"none" }}>org</span>
                   </div>
                   {pt.minPeserta && <div style={{ fontSize:11, color:"#27ae60", fontWeight:600, marginTop:4 }}>✓ Min. {pt.minPeserta} peserta</div>}
                 </div>
               </div>
 
               {/* Fitur Termasuk checklist */}
-              <div style={{ background:"#fff", borderRadius:12, padding:"22px 20px", boxShadow:"0 2px 10px rgba(0,0,0,.06)", borderTop:"3px solid #0891b2" }}>
-                <div style={{ fontSize:12, fontWeight:800, color:"#0891b2", textTransform:"uppercase", letterSpacing:"1px", marginBottom:4 }}>✅ Fitur Termasuk</div>
-                <div style={{ fontSize:11, color:"#5090aa", marginBottom:14 }}>Centang = tampil di website</div>
+              <div style={{ background:"#fff", borderRadius:12, padding:"22px 20px", boxShadow:"0 2px 10px rgba(0,0,0,.06)", borderTop:"3px solid #8B6914" }}>
+                <div style={{ fontSize:12, fontWeight:800, color:"#8B6914", textTransform:"uppercase", letterSpacing:"1px", marginBottom:4 }}>✅ Fitur Termasuk</div>
+                <div style={{ fontSize:11, color:"#5A6A6C", marginBottom:14 }}>Centang = tampil di website</div>
                 {features.length===0
                   ? <p style={{ fontSize:12, color:"#a0c4d8", textAlign:"center", padding:"20px 0" }}>Belum ada fitur di Master Paket.</p>
                   : <div style={{ display:"flex", flexDirection:"column", gap:8 }}>
@@ -6721,14 +6721,14 @@ function ServicesAdmin({ data, save, notify, uploadToCloudinary, onEditStateChan
                         return (
                           <label key={i} style={{ display:"flex", alignItems:"center", gap:10, padding:"8px 10px", borderRadius:7,
                             background: checked ? "#f0faff" : "#f9f9f9",
-                            border: `1.5px solid ${checked ? "#b0dce8" : "#e5e7eb"}`,
+                            border: `1.5px solid ${checked ? "#D4C4A0" : "#e5e7eb"}`,
                             cursor:"pointer", transition:"all .15s" }}>
                             <input type="checkbox" checked={checked} onChange={() => togglePaketCheck(pt.id,"featureChecks",i)}
-                              style={{ width:16, height:16, accentColor:"#0891b2", cursor:"pointer", flexShrink:0 }} />
-                            <span style={{ fontSize:12, color: checked ? "#0d3b66" : "#9ca3af", fontWeight: checked ? 600 : 400, flex:1, whiteSpace: "pre-wrap" }}>{feat||`Fitur ${i+1}`}</span>
+                              style={{ width:16, height:16, accentColor:"#8B6914", cursor:"pointer", flexShrink:0 }} />
+                            <span style={{ fontSize:12, color: checked ? "#2E3D3F" : "#9ca3af", fontWeight: checked ? 600 : 400, flex:1, whiteSpace: "pre-wrap" }}>{feat||`Fitur ${i+1}`}</span>
                             <span style={{ fontSize:10, padding:"2px 7px", borderRadius:8, fontWeight:700,
-                              background: checked ? "#e0f7fa" : "#f3f4f6",
-                              color: checked ? "#0891b2" : "#9ca3af" }}>{checked?"Tampil":"Disembunyikan"}</span>
+                              background: checked ? "#F5EDD8" : "#f3f4f6",
+                              color: checked ? "#8B6914" : "#9ca3af" }}>{checked?"Tampil":"Disembunyikan"}</span>
                           </label>
                         );
                       })}
@@ -6739,7 +6739,7 @@ function ServicesAdmin({ data, save, notify, uploadToCloudinary, onEditStateChan
               {/* Fasilitas checklist */}
               <div style={{ background:"#fff", borderRadius:12, padding:"22px 20px", boxShadow:"0 2px 10px rgba(0,0,0,.06)", borderTop:"3px solid #27ae60" }}>
                 <div style={{ fontSize:12, fontWeight:800, color:"#27ae60", textTransform:"uppercase", letterSpacing:"1px", marginBottom:4 }}>🛎 Fasilitas</div>
-                <div style={{ fontSize:11, color:"#5090aa", marginBottom:14 }}>Centang = tampil di website</div>
+                <div style={{ fontSize:11, color:"#5A6A6C", marginBottom:14 }}>Centang = tampil di website</div>
                 {facilities.length===0
                   ? <p style={{ fontSize:12, color:"#a0c4d8", textAlign:"center", padding:"20px 0" }}>Belum ada fasilitas di Master Paket.</p>
                   : <div style={{ display:"flex", flexDirection:"column", gap:8 }}>
@@ -6753,7 +6753,7 @@ function ServicesAdmin({ data, save, notify, uploadToCloudinary, onEditStateChan
                             <input type="checkbox" checked={checked} onChange={() => togglePaketCheck(pt.id,"facilityChecks",i)}
                               style={{ width:16, height:16, accentColor:"#27ae60", cursor:"pointer", flexShrink:0 }} />
                             <span style={{ fontSize:18, flexShrink:0 }}>{fac.icon||"•"}</span>
-                            <span style={{ fontSize:12, color: checked ? "#0d3b66" : "#9ca3af", fontWeight: checked ? 600 : 400, flex:1 }}>{fac.label||`Fasilitas ${i+1}`}</span>
+                            <span style={{ fontSize:12, color: checked ? "#2E3D3F" : "#9ca3af", fontWeight: checked ? 600 : 400, flex:1 }}>{fac.label||`Fasilitas ${i+1}`}</span>
                             <span style={{ fontSize:10, padding:"2px 7px", borderRadius:8, fontWeight:700,
                               background: checked ? "#d1fae5" : "#f3f4f6",
                               color: checked ? "#27ae60" : "#9ca3af" }}>{checked?"Tampil":"Disembunyikan"}</span>
@@ -6768,7 +6768,7 @@ function ServicesAdmin({ data, save, notify, uploadToCloudinary, onEditStateChan
             {/* Destinasi checklist — full width */}
             <div style={{ background:"#fff", borderRadius:12, padding:"22px 24px", boxShadow:"0 2px 10px rgba(0,0,0,.06)", borderTop:"3px solid #e8a020" }}>
               <div style={{ fontSize:12, fontWeight:800, color:"#e8a020", textTransform:"uppercase", letterSpacing:"1px", marginBottom:4 }}>🗺 Destinasi Wisata</div>
-              <div style={{ fontSize:11, color:"#5090aa", marginBottom:14 }}>Centang = destinasi tampil di website untuk tipe paket ini</div>
+              <div style={{ fontSize:11, color:"#5A6A6C", marginBottom:14 }}>Centang = destinasi tampil di website untuk tipe paket ini</div>
               {destinations.length===0
                 ? <p style={{ fontSize:12, color:"#a0c4d8", textAlign:"center", padding:"20px 0" }}>Belum ada destinasi di Master Paket.</p>
                 : <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr 1fr", gap:10 }}>
@@ -6782,7 +6782,7 @@ function ServicesAdmin({ data, save, notify, uploadToCloudinary, onEditStateChan
                           <input type="checkbox" checked={checked} onChange={() => togglePaketCheck(pt.id,"destinationChecks",i)}
                             style={{ width:16, height:16, accentColor:"#e8a020", cursor:"pointer", flexShrink:0 }} />
                           <div style={{ flex:1, minWidth:0 }}>
-                            <div style={{ fontSize:13, fontWeight: checked ? 700 : 400, color: checked ? "#0d3b66" : "#9ca3af",
+                            <div style={{ fontSize:13, fontWeight: checked ? 700 : 400, color: checked ? "#2E3D3F" : "#9ca3af",
                               whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis" }}>
                               {dest.name||`Destinasi ${i+1}`}
                             </div>
@@ -6812,8 +6812,8 @@ function ServicesAdmin({ data, save, notify, uploadToCloudinary, onEditStateChan
 
       {/* ── Footer sticky ── */}
       <div style={{ position:"sticky", bottom:0, display:"flex", gap:12, padding:"14px 28px", background:"#fff", borderTop:"1px solid #d0eaf4", boxShadow:"0 -4px 16px rgba(0,0,0,.07)" }}>
-        <button onClick={saveSvc} style={{ padding:"11px 28px", background:"linear-gradient(130deg,#063d5c 0%,#0875a8 45%,#0aa8bf 78%,#10d0e0 100%)", color:"#fff", border:"none", borderRadius:8, fontSize:14, fontWeight:800, cursor:"pointer" }}>💾 Simpan Paket</button>
-        <button onClick={cancelEdit} style={{ padding:"11px 18px", background:"#edfafc", color:"#4a7f98", border:"1px solid #b0dce8", borderRadius:8, fontSize:13, cursor:"pointer" }}>✕ Batal / Kembali</button>
+        <button onClick={saveSvc} style={{ padding:"11px 28px", background:"linear-gradient(130deg,#2E3D3F 0%,#3D5254 45%,#8B6914 78%,#C9AA71 100%)", color:"#fff", border:"none", borderRadius:8, fontSize:14, fontWeight:800, cursor:"pointer" }}>💾 Simpan Paket</button>
+        <button onClick={cancelEdit} style={{ padding:"11px 18px", background:"#FAF7F0", color:"#5A6A6C", border:"1px solid #D4C4A0", borderRadius:8, fontSize:13, cursor:"pointer" }}>✕ Batal / Kembali</button>
       </div>
     </div>
   );
@@ -6825,11 +6825,11 @@ function ServicesAdmin({ data, save, notify, uploadToCloudinary, onEditStateChan
     <div className="fade-in">
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24 }}>
         <div>
-          <h1 style={{ fontSize: 24, fontWeight: 500, color: "#0d3b66", marginBottom: 4 }}>Layanan / Paket</h1>
-          <p style={{ fontSize: 12, color: "#5090aa" }}>Kelola paket layanan yang tampil di halaman Layanan Kami.</p>
+          <h1 style={{ fontSize: 24, fontWeight: 500, color: "#2E3D3F", marginBottom: 4 }}>Layanan / Paket</h1>
+          <p style={{ fontSize: 12, color: "#5A6A6C" }}>Kelola paket layanan yang tampil di halaman Layanan Kami.</p>
         </div>
         <button onClick={openNew}
-          style={{ padding: "11px 24px", background: "linear-gradient(130deg,#063d5c 0%,#0875a8 45%,#0aa8bf 78%,#10d0e0 100%)", color: "#fff", border: "none", borderRadius: 8, fontSize: 14, fontWeight: 800, cursor: "pointer", boxShadow: "0 3px 12px rgba(8,145,178,.4)", letterSpacing:".02em" }}>
+          style={{ padding: "11px 24px", background: "linear-gradient(130deg,#2E3D3F 0%,#3D5254 45%,#8B6914 78%,#C9AA71 100%)", color: "#fff", border: "none", borderRadius: 8, fontSize: 14, fontWeight: 800, cursor: "pointer", boxShadow: "0 3px 12px rgba(139,105,20,.4)", letterSpacing:".02em" }}>
           ➕ Tambah Paket
         </button>
       </div>
@@ -6838,12 +6838,12 @@ function ServicesAdmin({ data, save, notify, uploadToCloudinary, onEditStateChan
       {false && (
         <div>
           {/* Header bar */}
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "20px 32px", background: "linear-gradient(130deg,#063d5c 0%,#0875a8 55%,#0aa8bf 100%)" }}>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "20px 32px", background: "linear-gradient(130deg,#2E3D3F 0%,#3D5254 55%,#8B6914 100%)" }}>
             <h2 style={{ fontSize: 18, fontWeight: 800, color: "#fff", margin: 0 }}>
               {editSvc === "new" ? "➕ Tambah Paket Baru" : "✏ Edit Paket"}
             </h2>
             <div style={{ display: "flex", gap: 10 }}>
-              <button onClick={saveSvc} style={{ padding: "9px 24px", background: "#10d0e0", color: "#fff", border: "none", borderRadius: 8, fontSize: 13, fontWeight: 800, cursor: "pointer", boxShadow: "0 2px 8px rgba(0,0,0,.2)" }}>💾 Simpan Paket</button>
+              <button onClick={saveSvc} style={{ padding: "9px 24px", background: "#E8C96A", color: "#fff", border: "none", borderRadius: 8, fontSize: 13, fontWeight: 800, cursor: "pointer", boxShadow: "0 2px 8px rgba(0,0,0,.2)" }}>💾 Simpan Paket</button>
               <button onClick={cancelEdit} style={{ padding: "9px 18px", background: "rgba(255,255,255,.15)", color: "#fff", border: "1px solid rgba(255,255,255,.3)", borderRadius: 8, fontSize: 13, cursor: "pointer" }}>✕ Batal</button>
             </div>
           </div>
@@ -6852,13 +6852,13 @@ function ServicesAdmin({ data, save, notify, uploadToCloudinary, onEditStateChan
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 0 }}>
 
             {/* ── Left Column ── */}
-            <div style={{ padding: "28px 32px", borderRight: "1px solid #edfafc" }}>
+            <div style={{ padding: "28px 32px", borderRight: "1px solid #FAF7F0" }}>
 
               {/* Kategori */}
               <div style={{ marginBottom: 20 }}>
-                <label style={{ display: "block", fontSize: 11, fontWeight: 700, color: "#5090aa", letterSpacing: "1px", textTransform: "uppercase", marginBottom: 8 }}>Kategori *</label>
+                <label style={{ display: "block", fontSize: 11, fontWeight: 700, color: "#5A6A6C", letterSpacing: "1px", textTransform: "uppercase", marginBottom: 8 }}>Kategori *</label>
                 <select value={svcForm.category || "traveling"} onChange={e => setSvcForm(p => ({ ...p, category: e.target.value }))}
-                  style={{ width: "100%", padding: "11px 14px", border: "1.5px solid #b0dce8", borderRadius: 8, fontSize: 14, outline: "none", background: "#fff" }}>
+                  style={{ width: "100%", padding: "11px 14px", border: "1.5px solid #D4C4A0", borderRadius: 8, fontSize: 14, outline: "none", background: "#fff" }}>
                   <option value="traveling">✈️ Traveling</option>
                   <option value="event">🎉 Event Plan</option>
                   <option value="wedding">💍 Wedding Organizer</option>
@@ -6874,20 +6874,20 @@ function ServicesAdmin({ data, save, notify, uploadToCloudinary, onEditStateChan
                   { label: "Badge (opsional)", key: "badge", placeholder: "Best Seller" },
                 ].map(f => (
                   <div key={f.key}>
-                    <label style={{ display: "block", fontSize: 11, fontWeight: 700, color: "#5090aa", letterSpacing: "1px", textTransform: "uppercase", marginBottom: 6 }}>{f.label}</label>
+                    <label style={{ display: "block", fontSize: 11, fontWeight: 700, color: "#5A6A6C", letterSpacing: "1px", textTransform: "uppercase", marginBottom: 6 }}>{f.label}</label>
                     <input value={svcForm[f.key] || ""} onChange={e => setSvcForm(p => ({ ...p, [f.key]: e.target.value }))}
                       placeholder={f.placeholder}
-                      style={{ width: "100%", padding: "10px 12px", border: "1.5px solid #b0dce8", borderRadius: 8, fontSize: 13, outline: "none", boxSizing: "border-box" }} />
+                      style={{ width: "100%", padding: "10px 12px", border: "1.5px solid #D4C4A0", borderRadius: 8, fontSize: 13, outline: "none", boxSizing: "border-box" }} />
                   </div>
                 ))}
                 {/* Jumlah Minimal Peserta */}
                 <div>
-                  <label style={{ display: "block", fontSize: 11, fontWeight: 700, color: "#5090aa", letterSpacing: "1px", textTransform: "uppercase", marginBottom: 6 }}>👥 Min. Peserta</label>
+                  <label style={{ display: "block", fontSize: 11, fontWeight: 700, color: "#5A6A6C", letterSpacing: "1px", textTransform: "uppercase", marginBottom: 6 }}>👥 Min. Peserta</label>
                   <div style={{ position: "relative" }}>
                     <input type="number" min="1" value={svcForm.minPeserta || ""} onChange={e => setSvcForm(p => ({ ...p, minPeserta: e.target.value }))}
                       placeholder="mis: 20"
-                      style={{ width: "100%", padding: "10px 12px 10px 40px", border: "1.5px solid #b0dce8", borderRadius: 8, fontSize: 13, outline: "none", boxSizing: "border-box" }} />
-                    <span style={{ position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)", fontSize: 11, fontWeight: 700, color: "#5090aa", pointerEvents: "none" }}>org</span>
+                      style={{ width: "100%", padding: "10px 12px 10px 40px", border: "1.5px solid #D4C4A0", borderRadius: 8, fontSize: 13, outline: "none", boxSizing: "border-box" }} />
+                    <span style={{ position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)", fontSize: 11, fontWeight: 700, color: "#5A6A6C", pointerEvents: "none" }}>org</span>
                   </div>
                   {svcForm.minPeserta && <div style={{ fontSize: 11, color: "#27ae60", fontWeight: 600, marginTop: 3 }}>✓ Min. {svcForm.minPeserta} peserta</div>}
                 </div>
@@ -6895,9 +6895,9 @@ function ServicesAdmin({ data, save, notify, uploadToCloudinary, onEditStateChan
 
               {/* Warna Badge */}
               <div style={{ marginBottom: 20 }}>
-                <label style={{ display: "block", fontSize: 11, fontWeight: 700, color: "#5090aa", letterSpacing: "1px", textTransform: "uppercase", marginBottom: 8 }}>Warna Badge</label>
+                <label style={{ display: "block", fontSize: 11, fontWeight: 700, color: "#5A6A6C", letterSpacing: "1px", textTransform: "uppercase", marginBottom: 8 }}>Warna Badge</label>
                 <div style={{ display: "flex", gap: 7, flexWrap: "wrap", marginBottom: 10 }}>
-                  {["#0891b2","#27ae60","#e67e22","#c0392b","#8e44ad","#e84393","#1abc9c","#f39c12","#0d3b66","#2c3e50"].map(c => (
+                  {["#8B6914","#27ae60","#e67e22","#c0392b","#8e44ad","#e84393","#1abc9c","#f39c12","#2E3D3F","#2c3e50"].map(c => (
                     <button key={c} onClick={() => setSvcForm(p => ({ ...p, badgeColor: c }))} title={c}
                       style={{ width: 28, height: 28, borderRadius: "50%", background: c, border: "none", cursor: "pointer",
                         boxShadow: svcForm.badgeColor === c ? `0 0 0 3px #fff, 0 0 0 5px ${c}` : "0 1px 3px rgba(0,0,0,.2)",
@@ -6905,13 +6905,13 @@ function ServicesAdmin({ data, save, notify, uploadToCloudinary, onEditStateChan
                   ))}
                 </div>
                 <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                  <input type="color" value={svcForm.badgeColor || "#0891b2"} onChange={e => setSvcForm(p => ({ ...p, badgeColor: e.target.value }))}
+                  <input type="color" value={svcForm.badgeColor || "#8B6914"} onChange={e => setSvcForm(p => ({ ...p, badgeColor: e.target.value }))}
                     style={{ width: 38, height: 38, border: "none", background: "none", cursor: "pointer", padding: 0, flexShrink: 0 }} />
-                  <input value={svcForm.badgeColor || "#0891b2"} onChange={e => setSvcForm(p => ({ ...p, badgeColor: e.target.value }))}
-                    placeholder="#0891b2" maxLength={7}
-                    style={{ flex: 1, padding: "9px 10px", border: "1.5px solid #b0dce8", borderRadius: 8, fontSize: 13, outline: "none", fontFamily: "monospace" }} />
+                  <input value={svcForm.badgeColor || "#8B6914"} onChange={e => setSvcForm(p => ({ ...p, badgeColor: e.target.value }))}
+                    placeholder="#8B6914" maxLength={7}
+                    style={{ flex: 1, padding: "9px 10px", border: "1.5px solid #D4C4A0", borderRadius: 8, fontSize: 13, outline: "none", fontFamily: "monospace" }} />
                   {svcForm.badge && (
-                    <span style={{ background: svcForm.badgeColor || "#0891b2", color: "#fff", borderRadius: 4, padding: "5px 12px", fontSize: 11, fontWeight: 800, letterSpacing: ".1em", textTransform: "uppercase", whiteSpace: "nowrap" }}>
+                    <span style={{ background: svcForm.badgeColor || "#8B6914", color: "#fff", borderRadius: 4, padding: "5px 12px", fontSize: 11, fontWeight: 800, letterSpacing: ".1em", textTransform: "uppercase", whiteSpace: "nowrap" }}>
                       {svcForm.badge}
                     </span>
                   )}
@@ -6920,16 +6920,16 @@ function ServicesAdmin({ data, save, notify, uploadToCloudinary, onEditStateChan
 
               {/* Deskripsi */}
               <div style={{ marginBottom: 20 }}>
-                <label style={{ display: "block", fontSize: 11, fontWeight: 700, color: "#5090aa", letterSpacing: "1px", textTransform: "uppercase", marginBottom: 8 }}>Deskripsi</label>
+                <label style={{ display: "block", fontSize: 11, fontWeight: 700, color: "#5A6A6C", letterSpacing: "1px", textTransform: "uppercase", marginBottom: 8 }}>Deskripsi</label>
                 <textarea value={svcForm.description || ""} onChange={e => setSvcForm(p => ({ ...p, description: e.target.value }))}
                   rows={5} placeholder="Deskripsi singkat paket layanan..."
-                  style={{ width: "100%", padding: "11px 14px", border: "1.5px solid #b0dce8", borderRadius: 8, fontSize: 13, outline: "none", resize: "vertical", lineHeight: 1.7, boxSizing: "border-box" }} />
+                  style={{ width: "100%", padding: "11px 14px", border: "1.5px solid #D4C4A0", borderRadius: 8, fontSize: 13, outline: "none", resize: "vertical", lineHeight: 1.7, boxSizing: "border-box" }} />
               </div>
 
               {/* Highlight */}
               <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                <input type="checkbox" id="svc-highlight" checked={!!svcForm.highlight} onChange={e => setSvcForm(p => ({ ...p, highlight: e.target.checked }))} style={{ width: 18, height: 18, cursor: "pointer", accentColor: "#0891b2" }} />
-                <label htmlFor="svc-highlight" style={{ fontSize: 13, color: "#0d3b66", fontWeight: 600, cursor: "pointer" }}>⭐ Tandai sebagai Pilihan Utama (highlight)</label>
+                <input type="checkbox" id="svc-highlight" checked={!!svcForm.highlight} onChange={e => setSvcForm(p => ({ ...p, highlight: e.target.checked }))} style={{ width: 18, height: 18, cursor: "pointer", accentColor: "#8B6914" }} />
+                <label htmlFor="svc-highlight" style={{ fontSize: 13, color: "#2E3D3F", fontWeight: 600, cursor: "pointer" }}>⭐ Tandai sebagai Pilihan Utama (highlight)</label>
               </div>
             </div>
 
@@ -6939,7 +6939,7 @@ function ServicesAdmin({ data, save, notify, uploadToCloudinary, onEditStateChan
               {/* ════ GALERI GAMBAR — Enhanced Upload ════ */}
               <div style={{ marginBottom: 24 }}>
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
-                  <label style={{ fontSize: 11, fontWeight: 700, color: "#5090aa", letterSpacing: "1px", textTransform: "uppercase" }}>
+                  <label style={{ fontSize: 11, fontWeight: 700, color: "#5A6A6C", letterSpacing: "1px", textTransform: "uppercase" }}>
                     Galeri Gambar ({(svcForm.images || []).length} foto)
                   </label>
                   {(svcForm.images || []).length > 0 && (
@@ -6951,27 +6951,27 @@ function ServicesAdmin({ data, save, notify, uploadToCloudinary, onEditStateChan
 
                 {/* Progress Bars — tampil saat uploading */}
                 {uploadProgresses.length > 0 && (
-                  <div style={{ background: "#f0fafe", border: "1px solid #b0dce8", borderRadius: 10, padding: "14px 16px", marginBottom: 14 }}>
-                    <div style={{ fontSize: 11, fontWeight: 700, color: "#0891b2", textTransform: "uppercase", letterSpacing: "1px", marginBottom: 10 }}>
+                  <div style={{ background: "#f0fafe", border: "1px solid #D4C4A0", borderRadius: 10, padding: "14px 16px", marginBottom: 14 }}>
+                    <div style={{ fontSize: 11, fontWeight: 700, color: "#8B6914", textTransform: "uppercase", letterSpacing: "1px", marginBottom: 10 }}>
                       ⏳ Proses Upload
                     </div>
                     {uploadProgresses.map((up, i) => (
                       <div key={i} style={{ marginBottom: 10 }}>
                         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 4 }}>
-                          <span style={{ fontSize: 12, color: up.error ? "#e74c3c" : "#0d3b66", fontWeight: 600, maxWidth: 220, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                          <span style={{ fontSize: 12, color: up.error ? "#e74c3c" : "#2E3D3F", fontWeight: 600, maxWidth: 220, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                             {up.error ? "❌ " : up.done ? "✅ " : "📤 "}{up.name}
                           </span>
-                          <span style={{ fontSize: 12, fontWeight: 800, color: up.error ? "#e74c3c" : up.done ? "#27ae60" : "#0891b2" }}>
+                          <span style={{ fontSize: 12, fontWeight: 800, color: up.error ? "#e74c3c" : up.done ? "#27ae60" : "#8B6914" }}>
                             {up.error ? "Gagal" : up.done ? "Selesai" : `${up.pct}%`}
                           </span>
                         </div>
-                        <div style={{ height: 7, background: "#c0e8f0", borderRadius: 4, overflow: "hidden" }}>
+                        <div style={{ height: 7, background: "#E8DCC8", borderRadius: 4, overflow: "hidden" }}>
                           <div style={{
                             height: "100%", borderRadius: 4, transition: "width .3s ease",
                             width: `${up.pct}%`,
                             background: up.error ? "#e74c3c" : up.done
                               ? "#27ae60"
-                              : "linear-gradient(90deg,#0891b2 0%,#10d0e0 100%)"
+                              : "linear-gradient(90deg,#8B6914 0%,#E8C96A 100%)"
                           }} />
                         </div>
                       </div>
@@ -6986,7 +6986,7 @@ function ServicesAdmin({ data, save, notify, uploadToCloudinary, onEditStateChan
                       const isCover = (svcForm.coverIndex || 0) === i;
                       return (
                         <div key={i} style={{ position: "relative", borderRadius: 8, overflow: "hidden",
-                          border: isCover ? "3px solid #0891b2" : "2px solid #c0e8f0",
+                          border: isCover ? "3px solid #8B6914" : "2px solid #E8DCC8",
                           boxShadow: isCover ? "0 0 0 2px rgba(8,145,178,.2)" : "none",
                           transition: "border .15s" }}>
                           <img loading="lazy" src={img} alt="" style={{ width: "100%", height: 84, objectFit: "cover", display: "block" }} />
@@ -7000,7 +7000,7 @@ function ServicesAdmin({ data, save, notify, uploadToCloudinary, onEditStateChan
                               <button
                                 onClick={() => setSvcForm(p => ({ ...p, coverIndex: i, image: p.images[i] }))}
                                 title="Jadikan Cover"
-                                style={{ flex: 1, fontSize: 9, fontWeight: 800, background: "#0891b2", color: "#fff", border: "none", borderRadius: 4, padding: "4px 2px", cursor: "pointer", lineHeight: 1.3, textAlign: "center" }}>
+                                style={{ flex: 1, fontSize: 9, fontWeight: 800, background: "#8B6914", color: "#fff", border: "none", borderRadius: 4, padding: "4px 2px", cursor: "pointer", lineHeight: 1.3, textAlign: "center" }}>
                                 📌 Cover
                               </button>
                             )}
@@ -7024,17 +7024,17 @@ function ServicesAdmin({ data, save, notify, uploadToCloudinary, onEditStateChan
                 {/* Drop zone / Upload button */}
                 <label style={{
                   display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
-                  gap: 8, padding: "22px 16px", border: "2px dashed #0ea5c5", borderRadius: 10,
+                  gap: 8, padding: "22px 16px", border: "2px dashed #C9AA71", borderRadius: 10,
                   background: "#f0fafe", cursor: "pointer", transition: "background .15s"
                 }}
                   onMouseEnter={e => e.currentTarget.style.background = "#daf4fb"}
                   onMouseLeave={e => e.currentTarget.style.background = "#f0fafe"}>
                   <span style={{ fontSize: 28 }}>🖼️</span>
-                  <span style={{ fontSize: 13, fontWeight: 700, color: "#0891b2" }}>Klik untuk Upload Foto</span>
-                  <span style={{ fontSize: 11, color: "#5090aa" }}>Bisa pilih beberapa foto sekaligus · JPG, PNG, WEBP</span>
+                  <span style={{ fontSize: 13, fontWeight: 700, color: "#8B6914" }}>Klik untuk Upload Foto</span>
+                  <span style={{ fontSize: 11, color: "#5A6A6C" }}>Bisa pilih beberapa foto sekaligus · JPG, PNG, WEBP</span>
                   <input type="file" accept="image/*" multiple onChange={handleImageUpload} style={{ display: "none" }} />
                 </label>
-                <div style={{ fontSize: 11, color: "#5090aa", marginTop: 6, textAlign: "center" }}>
+                <div style={{ fontSize: 11, color: "#5A6A6C", marginTop: 6, textAlign: "center" }}>
                   Klik thumbnail lalu <strong>📌 Cover</strong> untuk memilih foto cover
                 </div>
               </div>
@@ -7042,7 +7042,7 @@ function ServicesAdmin({ data, save, notify, uploadToCloudinary, onEditStateChan
               {/* Fitur */}
               <div>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
-                  <label style={{ fontSize: 11, fontWeight: 700, color: "#5090aa", letterSpacing: "1px", textTransform: "uppercase" }}>Fitur / Yang Termasuk</label>
+                  <label style={{ fontSize: 11, fontWeight: 700, color: "#5A6A6C", letterSpacing: "1px", textTransform: "uppercase" }}>Fitur / Yang Termasuk</label>
                   <button onClick={addFeature} style={{ fontSize: 12, padding: "5px 14px", background: "#e8f8ef", color: "#27ae60", border: "none", borderRadius: 6, cursor: "pointer", fontWeight: 700 }}>+ Tambah</button>
                 </div>
                 <div style={{ maxHeight: 400, overflowY: "auto", display: "flex", flexDirection: "column", gap: 8 }}>
@@ -7051,7 +7051,7 @@ function ServicesAdmin({ data, save, notify, uploadToCloudinary, onEditStateChan
                       <textarea value={feat} onChange={e => updateFeature(i, e.target.value)}
                         placeholder={`Fitur ${i + 1}...`}
                         rows={feat.split("\n").length || 1}
-                        style={{ flex: 1, padding: "9px 12px", border: "1px solid #b0dce8", borderRadius: 8, fontSize: 13, outline: "none", resize: "none", fontFamily: "inherit", lineHeight: 1.5, overflow: "hidden", minHeight: 38, boxSizing: "border-box" }}
+                        style={{ flex: 1, padding: "9px 12px", border: "1px solid #D4C4A0", borderRadius: 8, fontSize: 13, outline: "none", resize: "none", fontFamily: "inherit", lineHeight: 1.5, overflow: "hidden", minHeight: 38, boxSizing: "border-box" }}
                         onInput={e => { e.target.style.height = "auto"; e.target.style.height = e.target.scrollHeight + "px"; }} />
                       <button onClick={() => removeFeature(i)} style={{ padding: "9px 14px", background: "#fee", color: "#e74c3c", border: "none", borderRadius: 8, cursor: "pointer", fontSize: 14, fontWeight: 700, flexShrink: 0 }}>✕</button>
                     </div>
@@ -7066,11 +7066,11 @@ function ServicesAdmin({ data, save, notify, uploadToCloudinary, onEditStateChan
 
           {/* ══════════ DESTINASI WISATA ══════════ */}
           {(svcForm.category === "traveling" || svcForm.category === "event" || svcForm.category === "wedding") && (
-            <div style={{ padding: "24px 32px", borderTop: "2px solid #edfafc", background: "#fffdf8" }}>
+            <div style={{ padding: "24px 32px", borderTop: "2px solid #FAF7F0", background: "#fffdf8" }}>
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                   <span style={{ fontSize: 18 }}>🗺</span>
-                  <span style={{ fontSize: 14, fontWeight: 800, color: "#0d3b66" }}>{(svcForm.category === "event" || svcForm.category === "wedding") ? "Foto Fasilitas" : "Destinasi Wisata / Itinerary"}</span>
+                  <span style={{ fontSize: 14, fontWeight: 800, color: "#2E3D3F" }}>{(svcForm.category === "event" || svcForm.category === "wedding") ? "Foto Fasilitas" : "Destinasi Wisata / Itinerary"}</span>
                 </div>
                 <button onClick={addDest} style={{ fontSize: 12, padding: "7px 16px", background: "#e8a020", color: "#fff", border: "none", borderRadius: 8, cursor: "pointer", fontWeight: 700 }}>{(svcForm.category === "event" || svcForm.category === "wedding") ? "＋ Tambah Foto Fasilitas" : "＋ Tambah Destinasi"}</button>
               </div>
@@ -7083,55 +7083,55 @@ function ServicesAdmin({ data, save, notify, uploadToCloudinary, onEditStateChan
                       {/* Dest header */}
                       <div style={{ background: "linear-gradient(90deg,#fffbeb,#fff8dc)", padding: "10px 16px", display: "flex", alignItems: "center", gap: 10, borderBottom: "1px solid #fde68a" }}>
                         <span style={{ background: "#e8a020", color: "#fff", borderRadius: "50%", width: 28, height: 28, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 800, flexShrink: 0 }}>{dest.no || di+1}</span>
-                        <span style={{ fontWeight: 700, color: "#0d3b66", fontSize: 13, flex: 1 }}>{dest.name || ((svcForm.category === "event" || svcForm.category === "wedding") ? `Fasilitas ${di+1}` : `Destinasi ${di+1}`)}</span>
+                        <span style={{ fontWeight: 700, color: "#2E3D3F", fontSize: 13, flex: 1 }}>{dest.name || ((svcForm.category === "event" || svcForm.category === "wedding") ? `Fasilitas ${di+1}` : `Destinasi ${di+1}`)}</span>
                         <button onClick={() => removeDest(di)} style={{ padding: "5px 12px", background: "#fee", color: "#e74c3c", border: "none", borderRadius: 6, cursor: "pointer", fontSize: 12, fontWeight: 700 }}>✕ Hapus</button>
                       </div>
                       {/* Dest body */}
                       <div style={{ padding: "14px 16px" }}>
                         <div style={{ display: "grid", gridTemplateColumns: "80px 1fr 1fr", gap: 10, marginBottom: 10 }}>
                           <div>
-                            <label style={{ fontSize: 10, fontWeight: 700, color: "#5090aa", letterSpacing: "1px", textTransform: "uppercase", display: "block", marginBottom: 4 }}>No.</label>
+                            <label style={{ fontSize: 10, fontWeight: 700, color: "#5A6A6C", letterSpacing: "1px", textTransform: "uppercase", display: "block", marginBottom: 4 }}>No.</label>
                             <input value={dest.no||""} onChange={e=>updateDest(di,"no",e.target.value)} placeholder="01"
-                              style={{ width: "100%", padding: "8px 10px", border: "1.5px solid #b0dce8", borderRadius: 7, fontSize: 13, outline: "none", boxSizing: "border-box" }} />
+                              style={{ width: "100%", padding: "8px 10px", border: "1.5px solid #D4C4A0", borderRadius: 7, fontSize: 13, outline: "none", boxSizing: "border-box" }} />
                           </div>
                           <div>
-                            <label style={{ fontSize: 10, fontWeight: 700, color: "#5090aa", letterSpacing: "1px", textTransform: "uppercase", display: "block", marginBottom: 4 }}>{(svcForm.category === "event" || svcForm.category === "wedding") ? "Nama Fasilitas" : "Nama Tab"}</label>
+                            <label style={{ fontSize: 10, fontWeight: 700, color: "#5A6A6C", letterSpacing: "1px", textTransform: "uppercase", display: "block", marginBottom: 4 }}>{(svcForm.category === "event" || svcForm.category === "wedding") ? "Nama Fasilitas" : "Nama Tab"}</label>
                             <input value={dest.name||""} onChange={e=>updateDest(di,"name",e.target.value)} placeholder={(svcForm.category === "event" || svcForm.category === "wedding") ? "Aula Utama" : "Tanah Lot"}
-                              style={{ width: "100%", padding: "8px 10px", border: "1.5px solid #b0dce8", borderRadius: 7, fontSize: 13, outline: "none", boxSizing: "border-box" }} />
+                              style={{ width: "100%", padding: "8px 10px", border: "1.5px solid #D4C4A0", borderRadius: 7, fontSize: 13, outline: "none", boxSizing: "border-box" }} />
                           </div>
                           <div>
-                            <label style={{ fontSize: 10, fontWeight: 700, color: "#5090aa", letterSpacing: "1px", textTransform: "uppercase", display: "block", marginBottom: 4 }}>{(svcForm.category === "event" || svcForm.category === "wedding") ? "Kategori" : "Tag / Kategori"}</label>
+                            <label style={{ fontSize: 10, fontWeight: 700, color: "#5A6A6C", letterSpacing: "1px", textTransform: "uppercase", display: "block", marginBottom: 4 }}>{(svcForm.category === "event" || svcForm.category === "wedding") ? "Kategori" : "Tag / Kategori"}</label>
                             <input value={dest.tag||""} onChange={e=>updateDest(di,"tag",e.target.value)} placeholder={(svcForm.category === "event" || svcForm.category === "wedding") ? "Dekorasi · Sound System" : "Pura Hindu · Keindahan Alam"}
-                              style={{ width: "100%", padding: "8px 10px", border: "1.5px solid #b0dce8", borderRadius: 7, fontSize: 13, outline: "none", boxSizing: "border-box" }} />
+                              style={{ width: "100%", padding: "8px 10px", border: "1.5px solid #D4C4A0", borderRadius: 7, fontSize: 13, outline: "none", boxSizing: "border-box" }} />
                           </div>
                         </div>
                         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 120px", gap: 10, marginBottom: 10 }}>
                           <div>
-                            <label style={{ fontSize: 10, fontWeight: 700, color: "#5090aa", letterSpacing: "1px", textTransform: "uppercase", display: "block", marginBottom: 4 }}>{(svcForm.category === "event" || svcForm.category === "wedding") ? "Keterangan" : "Judul Lengkap"}</label>
+                            <label style={{ fontSize: 10, fontWeight: 700, color: "#5A6A6C", letterSpacing: "1px", textTransform: "uppercase", display: "block", marginBottom: 4 }}>{(svcForm.category === "event" || svcForm.category === "wedding") ? "Keterangan" : "Judul Lengkap"}</label>
                             <input value={dest.title||""} onChange={e=>updateDest(di,"title",e.target.value)} placeholder={(svcForm.category === "event" || svcForm.category === "wedding") ? "Tersedia sound system profesional" : "Pura Megah di Atas Batu Karang"}
-                              style={{ width: "100%", padding: "8px 10px", border: "1.5px solid #b0dce8", borderRadius: 7, fontSize: 13, outline: "none", boxSizing: "border-box" }} />
+                              style={{ width: "100%", padding: "8px 10px", border: "1.5px solid #D4C4A0", borderRadius: 7, fontSize: 13, outline: "none", boxSizing: "border-box" }} />
                           </div>
                           <div>
-                            <label style={{ fontSize: 10, fontWeight: 700, color: "#5090aa", letterSpacing: "1px", textTransform: "uppercase", display: "block", marginBottom: 4 }}>{(svcForm.category === "event" || svcForm.category === "wedding") ? "Area / Ruang" : "Lokasi"}</label>
+                            <label style={{ fontSize: 10, fontWeight: 700, color: "#5A6A6C", letterSpacing: "1px", textTransform: "uppercase", display: "block", marginBottom: 4 }}>{(svcForm.category === "event" || svcForm.category === "wedding") ? "Area / Ruang" : "Lokasi"}</label>
                             <input value={dest.sub||""} onChange={e=>updateDest(di,"sub",e.target.value)} placeholder={(svcForm.category === "event" || svcForm.category === "wedding") ? "Ballroom Lantai 2" : "Tabanan, Bali"}
-                              style={{ width: "100%", padding: "8px 10px", border: "1.5px solid #b0dce8", borderRadius: 7, fontSize: 13, outline: "none", boxSizing: "border-box" }} />
+                              style={{ width: "100%", padding: "8px 10px", border: "1.5px solid #D4C4A0", borderRadius: 7, fontSize: 13, outline: "none", boxSizing: "border-box" }} />
                           </div>
                           <div>
-                            <label style={{ fontSize: 10, fontWeight: 700, color: "#5090aa", letterSpacing: "1px", textTransform: "uppercase", display: "block", marginBottom: 4 }}>{(svcForm.category === "event" || svcForm.category === "wedding") ? "Kapasitas" : "Durasi"}</label>
+                            <label style={{ fontSize: 10, fontWeight: 700, color: "#5A6A6C", letterSpacing: "1px", textTransform: "uppercase", display: "block", marginBottom: 4 }}>{(svcForm.category === "event" || svcForm.category === "wedding") ? "Kapasitas" : "Durasi"}</label>
                             <input value={dest.duration||""} onChange={e=>updateDest(di,"duration",e.target.value)} placeholder={(svcForm.category === "event" || svcForm.category === "wedding") ? "500 pax" : "2–3 jam"}
-                              style={{ width: "100%", padding: "8px 10px", border: "1.5px solid #b0dce8", borderRadius: 7, fontSize: 13, outline: "none", boxSizing: "border-box" }} />
+                              style={{ width: "100%", padding: "8px 10px", border: "1.5px solid #D4C4A0", borderRadius: 7, fontSize: 13, outline: "none", boxSizing: "border-box" }} />
                           </div>
                         </div>
                         <div style={{ marginBottom: 10 }}>
-                          <label style={{ fontSize: 10, fontWeight: 700, color: "#5090aa", letterSpacing: "1px", textTransform: "uppercase", display: "block", marginBottom: 4 }}>Deskripsi</label>
+                          <label style={{ fontSize: 10, fontWeight: 700, color: "#5A6A6C", letterSpacing: "1px", textTransform: "uppercase", display: "block", marginBottom: 4 }}>Deskripsi</label>
                           <textarea value={dest.desc||""} onChange={e=>updateDest(di,"desc",e.target.value)} rows={3} placeholder={(svcForm.category === "event" || svcForm.category === "wedding") ? "Deskripsi fasilitas..." : "Deskripsi destinasi..."}
-                            style={{ width: "100%", padding: "8px 10px", border: "1.5px solid #b0dce8", borderRadius: 7, fontSize: 13, outline: "none", resize: "vertical", boxSizing: "border-box" }} />
+                            style={{ width: "100%", padding: "8px 10px", border: "1.5px solid #D4C4A0", borderRadius: 7, fontSize: 13, outline: "none", resize: "vertical", boxSizing: "border-box" }} />
                         </div>
                         {/* Foto & Points side by side */}
                         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
                           {/* Foto */}
                           <div>
-                            <label style={{ fontSize: 10, fontWeight: 700, color: "#5090aa", letterSpacing: "1px", textTransform: "uppercase", display: "block", marginBottom: 6 }}>{(svcForm.category === "event" || svcForm.category === "wedding") ? "Foto Fasilitas" : "Foto Destinasi"}</label>
+                            <label style={{ fontSize: 10, fontWeight: 700, color: "#5A6A6C", letterSpacing: "1px", textTransform: "uppercase", display: "block", marginBottom: 6 }}>{(svcForm.category === "event" || svcForm.category === "wedding") ? "Foto Fasilitas" : "Foto Destinasi"}</label>
                             <label style={{ cursor: "pointer", display: "block" }}>
                               <div style={{ height: 120, border: "2px dashed #fde68a", borderRadius: 8, background: "#fffbeb", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden", position: "relative" }}>
                                 {dest.img ? (
@@ -7152,7 +7152,7 @@ function ServicesAdmin({ data, save, notify, uploadToCloudinary, onEditStateChan
                           {/* Points */}
                           <div>
                             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 6 }}>
-                              <label style={{ fontSize: 10, fontWeight: 700, color: "#5090aa", letterSpacing: "1px", textTransform: "uppercase" }}>{(svcForm.category === "event" || svcForm.category === "wedding") ? "Keunggulan (✓)" : "Highlight (✓)"}</label>
+                              <label style={{ fontSize: 10, fontWeight: 700, color: "#5A6A6C", letterSpacing: "1px", textTransform: "uppercase" }}>{(svcForm.category === "event" || svcForm.category === "wedding") ? "Keunggulan (✓)" : "Highlight (✓)"}</label>
                               <button onClick={()=>addDestPoint(di)} style={{ fontSize: 11, padding: "3px 10px", background: "#e8f8ef", color: "#27ae60", border: "none", borderRadius: 6, cursor: "pointer", fontWeight: 700 }}>+ Tambah</button>
                             </div>
                             <div style={{ display: "flex", flexDirection: "column", gap: 6, maxHeight: 140, overflowY: "auto" }}>
@@ -7160,7 +7160,7 @@ function ServicesAdmin({ data, save, notify, uploadToCloudinary, onEditStateChan
                                 <div key={pi} style={{ display: "flex", gap: 6, alignItems: "center" }}>
                                   <span style={{ color: "#e8a020", fontWeight: 700, flexShrink: 0 }}>✓</span>
                                   <input value={pt} onChange={e=>updateDestPoint(di,pi,e.target.value)} placeholder={`Highlight ${pi+1}`}
-                                    style={{ flex: 1, padding: "6px 8px", border: "1px solid #b0dce8", borderRadius: 6, fontSize: 12, outline: "none" }} />
+                                    style={{ flex: 1, padding: "6px 8px", border: "1px solid #D4C4A0", borderRadius: 6, fontSize: 12, outline: "none" }} />
                                   <button onClick={()=>removeDestPoint(di,pi)} style={{ width: 24, height: 24, background: "#fee", color: "#e74c3c", border: "none", borderRadius: 5, cursor: "pointer", flexShrink: 0, fontSize: 11 }}>✕</button>
                                 </div>
                               ))}
@@ -7177,30 +7177,30 @@ function ServicesAdmin({ data, save, notify, uploadToCloudinary, onEditStateChan
 
           {/* ══════════ FASILITAS PERJALANAN ══════════ */}
           {(svcForm.category === "traveling" || svcForm.category === "event" || svcForm.category === "wedding") && (
-            <div style={{ padding: "24px 32px", borderTop: "2px solid #edfafc", background: "#f9fdff" }}>
+            <div style={{ padding: "24px 32px", borderTop: "2px solid #FAF7F0", background: "#f9fdff" }}>
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                   <span style={{ fontSize: 18 }}>🎒</span>
-                  <span style={{ fontSize: 14, fontWeight: 800, color: "#0d3b66" }}>Fasilitas Perjalanan</span>
+                  <span style={{ fontSize: 14, fontWeight: 800, color: "#2E3D3F" }}>Fasilitas Perjalanan</span>
                 </div>
-                <button onClick={addFac} style={{ fontSize: 12, padding: "7px 16px", background: "#0891b2", color: "#fff", border: "none", borderRadius: 8, cursor: "pointer", fontWeight: 700 }}>＋ Tambah Fasilitas</button>
+                <button onClick={addFac} style={{ fontSize: 12, padding: "7px 16px", background: "#8B6914", color: "#fff", border: "none", borderRadius: 8, cursor: "pointer", fontWeight: 700 }}>＋ Tambah Fasilitas</button>
               </div>
               {(svcForm.facilities || []).length === 0 ? (
                 <p style={{ fontSize: 12, color: "#a0c4d8", textAlign: "center", padding: "16px 0" }}>Belum ada fasilitas. Klik + Tambah Fasilitas.</p>
               ) : (
                 <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 12 }}>
                   {(svcForm.facilities || []).map((fac, fi) => (
-                    <div key={fi} style={{ background: "#fff", borderRadius: 10, border: "1.5px solid #b0dce8", padding: "12px 14px" }}>
+                    <div key={fi} style={{ background: "#fff", borderRadius: 10, border: "1.5px solid #D4C4A0", padding: "12px 14px" }}>
                       <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10 }}>
                         {/* Emoji picker mini */}
                         <div style={{ position: "relative" }}>
                           <input value={fac.icon||""} onChange={e=>updateFac(fi,"icon",e.target.value)}
                             placeholder="🏨" maxLength={4}
-                            style={{ width: 44, height: 38, textAlign: "center", border: "1.5px solid #b0dce8", borderRadius: 8, fontSize: "1.2rem", outline: "none", cursor: "pointer" }} />
+                            style={{ width: 44, height: 38, textAlign: "center", border: "1.5px solid #D4C4A0", borderRadius: 8, fontSize: "1.2rem", outline: "none", cursor: "pointer" }} />
                         </div>
                         <div style={{ flex: 1, display: "flex", gap: 8 }}>
                           <input value={fac.label||""} onChange={e=>updateFac(fi,"label",e.target.value)} placeholder="Nama Fasilitas"
-                            style={{ flex: 1, padding: "8px 10px", border: "1.5px solid #b0dce8", borderRadius: 7, fontSize: 13, outline: "none" }} />
+                            style={{ flex: 1, padding: "8px 10px", border: "1.5px solid #D4C4A0", borderRadius: 7, fontSize: 13, outline: "none" }} />
                         </div>
                         <button onClick={()=>removeFac(fi)} style={{ width: 30, height: 30, background: "#fee", color: "#e74c3c", border: "none", borderRadius: 7, cursor: "pointer", fontSize: 13, flexShrink: 0 }}>✕</button>
                       </div>
@@ -7208,13 +7208,13 @@ function ServicesAdmin({ data, save, notify, uploadToCloudinary, onEditStateChan
                       <div style={{ display: "flex", flexWrap: "wrap", gap: 4, marginBottom: 8 }}>
                         {FAC_ICONS.map(ic => (
                           <button key={ic} onClick={()=>updateFac(fi,"icon",ic)}
-                            style={{ width: 28, height: 28, fontSize: "0.9rem", borderRadius: 6, border: `1.5px solid ${fac.icon===ic?"#0891b2":"#e0f0f5"}`, background: fac.icon===ic?"#edfafc":"#fff", cursor: "pointer" }}>
+                            style={{ width: 28, height: 28, fontSize: "0.9rem", borderRadius: 6, border: `1.5px solid ${fac.icon===ic?"#8B6914":"#e0f0f5"}`, background: fac.icon===ic?"#FAF7F0":"#fff", cursor: "pointer" }}>
                             {ic}
                           </button>
                         ))}
                       </div>
                       <input value={fac.detail||""} onChange={e=>updateFac(fi,"detail",e.target.value)} placeholder="Keterangan (opsional)"
-                        style={{ width: "100%", padding: "7px 10px", border: "1.5px solid #b0dce8", borderRadius: 7, fontSize: 12, outline: "none", boxSizing: "border-box" }} />
+                        style={{ width: "100%", padding: "7px 10px", border: "1.5px solid #D4C4A0", borderRadius: 7, fontSize: 12, outline: "none", boxSizing: "border-box" }} />
                     </div>
                   ))}
                 </div>
@@ -7223,23 +7223,23 @@ function ServicesAdmin({ data, save, notify, uploadToCloudinary, onEditStateChan
           )}
 
           {/* Footer action bar */}
-          <div style={{ display: "flex", gap: 12, padding: "18px 32px", background: "#f5fdff", borderTop: "1px solid #edfafc" }}>
-            <button onClick={saveSvc} style={{ padding: "11px 28px", background: "linear-gradient(130deg,#063d5c 0%,#0875a8 45%,#0aa8bf 78%,#10d0e0 100%)", color: "#fff", border: "none", borderRadius: 8, fontSize: 14, fontWeight: 800, cursor: "pointer" }}>💾 Simpan Paket</button>
-            <button onClick={cancelEdit} style={{ padding: "11px 20px", background: "#edfafc", color: "#4a7f98", border: "1px solid #b0dce8", borderRadius: 8, fontSize: 13, cursor: "pointer" }}>Batal</button>
+          <div style={{ display: "flex", gap: 12, padding: "18px 32px", background: "#FDFAF4", borderTop: "1px solid #FAF7F0" }}>
+            <button onClick={saveSvc} style={{ padding: "11px 28px", background: "linear-gradient(130deg,#2E3D3F 0%,#3D5254 45%,#8B6914 78%,#C9AA71 100%)", color: "#fff", border: "none", borderRadius: 8, fontSize: 14, fontWeight: 800, cursor: "pointer" }}>💾 Simpan Paket</button>
+            <button onClick={cancelEdit} style={{ padding: "11px 20px", background: "#FAF7F0", color: "#5A6A6C", border: "1px solid #D4C4A0", borderRadius: 8, fontSize: 13, cursor: "pointer" }}>Batal</button>
           </div>
         </div>
       )}
 
       {/* Daftar Paket */}
       {svcs.length === 0 && editSvc === null ? (
-        <div style={{ background: "#fff", borderRadius: 10, padding: "60px 20px", textAlign: "center", color: "#5090aa", boxShadow: "0 2px 8px rgba(0,0,0,.06)" }}>
+        <div style={{ background: "#fff", borderRadius: 10, padding: "60px 20px", textAlign: "center", color: "#5A6A6C", boxShadow: "0 2px 8px rgba(0,0,0,.06)" }}>
           <div style={{ fontSize: 40, marginBottom: 12 }}>🛎</div>
           <p style={{ fontSize: 14 }}>Belum ada paket layanan. Klik "+ Tambah Paket" untuk memulai.</p>
         </div>
       ) : (
         <div style={{ display: "flex", flexDirection: "column", gap: 28 }}>
           {[
-            { key: "traveling", label: "Traveling",          icon: "✈️", color: "#0891b2", light: "#edfafc", border: "#b0dce8" },
+            { key: "traveling", label: "Traveling",          icon: "✈️", color: "#8B6914", light: "#FAF7F0", border: "#D4C4A0" },
             { key: "event",     label: "Event Plan",         icon: "🎉", color: "#f39c12", light: "#fff8e1", border: "#fde68a" },
             { key: "wedding",   label: "Wedding Organizer",  icon: "💍", color: "#db2777", light: "#fff0f7", border: "#fbcfe8" },
           ].map(cat => {
@@ -7274,12 +7274,12 @@ function ServicesAdmin({ data, save, notify, uploadToCloudinary, onEditStateChan
                         )}
                         <div style={{ minWidth: 0 }}>
                           <div style={{ display: "flex", gap: 6, alignItems: "center", flexWrap: "wrap", marginBottom: 2 }}>
-                            <span style={{ fontSize: 13, fontWeight: 700, color: "#0d3b66" }}>{svc.title}</span>
+                            <span style={{ fontSize: 13, fontWeight: 700, color: "#2E3D3F" }}>{svc.title}</span>
                             {svc.badge && <span style={{ fontSize: 10, background: svc.badgeColor || cat.color, color: "#fff", borderRadius: 10, padding: "2px 8px", fontWeight: 700 }}>{svc.badge}</span>}
                             {svc.highlight && <span style={{ fontSize: 10, background: cat.color, color: "#fff", borderRadius: 10, padding: "2px 8px", fontWeight: 700 }}>⭐ Pilihan Utama</span>}
                           </div>
-                          <div style={{ fontSize: 12, fontWeight: 700, color: cat.color }}>{(()=>{ const uPt=(svc.paketTypes||[]).find(pt=>pt.id===(svc.utamaTipeId||svc.paketTypes?.[0]?.id)); const rp=uPt?.price||svc.price; return formatRp(rp)||rp; })()}<span style={{ color: "#5090aa", fontWeight: 400 }}> {svc.priceNote}</span></div>
-                          <div style={{ fontSize: 11, color: "#5090aa", marginTop: 1 }}>{(svc.features || []).length} fitur termasuk</div>
+                          <div style={{ fontSize: 12, fontWeight: 700, color: cat.color }}>{(()=>{ const uPt=(svc.paketTypes||[]).find(pt=>pt.id===(svc.utamaTipeId||svc.paketTypes?.[0]?.id)); const rp=uPt?.price||svc.price; return formatRp(rp)||rp; })()}<span style={{ color: "#5A6A6C", fontWeight: 400 }}> {svc.priceNote}</span></div>
+                          <div style={{ fontSize: 11, color: "#5A6A6C", marginTop: 1 }}>{(svc.features || []).length} fitur termasuk</div>
                         </div>
                       </div>
                       {/* Right: Edit + Hapus stacked */}
@@ -7350,9 +7350,9 @@ function AboutPage({ content, images, teamMembers, onWaOpen }) {
     <div className="fade-in" style={{ minHeight: "100vh", background: "#fff" }}>
 
       {/* ── HERO ── */}
-      <div style={{ background: "linear-gradient(130deg,#063d5c 0%,#0875a8 45%,#0aa8bf 78%,#10d0e0 100%)", padding: "80px 5% 90px", overflow: "hidden", position: "relative" }}>
+      <div style={{ background: "linear-gradient(130deg,#2E3D3F 0%,#3D5254 45%,#8B6914 78%,#C9AA71 100%)", padding: "80px 5% 90px", overflow: "hidden", position: "relative" }}>
         <div style={{ position: "absolute", top: -60, right: -60, width: 400, height: 400, borderRadius: "50%", background: "rgba(255,255,255,.12)", pointerEvents: "none" }} />
-        <div style={{ position: "absolute", bottom: -80, left: "20%", width: 300, height: 300, borderRadius: "50%", background: "rgba(8,145,178,.1)", pointerEvents: "none" }} />
+        <div style={{ position: "absolute", bottom: -80, left: "20%", width: 300, height: 300, borderRadius: "50%", background: "rgba(139,105,20,.1)", pointerEvents: "none" }} />
         <div style={{ maxWidth: 1200, margin: "0 auto" }} className="about-hero-grid">
           <div style={{ position: "relative", zIndex: 1 }}>
             <div style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "rgba(8,145,178,.15)", border: "1px solid rgba(8,145,178,.3)", borderRadius: 20, padding: "5px 16px", marginBottom: 24 }}>
@@ -7366,9 +7366,9 @@ function AboutPage({ content, images, teamMembers, onWaOpen }) {
             </p>
             <div style={{ display: "flex", gap: 16, flexWrap: "wrap" }}>
               <button onClick={() => onWaOpen && onWaOpen()}
-                style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "13px 28px", background: "linear-gradient(130deg,#063d5c 0%,#0875a8 45%,#0aa8bf 78%,#10d0e0 100%)", color: "#fff", borderRadius: 4, fontSize: "0.8125rem", fontWeight: 700, letterSpacing: ".08em", textTransform: "uppercase", border: "none", cursor: "pointer", transition: "background .2s" }}
-                onMouseEnter={e => e.currentTarget.style.background = "#0891b2"}
-                onMouseLeave={e => e.currentTarget.style.background = "#0d3b66"}>
+                style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "13px 28px", background: "linear-gradient(130deg,#2E3D3F 0%,#3D5254 45%,#8B6914 78%,#C9AA71 100%)", color: "#fff", borderRadius: 4, fontSize: "0.8125rem", fontWeight: 700, letterSpacing: ".08em", textTransform: "uppercase", border: "none", cursor: "pointer", transition: "background .2s" }}
+                onMouseEnter={e => e.currentTarget.style.background = "#8B6914"}
+                onMouseLeave={e => e.currentTarget.style.background = "#2E3D3F"}>
                 💬 Hubungi Kami
               </button>
               {content.phone && (
@@ -7392,7 +7392,7 @@ function AboutPage({ content, images, teamMembers, onWaOpen }) {
       </div>
 
       {/* ── STATS STRIP ── */}
-      <div style={{ background: "linear-gradient(130deg,#063d5c 0%,#0875a8 45%,#0aa8bf 78%,#10d0e0 100%)", padding: "36px 5%" }}>
+      <div style={{ background: "linear-gradient(130deg,#2E3D3F 0%,#3D5254 45%,#8B6914 78%,#C9AA71 100%)", padding: "36px 5%" }}>
         <div style={{ maxWidth: 1200, margin: "0 auto", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))", gap: 24, textAlign: "center" }}>
           {[
             { num: "500+", label: "Klien Puas" },
@@ -7401,7 +7401,7 @@ function AboutPage({ content, images, teamMembers, onWaOpen }) {
             { num: "24/7", label: "Layanan Support" },
           ].map(s => (
             <div key={s.label}>
-              <div style={{ fontSize: "clamp(1.75rem,4vw,2.5rem)", fontWeight: 900, color: "#22d3ee", fontFamily: "'Playfair Display',serif", lineHeight: 1 }}>{s.num}</div>
+              <div style={{ fontSize: "clamp(1.75rem,4vw,2.5rem)", fontWeight: 900, color: "#D4AF37", fontFamily: "'Playfair Display',serif", lineHeight: 1 }}>{s.num}</div>
               <div style={{ fontSize: "0.8125rem", color: "rgba(255,255,255,.65)", marginTop: 6, fontWeight: 500, letterSpacing: ".04em" }}>{s.label}</div>
             </div>
           ))}
@@ -7411,20 +7411,20 @@ function AboutPage({ content, images, teamMembers, onWaOpen }) {
       {/* ── VISI MISI ── */}
       <div style={{ padding: "80px 5%", maxWidth: 1200, margin: "0 auto" }}>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 40 }} className="grid-2">
-          <div style={{ background: "linear-gradient(135deg, #0891b2 0%, #0ea5c5 100%)", borderRadius: 12, padding: "40px 36px", color: "#fff" }}>
+          <div style={{ background: "linear-gradient(135deg, #2E3D3F 0%, #3D5254 100%)", borderRadius: 12, padding: "40px 36px", color: "#fff" }}>
             <div style={{ fontSize: 36, marginBottom: 20 }}>🎯</div>
             <h3 style={{ fontSize: "1.5rem", fontFamily: "'Playfair Display',serif", fontWeight: 800, marginBottom: 16, color: "#fff" }}>Visi Kami</h3>
             <p style={{ fontSize: "0.9375rem", lineHeight: 1.85, color: "rgba(255,255,255,.8)" }}>
               Menjadi perusahaan travel dan organizer terkemuka di Indonesia yang dikenal atas pelayanan profesional, kreativitas, dan kemampuan mewujudkan momen-momen tak terlupakan bagi setiap klien.
             </p>
           </div>
-          <div style={{ background: "#edfafc", borderRadius: 12, padding: "40px 36px", borderLeft: "4px solid #0891b2" }}>
+          <div style={{ background: "#FAF7F0", borderRadius: 12, padding: "40px 36px", borderLeft: "4px solid #8B6914" }}>
             <div style={{ fontSize: 36, marginBottom: 20 }}>🚀</div>
-            <h3 style={{ fontSize: "1.5rem", fontFamily: "'Playfair Display',serif", fontWeight: 800, marginBottom: 16, color: "#0d3b66" }}>Misi Kami</h3>
+            <h3 style={{ fontSize: "1.5rem", fontFamily: "'Playfair Display',serif", fontWeight: 800, marginBottom: 16, color: "#2E3D3F" }}>Misi Kami</h3>
             <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: 12 }}>
               {["Memberikan layanan terbaik dengan standar profesional tinggi", "Memastikan kepuasan klien di setiap momen yang kami tangani", "Berinovasi dalam layanan travel & event secara berkelanjutan", "Membangun kepercayaan jangka panjang bersama klien dan mitra"].map(m => (
-                <li key={m} style={{ display: "flex", gap: 10, fontSize: "0.9rem", color: "#1a5a78", lineHeight: 1.6 }}>
-                  <span style={{ color: "#0891b2", fontWeight: 700, flexShrink: 0 }}>✓</span>
+                <li key={m} style={{ display: "flex", gap: 10, fontSize: "0.9rem", color: "#3D5254", lineHeight: 1.6 }}>
+                  <span style={{ color: "#8B6914", fontWeight: 700, flexShrink: 0 }}>✓</span>
                   {m}
                 </li>
               ))}
@@ -7442,10 +7442,10 @@ function AboutPage({ content, images, teamMembers, onWaOpen }) {
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 24 }}>
             {values.map((v, i) => (
-              <div key={v.title} className="hover-lift" style={{ background: "#fff", borderRadius: 12, padding: "32px 28px", boxShadow: "0 2px 12px rgba(13,59,102,.06)", borderTop: "3px solid #0891b2", transition: "all .3s" }}>
+              <div key={v.title} className="hover-lift" style={{ background: "#fff", borderRadius: 12, padding: "32px 28px", boxShadow: "0 2px 12px rgba(46,61,63,.06)", borderTop: "3px solid #8B6914", transition: "all .3s" }}>
                 <div style={{ fontSize: 36, marginBottom: 16 }}>{v.icon}</div>
-                <h3 style={{ fontSize: "1.05rem", fontFamily: "'Playfair Display',serif", fontWeight: 700, color: "#0d3b66", marginBottom: 10 }}>{v.title}</h3>
-                <p style={{ fontSize: "0.9rem", color: "#1a5a78", lineHeight: 1.75, whiteSpace: "pre-line" }}>{v.desc}</p>
+                <h3 style={{ fontSize: "1.05rem", fontFamily: "'Playfair Display',serif", fontWeight: 700, color: "#2E3D3F", marginBottom: 10 }}>{v.title}</h3>
+                <p style={{ fontSize: "0.9rem", color: "#3D5254", lineHeight: 1.75, whiteSpace: "pre-line" }}>{v.desc}</p>
               </div>
             ))}
           </div>
@@ -7456,17 +7456,17 @@ function AboutPage({ content, images, teamMembers, onWaOpen }) {
       <div style={{ padding: "80px 5%" }}>
         <div style={{ maxWidth: 1200, margin: "0 auto" }}>
           <div style={{ textAlign: "center", marginBottom: 52 }}>
-            <div style={{ fontSize: "0.6875rem", letterSpacing: "2px", color: "#0891b2", textTransform: "uppercase", fontWeight: 700, marginBottom: 12 }}>Orang-Orang di Balik Layanan</div>
-            <h2 className="display" style={{ fontSize: "clamp(1.75rem,4vw,2.75rem)", fontWeight: 900, color: "#0d3b66" }}>Susunan Tim Kami</h2>
+            <div style={{ fontSize: "0.6875rem", letterSpacing: "2px", color: "#8B6914", textTransform: "uppercase", fontWeight: 700, marginBottom: 12 }}>Orang-Orang di Balik Layanan</div>
+            <h2 className="display" style={{ fontSize: "clamp(1.75rem,4vw,2.75rem)", fontWeight: 900, color: "#2E3D3F" }}>Susunan Tim Kami</h2>
           </div>
           {(!teamMembers || teamMembers.length === 0) ? (
-            <div style={{ textAlign: "center", padding: "40px 0", color: "#5090aa" }}>Susunan tim belum diisi. Hubungi administrator.</div>
+            <div style={{ textAlign: "center", padding: "40px 0", color: "#5A6A6C" }}>Susunan tim belum diisi. Hubungi administrator.</div>
           ) : (
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: 28 }}>
               {teamMembers.map((member, i) => (
                 <div key={member.id || i} className="hover-lift" style={{ background: "#fff", borderRadius: 14, overflow: "hidden", boxShadow: "0 4px 16px rgba(13,59,102,.08)", textAlign: "center", transition: "all .3s" }}>
                   {/* Photo */}
-                  <div style={{ height: 220, overflow: "hidden", background: "linear-gradient(130deg,#063d5c 0%,#0875a8 50%,#0aa8bf 100%)", position: "relative" }}>
+                  <div style={{ height: 220, overflow: "hidden", background: "linear-gradient(130deg,#2E3D3F 0%,#3D5254 50%,#8B6914 100%)", position: "relative" }}>
                     {member.photo ? (
                       <img loading="lazy" src={member.photo} alt={member.name}
                         style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "top center", display: "block", transition: "transform .4s ease" }}
@@ -7482,10 +7482,10 @@ function AboutPage({ content, images, teamMembers, onWaOpen }) {
                     <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: 60, background: "linear-gradient(to top, rgba(13,59,102,.75), transparent)", pointerEvents: "none" }} />
                   </div>
                   <div style={{ padding: "20px 20px 24px" }}>
-                    <h3 style={{ fontSize: "1rem", fontFamily: "'Playfair Display',serif", fontWeight: 800, color: "#0d3b66", marginBottom: 4 }}>{member.name}</h3>
-                    <div style={{ fontSize: "0.8125rem", color: "#0891b2", fontWeight: 600, marginBottom: 12 }}>{member.role}</div>
+                    <h3 style={{ fontSize: "1rem", fontFamily: "'Playfair Display',serif", fontWeight: 800, color: "#2E3D3F", marginBottom: 4 }}>{member.name}</h3>
+                    <div style={{ fontSize: "0.8125rem", color: "#8B6914", fontWeight: 600, marginBottom: 12 }}>{member.role}</div>
                     {member.quotes && (
-                      <p style={{ fontSize: "0.8125rem", color: "#4a7f98", fontStyle: "italic", lineHeight: 1.65, whiteSpace: "pre-line" }}>"{member.quotes}"</p>
+                      <p style={{ fontSize: "0.8125rem", color: "#5A6A6C", fontStyle: "italic", lineHeight: 1.65, whiteSpace: "pre-line" }}>"{member.quotes}"</p>
                     )}
                   </div>
                 </div>
@@ -7504,7 +7504,7 @@ function AboutPage({ content, images, teamMembers, onWaOpen }) {
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: 28 }}>
             {[
-              { icon: "✈️", title: "Travel & Wisata", color: "#0891b2", items: ["Paket Wisata Lokal & Mancanegara", "Tiket Pesawat & Hotel", "Tour Guide Profesional", "Itinerary Kustom", "Transportasi Pribadi"] },
+              { icon: "✈️", title: "Travel & Wisata", color: "#8B6914", items: ["Paket Wisata Lokal & Mancanegara", "Tiket Pesawat & Hotel", "Tour Guide Profesional", "Itinerary Kustom", "Transportasi Pribadi"] },
               { icon: "💍", title: "Wedding Organizer", color: "#8e44ad", items: ["Konsultasi & Perencanaan", "Dekorasi & Venue", "Koordinasi Hari H", "Dokumentasi & Foto", "Catering & Entertainment"] },
               { icon: "🎉", title: "Event Organizer", color: "#e67e22", items: ["Corporate Event", "Birthday & Anniversary", "Gathering & Outbound", "Seminar & Conference", "Pesta Perpisahan & Reunian"] },
             ].map(s => (
@@ -7516,7 +7516,7 @@ function AboutPage({ content, images, teamMembers, onWaOpen }) {
                 <div style={{ padding: "20px 28px", background: "#fff" }}>
                   <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: 10 }}>
                     {s.items.map(item => (
-                      <li key={item} style={{ display: "flex", gap: 10, fontSize: "0.9rem", color: "#0d3b66", fontWeight: 500 }}>
+                      <li key={item} style={{ display: "flex", gap: 10, fontSize: "0.9rem", color: "#2E3D3F", fontWeight: 500 }}>
                         <span style={{ color: s.color, fontWeight: 700, flexShrink: 0 }}>→</span> {item}
                       </li>
                     ))}
@@ -7529,7 +7529,7 @@ function AboutPage({ content, images, teamMembers, onWaOpen }) {
       </div>
 
       {/* ── CONTACT US ── */}
-      <div style={{ background: "linear-gradient(130deg,#063d5c 0%,#0875a8 45%,#0aa8bf 78%,#10d0e0 100%)", padding: "80px 5%" }}>
+      <div style={{ background: "linear-gradient(130deg,#2E3D3F 0%,#3D5254 45%,#8B6914 78%,#C9AA71 100%)", padding: "80px 5%" }}>
         <div style={{ maxWidth: 1200, margin: "0 auto" }}>
           <div style={{ textAlign: "center", marginBottom: 52 }}>
             <div style={{ fontSize: "0.6875rem", letterSpacing: "2px", color: "rgba(255,255,255,.75)", textTransform: "uppercase", fontWeight: 700, marginBottom: 12 }}>Hubungi Kami</div>
@@ -7546,12 +7546,12 @@ function AboutPage({ content, images, teamMembers, onWaOpen }) {
                 { icon: "🕐", label: "Jam Operasional", value: content.hours || "Senin – Sabtu: 08.00 – 20.00 WIB", type: "text" },
               ].map(info => (
                 <div key={info.label} style={{ display: "flex", gap: 16, alignItems: "flex-start", background: "rgba(255,255,255,.7)", borderRadius: 10, padding: "18px 20px", backdropFilter: "blur(8px)" }}>
-                  <div style={{ width: 44, height: 44, borderRadius: 10, background: "linear-gradient(130deg,#063d5c 0%,#0875a8 45%,#0aa8bf 78%,#10d0e0 100%)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20, flexShrink: 0 }}>{info.icon}</div>
+                  <div style={{ width: 44, height: 44, borderRadius: 10, background: "linear-gradient(130deg,#2E3D3F 0%,#3D5254 45%,#8B6914 78%,#C9AA71 100%)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20, flexShrink: 0 }}>{info.icon}</div>
                   <div>
-                    <div style={{ fontSize: "0.75rem", color: "#5090aa", fontWeight: 700, letterSpacing: ".05em", textTransform: "uppercase", marginBottom: 4 }}>{info.label}</div>
+                    <div style={{ fontSize: "0.75rem", color: "#5A6A6C", fontWeight: 700, letterSpacing: ".05em", textTransform: "uppercase", marginBottom: 4 }}>{info.label}</div>
                     {info.type === "link"
-                      ? <a href={info.href} onClick={info.onClick} target={info.href.startsWith("https") ? "_blank" : "_self"} rel="noopener noreferrer" style={{ fontSize: "0.9375rem", color: "#0891b2", fontWeight: 600, textDecoration: "none" }}>{info.value}</a>
-                      : <div style={{ fontSize: "0.9375rem", color: "#0d3b66", fontWeight: 500 }}>{info.value}</div>
+                      ? <a href={info.href} onClick={info.onClick} target={info.href.startsWith("https") ? "_blank" : "_self"} rel="noopener noreferrer" style={{ fontSize: "0.9375rem", color: "#8B6914", fontWeight: 600, textDecoration: "none" }}>{info.value}</a>
+                      : <div style={{ fontSize: "0.9375rem", color: "#2E3D3F", fontWeight: 500 }}>{info.value}</div>
                     }
                   </div>
                 </div>
@@ -7559,7 +7559,7 @@ function AboutPage({ content, images, teamMembers, onWaOpen }) {
 
               {/* Social Media */}
               <div style={{ background: "rgba(255,255,255,.7)", borderRadius: 10, padding: "18px 20px", backdropFilter: "blur(8px)" }}>
-                <div style={{ fontSize: "0.75rem", color: "#5090aa", fontWeight: 700, letterSpacing: ".05em", textTransform: "uppercase", marginBottom: 14 }}>Media Sosial</div>
+                <div style={{ fontSize: "0.75rem", color: "#5A6A6C", fontWeight: 700, letterSpacing: ".05em", textTransform: "uppercase", marginBottom: 14 }}>Media Sosial</div>
                 <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
                   {[
                     { label: "Instagram", icon: "📷", href: content.igLink || "https://instagram.com", color: "#e1306c" },
@@ -7583,46 +7583,46 @@ function AboutPage({ content, images, teamMembers, onWaOpen }) {
             </div>
 
             {/* Form */}
-            <div style={{ background: "#fff", borderRadius: 14, padding: "36px 32px", boxShadow: "0 8px 40px rgba(13,59,102,.12)" }}>
-              <h3 style={{ fontSize: "1.25rem", fontFamily: "'Playfair Display',serif", fontWeight: 800, color: "#0d3b66", marginBottom: 24 }}>Kirim Pesan</h3>
+            <div style={{ background: "#fff", borderRadius: 14, padding: "36px 32px", boxShadow: "0 8px 40px rgba(46,61,63,.12)" }}>
+              <h3 style={{ fontSize: "1.25rem", fontFamily: "'Playfair Display',serif", fontWeight: 800, color: "#2E3D3F", marginBottom: 24 }}>Kirim Pesan</h3>
               {contactSent ? (
                 <div style={{ textAlign: "center", padding: "40px 20px" }}>
                   <div style={{ fontSize: 56, marginBottom: 16 }}>✅</div>
                   <h4 style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.25rem", color: "#27ae60", marginBottom: 8 }}>Pesan Terkirim!</h4>
-                  <p style={{ color: "#1a5a78", fontSize: "0.9rem" }}>Kami akan segera menghubungi Anda melalui WhatsApp.</p>
+                  <p style={{ color: "#3D5254", fontSize: "0.9rem" }}>Kami akan segera menghubungi Anda melalui WhatsApp.</p>
                 </div>
               ) : (
                 <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
                   <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
                     <div>
-                      <label style={{ fontSize: "0.75rem", fontWeight: 700, color: "#5090aa", textTransform: "uppercase", letterSpacing: ".05em", display: "block", marginBottom: 6 }}>Nama *</label>
+                      <label style={{ fontSize: "0.75rem", fontWeight: 700, color: "#5A6A6C", textTransform: "uppercase", letterSpacing: ".05em", display: "block", marginBottom: 6 }}>Nama *</label>
                       <input value={contactForm.name} onChange={e => setContactForm(p => ({ ...p, name: e.target.value }))}
                         placeholder="Nama lengkap"
-                        style={{ width: "100%", padding: "11px 14px", border: "1.5px solid #b0dce8", borderRadius: 8, fontSize: "0.9rem", outline: "none", transition: "border .2s" }}
-                        onFocus={e => e.target.style.borderColor = "#0891b2"}
-                        onBlur={e => e.target.style.borderColor = "#b0dce8"} />
+                        style={{ width: "100%", padding: "11px 14px", border: "1.5px solid #D4C4A0", borderRadius: 8, fontSize: "0.9rem", outline: "none", transition: "border .2s" }}
+                        onFocus={e => e.target.style.borderColor = "#8B6914"}
+                        onBlur={e => e.target.style.borderColor = "#D4C4A0"} />
                     </div>
                     <div>
-                      <label style={{ fontSize: "0.75rem", fontWeight: 700, color: "#5090aa", textTransform: "uppercase", letterSpacing: ".05em", display: "block", marginBottom: 6 }}>No. HP</label>
+                      <label style={{ fontSize: "0.75rem", fontWeight: 700, color: "#5A6A6C", textTransform: "uppercase", letterSpacing: ".05em", display: "block", marginBottom: 6 }}>No. HP</label>
                       <input value={contactForm.phone} onChange={e => setContactForm(p => ({ ...p, phone: e.target.value }))}
                         placeholder="08xx-xxxx-xxxx"
-                        style={{ width: "100%", padding: "11px 14px", border: "1.5px solid #b0dce8", borderRadius: 8, fontSize: "0.9rem", outline: "none", transition: "border .2s" }}
-                        onFocus={e => e.target.style.borderColor = "#0891b2"}
-                        onBlur={e => e.target.style.borderColor = "#b0dce8"} />
+                        style={{ width: "100%", padding: "11px 14px", border: "1.5px solid #D4C4A0", borderRadius: 8, fontSize: "0.9rem", outline: "none", transition: "border .2s" }}
+                        onFocus={e => e.target.style.borderColor = "#8B6914"}
+                        onBlur={e => e.target.style.borderColor = "#D4C4A0"} />
                     </div>
                   </div>
                   <div>
-                    <label style={{ fontSize: "0.75rem", fontWeight: 700, color: "#5090aa", textTransform: "uppercase", letterSpacing: ".05em", display: "block", marginBottom: 6 }}>Email</label>
+                    <label style={{ fontSize: "0.75rem", fontWeight: 700, color: "#5A6A6C", textTransform: "uppercase", letterSpacing: ".05em", display: "block", marginBottom: 6 }}>Email</label>
                     <input value={contactForm.email} onChange={e => setContactForm(p => ({ ...p, email: e.target.value }))}
                       placeholder="email@domain.com"
-                      style={{ width: "100%", padding: "11px 14px", border: "1.5px solid #b0dce8", borderRadius: 8, fontSize: "0.9rem", outline: "none", transition: "border .2s" }}
-                      onFocus={e => e.target.style.borderColor = "#0891b2"}
-                      onBlur={e => e.target.style.borderColor = "#b0dce8"} />
+                      style={{ width: "100%", padding: "11px 14px", border: "1.5px solid #D4C4A0", borderRadius: 8, fontSize: "0.9rem", outline: "none", transition: "border .2s" }}
+                      onFocus={e => e.target.style.borderColor = "#8B6914"}
+                      onBlur={e => e.target.style.borderColor = "#D4C4A0"} />
                   </div>
                   <div>
-                    <label style={{ fontSize: "0.75rem", fontWeight: 700, color: "#5090aa", textTransform: "uppercase", letterSpacing: ".05em", display: "block", marginBottom: 6 }}>Keperluan</label>
+                    <label style={{ fontSize: "0.75rem", fontWeight: 700, color: "#5A6A6C", textTransform: "uppercase", letterSpacing: ".05em", display: "block", marginBottom: 6 }}>Keperluan</label>
                     <select value={contactForm.subject} onChange={e => setContactForm(p => ({ ...p, subject: e.target.value }))}
-                      style={{ width: "100%", padding: "11px 14px", border: "1.5px solid #b0dce8", borderRadius: 8, fontSize: "0.9rem", outline: "none", background: "#fff", color: contactForm.subject ? "#0d3b66" : "#7ab5cc" }}>
+                      style={{ width: "100%", padding: "11px 14px", border: "1.5px solid #D4C4A0", borderRadius: 8, fontSize: "0.9rem", outline: "none", background: "#fff", color: contactForm.subject ? "#2E3D3F" : "#7ab5cc" }}>
                       <option value="">-- Pilih keperluan --</option>
                       <option value="Travel & Wisata">✈️ Travel & Wisata</option>
                       <option value="Wedding Organizer">💍 Wedding Organizer</option>
@@ -7632,18 +7632,18 @@ function AboutPage({ content, images, teamMembers, onWaOpen }) {
                     </select>
                   </div>
                   <div>
-                    <label style={{ fontSize: "0.75rem", fontWeight: 700, color: "#5090aa", textTransform: "uppercase", letterSpacing: ".05em", display: "block", marginBottom: 6 }}>Pesan *</label>
+                    <label style={{ fontSize: "0.75rem", fontWeight: 700, color: "#5A6A6C", textTransform: "uppercase", letterSpacing: ".05em", display: "block", marginBottom: 6 }}>Pesan *</label>
                     <textarea value={contactForm.message} onChange={e => setContactForm(p => ({ ...p, message: e.target.value }))}
                       placeholder="Ceritakan kebutuhan Anda..."
                       rows={4}
-                      style={{ width: "100%", padding: "11px 14px", border: "1.5px solid #b0dce8", borderRadius: 8, fontSize: "0.9rem", outline: "none", resize: "vertical", lineHeight: 1.65, transition: "border .2s" }}
-                      onFocus={e => e.target.style.borderColor = "#0891b2"}
-                      onBlur={e => e.target.style.borderColor = "#b0dce8"} />
+                      style={{ width: "100%", padding: "11px 14px", border: "1.5px solid #D4C4A0", borderRadius: 8, fontSize: "0.9rem", outline: "none", resize: "vertical", lineHeight: 1.65, transition: "border .2s" }}
+                      onFocus={e => e.target.style.borderColor = "#8B6914"}
+                      onBlur={e => e.target.style.borderColor = "#D4C4A0"} />
                   </div>
                   <button onClick={handleContactSubmit}
-                    style={{ padding: "13px 28px", background: "linear-gradient(130deg,#063d5c 0%,#0875a8 45%,#0aa8bf 78%,#10d0e0 100%)", color: "#fff", border: "none", borderRadius: 8, fontSize: "0.875rem", fontWeight: 700, letterSpacing: ".06em", textTransform: "uppercase", cursor: "pointer", transition: "background .2s", display: "flex", alignItems: "center", gap: 8, justifyContent: "center" }}
-                    onMouseEnter={e => e.currentTarget.style.background = "#0891b2"}
-                    onMouseLeave={e => e.currentTarget.style.background = "#0d3b66"}>
+                    style={{ padding: "13px 28px", background: "linear-gradient(130deg,#2E3D3F 0%,#3D5254 45%,#8B6914 78%,#C9AA71 100%)", color: "#fff", border: "none", borderRadius: 8, fontSize: "0.875rem", fontWeight: 700, letterSpacing: ".06em", textTransform: "uppercase", cursor: "pointer", transition: "background .2s", display: "flex", alignItems: "center", gap: 8, justifyContent: "center" }}
+                    onMouseEnter={e => e.currentTarget.style.background = "#8B6914"}
+                    onMouseLeave={e => e.currentTarget.style.background = "#2E3D3F"}>
                     💬 Kirim via WhatsApp
                   </button>
                   <p style={{ fontSize: "0.8rem", color: "#7ab5cc", textAlign: "center" }}>Pesan akan diteruskan ke WhatsApp kami untuk respons lebih cepat.</p>
@@ -7701,47 +7701,47 @@ function TeamAdmin({ data, save, notify, uploadToCloudinary }) {
   return (
     <div className="fade-in">
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24 }}>
-        <h1 style={{ fontSize: 24, fontWeight: 500, color: "#0d3b66" }}>👥 Susunan Tim</h1>
-        {!editId && <button onClick={openNew} style={{ padding: "10px 20px", background: "linear-gradient(130deg,#063d5c 0%,#0875a8 45%,#0aa8bf 78%,#10d0e0 100%)", color: "#fff", border: "none", borderRadius: 8, fontSize: 13, fontWeight: 700, cursor: "pointer" }}>+ Tambah Anggota</button>}
+        <h1 style={{ fontSize: 24, fontWeight: 500, color: "#2E3D3F" }}>👥 Susunan Tim</h1>
+        {!editId && <button onClick={openNew} style={{ padding: "10px 20px", background: "linear-gradient(130deg,#2E3D3F 0%,#3D5254 45%,#8B6914 78%,#C9AA71 100%)", color: "#fff", border: "none", borderRadius: 8, fontSize: 13, fontWeight: 700, cursor: "pointer" }}>+ Tambah Anggota</button>}
       </div>
 
       {/* Form Edit */}
       {editId && (
-        <div style={{ background: "#fff", borderRadius: 12, padding: "28px", boxShadow: "0 4px 20px rgba(0,0,0,.08)", marginBottom: 28, borderTop: "4px solid #0ea5c5" }}>
-          <h2 style={{ fontSize: 16, fontWeight: 700, color: "#0d3b66", marginBottom: 20 }}>{editId === "new" ? "➕ Tambah Anggota Tim" : "✏ Edit Anggota Tim"}</h2>
+        <div style={{ background: "#fff", borderRadius: 12, padding: "28px", boxShadow: "0 4px 20px rgba(0,0,0,.08)", marginBottom: 28, borderTop: "4px solid #C9AA71" }}>
+          <h2 style={{ fontSize: 16, fontWeight: 700, color: "#2E3D3F", marginBottom: 20 }}>{editId === "new" ? "➕ Tambah Anggota Tim" : "✏ Edit Anggota Tim"}</h2>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 16 }}>
             {[
               { label: "Nama *", key: "name", placeholder: "Budi Santoso" },
               { label: "Jabatan", key: "role", placeholder: "Wedding Coordinator" },
             ].map(f => (
               <div key={f.key}>
-                <label style={{ display: "block", fontSize: 11, fontWeight: 600, color: "#5090aa", letterSpacing: "1px", textTransform: "uppercase", marginBottom: 6 }}>{f.label}</label>
+                <label style={{ display: "block", fontSize: 11, fontWeight: 600, color: "#5A6A6C", letterSpacing: "1px", textTransform: "uppercase", marginBottom: 6 }}>{f.label}</label>
                 <input value={form[f.key] || ""} onChange={e => setForm(p => ({ ...p, [f.key]: e.target.value }))}
-                  placeholder={f.placeholder} style={{ width: "100%", padding: "9px 12px", border: "1.5px solid #b0dce8", borderRadius: 6, fontSize: 13, outline: "none" }} />
+                  placeholder={f.placeholder} style={{ width: "100%", padding: "9px 12px", border: "1.5px solid #D4C4A0", borderRadius: 6, fontSize: 13, outline: "none" }} />
               </div>
             ))}
           </div>
           <div style={{ marginBottom: 16 }}>
-            <label style={{ display: "block", fontSize: 11, fontWeight: 600, color: "#5090aa", letterSpacing: "1px", textTransform: "uppercase", marginBottom: 6 }}>Quotes / Motto</label>
+            <label style={{ display: "block", fontSize: 11, fontWeight: 600, color: "#5A6A6C", letterSpacing: "1px", textTransform: "uppercase", marginBottom: 6 }}>Quotes / Motto</label>
             <input value={form.quotes || ""} onChange={e => setForm(p => ({ ...p, quotes: e.target.value }))}
               placeholder="Setiap momen spesial layak dirayakan dengan sempurna."
-              style={{ width: "100%", padding: "9px 12px", border: "1.5px solid #b0dce8", borderRadius: 6, fontSize: 13, outline: "none" }} />
+              style={{ width: "100%", padding: "9px 12px", border: "1.5px solid #D4C4A0", borderRadius: 6, fontSize: 13, outline: "none" }} />
           </div>
           <div style={{ marginBottom: 20 }}>
-            <label style={{ display: "block", fontSize: 11, fontWeight: 600, color: "#5090aa", letterSpacing: "1px", textTransform: "uppercase", marginBottom: 6 }}>Foto</label>
-            {form.photo && <img loading="lazy" src={form.photo} alt="preview" style={{ height: 80, width: 80, objectFit: "cover", borderRadius: "50%", marginBottom: 10, border: "2px solid #c0e8f0" }} />}
+            <label style={{ display: "block", fontSize: 11, fontWeight: 600, color: "#5A6A6C", letterSpacing: "1px", textTransform: "uppercase", marginBottom: 6 }}>Foto</label>
+            {form.photo && <img loading="lazy" src={form.photo} alt="preview" style={{ height: 80, width: 80, objectFit: "cover", borderRadius: "50%", marginBottom: 10, border: "2px solid #E8DCC8" }} />}
             <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
               <UploadButton label="📁 Upload Foto Tim"
                 onDone={urls => { setForm(p => ({ ...p, photo: urls[0] })); notify("Foto berhasil diupload!"); }}
                 onError={msg => notify(msg, "error")} />
               <div style={{ fontSize: 11, color: "#7ab5cc", textAlign: "center" }}>— atau paste URL foto —</div>
               <input type="url" value={form.photo || ""} onChange={e => setForm(p => ({ ...p, photo: e.target.value }))}
-                placeholder="https://..." style={{ width: "100%", padding: "8px 12px", border: "1.5px solid #b0dce8", borderRadius: 6, fontSize: 12, outline: "none" }} />
+                placeholder="https://..." style={{ width: "100%", padding: "8px 12px", border: "1.5px solid #D4C4A0", borderRadius: 6, fontSize: 12, outline: "none" }} />
             </div>
           </div>
           <div style={{ display: "flex", gap: 10 }}>
-            <button onClick={saveMember} style={{ padding: "10px 22px", background: "linear-gradient(130deg,#063d5c 0%,#0875a8 45%,#0aa8bf 78%,#10d0e0 100%)", color: "#fff", border: "none", borderRadius: 8, fontSize: 13, fontWeight: 700, cursor: "pointer" }}>💾 Simpan</button>
-            <button onClick={cancelEdit} style={{ padding: "10px 18px", background: "#edfafc", color: "#4a7f98", border: "1px solid #b0dce8", borderRadius: 8, fontSize: 13, cursor: "pointer" }}>Batal</button>
+            <button onClick={saveMember} style={{ padding: "10px 22px", background: "linear-gradient(130deg,#2E3D3F 0%,#3D5254 45%,#8B6914 78%,#C9AA71 100%)", color: "#fff", border: "none", borderRadius: 8, fontSize: 13, fontWeight: 700, cursor: "pointer" }}>💾 Simpan</button>
+            <button onClick={cancelEdit} style={{ padding: "10px 18px", background: "#FAF7F0", color: "#5A6A6C", border: "1px solid #D4C4A0", borderRadius: 8, fontSize: 13, cursor: "pointer" }}>Batal</button>
           </div>
         </div>
       )}
@@ -7750,22 +7750,22 @@ function TeamAdmin({ data, save, notify, uploadToCloudinary }) {
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(260px,1fr))", gap: 16 }}>
         {members.map(m => (
           <div key={m.id} style={{ background: "#fff", borderRadius: 12, padding: "20px", boxShadow: "0 2px 8px rgba(0,0,0,.06)", display: "flex", flexDirection: "column", gap: 12, alignItems: "center", textAlign: "center" }}>
-            <div style={{ width: 72, height: 72, borderRadius: "50%", overflow: "hidden", background: "#edfafc", border: "2px solid #c0e8f0", flexShrink: 0 }}>
+            <div style={{ width: 72, height: 72, borderRadius: "50%", overflow: "hidden", background: "#FAF7F0", border: "2px solid #E8DCC8", flexShrink: 0 }}>
               {m.photo ? <img loading="lazy" src={m.photo} alt={m.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 30 }}>👤</div>}
             </div>
             <div>
-              <div style={{ fontWeight: 700, color: "#0d3b66", fontSize: 14 }}>{m.name}</div>
-              <div style={{ fontSize: 12, color: "#0891b2", fontWeight: 600 }}>{m.role}</div>
-              {m.quotes && <div style={{ fontSize: 11, color: "#5090aa", fontStyle: "italic", marginTop: 6, lineHeight: 1.5, whiteSpace: "pre-line" }}>"{m.quotes}"</div>}
+              <div style={{ fontWeight: 700, color: "#2E3D3F", fontSize: 14 }}>{m.name}</div>
+              <div style={{ fontSize: 12, color: "#8B6914", fontWeight: 600 }}>{m.role}</div>
+              {m.quotes && <div style={{ fontSize: 11, color: "#5A6A6C", fontStyle: "italic", marginTop: 6, lineHeight: 1.5, whiteSpace: "pre-line" }}>"{m.quotes}"</div>}
             </div>
             <div style={{ display: "flex", gap: 8 }}>
-              <button onClick={() => openEdit(m)} style={{ padding: "6px 14px", background: "#e8f9fc", color: "#0ea5c5", border: "1px solid #c5dde9", borderRadius: 6, fontSize: 12, fontWeight: 600, cursor: "pointer" }}>✏ Edit</button>
+              <button onClick={() => openEdit(m)} style={{ padding: "6px 14px", background: "#FAF7F0", color: "#C9AA71", border: "1px solid #E8DCC8", borderRadius: 6, fontSize: 12, fontWeight: 600, cursor: "pointer" }}>✏ Edit</button>
               <button onClick={() => deleteMember(m.id)} style={{ padding: "6px 14px", background: "#fee", color: "#e74c3c", border: "1px solid #fecaca", borderRadius: 6, fontSize: 12, fontWeight: 600, cursor: "pointer" }}>🗑 Hapus</button>
             </div>
           </div>
         ))}
         {members.length === 0 && !editId && (
-          <div style={{ gridColumn: "1/-1", textAlign: "center", padding: "60px 0", color: "#5090aa" }}>
+          <div style={{ gridColumn: "1/-1", textAlign: "center", padding: "60px 0", color: "#5A6A6C" }}>
             <div style={{ fontSize: 40, marginBottom: 12 }}>👥</div>
             <p>Belum ada anggota tim. Klik "+ Tambah Anggota" untuk mulai.</p>
           </div>
@@ -7792,7 +7792,7 @@ function AdvSection({ data, navigateTo }) {
     data.images.gal[3] || data.images.hero[3],
   ];
   return (
-    <section className="section-md" style={{ background: "linear-gradient(130deg,#063d5c 0%,#0875a8 45%,#0aa8bf 78%,#10d0e0 100%)", position: "relative", overflow: "hidden" }}>
+    <section className="section-md" style={{ background: "linear-gradient(130deg,#2E3D3F 0%,#3D5254 45%,#8B6914 78%,#C9AA71 100%)", position: "relative", overflow: "hidden" }}>
       {/* Flare effects */}
       <div style={{ position: "absolute", top: "30%", right: "15%", width: 360, height: 360, borderRadius: "50%", background: "radial-gradient(circle, rgba(30,216,232,.32) 0%, transparent 70%)", pointerEvents: "none", filter: "blur(16px)" }} />
       <div style={{ position: "absolute", bottom: "10%", left: "5%", width: 220, height: 220, borderRadius: "50%", background: "radial-gradient(circle, rgba(14,165,197,.25) 0%, transparent 70%)", pointerEvents: "none", filter: "blur(20px)" }} />
@@ -7905,7 +7905,7 @@ function HomeIntroSlideshow({ data }) {
   }, [allImgs.length]);
 
   return (
-    <div style={{ position: "relative", width: "100%", height: "100%", minHeight: 380, overflow: "hidden", background: "#0d3b66" }}>
+    <div style={{ position: "relative", width: "100%", height: "100%", minHeight: 380, overflow: "hidden", background: "#2E3D3F" }}>
       <style>{`@keyframes introImgSlide { from { opacity:0; transform:scale(1.05); } to { opacity:1; transform:scale(1); } }`}</style>
       {allImgs.map((img, i) => (
         i === cur ? (
@@ -7923,7 +7923,7 @@ function HomeIntroSlideshow({ data }) {
         <div style={{ position: "absolute", bottom: 48, left: "50%", transform: "translateX(-50%)", display: "flex", gap: 5, zIndex: 3, flexWrap: "wrap", justifyContent: "center", maxWidth: "80%" }}>
           {allImgs.slice(0, 12).map((_, i) => (
             <div key={i} onClick={() => setCur(i)}
-              style={{ width: i === cur ? 16 : 5, height: 5, borderRadius: 3, background: i === cur ? "#10d0e0" : "rgba(255,255,255,.4)", cursor: "pointer", transition: "all .3s ease" }} />
+              style={{ width: i === cur ? 16 : 5, height: 5, borderRadius: 3, background: i === cur ? "#E8C96A" : "rgba(255,255,255,.4)", cursor: "pointer", transition: "all .3s ease" }} />
           ))}
         </div>
       )}
@@ -8035,7 +8035,7 @@ function HeroSlideshow({ data, navigateTo }) {
             )}
             <div style={{ display: "flex", gap: 12, flexWrap: "wrap", justifyContent: "center" }}>
               <button onClick={() => navigateTo("services")} style={{ padding: "13px 30px", background: "#e8a020", color: "#fff", border: "none", borderRadius: 3, fontSize: "0.8125rem", fontWeight: 800, letterSpacing: ".1em", textTransform: "uppercase", cursor: "pointer" }}>Read More →</button>
-              <button onClick={() => navigateTo("about")} style={{ padding: "13px 30px", background: "linear-gradient(130deg,#063d5c 0%,#0875a8 45%,#0aa8bf 78%,#10d0e0 100%)", color: "#fff", border: "2px solid rgba(255,255,255,.55)", borderRadius: 3, fontSize: "0.8125rem", fontWeight: 800, letterSpacing: ".1em", textTransform: "uppercase", cursor: "pointer" }}>About Us →</button>
+              <button onClick={() => navigateTo("about")} style={{ padding: "13px 30px", background: "linear-gradient(130deg,#2E3D3F 0%,#3D5254 45%,#8B6914 78%,#C9AA71 100%)", color: "#fff", border: "2px solid rgba(255,255,255,.55)", borderRadius: 3, fontSize: "0.8125rem", fontWeight: 800, letterSpacing: ".1em", textTransform: "uppercase", cursor: "pointer" }}>About Us →</button>
             </div>
           </div>
         </div>
@@ -8152,7 +8152,7 @@ function HeroSlideshow({ data, navigateTo }) {
               Read More →
             </button>
             <button className="hero-cta-btn" onClick={() => navigateTo("about")}
-              style={{ padding: "13px 30px", background: "linear-gradient(130deg,#063d5c 0%,#0875a8 45%,#0aa8bf 78%,#10d0e0 100%)", color: "#fff", border: "2px solid rgba(255,255,255,.55)", borderRadius: 3, fontSize: "0.8125rem", fontWeight: 800, letterSpacing: ".1em", textTransform: "uppercase", cursor: "pointer" }}>
+              style={{ padding: "13px 30px", background: "linear-gradient(130deg,#2E3D3F 0%,#3D5254 45%,#8B6914 78%,#C9AA71 100%)", color: "#fff", border: "2px solid rgba(255,255,255,.55)", borderRadius: 3, fontSize: "0.8125rem", fontWeight: 800, letterSpacing: ".1em", textTransform: "uppercase", cursor: "pointer" }}>
               About Us →
             </button>
           </div>
@@ -8201,11 +8201,11 @@ function ReviewForm({ token, onSubmitDone, data, save, notify, isLoading }) {
 
   // Tunggu data selesai load dari Firestore sebelum validasi token
   if (isLoading) return (
-    <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "linear-gradient(135deg,#edfafc,#e8f4fd)" }}>
+    <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "linear-gradient(135deg,#FAF7F0,#F5EDD8)" }}>
       <div style={{ textAlign: "center" }}>
-        <div style={{ width: 56, height: 56, border: "4px solid #c0e8f0", borderTopColor: "#0891b2", borderRadius: "50%", animation: "spin 0.8s linear infinite", margin: "0 auto 20px" }} />
+        <div style={{ width: 56, height: 56, border: "4px solid #E8DCC8", borderTopColor: "#8B6914", borderRadius: "50%", animation: "spin 0.8s linear infinite", margin: "0 auto 20px" }} />
         <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
-        <p style={{ color: "#4a7f98", fontSize: "0.9375rem", fontWeight: 500 }}>Memuat form ulasan…</p>
+        <p style={{ color: "#5A6A6C", fontSize: "0.9375rem", fontWeight: 500 }}>Memuat form ulasan…</p>
       </div>
     </div>
   );
@@ -8213,32 +8213,32 @@ function ReviewForm({ token, onSubmitDone, data, save, notify, isLoading }) {
   const tokenObj = (data.reviewTokens || []).find(t => t.token === token);
 
   if (!tokenObj) return (
-    <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "#edfafc" }}>
+    <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "#FAF7F0" }}>
       <div style={{ textAlign: "center", background: "#fff", borderRadius: 16, padding: "48px 40px", maxWidth: 400, boxShadow: "0 8px 40px rgba(0,0,0,.1)" }}>
         <div style={{ fontSize: 56, marginBottom: 16 }}>❌</div>
-        <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.5rem", color: "#0d3b66", marginBottom: 12 }}>Link Tidak Valid</h2>
-        <p style={{ color: "#4a7f98", fontSize: "0.9375rem", lineHeight: 1.7 }}>Link form ulasan ini tidak ditemukan atau sudah tidak berlaku.</p>
+        <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.5rem", color: "#2E3D3F", marginBottom: 12 }}>Link Tidak Valid</h2>
+        <p style={{ color: "#5A6A6C", fontSize: "0.9375rem", lineHeight: 1.7 }}>Link form ulasan ini tidak ditemukan atau sudah tidak berlaku.</p>
       </div>
     </div>
   );
 
   if (tokenObj.used) return (
-    <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "#edfafc" }}>
+    <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "#FAF7F0" }}>
       <div style={{ textAlign: "center", background: "#fff", borderRadius: 16, padding: "48px 40px", maxWidth: 400, boxShadow: "0 8px 40px rgba(0,0,0,.1)" }}>
         <div style={{ fontSize: 56, marginBottom: 16 }}>⏰</div>
-        <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.5rem", color: "#0d3b66", marginBottom: 12 }}>Link Sudah Digunakan</h2>
-        <p style={{ color: "#4a7f98", fontSize: "0.9375rem", lineHeight: 1.7 }}>Form ulasan ini sudah pernah diisi. Setiap link hanya bisa digunakan satu kali.</p>
+        <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.5rem", color: "#2E3D3F", marginBottom: 12 }}>Link Sudah Digunakan</h2>
+        <p style={{ color: "#5A6A6C", fontSize: "0.9375rem", lineHeight: 1.7 }}>Form ulasan ini sudah pernah diisi. Setiap link hanya bisa digunakan satu kali.</p>
       </div>
     </div>
   );
 
   if (step === "done") return (
-    <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "linear-gradient(135deg,#edfafc,#e8f4fd)" }}>
-      <div style={{ textAlign: "center", background: "#fff", borderRadius: 20, padding: "56px 48px", maxWidth: 440, boxShadow: "0 16px 56px rgba(13,59,102,.12)" }}>
+    <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "linear-gradient(135deg,#FAF7F0,#F5EDD8)" }}>
+      <div style={{ textAlign: "center", background: "#fff", borderRadius: 20, padding: "56px 48px", maxWidth: 440, boxShadow: "0 16px 56px rgba(46,61,63,.12)" }}>
         <div style={{ fontSize: 64, marginBottom: 20 }}>🎉</div>
-        <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.875rem", fontWeight: 900, color: "#0d3b66", marginBottom: 14 }}>Terima Kasih!</h2>
-        <p style={{ color: "#1a5a78", fontSize: "1rem", lineHeight: 1.8 }}>Ulasan Anda telah berhasil dikirim. Kami sangat menghargai kepercayaan Anda kepada VASTURA GROUP.</p>
-        <div style={{ width: 48, height: 3, background: "#0891b2", borderRadius: 2, margin: "28px auto 0" }} />
+        <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.875rem", fontWeight: 900, color: "#2E3D3F", marginBottom: 14 }}>Terima Kasih!</h2>
+        <p style={{ color: "#3D5254", fontSize: "1rem", lineHeight: 1.8 }}>Ulasan Anda telah berhasil dikirim. Kami sangat menghargai kepercayaan Anda kepada VASTURA GROUP.</p>
+        <div style={{ width: 48, height: 3, background: "#8B6914", borderRadius: 2, margin: "28px auto 0" }} />
       </div>
     </div>
   );
@@ -8290,41 +8290,41 @@ function ReviewForm({ token, onSubmitDone, data, save, notify, isLoading }) {
   const content_data = data.content;
 
   return (
-    <div style={{ minHeight: "100vh", background: "linear-gradient(135deg,#edfafc 0%,#e8f0f8 100%)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "40px 5%" }}>
-      <div style={{ background: "#fff", borderRadius: 20, padding: "48px 44px", maxWidth: 520, width: "100%", boxShadow: "0 16px 56px rgba(13,59,102,.12)" }}>
+    <div style={{ minHeight: "100vh", background: "linear-gradient(135deg,#FAF7F0 0%,#e8f0f8 100%)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "40px 5%" }}>
+      <div style={{ background: "#fff", borderRadius: 20, padding: "48px 44px", maxWidth: 520, width: "100%", boxShadow: "0 16px 56px rgba(46,61,63,.12)" }}>
         {/* Header */}
         <div style={{ textAlign: "center", marginBottom: 36 }}>
-          <div style={{ width: 64, height: 64, borderRadius: "50%", background: "linear-gradient(130deg,#063d5c 0%,#0875a8 50%,#0aa8bf 100%)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 16px", fontSize: 28 }}>⭐</div>
-          <h1 style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.75rem", fontWeight: 900, color: "#0d3b66", marginBottom: 8 }}>Berikan Ulasan Anda</h1>
-          <p style={{ color: "#4a7f98", fontSize: "0.9375rem", lineHeight: 1.6 }}>Bagikan pengalaman Anda bersama {content_data.logoText?.replace("\n"," ") || "VASTURA GROUP"}</p>
-          {tokenObj.label && <div style={{ marginTop: 10, display: "inline-block", background: "#e8f9fc", border: "1px solid #86cad8", color: "#0891b2", fontSize: "0.75rem", fontWeight: 600, padding: "4px 14px", borderRadius: 20 }}>{tokenObj.label}</div>}
+          <div style={{ width: 64, height: 64, borderRadius: "50%", background: "linear-gradient(130deg,#2E3D3F 0%,#3D5254 50%,#8B6914 100%)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 16px", fontSize: 28 }}>⭐</div>
+          <h1 style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.75rem", fontWeight: 900, color: "#2E3D3F", marginBottom: 8 }}>Berikan Ulasan Anda</h1>
+          <p style={{ color: "#5A6A6C", fontSize: "0.9375rem", lineHeight: 1.6 }}>Bagikan pengalaman Anda bersama {content_data.logoText?.replace("\n"," ") || "VASTURA GROUP"}</p>
+          {tokenObj.label && <div style={{ marginTop: 10, display: "inline-block", background: "#FAF7F0", border: "1px solid #A89070", color: "#8B6914", fontSize: "0.75rem", fontWeight: 600, padding: "4px 14px", borderRadius: 20 }}>{tokenObj.label}</div>}
         </div>
 
         <div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
           {/* Photo Upload */}
           <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            <label style={{ fontSize: "0.75rem", fontWeight: 700, color: "#4a7f98", letterSpacing: ".08em", textTransform: "uppercase" }}>Foto Profil (Opsional)</label>
+            <label style={{ fontSize: "0.75rem", fontWeight: 700, color: "#5A6A6C", letterSpacing: ".08em", textTransform: "uppercase" }}>Foto Profil (Opsional)</label>
             <div style={{ display: "flex", alignItems: "flex-start", gap: 16 }}>
-              <div style={{ width: 60, height: 60, borderRadius: "50%", background: form.photo ? "transparent" : "linear-gradient(135deg,#c0e8f0,#c5dde9)", border: "2px solid #c0e8f0", overflow: "hidden", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <div style={{ width: 60, height: 60, borderRadius: "50%", background: form.photo ? "transparent" : "linear-gradient(135deg,#E8DCC8,#E8DCC8)", border: "2px solid #E8DCC8", overflow: "hidden", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
                 {form.photo ? <img loading="lazy" src={form.photo} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : <span style={{ fontSize: 24 }}>👤</span>}
               </div>
               <div style={{ flex: 1 }}>
                 <input type="file" accept="image/*" onChange={e => handlePhotoUpload(e.target.files?.[0])}
                   disabled={photoUploading}
-                  style={{ fontSize: "0.8125rem", color: "#1a5a78", width: "100%", cursor: photoUploading ? "not-allowed" : "pointer" }} />
+                  style={{ fontSize: "0.8125rem", color: "#3D5254", width: "100%", cursor: photoUploading ? "not-allowed" : "pointer" }} />
                 {photoUploadItem && (
                   <div style={{ marginTop: 6 }}>
                     <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 3 }}>
-                      <span style={{ fontSize: 11, fontWeight: 600, color: photoUploadItem.error ? "#e74c3c" : "#0d3b66", maxWidth: 180, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                      <span style={{ fontSize: 11, fontWeight: 600, color: photoUploadItem.error ? "#e74c3c" : "#2E3D3F", maxWidth: 180, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                         {photoUploadItem.error ? "❌ " : photoUploadItem.done ? "✅ " : "📤 "}{photoUploadItem.name}
                       </span>
-                      <span style={{ fontSize: 11, fontWeight: 800, color: photoUploadItem.error ? "#e74c3c" : photoUploadItem.done ? "#27ae60" : "#0891b2" }}>
+                      <span style={{ fontSize: 11, fontWeight: 800, color: photoUploadItem.error ? "#e74c3c" : photoUploadItem.done ? "#27ae60" : "#8B6914" }}>
                         {photoUploadItem.error ? "Gagal" : photoUploadItem.done ? "Selesai" : `${photoUploadItem.pct}%`}
                       </span>
                     </div>
-                    <div style={{ height: 5, background: "#c0e8f0", borderRadius: 3, overflow: "hidden" }}>
+                    <div style={{ height: 5, background: "#E8DCC8", borderRadius: 3, overflow: "hidden" }}>
                       <div style={{ height: "100%", borderRadius: 3, width: `${photoUploadItem.pct}%`,
-                        background: photoUploadItem.error ? "#e74c3c" : photoUploadItem.done ? "#27ae60" : "linear-gradient(90deg,#0891b2,#10d0e0)",
+                        background: photoUploadItem.error ? "#e74c3c" : photoUploadItem.done ? "#27ae60" : "linear-gradient(90deg,#8B6914,#E8C96A)",
                         transition: "width .2s ease" }} />
                     </div>
                   </div>
@@ -8335,25 +8335,25 @@ function ReviewForm({ token, onSubmitDone, data, save, notify, isLoading }) {
 
           {/* Name */}
           <div>
-            <label style={{ fontSize: "0.75rem", fontWeight: 700, color: "#4a7f98", letterSpacing: ".08em", textTransform: "uppercase", display: "block", marginBottom: 6 }}>Nama Lengkap *</label>
+            <label style={{ fontSize: "0.75rem", fontWeight: 700, color: "#5A6A6C", letterSpacing: ".08em", textTransform: "uppercase", display: "block", marginBottom: 6 }}>Nama Lengkap *</label>
             <input value={form.name} onChange={e => { setForm(p => ({ ...p, name: e.target.value })); setErr(""); }}
               placeholder="Masukkan nama Anda"
-              style={{ width: "100%", padding: "12px 14px", border: "1.5px solid #b0dce8", borderRadius: 8, fontSize: "0.9375rem", outline: "none", transition: "border-color .2s" }}
-              onFocus={e => e.target.style.borderColor = "#0891b2"} onBlur={e => e.target.style.borderColor = "#b0dce8"} />
+              style={{ width: "100%", padding: "12px 14px", border: "1.5px solid #D4C4A0", borderRadius: 8, fontSize: "0.9375rem", outline: "none", transition: "border-color .2s" }}
+              onFocus={e => e.target.style.borderColor = "#8B6914"} onBlur={e => e.target.style.borderColor = "#D4C4A0"} />
           </div>
 
           {/* Email */}
           <div>
-            <label style={{ fontSize: "0.75rem", fontWeight: 700, color: "#4a7f98", letterSpacing: ".08em", textTransform: "uppercase", display: "block", marginBottom: 6 }}>Email *</label>
+            <label style={{ fontSize: "0.75rem", fontWeight: 700, color: "#5A6A6C", letterSpacing: ".08em", textTransform: "uppercase", display: "block", marginBottom: 6 }}>Email *</label>
             <input type="email" value={form.email} onChange={e => { setForm(p => ({ ...p, email: e.target.value })); setErr(""); }}
               placeholder="email@contoh.com"
-              style={{ width: "100%", padding: "12px 14px", border: "1.5px solid #b0dce8", borderRadius: 8, fontSize: "0.9375rem", outline: "none", transition: "border-color .2s" }}
-              onFocus={e => e.target.style.borderColor = "#0891b2"} onBlur={e => e.target.style.borderColor = "#b0dce8"} />
+              style={{ width: "100%", padding: "12px 14px", border: "1.5px solid #D4C4A0", borderRadius: 8, fontSize: "0.9375rem", outline: "none", transition: "border-color .2s" }}
+              onFocus={e => e.target.style.borderColor = "#8B6914"} onBlur={e => e.target.style.borderColor = "#D4C4A0"} />
           </div>
 
           {/* Stars */}
           <div>
-            <label style={{ fontSize: "0.75rem", fontWeight: 700, color: "#4a7f98", letterSpacing: ".08em", textTransform: "uppercase", display: "block", marginBottom: 10 }}>Rating *</label>
+            <label style={{ fontSize: "0.75rem", fontWeight: 700, color: "#5A6A6C", letterSpacing: ".08em", textTransform: "uppercase", display: "block", marginBottom: 10 }}>Rating *</label>
             <div style={{ display: "flex", gap: 8 }}>
               {[1,2,3,4,5].map(s => (
                 <button key={s} onClick={() => setForm(p => ({ ...p, stars: s }))}
@@ -8361,7 +8361,7 @@ function ReviewForm({ token, onSubmitDone, data, save, notify, isLoading }) {
                   onMouseEnter={e => e.currentTarget.style.transform = "scale(1.2)"}
                   onMouseLeave={e => e.currentTarget.style.transform = "scale(1)"}>⭐</button>
               ))}
-              <span style={{ fontSize: "0.875rem", color: "#4a7f98", alignSelf: "center", marginLeft: 6 }}>
+              <span style={{ fontSize: "0.875rem", color: "#5A6A6C", alignSelf: "center", marginLeft: 6 }}>
                 {["","Sangat Buruk","Buruk","Cukup","Bagus","Sangat Bagus"][form.stars]}
               </span>
             </div>
@@ -8369,18 +8369,18 @@ function ReviewForm({ token, onSubmitDone, data, save, notify, isLoading }) {
 
           {/* Review Content */}
           <div>
-            <label style={{ fontSize: "0.75rem", fontWeight: 700, color: "#4a7f98", letterSpacing: ".08em", textTransform: "uppercase", display: "block", marginBottom: 6 }}>Isi Ulasan *</label>
+            <label style={{ fontSize: "0.75rem", fontWeight: 700, color: "#5A6A6C", letterSpacing: ".08em", textTransform: "uppercase", display: "block", marginBottom: 6 }}>Isi Ulasan *</label>
             <textarea value={form.content} onChange={e => { setForm(p => ({ ...p, content: e.target.value })); setErr(""); }}
               placeholder="Ceritakan pengalaman Anda bersama kami..."
               rows={5}
-              style={{ width: "100%", padding: "12px 14px", border: "1.5px solid #b0dce8", borderRadius: 8, fontSize: "0.9375rem", outline: "none", resize: "vertical", lineHeight: 1.7, transition: "border-color .2s" }}
-              onFocus={e => e.target.style.borderColor = "#0891b2"} onBlur={e => e.target.style.borderColor = "#b0dce8"} />
+              style={{ width: "100%", padding: "12px 14px", border: "1.5px solid #D4C4A0", borderRadius: 8, fontSize: "0.9375rem", outline: "none", resize: "vertical", lineHeight: 1.7, transition: "border-color .2s" }}
+              onFocus={e => e.target.style.borderColor = "#8B6914"} onBlur={e => e.target.style.borderColor = "#D4C4A0"} />
           </div>
 
           {err && <div style={{ background: "#fef0f0", border: "1px solid #f5c6c6", borderRadius: 8, padding: "10px 14px", color: "#c0392b", fontSize: "0.875rem" }}>{err}</div>}
 
           <button onClick={handleSubmit} disabled={submitting || photoUploading}
-            style={{ padding: "14px", background: submitting ? "#5090aa" : "linear-gradient(135deg,#0d3b66,#0891b2)", color: "#fff", border: "none", borderRadius: 10, fontSize: "0.9375rem", fontWeight: 700, letterSpacing: ".05em", cursor: submitting ? "not-allowed" : "pointer", transition: "opacity .2s" }}>
+            style={{ padding: "14px", background: submitting ? "#5A6A6C" : "linear-gradient(135deg,#2E3D3F,#8B6914)", color: "#fff", border: "none", borderRadius: 10, fontSize: "0.9375rem", fontWeight: 700, letterSpacing: ".05em", cursor: submitting ? "not-allowed" : "pointer", transition: "opacity .2s" }}>
             {submitting ? "⏳ Mengirim..." : "✨ Kirim Ulasan"}
           </button>
         </div>
@@ -8441,7 +8441,7 @@ function ReviewSlideshow({ reviews }) {
       <style>{`
         @keyframes reviewIn { from { opacity:0; transform:translateY(18px); } to { opacity:1; transform:none; } }
         .rev-card { transition: transform .5s cubic-bezier(.22,1,.36,1), opacity .5s ease, box-shadow .3s; }
-        .rev-card:hover { transform: translateY(-6px) !important; box-shadow: 0 20px 48px rgba(13,59,102,.14) !important; }
+        .rev-card:hover { transform: translateY(-6px) !important; box-shadow: 0 20px 48px rgba(46,61,63,.14) !important; }
       `}</style>
 
       {/* Section Header */}
@@ -8452,9 +8452,9 @@ function ReviewSlideshow({ reviews }) {
       </div>
       <div style={{ textAlign: "center", marginBottom: 52, padding: "0 5%", position: "relative", zIndex: 1 }}>
         <div style={{ display: "inline-flex", alignItems: "center", gap: 10, marginBottom: 14 }}>
-          <div style={{ width: 32, height: 1.5, background: "#38c5d8" }} />
+          <div style={{ width: 32, height: 1.5, background: "#C9AA71" }} />
           <span style={{ fontSize: "0.6875rem", letterSpacing: "3px", color: "rgba(255,255,255,.7)", textTransform: "uppercase", fontWeight: 700 }}>Testimoni Klien</span>
-          <div style={{ width: 32, height: 1.5, background: "#38c5d8" }} />
+          <div style={{ width: 32, height: 1.5, background: "#C9AA71" }} />
         </div>
         <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: "clamp(1.75rem,4vw,2.75rem)", fontWeight: 900, color: "#fff", lineHeight: 1.1 }}>
           Apa Kata Mereka?
@@ -8523,13 +8523,13 @@ function ReviewSlideshow({ reviews }) {
         {total > 1 && (
           <>
             <button onClick={() => { setCurrent(p => (p - 1 + total) % total); }}
-              style={{ position: "absolute", left: "2%", top: "50%", transform: "translateY(-50%)", zIndex: 10, width: 44, height: 44, borderRadius: "50%", background: "#fff", border: "1.5px solid #c0e8f0", boxShadow: "0 4px 16px rgba(13,59,102,.1)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18, color: "#0d3b66", cursor: "pointer", transition: "all .2s" }}
-              onMouseEnter={e => { e.currentTarget.style.background = "#0d3b66"; e.currentTarget.style.color = "#fff"; }}
-              onMouseLeave={e => { e.currentTarget.style.background = "#fff"; e.currentTarget.style.color = "#0d3b66"; }}>‹</button>
+              style={{ position: "absolute", left: "2%", top: "50%", transform: "translateY(-50%)", zIndex: 10, width: 44, height: 44, borderRadius: "50%", background: "#fff", border: "1.5px solid #E8DCC8", boxShadow: "0 4px 16px rgba(13,59,102,.1)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18, color: "#2E3D3F", cursor: "pointer", transition: "all .2s" }}
+              onMouseEnter={e => { e.currentTarget.style.background = "#2E3D3F"; e.currentTarget.style.color = "#fff"; }}
+              onMouseLeave={e => { e.currentTarget.style.background = "#fff"; e.currentTarget.style.color = "#2E3D3F"; }}>‹</button>
             <button onClick={() => { setCurrent(p => (p + 1) % total); }}
-              style={{ position: "absolute", right: "2%", top: "50%", transform: "translateY(-50%)", zIndex: 10, width: 44, height: 44, borderRadius: "50%", background: "#fff", border: "1.5px solid #c0e8f0", boxShadow: "0 4px 16px rgba(13,59,102,.1)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18, color: "#0d3b66", cursor: "pointer", transition: "all .2s" }}
-              onMouseEnter={e => { e.currentTarget.style.background = "#0d3b66"; e.currentTarget.style.color = "#fff"; }}
-              onMouseLeave={e => { e.currentTarget.style.background = "#fff"; e.currentTarget.style.color = "#0d3b66"; }}>›</button>
+              style={{ position: "absolute", right: "2%", top: "50%", transform: "translateY(-50%)", zIndex: 10, width: 44, height: 44, borderRadius: "50%", background: "#fff", border: "1.5px solid #E8DCC8", boxShadow: "0 4px 16px rgba(13,59,102,.1)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18, color: "#2E3D3F", cursor: "pointer", transition: "all .2s" }}
+              onMouseEnter={e => { e.currentTarget.style.background = "#2E3D3F"; e.currentTarget.style.color = "#fff"; }}
+              onMouseLeave={e => { e.currentTarget.style.background = "#fff"; e.currentTarget.style.color = "#2E3D3F"; }}>›</button>
           </>
         )}
       </div>
@@ -8539,7 +8539,7 @@ function ReviewSlideshow({ reviews }) {
         <div style={{ display: "flex", justifyContent: "center", gap: 8, marginTop: 28 }}>
           {reviews.map((_, i) => (
             <button key={i} onClick={() => setCurrent(i)}
-              style={{ width: i === current ? 24 : 8, height: 8, borderRadius: 4, background: i === current ? "#38c5d8" : "rgba(255,255,255,.3)", border: "none", cursor: "pointer", transition: "all .3s", padding: 0 }} />
+              style={{ width: i === current ? 24 : 8, height: 8, borderRadius: 4, background: i === current ? "#C9AA71" : "rgba(255,255,255,.3)", border: "none", cursor: "pointer", transition: "all .3s", padding: 0 }} />
           ))}
         </div>
       )}
@@ -8550,7 +8550,7 @@ function ReviewSlideshow({ reviews }) {
 function ReviewCard({ review }) {
   const stars = review.stars || 5;
   return (
-    <div style={{ background: "#fff", borderRadius: 16, padding: "28px 24px", boxShadow: "0 4px 24px rgba(13,59,102,.08)", border: "1px solid #e0f7fa", height: "100%", display: "flex", flexDirection: "column", gap: 16 }}>
+    <div style={{ background: "#fff", borderRadius: 16, padding: "28px 24px", boxShadow: "0 4px 24px rgba(13,59,102,.08)", border: "1px solid #F5EDD8", height: "100%", display: "flex", flexDirection: "column", gap: 16 }}>
       {/* Stars */}
       <div style={{ display: "flex", gap: 3 }}>
         {[1,2,3,4,5].map(s => (
@@ -8558,23 +8558,23 @@ function ReviewCard({ review }) {
         ))}
       </div>
       {/* Quote */}
-      <p style={{ fontSize: "0.9rem", color: "#1a4a72", lineHeight: 1.75, fontStyle: "italic", fontFamily: "'Cormorant Garamond',serif", flex: 1, whiteSpace: "pre-line" }}>
+      <p style={{ fontSize: "0.9rem", color: "#2E3D3F", lineHeight: 1.75, fontStyle: "italic", fontFamily: "'Cormorant Garamond',serif", flex: 1, whiteSpace: "pre-line" }}>
         "{review.content?.length > 180 ? review.content.slice(0, 180) + "…" : review.content}"
       </p>
       {/* Author */}
       <div style={{ display: "flex", alignItems: "center", gap: 12, paddingTop: 12, borderTop: "1px solid #f0f4f8" }}>
-        <div style={{ width: 44, height: 44, borderRadius: "50%", overflow: "hidden", flexShrink: 0, background: "linear-gradient(130deg,#063d5c 0%,#0875a8 50%,#0aa8bf 100%)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18 }}>
+        <div style={{ width: 44, height: 44, borderRadius: "50%", overflow: "hidden", flexShrink: 0, background: "linear-gradient(130deg,#2E3D3F 0%,#3D5254 50%,#8B6914 100%)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18 }}>
           {review.photo
             ? <img loading="lazy" src={review.photo} alt={review.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
             : <span style={{ color: "#fff", fontWeight: 700, fontSize: "1rem" }}>{review.name?.charAt(0)?.toUpperCase() || "?"}</span>
           }
         </div>
         <div style={{ minWidth: 0 }}>
-          <div style={{ fontSize: "0.875rem", fontWeight: 700, color: "#0d3b66", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{review.name}</div>
-          <div style={{ fontSize: "0.75rem", color: "#4a7f98" }}>{review.date}</div>
+          <div style={{ fontSize: "0.875rem", fontWeight: 700, color: "#2E3D3F", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{review.name}</div>
+          <div style={{ fontSize: "0.75rem", color: "#5A6A6C" }}>{review.date}</div>
         </div>
         {review.tokenLabel && (
-          <div style={{ marginLeft: "auto", fontSize: "0.625rem", background: "#e8f9fc", color: "#0891b2", padding: "2px 8px", borderRadius: 10, fontWeight: 600, flexShrink: 0, maxWidth: 80, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{review.tokenLabel}</div>
+          <div style={{ marginLeft: "auto", fontSize: "0.625rem", background: "#FAF7F0", color: "#8B6914", padding: "2px 8px", borderRadius: 10, fontWeight: 600, flexShrink: 0, maxWidth: 80, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{review.tokenLabel}</div>
         )}
       </div>
     </div>
@@ -8637,31 +8637,31 @@ function AdminReviews({ data, save, notify }) {
 
   return (
   <div className="fade-in">
-    <h1 style={{ fontSize: 24, fontWeight: 500, color: "#0d3b66", marginBottom: 28 }}>⭐ Kelola Ulasan</h1>
+    <h1 style={{ fontSize: 24, fontWeight: 500, color: "#2E3D3F", marginBottom: 28 }}>⭐ Kelola Ulasan</h1>
 
     {/* Generate Review Link */}
-    <div style={{ background: "#fff", borderRadius: 8, padding: "22px 24px", marginBottom: 24, boxShadow: "0 2px 8px rgba(0,0,0,.06)", borderTop: "4px solid #38c5d8" }}>
-      <h3 style={{ fontSize: 15, fontWeight: 600, color: "#0d3b66", marginBottom: 6 }}>🔗 Buat Link Form Ulasan</h3>
-      <p style={{ fontSize: 12, color: "#5090aa", marginBottom: 16, lineHeight: 1.6 }}>
+    <div style={{ background: "#fff", borderRadius: 8, padding: "22px 24px", marginBottom: 24, boxShadow: "0 2px 8px rgba(0,0,0,.06)", borderTop: "4px solid #C9AA71" }}>
+      <h3 style={{ fontSize: 15, fontWeight: 600, color: "#2E3D3F", marginBottom: 6 }}>🔗 Buat Link Form Ulasan</h3>
+      <p style={{ fontSize: 12, color: "#5A6A6C", marginBottom: 16, lineHeight: 1.6 }}>
         Buat link sekali pakai untuk dikirimkan ke klien. Link hanya bisa digunakan satu kali — setelah diisi, link akan hangus otomatis.
       </p>
       <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginBottom: 12 }}>
         <input value={newTokenLabel} onChange={e => setNewTokenLabel(e.target.value)}
           placeholder="Label (misal: Klien Wedding Budi, opsional)"
-          style={{ flex: 1, minWidth: 240, padding: "9px 12px", border: "1px solid #b0dce8", borderRadius: 6, fontSize: 13, outline: "none" }} />
+          style={{ flex: 1, minWidth: 240, padding: "9px 12px", border: "1px solid #D4C4A0", borderRadius: 6, fontSize: 13, outline: "none" }} />
         <button onClick={generateToken}
-          style={{ padding: "9px 18px", background: "linear-gradient(130deg,#063d5c 0%,#0875a8 45%,#0aa8bf 78%,#10d0e0 100%)", color: "#fff", borderRadius: 6, fontSize: 13, border: "none", fontWeight: 600, whiteSpace: "nowrap" }}>
+          style={{ padding: "9px 18px", background: "linear-gradient(130deg,#2E3D3F 0%,#3D5254 45%,#8B6914 78%,#C9AA71 100%)", color: "#fff", borderRadius: 6, fontSize: 13, border: "none", fontWeight: 600, whiteSpace: "nowrap" }}>
           + Buat Link
         </button>
       </div>
       {generatedLink && (
-        <div style={{ background: "#e8f9fc", border: "1px solid #86cad8", borderRadius: 8, padding: "14px 16px", display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
+        <div style={{ background: "#FAF7F0", border: "1px solid #A89070", borderRadius: 8, padding: "14px 16px", display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
           <div style={{ flex: 1, minWidth: 0 }}>
-            <div style={{ fontSize: 11, fontWeight: 700, color: "#0891b2", marginBottom: 4, letterSpacing: ".05em", textTransform: "uppercase" }}>Link Form Ulasan Terbaru</div>
-            <code style={{ fontSize: 12, color: "#0d3b66", wordBreak: "break-all", display: "block" }}>{generatedLink}</code>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#8B6914", marginBottom: 4, letterSpacing: ".05em", textTransform: "uppercase" }}>Link Form Ulasan Terbaru</div>
+            <code style={{ fontSize: 12, color: "#2E3D3F", wordBreak: "break-all", display: "block" }}>{generatedLink}</code>
           </div>
           <button onClick={() => { navigator.clipboard?.writeText(generatedLink); notify("Link disalin!"); }}
-            style={{ padding: "7px 14px", background: "#0891b2", color: "#fff", borderRadius: 6, fontSize: 12, border: "none", fontWeight: 600, flexShrink: 0 }}>
+            style={{ padding: "7px 14px", background: "#8B6914", color: "#fff", borderRadius: 6, fontSize: 12, border: "none", fontWeight: 600, flexShrink: 0 }}>
             📋 Salin
           </button>
         </div>
@@ -8670,22 +8670,22 @@ function AdminReviews({ data, save, notify }) {
 
     {/* Active Tokens */}
     <div style={{ background: "#fff", borderRadius: 8, padding: "22px 24px", marginBottom: 24, boxShadow: "0 2px 8px rgba(0,0,0,.06)" }}>
-      <h3 style={{ fontSize: 14, fontWeight: 600, color: "#0d3b66", marginBottom: 14 }}>🔑 Token Aktif ({tokens.filter(t => !t.used).length})</h3>
+      <h3 style={{ fontSize: 14, fontWeight: 600, color: "#2E3D3F", marginBottom: 14 }}>🔑 Token Aktif ({tokens.filter(t => !t.used).length})</h3>
       {tokens.length === 0 ? (
-        <p style={{ fontSize: 13, color: "#5090aa" }}>Belum ada token dibuat.</p>
+        <p style={{ fontSize: 13, color: "#5A6A6C" }}>Belum ada token dibuat.</p>
       ) : (
         <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
           {tokens.slice().reverse().map(tok => (
-            <div key={tok.id} style={{ display: "flex", alignItems: "center", gap: 12, padding: "10px 14px", background: tok.used ? "#f9f9f9" : "#e8f9fc", borderRadius: 8, border: `1px solid ${tok.used ? "#e8e8e8" : "#86cad8"}` }}>
+            <div key={tok.id} style={{ display: "flex", alignItems: "center", gap: 12, padding: "10px 14px", background: tok.used ? "#f9f9f9" : "#FAF7F0", borderRadius: 8, border: `1px solid ${tok.used ? "#e8e8e8" : "#A89070"}` }}>
               <span style={{ fontSize: 16 }}>{tok.used ? "✅" : "🔑"}</span>
               <div style={{ flex: 1, minWidth: 0 }}>
-                <div style={{ fontSize: 13, fontWeight: 600, color: "#0d3b66" }}>{tok.label || "—"}</div>
-                <div style={{ fontSize: 11, color: "#5090aa", fontFamily: "monospace", wordBreak: "break-all" }}>/UlasanPelayanan/{tok.token}</div>
-                <div style={{ fontSize: 11, color: "#5090aa" }}>Dibuat: {tok.createdAt} · {tok.used ? "Sudah digunakan" : "Belum digunakan"}</div>
+                <div style={{ fontSize: 13, fontWeight: 600, color: "#2E3D3F" }}>{tok.label || "—"}</div>
+                <div style={{ fontSize: 11, color: "#5A6A6C", fontFamily: "monospace", wordBreak: "break-all" }}>/UlasanPelayanan/{tok.token}</div>
+                <div style={{ fontSize: 11, color: "#5A6A6C" }}>Dibuat: {tok.createdAt} · {tok.used ? "Sudah digunakan" : "Belum digunakan"}</div>
               </div>
               {!tok.used && (
                 <button onClick={() => { const l = `${window.location.origin}/UlasanPelayanan/${tok.token}`; navigator.clipboard?.writeText(l); notify("Link disalin!"); }}
-                  style={{ padding: "5px 10px", background: "#0ea5c5", color: "#fff", borderRadius: 5, fontSize: 11, border: "none" }}>📋</button>
+                  style={{ padding: "5px 10px", background: "#C9AA71", color: "#fff", borderRadius: 5, fontSize: 11, border: "none" }}>📋</button>
               )}
               <button onClick={() => deleteToken(tok.id)}
                 style={{ padding: "5px 10px", background: "#fee", color: "#e74c3c", borderRadius: 5, fontSize: 11, border: "none" }}>Hapus</button>
@@ -8697,7 +8697,7 @@ function AdminReviews({ data, save, notify }) {
 
     {/* Reviews List */}
     <div style={{ background: "#fff", borderRadius: 8, padding: "22px 24px", boxShadow: "0 2px 8px rgba(0,0,0,.06)" }}>
-      <h3 style={{ fontSize: 14, fontWeight: 600, color: "#0d3b66", marginBottom: 14 }}>
+      <h3 style={{ fontSize: 14, fontWeight: 600, color: "#2E3D3F", marginBottom: 14 }}>
         💬 Ulasan Masuk ({reviews.length})
         {reviews.filter(r => !r.approved).length > 0 && (
           <span style={{ marginLeft: 8, background: "#e74c3c", color: "#fff", borderRadius: 10, padding: "2px 8px", fontSize: 11, fontWeight: 700 }}>
@@ -8706,19 +8706,19 @@ function AdminReviews({ data, save, notify }) {
         )}
       </h3>
       {reviews.length === 0 ? (
-        <div style={{ textAlign: "center", padding: "32px", color: "#5090aa", fontSize: 13 }}>Belum ada ulasan masuk. Buat link dan kirimkan ke klien!</div>
+        <div style={{ textAlign: "center", padding: "32px", color: "#5A6A6C", fontSize: 13 }}>Belum ada ulasan masuk. Buat link dan kirimkan ke klien!</div>
       ) : (
         <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
           {reviews.slice().reverse().map(r => (
-            <div key={r.id} style={{ border: "1px solid #e0f7fa", borderRadius: 10, overflow: "hidden" }}>
+            <div key={r.id} style={{ border: "1px solid #F5EDD8", borderRadius: 10, overflow: "hidden" }}>
               <div style={{ display: "flex", alignItems: "flex-start", gap: 14, padding: "16px 20px" }}>
-                <div style={{ width: 48, height: 48, borderRadius: "50%", background: "linear-gradient(130deg,#063d5c 0%,#0875a8 50%,#0aa8bf 100%)", overflow: "hidden", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", fontWeight: 700, fontSize: 18 }}>
+                <div style={{ width: 48, height: 48, borderRadius: "50%", background: "linear-gradient(130deg,#2E3D3F 0%,#3D5254 50%,#8B6914 100%)", overflow: "hidden", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", fontWeight: 700, fontSize: 18 }}>
                   {r.photo ? <img loading="lazy" src={r.photo} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : r.name?.charAt(0)?.toUpperCase()}
                 </div>
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap", marginBottom: 4 }}>
-                    <span style={{ fontSize: 14, fontWeight: 700, color: "#0d3b66" }}>{r.name}</span>
-                    <span style={{ fontSize: 12, color: "#5090aa" }}>{r.email}</span>
+                    <span style={{ fontSize: 14, fontWeight: 700, color: "#2E3D3F" }}>{r.name}</span>
+                    <span style={{ fontSize: 12, color: "#5A6A6C" }}>{r.email}</span>
                     <span style={{
                       fontSize: 10, fontWeight: 700, padding: "2px 8px", borderRadius: 8,
                       background: r.approved ? "#e8f8ef" : "#fff8e1",
@@ -8727,7 +8727,7 @@ function AdminReviews({ data, save, notify }) {
                     }}>
                       {r.approved ? "✓ Tayang" : "⏳ Pending"}
                     </span>
-                    <span style={{ marginLeft: "auto", fontSize: 12, color: "#5090aa" }}>{r.date}</span>
+                    <span style={{ marginLeft: "auto", fontSize: 12, color: "#5A6A6C" }}>{r.date}</span>
                   </div>
                   <div style={{ display: "flex", gap: 2, marginBottom: 8 }}>
                     {[1,2,3,4,5].map(s => <span key={s} style={{ fontSize: 13, filter: s <= r.stars ? "none" : "grayscale(1) opacity(.3)" }}>⭐</span>)}
@@ -8735,7 +8735,7 @@ function AdminReviews({ data, save, notify }) {
                   {editReviewId === r.id ? (
                     <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
                       <input value={editReviewForm.name} onChange={e => setEditReviewForm(p => ({ ...p, name: e.target.value }))}
-                        style={{ padding: "7px 10px", border: "1px solid #b0dce8", borderRadius: 5, fontSize: 13 }} placeholder="Nama" />
+                        style={{ padding: "7px 10px", border: "1px solid #D4C4A0", borderRadius: 5, fontSize: 13 }} placeholder="Nama" />
                       <div style={{ display: "flex", gap: 4 }}>
                         {[1,2,3,4,5].map(s => (
                           <button key={s} onClick={() => setEditReviewForm(p => ({ ...p, stars: s }))}
@@ -8743,26 +8743,26 @@ function AdminReviews({ data, save, notify }) {
                         ))}
                       </div>
                       <textarea value={editReviewForm.content} onChange={e => setEditReviewForm(p => ({ ...p, content: e.target.value }))}
-                        rows={3} style={{ padding: "7px 10px", border: "1px solid #b0dce8", borderRadius: 5, fontSize: 13, resize: "vertical" }} />
+                        rows={3} style={{ padding: "7px 10px", border: "1px solid #D4C4A0", borderRadius: 5, fontSize: 13, resize: "vertical" }} />
                       <div style={{ display: "flex", gap: 8 }}>
                         <button onClick={saveEditReview} style={{ padding: "6px 16px", background: "#27ae60", color: "#fff", borderRadius: 5, fontSize: 12, border: "none" }}>Simpan</button>
-                        <button onClick={() => setEditReviewId(null)} style={{ padding: "6px 14px", background: "#edfafc", color: "#4a7f98", borderRadius: 5, fontSize: 12, border: "1px solid #b0dce8" }}>Batal</button>
+                        <button onClick={() => setEditReviewId(null)} style={{ padding: "6px 14px", background: "#FAF7F0", color: "#5A6A6C", borderRadius: 5, fontSize: 12, border: "1px solid #D4C4A0" }}>Batal</button>
                       </div>
                     </div>
                   ) : (
-                    <p style={{ fontSize: 13, color: "#1a4a72", lineHeight: 1.7, fontStyle: "italic", whiteSpace: "pre-line" }}>"{r.content}"</p>
+                    <p style={{ fontSize: 13, color: "#2E3D3F", lineHeight: 1.7, fontStyle: "italic", whiteSpace: "pre-line" }}>"{r.content}"</p>
                   )}
-                  {r.tokenLabel && <div style={{ marginTop: 6, fontSize: 11, color: "#0891b2", fontWeight: 500 }}>🏷 {r.tokenLabel}</div>}
+                  {r.tokenLabel && <div style={{ marginTop: 6, fontSize: 11, color: "#8B6914", fontWeight: 500 }}>🏷 {r.tokenLabel}</div>}
                 </div>
               </div>
               {editReviewId !== r.id && (
-                <div style={{ padding: "10px 20px", background: "#f5fdff", borderTop: "1px solid #f0f4f8", display: "flex", gap: 8, flexWrap: "wrap" }}>
+                <div style={{ padding: "10px 20px", background: "#FDFAF4", borderTop: "1px solid #f0f4f8", display: "flex", gap: 8, flexWrap: "wrap" }}>
                   {r.approved ? (
                     <button onClick={() => rejectReview(r.id)} style={{ padding: "5px 14px", background: "#fff8e1", color: "#f39c12", borderRadius: 5, fontSize: 12, border: "1px solid #f39c1240", fontWeight: 500 }}>👁 Sembunyikan</button>
                   ) : (
                     <button onClick={() => approveReview(r.id)} style={{ padding: "5px 14px", background: "#e8f8ef", color: "#27ae60", borderRadius: 5, fontSize: 12, border: "1px solid #27ae6040", fontWeight: 600 }}>✅ Setujui & Tayangkan</button>
                   )}
-                  <button onClick={() => startEditReview(r)} style={{ padding: "5px 14px", background: "#e8f4fd", color: "#0891b2", borderRadius: 5, fontSize: 12, border: "none", fontWeight: 500 }}>✏ Edit</button>
+                  <button onClick={() => startEditReview(r)} style={{ padding: "5px 14px", background: "#F5EDD8", color: "#8B6914", borderRadius: 5, fontSize: 12, border: "none", fontWeight: 500 }}>✏ Edit</button>
                   <button onClick={() => { if (window.confirm("Hapus ulasan ini?")) deleteReview(r.id); }} style={{ padding: "5px 14px", background: "#fee", color: "#e74c3c", borderRadius: 5, fontSize: 12, border: "none" }}>🗑 Hapus</button>
                 </div>
               )}
@@ -8870,7 +8870,7 @@ function DevServicePage({ pageKey, title, subtitle, icon, heroColor, sections, c
     <div style={{ paddingTop: 72, minHeight: "100vh", background: "#f8fbfd" }}>
       {/* Hero Banner */}
       <div style={{
-        background: heroColor || "linear-gradient(135deg,#063d5c 0%,#0875a8 50%,#0aa8bf 100%)",
+        background: heroColor || "linear-gradient(135deg,#2E3D3F 0%,#3D5254 50%,#B8962A 100%)",
         padding: "64px 5% 56px", textAlign: "center", position: "relative", overflow: "hidden"
       }}>
         <div style={{ position: "absolute", inset: 0, opacity: 0.08, backgroundImage: "radial-gradient(circle at 20% 50%, #fff 0%, transparent 50%), radial-gradient(circle at 80% 20%, #fff 0%, transparent 40%)" }} />
@@ -8891,10 +8891,10 @@ function DevServicePage({ pageKey, title, subtitle, icon, heroColor, sections, c
           <div key={i} style={{ marginBottom: 56 }}>
             {/* Section header */}
             <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 28 }}>
-              <div style={{ width: 4, height: 40, background: "linear-gradient(180deg,#0891b2,#0aa8bf)", borderRadius: 4, flexShrink: 0 }} />
+              <div style={{ width: 4, height: 40, background: "linear-gradient(180deg,#8B6914,#B8962A)", borderRadius: 4, flexShrink: 0 }} />
               <div>
-                <div style={{ fontSize: "0.7rem", letterSpacing: ".14em", textTransform: "uppercase", color: "#0891b2", fontWeight: 700, marginBottom: 4 }}>{sec.tag || `Layanan ${String(i+1).padStart(2,"0")}`}</div>
-                <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: "clamp(1.25rem,3vw,1.75rem)", fontWeight: 900, color: "#0d3b66", lineHeight: 1.25 }}>{sec.title}</h2>
+                <div style={{ fontSize: "0.7rem", letterSpacing: ".14em", textTransform: "uppercase", color: "#8B6914", fontWeight: 700, marginBottom: 4 }}>{sec.tag || `Layanan ${String(i+1).padStart(2,"0")}`}</div>
+                <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: "clamp(1.25rem,3vw,1.75rem)", fontWeight: 900, color: "#2E3D3F", lineHeight: 1.25 }}>{sec.title}</h2>
               </div>
             </div>
 
@@ -8911,8 +8911,8 @@ function DevServicePage({ pageKey, title, subtitle, icon, heroColor, sections, c
                     onMouseEnter={e => { e.currentTarget.style.transform="translateY(-4px)"; e.currentTarget.style.boxShadow="0 8px 28px rgba(8,145,178,.18)"; }}
                     onMouseLeave={e => { e.currentTarget.style.transform="none"; e.currentTarget.style.boxShadow="0 2px 14px rgba(0,0,0,.07)"; }}>
                     <div style={{ fontSize: "2rem", marginBottom: 12 }}>{item.icon}</div>
-                    <h3 style={{ fontSize: "1rem", fontWeight: 700, color: "#0d3b66", marginBottom: 8 }}>{item.title}</h3>
-                    <p style={{ fontSize: "0.875rem", color: "#4a7f98", lineHeight: 1.65 }}>{item.desc}</p>
+                    <h3 style={{ fontSize: "1rem", fontWeight: 700, color: "#2E3D3F", marginBottom: 8 }}>{item.title}</h3>
+                    <p style={{ fontSize: "0.875rem", color: "#5A6A6C", lineHeight: 1.65 }}>{item.desc}</p>
                   </div>
                 ))}
               </div>
@@ -8926,7 +8926,7 @@ function DevServicePage({ pageKey, title, subtitle, icon, heroColor, sections, c
         ))}
 
         {/* CTA Banner */}
-        <div style={{ background: "linear-gradient(130deg,#063d5c 0%,#0875a8 50%,#0aa8bf 100%)", borderRadius: 16, padding: "40px 40px", textAlign: "center", boxShadow: "0 8px 32px rgba(8,145,178,.25)" }}>
+        <div style={{ background: "linear-gradient(130deg,#2E3D3F 0%,#3D5254 50%,#8B6914 100%)", borderRadius: 16, padding: "40px 40px", textAlign: "center", boxShadow: "0 8px 32px rgba(8,145,178,.25)" }}>
           <h3 style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.6rem", fontWeight: 900, color: "#fff", marginBottom: 12 }}>Siap Wujudkan Proyek Anda?</h3>
           <p style={{ color: "rgba(255,255,255,.85)", marginBottom: 24, fontSize: "0.95rem" }}>Konsultasikan kebutuhan Anda bersama tim ahli kami — gratis & tanpa komitmen.</p>
           <button onClick={() => onWaOpen && onWaOpen(waText)}
@@ -8946,7 +8946,7 @@ function DesainRabPage({ onWaOpen }) {
     title="Jasa Desain & RAB"
     subtitle="Kami menyediakan layanan desain arsitektur dan Rencana Anggaran Biaya (RAB) yang akurat, profesional, dan sesuai kebutuhan proyek Anda."
     icon="📐"
-    heroColor="linear-gradient(135deg,#063d5c 0%,#0875a8 50%,#10d0e0 100%)"
+    heroColor="linear-gradient(135deg,#2E3D3F 0%,#3D5254 50%,#E8C96A 100%)"
     onWaOpen={onWaOpen}
     sections={[
       {
@@ -9203,12 +9203,12 @@ function WaPickerModal({ admins = [], msgText = "", onClose }) {
           boxShadow: "0 20px 60px rgba(0,0,0,.2)", position: "relative" }}>
         <button onClick={onClose}
           style={{ position: "absolute", top: 16, right: 16, background: "none", border: "none",
-            fontSize: 24, color: "#0d3b66", cursor: "pointer", lineHeight: 1 }}>✕</button>
+            fontSize: 24, color: "#2E3D3F", cursor: "pointer", lineHeight: 1 }}>✕</button>
 
-        <h2 style={{ fontSize: 20, fontWeight: 700, color: "#0d3b66", marginBottom: 6, textAlign: "center" }}>
+        <h2 style={{ fontSize: 20, fontWeight: 700, color: "#2E3D3F", marginBottom: 6, textAlign: "center" }}>
           Hubungi Kami via WhatsApp
         </h2>
-        <p style={{ fontSize: 13, color: "#4a7f98", textAlign: "center", marginBottom: 24 }}>
+        <p style={{ fontSize: 13, color: "#5A6A6C", textAlign: "center", marginBottom: 24 }}>
           Pilih kontak yang ingin Anda hubungi
         </p>
 
@@ -9217,14 +9217,14 @@ function WaPickerModal({ admins = [], msgText = "", onClose }) {
             <a key={admin.id} href={admin.wa + (msgText ? `?text=${encodeURIComponent(msgText)}` : "")}
               target="_blank" rel="noopener noreferrer"
               style={{ display: "flex", alignItems: "center", gap: 14, padding: "14px 16px",
-                border: "1.5px solid #c0e8f0", borderRadius: 10, background: "#f5fdff",
+                border: "1.5px solid #E8DCC8", borderRadius: 10, background: "#FDFAF4",
                 textDecoration: "none", cursor: "pointer", transition: "all .2s" }}
               onMouseEnter={e => { e.currentTarget.style.borderColor = "#25d366"; e.currentTarget.style.background = "#f0fdf4"; }}
-              onMouseLeave={e => { e.currentTarget.style.borderColor = "#c0e8f0"; e.currentTarget.style.background = "#f5fdff"; }}>
+              onMouseLeave={e => { e.currentTarget.style.borderColor = "#E8DCC8"; e.currentTarget.style.background = "#FDFAF4"; }}>
               <span style={{ fontSize: 24 }}>💬</span>
               <div style={{ flex: 1 }}>
-                <div style={{ fontSize: 14, fontWeight: 700, color: "#0d3b66" }}>{admin.name}</div>
-                <div style={{ fontSize: 12, color: "#4a7f98", marginTop: 2 }}>
+                <div style={{ fontSize: 14, fontWeight: 700, color: "#2E3D3F" }}>{admin.name}</div>
+                <div style={{ fontSize: 12, color: "#5A6A6C", marginTop: 2 }}>
                   {admin.wa.replace("https://wa.me/", "+").replace(/(\d{2})(\d{3})(\d{4})(\d+)/, "$1 $2-$3-$4")}
                 </div>
               </div>
@@ -9234,11 +9234,11 @@ function WaPickerModal({ admins = [], msgText = "", onClose }) {
         </div>
 
         <button onClick={onClose}
-          style={{ width: "100%", marginTop: 20, padding: "11px 0", border: "1.5px solid #c0e8f0",
-            borderRadius: 8, background: "transparent", color: "#4a7f98", fontSize: 13, fontWeight: 600,
+          style={{ width: "100%", marginTop: 20, padding: "11px 0", border: "1.5px solid #E8DCC8",
+            borderRadius: 8, background: "transparent", color: "#5A6A6C", fontSize: 13, fontWeight: 600,
             cursor: "pointer", transition: "all .2s" }}
-          onMouseEnter={e => { e.currentTarget.style.borderColor = "#0d3b66"; e.currentTarget.style.color = "#0d3b66"; }}
-          onMouseLeave={e => { e.currentTarget.style.borderColor = "#c0e8f0"; e.currentTarget.style.color = "#4a7f98"; }}>
+          onMouseEnter={e => { e.currentTarget.style.borderColor = "#2E3D3F"; e.currentTarget.style.color = "#2E3D3F"; }}
+          onMouseLeave={e => { e.currentTarget.style.borderColor = "#E8DCC8"; e.currentTarget.style.color = "#5A6A6C"; }}>
           Tutup
         </button>
       </div>
@@ -9569,7 +9569,7 @@ export default function BricksyTravel() {
       themeMeta.name = "theme-color";
       document.head.appendChild(themeMeta);
     }
-    themeMeta.content = "#063d5c";
+    themeMeta.content = "#2E3D3F";
     // Paksa html & body pakai color-scheme light — kebal dark mode
     document.documentElement.style.colorScheme = "only light";
     document.documentElement.style.forcedColorAdjust = "none";
@@ -10035,13 +10035,13 @@ export default function BricksyTravel() {
 
       {/* ── LOADING SKELETON ── */}
       {isLoading && !reviewTokenParam && (
-        <div style={{ position: "fixed", inset: 0, zIndex: 9990, background: "#f0fbfd", display: "flex", flexDirection: "column" }}>
+        <div style={{ position: "fixed", inset: 0, zIndex: 9990, background: "#FDFAF4", display: "flex", flexDirection: "column" }}>
           <style>{`
             @keyframes shimmer { 0%{background-position:-800px 0} 100%{background-position:800px 0} }
-            .sk { background: linear-gradient(90deg,#dff0f5 25%,#edfafc 50%,#dff0f5 75%); background-size:800px 100%; animation: shimmer 1.5s infinite; border-radius:6px; }
+            .sk { background: linear-gradient(90deg,#F5EDD8 25%,#FAF7F0 50%,#F5EDD8 75%); background-size:800px 100%; animation: shimmer 1.5s infinite; border-radius:6px; }
           `}</style>
           {/* Navbar skeleton */}
-          <div style={{ height: 64, background: "#fff", borderBottom: "1px solid #c0e8f0", display: "flex", alignItems: "center", padding: "0 5%", gap: 24 }}>
+          <div style={{ height: 64, background: "#fff", borderBottom: "1px solid #E8DCC8", display: "flex", alignItems: "center", padding: "0 5%", gap: 24 }}>
             <div className="sk" style={{ width: 120, height: 32 }} />
             <div style={{ flex: 1 }} />
             {[80,70,90,70,80].map((w,i) => <div key={i} className="sk" style={{ width: w, height: 14 }} />)}
@@ -10091,44 +10091,44 @@ export default function BricksyTravel() {
             {/* Close */}
             <button onClick={() => setShowDevProfile(false)}
               style={{ position: "absolute", top: 14, right: 16, background: "none", border: "none",
-                fontSize: 18, color: "#86cad8", cursor: "pointer", lineHeight: 1 }}>✕</button>
+                fontSize: 18, color: "#A89070", cursor: "pointer", lineHeight: 1 }}>✕</button>
             {/* Power Icon */}
-            <div style={{ width: 56, height: 56, borderRadius: "50%", background: "#e8f9fc",
-              border: "2px solid #c0e8f0", display: "flex", alignItems: "center", justifyContent: "center",
+            <div style={{ width: 56, height: 56, borderRadius: "50%", background: "#FAF7F0",
+              border: "2px solid #E8DCC8", display: "flex", alignItems: "center", justifyContent: "center",
               margin: "0 auto 20px" }}>
-              <svg viewBox="0 0 24 24" fill="none" stroke="#0ea5c5" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="26" height="26">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#C9AA71" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="26" height="26">
                 <path d="M18.36 6.64A9 9 0 1 1 5.64 6.64" /><line x1="12" y1="2" x2="12" y2="12" />
               </svg>
             </div>
-            <div style={{ fontSize: 10, letterSpacing: "2px", color: "#5090aa", textTransform: "uppercase", marginBottom: 10, fontWeight: 600 }}>Developer Profile</div>
-            <h2 className="serif" style={{ fontSize: 24, fontWeight: 400, color: "#0d3b66", marginBottom: 6, lineHeight: 1.2 }}>
+            <div style={{ fontSize: 10, letterSpacing: "2px", color: "#5A6A6C", textTransform: "uppercase", marginBottom: 10, fontWeight: 600 }}>Developer Profile</div>
+            <h2 className="serif" style={{ fontSize: 24, fontWeight: 400, color: "#2E3D3F", marginBottom: 6, lineHeight: 1.2 }}>
               Mahfud Febry Styanto
             </h2>
-            <div style={{ width: 32, height: 2, background: "#0ea5c5", borderRadius: 2, margin: "0 auto 20px" }} />
+            <div style={{ width: 32, height: 2, background: "#C9AA71", borderRadius: 2, margin: "0 auto 20px" }} />
             <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
               <a href="https://wa.me/6282234651413" target="_blank" rel="noopener noreferrer"
                 style={{ display: "flex", alignItems: "center", gap: 10, padding: "10px 16px",
-                  background: "#edfafc", borderRadius: 8, textDecoration: "none",
-                  transition: "background .2s", border: "1px solid #e0f7fa" }}
-                onMouseEnter={e => e.currentTarget.style.background = "#e8f4fd"}
-                onMouseLeave={e => e.currentTarget.style.background = "#edfafc"}>
+                  background: "#FAF7F0", borderRadius: 8, textDecoration: "none",
+                  transition: "background .2s", border: "1px solid #F5EDD8" }}
+                onMouseEnter={e => e.currentTarget.style.background = "#F5EDD8"}
+                onMouseLeave={e => e.currentTarget.style.background = "#FAF7F0"}>
                 <span style={{ fontSize: 18 }}>💬</span>
                 <div style={{ textAlign: "left" }}>
-                  <div style={{ fontSize: 10, color: "#5090aa", letterSpacing: "1px", textTransform: "uppercase", fontWeight: 600 }}>WhatsApp</div>
-                  <div style={{ fontSize: 14, color: "#0d3b66", fontWeight: 500 }}>082234651413</div>
+                  <div style={{ fontSize: 10, color: "#5A6A6C", letterSpacing: "1px", textTransform: "uppercase", fontWeight: 600 }}>WhatsApp</div>
+                  <div style={{ fontSize: 14, color: "#2E3D3F", fontWeight: 500 }}>082234651413</div>
                 </div>
-                <span style={{ marginLeft: "auto", fontSize: 11, color: "#0ea5c5", fontWeight: 500 }}>Hubungi →</span>
+                <span style={{ marginLeft: "auto", fontSize: 11, color: "#C9AA71", fontWeight: 500 }}>Hubungi →</span>
               </a>
               <div style={{ display: "flex", alignItems: "center", gap: 10, padding: "10px 16px",
-                background: "#edfafc", borderRadius: 8, border: "1px solid #e0f7fa" }}>
+                background: "#FAF7F0", borderRadius: 8, border: "1px solid #F5EDD8" }}>
                 <span style={{ fontSize: 18 }}>✉️</span>
                 <div style={{ textAlign: "left" }}>
-                  <div style={{ fontSize: 10, color: "#5090aa", letterSpacing: "1px", textTransform: "uppercase", fontWeight: 600 }}>Email</div>
-                  <div style={{ fontSize: 13, color: "#0d3b66" }}>mahfudfebrys@gmail.com</div>
+                  <div style={{ fontSize: 10, color: "#5A6A6C", letterSpacing: "1px", textTransform: "uppercase", fontWeight: 600 }}>Email</div>
+                  <div style={{ fontSize: 13, color: "#2E3D3F" }}>mahfudfebrys@gmail.com</div>
                 </div>
               </div>
             </div>
-            <p style={{ fontSize: 11, color: "#86cad8", marginTop: 20, fontStyle: "italic" }}>
+            <p style={{ fontSize: 11, color: "#A89070", marginTop: 20, fontStyle: "italic" }}>
               Website developed & designed by Mahfud Febry Styanto
             </p>
           </div>
@@ -10150,45 +10150,45 @@ export default function BricksyTravel() {
               position: "relative", boxShadow: "0 20px 60px rgba(0,0,0,.2)" }}>
             <button onClick={() => setShowLogin(false)} 
               style={{ position: "absolute", top: 16, right: 16, background: "none", border: "none",
-                fontSize: 24, color: "#0d3b66", cursor: "pointer", lineHeight: 1 }}>✕</button>
+                fontSize: 24, color: "#2E3D3F", cursor: "pointer", lineHeight: 1 }}>✕</button>
             
             {!forgotStep ? (
               <>
-                <h2 style={{ fontSize: 24, fontWeight: 700, color: "#0d3b66", marginBottom: 4, textAlign: "center" }}>Login</h2>
-                <p style={{ fontSize: 13, color: "#4a7f98", textAlign: "center", marginBottom: 28 }}>Akses control panel Anda</p>
+                <h2 style={{ fontSize: 24, fontWeight: 700, color: "#2E3D3F", marginBottom: 4, textAlign: "center" }}>Login</h2>
+                <p style={{ fontSize: 13, color: "#5A6A6C", textAlign: "center", marginBottom: 28 }}>Akses control panel Anda</p>
                 
                 {loginErr && <div style={{ background: "#fceaea", borderLeft: "3px solid #e74c3c", padding: "12px 14px", borderRadius: 6, fontSize: 12, color: "#c0392b", marginBottom: 16 }}>⚠ {loginErr}</div>}
                 
                 <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
                   <div>
-                    <label style={{ display: "block", fontSize: 12, fontWeight: 600, color: "#0d3b66", marginBottom: 6, letterSpacing: ".5px" }}>USERNAME</label>
+                    <label style={{ display: "block", fontSize: 12, fontWeight: 600, color: "#2E3D3F", marginBottom: 6, letterSpacing: ".5px" }}>USERNAME</label>
                     <input type="text" value={loginForm.username} onChange={e => setLoginForm(p => ({ ...p, username: e.target.value }))}
                       placeholder="administrator / writer1 / cs1"
-                      style={{ width: "100%", padding: "11px 14px", border: "1.5px solid #c0e8f0", borderRadius: 8, 
-                        fontSize: 13, outline: "none", background: "#f5fdff", color: "#0d3b66",
+                      style={{ width: "100%", padding: "11px 14px", border: "1.5px solid #E8DCC8", borderRadius: 8, 
+                        fontSize: 13, outline: "none", background: "#FDFAF4", color: "#2E3D3F",
                         transition: "border .2s" }}
-                      onFocus={e => e.target.style.borderColor = "#0891b2"}
-                      onBlur={e => e.target.style.borderColor = "#c0e8f0"} />
+                      onFocus={e => e.target.style.borderColor = "#8B6914"}
+                      onBlur={e => e.target.style.borderColor = "#E8DCC8"} />
                   </div>
                   <div>
-                    <label style={{ display: "block", fontSize: 12, fontWeight: 600, color: "#0d3b66", marginBottom: 6, letterSpacing: ".5px" }}>PASSWORD</label>
+                    <label style={{ display: "block", fontSize: 12, fontWeight: 600, color: "#2E3D3F", marginBottom: 6, letterSpacing: ".5px" }}>PASSWORD</label>
                     <div style={{ position: "relative", display: "flex", alignItems: "center" }}>
                       <input type={showPassword ? "text" : "password"} value={loginForm.password} onChange={e => setLoginForm(p => ({ ...p, password: e.target.value }))}
                         placeholder="••••••••"
                         onKeyDown={e => e.key === "Enter" && login()}
-                        style={{ width: "100%", padding: "11px 14px", paddingRight: 42, border: "1.5px solid #c0e8f0", borderRadius: 8, 
-                          fontSize: 13, outline: "none", background: "#f5fdff", color: "#0d3b66",
+                        style={{ width: "100%", padding: "11px 14px", paddingRight: 42, border: "1.5px solid #E8DCC8", borderRadius: 8, 
+                          fontSize: 13, outline: "none", background: "#FDFAF4", color: "#2E3D3F",
                           transition: "border .2s" }}
-                        onFocus={e => e.target.style.borderColor = "#0891b2"}
-                        onBlur={e => e.target.style.borderColor = "#c0e8f0"} />
+                        onFocus={e => e.target.style.borderColor = "#8B6914"}
+                        onBlur={e => e.target.style.borderColor = "#E8DCC8"} />
                       <button onClick={() => setShowPassword(!showPassword)}
                         type="button"
                         style={{ position: "absolute", right: 8, background: "none", border: "none", 
                           cursor: "pointer", padding: "6px 8px", borderRadius: "50%", 
                           display: "flex", alignItems: "center", justifyContent: "center",
                           width: 36, height: 36, transition: "all .2s",
-                          color: "#0891b2", fontSize: 18 }}
-                        onMouseEnter={e => { e.currentTarget.style.background = "rgba(8,145,178,.1)"; }}
+                          color: "#8B6914", fontSize: 18 }}
+                        onMouseEnter={e => { e.currentTarget.style.background = "rgba(139,105,20,.1)"; }}
                         onMouseLeave={e => { e.currentTarget.style.background = "none"; }}>
                         {showPassword ? (
                           // Eye open icon
@@ -10209,38 +10209,38 @@ export default function BricksyTravel() {
                 </div>
 
                 <button onClick={login}
-                  style={{ width: "100%", marginTop: 20, padding: "12px 0", background: "linear-gradient(130deg,#063d5c 0%,#0875a8 45%,#0aa8bf 78%,#10d0e0 100%)",
+                  style={{ width: "100%", marginTop: 20, padding: "12px 0", background: "linear-gradient(130deg,#2E3D3F 0%,#3D5254 45%,#8B6914 78%,#C9AA71 100%)",
                     color: "#fff", border: "none", borderRadius: 8, fontSize: 14, fontWeight: 700, cursor: "pointer",
                     transition: "all .2s" }}
-                  onMouseEnter={e => e.currentTarget.style.boxShadow = "0 8px 20px rgba(8,117,168,.35)"}
+                  onMouseEnter={e => e.currentTarget.style.boxShadow = "0 8px 20px rgba(139,105,20,.35)"}
                   onMouseLeave={e => e.currentTarget.style.boxShadow = "none"}>
                   Masuk
                 </button>
 
                 <button onClick={() => { setForgotStep("input_user"); setLoginErr(""); }}
                   style={{ width: "100%", marginTop: 10, padding: "10px 0", background: "transparent", 
-                    color: "#0891b2", border: "none", fontSize: 12, fontWeight: 600, cursor: "pointer",
+                    color: "#8B6914", border: "none", fontSize: 12, fontWeight: 600, cursor: "pointer",
                     textDecoration: "underline", letterSpacing: ".3px" }}>
                   Lupa Password?
                 </button>
               </>
             ) : (
               <>
-                <h2 style={{ fontSize: 20, fontWeight: 700, color: "#0d3b66", marginBottom: 4, textAlign: "center" }}>Reset Password</h2>
-                <p style={{ fontSize: 12, color: "#4a7f98", textAlign: "center", marginBottom: 20 }}>Pulihkan akses Anda</p>
+                <h2 style={{ fontSize: 20, fontWeight: 700, color: "#2E3D3F", marginBottom: 4, textAlign: "center" }}>Reset Password</h2>
+                <p style={{ fontSize: 12, color: "#5A6A6C", textAlign: "center", marginBottom: 20 }}>Pulihkan akses Anda</p>
                 
                 {forgotErr && <div style={{ background: "#fceaea", borderLeft: "3px solid #e74c3c", padding: "10px 12px", borderRadius: 6, fontSize: 11, color: "#c0392b", marginBottom: 14 }}>⚠ {forgotErr}</div>}
 
                 {forgotStep === "input_user" && (
                   <>
-                    <label style={{ display: "block", fontSize: 11, fontWeight: 600, color: "#4a7f98", marginBottom: 8 }}>CARI BERDASARKAN</label>
+                    <label style={{ display: "block", fontSize: 11, fontWeight: 600, color: "#5A6A6C", marginBottom: 8 }}>CARI BERDASARKAN</label>
                     <div style={{ display: "flex", gap: 8, marginBottom: 14 }}>
                       {[{k:"username",l:"Username"}, {k:"email",l:"Email"}, {k:"phone",l:"No. HP"}].map(o => (
                         <button key={o.k} onClick={() => setForgotSearchBy(o.k)}
                           style={{ flex: 1, padding: "7px", fontSize: 11, fontWeight: 600, border: "1px solid",
-                            borderRadius: 6, background: forgotSearchBy === o.k ? "#0d3b66" : "#f5fdff",
-                            color: forgotSearchBy === o.k ? "#fff" : "#4a7f98",
-                            borderColor: forgotSearchBy === o.k ? "#0d3b66" : "#c0e8f0",
+                            borderRadius: 6, background: forgotSearchBy === o.k ? "#2E3D3F" : "#FDFAF4",
+                            color: forgotSearchBy === o.k ? "#fff" : "#5A6A6C",
+                            borderColor: forgotSearchBy === o.k ? "#2E3D3F" : "#E8DCC8",
                             cursor: "pointer" }}>
                           {o.l}
                         </button>
@@ -10248,12 +10248,12 @@ export default function BricksyTravel() {
                     </div>
                     <input type="text" value={forgotUser} onChange={e => setForgotUser(e.target.value)}
                       placeholder={forgotSearchBy === "username" ? "username" : forgotSearchBy === "email" ? "email@domain.com" : "0812..."}
-                      style={{ width: "100%", padding: "11px 14px", border: "1.5px solid #c0e8f0", borderRadius: 8,
-                        fontSize: 13, outline: "none", background: "#f5fdff" }}
-                      onFocus={e => e.target.style.borderColor = "#0891b2"}
-                      onBlur={e => e.target.style.borderColor = "#c0e8f0"} />
+                      style={{ width: "100%", padding: "11px 14px", border: "1.5px solid #E8DCC8", borderRadius: 8,
+                        fontSize: 13, outline: "none", background: "#FDFAF4" }}
+                      onFocus={e => e.target.style.borderColor = "#8B6914"}
+                      onBlur={e => e.target.style.borderColor = "#E8DCC8"} />
                     <button onClick={forgotStep1}
-                      style={{ width: "100%", marginTop: 16, padding: "10px", background: "#0d3b66", color: "#fff",
+                      style={{ width: "100%", marginTop: 16, padding: "10px", background: "#2E3D3F", color: "#fff",
                         border: "none", borderRadius: 6, fontSize: 12, fontWeight: 700, cursor: "pointer" }}>
                       Lanjut
                     </button>
@@ -10262,13 +10262,13 @@ export default function BricksyTravel() {
 
                 {forgotStep === "input_email" && (
                   <>
-                    <label style={{ display: "block", fontSize: 11, fontWeight: 600, color: "#4a7f98", marginBottom: 8 }}>EMAIL TERDAFTAR</label>
+                    <label style={{ display: "block", fontSize: 11, fontWeight: 600, color: "#5A6A6C", marginBottom: 8 }}>EMAIL TERDAFTAR</label>
                     <input type="email" value={forgotEmail} onChange={e => setForgotEmail(e.target.value)}
                       placeholder="email@domain.com"
-                      style={{ width: "100%", padding: "11px 14px", border: "1.5px solid #c0e8f0", borderRadius: 8,
-                        fontSize: 13, outline: "none", background: "#f5fdff", marginBottom: 14 }}
-                      onFocus={e => e.target.style.borderColor = "#0891b2"}
-                      onBlur={e => e.target.style.borderColor = "#c0e8f0"} />
+                      style={{ width: "100%", padding: "11px 14px", border: "1.5px solid #E8DCC8", borderRadius: 8,
+                        fontSize: 13, outline: "none", background: "#FDFAF4", marginBottom: 14 }}
+                      onFocus={e => e.target.style.borderColor = "#8B6914"}
+                      onBlur={e => e.target.style.borderColor = "#E8DCC8"} />
                     <button onClick={forgotStep2} disabled={forgotOTP.sending}
                       style={{ width: "100%", padding: "10px", background: forgotOTP.sending ? "#ccc" : "#27ae60", 
                         color: "#fff", border: "none", borderRadius: 6, fontSize: 12, fontWeight: 700, cursor: "pointer" }}>
@@ -10279,15 +10279,15 @@ export default function BricksyTravel() {
 
                 {forgotStep === "input_otp" && (
                   <>
-                    <label style={{ display: "block", fontSize: 11, fontWeight: 600, color: "#4a7f98", marginBottom: 8 }}>MASUKKAN KODE OTP</label>
+                    <label style={{ display: "block", fontSize: 11, fontWeight: 600, color: "#5A6A6C", marginBottom: 8 }}>MASUKKAN KODE OTP</label>
                     <input type="text" value={forgotOTP.input} onChange={e => setForgotOTP(p => ({ ...p, input: e.target.value }))}
                       placeholder="000000"
-                      style={{ width: "100%", padding: "11px 14px", border: "1.5px solid #c0e8f0", borderRadius: 8,
-                        fontSize: 13, outline: "none", background: "#f5fdff", marginBottom: 14, letterSpacing: "3px" }}
-                      onFocus={e => e.target.style.borderColor = "#0891b2"}
-                      onBlur={e => e.target.style.borderColor = "#c0e8f0"} />
+                      style={{ width: "100%", padding: "11px 14px", border: "1.5px solid #E8DCC8", borderRadius: 8,
+                        fontSize: 13, outline: "none", background: "#FDFAF4", marginBottom: 14, letterSpacing: "3px" }}
+                      onFocus={e => e.target.style.borderColor = "#8B6914"}
+                      onBlur={e => e.target.style.borderColor = "#E8DCC8"} />
                     <button onClick={forgotStep3}
-                      style={{ width: "100%", padding: "10px", background: "#0d3b66", color: "#fff",
+                      style={{ width: "100%", padding: "10px", background: "#2E3D3F", color: "#fff",
                         border: "none", borderRadius: 6, fontSize: 12, fontWeight: 700, cursor: "pointer" }}>
                       Verifikasi OTP
                     </button>
@@ -10296,20 +10296,20 @@ export default function BricksyTravel() {
 
                 {forgotStep === "input_newpass" && (
                   <>
-                    <label style={{ display: "block", fontSize: 11, fontWeight: 600, color: "#4a7f98", marginBottom: 8 }}>PASSWORD BARU</label>
+                    <label style={{ display: "block", fontSize: 11, fontWeight: 600, color: "#5A6A6C", marginBottom: 8 }}>PASSWORD BARU</label>
                     <input type="password" value={forgotNewPass.val} onChange={e => setForgotNewPass(p => ({ ...p, val: e.target.value }))}
                       placeholder="••••••••"
-                      style={{ width: "100%", padding: "11px 14px", border: "1.5px solid #c0e8f0", borderRadius: 8,
-                        fontSize: 13, outline: "none", background: "#f5fdff", marginBottom: 10 }}
-                      onFocus={e => e.target.style.borderColor = "#0891b2"}
-                      onBlur={e => e.target.style.borderColor = "#c0e8f0"} />
-                    <label style={{ display: "block", fontSize: 11, fontWeight: 600, color: "#4a7f98", marginBottom: 8 }}>KONFIRMASI PASSWORD</label>
+                      style={{ width: "100%", padding: "11px 14px", border: "1.5px solid #E8DCC8", borderRadius: 8,
+                        fontSize: 13, outline: "none", background: "#FDFAF4", marginBottom: 10 }}
+                      onFocus={e => e.target.style.borderColor = "#8B6914"}
+                      onBlur={e => e.target.style.borderColor = "#E8DCC8"} />
+                    <label style={{ display: "block", fontSize: 11, fontWeight: 600, color: "#5A6A6C", marginBottom: 8 }}>KONFIRMASI PASSWORD</label>
                     <input type="password" value={forgotNewPass.confirm} onChange={e => setForgotNewPass(p => ({ ...p, confirm: e.target.value }))}
                       placeholder="••••••••"
-                      style={{ width: "100%", padding: "11px 14px", border: "1.5px solid #c0e8f0", borderRadius: 8,
-                        fontSize: 13, outline: "none", background: "#f5fdff", marginBottom: 14 }}
-                      onFocus={e => e.target.style.borderColor = "#0891b2"}
-                      onBlur={e => e.target.style.borderColor = "#c0e8f0"} />
+                      style={{ width: "100%", padding: "11px 14px", border: "1.5px solid #E8DCC8", borderRadius: 8,
+                        fontSize: 13, outline: "none", background: "#FDFAF4", marginBottom: 14 }}
+                      onFocus={e => e.target.style.borderColor = "#8B6914"}
+                      onBlur={e => e.target.style.borderColor = "#E8DCC8"} />
                     <button onClick={forgotStep4}
                       style={{ width: "100%", padding: "10px", background: "#27ae60", color: "#fff",
                         border: "none", borderRadius: 6, fontSize: 12, fontWeight: 700, cursor: "pointer" }}>
@@ -10320,7 +10320,7 @@ export default function BricksyTravel() {
 
                 <button onClick={closeForgot}
                   style={{ width: "100%", marginTop: 12, padding: "10px", background: "transparent",
-                    color: "#4a7f98", border: "1px solid #c0e8f0", borderRadius: 6, fontSize: 12, cursor: "pointer" }}>
+                    color: "#5A6A6C", border: "1px solid #E8DCC8", borderRadius: 6, fontSize: 12, cursor: "pointer" }}>
                   Kembali
                 </button>
               </>
@@ -10394,33 +10394,33 @@ export default function BricksyTravel() {
                           background: "rgba(255,255,255,.98)", borderRadius: 10, boxShadow: "0 8px 32px rgba(0,0,0,.14)",
                           border: "1px solid rgba(158,155,150,.15)", padding: "6px 0", zIndex: 200, backdropFilter: "blur(12px)" }}>
                           {/* Label grup Interior & Eksterior */}
-                          <div style={{ padding: "4px 18px 2px", fontSize: "0.65rem", fontWeight: 700, color: "#9ab", letterSpacing: ".1em", textTransform: "uppercase" }}>Layanan Kami</div>
+                          <div style={{ padding: "4px 18px 2px", fontSize: "0.65rem", fontWeight: 700, color: "#8B9A9C", letterSpacing: ".1em", textTransform: "uppercase" }}>Layanan Kami</div>
                           {navDropdownLayanan.filter(i=>["services","desainrab","temarumah"].includes(i.key)).map(item => (
                             <button key={item.key} onClick={() => { navigateTo(item.key); setDdOpen(false); }}
                               style={{ display: "block", width: "100%", textAlign: "left", padding: "9px 18px",
                                 fontSize: "0.78rem", fontWeight: page === item.key ? 700 : 500,
-                                color: page === item.key ? "#0d3b66" : "#3a5a6a",
-                                background: page === item.key ? "#edfafc" : "transparent",
-                                border: "none", cursor: "pointer", borderLeft: page === item.key ? "2px solid #0891b2" : "2px solid transparent",
+                                color: page === item.key ? "#2E3D3F" : "#3D5254",
+                                background: page === item.key ? "#FAF7F0" : "transparent",
+                                border: "none", cursor: "pointer", borderLeft: page === item.key ? "2px solid #8B6914" : "2px solid transparent",
                                 transition: "all .15s", letterSpacing: ".04em" }}
-                              onMouseEnter={e => { e.currentTarget.style.background="#edfafc"; e.currentTarget.style.color="#0d3b66"; }}
-                              onMouseLeave={e => { e.currentTarget.style.background=page===item.key?"#edfafc":"transparent"; e.currentTarget.style.color=page===item.key?"#0d3b66":"#3a5a6a"; }}>
+                              onMouseEnter={e => { e.currentTarget.style.background="#FAF7F0"; e.currentTarget.style.color="#2E3D3F"; }}
+                              onMouseLeave={e => { e.currentTarget.style.background=page===item.key?"#FAF7F0":"transparent"; e.currentTarget.style.color=page===item.key?"#2E3D3F":"#3D5254"; }}>
                               {item.label}
                             </button>
                           ))}
                           {/* Divider + Label Interior & Eksterior */}
                           <div style={{ margin: "6px 0 2px", borderTop: "1px solid #edf2f4" }} />
-                          <div style={{ padding: "4px 18px 2px", fontSize: "0.65rem", fontWeight: 700, color: "#9ab", letterSpacing: ".1em", textTransform: "uppercase" }}>Interior & Eksterior</div>
+                          <div style={{ padding: "4px 18px 2px", fontSize: "0.65rem", fontWeight: 700, color: "#8B9A9C", letterSpacing: ".1em", textTransform: "uppercase" }}>Interior & Eksterior</div>
                           {navDropdownLayanan.filter(i=>["interior","pagar","kanopi","aluminium","landscape"].includes(i.key)).map(item => (
                             <button key={item.key} onClick={() => { navigateTo(item.key); setDdOpen(false); }}
                               style={{ display: "block", width: "100%", textAlign: "left", padding: "9px 18px",
                                 fontSize: "0.78rem", fontWeight: page === item.key ? 700 : 500,
-                                color: page === item.key ? "#0d3b66" : "#3a5a6a",
-                                background: page === item.key ? "#edfafc" : "transparent",
-                                border: "none", cursor: "pointer", borderLeft: page === item.key ? "2px solid #0891b2" : "2px solid transparent",
+                                color: page === item.key ? "#2E3D3F" : "#3D5254",
+                                background: page === item.key ? "#FAF7F0" : "transparent",
+                                border: "none", cursor: "pointer", borderLeft: page === item.key ? "2px solid #8B6914" : "2px solid transparent",
                                 transition: "all .15s", letterSpacing: ".04em" }}
-                              onMouseEnter={e => { e.currentTarget.style.background="#edfafc"; e.currentTarget.style.color="#0d3b66"; }}
-                              onMouseLeave={e => { e.currentTarget.style.background=page===item.key?"#edfafc":"transparent"; e.currentTarget.style.color=page===item.key?"#0d3b66":"#3a5a6a"; }}>
+                              onMouseEnter={e => { e.currentTarget.style.background="#FAF7F0"; e.currentTarget.style.color="#2E3D3F"; }}
+                              onMouseLeave={e => { e.currentTarget.style.background=page===item.key?"#FAF7F0":"transparent"; e.currentTarget.style.color=page===item.key?"#2E3D3F":"#3D5254"; }}>
                               {item.label}
                             </button>
                           ))}
@@ -10452,12 +10452,12 @@ export default function BricksyTravel() {
                             <button key={item.key} onClick={() => { navigateTo(item.key); setDdOpen3(false); }}
                               style={{ display: "block", width: "100%", textAlign: "left", padding: "9px 18px",
                                 fontSize: "0.78rem", fontWeight: page === item.key ? 700 : 500,
-                                color: page === item.key ? "#0d3b66" : "#3a5a6a",
-                                background: page === item.key ? "#edfafc" : "transparent",
-                                border: "none", cursor: "pointer", borderLeft: page === item.key ? "2px solid #0891b2" : "2px solid transparent",
+                                color: page === item.key ? "#2E3D3F" : "#3D5254",
+                                background: page === item.key ? "#FAF7F0" : "transparent",
+                                border: "none", cursor: "pointer", borderLeft: page === item.key ? "2px solid #8B6914" : "2px solid transparent",
                                 transition: "all .15s", letterSpacing: ".04em" }}
-                              onMouseEnter={e => { e.currentTarget.style.background="#edfafc"; e.currentTarget.style.color="#0d3b66"; }}
-                              onMouseLeave={e => { e.currentTarget.style.background=page===item.key?"#edfafc":"transparent"; e.currentTarget.style.color=page===item.key?"#0d3b66":"#3a5a6a"; }}>
+                              onMouseEnter={e => { e.currentTarget.style.background="#FAF7F0"; e.currentTarget.style.color="#2E3D3F"; }}
+                              onMouseLeave={e => { e.currentTarget.style.background=page===item.key?"#FAF7F0":"transparent"; e.currentTarget.style.color=page===item.key?"#2E3D3F":"#3D5254"; }}>
                               {item.label}
                             </button>
                           ))}
@@ -10475,15 +10475,15 @@ export default function BricksyTravel() {
                       {/* Avatar dengan organic border shape */}
                       <div style={{
                         width: 38, height: 38, flexShrink: 0,
-                        background: user.photo ? "transparent" : "linear-gradient(135deg,#0891b2,#22d3ee)",
+                        background: user.photo ? "transparent" : "linear-gradient(135deg,#3D5254,#C9AA71)",
                         borderRadius: "30% 70% 70% 30% / 30% 30% 70% 70%",
                         border: "2.5px solid rgba(255,255,255,.75)",
-                        boxShadow: "0 0 0 3px rgba(8,145,178,.4), 0 4px 14px rgba(0,0,0,.22)",
+                        boxShadow: "0 0 0 3px rgba(139,105,20,.4), 0 4px 14px rgba(0,0,0,.22)",
                         display: "flex", alignItems: "center", justifyContent: "center",
                         overflow: "hidden", transition: "border-radius .4s ease, box-shadow .3s"
                       }}
-                        onMouseEnter={e => { e.currentTarget.style.borderRadius = "50%"; e.currentTarget.style.boxShadow = "0 0 0 3px rgba(34,211,238,.6), 0 6px 20px rgba(0,0,0,.3)"; }}
-                        onMouseLeave={e => { e.currentTarget.style.borderRadius = "30% 70% 70% 30% / 30% 30% 70% 70%"; e.currentTarget.style.boxShadow = "0 0 0 3px rgba(8,145,178,.4), 0 4px 14px rgba(0,0,0,.22)"; }}>
+                        onMouseEnter={e => { e.currentTarget.style.borderRadius = "50%"; e.currentTarget.style.boxShadow = "0 0 0 3px rgba(201,170,113,.6), 0 6px 20px rgba(0,0,0,.3)"; }}
+                        onMouseLeave={e => { e.currentTarget.style.borderRadius = "30% 70% 70% 30% / 30% 30% 70% 70%"; e.currentTarget.style.boxShadow = "0 0 0 3px rgba(139,105,20,.4), 0 4px 14px rgba(0,0,0,.22)"; }}>
                         {user.photo
                           ? <img loading="lazy" src={user.photo} alt={user.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                           : <span style={{ color: "#fff", fontWeight: 800, fontSize: "1rem" }}>{(user.name || user.username || "?")[0].toUpperCase()}</span>
@@ -10580,39 +10580,39 @@ export default function BricksyTravel() {
                   </button>
                 ))}
                 {/* ── Mobile Group: Layanan Developer ── */}
-                <div style={{ padding: "10px 18px 4px", fontSize: "0.6rem", fontWeight: 800, letterSpacing: ".18em", textTransform: "uppercase", color: "#0891b2", opacity: 0.8 }}>Layanan Developer</div>
+                <div style={{ padding: "10px 18px 4px", fontSize: "0.6rem", fontWeight: 800, letterSpacing: ".18em", textTransform: "uppercase", color: "#8B6914", opacity: 0.8 }}>Layanan Developer</div>
                 {navDropdownLayanan.map(item => (
                   <button key={item.key} onClick={() => { navigateTo(item.key); setMobileMenu(false); }}
                     style={{ fontSize: ".8rem", letterSpacing: ".12em", textTransform: "uppercase", fontFamily: "'Jost',sans-serif",
                       color: page === item.key ? "var(--re-black)" : "var(--re-grey-dk)", fontWeight: page === item.key ? 700 : 400,
                       border: "none", background: "transparent", textAlign: "left", padding: "11px 28px", borderRadius: 6, width: "100%",
-                      borderLeft: page === item.key ? "2px solid #0891b2" : "2px solid transparent", transition: "all .15s", cursor: "pointer" }}
+                      borderLeft: page === item.key ? "2px solid #8B6914" : "2px solid transparent", transition: "all .15s", cursor: "pointer" }}
                     onMouseEnter={e => { e.currentTarget.style.background = "var(--re-grey-lt)"; }}
                     onMouseLeave={e => { e.currentTarget.style.background = "transparent"; }}>
                     {item.label}
                   </button>
                 ))}
                 {/* ── Mobile Group: Interior & Eksterior ── */}
-                <div style={{ padding: "10px 18px 4px", fontSize: "0.6rem", fontWeight: 800, letterSpacing: ".18em", textTransform: "uppercase", color: "#0891b2", opacity: 0.8 }}>Interior & Eksterior</div>
+                <div style={{ padding: "10px 18px 4px", fontSize: "0.6rem", fontWeight: 800, letterSpacing: ".18em", textTransform: "uppercase", color: "#8B6914", opacity: 0.8 }}>Interior & Eksterior</div>
                 {navDropdownInterior.map(item => (
                   <button key={item.key} onClick={() => { navigateTo(item.key); setMobileMenu(false); }}
                     style={{ fontSize: ".8rem", letterSpacing: ".12em", textTransform: "uppercase", fontFamily: "'Jost',sans-serif",
                       color: page === item.key ? "var(--re-black)" : "var(--re-grey-dk)", fontWeight: page === item.key ? 700 : 400,
                       border: "none", background: "transparent", textAlign: "left", padding: "11px 28px", borderRadius: 6, width: "100%",
-                      borderLeft: page === item.key ? "2px solid #0891b2" : "2px solid transparent", transition: "all .15s", cursor: "pointer" }}
+                      borderLeft: page === item.key ? "2px solid #8B6914" : "2px solid transparent", transition: "all .15s", cursor: "pointer" }}
                     onMouseEnter={e => { e.currentTarget.style.background = "var(--re-grey-lt)"; }}
                     onMouseLeave={e => { e.currentTarget.style.background = "transparent"; }}>
                     {item.label}
                   </button>
                 ))}
                 {/* ── Mobile Group: Galeri & Proyek ── */}
-                <div style={{ padding: "10px 18px 4px", fontSize: "0.6rem", fontWeight: 800, letterSpacing: ".18em", textTransform: "uppercase", color: "#0891b2", opacity: 0.8 }}>Galeri & Proyek</div>
+                <div style={{ padding: "10px 18px 4px", fontSize: "0.6rem", fontWeight: 800, letterSpacing: ".18em", textTransform: "uppercase", color: "#8B6914", opacity: 0.8 }}>Galeri & Proyek</div>
                 {navDropdownGaleri.map(item => (
                   <button key={item.key} onClick={() => { navigateTo(item.key); setMobileMenu(false); }}
                     style={{ fontSize: ".8rem", letterSpacing: ".12em", textTransform: "uppercase", fontFamily: "'Jost',sans-serif",
                       color: page === item.key ? "var(--re-black)" : "var(--re-grey-dk)", fontWeight: page === item.key ? 700 : 400,
                       border: "none", background: "transparent", textAlign: "left", padding: "11px 28px", borderRadius: 6, width: "100%",
-                      borderLeft: page === item.key ? "2px solid #0891b2" : "2px solid transparent", transition: "all .15s", cursor: "pointer" }}
+                      borderLeft: page === item.key ? "2px solid #8B6914" : "2px solid transparent", transition: "all .15s", cursor: "pointer" }}
                     onMouseEnter={e => { e.currentTarget.style.background = "var(--re-grey-lt)"; }}
                     onMouseLeave={e => { e.currentTarget.style.background = "transparent"; }}>
                     {item.label}
@@ -10635,7 +10635,7 @@ export default function BricksyTravel() {
                 )}
                 {!user && (
                   <button onClick={() => { setShowLogin(true); setMobileMenu(false); }}
-                    style={{ padding: "13px 16px", border: "none", background: "linear-gradient(135deg,#0891b2,#22d3ee)", borderRadius: 10, fontSize: "1rem", color: "#fff", textAlign: "center", fontWeight: 700, marginTop: 4, position: "relative", zIndex: 1 }}>
+                    style={{ padding: "13px 16px", border: "none", background: "linear-gradient(135deg,#3D5254,#C9AA71)", borderRadius: 10, fontSize: "1rem", color: "#fff", textAlign: "center", fontWeight: 700, marginTop: 4, position: "relative", zIndex: 1 }}>
                     🔑 Login
                   </button>
                 )}
@@ -10657,7 +10657,7 @@ export default function BricksyTravel() {
                 <div style={{
                   position: "fixed", bottom: 20, left: 12, zIndex: 9989,
                   display: "flex", alignItems: "center",
-                  background: "#0d3b66",
+                  background: "#2E3D3F",
                   borderRadius: 10, overflow: "hidden",
                   boxShadow: "0 4px 18px rgba(13,59,102,.45), 0 2px 6px rgba(0,0,0,.2)",
                   border: "2px solid rgba(255,255,255,.15)",
@@ -10721,7 +10721,7 @@ export default function BricksyTravel() {
                 <button onClick={spaForward} disabled={!canFwd} title="Maju"
                   style={{
                     width: 52, height: 44, borderRadius: 8, border: "none",
-                    background: canFwd ? "linear-gradient(135deg,#0d3b66,#0891b2)" : "rgba(200,210,220,.55)",
+                    background: canFwd ? "linear-gradient(135deg,#2E3D3F,#8B6914)" : "rgba(200,210,220,.55)",
                     boxShadow: canFwd ? "0 4px 14px rgba(13,59,102,.40)" : "0 2px 6px rgba(0,0,0,.12)",
                     display: "flex", alignItems: "center", justifyContent: "center",
                     cursor: canFwd ? "pointer" : "default", opacity: canFwd ? 1 : 0.45,
@@ -10737,7 +10737,7 @@ export default function BricksyTravel() {
                 <button onClick={spaBack} disabled={!canBack} title="Mundur"
                   style={{
                     width: 52, height: 44, borderRadius: 8, border: "none",
-                    background: canBack ? "linear-gradient(135deg,#0d3b66,#0891b2)" : "rgba(200,210,220,.55)",
+                    background: canBack ? "linear-gradient(135deg,#2E3D3F,#8B6914)" : "rgba(200,210,220,.55)",
                     boxShadow: canBack ? "0 4px 14px rgba(13,59,102,.40)" : "0 2px 6px rgba(0,0,0,.12)",
                     display: "flex", alignItems: "center", justifyContent: "center",
                     cursor: canBack ? "pointer" : "default", opacity: canBack ? 1 : 0.45,
@@ -11034,7 +11034,7 @@ export default function BricksyTravel() {
 
       {/* ADMIN PANEL */}
       {showAdmin && !reviewTokenParam && (
-        <div style={{ minHeight: "100vh", display: "flex", background: "#f5fdff", paddingTop: 58 }}>
+        <div style={{ minHeight: "100vh", display: "flex", background: "#FDFAF4", paddingTop: 58 }}>
           <div className={`admin-sidebar${sidebarOpen ? " open" : ""}`}>
             {[
               { id: "dashboard", label: "Dashboard", show: true },
@@ -11065,11 +11065,11 @@ export default function BricksyTravel() {
           <div style={{ flex: 1, minWidth: 0 }}>
             <div style={{ height: 58, position: "fixed", top: 0, left: 0, right: 0, zIndex: 220, background: "#fff", borderBottom: "1px solid #d6f1f6", display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 20px", boxShadow: "0 2px 12px rgba(0,0,0,.05)" }}>
               <button className="show-sm" onClick={() => setSidebarOpen(p => !p)}
-                style={{ border: "none", background: "#edfafc", color: "#0d3b66", borderRadius: 6, width: 38, height: 38, cursor: "pointer", fontSize: 18 }}>
+                style={{ border: "none", background: "#FAF7F0", color: "#2E3D3F", borderRadius: 6, width: 38, height: 38, cursor: "pointer", fontSize: 18 }}>
                 ☰
               </button>
-              <strong style={{ color: "#0d3b66", fontSize: 15 }}>Control Panel</strong>
-              <button onClick={closeAdmin} style={{ border: "none", background: "#0d3b66", color: "#fff", borderRadius: 6, padding: "8px 14px", cursor: "pointer", fontSize: 12 }}>
+              <strong style={{ color: "#2E3D3F", fontSize: 15 }}>Control Panel</strong>
+              <button onClick={closeAdmin} style={{ border: "none", background: "#2E3D3F", color: "#fff", borderRadius: 6, padding: "8px 14px", cursor: "pointer", fontSize: 12 }}>
                 Kembali
               </button>
             </div>
@@ -11094,7 +11094,7 @@ export default function BricksyTravel() {
 
               {adminTab === "content" && isAdmin && (
                 <div className="fade-in">
-                  <h1 style={{ fontSize: 24, fontWeight: 500, color: "#0d3b66", marginBottom: 24 }}>Konten Website</h1>
+                  <h1 style={{ fontSize: 24, fontWeight: 500, color: "#2E3D3F", marginBottom: 24 }}>Konten Website</h1>
                   {[
                     { label: "Nav: Home", key: "nav1" },
                     { label: "Nav: About", key: "nav2" },
@@ -11113,7 +11113,7 @@ export default function BricksyTravel() {
                     { label: "Layanan — Subjudul Halaman", key: "servicesPageSub", multiline: true },
                   ].map(f => (
                     <div key={f.key} style={{ background: "#fff", borderRadius: 8, padding: "18px 20px", marginBottom: 14, boxShadow: "0 1px 4px rgba(0,0,0,.05)" }}>
-                      <label style={{ display: "block", fontSize: 11, fontWeight: 600, color: "#5090aa", letterSpacing: "1px", textTransform: "uppercase", marginBottom: 8 }}>{f.label}</label>
+                      <label style={{ display: "block", fontSize: 11, fontWeight: 600, color: "#5A6A6C", letterSpacing: "1px", textTransform: "uppercase", marginBottom: 8 }}>{f.label}</label>
                       <CEF
                         key={f.key}
                         val={getCEFVal(f.key)}
@@ -11165,9 +11165,9 @@ export default function BricksyTravel() {
               {adminTab === "messages" && canCS && (
                 <div className="fade-in">
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24 }}>
-                    <h1 style={{ fontSize: 24, fontWeight: 500, color: "#0d3b66" }}>Pesan Masuk</h1>
+                    <h1 style={{ fontSize: 24, fontWeight: 500, color: "#2E3D3F" }}>Pesan Masuk</h1>
                     <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
-                      <span style={{ fontSize: 12, color: "#5090aa" }}>Total: {data.messages.length} pesan</span>
+                      <span style={{ fontSize: 12, color: "#5A6A6C" }}>Total: {data.messages.length} pesan</span>
                       {data.messages.filter(m => !m.read).length > 0 && (
                         <span style={{ fontSize: 11, background: "#e74c3c", color: "#fff", borderRadius: 10, padding: "3px 10px", fontWeight: 600 }}>
                           {data.messages.filter(m => !m.read).length} belum dibaca
@@ -11177,7 +11177,7 @@ export default function BricksyTravel() {
                         <button onClick={() => {
                           const msgs = data.messages.map(m => ({ ...m, read: true }));
                           save({ ...data, messages: msgs }); notify("Semua pesan ditandai sudah dibaca.");
-                        }} style={{ fontSize: 11, padding: "5px 12px", background: "#edfafc", border: "1px solid #b0dce8", borderRadius: 6, color: "#4a6680", cursor: "pointer" }}>
+                        }} style={{ fontSize: 11, padding: "5px 12px", background: "#FAF7F0", border: "1px solid #D4C4A0", borderRadius: 6, color: "#3D5254", cursor: "pointer" }}>
                           Tandai Semua Dibaca
                         </button>
                       )}
@@ -11185,43 +11185,43 @@ export default function BricksyTravel() {
                   </div>
 
                   {data.messages.length === 0
-                    ? <div style={{ textAlign: "center", padding: "60px", color: "#5090aa", background: "#fff", borderRadius: 10, boxShadow: "0 2px 8px rgba(0,0,0,.06)" }}>
+                    ? <div style={{ textAlign: "center", padding: "60px", color: "#5A6A6C", background: "#fff", borderRadius: 10, boxShadow: "0 2px 8px rgba(0,0,0,.06)" }}>
                         <div style={{ fontSize: 40, marginBottom: 12 }}>✉️</div>
                         <p style={{ fontSize: 14 }}>Belum ada pesan masuk.</p>
                       </div>
                     : [...data.messages].reverse().map(m => (
                       <div key={m.id} style={{ background: "#fff", borderRadius: 10, marginBottom: 16,
-                        boxShadow: "0 2px 8px rgba(0,0,0,.06)", borderLeft: m.read ? "3px solid #c0e8f0" : "3px solid #e74c3c",
+                        boxShadow: "0 2px 8px rgba(0,0,0,.06)", borderLeft: m.read ? "3px solid #E8DCC8" : "3px solid #e74c3c",
                         overflow: "hidden", opacity: m.deleted ? 0.5 : 1 }}>
                         {/* Header */}
-                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", padding: "16px 20px 12px", borderBottom: "1px solid #edfafc" }}>
+                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", padding: "16px 20px 12px", borderBottom: "1px solid #FAF7F0" }}>
                           <div style={{ display: "flex", gap: 12, alignItems: "flex-start" }}>
-                            <div style={{ width: 40, height: 40, borderRadius: "50%", background: "linear-gradient(130deg,#063d5c 0%,#0875a8 50%,#0aa8bf 100%)", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", fontWeight: 700, fontSize: 16 }}>
+                            <div style={{ width: 40, height: 40, borderRadius: "50%", background: "linear-gradient(130deg,#2E3D3F 0%,#3D5254 50%,#8B6914 100%)", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", fontWeight: 700, fontSize: 16 }}>
                               {m.name?.charAt(0).toUpperCase() || "?"}
                             </div>
                             <div>
-                              <div style={{ fontWeight: 700, fontSize: 14, color: "#0d3b66", lineHeight: 1.3 }}>
+                              <div style={{ fontWeight: 700, fontSize: 14, color: "#2E3D3F", lineHeight: 1.3 }}>
                                 {m.name}
                                 {!m.read && <span style={{ marginLeft: 8, fontSize: 9, background: "#e74c3c", color: "#fff", borderRadius: 8, padding: "2px 7px", fontWeight: 700, letterSpacing: ".5px" }}>BARU</span>}
                               </div>
-                              <div style={{ fontSize: 12, color: "#5090aa", marginTop: 2 }}>{m.email}</div>
+                              <div style={{ fontSize: 12, color: "#5A6A6C", marginTop: 2 }}>{m.email}</div>
                             </div>
                           </div>
                           <div style={{ display: "flex", gap: 6, alignItems: "center", flexShrink: 0 }}>
-                            <span style={{ fontSize: 11, color: "#86cad8" }}>{m.date}</span>
+                            <span style={{ fontSize: 11, color: "#A89070" }}>{m.date}</span>
                             {/* READ button */}
                             <button onClick={() => {
                               const msgs = data.messages.map(x => x.id === m.id ? { ...x, read: !x.read } : x);
                               save({ ...data, messages: msgs });
                             }} title={m.read ? "Tandai belum dibaca" : "Tandai sudah dibaca"}
-                              style={{ fontSize: 11, padding: "4px 10px", borderRadius: 5, border: "1px solid #b0dce8",
-                                background: m.read ? "#edfafc" : "#e8f8ef", color: m.read ? "#5090aa" : "#27ae60", cursor: "pointer", fontWeight: 600 }}>
+                              style={{ fontSize: 11, padding: "4px 10px", borderRadius: 5, border: "1px solid #D4C4A0",
+                                background: m.read ? "#FAF7F0" : "#e8f8ef", color: m.read ? "#5A6A6C" : "#27ae60", cursor: "pointer", fontWeight: 600 }}>
                               {m.read ? "✓ Dibaca" : "Tandai Dibaca"}
                             </button>
                             {/* REPLY button */}
                             <button onClick={() => setReplyTo(replyTo === m.id ? null : m.id)}
-                              style={{ fontSize: 11, padding: "4px 10px", borderRadius: 5, border: "1px solid #86cad8",
-                                background: replyTo === m.id ? "#e8f4fd" : "none", color: "#0ea5c5", cursor: "pointer", fontWeight: 600 }}>
+                              style={{ fontSize: 11, padding: "4px 10px", borderRadius: 5, border: "1px solid #A89070",
+                                background: replyTo === m.id ? "#F5EDD8" : "none", color: "#C9AA71", cursor: "pointer", fontWeight: 600 }}>
                               ↩ Reply
                             </button>
                             {/* DELETE button */}
@@ -11238,16 +11238,16 @@ export default function BricksyTravel() {
                         </div>
                         {/* Body */}
                         <div style={{ padding: "14px 20px 16px" }}>
-                          <p style={{ fontSize: 14, color: "#1a4a72", lineHeight: 1.75, whiteSpace: "pre-wrap" }}>{m.message}</p>
+                          <p style={{ fontSize: 14, color: "#2E3D3F", lineHeight: 1.75, whiteSpace: "pre-wrap" }}>{m.message}</p>
                           {/* Reply history */}
                           {m.replies?.length > 0 && (
                             <div style={{ marginTop: 14, display: "flex", flexDirection: "column", gap: 8 }}>
-                              <div style={{ fontSize: 10, fontWeight: 700, color: "#5090aa", letterSpacing: "1px", textTransform: "uppercase" }}>Riwayat Balasan</div>
+                              <div style={{ fontSize: 10, fontWeight: 700, color: "#5A6A6C", letterSpacing: "1px", textTransform: "uppercase" }}>Riwayat Balasan</div>
                               {m.replies.map((r, i) => (
-                                <div key={i} style={{ background: "#edfafc", borderRadius: 6, padding: "10px 14px", fontSize: 13, color: "#3a5066", borderLeft: "2px solid #0ea5c5" }}>
+                                <div key={i} style={{ background: "#FAF7F0", borderRadius: 6, padding: "10px 14px", fontSize: 13, color: "#3a5066", borderLeft: "2px solid #C9AA71" }}>
                                   <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 4 }}>
-                                    <strong style={{ color: "#0ea5c5", fontSize: 12 }}>↩ {r.author}</strong>
-                                    <span style={{ fontSize: 11, color: "#86cad8" }}>{r.date}</span>
+                                    <strong style={{ color: "#C9AA71", fontSize: 12 }}>↩ {r.author}</strong>
+                                    <span style={{ fontSize: 11, color: "#A89070" }}>{r.date}</span>
                                   </div>
                                   {r.text}
                                 </div>
@@ -11260,12 +11260,12 @@ export default function BricksyTravel() {
                               <textarea value={replyText} onChange={e => setReplyText(e.target.value)}
                                 placeholder="Tulis balasan..."
                                 rows={3}
-                                style={{ flex: 1, padding: "10px 12px", border: "1.5px solid #0ea5c5", borderRadius: 6, fontSize: 13, outline: "none", resize: "vertical" }} />
+                                style={{ flex: 1, padding: "10px 12px", border: "1.5px solid #C9AA71", borderRadius: 6, fontSize: 13, outline: "none", resize: "vertical" }} />
                               <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
                                 <button onClick={() => replyMsg(m.id)}
                                   style={{ padding: "9px 18px", background: "#27ae60", color: "#fff", borderRadius: 6, fontSize: 12, border: "none", fontWeight: 600, cursor: "pointer" }}>Kirim</button>
                                 <button onClick={() => { setReplyTo(null); setReplyText(""); }}
-                                  style={{ padding: "9px 14px", background: "#edfafc", borderRadius: 6, fontSize: 12, border: "1px solid #b0dce8", cursor: "pointer" }}>Batal</button>
+                                  style={{ padding: "9px 14px", background: "#FAF7F0", borderRadius: 6, fontSize: 12, border: "1px solid #D4C4A0", cursor: "pointer" }}>Batal</button>
                               </div>
                             </div>
                           )}
@@ -11280,10 +11280,10 @@ export default function BricksyTravel() {
               {adminTab === "users" && isAdmin && (
                 <div className="fade-in">
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24 }}>
-                    <h1 style={{ fontSize: 24, fontWeight: 500, color: "#0d3b66" }}>User Management</h1>
+                    <h1 style={{ fontSize: 24, fontWeight: 500, color: "#2E3D3F" }}>User Management</h1>
                     <button onClick={() => setUserMgmtOpen(v => !v)}
-                      style={{ padding: "9px 20px", background: userMgmtOpen ? "#edfafc" : "#0d3b66", color: userMgmtOpen ? "#4a6680" : "#fff",
-                        border: userMgmtOpen ? "1px solid #b0dce8" : "none", borderRadius: 6, fontSize: 13, fontWeight: 600, cursor: "pointer" }}>
+                      style={{ padding: "9px 20px", background: userMgmtOpen ? "#FAF7F0" : "#2E3D3F", color: userMgmtOpen ? "#3D5254" : "#fff",
+                        border: userMgmtOpen ? "1px solid #D4C4A0" : "none", borderRadius: 6, fontSize: 13, fontWeight: 600, cursor: "pointer" }}>
                       {userMgmtOpen ? "✕ Batal" : "+ Tambah User"}
                     </button>
                   </div>
@@ -11291,7 +11291,7 @@ export default function BricksyTravel() {
                   {/* Add User Form */}
                   {userMgmtOpen && (
                     <div style={{ background: "#fff", borderRadius: 10, padding: "24px 28px", marginBottom: 24, boxShadow: "0 2px 10px rgba(0,0,0,.07)", borderTop: "4px solid #27ae60" }}>
-                      <h3 style={{ fontSize: 14, fontWeight: 600, color: "#0d3b66", marginBottom: 18 }}>➕ Tambah Akun Baru</h3>
+                      <h3 style={{ fontSize: 14, fontWeight: 600, color: "#2E3D3F", marginBottom: 18 }}>➕ Tambah Akun Baru</h3>
                       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
                         {[
                           { label: "Nama Lengkap", key: "name", placeholder: "Nama lengkap", type: "text" },
@@ -11299,16 +11299,16 @@ export default function BricksyTravel() {
                           { label: "Password", key: "password", placeholder: "Min. 6 karakter", type: "password" },
                         ].map(f => (
                           <div key={f.key}>
-                            <label style={{ fontSize: 10, fontWeight: 700, color: "#5090aa", letterSpacing: "1px", textTransform: "uppercase", display: "block", marginBottom: 5 }}>{f.label}</label>
+                            <label style={{ fontSize: 10, fontWeight: 700, color: "#5A6A6C", letterSpacing: "1px", textTransform: "uppercase", display: "block", marginBottom: 5 }}>{f.label}</label>
                             <input type={f.type} placeholder={f.placeholder} value={userMgmtForm[f.key]}
                               onChange={e => setUserMgmtForm(p => ({ ...p, [f.key]: e.target.value }))}
-                              style={{ width: "100%", padding: "9px 11px", border: "1px solid #b0dce8", borderRadius: 6, fontSize: 13, outline: "none", boxSizing: "border-box" }} />
+                              style={{ width: "100%", padding: "9px 11px", border: "1px solid #D4C4A0", borderRadius: 6, fontSize: 13, outline: "none", boxSizing: "border-box" }} />
                           </div>
                         ))}
                         <div>
-                          <label style={{ fontSize: 10, fontWeight: 700, color: "#5090aa", letterSpacing: "1px", textTransform: "uppercase", display: "block", marginBottom: 5 }}>Role</label>
+                          <label style={{ fontSize: 10, fontWeight: 700, color: "#5A6A6C", letterSpacing: "1px", textTransform: "uppercase", display: "block", marginBottom: 5 }}>Role</label>
                           <select value={userMgmtForm.role} onChange={e => setUserMgmtForm(p => ({ ...p, role: e.target.value }))}
-                            style={{ width: "100%", padding: "9px 11px", border: "1px solid #b0dce8", borderRadius: 6, fontSize: 13, outline: "none", background: "#fff" }}>
+                            style={{ width: "100%", padding: "9px 11px", border: "1px solid #D4C4A0", borderRadius: 6, fontSize: 13, outline: "none", background: "#fff" }}>
                             {Object.entries(ROLES).map(([k, v]) => (
                               <option key={k} value={k}>{v.label}</option>
                             ))}
@@ -11330,7 +11330,7 @@ export default function BricksyTravel() {
                           Simpan User
                         </button>
                         <button onClick={() => { setUserMgmtOpen(false); setUserMgmtForm({ username: "", password: "", role: "content_writer", email: "", name: "" }); }}
-                          style={{ padding: "10px 18px", background: "#edfafc", color: "#4a6680", border: "1px solid #b0dce8", borderRadius: 6, fontSize: 13, cursor: "pointer" }}>
+                          style={{ padding: "10px 18px", background: "#FAF7F0", color: "#3D5254", border: "1px solid #D4C4A0", borderRadius: 6, fontSize: 13, cursor: "pointer" }}>
                           Batal
                         </button>
                       </div>
@@ -11341,27 +11341,27 @@ export default function BricksyTravel() {
                   <div className="table-wrap" style={{ background: "#fff", borderRadius: 10, boxShadow: "0 2px 8px rgba(0,0,0,.06)" }}>
                     <table style={{ width: "100%", borderCollapse: "collapse", minWidth: 560 }}>
                       <thead>
-                        <tr style={{ background: "#edfafc" }}>
+                        <tr style={{ background: "#FAF7F0" }}>
                           {["#", "Nama / Username", "Role", "Email", "Status", "Aksi"].map(h => (
-                            <th key={h} style={{ padding: "13px 16px", textAlign: "left", fontSize: 10, fontWeight: 700, color: "#5090aa", letterSpacing: "1px", textTransform: "uppercase", borderBottom: "1px solid #e8f2f8" }}>{h}</th>
+                            <th key={h} style={{ padding: "13px 16px", textAlign: "left", fontSize: 10, fontWeight: 700, color: "#5A6A6C", letterSpacing: "1px", textTransform: "uppercase", borderBottom: "1px solid #e8f2f8" }}>{h}</th>
                           ))}
                         </tr>
                       </thead>
                       <tbody>
                         {data.users.map((u, idx) => (
                           <React.Fragment key={u.id}>
-                            <tr style={{ borderBottom: editUserId === u.id ? "none" : "1px solid #e0f7fa", background: idx % 2 === 0 ? "#fff" : "#f5fdff" }}>
-                              <td style={{ padding: "13px 16px", fontSize: 12, color: "#86cad8" }}>{idx + 1}</td>
+                            <tr style={{ borderBottom: editUserId === u.id ? "none" : "1px solid #F5EDD8", background: idx % 2 === 0 ? "#fff" : "#FDFAF4" }}>
+                              <td style={{ padding: "13px 16px", fontSize: 12, color: "#A89070" }}>{idx + 1}</td>
                               <td style={{ padding: "13px 16px" }}>
-                                <div style={{ fontWeight: 600, fontSize: 13, color: "#0d3b66" }}>{u.name || u.username}</div>
-                                <div style={{ fontSize: 11, color: "#5090aa", marginTop: 1 }}>@{u.username}</div>
+                                <div style={{ fontWeight: 600, fontSize: 13, color: "#2E3D3F" }}>{u.name || u.username}</div>
+                                <div style={{ fontSize: 11, color: "#5A6A6C", marginTop: 1 }}>@{u.username}</div>
                               </td>
                               <td style={{ padding: "13px 16px" }}>
                                 {editRoleId === u.id ? (
                                   <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
                                     <select defaultValue={u.role}
                                       id={`role-select-${u.id}`}
-                                      style={{ padding: "5px 8px", border: "1px solid #b0dce8", borderRadius: 5, fontSize: 12, outline: "none" }}>
+                                      style={{ padding: "5px 8px", border: "1px solid #D4C4A0", borderRadius: 5, fontSize: 12, outline: "none" }}>
                                       {Object.entries(ROLES).map(([k, v]) => (
                                         <option key={k} value={k}>{v.label}</option>
                                       ))}
@@ -11374,17 +11374,17 @@ export default function BricksyTravel() {
                                       }
                                       setEditRoleId(null);
                                     }} style={{ fontSize: 11, padding: "4px 10px", background: "#27ae60", color: "#fff", borderRadius: 5, border: "none", cursor: "pointer" }}>✓</button>
-                                    <button onClick={() => setEditRoleId(null)} style={{ fontSize: 11, padding: "4px 8px", background: "#edfafc", borderRadius: 5, border: "1px solid #b0dce8", cursor: "pointer" }}>✕</button>
+                                    <button onClick={() => setEditRoleId(null)} style={{ fontSize: 11, padding: "4px 8px", background: "#FAF7F0", borderRadius: 5, border: "1px solid #D4C4A0", cursor: "pointer" }}>✕</button>
                                   </div>
                                 ) : (
                                   <span style={{ fontSize: 11, padding: "3px 10px", borderRadius: 10, fontWeight: 500,
-                                    background: u.role === "admin" ? "#fef0f0" : u.role === "content_writer" ? "#e8f4fd" : "#e8f8ef",
+                                    background: u.role === "admin" ? "#fef0f0" : u.role === "content_writer" ? "#F5EDD8" : "#e8f8ef",
                                     color: ROLES[u.role]?.color }}>
                                     {ROLES[u.role]?.label}
                                   </span>
                                 )}
                               </td>
-                              <td style={{ padding: "13px 16px", fontSize: 12, color: "#4a7f98" }}>{u.email || "—"}</td>
+                              <td style={{ padding: "13px 16px", fontSize: 12, color: "#5A6A6C" }}>{u.email || "—"}</td>
                               <td style={{ padding: "13px 16px" }}>
                                 <span style={{ fontSize: 11, padding: "3px 10px", borderRadius: 10, fontWeight: 500,
                                   background: u.active ? "#e8f8ef" : "#fef0f0", color: u.active ? "#27ae60" : "#e74c3c" }}>
@@ -11407,14 +11407,14 @@ export default function BricksyTravel() {
                                   {/* Tutup Edit */}
                                   {editUserId === u.id && (
                                     <button onClick={() => setEditUserId(null)}
-                                      style={{ fontSize: 11, padding: "4px 10px", borderRadius: 5, background: "#edfafc", color: "#0891b2", border: "1px solid #b0dce8", cursor: "pointer", fontWeight: 600 }}>
+                                      style={{ fontSize: 11, padding: "4px 10px", borderRadius: 5, background: "#FAF7F0", color: "#8B6914", border: "1px solid #D4C4A0", cursor: "pointer", fontWeight: 600 }}>
                                       ✕ Tutup
                                     </button>
                                   )}
                                   {/* Ganti Role */}
                                   {u.username !== "administrator" && editRoleId !== u.id && editUserId !== u.id && (
                                     <button onClick={() => setEditRoleId(u.id)}
-                                      style={{ fontSize: 11, padding: "4px 10px", borderRadius: 5, background: "#e8f4fd", color: "#0ea5c5", border: "none", cursor: "pointer", fontWeight: 500 }}>
+                                      style={{ fontSize: 11, padding: "4px 10px", borderRadius: 5, background: "#F5EDD8", color: "#C9AA71", border: "none", cursor: "pointer", fontWeight: 500 }}>
                                       Ganti Role
                                     </button>
                                   )}
@@ -11440,7 +11440,7 @@ export default function BricksyTravel() {
                                     </button>
                                   )}
                                   {u.username === "administrator" && (
-                                    <span style={{ fontSize: 11, color: "#86cad8", fontStyle: "italic" }}>Protected</span>
+                                    <span style={{ fontSize: 11, color: "#A89070", fontStyle: "italic" }}>Protected</span>
                                   )}
                                 </div>
                               </td>
@@ -11448,7 +11448,7 @@ export default function BricksyTravel() {
 
                             {/* ── INLINE EDIT ROW ── */}
                             {editUserId === u.id && (
-                              <tr style={{ borderBottom: "1px solid #e0f7fa", background: "#fffbea" }}>
+                              <tr style={{ borderBottom: "1px solid #F5EDD8", background: "#fffbea" }}>
                                 <td colSpan={6} style={{ padding: "0" }}>
                                   <div style={{ padding: "18px 20px", borderTop: "2px solid #f5d78e", borderBottom: "2px solid #f5d78e", background: "linear-gradient(135deg,#fffef5 0%,#fffbea 100%)" }}>
                                     <div style={{ fontSize: 11, fontWeight: 700, color: "#b7600a", letterSpacing: ".08em", textTransform: "uppercase", marginBottom: 14 }}>
@@ -11457,7 +11457,7 @@ export default function BricksyTravel() {
                                     <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 12, marginBottom: 14 }}>
                                       {/* Nama */}
                                       <div>
-                                        <label style={{ fontSize: 10, fontWeight: 700, color: "#5090aa", letterSpacing: "1px", textTransform: "uppercase", display: "block", marginBottom: 4 }}>Nama Lengkap</label>
+                                        <label style={{ fontSize: 10, fontWeight: 700, color: "#5A6A6C", letterSpacing: "1px", textTransform: "uppercase", display: "block", marginBottom: 4 }}>Nama Lengkap</label>
                                         <input
                                           value={editUserForm.name}
                                           onChange={e => setEditUserForm(f => ({ ...f, name: e.target.value }))}
@@ -11466,7 +11466,7 @@ export default function BricksyTravel() {
                                       </div>
                                       {/* Email */}
                                       <div>
-                                        <label style={{ fontSize: 10, fontWeight: 700, color: "#5090aa", letterSpacing: "1px", textTransform: "uppercase", display: "block", marginBottom: 4 }}>Email</label>
+                                        <label style={{ fontSize: 10, fontWeight: 700, color: "#5A6A6C", letterSpacing: "1px", textTransform: "uppercase", display: "block", marginBottom: 4 }}>Email</label>
                                         <input
                                           type="email"
                                           value={editUserForm.email}
@@ -11476,7 +11476,7 @@ export default function BricksyTravel() {
                                       </div>
                                       {/* No. HP */}
                                       <div>
-                                        <label style={{ fontSize: 10, fontWeight: 700, color: "#5090aa", letterSpacing: "1px", textTransform: "uppercase", display: "block", marginBottom: 4 }}>No. HP / WhatsApp</label>
+                                        <label style={{ fontSize: 10, fontWeight: 700, color: "#5A6A6C", letterSpacing: "1px", textTransform: "uppercase", display: "block", marginBottom: 4 }}>No. HP / WhatsApp</label>
                                         <input
                                           value={editUserForm.phone}
                                           onChange={e => setEditUserForm(f => ({ ...f, phone: e.target.value }))}
@@ -11485,7 +11485,7 @@ export default function BricksyTravel() {
                                       </div>
                                       {/* Password baru */}
                                       <div>
-                                        <label style={{ fontSize: 10, fontWeight: 700, color: "#5090aa", letterSpacing: "1px", textTransform: "uppercase", display: "block", marginBottom: 4 }}>Password Baru <span style={{ color: "#b0c4cc", fontWeight: 400 }}>(kosongkan jika tidak ganti)</span></label>
+                                        <label style={{ fontSize: 10, fontWeight: 700, color: "#5A6A6C", letterSpacing: "1px", textTransform: "uppercase", display: "block", marginBottom: 4 }}>Password Baru <span style={{ color: "#b0c4cc", fontWeight: 400 }}>(kosongkan jika tidak ganti)</span></label>
                                         <input
                                           type="password"
                                           value={editUserForm.password}
@@ -11511,7 +11511,7 @@ export default function BricksyTravel() {
                                         💾 Simpan Perubahan
                                       </button>
                                       <button onClick={() => setEditUserId(null)}
-                                        style={{ padding: "7px 14px", background: "#edfafc", color: "#4a7f98", border: "1px solid #b0dce8", borderRadius: 6, fontSize: 12, cursor: "pointer" }}>
+                                        style={{ padding: "7px 14px", background: "#FAF7F0", color: "#5A6A6C", border: "1px solid #D4C4A0", borderRadius: 6, fontSize: 12, cursor: "pointer" }}>
                                         Batal
                                       </button>
                                     </div>
@@ -11524,7 +11524,7 @@ export default function BricksyTravel() {
                       </tbody>
                     </table>
                     {data.users.length === 0 && (
-                      <div style={{ padding: "32px", textAlign: "center", color: "#5090aa", fontSize: 13 }}>Belum ada user terdaftar.</div>
+                      <div style={{ padding: "32px", textAlign: "center", color: "#5A6A6C", fontSize: 13 }}>Belum ada user terdaftar.</div>
                     )}
                   </div>
                 </div>
@@ -11536,51 +11536,51 @@ export default function BricksyTravel() {
               {/* SETTINGS */}
               {adminTab === "settings" && isAdmin && (
                 <div className="fade-in">
-                  <h1 style={{ fontSize: 24, fontWeight: 500, color: "#0d3b66", marginBottom: 28 }}>Settings</h1>
+                  <h1 style={{ fontSize: 24, fontWeight: 500, color: "#2E3D3F", marginBottom: 28 }}>Settings</h1>
 
                   {/* Logo Upload */}
-                  <div style={{ background: "#fff", borderRadius: 8, padding: "22px 24px", marginBottom: 24, boxShadow: "0 2px 8px rgba(0,0,0,.06)", borderTop: "4px solid #0ea5c5" }}>
-                    <h3 style={{ fontSize: 15, fontWeight: 500, color: "#0d3b66", marginBottom: 6 }}>🖼 Logo Upload</h3>
-                    <p style={{ fontSize: 12, color: "#5090aa", marginBottom: 16, lineHeight: 1.6 }}>
+                  <div style={{ background: "#fff", borderRadius: 8, padding: "22px 24px", marginBottom: 24, boxShadow: "0 2px 8px rgba(0,0,0,.06)", borderTop: "4px solid #C9AA71" }}>
+                    <h3 style={{ fontSize: 15, fontWeight: 500, color: "#2E3D3F", marginBottom: 6 }}>🖼 Logo Upload</h3>
+                    <p style={{ fontSize: 12, color: "#5A6A6C", marginBottom: 16, lineHeight: 1.6 }}>
                       Upload logo untuk ditampilkan di navbar, footer, admin panel, dan tab browser (favicon). Jika tidak diupload, nama brand teks akan digunakan.
                     </p>
                     <div style={{ display: "flex", gap: 20, alignItems: "flex-start", flexWrap: "wrap" }}>
                       {data.content.logoImage && (
                         <div style={{ display: "flex", flexDirection: "column", gap: 8, alignItems: "center" }}>
-                          <img src={data.content.logoImage} alt="Logo" style={{ height: 60, maxWidth: 180, objectFit: "contain", border: "1px solid #e0f7fa", borderRadius: 6, padding: 8, background: "#edfafc" }} />
+                          <img src={data.content.logoImage} alt="Logo" style={{ height: 60, maxWidth: 180, objectFit: "contain", border: "1px solid #F5EDD8", borderRadius: 6, padding: 8, background: "#FAF7F0" }} />
                           <button onClick={() => { save({ ...data, content: { ...data.content, logoImage: "" } }); notify("Logo removed."); }}
                             style={{ fontSize: 11, padding: "4px 12px", background: "#fee", color: "#e74c3c", borderRadius: 6, border: "none" }}>Remove Logo</button>
                         </div>
                       )}
                       <div style={{ display: "flex", flexDirection: "column", gap: 8, flex: 1, minWidth: 240 }}>
-                        <label style={{ fontSize: 11, fontWeight: 600, color: "#5090aa", letterSpacing: "1px", textTransform: "uppercase" }}>Upload File Logo</label>
+                        <label style={{ fontSize: 11, fontWeight: 600, color: "#5A6A6C", letterSpacing: "1px", textTransform: "uppercase" }}>Upload File Logo</label>
                         <UploadButton label="📁 Pilih File Logo"
                           onDone={urls => {
                             save({ ...data, content: { ...data.content, logoImage: urls[0] } });
                             notify("Logo uploaded & applied to all sections!");
                           }}
                           onError={() => notify("Gagal upload logo. Coba lagi.", "error")} />
-                        <label style={{ fontSize: 11, fontWeight: 600, color: "#5090aa", letterSpacing: "1px", textTransform: "uppercase", marginTop: 4 }}>Atau URL Gambar</label>
+                        <label style={{ fontSize: 11, fontWeight: 600, color: "#5A6A6C", letterSpacing: "1px", textTransform: "uppercase", marginTop: 4 }}>Atau URL Gambar</label>
                         <div style={{ display: "flex", gap: 8 }}>
                           <input placeholder="https://..." defaultValue={data.content.logoImage}
                             id="logo-url-input"
-                            style={{ flex: 1, padding: "8px 10px", border: "1px solid #b0dce8", borderRadius: 6, fontSize: 12, outline: "none" }} />
+                            style={{ flex: 1, padding: "8px 10px", border: "1px solid #D4C4A0", borderRadius: 6, fontSize: 12, outline: "none" }} />
                           <button onClick={() => {
                             const url = document.getElementById("logo-url-input")?.value?.trim();
                             if (!url) return notify("Masukkan URL logo.", "error");
                             save({ ...data, content: { ...data.content, logoImage: url } });
                             notify("Logo URL applied!");
-                          }} style={{ padding: "8px 14px", background: "#0ea5c5", color: "#fff", borderRadius: 6, fontSize: 12, border: "none" }}>Apply</button>
+                          }} style={{ padding: "8px 14px", background: "#C9AA71", color: "#fff", borderRadius: 6, fontSize: 12, border: "none" }}>Apply</button>
                         </div>
-                        <p style={{ fontSize: 11, color: "#5090aa" }}>Disarankan: PNG transparan, min 200px lebar, rasio 3:1 atau 4:1</p>
+                        <p style={{ fontSize: 11, color: "#5A6A6C" }}>Disarankan: PNG transparan, min 200px lebar, rasio 3:1 atau 4:1</p>
                       </div>
                     </div>
                   </div>
 
                   {/* Founding Year */}
-                  <div style={{ background: "#fff", borderRadius: 8, padding: "22px 24px", marginBottom: 24, boxShadow: "0 2px 8px rgba(0,0,0,.06)", borderTop: "4px solid #38c5d8" }}>
-                    <h3 style={{ fontSize: 15, fontWeight: 500, color: "#0d3b66", marginBottom: 6 }}>🗓 Tahun Berdiri Perusahaan</h3>
-                    <p style={{ fontSize: 12, color: "#5090aa", marginBottom: 16, lineHeight: 1.6 }}>
+                  <div style={{ background: "#fff", borderRadius: 8, padding: "22px 24px", marginBottom: 24, boxShadow: "0 2px 8px rgba(0,0,0,.06)", borderTop: "4px solid #C9AA71" }}>
+                    <h3 style={{ fontSize: 15, fontWeight: 500, color: "#2E3D3F", marginBottom: 6 }}>🗓 Tahun Berdiri Perusahaan</h3>
+                    <p style={{ fontSize: 12, color: "#5A6A6C", marginBottom: 16, lineHeight: 1.6 }}>
                       Tahun ini digunakan untuk teks "sejak [tahun]", statistik "X Tahun Pengalaman", dan label dekorasi halaman.
                     </p>
                     <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
@@ -11589,24 +11589,24 @@ export default function BricksyTravel() {
                         defaultValue={data.content.foundingYear || "2026"}
                         placeholder="cth: 2026"
                         maxLength={4}
-                        style={{ width: 120, padding: "8px 12px", border: "1px solid #b0dce8", borderRadius: 6, fontSize: 14, outline: "none" }}
+                        style={{ width: 120, padding: "8px 12px", border: "1px solid #D4C4A0", borderRadius: 6, fontSize: 14, outline: "none" }}
                       />
                       <button onClick={() => {
                         const yr = document.getElementById("founding-year-input")?.value?.trim();
                         if (!yr || !/^\d{4}$/.test(yr)) return notify("Masukkan tahun 4 digit (misal: 2026).", "error");
                         save({ ...data, content: { ...data.content, foundingYear: yr } });
                         notify(`✅ Tahun berdiri diperbarui ke ${yr}`);
-                      }} style={{ padding: "8px 16px", background: "linear-gradient(130deg,#063d5c 0%,#0875a8 45%,#0aa8bf 78%,#10d0e0 100%)", color: "#fff", borderRadius: 6, fontSize: 12, border: "none", fontWeight: 500 }}>
+                      }} style={{ padding: "8px 16px", background: "linear-gradient(130deg,#2E3D3F 0%,#3D5254 45%,#8B6914 78%,#C9AA71 100%)", color: "#fff", borderRadius: 6, fontSize: 12, border: "none", fontWeight: 500 }}>
                         Simpan
                       </button>
-                      <span style={{ fontSize: 12, color: "#5090aa" }}>Saat ini: <strong style={{ color: "#0d3b66" }}>{data.content.foundingYear || "2026"}</strong> · Pengalaman: <strong style={{ color: "#0891b2" }}>{new Date().getFullYear() - parseInt(data.content.foundingYear || "2026")} tahun</strong></span>
+                      <span style={{ fontSize: 12, color: "#5A6A6C" }}>Saat ini: <strong style={{ color: "#2E3D3F" }}>{data.content.foundingYear || "2026"}</strong> · Pengalaman: <strong style={{ color: "#8B6914" }}>{new Date().getFullYear() - parseInt(data.content.foundingYear || "2026")} tahun</strong></span>
                     </div>
                   </div>
 
                   {/* Hero Display Mode */}
                   <div style={{ background: "#fff", borderRadius: 8, padding: "22px 24px", marginBottom: 24, boxShadow: "0 2px 8px rgba(0,0,0,.06)", borderTop: "4px solid #8e44ad" }}>
-                    <h3 style={{ fontSize: 15, fontWeight: 500, color: "#0d3b66", marginBottom: 6 }}>🖥 Mode Tampilan Hero Beranda</h3>
-                    <p style={{ fontSize: 12, color: "#5090aa", marginBottom: 20, lineHeight: 1.6 }}>
+                    <h3 style={{ fontSize: 15, fontWeight: 500, color: "#2E3D3F", marginBottom: 6 }}>🖥 Mode Tampilan Hero Beranda</h3>
+                    <p style={{ fontSize: 12, color: "#5A6A6C", marginBottom: 20, lineHeight: 1.6 }}>
                       Pilih apakah bagian hero di halaman utama ditampilkan sebagai <strong>slideshow otomatis</strong> (berganti-ganti gambar dari artikel) atau <strong>gambar statis diam</strong> dari satu URL yang ditentukan.
                     </p>
                     {/* Toggle Pill */}
@@ -11619,15 +11619,15 @@ export default function BricksyTravel() {
                         return (
                           <div key={opt.val} onClick={() => { save({ ...data, content: { ...data.content, heroMode: opt.val } }); notify(`✅ Mode hero diubah ke: ${opt.label}`); }}
                             style={{ flex: 1, minWidth: 200, padding: "16px 20px", borderRadius: 10, cursor: "pointer",
-                              border: active ? "2px solid #8e44ad" : "2px solid #e0f7fa",
-                              background: active ? "#f5eeff" : "#f5fdff",
+                              border: active ? "2px solid #8e44ad" : "2px solid #F5EDD8",
+                              background: active ? "#f5eeff" : "#FDFAF4",
                               transition: "all .18s" }}>
                             <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 6 }}>
                               <span style={{ fontSize: 22 }}>{opt.icon}</span>
-                              <span style={{ fontWeight: 700, fontSize: 14, color: active ? "#8e44ad" : "#0d3b66" }}>{opt.label}</span>
+                              <span style={{ fontWeight: 700, fontSize: 14, color: active ? "#8e44ad" : "#2E3D3F" }}>{opt.label}</span>
                               {active && <span style={{ marginLeft: "auto", fontSize: 10, background: "#8e44ad", color: "#fff", borderRadius: 8, padding: "2px 8px", fontWeight: 700 }}>AKTIF</span>}
                             </div>
-                            <div style={{ fontSize: 12, color: "#5090aa", lineHeight: 1.5 }}>{opt.desc}</div>
+                            <div style={{ fontSize: 12, color: "#5A6A6C", lineHeight: 1.5 }}>{opt.desc}</div>
                           </div>
                         );
                       })}
@@ -11636,7 +11636,7 @@ export default function BricksyTravel() {
                     {/* Static image setting — hanya tampil kalau mode static */}
                     {(data.content.heroMode || "slideshow") === "static" && (
                       <div style={{ background: "#f5eeff", borderRadius: 8, padding: "16px 18px", border: "1px solid #d8b4fe" }}>
-                        <label style={{ fontSize: 11, fontWeight: 600, color: "#5090aa", letterSpacing: "1px", textTransform: "uppercase", display: "block", marginBottom: 8 }}>URL Gambar Statis Hero</label>
+                        <label style={{ fontSize: 11, fontWeight: 600, color: "#5A6A6C", letterSpacing: "1px", textTransform: "uppercase", display: "block", marginBottom: 8 }}>URL Gambar Statis Hero</label>
                         <div style={{ display: "flex", gap: 8, marginBottom: 10 }}>
                           <input id="hero-static-url" defaultValue={data.content.heroStaticImage || ""}
                             placeholder="https://..."
@@ -11651,7 +11651,7 @@ export default function BricksyTravel() {
                           </button>
                         </div>
                         {/* Upload file */}
-                        <label style={{ fontSize: 11, fontWeight: 600, color: "#5090aa", letterSpacing: "1px", textTransform: "uppercase", display: "block", marginBottom: 6 }}>Atau Upload Gambar</label>
+                        <label style={{ fontSize: 11, fontWeight: 600, color: "#5A6A6C", letterSpacing: "1px", textTransform: "uppercase", display: "block", marginBottom: 6 }}>Atau Upload Gambar</label>
                         <UploadButton label="📁 Pilih Gambar Hero"
                           style={{ border: "1.5px dashed #8e44ad", color: "#8e44ad", background: "#fff" }}
                           onDone={urls => {
@@ -11672,8 +11672,8 @@ export default function BricksyTravel() {
                   <div className="settings-grid">
                     {[
                       { title: "Firebase Config", desc: "Connect to Firestore for real-time data sync", btn: "Configure", color: "#f39c12" },
-                      { title: "Cloudinary Config", desc: "Set up image hosting and transformation pipeline", btn: "Configure", color: "#0ea5c5" },
-                      { title: "Vercel Deploy", desc: "Deploy updates to production via Vercel CI/CD", btn: "Deploy", color: "#0d3b66" },
+                      { title: "Cloudinary Config", desc: "Set up image hosting and transformation pipeline", btn: "Configure", color: "#C9AA71" },
+                      { title: "Vercel Deploy", desc: "Deploy updates to production via Vercel CI/CD", btn: "Deploy", color: "#2E3D3F" },
                       { title: "SEO Settings", desc: "Manage meta tags, sitemap, and schema markup", btn: "Edit SEO", color: "#27ae60" },
                       { title: "Analytics", desc: "View traffic, user behavior and conversion data", btn: "View", color: "#8e44ad" },
                       {
@@ -11686,8 +11686,8 @@ export default function BricksyTravel() {
                       },
                     ].map(s => (
                       <div key={s.title} style={{ background: "#fff", borderRadius: 8, padding: "20px 24px", boxShadow: "0 2px 8px rgba(0,0,0,.06)", borderTop: `4px solid ${s.color}` }}>
-                        <h3 style={{ fontSize: 15, fontWeight: 500, color: "#0d3b66", marginBottom: 8 }}>{s.title}</h3>
-                        <p style={{ fontSize: 12, color: "#5090aa", lineHeight: 1.6, marginBottom: 16 }}>{s.desc}</p>
+                        <h3 style={{ fontSize: 15, fontWeight: 500, color: "#2E3D3F", marginBottom: 8 }}>{s.title}</h3>
+                        <p style={{ fontSize: 12, color: "#5A6A6C", lineHeight: 1.6, marginBottom: 16 }}>{s.desc}</p>
                         <button onClick={s.action || (() => notify(`${s.title} — Configure in your deployment environment.`, "success"))}
                           style={{ padding: "8px 18px", background: s.color, color: "#fff", borderRadius: 6, fontSize: 12, border: "none" }}>{s.btn}</button>
                       </div>
