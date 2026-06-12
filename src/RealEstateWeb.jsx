@@ -557,7 +557,7 @@ const DEFAULT_POSTS = {
         { type: "paragraph", value: "Perjalanan bukan sekadar soal destinasi — melainkan tentang momen yang membuat hati terasa penuh. Saat matahari terbenam di Pura Tanah Lot, saat pertama kali menginjakkan kaki di hamparan sawah Tegalalang, atau saat tawa riang di tengah petualangan bersama orang-orang tersayang." },
         { type: "paragraph", value: "Bersama VASTURA GROUP, setiap detail perjalanan Anda direncanakan dengan penuh perhatian. Kami percaya bahwa kenangan terbaik lahir dari pengalaman yang dirancang dengan hati." },
       ],
-      tags: ["kenangan", "realestate", "wisata", "bali"],
+      tags: ["kenangan", "vastura", "wisata", "bali"],
     },
   ],
   shop: [
@@ -672,7 +672,7 @@ const DEFAULT_DATA = {
     waLink: "https://wa.me/6281233275485",
     igLink: "https://instagram.com/vastura_group",
     fbLink: "https://facebook.com/vastura_group",
-    logoText: "REAL ESTATE\nWEB",
+    logoText: "VASTURA\nGROUP",
     logoImage: "",
     logoSingleLine: false,
     logoFont: "Playfair Display",
@@ -1647,7 +1647,7 @@ const DEFAULT_DATA = {
     { id: 3, name: "Raka Pratama", role: "Travel Manager", quotes: "Perjalanan terbaik dimulai dari perencanaan yang matang.", photo: "https://ui-avatars.com/api/?name=Raka+Pratama&size=300&background=c9aa71&color=fff&bold=true" },
     { id: 4, name: "Dini Rahayu", role: "Event Organizer", quotes: "Kreativitas adalah kunci event yang tak terlupakan.", photo: "https://ui-avatars.com/api/?name=Dini+Rahayu&size=300&background=27ae60&color=fff&bold=true" },
   ],
-  users: HARDCODED_USERS.map((u, i) => ({ id: i + 1, ...u, email: `${u.username}@realestate.com`, active: true })),
+  users: HARDCODED_USERS.map((u, i) => ({ id: i + 1, ...u, email: `${u.username}@vastura.com`, active: true })),
 };
 
 /* ─────────────── GLOBAL STYLES ─────────────── */
@@ -2423,7 +2423,7 @@ const GS = () => (
     }
 
     /* ═══════════════════════════════════════════
-       REAL ESTATE WEB — HOME PAGE STYLES
+       VASTURA GROUP — HOME PAGE STYLES
        Palette: White dominant, Grey/Black accents
        Ornaments: selendang, flare, smoke
     ════════════════════════════════════════════ */
@@ -9190,6 +9190,62 @@ function LandscapePage({ onWaOpen }) {
   />;
 }
 
+/* ════════════════════════════════════════════ WA PICKER MODAL ════════════════════════════════════════════ */
+function WaPickerModal({ admins = [], msgText = "", onClose }) {
+  if (!admins || admins.length === 0) return null;
+
+  return (
+    <div onClick={onClose}
+      style={{ position: "fixed", inset: 0, zIndex: 9995, background: "rgba(10,20,30,.50)",
+        backdropFilter: "blur(6px)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+      <div onClick={e => e.stopPropagation()}
+        style={{ background: "#fff", borderRadius: 16, padding: "32px 28px", maxWidth: 360, width: "90%",
+          boxShadow: "0 20px 60px rgba(0,0,0,.2)", position: "relative" }}>
+        <button onClick={onClose}
+          style={{ position: "absolute", top: 16, right: 16, background: "none", border: "none",
+            fontSize: 24, color: "#0d3b66", cursor: "pointer", lineHeight: 1 }}>✕</button>
+
+        <h2 style={{ fontSize: 20, fontWeight: 700, color: "#0d3b66", marginBottom: 6, textAlign: "center" }}>
+          Hubungi Kami via WhatsApp
+        </h2>
+        <p style={{ fontSize: 13, color: "#4a7f98", textAlign: "center", marginBottom: 24 }}>
+          Pilih kontak yang ingin Anda hubungi
+        </p>
+
+        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+          {admins.map(admin => (
+            <a key={admin.id} href={admin.wa + (msgText ? `?text=${encodeURIComponent(msgText)}` : "")}
+              target="_blank" rel="noopener noreferrer"
+              style={{ display: "flex", alignItems: "center", gap: 14, padding: "14px 16px",
+                border: "1.5px solid #c0e8f0", borderRadius: 10, background: "#f5fdff",
+                textDecoration: "none", cursor: "pointer", transition: "all .2s" }}
+              onMouseEnter={e => { e.currentTarget.style.borderColor = "#25d366"; e.currentTarget.style.background = "#f0fdf4"; }}
+              onMouseLeave={e => { e.currentTarget.style.borderColor = "#c0e8f0"; e.currentTarget.style.background = "#f5fdff"; }}>
+              <span style={{ fontSize: 24 }}>💬</span>
+              <div style={{ flex: 1 }}>
+                <div style={{ fontSize: 14, fontWeight: 700, color: "#0d3b66" }}>{admin.name}</div>
+                <div style={{ fontSize: 12, color: "#4a7f98", marginTop: 2 }}>
+                  {admin.wa.replace("https://wa.me/", "+").replace(/(\d{2})(\d{3})(\d{4})(\d+)/, "$1 $2-$3-$4")}
+                </div>
+              </div>
+              <span style={{ fontSize: 14, color: "#25d366" }}>→</span>
+            </a>
+          ))}
+        </div>
+
+        <button onClick={onClose}
+          style={{ width: "100%", marginTop: 20, padding: "11px 0", border: "1.5px solid #c0e8f0",
+            borderRadius: 8, background: "transparent", color: "#4a7f98", fontSize: 13, fontWeight: 600,
+            cursor: "pointer", transition: "all .2s" }}
+          onMouseEnter={e => { e.currentTarget.style.borderColor = "#0d3b66"; e.currentTarget.style.color = "#0d3b66"; }}
+          onMouseLeave={e => { e.currentTarget.style.borderColor = "#c0e8f0"; e.currentTarget.style.color = "#4a7f98"; }}>
+          Tutup
+        </button>
+      </div>
+    </div>
+  );
+}
+
 export default function BricksyTravel() {
   const [data, setData] = useState(DEFAULT_DATA);
   const dataRef = useRef(DEFAULT_DATA); // selalu up-to-date, aman dipakai di closure stale (popstate)
@@ -9598,7 +9654,7 @@ export default function BricksyTravel() {
 
   // Sync browser tab title — selalu satu baris, ikuti logoText
   useEffect(() => {
-    const raw = data.content.logoText || "REAL ESTATE WEB";
+    const raw = data.content.logoText || "VASTURA GROUP";
     const oneLiner = raw.replace(/\n/g, " ").replace(/\s+/g, " ").trim().toUpperCase();
     document.title = oneLiner;
   }); // tanpa dependency array → jalan setiap render, selalu up-to-date
@@ -10791,7 +10847,7 @@ export default function BricksyTravel() {
                     <div className="re-smoke-orb" style={{ width:340,height:340,bottom:"-60px",left:"-60px",animationDelay:"4s" }} />
                     <p className="re-about-label re-reveal">Tentang Kami</p>
                     <h2 className="re-about-h2 re-reveal delay-1">
-                      Selama 20 tahun lebih, VASTURA GROUP telah melakukan jual-beli properti. Kami bangga menjadi salah satu perusahaan real estat terkemuka di kota.
+                      Selama 20 tahun lebih, VASTURA GROUP telah melakukan jual-beli properti. Kami bangga menjadi salah satu perusahaan properti terkemuka di kota.
                     </h2>
                     <div className="re-sash" style={{ bottom:0,left:"20%",width:"60%",opacity:.5 }} />
                   </section>
@@ -10867,7 +10923,7 @@ export default function BricksyTravel() {
                     {/* Smoke ornament */}
                     <div className="re-smoke-orb" style={{ width:450,height:450,top:"-80px",right:"-60px",animationDelay:"2s" }} />
                     <div style={{ maxWidth:1200,margin:"0 auto",position:"relative",zIndex:1 }}>
-                      <h2 className="re-services-h2 re-reveal">Layanan Real Estat Kami</h2>
+                      <h2 className="re-services-h2 re-reveal">Layanan VASTURA GROUP Kami</h2>
                       <div className="re-services-grid">
                         {[
                           { num:"01", title:"Beli Rumah", desc:"Sedang cari rumah? Kami bisa membantu menemukannya.", img:"https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=600&q=80&auto=format&fit=crop" },
@@ -10896,7 +10952,7 @@ export default function BricksyTravel() {
                   <section className="re-contact" id="re-contact-section">
                     <div className="re-contact-grid">
                       <div className="re-slide-left">
-                        <div className="re-contact-logo">Real Estate<br />Web</div>
+                        <div className="re-contact-logo">VASTURA<br />GROUP</div>
                         <p style={{ fontFamily:"'Jost',sans-serif", fontSize:".85rem", color:"var(--re-grey-md)", lineHeight:1.8, marginBottom:14 }}>
                           {data.content.email || "halo@vastura.co.id"}
                         </p>
