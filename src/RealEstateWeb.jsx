@@ -513,7 +513,7 @@ async function sendOTPEmail(toEmail, passcode) {
 const SECTIONS = ["news", "shop", "destinations"];
 
 const SECTION_LABELS = {
-  news: "Portfolio",
+  news: "Program Affiliate",
   shop: "Traveling",
   destinations: "Wedding Organizer",
 };
@@ -9930,20 +9930,20 @@ export default function BricksyTravel() {
     { key: "about", label: data.content.nav2 || "About" },
     { key: "news",  label: data.content.nav3 || "Portfolio" },
   ];
-  // Dropdown: Layanan Developer
+  // Dropdown: Layanan Developer (termasuk Interior & Eksterior)
   const navDropdownLayanan = [
     { key: "services",  label: data.content.nav6  || "Layanan Kami" },
     { key: "desainrab", label: data.content.nav7  || "Jasa Desain & RAB" },
     { key: "temarumah", label: data.content.nav8  || "Tema Rumah" },
+    { key: "_divider",  label: null },
+    { key: "interior",  label: data.content.nav9  || "Interior" },
+    { key: "pagar",     label: data.content.nav10 || "Pagar Rumah" },
+    { key: "kanopi",    label: data.content.nav11 || "Kanopi" },
+    { key: "aluminium", label: data.content.nav12 || "Aluminium" },
+    { key: "landscape", label: data.content.nav13 || "Landscape & Taman" },
   ];
-  // Dropdown: Interior & Eksterior
-  const navDropdownInterior = [
-    { key: "interior",   label: data.content.nav9  || "Interior" },
-    { key: "pagar",      label: data.content.nav10 || "Pagar Rumah" },
-    { key: "kanopi",     label: data.content.nav11 || "Kanopi" },
-    { key: "aluminium",  label: data.content.nav12 || "Aluminium" },
-    { key: "landscape",  label: data.content.nav13 || "Landscape & Taman" },
-  ];
+  // Interior & Eksterior sudah digabung ke navDropdownLayanan
+  const navDropdownInterior = [];
   // Dropdown: Galeri Proyek (artikel sections)
   const navDropdownGaleri = [
     { key: "shop",         label: data.content.nav4 || "Traveling" },
@@ -10076,6 +10076,170 @@ export default function BricksyTravel() {
         <ReviewForm token={reviewTokenParam} data={data} save={save} notify={notify} isLoading={isLoading} />
       )}
 
+      {/* ══════ LOGIN MODAL ══════ */}
+      {showLogin && (
+        <div onClick={() => setShowLogin(false)} 
+          style={{ position: "fixed", inset: 0, zIndex: 9998, background: "rgba(10,20,30,.50)",
+            backdropFilter: "blur(6px)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <div onClick={e => e.stopPropagation()} className="login-modal" 
+            style={{ background: "#fff", borderRadius: 12, padding: "48px 44px", width: "90%", maxWidth: 400, 
+              position: "relative", boxShadow: "0 20px 60px rgba(0,0,0,.2)" }}>
+            <button onClick={() => setShowLogin(false)} 
+              style={{ position: "absolute", top: 16, right: 16, background: "none", border: "none",
+                fontSize: 24, color: "#0d3b66", cursor: "pointer", lineHeight: 1 }}>✕</button>
+            
+            {!forgotStep ? (
+              <>
+                <h2 style={{ fontSize: 24, fontWeight: 700, color: "#0d3b66", marginBottom: 4, textAlign: "center" }}>Login</h2>
+                <p style={{ fontSize: 13, color: "#4a7f98", textAlign: "center", marginBottom: 28 }}>Akses control panel Anda</p>
+                
+                {loginErr && <div style={{ background: "#fceaea", borderLeft: "3px solid #e74c3c", padding: "12px 14px", borderRadius: 6, fontSize: 12, color: "#c0392b", marginBottom: 16 }}>⚠ {loginErr}</div>}
+                
+                <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+                  <div>
+                    <label style={{ display: "block", fontSize: 12, fontWeight: 600, color: "#0d3b66", marginBottom: 6, letterSpacing: ".5px" }}>USERNAME</label>
+                    <input type="text" value={loginForm.username} onChange={e => setLoginForm(p => ({ ...p, username: e.target.value }))}
+                      placeholder="administrator / writer1 / cs1"
+                      style={{ width: "100%", padding: "11px 14px", border: "1.5px solid #c0e8f0", borderRadius: 8, 
+                        fontSize: 13, outline: "none", background: "#f5fdff", color: "#0d3b66",
+                        transition: "border .2s" }}
+                      onFocus={e => e.target.style.borderColor = "#0891b2"}
+                      onBlur={e => e.target.style.borderColor = "#c0e8f0"} />
+                  </div>
+                  <div>
+                    <label style={{ display: "block", fontSize: 12, fontWeight: 600, color: "#0d3b66", marginBottom: 6, letterSpacing: ".5px" }}>PASSWORD</label>
+                    <input type="password" value={loginForm.password} onChange={e => setLoginForm(p => ({ ...p, password: e.target.value }))}
+                      placeholder="••••••••"
+                      onKeyDown={e => e.key === "Enter" && login()}
+                      style={{ width: "100%", padding: "11px 14px", border: "1.5px solid #c0e8f0", borderRadius: 8, 
+                        fontSize: 13, outline: "none", background: "#f5fdff", color: "#0d3b66",
+                        transition: "border .2s" }}
+                      onFocus={e => e.target.style.borderColor = "#0891b2"}
+                      onBlur={e => e.target.style.borderColor = "#c0e8f0"} />
+                  </div>
+                </div>
+
+                <button onClick={login}
+                  style={{ width: "100%", marginTop: 20, padding: "12px 0", background: "linear-gradient(130deg,#063d5c 0%,#0875a8 45%,#0aa8bf 78%,#10d0e0 100%)",
+                    color: "#fff", border: "none", borderRadius: 8, fontSize: 14, fontWeight: 700, cursor: "pointer",
+                    transition: "all .2s" }}
+                  onMouseEnter={e => e.currentTarget.style.boxShadow = "0 8px 20px rgba(8,117,168,.35)"}
+                  onMouseLeave={e => e.currentTarget.style.boxShadow = "none"}>
+                  Masuk
+                </button>
+
+                <button onClick={() => { setForgotStep("input_user"); setLoginErr(""); }}
+                  style={{ width: "100%", marginTop: 10, padding: "10px 0", background: "transparent", 
+                    color: "#0891b2", border: "none", fontSize: 12, fontWeight: 600, cursor: "pointer",
+                    textDecoration: "underline", letterSpacing: ".3px" }}>
+                  Lupa Password?
+                </button>
+              </>
+            ) : (
+              <>
+                <h2 style={{ fontSize: 20, fontWeight: 700, color: "#0d3b66", marginBottom: 4, textAlign: "center" }}>Reset Password</h2>
+                <p style={{ fontSize: 12, color: "#4a7f98", textAlign: "center", marginBottom: 20 }}>Pulihkan akses Anda</p>
+                
+                {forgotErr && <div style={{ background: "#fceaea", borderLeft: "3px solid #e74c3c", padding: "10px 12px", borderRadius: 6, fontSize: 11, color: "#c0392b", marginBottom: 14 }}>⚠ {forgotErr}</div>}
+
+                {forgotStep === "input_user" && (
+                  <>
+                    <label style={{ display: "block", fontSize: 11, fontWeight: 600, color: "#4a7f98", marginBottom: 8 }}>CARI BERDASARKAN</label>
+                    <div style={{ display: "flex", gap: 8, marginBottom: 14 }}>
+                      {[{k:"username",l:"Username"}, {k:"email",l:"Email"}, {k:"phone",l:"No. HP"}].map(o => (
+                        <button key={o.k} onClick={() => setForgotSearchBy(o.k)}
+                          style={{ flex: 1, padding: "7px", fontSize: 11, fontWeight: 600, border: "1px solid",
+                            borderRadius: 6, background: forgotSearchBy === o.k ? "#0d3b66" : "#f5fdff",
+                            color: forgotSearchBy === o.k ? "#fff" : "#4a7f98",
+                            borderColor: forgotSearchBy === o.k ? "#0d3b66" : "#c0e8f0",
+                            cursor: "pointer" }}>
+                          {o.l}
+                        </button>
+                      ))}
+                    </div>
+                    <input type="text" value={forgotUser} onChange={e => setForgotUser(e.target.value)}
+                      placeholder={forgotSearchBy === "username" ? "username" : forgotSearchBy === "email" ? "email@domain.com" : "0812..."}
+                      style={{ width: "100%", padding: "11px 14px", border: "1.5px solid #c0e8f0", borderRadius: 8,
+                        fontSize: 13, outline: "none", background: "#f5fdff" }}
+                      onFocus={e => e.target.style.borderColor = "#0891b2"}
+                      onBlur={e => e.target.style.borderColor = "#c0e8f0"} />
+                    <button onClick={forgotStep1}
+                      style={{ width: "100%", marginTop: 16, padding: "10px", background: "#0d3b66", color: "#fff",
+                        border: "none", borderRadius: 6, fontSize: 12, fontWeight: 700, cursor: "pointer" }}>
+                      Lanjut
+                    </button>
+                  </>
+                )}
+
+                {forgotStep === "input_email" && (
+                  <>
+                    <label style={{ display: "block", fontSize: 11, fontWeight: 600, color: "#4a7f98", marginBottom: 8 }}>EMAIL TERDAFTAR</label>
+                    <input type="email" value={forgotEmail} onChange={e => setForgotEmail(e.target.value)}
+                      placeholder="email@domain.com"
+                      style={{ width: "100%", padding: "11px 14px", border: "1.5px solid #c0e8f0", borderRadius: 8,
+                        fontSize: 13, outline: "none", background: "#f5fdff", marginBottom: 14 }}
+                      onFocus={e => e.target.style.borderColor = "#0891b2"}
+                      onBlur={e => e.target.style.borderColor = "#c0e8f0"} />
+                    <button onClick={forgotStep2} disabled={forgotOTP.sending}
+                      style={{ width: "100%", padding: "10px", background: forgotOTP.sending ? "#ccc" : "#27ae60", 
+                        color: "#fff", border: "none", borderRadius: 6, fontSize: 12, fontWeight: 700, cursor: "pointer" }}>
+                      {forgotOTP.sending ? "Mengirim..." : "Kirim OTP"}
+                    </button>
+                  </>
+                )}
+
+                {forgotStep === "input_otp" && (
+                  <>
+                    <label style={{ display: "block", fontSize: 11, fontWeight: 600, color: "#4a7f98", marginBottom: 8 }}>MASUKKAN KODE OTP</label>
+                    <input type="text" value={forgotOTP.input} onChange={e => setForgotOTP(p => ({ ...p, input: e.target.value }))}
+                      placeholder="000000"
+                      style={{ width: "100%", padding: "11px 14px", border: "1.5px solid #c0e8f0", borderRadius: 8,
+                        fontSize: 13, outline: "none", background: "#f5fdff", marginBottom: 14, letterSpacing: "3px" }}
+                      onFocus={e => e.target.style.borderColor = "#0891b2"}
+                      onBlur={e => e.target.style.borderColor = "#c0e8f0"} />
+                    <button onClick={forgotStep3}
+                      style={{ width: "100%", padding: "10px", background: "#0d3b66", color: "#fff",
+                        border: "none", borderRadius: 6, fontSize: 12, fontWeight: 700, cursor: "pointer" }}>
+                      Verifikasi OTP
+                    </button>
+                  </>
+                )}
+
+                {forgotStep === "input_newpass" && (
+                  <>
+                    <label style={{ display: "block", fontSize: 11, fontWeight: 600, color: "#4a7f98", marginBottom: 8 }}>PASSWORD BARU</label>
+                    <input type="password" value={forgotNewPass.val} onChange={e => setForgotNewPass(p => ({ ...p, val: e.target.value }))}
+                      placeholder="••••••••"
+                      style={{ width: "100%", padding: "11px 14px", border: "1.5px solid #c0e8f0", borderRadius: 8,
+                        fontSize: 13, outline: "none", background: "#f5fdff", marginBottom: 10 }}
+                      onFocus={e => e.target.style.borderColor = "#0891b2"}
+                      onBlur={e => e.target.style.borderColor = "#c0e8f0"} />
+                    <label style={{ display: "block", fontSize: 11, fontWeight: 600, color: "#4a7f98", marginBottom: 8 }}>KONFIRMASI PASSWORD</label>
+                    <input type="password" value={forgotNewPass.confirm} onChange={e => setForgotNewPass(p => ({ ...p, confirm: e.target.value }))}
+                      placeholder="••••••••"
+                      style={{ width: "100%", padding: "11px 14px", border: "1.5px solid #c0e8f0", borderRadius: 8,
+                        fontSize: 13, outline: "none", background: "#f5fdff", marginBottom: 14 }}
+                      onFocus={e => e.target.style.borderColor = "#0891b2"}
+                      onBlur={e => e.target.style.borderColor = "#c0e8f0"} />
+                    <button onClick={forgotStep4}
+                      style={{ width: "100%", padding: "10px", background: "#27ae60", color: "#fff",
+                        border: "none", borderRadius: 6, fontSize: 12, fontWeight: 700, cursor: "pointer" }}>
+                      Simpan Password
+                    </button>
+                  </>
+                )}
+
+                <button onClick={closeForgot}
+                  style={{ width: "100%", marginTop: 12, padding: "10px", background: "transparent",
+                    color: "#4a7f98", border: "1px solid #c0e8f0", borderRadius: 6, fontSize: 12, cursor: "pointer" }}>
+                  Kembali
+                </button>
+              </>
+            )}
+          </div>
+        </div>
+      )}
+
       {/* ══════ PUBLIC WEBSITE ══════ */}
       {!showAdmin && !reviewTokenParam && (
         <>
@@ -10124,23 +10288,41 @@ export default function BricksyTravel() {
                   </button>
                 ))}
 
-                {/* Dropdown: Layanan Developer */}
+                {/* Dropdown: Layanan */}
                 {(() => {
                   const [ddOpen, setDdOpen] = React.useState(false);
-                  const isActive = navDropdownLayanan.some(i => i.key === page);
+                  const isActive = navDropdownLayanan.filter(i=>i.key!=="x_divider").some(i => i.key === page);
                   return (
                     <div style={{ position: "relative" }}
-                      onMouseEnter={() => setDdOpen(true)}
-                      onMouseLeave={() => setDdOpen(false)}>
+                      ref={el => { if (el) { const handler = (e) => { if (!el.contains(e.target)) setDdOpen(false); }; document.addEventListener("mousedown", handler); } }}>
                       <button className={`nav-link${isActive ? " active" : ""}`}
+                        onClick={() => setDdOpen(v => !v)}
                         style={{ border: "none", background: "none", cursor: "pointer", display: "flex", alignItems: "center", gap: 4, padding: "4px 2px" }}>
-                        Layanan <span style={{ fontSize: "0.6rem", opacity: 0.7 }}>▼</span>
+                        Layanan <span style={{ fontSize: "0.6rem", opacity: 0.7, transition: "transform .2s", display: "inline-block", transform: ddOpen ? "rotate(180deg)" : "rotate(0deg)" }}>▼</span>
                       </button>
                       {ddOpen && (
-                        <div style={{ position: "absolute", top: "calc(100% + 6px)", right: 0, minWidth: 200,
+                        <div style={{ position: "absolute", top: "calc(100% + 6px)", left: 0, minWidth: 220,
                           background: "rgba(255,255,255,.98)", borderRadius: 10, boxShadow: "0 8px 32px rgba(0,0,0,.14)",
                           border: "1px solid rgba(158,155,150,.15)", padding: "6px 0", zIndex: 200, backdropFilter: "blur(12px)" }}>
-                          {navDropdownLayanan.map(item => (
+                          {/* Label grup Interior & Eksterior */}
+                          <div style={{ padding: "4px 18px 2px", fontSize: "0.65rem", fontWeight: 700, color: "#9ab", letterSpacing: ".1em", textTransform: "uppercase" }}>Layanan Kami</div>
+                          {navDropdownLayanan.filter(i=>["services","desainrab","temarumah"].includes(i.key)).map(item => (
+                            <button key={item.key} onClick={() => { navigateTo(item.key); setDdOpen(false); }}
+                              style={{ display: "block", width: "100%", textAlign: "left", padding: "9px 18px",
+                                fontSize: "0.78rem", fontWeight: page === item.key ? 700 : 500,
+                                color: page === item.key ? "#0d3b66" : "#3a5a6a",
+                                background: page === item.key ? "#edfafc" : "transparent",
+                                border: "none", cursor: "pointer", borderLeft: page === item.key ? "2px solid #0891b2" : "2px solid transparent",
+                                transition: "all .15s", letterSpacing: ".04em" }}
+                              onMouseEnter={e => { e.currentTarget.style.background="#edfafc"; e.currentTarget.style.color="#0d3b66"; }}
+                              onMouseLeave={e => { e.currentTarget.style.background=page===item.key?"#edfafc":"transparent"; e.currentTarget.style.color=page===item.key?"#0d3b66":"#3a5a6a"; }}>
+                              {item.label}
+                            </button>
+                          ))}
+                          {/* Divider + Label Interior & Eksterior */}
+                          <div style={{ margin: "6px 0 2px", borderTop: "1px solid #edf2f4" }} />
+                          <div style={{ padding: "4px 18px 2px", fontSize: "0.65rem", fontWeight: 700, color: "#9ab", letterSpacing: ".1em", textTransform: "uppercase" }}>Interior & Eksterior</div>
+                          {navDropdownLayanan.filter(i=>["interior","pagar","kanopi","aluminium","landscape"].includes(i.key)).map(item => (
                             <button key={item.key} onClick={() => { navigateTo(item.key); setDdOpen(false); }}
                               style={{ display: "block", width: "100%", textAlign: "left", padding: "9px 18px",
                                 fontSize: "0.78rem", fontWeight: page === item.key ? 700 : 500,
@@ -10159,40 +10341,7 @@ export default function BricksyTravel() {
                   );
                 })()}
 
-                {/* Dropdown: Interior & Eksterior */}
-                {(() => {
-                  const [ddOpen2, setDdOpen2] = React.useState(false);
-                  const isActive2 = navDropdownInterior.some(i => i.key === page);
-                  return (
-                    <div style={{ position: "relative" }}
-                      onMouseEnter={() => setDdOpen2(true)}
-                      onMouseLeave={() => setDdOpen2(false)}>
-                      <button className={`nav-link${isActive2 ? " active" : ""}`}
-                        style={{ border: "none", background: "none", cursor: "pointer", display: "flex", alignItems: "center", gap: 4, padding: "4px 2px" }}>
-                        Interior & Eksterior <span style={{ fontSize: "0.6rem", opacity: 0.7 }}>▼</span>
-                      </button>
-                      {ddOpen2 && (
-                        <div style={{ position: "absolute", top: "calc(100% + 6px)", right: 0, minWidth: 210,
-                          background: "rgba(255,255,255,.98)", borderRadius: 10, boxShadow: "0 8px 32px rgba(0,0,0,.14)",
-                          border: "1px solid rgba(158,155,150,.15)", padding: "6px 0", zIndex: 200, backdropFilter: "blur(12px)" }}>
-                          {navDropdownInterior.map(item => (
-                            <button key={item.key} onClick={() => { navigateTo(item.key); setDdOpen2(false); }}
-                              style={{ display: "block", width: "100%", textAlign: "left", padding: "9px 18px",
-                                fontSize: "0.78rem", fontWeight: page === item.key ? 700 : 500,
-                                color: page === item.key ? "#0d3b66" : "#3a5a6a",
-                                background: page === item.key ? "#edfafc" : "transparent",
-                                border: "none", cursor: "pointer", borderLeft: page === item.key ? "2px solid #0891b2" : "2px solid transparent",
-                                transition: "all .15s", letterSpacing: ".04em" }}
-                              onMouseEnter={e => { e.currentTarget.style.background="#edfafc"; e.currentTarget.style.color="#0d3b66"; }}
-                              onMouseLeave={e => { e.currentTarget.style.background=page===item.key?"#edfafc":"transparent"; e.currentTarget.style.color=page===item.key?"#0d3b66":"#3a5a6a"; }}>
-                              {item.label}
-                            </button>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  );
-                })()}
+                {/* Interior & Eksterior sudah digabung ke dropdown Layanan */}
 
                 {/* Dropdown: Galeri & Proyek */}
                 {(() => {
@@ -10200,11 +10349,11 @@ export default function BricksyTravel() {
                   const isActive3 = navDropdownGaleri.some(i => i.key === page);
                   return (
                     <div style={{ position: "relative" }}
-                      onMouseEnter={() => setDdOpen3(true)}
-                      onMouseLeave={() => setDdOpen3(false)}>
+                      ref={el => { if (el) { const handler = (e) => { if (!el.contains(e.target)) setDdOpen3(false); }; document.addEventListener("mousedown", handler); } }}>
                       <button className={`nav-link${isActive3 ? " active" : ""}`}
+                        onClick={() => setDdOpen3(v => !v)}
                         style={{ border: "none", background: "none", cursor: "pointer", display: "flex", alignItems: "center", gap: 4, padding: "4px 2px" }}>
-                        Galeri & Proyek <span style={{ fontSize: "0.6rem", opacity: 0.7 }}>▼</span>
+                        Galeri & Proyek <span style={{ fontSize: "0.6rem", opacity: 0.7, transition: "transform .2s", display: "inline-block", transform: ddOpen3 ? "rotate(180deg)" : "rotate(0deg)" }}>▼</span>
                       </button>
                       {ddOpen3 && (
                         <div style={{ position: "absolute", top: "calc(100% + 6px)", right: 0, minWidth: 200,
@@ -10860,7 +11009,7 @@ export default function BricksyTravel() {
                   {[
                     { label: "Nav: Home", key: "nav1" },
                     { label: "Nav: About", key: "nav2" },
-                    { label: "Nav: Portfolio", key: "nav3" },
+                    { label: "Nav: Program Affiliate", key: "nav3" },
                     { label: "Nav: Galeri - Traveling", key: "nav4" },
                     { label: "Nav: Galeri - Wedding Organizer", key: "nav5" },
                     { label: "Nav: Layanan Kami (Dropdown)", key: "nav6" },
