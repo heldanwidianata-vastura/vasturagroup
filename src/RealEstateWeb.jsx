@@ -10441,7 +10441,7 @@ export default function BricksyTravel() {
                   {/* Label halaman aktif */}
                   <div style={{
                     padding: "0 10px", fontSize: "0.6875rem", fontWeight: 800,
-                    color: "#fff", letterSpacing: ".04em", whiteSpace: "nowrap",
+                    color: "#fff", whiteSpace: "nowrap",
                     maxWidth: 88, overflow: "hidden", textOverflow: "ellipsis",
                     fontFamily: "'DM Sans',sans-serif", lineHeight: 1,
                     borderLeft: "1px solid rgba(255,255,255,.2)", borderRight: "1px solid rgba(255,255,255,.2)",
@@ -10784,6 +10784,77 @@ export default function BricksyTravel() {
                   onReadPost={(post) => openArticle(post)}
                 />
               )}
+            </>
+          )}
+        </>
+      )}
+
+      {/* ADMIN PANEL */}
+      {showAdmin && !reviewTokenParam && (
+        <div style={{ minHeight: "100vh", display: "flex", background: "#f5fdff", paddingTop: 58 }}>
+          <div className={`admin-sidebar${sidebarOpen ? " open" : ""}`}>
+            {[
+              { id: "dashboard", label: "Dashboard", show: true },
+              { id: "content", label: "Konten Website", show: isAdmin },
+              { id: "services", label: "Layanan", show: isAdmin },
+              { id: "team", label: "Susunan Tim", show: isAdmin },
+              { id: "messages", label: "Pesan Masuk", show: canCS },
+              { id: "users", label: "Users", show: isAdmin },
+              { id: "reviews", label: "Reviews", show: isAdmin },
+              { id: "settings", label: "Settings", show: isAdmin },
+            ].filter(item => item.show).map(item => (
+              <button key={item.id} onClick={() => navigateAdminTab(item.id)}
+                style={{
+                  padding: "14px 20px",
+                  textAlign: "left",
+                  border: "none",
+                  background: adminTab === item.id ? "rgba(255,255,255,.16)" : "transparent",
+                  color: "#fff",
+                  cursor: "pointer",
+                  fontSize: 13,
+                  fontWeight: adminTab === item.id ? 700 : 500,
+                  letterSpacing: ".04em"
+                }}>
+                {item.label}
+              </button>
+            ))}
+          </div>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div style={{ height: 58, position: "fixed", top: 0, left: 0, right: 0, zIndex: 220, background: "#fff", borderBottom: "1px solid #d6f1f6", display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 20px", boxShadow: "0 2px 12px rgba(0,0,0,.05)" }}>
+              <button className="show-sm" onClick={() => setSidebarOpen(p => !p)}
+                style={{ border: "none", background: "#edfafc", color: "#0d3b66", borderRadius: 6, width: 38, height: 38, cursor: "pointer", fontSize: 18 }}>
+                ☰
+              </button>
+              <strong style={{ color: "#0d3b66", fontSize: 15 }}>Control Panel</strong>
+              <button onClick={closeAdmin} style={{ border: "none", background: "#0d3b66", color: "#fff", borderRadius: 6, padding: "8px 14px", cursor: "pointer", fontSize: 12 }}>
+                Kembali
+              </button>
+            </div>
+            <div style={{ padding: "28px", maxWidth: 1180, margin: "0 auto" }}>
+              {adminTab === "dashboard" && (
+                <DashTabs
+                  user={user}
+                  allPosts={allPosts}
+                  publishedCount={publishedCount}
+                  draftCount={draftCount}
+                  data={data}
+                  canEdit={canEdit}
+                  canCS={canCS}
+                  isAdmin={isAdmin}
+                  setAdminTab={navigateAdminTab}
+                  setCmsEditPost={setCmsEditPost}
+                  SECTION_LABELS={SECTION_LABELS}
+                  SECTIONS={SECTIONS}
+                  formatDate={formatDate}
+                />
+              )}
+
+              {adminTab === "content" && isAdmin && (
+                <div className="fade-in">
+                  <h1 style={{ fontSize: 24, fontWeight: 500, color: "#0d3b66", marginBottom: 24 }}>Konten Website</h1>
+                  {[
+                    { label: "Nav: Home", key: "nav1" },
+                    { label: "Nav: About", key: "nav2" },
                     { label: "Nav: Portfolio", key: "nav3" },
                     { label: "Nav: Galeri - Traveling", key: "nav4" },
                     { label: "Nav: Galeri - Wedding Organizer", key: "nav5" },
