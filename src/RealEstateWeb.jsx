@@ -8848,6 +8848,8 @@ const getInitialPage = () => {
   // URL artikel → mount section yang sesuai (readPost di-resolve setelah data load)
   const art = parseArtikelPath(p);
   if (art) return { news: "news", shop: "shop", destinations: "destinations" }[art.section] || "news";
+  return "home";
+};
 
 /* ─────────────── REUSABLE SERVICE PAGE TEMPLATE ─────────────── */
 function DevServicePage({ pageKey, title, subtitle, icon, heroColor, sections, ctaText, onWaOpen }) {
