@@ -1,4 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo, Suspense, lazy } from "react";
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore";
 
 /* ─────────────── DASHBOARD TABS SUB-COMPONENT ─────────────── */
 function DashTabs({ user, allPosts, publishedCount, draftCount, data, canEdit, canCS, isAdmin, setAdminTab, setCmsEditPost, SECTION_LABELS, SECTIONS, formatDate }) {
@@ -212,9 +215,6 @@ const HARDCODED_USERS = [
 ];
 
 /* ─── Firebase Config ─── */
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey:            "AIzaSyCfBcu5pQbrt5NPex6d2PhNyQIta5tE21M",
