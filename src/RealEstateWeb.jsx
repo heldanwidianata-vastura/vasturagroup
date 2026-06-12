@@ -8851,6 +8851,11 @@ const getInitialPage = () => {
   return "home";
 };
 
+// Restore showAdmin state dari URL: /control-panel → true
+const getInitialShowAdmin = () => {
+  return window.location.pathname === "/control-panel";
+};
+
 /* ─────────────── REUSABLE SERVICE PAGE TEMPLATE ─────────────── */
 function DevServicePage({ pageKey, title, subtitle, icon, heroColor, sections, ctaText, onWaOpen }) {
   const waText = `Halo! Saya tertarik dengan layanan *${title}* dari Real Estate Web. Mohon informasi lebih lanjut. Terima kasih!`;
