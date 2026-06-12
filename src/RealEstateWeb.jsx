@@ -9249,6 +9249,102 @@ function WaPickerModal({ admins = [], msgText = "", onClose }) {
   );
 }
 
+/* ─────────────── NAV DROPDOWN: LAYANAN ─────────────── */
+function NavDropdownLayanan({ page, navigateTo, navDropdownLayanan }) {
+  const [ddOpen, setDdOpen] = useState(false);
+  const ref = useRef(null);
+  useEffect(() => {
+    const handler = (e) => { if (ref.current && !ref.current.contains(e.target)) setDdOpen(false); };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, []);
+  const isActive = navDropdownLayanan.filter(i => i.key !== "x_divider").some(i => i.key === page);
+  return (
+    <div style={{ position: "relative" }} ref={ref}>
+      <button className={`nav-link${isActive ? " active" : ""}`}
+        onClick={() => setDdOpen(v => !v)}
+        style={{ border: "none", background: "none", cursor: "pointer", display: "flex", alignItems: "center", gap: 4, padding: "4px 2px" }}>
+        Layanan <span style={{ fontSize: "0.6rem", opacity: 0.7, transition: "transform .2s", display: "inline-block", transform: ddOpen ? "rotate(180deg)" : "rotate(0deg)" }}>▼</span>
+      </button>
+      {ddOpen && (
+        <div style={{ position: "absolute", top: "calc(100% + 6px)", left: 0, minWidth: 220,
+          background: "rgba(255,255,255,.98)", borderRadius: 10, boxShadow: "0 8px 32px rgba(0,0,0,.14)",
+          border: "1px solid rgba(158,155,150,.15)", padding: "6px 0", zIndex: 200, backdropFilter: "blur(12px)" }}>
+          <div style={{ padding: "4px 18px 2px", fontSize: "0.65rem", fontWeight: 700, color: "#8B9A9C", letterSpacing: ".1em", textTransform: "uppercase" }}>Layanan Kami</div>
+          {navDropdownLayanan.filter(i => ["services","desainrab","temarumah"].includes(i.key)).map(item => (
+            <button key={item.key} onClick={() => { navigateTo(item.key); setDdOpen(false); }}
+              style={{ display: "block", width: "100%", textAlign: "left", padding: "9px 18px",
+                fontSize: "0.78rem", fontWeight: page === item.key ? 700 : 500,
+                color: page === item.key ? "#2E3D3F" : "#3D5254",
+                background: page === item.key ? "#FAF7F0" : "transparent",
+                border: "none", cursor: "pointer", borderLeft: page === item.key ? "2px solid #8B6914" : "2px solid transparent",
+                transition: "all .15s", letterSpacing: ".04em" }}
+              onMouseEnter={e => { e.currentTarget.style.background="#FAF7F0"; e.currentTarget.style.color="#2E3D3F"; }}
+              onMouseLeave={e => { e.currentTarget.style.background=page===item.key?"#FAF7F0":"transparent"; e.currentTarget.style.color=page===item.key?"#2E3D3F":"#3D5254"; }}>
+              {item.label}
+            </button>
+          ))}
+          <div style={{ margin: "6px 0 2px", borderTop: "1px solid #edf2f4" }} />
+          <div style={{ padding: "4px 18px 2px", fontSize: "0.65rem", fontWeight: 700, color: "#8B9A9C", letterSpacing: ".1em", textTransform: "uppercase" }}>Interior & Eksterior</div>
+          {navDropdownLayanan.filter(i => ["interior","pagar","kanopi","aluminium","landscape"].includes(i.key)).map(item => (
+            <button key={item.key} onClick={() => { navigateTo(item.key); setDdOpen(false); }}
+              style={{ display: "block", width: "100%", textAlign: "left", padding: "9px 18px",
+                fontSize: "0.78rem", fontWeight: page === item.key ? 700 : 500,
+                color: page === item.key ? "#2E3D3F" : "#3D5254",
+                background: page === item.key ? "#FAF7F0" : "transparent",
+                border: "none", cursor: "pointer", borderLeft: page === item.key ? "2px solid #8B6914" : "2px solid transparent",
+                transition: "all .15s", letterSpacing: ".04em" }}
+              onMouseEnter={e => { e.currentTarget.style.background="#FAF7F0"; e.currentTarget.style.color="#2E3D3F"; }}
+              onMouseLeave={e => { e.currentTarget.style.background=page===item.key?"#FAF7F0":"transparent"; e.currentTarget.style.color=page===item.key?"#2E3D3F":"#3D5254"; }}>
+              {item.label}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ─────────────── NAV DROPDOWN: GALERI & PROYEK ─────────────── */
+function NavDropdownGaleri({ page, navigateTo, navDropdownGaleri }) {
+  const [ddOpen3, setDdOpen3] = useState(false);
+  const ref = useRef(null);
+  useEffect(() => {
+    const handler = (e) => { if (ref.current && !ref.current.contains(e.target)) setDdOpen3(false); };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, []);
+  const isActive3 = navDropdownGaleri.some(i => i.key === page);
+  return (
+    <div style={{ position: "relative" }} ref={ref}>
+      <button className={`nav-link${isActive3 ? " active" : ""}`}
+        onClick={() => setDdOpen3(v => !v)}
+        style={{ border: "none", background: "none", cursor: "pointer", display: "flex", alignItems: "center", gap: 4, padding: "4px 2px" }}>
+        Galeri & Proyek <span style={{ fontSize: "0.6rem", opacity: 0.7, transition: "transform .2s", display: "inline-block", transform: ddOpen3 ? "rotate(180deg)" : "rotate(0deg)" }}>▼</span>
+      </button>
+      {ddOpen3 && (
+        <div style={{ position: "absolute", top: "calc(100% + 6px)", right: 0, minWidth: 200,
+          background: "rgba(255,255,255,.98)", borderRadius: 10, boxShadow: "0 8px 32px rgba(0,0,0,.14)",
+          border: "1px solid rgba(158,155,150,.15)", padding: "6px 0", zIndex: 200, backdropFilter: "blur(12px)" }}>
+          {navDropdownGaleri.map(item => (
+            <button key={item.key} onClick={() => { navigateTo(item.key); setDdOpen3(false); }}
+              style={{ display: "block", width: "100%", textAlign: "left", padding: "9px 18px",
+                fontSize: "0.78rem", fontWeight: page === item.key ? 700 : 500,
+                color: page === item.key ? "#2E3D3F" : "#3D5254",
+                background: page === item.key ? "#FAF7F0" : "transparent",
+                border: "none", cursor: "pointer", borderLeft: page === item.key ? "2px solid #8B6914" : "2px solid transparent",
+                transition: "all .15s", letterSpacing: ".04em" }}
+              onMouseEnter={e => { e.currentTarget.style.background="#FAF7F0"; e.currentTarget.style.color="#2E3D3F"; }}
+              onMouseLeave={e => { e.currentTarget.style.background=page===item.key?"#FAF7F0":"transparent"; e.currentTarget.style.color=page===item.key?"#2E3D3F":"#3D5254"; }}>
+              {item.label}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function BricksyTravel() {
   const [data, setData] = useState(DEFAULT_DATA);
   const dataRef = useRef(DEFAULT_DATA); // selalu up-to-date, aman dipakai di closure stale (popstate)
@@ -10381,94 +10477,12 @@ export default function BricksyTravel() {
                 ))}
 
                 {/* Dropdown: Layanan */}
-                {(() => {
-                  const [ddOpen, setDdOpen] = React.useState(false);
-                  const isActive = navDropdownLayanan.filter(i=>i.key!=="x_divider").some(i => i.key === page);
-                  return (
-                    <div style={{ position: "relative" }}
-                      ref={el => { if (el) { const handler = (e) => { if (!el.contains(e.target)) setDdOpen(false); }; document.addEventListener("mousedown", handler); } }}>
-                      <button className={`nav-link${isActive ? " active" : ""}`}
-                        onClick={() => setDdOpen(v => !v)}
-                        style={{ border: "none", background: "none", cursor: "pointer", display: "flex", alignItems: "center", gap: 4, padding: "4px 2px" }}>
-                        Layanan <span style={{ fontSize: "0.6rem", opacity: 0.7, transition: "transform .2s", display: "inline-block", transform: ddOpen ? "rotate(180deg)" : "rotate(0deg)" }}>▼</span>
-                      </button>
-                      {ddOpen && (
-                        <div style={{ position: "absolute", top: "calc(100% + 6px)", left: 0, minWidth: 220,
-                          background: "rgba(255,255,255,.98)", borderRadius: 10, boxShadow: "0 8px 32px rgba(0,0,0,.14)",
-                          border: "1px solid rgba(158,155,150,.15)", padding: "6px 0", zIndex: 200, backdropFilter: "blur(12px)" }}>
-                          {/* Label grup Interior & Eksterior */}
-                          <div style={{ padding: "4px 18px 2px", fontSize: "0.65rem", fontWeight: 700, color: "#8B9A9C", letterSpacing: ".1em", textTransform: "uppercase" }}>Layanan Kami</div>
-                          {navDropdownLayanan.filter(i=>["services","desainrab","temarumah"].includes(i.key)).map(item => (
-                            <button key={item.key} onClick={() => { navigateTo(item.key); setDdOpen(false); }}
-                              style={{ display: "block", width: "100%", textAlign: "left", padding: "9px 18px",
-                                fontSize: "0.78rem", fontWeight: page === item.key ? 700 : 500,
-                                color: page === item.key ? "#2E3D3F" : "#3D5254",
-                                background: page === item.key ? "#FAF7F0" : "transparent",
-                                border: "none", cursor: "pointer", borderLeft: page === item.key ? "2px solid #8B6914" : "2px solid transparent",
-                                transition: "all .15s", letterSpacing: ".04em" }}
-                              onMouseEnter={e => { e.currentTarget.style.background="#FAF7F0"; e.currentTarget.style.color="#2E3D3F"; }}
-                              onMouseLeave={e => { e.currentTarget.style.background=page===item.key?"#FAF7F0":"transparent"; e.currentTarget.style.color=page===item.key?"#2E3D3F":"#3D5254"; }}>
-                              {item.label}
-                            </button>
-                          ))}
-                          {/* Divider + Label Interior & Eksterior */}
-                          <div style={{ margin: "6px 0 2px", borderTop: "1px solid #edf2f4" }} />
-                          <div style={{ padding: "4px 18px 2px", fontSize: "0.65rem", fontWeight: 700, color: "#8B9A9C", letterSpacing: ".1em", textTransform: "uppercase" }}>Interior & Eksterior</div>
-                          {navDropdownLayanan.filter(i=>["interior","pagar","kanopi","aluminium","landscape"].includes(i.key)).map(item => (
-                            <button key={item.key} onClick={() => { navigateTo(item.key); setDdOpen(false); }}
-                              style={{ display: "block", width: "100%", textAlign: "left", padding: "9px 18px",
-                                fontSize: "0.78rem", fontWeight: page === item.key ? 700 : 500,
-                                color: page === item.key ? "#2E3D3F" : "#3D5254",
-                                background: page === item.key ? "#FAF7F0" : "transparent",
-                                border: "none", cursor: "pointer", borderLeft: page === item.key ? "2px solid #8B6914" : "2px solid transparent",
-                                transition: "all .15s", letterSpacing: ".04em" }}
-                              onMouseEnter={e => { e.currentTarget.style.background="#FAF7F0"; e.currentTarget.style.color="#2E3D3F"; }}
-                              onMouseLeave={e => { e.currentTarget.style.background=page===item.key?"#FAF7F0":"transparent"; e.currentTarget.style.color=page===item.key?"#2E3D3F":"#3D5254"; }}>
-                              {item.label}
-                            </button>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  );
-                })()}
+                <NavDropdownLayanan page={page} navigateTo={navigateTo} navDropdownLayanan={navDropdownLayanan} />
 
                 {/* Interior & Eksterior sudah digabung ke dropdown Layanan */}
 
                 {/* Dropdown: Galeri & Proyek */}
-                {(() => {
-                  const [ddOpen3, setDdOpen3] = React.useState(false);
-                  const isActive3 = navDropdownGaleri.some(i => i.key === page);
-                  return (
-                    <div style={{ position: "relative" }}
-                      ref={el => { if (el) { const handler = (e) => { if (!el.contains(e.target)) setDdOpen3(false); }; document.addEventListener("mousedown", handler); } }}>
-                      <button className={`nav-link${isActive3 ? " active" : ""}`}
-                        onClick={() => setDdOpen3(v => !v)}
-                        style={{ border: "none", background: "none", cursor: "pointer", display: "flex", alignItems: "center", gap: 4, padding: "4px 2px" }}>
-                        Galeri & Proyek <span style={{ fontSize: "0.6rem", opacity: 0.7, transition: "transform .2s", display: "inline-block", transform: ddOpen3 ? "rotate(180deg)" : "rotate(0deg)" }}>▼</span>
-                      </button>
-                      {ddOpen3 && (
-                        <div style={{ position: "absolute", top: "calc(100% + 6px)", right: 0, minWidth: 200,
-                          background: "rgba(255,255,255,.98)", borderRadius: 10, boxShadow: "0 8px 32px rgba(0,0,0,.14)",
-                          border: "1px solid rgba(158,155,150,.15)", padding: "6px 0", zIndex: 200, backdropFilter: "blur(12px)" }}>
-                          {navDropdownGaleri.map(item => (
-                            <button key={item.key} onClick={() => { navigateTo(item.key); setDdOpen3(false); }}
-                              style={{ display: "block", width: "100%", textAlign: "left", padding: "9px 18px",
-                                fontSize: "0.78rem", fontWeight: page === item.key ? 700 : 500,
-                                color: page === item.key ? "#2E3D3F" : "#3D5254",
-                                background: page === item.key ? "#FAF7F0" : "transparent",
-                                border: "none", cursor: "pointer", borderLeft: page === item.key ? "2px solid #8B6914" : "2px solid transparent",
-                                transition: "all .15s", letterSpacing: ".04em" }}
-                              onMouseEnter={e => { e.currentTarget.style.background="#FAF7F0"; e.currentTarget.style.color="#2E3D3F"; }}
-                              onMouseLeave={e => { e.currentTarget.style.background=page===item.key?"#FAF7F0":"transparent"; e.currentTarget.style.color=page===item.key?"#2E3D3F":"#3D5254"; }}>
-                              {item.label}
-                            </button>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  );
-                })()}
+                <NavDropdownGaleri page={page} navigateTo={navigateTo} navDropdownGaleri={navDropdownGaleri} />
               </div>
 
               {/* ── LOGIN / USER (desktop) ── */}
