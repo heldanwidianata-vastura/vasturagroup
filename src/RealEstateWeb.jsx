@@ -212,6 +212,7 @@ const HARDCODED_USERS = [
 ];
 
 /* ─── Firebase Config ─── */
+<<<<<<< HEAD
 // Install dulu: npm install firebase
 import { initializeApp } from "firebase/app";
 import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore";
@@ -229,6 +230,27 @@ const _fbApp = initializeApp(firebaseConfig);
 const _db    = getFirestore(_fbApp);
 
 const FS_COLLECTION = import.meta.env.VITE_FS_COLLECTION || "arutala";
+=======
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore";
+
+const firebaseConfig = {
+  apiKey:            "AIzaSyCfBcu5pQbrt5NPex6d2PhNyQIta5tE21M",
+  authDomain:        "vasturagroup-9ed0e.firebaseapp.com",
+  projectId:         "vasturagroup-9ed0e",
+  storageBucket:     "vasturagroup-9ed0e.firebasestorage.app",
+  messagingSenderId: "973491258131",
+  appId:             "1:973491258131:web:8f05c0732a5c44947050e6",
+  measurementId:     "G-E63BYG2GGJ",
+};
+
+const _fbApp    = initializeApp(firebaseConfig);
+const _analytics = getAnalytics(_fbApp);
+const _db       = getFirestore(_fbApp);
+
+const FS_COLLECTION = import.meta.env.VITE_FS_COLLECTION || "vasturagroup";
+>>>>>>> 1512cdd (Upload folder proyek pertama kali)
 
 /* ── Firestore helpers ── */
 async function fsGet(docId) {
@@ -243,8 +265,13 @@ async function fsSet(docId, payload) {
 
 /* ─── Cloudinary Config ─── */
 const CLOUDINARY = {
+<<<<<<< HEAD
   cloudName:    import.meta.env.VITE_CLOUDINARY_CLOUD_NAME,
   uploadPreset: import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET,
+=======
+  cloudName:    "dum9j7ym1",
+  uploadPreset: "vastura_clouds",
+>>>>>>> 1512cdd (Upload folder proyek pertama kali)
 };
 
 async function uploadToCloudinary(file) {
@@ -479,9 +506,15 @@ function UploadButton({ accept = "image/*", multiple = false, label = "📁 Uplo
 
 /* ─── EmailJS Config ─── */
 const EJS = {
+<<<<<<< HEAD
   publicKey:  import.meta.env.VITE_EMAILJS_PUBLIC_KEY,
   serviceId:  import.meta.env.VITE_EMAILJS_SERVICE_ID,
   templateId: import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
+=======
+  publicKey:  "GepGzvwHLN7YwXXpF",
+  serviceId:  "service_vastura",
+  templateId: "template_otp_vastura",
+>>>>>>> 1512cdd (Upload folder proyek pertama kali)
 };
 
 /* Generate 6-digit OTP */
@@ -511,7 +544,11 @@ async function sendOTPEmail(toEmail, passcode) {
 const SECTIONS = ["news", "shop", "destinations"];
 
 const SECTION_LABELS = {
+<<<<<<< HEAD
   news: "Event Plan",
+=======
+  news: "Portfolio",
+>>>>>>> 1512cdd (Upload folder proyek pertama kali)
   shop: "Traveling",
   destinations: "Wedding Organizer",
 };
@@ -636,6 +673,7 @@ const DEFAULT_DATA = {
     ],
   },
   content: {
+<<<<<<< HEAD
     heroTitle: "Travel & Relax",
     heroSub: "Discover breathtaking destinations, hidden gems, and unforgettable adventures around the world. Your next journey starts here.",
     advTitle: "Adventure for your Soul",
@@ -670,6 +708,42 @@ const DEFAULT_DATA = {
     waLink: `https://wa.me/${import.meta.env.VITE_WA_ADMIN1 || "6285745571442"}`,
     igLink: import.meta.env.VITE_IG_LINK || "https://instagram.com/realEstateweb",
     fbLink: import.meta.env.VITE_FB_LINK || "https://facebook.com/realEstateweb",
+=======
+    heroTitle: "Developer Perumahan & Jasa Desain",
+    heroSub: "Kami hadir sebagai mitra terpercaya untuk mewujudkan hunian impian Anda — desain, RAB, interior, hingga landscape. Profesional, berkualitas, dan tepat waktu.",
+    advTitle: "Wujudkan Hunian Impian Anda",
+    advSub: "DEVELOPER & JASA PERUMAHAN",
+    advQuote: '"We live in a wonderful world that is full of beauty, charm and adventure. There is no end to the adventures that we can have if only we seek them with our eyes open." — Jawaharlal Nehru',
+    newAdvTitle: "Proyek Terbaru Kami",
+    newAdvSub: "Temukan portofolio terkini — hunian berkualitas yang telah kami bangun dan rancang bersama klien.",
+    bookTitle: "Konsultasikan Proyek Anda",
+    bookSub: "Tim ahli kami siap membantu dari perencanaan hingga serah terima kunci — gratis konsultasi pertama.",
+    newsletterTitle: "Dapatkan Update Proyek & Promo Terbaru",
+    foundingYear: "2026",
+    aboutText: "Real Estate Web adalah developer perumahan dan penyedia jasa desain terpercaya sejak 2026. Kami membangun hunian impian dengan standar kualitas tinggi dan harga transparan.",
+    contactText: "Hubungi kami untuk konsultasi gratis. Tim Real Estate Web siap membantu mewujudkan hunian impian Anda — dari desain, RAB, interior, pagar, kanopi, hingga landscape.",
+    aboutHeroLabel: "About Us",
+    aboutHeroTitle: "Membangun Hunian, Mewujudkan Impian",
+    aboutHeroSub: "Real Estate Web adalah developer perumahan dan jasa desain terpercaya. Kami berkomitmen menghadirkan hunian berkualitas dengan layanan lengkap dari desain hingga finishing.",
+    aboutWhyTitle: "Why Choose Us",
+    aboutV1Icon: "🏠", aboutV1Title: "Desain Profesional", aboutV1Desc: "Tim arsitek & desainer interior berpengalaman untuk setiap proyek.",
+    aboutV2Icon: "🛡",  aboutV2Title: "Terpercaya & Legal", aboutV2Desc: "Semua proyek dilaksanakan sesuai perizinan dan standar konstruksi yang berlaku.",
+    aboutV3Icon: "⚡", aboutV3Title: "Tepat Waktu",        aboutV3Desc: "Komitmen penyelesaian proyek sesuai timeline yang disepakati.",
+    aboutV4Icon: "⭐", aboutV4Title: "Harga Transparan",   aboutV4Desc: "RAB detail dan transparan — tidak ada biaya tersembunyi dalam setiap proyek.",
+    aboutContactTitle: "Get in Touch",
+    aboutContactSub: "We'd love to help plan your next event.",
+    email:   "heldanwidianata@gmail.com",
+    phone:   "+62 812-3327-5485",
+    address: "Perumahan Puri Mangundikaran, Blok B5 No.21, Kel. Mangundikaran, Kec. Nganjuk, Kab. Nganjuk",
+    hours: "Senin – Sabtu: 08.00 – 20.00 WIB",
+    waAdmins: [
+      { id: 1, name: "Fredy – Admin Utama", wa: "https://wa.me/6281233275485" },
+      { id: 2, name: "Heldan – CS", wa: "https://wa.me/6282140294820" },
+    ],
+    waLink: "https://wa.me/6281233275485",
+    igLink: "https://instagram.com/vastura_group",
+    fbLink: "https://facebook.com/vastura_group",
+>>>>>>> 1512cdd (Upload folder proyek pertama kali)
     logoText: "REAL ESTATE\nWEB",
     logoImage: "",
     logoSingleLine: false,
@@ -677,7 +751,13 @@ const DEFAULT_DATA = {
     logoColor: "#111111",
     logoShadow: "0 1px 6px rgba(0,0,0,.35), 0 2px 14px rgba(0,0,0,.18)",
     loginBtnText: "LOGIN",
+<<<<<<< HEAD
     nav1: "Home", nav2: "About", nav3: "Event Plan", nav4: "Traveling", nav5: "Wedding Organizer", nav6: "Layanan Kami",
+=======
+    nav1: "Home", nav2: "About", nav3: "Portfolio", nav4: "Traveling", nav5: "Wedding Organizer", nav6: "Layanan Kami",
+    nav7: "Jasa Desain & RAB", nav8: "Tema Rumah",
+    nav9: "Interior", nav10: "Pagar Rumah", nav11: "Kanopi", nav12: "Aluminium", nav13: "Landscape & Taman",
+>>>>>>> 1512cdd (Upload folder proyek pertama kali)
     servicesPageTitle: "Paket Layanan Kami",
     servicesPageSub: "Pilih paket yang sesuai dengan kebutuhan Anda. Setiap paket dirancang untuk memberikan pengalaman terbaik bersama Real Estate Web.",
   },
@@ -1743,7 +1823,12 @@ const GS = () => (
     p{font-size:1rem;line-height:1.75;color:rgba(255,255,255,.8)}
     small{font-size:.875rem;line-height:1.5}
 
+<<<<<<< HEAD
     .nav-link{position:relative;padding-bottom:3px;font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;font-weight:600;color:var(--re-grey-dk);transition:color .2s;font-family:'Jost',sans-serif}
+=======
+    .nav-link{position:relative;padding-bottom:3px;font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;font-weight:600;color:var(--re-grey-dk);transition:color .2s;font-family:'Jost',sans-serif}
+    .nav-dropdown-panel{animation:fadeIn .18s ease}
+>>>>>>> 1512cdd (Upload folder proyek pertama kali)
     .nav-link::after{content:'';position:absolute;bottom:0;left:0;width:0;height:1.5px;background:var(--re-black);transition:width .3s;border-radius:2px}
     .nav-link:hover{color:var(--re-black)}
     .nav-link:hover::after,.nav-link.active::after{width:100%}
@@ -7820,9 +7905,15 @@ function AdvSection({ data, navigateTo }) {
 
           <div className="adv2-btns">
             {[
+<<<<<<< HEAD
               { label: "🎉 Event Plan", key: "destinations" },
               { label: "✈️ Traveling", key: "shop" },
               { label: "💍 Wedding", key: "news" },
+=======
+              { label: "🏠 Desain Rumah", key: "desainrab" },
+              { label: "🛋️ Interior", key: "interior" },
+              { label: "🌳 Taman & Landscape", key: "landscape" },
+>>>>>>> 1512cdd (Upload folder proyek pertama kali)
             ].map(item => (
               <button key={item.key} className="adv2-btn-pill" onClick={() => navigateTo(item.key)}>
                 {item.label}
@@ -8781,8 +8872,20 @@ const sessionClear = () => {
 
 /* ── Mapping URL pathname ↔ page key ─────────────────────────────────────── */
 const PAGE_TO_PATH = {
+<<<<<<< HEAD
   home: "/", about: "/about", news: "/EventPlan", shop: "/Traveling",
   destinations: "/destinations", services: "/services",
+=======
+  home: "/", about: "/about", news: "/portfolio", shop: "/traveling",
+  destinations: "/wedding-organizer", services: "/layanan",
+  desainrab: "/jasa-desain-rab",
+  temarumah: "/tema-rumah",
+  interior: "/interior",
+  pagar: "/pagar-rumah",
+  kanopi: "/kanopi",
+  aluminium: "/aluminium",
+  landscape: "/landscape-taman",
+>>>>>>> 1512cdd (Upload folder proyek pertama kali)
 };
 const PATH_TO_PAGE = Object.fromEntries(Object.entries(PAGE_TO_PATH).map(([k, v]) => [v, k]));
 
@@ -8836,6 +8939,17 @@ const getInitialPage = () => {
   // URL artikel → mount section yang sesuai (readPost di-resolve setelah data load)
   const art = parseArtikelPath(p);
   if (art) return { news: "news", shop: "shop", destinations: "destinations" }[art.section] || "news";
+<<<<<<< HEAD
+=======
+  // New developer pages — fallback by prefix
+  if (p.startsWith("/jasa-desain-rab")) return "desainrab";
+  if (p.startsWith("/tema-rumah")) return "temarumah";
+  if (p.startsWith("/interior")) return "interior";
+  if (p.startsWith("/pagar-rumah")) return "pagar";
+  if (p.startsWith("/kanopi")) return "kanopi";
+  if (p.startsWith("/aluminium")) return "aluminium";
+  if (p.startsWith("/landscape-taman")) return "landscape";
+>>>>>>> 1512cdd (Upload folder proyek pertama kali)
   return "home";
 };
 
@@ -9316,6 +9430,337 @@ function PortfolioSection({ data, navigateTo, openArticle, PostCard }) {
   );
 }
 
+<<<<<<< HEAD
+=======
+
+/* ─────────────── REUSABLE SERVICE PAGE TEMPLATE ─────────────── */
+function DevServicePage({ pageKey, title, subtitle, icon, heroColor, sections, ctaText, onWaOpen }) {
+  const waText = `Halo! Saya tertarik dengan layanan *${title}* dari Real Estate Web. Mohon informasi lebih lanjut. Terima kasih!`;
+  return (
+    <div style={{ paddingTop: 72, minHeight: "100vh", background: "#f8fbfd" }}>
+      {/* Hero Banner */}
+      <div style={{
+        background: heroColor || "linear-gradient(135deg,#063d5c 0%,#0875a8 50%,#0aa8bf 100%)",
+        padding: "64px 5% 56px", textAlign: "center", position: "relative", overflow: "hidden"
+      }}>
+        <div style={{ position: "absolute", inset: 0, opacity: 0.08, backgroundImage: "radial-gradient(circle at 20% 50%, #fff 0%, transparent 50%), radial-gradient(circle at 80% 20%, #fff 0%, transparent 40%)" }} />
+        <div style={{ position: "relative", zIndex: 1, maxWidth: 800, margin: "0 auto" }}>
+          <div style={{ fontSize: "3.5rem", marginBottom: 16 }}>{icon}</div>
+          <h1 style={{ fontFamily: "'Playfair Display',serif", fontSize: "clamp(1.8rem,4vw,3rem)", fontWeight: 900, color: "#fff", marginBottom: 16, lineHeight: 1.2 }}>{title}</h1>
+          <p style={{ fontSize: "clamp(0.9rem,2vw,1.1rem)", color: "rgba(255,255,255,.85)", lineHeight: 1.7, maxWidth: 600, margin: "0 auto 28px" }}>{subtitle}</p>
+          <button onClick={() => onWaOpen && onWaOpen(waText)}
+            style={{ padding: "13px 32px", background: "#e8a020", color: "#fff", border: "none", borderRadius: 4, fontSize: "0.875rem", fontWeight: 800, letterSpacing: ".1em", textTransform: "uppercase", cursor: "pointer", boxShadow: "0 4px 20px rgba(0,0,0,.25)" }}>
+            {ctaText || "Konsultasi Gratis →"}
+          </button>
+        </div>
+      </div>
+
+      {/* Content Sections */}
+      <div style={{ maxWidth: 1100, margin: "0 auto", padding: "56px 5%" }}>
+        {sections.map((sec, i) => (
+          <div key={i} style={{ marginBottom: 56 }}>
+            {/* Section header */}
+            <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 28 }}>
+              <div style={{ width: 4, height: 40, background: "linear-gradient(180deg,#0891b2,#0aa8bf)", borderRadius: 4, flexShrink: 0 }} />
+              <div>
+                <div style={{ fontSize: "0.7rem", letterSpacing: ".14em", textTransform: "uppercase", color: "#0891b2", fontWeight: 700, marginBottom: 4 }}>{sec.tag || `Layanan ${String(i+1).padStart(2,"0")}`}</div>
+                <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: "clamp(1.25rem,3vw,1.75rem)", fontWeight: 900, color: "#0d3b66", lineHeight: 1.25 }}>{sec.title}</h2>
+              </div>
+            </div>
+
+            {/* Cards grid */}
+            {sec.items && (
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(240px,1fr))", gap: 20 }}>
+                {sec.items.map((item, j) => (
+                  <div key={j} style={{
+                    background: "#fff", borderRadius: 12, padding: "24px 22px",
+                    boxShadow: "0 2px 14px rgba(0,0,0,.07)", border: "1px solid #e8f4fb",
+                    transition: "transform .2s, box-shadow .2s",
+                    cursor: "default"
+                  }}
+                    onMouseEnter={e => { e.currentTarget.style.transform="translateY(-4px)"; e.currentTarget.style.boxShadow="0 8px 28px rgba(8,145,178,.18)"; }}
+                    onMouseLeave={e => { e.currentTarget.style.transform="none"; e.currentTarget.style.boxShadow="0 2px 14px rgba(0,0,0,.07)"; }}>
+                    <div style={{ fontSize: "2rem", marginBottom: 12 }}>{item.icon}</div>
+                    <h3 style={{ fontSize: "1rem", fontWeight: 700, color: "#0d3b66", marginBottom: 8 }}>{item.title}</h3>
+                    <p style={{ fontSize: "0.875rem", color: "#4a7f98", lineHeight: 1.65 }}>{item.desc}</p>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* Prose */}
+            {sec.prose && (
+              <p style={{ fontSize: "1rem", color: "#2a4a5e", lineHeight: 1.8, maxWidth: 780 }}>{sec.prose}</p>
+            )}
+          </div>
+        ))}
+
+        {/* CTA Banner */}
+        <div style={{ background: "linear-gradient(130deg,#063d5c 0%,#0875a8 50%,#0aa8bf 100%)", borderRadius: 16, padding: "40px 40px", textAlign: "center", boxShadow: "0 8px 32px rgba(8,145,178,.25)" }}>
+          <h3 style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.6rem", fontWeight: 900, color: "#fff", marginBottom: 12 }}>Siap Wujudkan Proyek Anda?</h3>
+          <p style={{ color: "rgba(255,255,255,.85)", marginBottom: 24, fontSize: "0.95rem" }}>Konsultasikan kebutuhan Anda bersama tim ahli kami — gratis & tanpa komitmen.</p>
+          <button onClick={() => onWaOpen && onWaOpen(waText)}
+            style={{ padding: "13px 36px", background: "#e8a020", color: "#fff", border: "none", borderRadius: 4, fontSize: "0.875rem", fontWeight: 800, letterSpacing: ".1em", textTransform: "uppercase", cursor: "pointer" }}>
+            Hubungi Kami via WhatsApp
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ── Page: Jasa Desain & RAB ── */
+function DesainRabPage({ onWaOpen }) {
+  return <DevServicePage
+    pageKey="desainrab"
+    title="Jasa Desain & RAB"
+    subtitle="Kami menyediakan layanan desain arsitektur dan Rencana Anggaran Biaya (RAB) yang akurat, profesional, dan sesuai kebutuhan proyek Anda."
+    icon="📐"
+    heroColor="linear-gradient(135deg,#063d5c 0%,#0875a8 50%,#10d0e0 100%)"
+    onWaOpen={onWaOpen}
+    sections={[
+      {
+        tag: "Desain Arsitektur",
+        title: "Desain Rumah Profesional",
+        items: [
+          { icon: "🏠", title: "Desain 2D (Denah)", desc: "Denah lantai lengkap, tampak depan-samping-belakang, dan potongan bangunan." },
+          { icon: "🏗️", title: "Desain 3D Rendering", desc: "Visualisasi 3 dimensi realistis sehingga Anda bisa melihat rumah sebelum dibangun." },
+          { icon: "📏", title: "Gambar Kerja (Shop Drawing)", desc: "Gambar teknis detail untuk panduan pelaksanaan kontraktor di lapangan." },
+          { icon: "🏢", title: "Desain Fasad & Interior", desc: "Desain tampak luar dan tata ruang dalam yang estetis dan fungsional." },
+        ]
+      },
+      {
+        tag: "RAB & Estimasi",
+        title: "Rencana Anggaran Biaya Akurat",
+        items: [
+          { icon: "💰", title: "RAB Detail per Item", desc: "Perincian biaya material dan jasa setiap pekerjaan — pondasi hingga finishing." },
+          { icon: "📊", title: "Analisa Harga Satuan", desc: "Menggunakan harga pasar terkini di lokasi proyek Anda." },
+          { icon: "📋", title: "Bill of Quantity (BoQ)", desc: "Daftar volume pekerjaan lengkap sebagai acuan penawaran kontraktor." },
+          { icon: "🔄", title: "Revisi RAB", desc: "Penyesuaian anggaran sesuai perubahan desain atau ketersediaan material." },
+        ]
+      },
+      {
+        tag: "Perizinan",
+        title: "Pengurusan Izin Mendirikan Bangunan",
+        prose: "Kami membantu proses pengurusan IMB / PBG (Persetujuan Bangunan Gedung) mulai dari penyiapan dokumen teknis, gambar situasi, hingga koordinasi dengan instansi terkait agar proyek Anda berjalan legal dan lancar."
+      }
+    ]}
+  />;
+}
+
+/* ── Page: Tema Rumah ── */
+function TemaRumahPage({ onWaOpen }) {
+  return <DevServicePage
+    pageKey="temarumah"
+    title="Tema Rumah"
+    subtitle="Temukan konsep dan tema rumah yang sesuai gaya hidup Anda — dari modern minimalis, klasik mewah, tropis kontemporer, hingga industrial chic."
+    icon="🏡"
+    heroColor="linear-gradient(135deg,#1a3a2a 0%,#2e7d52 50%,#52b788 100%)"
+    onWaOpen={onWaOpen}
+    sections={[
+      {
+        tag: "Gaya Populer",
+        title: "Pilihan Tema & Konsep Hunian",
+        items: [
+          { icon: "⬜", title: "Modern Minimalis", desc: "Garis bersih, palet netral, ruang terbuka, dan pencahayaan alami yang maksimal." },
+          { icon: "🏛️", title: "Klasik Eropa", desc: "Ornamen mewah, kolom, material premium, dan detail arsitektur yang timeless." },
+          { icon: "🌿", title: "Tropis Kontemporer", desc: "Mengintegrasikan elemen alam — kayu, batu, tanaman — dengan desain modern." },
+          { icon: "⚙️", title: "Industrial Chic", desc: "Material raw seperti beton ekspos, baja, dan bata untuk kesan urban yang kuat." },
+          { icon: "🎎", title: "Japandi", desc: "Perpaduan estetika Jepang dan Skandinavia — sederhana, hangat, dan harmonis." },
+          { icon: "🏖️", title: "Mediterania", desc: "Warna tanah hangat, lengkungan, dan suasana resort yang santai dan elegan." },
+        ]
+      },
+      {
+        tag: "Proses",
+        title: "Tahapan Konsultasi Tema",
+        items: [
+          { icon: "💬", title: "Konsultasi Kebutuhan", desc: "Diskusi mendalam tentang gaya hidup, budget, dan preferensi estetika Anda." },
+          { icon: "🎨", title: "Mood Board & Referensi", desc: "Presentasi visual berupa kolase inspirasi sesuai tema yang dipilih." },
+          { icon: "📐", title: "Aplikasi ke Desain", desc: "Integrasi tema ke denah, fasad, dan interior secara konsisten dan harmonis." },
+        ]
+      }
+    ]}
+  />;
+}
+
+/* ── Page: Interior ── */
+function InteriorPage({ onWaOpen }) {
+  return <DevServicePage
+    pageKey="interior"
+    title="Desain Interior"
+    subtitle="Wujudkan interior impian Anda — dari teras hingga kamar tidur, setiap ruang dirancang indah, fungsional, dan mencerminkan kepribadian Anda."
+    icon="🛋️"
+    heroColor="linear-gradient(135deg,#4a1942 0%,#7b3f8a 50%,#b565c0 100%)"
+    onWaOpen={onWaOpen}
+    sections={[
+      {
+        tag: "Ruang Utama",
+        title: "Layanan Desain Interior Lengkap",
+        items: [
+          { icon: "🏠", title: "Teras", desc: "Desain teras yang menyambut — kombinasi material, pencahayaan, dan tanaman hias yang harmonis." },
+          { icon: "🛋️", title: "Ruang Tamu", desc: "Furnitur elegan, layout optimal, dan dekorasi yang menciptakan kesan pertama yang kuat." },
+          { icon: "👨‍👩‍👧", title: "Ruang Keluarga", desc: "Ruang hangat dan fungsional untuk quality time keluarga dengan konsep cozy living." },
+          { icon: "🛏️", title: "Kamar Tidur", desc: "Desain kamar nyaman dan personal — dari master bedroom hingga kamar anak yang kreatif." },
+          { icon: "🚿", title: "Kamar Mandi", desc: "Bathroom modern dengan material premium, pencahayaan spa, dan layout yang efisien." },
+          { icon: "🍳", title: "Kitchen Set", desc: "Dapur impian dengan kabinet custom, material tahan lama, dan ergonomis untuk memasak." },
+          { icon: "🔲", title: "Plafon", desc: "Desain plafon kreatif — drop ceiling, gypsum, kayu, dan pencahayaan tersembunyi (hidden lamp)." },
+          { icon: "📺", title: "Backdrop TV", desc: "Feature wall TV yang menjadi focal point ruangan — material batu alam, kayu, panel 3D, dll." },
+        ]
+      },
+      {
+        tag: "Proses Kerja",
+        title: "Alur Proyek Interior",
+        items: [
+          { icon: "📝", title: "Survei & Ukur", desc: "Tim kami datang langsung ke lokasi untuk mengukur dan memahami kondisi lapangan." },
+          { icon: "🎨", title: "Konsep & 3D Visual", desc: "Presentasi desain 3D lengkap sebelum eksekusi agar Anda tahu hasilnya." },
+          { icon: "🔨", title: "Eksekusi & Finishing", desc: "Pengerjaan oleh tenaga ahli berpengalaman dengan quality control ketat." },
+        ]
+      }
+    ]}
+  />;
+}
+
+/* ── Page: Pagar Rumah ── */
+function PagarPage({ onWaOpen }) {
+  return <DevServicePage
+    pageKey="pagar"
+    title="Pagar Rumah"
+    subtitle="Pagar bukan sekadar keamanan — ini ekspresi pertama rumah Anda. Kami menghadirkan pagar yang kokoh, estetis, dan sesuai karakter hunian Anda."
+    icon="🔒"
+    heroColor="linear-gradient(135deg,#1a1a2e 0%,#16213e 50%,#0f3460 100%)"
+    onWaOpen={onWaOpen}
+    sections={[
+      {
+        tag: "Jenis Pagar",
+        title: "Pilihan Model & Material Pagar",
+        items: [
+          { icon: "🔩", title: "Pagar Besi Tempa", desc: "Klasik dan kokoh, tersedia berbagai motif ornamen — cocok untuk rumah gaya Eropa atau klasik." },
+          { icon: "⬛", title: "Pagar Hollow Minimalis", desc: "Garis bersih dari besi hollow finishing cat duco — populer untuk rumah modern minimalis." },
+          { icon: "🌿", title: "Pagar Panel Kayu + Besi", desc: "Kombinasi kayu solid/WPC dengan rangka besi — kesan natural namun tetap modern dan tahan lama." },
+          { icon: "🧱", title: "Pagar Tembok + Ornamen", desc: "Dinding bata/batako finishing plester dengan sisipan ornamen besi atau roster kerawang." },
+          { icon: "🚪", title: "Pintu Gerbang Otomatis", desc: "Gate geser/lipat dengan motor otomatis dan remote control untuk kemudahan akses." },
+          { icon: "✨", title: "Pagar Stainless Steel", desc: "Tampilan premium dan anti karat — pilihan ideal untuk hunian mewah dan eksklusif." },
+        ]
+      },
+      {
+        tag: "Proses",
+        title: "Cara Kerja Kami",
+        items: [
+          { icon: "📐", title: "Survei & Desain", desc: "Pengukuran lokasi dan presentasi desain 3D sebelum produksi dimulai." },
+          { icon: "🏭", title: "Fabrikasi Custom", desc: "Diproduksi sesuai ukuran dan desain di workshop kami dengan standar kualitas tinggi." },
+          { icon: "🔧", title: "Instalasi & Finishing", desc: "Pemasangan oleh tim terlatih, termasuk cat, galvanis, atau finishing sesuai spesifikasi." },
+        ]
+      }
+    ]}
+  />;
+}
+
+/* ── Page: Kanopi ── */
+function KanopiPage({ onWaOpen }) {
+  return <DevServicePage
+    pageKey="kanopi"
+    title="Kanopi"
+    subtitle="Lindungi carport, teras, atau area outdoor Anda dengan kanopi yang fungsional dan estetis. Berbagai material dan model tersedia sesuai kebutuhan."
+    icon="🏗️"
+    heroColor="linear-gradient(135deg,#1b4332 0%,#2d6a4f 50%,#52b788 100%)"
+    onWaOpen={onWaOpen}
+    sections={[
+      {
+        tag: "Jenis Kanopi",
+        title: "Model & Material Kanopi",
+        items: [
+          { icon: "🔵", title: "Kanopi Polycarbonate", desc: "Ringan, tembus cahaya, dan tahan UV. Pilihan paling populer untuk carport dan teras." },
+          { icon: "🔩", title: "Kanopi Rangka Besi Hollow", desc: "Struktur kokoh dari besi hollow galvanis dengan penutup atap polycarbonate atau spandek." },
+          { icon: "🌊", title: "Kanopi Alderon / UPVC", desc: "Material anti karat, ringan, dan estetis — tidak perlu cat ulang, perawatan minimal." },
+          { icon: "🏠", title: "Kanopi Atap Kaca", desc: "Tampilan premium dan modern, memaksimalkan cahaya alami sekaligus terlindungi dari hujan." },
+          { icon: "🎨", title: "Kanopi Custom Laser Cut", desc: "Ornamen plat besi dengan pola custom dipotong laser untuk sentuhan artistik yang unik." },
+          { icon: "🔑", title: "Kanopi Alderon (HPL)", desc: "Panel HPL berwarna-warni untuk tampilan modern dan colorful sesuai selera." },
+        ]
+      },
+      {
+        tag: "Area Aplikasi",
+        title: "Dimana Kanopi Dipasang?",
+        items: [
+          { icon: "🚗", title: "Carport / Garasi", desc: "Pelindung kendaraan dari panas dan hujan sekaligus mempercantik area depan rumah." },
+          { icon: "☕", title: "Teras Belakang / Balkon", desc: "Jadikan teras sebagai ruang outdoor yang nyaman sepanjang hari sepanjang tahun." },
+          { icon: "🏪", title: "Ruko & Komersial", desc: "Kanopi teras ruko, restoran, atau kafe yang meningkatkan daya tarik eksterior bisnis." },
+        ]
+      }
+    ]}
+  />;
+}
+
+/* ── Page: Aluminium ── */
+function AluminiumPage({ onWaOpen }) {
+  return <DevServicePage
+    pageKey="aluminium"
+    title="Aluminium"
+    subtitle="Kusen, pintu, jendela, dan partisi aluminium berkualitas tinggi — ringan, anti karat, dan tersedia dalam berbagai profil dan warna finishing."
+    icon="🔲"
+    heroColor="linear-gradient(135deg,#2b2d42 0%,#555b6e 50%,#8d99ae 100%)"
+    onWaOpen={onWaOpen}
+    sections={[
+      {
+        tag: "Produk Aluminium",
+        title: "Rangkaian Produk Aluminium Kami",
+        items: [
+          { icon: "🪟", title: "Kusen & Jendela Aluminium", desc: "Anti karat, tidak perlu dicat ulang, dan tersedia sistem swing, casement, maupun sliding." },
+          { icon: "🚪", title: "Pintu Aluminium", desc: "Ringan namun kuat — pilihan ideal untuk pintu kamar mandi, balkon, dan eksterior." },
+          { icon: "🔲", title: "Partisi Aluminium & Kaca", desc: "Pembatas ruang kantor atau rumah yang elegan dan mudah disesuaikan." },
+          { icon: "🌿", title: "Fasad Aluminium Composite", desc: "ACP (Aluminium Composite Panel) untuk cladding fasad eksterior modern dan premium." },
+          { icon: "🏠", title: "Canopy Aluminium", desc: "Kanopi dari profil aluminium ekstrusi — ringan, anti karat, dan estetis." },
+          { icon: "📐", title: "Railing & Handrail", desc: "Pegangan tangga dan railing balkon dari aluminium finishing powder coat aneka warna." },
+        ]
+      },
+      {
+        tag: "Keunggulan",
+        title: "Mengapa Memilih Aluminium?",
+        items: [
+          { icon: "🛡️", title: "Anti Karat & Tahan Lama", desc: "Tidak berkarat meski terpapar hujan dan panas ekstrem — perawatan minimal, usia panjang." },
+          { icon: "⚡", title: "Ringan & Kuat", desc: "Ratio kekuatan-bobot tinggi sehingga tidak membebani struktur bangunan." },
+          { icon: "🎨", title: "Aneka Pilihan Warna", desc: "Finishing powder coat dengan ratusan pilihan warna agar cocok dengan tema hunian Anda." },
+        ]
+      }
+    ]}
+  />;
+}
+
+/* ── Page: Landscape & Taman ── */
+function LandscapePage({ onWaOpen }) {
+  return <DevServicePage
+    pageKey="landscape"
+    title="Landscape & Taman"
+    subtitle="Ciptakan taman impian yang asri, hijau, dan menenangkan. Kami menghadirkan desain landscape profesional untuk hunian, perumahan, maupun area komersial."
+    icon="🌳"
+    heroColor="linear-gradient(135deg,#1a472a 0%,#2d6a4f 50%,#40916c 100%)"
+    onWaOpen={onWaOpen}
+    sections={[
+      {
+        tag: "Layanan Taman",
+        title: "Layanan Landscape Kami",
+        items: [
+          { icon: "🌿", title: "Desain Taman Depan", desc: "Taman depan yang mempercantik fasad rumah — paduan tanaman, batu, dan lampu taman." },
+          { icon: "🏡", title: "Taman Belakang / Rooftop", desc: "Oasis pribadi di halaman belakang atau atap rumah untuk relaksasi dan hiburan keluarga." },
+          { icon: "🌺", title: "Vertical Garden", desc: "Dinding hijau vertikal sebagai elemen dekoratif sekaligus penyejuk udara di ruang terbatas." },
+          { icon: "💧", title: "Kolam Hias & Air Mancur", desc: "Fitur air yang menenangkan — dari kolam ikan koi hingga waterfall minimalis modern." },
+          { icon: "💡", title: "Lampu Taman & Outdoor Lighting", desc: "Pencahayaan artistik yang memperindah taman di malam hari sekaligus meningkatkan keamanan." },
+          { icon: "🌱", title: "Perawatan Taman Berkala", desc: "Jasa perawatan rutin: pemangkasan, pemupukan, penyiraman, dan penggantian tanaman." },
+        ]
+      },
+      {
+        tag: "Material & Elemen",
+        title: "Elemen Taman Premium",
+        items: [
+          { icon: "🪨", title: "Batu Alam & Kerikil", desc: "Batu andesit, batu candi, kerikil warna — untuk jalur taman, dinding, dan aksen dekoratif." },
+          { icon: "🌳", title: "Tanaman Pilihan", desc: "Seleksi tanaman sesuai iklim lokal — tahan panas, mudah dirawat, dan bernilai estetis tinggi." },
+          { icon: "🏗️", title: "Pergola & Gazebo", desc: "Struktur atap taman dari kayu atau besi untuk area duduk yang nyaman di luar ruangan." },
+        ]
+      }
+    ]}
+  />;
+}
+
+>>>>>>> 1512cdd (Upload folder proyek pertama kali)
 export default function BricksyTravel() {
   const [data, setData] = useState(DEFAULT_DATA);
   const dataRef = useRef(DEFAULT_DATA); // selalu up-to-date, aman dipakai di closure stale (popstate)
@@ -10058,13 +10503,53 @@ export default function BricksyTravel() {
 
   const getCEFVal = (cKey) => editContent[cKey] !== undefined ? editContent[cKey] : data.content[cKey];
 
+<<<<<<< HEAD
+=======
+  // ── Nav items: flat list + dropdown groups
+>>>>>>> 1512cdd (Upload folder proyek pertama kali)
   const navItems = [
     { key: "home", label: data.content.nav1 },
     { key: "about", label: data.content.nav2 },
     { key: "news", label: data.content.nav3 },
+<<<<<<< HEAD
     { key: "shop", label: data.content.nav4 },         // Traveling → halaman artikel Traveling
     { key: "destinations", label: data.content.nav5 }, // Wedding Organizer → halaman artikel WO
     { key: "services", label: data.content.nav6 || "Layanan Kami" },
+=======
+  ];
+  // Dropdown: Layanan Developer
+  const navDropdownLayanan = [
+    { key: "services",  label: data.content.nav6  || "Layanan Kami" },
+    { key: "desainrab", label: data.content.nav7  || "Jasa Desain & RAB" },
+    { key: "temarumah", label: data.content.nav8  || "Tema Rumah" },
+  ];
+  // Dropdown: Interior & Eksterior
+  const navDropdownInterior = [
+    { key: "interior",   label: data.content.nav9  || "Interior" },
+    { key: "pagar",      label: data.content.nav10 || "Pagar Rumah" },
+    { key: "kanopi",     label: data.content.nav11 || "Kanopi" },
+    { key: "aluminium",  label: data.content.nav12 || "Aluminium" },
+    { key: "landscape",  label: data.content.nav13 || "Landscape & Taman" },
+  ];
+  // Dropdown: Galeri Proyek (artikel sections)
+  const navDropdownGaleri = [
+    { key: "shop",         label: data.content.nav4 || "Traveling" },
+    { key: "destinations", label: data.content.nav5 || "Wedding Organizer" },
+  ];
+  // All keys that are "active" as pages for highlight purposes
+  const allNavKeys = [
+    ...navItems.map(i=>i.key),
+    ...navDropdownLayanan.map(i=>i.key),
+    ...navDropdownInterior.map(i=>i.key),
+    ...navDropdownGaleri.map(i=>i.key),
+  ];
+  // Legacy flat list for mobile menu
+  const allNavItemsFlat = [
+    ...navItems,
+    ...navDropdownLayanan,
+    ...navDropdownInterior,
+    ...navDropdownGaleri,
+>>>>>>> 1512cdd (Upload folder proyek pertama kali)
   ];
 
   /* ─── RENDER ─── */
@@ -10216,6 +10701,7 @@ export default function BricksyTravel() {
                 <LogoDisplay content={data.content} size="nav" />
               </button>
 
+<<<<<<< HEAD
               {/* ── 2-ROW NAV (desktop) ── */}
               <div className="hide-sm" style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "flex-end", gap: 14, paddingLeft: 8 }}>
                 {/* Row 1 */}
@@ -10238,6 +10724,123 @@ export default function BricksyTravel() {
                     </button>
                   ))}
                 </div>
+=======
+              {/* ── DESKTOP NAV with Dropdowns ── */}
+              <div className="hide-sm" style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "flex-end", gap: 6, paddingLeft: 8, flexWrap: "wrap" }}>
+                {/* Flat nav items */}
+                {navItems.map(item => (
+                  <button key={item.key} onClick={() => navigateTo(item.key)}
+                    className={`nav-link${page === item.key ? " active" : ""}`}
+                    style={{ border: "none", background: "none", cursor: "pointer", padding: "4px 2px" }}>
+                    {item.label}
+                  </button>
+                ))}
+
+                {/* Dropdown: Layanan Developer */}
+                {(() => {
+                  const [ddOpen, setDdOpen] = React.useState(false);
+                  const isActive = navDropdownLayanan.some(i => i.key === page);
+                  return (
+                    <div style={{ position: "relative" }}
+                      onMouseEnter={() => setDdOpen(true)}
+                      onMouseLeave={() => setDdOpen(false)}>
+                      <button className={`nav-link${isActive ? " active" : ""}`}
+                        style={{ border: "none", background: "none", cursor: "pointer", display: "flex", alignItems: "center", gap: 4, padding: "4px 2px" }}>
+                        Layanan <span style={{ fontSize: "0.6rem", opacity: 0.7 }}>▼</span>
+                      </button>
+                      {ddOpen && (
+                        <div style={{ position: "absolute", top: "calc(100% + 6px)", right: 0, minWidth: 200,
+                          background: "rgba(255,255,255,.98)", borderRadius: 10, boxShadow: "0 8px 32px rgba(0,0,0,.14)",
+                          border: "1px solid rgba(158,155,150,.15)", padding: "6px 0", zIndex: 200, backdropFilter: "blur(12px)" }}>
+                          {navDropdownLayanan.map(item => (
+                            <button key={item.key} onClick={() => { navigateTo(item.key); setDdOpen(false); }}
+                              style={{ display: "block", width: "100%", textAlign: "left", padding: "9px 18px",
+                                fontSize: "0.78rem", fontWeight: page === item.key ? 700 : 500,
+                                color: page === item.key ? "#0d3b66" : "#3a5a6a",
+                                background: page === item.key ? "#edfafc" : "transparent",
+                                border: "none", cursor: "pointer", borderLeft: page === item.key ? "2px solid #0891b2" : "2px solid transparent",
+                                transition: "all .15s", letterSpacing: ".04em" }}
+                              onMouseEnter={e => { e.currentTarget.style.background="#edfafc"; e.currentTarget.style.color="#0d3b66"; }}
+                              onMouseLeave={e => { e.currentTarget.style.background=page===item.key?"#edfafc":"transparent"; e.currentTarget.style.color=page===item.key?"#0d3b66":"#3a5a6a"; }}>
+                              {item.label}
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })()}
+
+                {/* Dropdown: Interior & Eksterior */}
+                {(() => {
+                  const [ddOpen2, setDdOpen2] = React.useState(false);
+                  const isActive2 = navDropdownInterior.some(i => i.key === page);
+                  return (
+                    <div style={{ position: "relative" }}
+                      onMouseEnter={() => setDdOpen2(true)}
+                      onMouseLeave={() => setDdOpen2(false)}>
+                      <button className={`nav-link${isActive2 ? " active" : ""}`}
+                        style={{ border: "none", background: "none", cursor: "pointer", display: "flex", alignItems: "center", gap: 4, padding: "4px 2px" }}>
+                        Interior & Eksterior <span style={{ fontSize: "0.6rem", opacity: 0.7 }}>▼</span>
+                      </button>
+                      {ddOpen2 && (
+                        <div style={{ position: "absolute", top: "calc(100% + 6px)", right: 0, minWidth: 210,
+                          background: "rgba(255,255,255,.98)", borderRadius: 10, boxShadow: "0 8px 32px rgba(0,0,0,.14)",
+                          border: "1px solid rgba(158,155,150,.15)", padding: "6px 0", zIndex: 200, backdropFilter: "blur(12px)" }}>
+                          {navDropdownInterior.map(item => (
+                            <button key={item.key} onClick={() => { navigateTo(item.key); setDdOpen2(false); }}
+                              style={{ display: "block", width: "100%", textAlign: "left", padding: "9px 18px",
+                                fontSize: "0.78rem", fontWeight: page === item.key ? 700 : 500,
+                                color: page === item.key ? "#0d3b66" : "#3a5a6a",
+                                background: page === item.key ? "#edfafc" : "transparent",
+                                border: "none", cursor: "pointer", borderLeft: page === item.key ? "2px solid #0891b2" : "2px solid transparent",
+                                transition: "all .15s", letterSpacing: ".04em" }}
+                              onMouseEnter={e => { e.currentTarget.style.background="#edfafc"; e.currentTarget.style.color="#0d3b66"; }}
+                              onMouseLeave={e => { e.currentTarget.style.background=page===item.key?"#edfafc":"transparent"; e.currentTarget.style.color=page===item.key?"#0d3b66":"#3a5a6a"; }}>
+                              {item.label}
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })()}
+
+                {/* Dropdown: Galeri & Proyek */}
+                {(() => {
+                  const [ddOpen3, setDdOpen3] = React.useState(false);
+                  const isActive3 = navDropdownGaleri.some(i => i.key === page);
+                  return (
+                    <div style={{ position: "relative" }}
+                      onMouseEnter={() => setDdOpen3(true)}
+                      onMouseLeave={() => setDdOpen3(false)}>
+                      <button className={`nav-link${isActive3 ? " active" : ""}`}
+                        style={{ border: "none", background: "none", cursor: "pointer", display: "flex", alignItems: "center", gap: 4, padding: "4px 2px" }}>
+                        Galeri & Proyek <span style={{ fontSize: "0.6rem", opacity: 0.7 }}>▼</span>
+                      </button>
+                      {ddOpen3 && (
+                        <div style={{ position: "absolute", top: "calc(100% + 6px)", right: 0, minWidth: 200,
+                          background: "rgba(255,255,255,.98)", borderRadius: 10, boxShadow: "0 8px 32px rgba(0,0,0,.14)",
+                          border: "1px solid rgba(158,155,150,.15)", padding: "6px 0", zIndex: 200, backdropFilter: "blur(12px)" }}>
+                          {navDropdownGaleri.map(item => (
+                            <button key={item.key} onClick={() => { navigateTo(item.key); setDdOpen3(false); }}
+                              style={{ display: "block", width: "100%", textAlign: "left", padding: "9px 18px",
+                                fontSize: "0.78rem", fontWeight: page === item.key ? 700 : 500,
+                                color: page === item.key ? "#0d3b66" : "#3a5a6a",
+                                background: page === item.key ? "#edfafc" : "transparent",
+                                border: "none", cursor: "pointer", borderLeft: page === item.key ? "2px solid #0891b2" : "2px solid transparent",
+                                transition: "all .15s", letterSpacing: ".04em" }}
+                              onMouseEnter={e => { e.currentTarget.style.background="#edfafc"; e.currentTarget.style.color="#0d3b66"; }}
+                              onMouseLeave={e => { e.currentTarget.style.background=page===item.key?"#edfafc":"transparent"; e.currentTarget.style.color=page===item.key?"#0d3b66":"#3a5a6a"; }}>
+                              {item.label}
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })()}
+>>>>>>> 1512cdd (Upload folder proyek pertama kali)
               </div>
 
               {/* ── LOGIN / USER (desktop) ── */}
@@ -10335,10 +10938,15 @@ export default function BricksyTravel() {
                 overflowY: "auto",
                 WebkitOverflowScrolling: "touch"
               }}>
+<<<<<<< HEAD
+=======
+                {/* ── Mobile: Utama ── */}
+>>>>>>> 1512cdd (Upload folder proyek pertama kali)
                 {navItems.map(item => (
                   <button key={item.key} onClick={() => { navigateTo(item.key); setMobileMenu(false); }}
                     className="mobile-nav-item"
                     style={{
+<<<<<<< HEAD
                       fontSize: ".8rem",
                       letterSpacing: ".14em", textTransform: "uppercase", fontFamily: "'Jost',sans-serif",
                       color: page === item.key ? "var(--re-black)" : "var(--re-grey-dk)",
@@ -10348,15 +10956,64 @@ export default function BricksyTravel() {
                         ? "rgba(56,197,216,.25)" 
                         : "rgba(255,255,255,.06)",
                       background: "transparent",
+=======
+                      fontSize: ".8rem", letterSpacing: ".14em", textTransform: "uppercase", fontFamily: "'Jost',sans-serif",
+                      color: page === item.key ? "var(--re-black)" : "var(--re-grey-dk)",
+                      fontWeight: page === item.key ? 700 : 400,
+                      border: "none", background: "transparent",
+>>>>>>> 1512cdd (Upload folder proyek pertama kali)
                       textAlign: "left", padding: "13px 18px", borderRadius: 6, width: "100%",
                       borderLeft: page === item.key ? "2px solid var(--re-black)" : "2px solid transparent",
                       transition: "all .15s", cursor: "pointer"
                     }}
                     onMouseEnter={e => { e.currentTarget.style.background = "var(--re-grey-lt)"; e.currentTarget.style.borderLeft = "2px solid var(--re-black)"; }}
+<<<<<<< HEAD
                     onMouseLeave={e => { 
                       e.currentTarget.style.background = "transparent"; 
                       e.currentTarget.style.borderLeft = page === item.key ? "2px solid var(--re-black)" : "2px solid transparent";
                     }}>
+=======
+                    onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.borderLeft = page === item.key ? "2px solid var(--re-black)" : "2px solid transparent"; }}>
+                    {item.label}
+                  </button>
+                ))}
+                {/* ── Mobile Group: Layanan Developer ── */}
+                <div style={{ padding: "10px 18px 4px", fontSize: "0.6rem", fontWeight: 800, letterSpacing: ".18em", textTransform: "uppercase", color: "#0891b2", opacity: 0.8 }}>Layanan Developer</div>
+                {navDropdownLayanan.map(item => (
+                  <button key={item.key} onClick={() => { navigateTo(item.key); setMobileMenu(false); }}
+                    style={{ fontSize: ".8rem", letterSpacing: ".12em", textTransform: "uppercase", fontFamily: "'Jost',sans-serif",
+                      color: page === item.key ? "var(--re-black)" : "var(--re-grey-dk)", fontWeight: page === item.key ? 700 : 400,
+                      border: "none", background: "transparent", textAlign: "left", padding: "11px 28px", borderRadius: 6, width: "100%",
+                      borderLeft: page === item.key ? "2px solid #0891b2" : "2px solid transparent", transition: "all .15s", cursor: "pointer" }}
+                    onMouseEnter={e => { e.currentTarget.style.background = "var(--re-grey-lt)"; }}
+                    onMouseLeave={e => { e.currentTarget.style.background = "transparent"; }}>
+                    {item.label}
+                  </button>
+                ))}
+                {/* ── Mobile Group: Interior & Eksterior ── */}
+                <div style={{ padding: "10px 18px 4px", fontSize: "0.6rem", fontWeight: 800, letterSpacing: ".18em", textTransform: "uppercase", color: "#0891b2", opacity: 0.8 }}>Interior & Eksterior</div>
+                {navDropdownInterior.map(item => (
+                  <button key={item.key} onClick={() => { navigateTo(item.key); setMobileMenu(false); }}
+                    style={{ fontSize: ".8rem", letterSpacing: ".12em", textTransform: "uppercase", fontFamily: "'Jost',sans-serif",
+                      color: page === item.key ? "var(--re-black)" : "var(--re-grey-dk)", fontWeight: page === item.key ? 700 : 400,
+                      border: "none", background: "transparent", textAlign: "left", padding: "11px 28px", borderRadius: 6, width: "100%",
+                      borderLeft: page === item.key ? "2px solid #0891b2" : "2px solid transparent", transition: "all .15s", cursor: "pointer" }}
+                    onMouseEnter={e => { e.currentTarget.style.background = "var(--re-grey-lt)"; }}
+                    onMouseLeave={e => { e.currentTarget.style.background = "transparent"; }}>
+                    {item.label}
+                  </button>
+                ))}
+                {/* ── Mobile Group: Galeri & Proyek ── */}
+                <div style={{ padding: "10px 18px 4px", fontSize: "0.6rem", fontWeight: 800, letterSpacing: ".18em", textTransform: "uppercase", color: "#0891b2", opacity: 0.8 }}>Galeri & Proyek</div>
+                {navDropdownGaleri.map(item => (
+                  <button key={item.key} onClick={() => { navigateTo(item.key); setMobileMenu(false); }}
+                    style={{ fontSize: ".8rem", letterSpacing: ".12em", textTransform: "uppercase", fontFamily: "'Jost',sans-serif",
+                      color: page === item.key ? "var(--re-black)" : "var(--re-grey-dk)", fontWeight: page === item.key ? 700 : 400,
+                      border: "none", background: "transparent", textAlign: "left", padding: "11px 28px", borderRadius: 6, width: "100%",
+                      borderLeft: page === item.key ? "2px solid #0891b2" : "2px solid transparent", transition: "all .15s", cursor: "pointer" }}
+                    onMouseEnter={e => { e.currentTarget.style.background = "var(--re-grey-lt)"; }}
+                    onMouseLeave={e => { e.currentTarget.style.background = "transparent"; }}>
+>>>>>>> 1512cdd (Upload folder proyek pertama kali)
                     {item.label}
                   </button>
                 ))}
@@ -10769,6 +11426,18 @@ export default function BricksyTravel() {
                   onReadPost={(post) => openArticle(post)}
                 />
               )}
+<<<<<<< HEAD
+=======
+
+              {/* NEW DEVELOPER SERVICE PAGES */}
+              {page === "desainrab"  && <DesainRabPage  onWaOpen={openWaPicker} />}
+              {page === "temarumah" && <TemaRumahPage   onWaOpen={openWaPicker} />}
+              {page === "interior"  && <InteriorPage    onWaOpen={openWaPicker} />}
+              {page === "pagar"     && <PagarPage       onWaOpen={openWaPicker} />}
+              {page === "kanopi"    && <KanopiPage      onWaOpen={openWaPicker} />}
+              {page === "aluminium" && <AluminiumPage   onWaOpen={openWaPicker} />}
+              {page === "landscape" && <LandscapePage   onWaOpen={openWaPicker} />}
+>>>>>>> 1512cdd (Upload folder proyek pertama kali)
             </>
           )}
         </>
@@ -11807,10 +12476,24 @@ export default function BricksyTravel() {
                     { label: "Login Button Text", key: "loginBtnText" },
                     { label: "Nav: Home", key: "nav1" },
                     { label: "Nav: About", key: "nav2" },
+<<<<<<< HEAD
                     { label: "Nav: News", key: "nav3" },
                     { label: "Nav: Shop", key: "nav4" },
                     { label: "Nav: Destinations", key: "nav5" },
                     { label: "Nav: Layanan Kami", key: "nav6" },
+=======
+                    { label: "Nav: Portfolio", key: "nav3" },
+                    { label: "Nav: Galeri - Traveling", key: "nav4" },
+                    { label: "Nav: Galeri - Wedding Organizer", key: "nav5" },
+                    { label: "Nav: Layanan Kami (Dropdown)", key: "nav6" },
+                    { label: "Nav: Jasa Desain & RAB", key: "nav7" },
+                    { label: "Nav: Tema Rumah", key: "nav8" },
+                    { label: "Nav: Interior", key: "nav9" },
+                    { label: "Nav: Pagar Rumah", key: "nav10" },
+                    { label: "Nav: Kanopi", key: "nav11" },
+                    { label: "Nav: Aluminium", key: "nav12" },
+                    { label: "Nav: Landscape & Taman", key: "nav13" },
+>>>>>>> 1512cdd (Upload folder proyek pertama kali)
                     { label: "Layanan — Judul Halaman", key: "servicesPageTitle" },
                     { label: "Layanan — Subjudul Halaman", key: "servicesPageSub", multiline: true },
                   ].map(f => (
