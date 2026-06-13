@@ -9249,6 +9249,75 @@ function WaPickerModal({ admins = [], msgText = "", onClose }) {
   );
 }
 
+/* ─────────────── WA ADMIN MANAGER ─────────────── */
+function WaAdminManager({ admins = [], onSave, notify }) {
+  const [list, setList] = useState(() => admins.map((a, i) => ({ ...a, id: a.id ?? i + 1 })));
+  const [dirty, setDirty] = useState(false);
+
+  function update(id, field, val) {
+    setList(prev => prev.map(a => a.id === id ? { ...a, [field]: val } : a));
+    setDirty(true);
+  }
+  function setPrimary(id) {
+    setList(prev => prev.map(a => ({ ...a, primary: a.id === id })));
+    setDirty(true);
+  }
+  function addAdmin() {
+    const newId = Date.now();
+    setList(prev => [...prev, { id: newId, name: "", wa: "https://wa.me/62", primary: false }]);
+    setDirty(true);
+  }
+  function removeAdmin(id) {
+    setList(prev => prev.filter(a => a.id !== id));
+    setDirty(true);
+  }
+  function handleSave() {
+    const invalid = list.find(a => !a.name.trim() || !a.wa.trim());
+    if (invalid) { notify("⚠️ Nama dan nomor WA wajib diisi!"); return; }
+    onSave(list);
+    setDirty(false);
+  }
+
+  const cardStyle = { background: "#fff", borderRadius: 8, padding: "16px 18px", marginBottom: 10, boxShadow: "0 1px 4px rgba(0,0,0,.06)", border: "1px solid #eee", display: "flex", flexDirection: "column", gap: 10 };
+  const inputStyle = { width: "100%", padding: "8px 12px", border: "1px solid #ddd", borderRadius: 6, fontSize: 13, boxSizing: "border-box" };
+  const labelStyle = { fontSize: 11, fontWeight: 700, color: "#5A6A6C", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 4, display: "block" };
+
+  return (
+    <div style={{ background: "#fff", borderRadius: 8, padding: "18px 20px", marginBottom: 14, boxShadow: "0 1px 4px rgba(0,0,0,.05)" }}>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 14 }}>
+        <label style={{ fontSize: 11, fontWeight: 700, color: "#5A6A6C", letterSpacing: "1px", textTransform: "uppercase" }}>📱 Admin WhatsApp</label>
+        <button onClick={addAdmin} style={{ fontSize: 12, padding: "5px 12px", background: "#25d366", color: "#fff", border: "none", borderRadius: 6, cursor: "pointer", fontWeight: 600 }}>+ Tambah Admin</button>
+      </div>
+
+      {list.map((admin) => (
+        <div key={admin.id} style={cardStyle}>
+          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            <input type="radio" name="wa_primary" checked={!!admin.primary} onChange={() => setPrimary(admin.id)} title="Jadikan Admin Utama" style={{ accentColor: "#25d366", width: 16, height: 16 }} />
+            <span style={{ fontSize: 11, color: "#888" }}>{admin.primary ? "⭐ Admin Utama (WA default)" : "Jadikan utama"}</span>
+            <button onClick={() => removeAdmin(admin.id)} style={{ marginLeft: "auto", fontSize: 11, padding: "3px 10px", background: "#fee2e2", color: "#dc2626", border: "none", borderRadius: 5, cursor: "pointer" }}>Hapus</button>
+          </div>
+          <div>
+            <label style={labelStyle}>Nama Admin</label>
+            <input style={inputStyle} value={admin.name} onChange={e => update(admin.id, "name", e.target.value)} placeholder="cth: Fredy – Admin Utama" />
+          </div>
+          <div>
+            <label style={labelStyle}>Nomor WA (format: https://wa.me/628xxx)</label>
+            <input style={inputStyle} value={admin.wa} onChange={e => update(admin.id, "wa", e.target.value)} placeholder="https://wa.me/628123456789" />
+          </div>
+        </div>
+      ))}
+
+      {list.length === 0 && <p style={{ fontSize: 13, color: "#aaa", textAlign: "center", padding: "12px 0" }}>Belum ada admin. Klik "+ Tambah Admin".</p>}
+
+      {dirty && (
+        <button onClick={handleSave} style={{ marginTop: 6, width: "100%", padding: "10px", background: "#2E3D3F", color: "#fff", border: "none", borderRadius: 7, fontWeight: 700, fontSize: 13, cursor: "pointer" }}>
+          💾 Simpan Daftar Admin WA
+        </button>
+      )}
+    </div>
+  );
+}
+
 /* ─────────────── NAV DROPDOWN: LAYANAN ─────────────── */
 function NavDropdownLayanan({ page, navigateTo, navDropdownLayanan }) {
   const [ddOpen, setDdOpen] = useState(false);
