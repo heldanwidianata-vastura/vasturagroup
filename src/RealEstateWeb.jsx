@@ -2815,7 +2815,7 @@ function LogoDisplay({ content, size = "nav" }) {
     return (
       <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
         <img src={content.logoImage} alt={content.logoText}
-          style={{ height: size === "nav" ? 88 : size === "footer" ? 64 : iconSz, maxWidth: size === "nav" ? 180 : size === "footer" ? 140 : 120, objectFit: "contain", display: "block" }} />
+          style={{ height: size === "nav" ? 54 : size === "footer" ? 64 : iconSz, maxWidth: size === "nav" ? 160 : size === "footer" ? 140 : 120, objectFit: "contain", display: "block" }} />
         <span className={brandClass} style={dynStyle}>
           {lines.map((line, i) => <span key={i} style={{ display: singleLine ? "inline" : "block" }}>{line}</span>)}
         </span>
@@ -9318,6 +9318,41 @@ function WaAdminManager({ admins = [], onSave, notify }) {
   );
 }
 
+/* ─────────────── SOSMED MANAGER ─────────────── */
+function SosmedManager({ content, onSave, notify }) {
+  const [ig, setIg] = useState(content.igLink || "");
+  const [fb, setFb] = useState(content.fbLink || "");
+  const [dirty, setDirty] = useState(false);
+
+  function handleSave() {
+    onSave({ igLink: ig, fbLink: fb });
+    setDirty(false);
+    notify("✅ Link sosial media disimpan!");
+  }
+
+  const inputStyle = { width: "100%", padding: "8px 12px", border: "1px solid #ddd", borderRadius: 6, fontSize: 13, boxSizing: "border-box" };
+  const labelStyle = { fontSize: 11, fontWeight: 700, color: "#5A6A6C", letterSpacing: "0.08em", textTransform: "uppercase", marginBottom: 4, display: "block" };
+
+  return (
+    <div style={{ background: "#fff", borderRadius: 8, padding: "18px 20px", marginBottom: 14, boxShadow: "0 1px 4px rgba(0,0,0,.05)" }}>
+      <label style={{ fontSize: 11, fontWeight: 700, color: "#5A6A6C", letterSpacing: "1px", textTransform: "uppercase", display: "block", marginBottom: 14 }}>🌐 Link Sosial Media</label>
+      <div style={{ marginBottom: 12 }}>
+        <label style={labelStyle}>📷 Instagram URL</label>
+        <input style={inputStyle} value={ig} onChange={e => { setIg(e.target.value); setDirty(true); }} placeholder="https://instagram.com/username" />
+      </div>
+      <div style={{ marginBottom: 12 }}>
+        <label style={labelStyle}>📘 Facebook URL</label>
+        <input style={inputStyle} value={fb} onChange={e => { setFb(e.target.value); setDirty(true); }} placeholder="https://facebook.com/username" />
+      </div>
+      {dirty && (
+        <button onClick={handleSave} style={{ width: "100%", padding: "10px", background: "#2E3D3F", color: "#fff", border: "none", borderRadius: 7, fontWeight: 700, fontSize: 13, cursor: "pointer" }}>
+          💾 Simpan Link Sosmed
+        </button>
+      )}
+    </div>
+  );
+}
+
 /* ─────────────── NAV DROPDOWN: LAYANAN ─────────────── */
 function NavDropdownLayanan({ page, navigateTo, navDropdownLayanan }) {
   const [ddOpen, setDdOpen] = useState(false);
@@ -10595,6 +10630,23 @@ export default function BricksyTravel() {
                           onMouseEnter={e => { e.currentTarget.style.background = "rgba(255,255,255,.28)"; e.currentTarget.style.borderRadius = "4px 14px 4px 14px"; e.currentTarget.style.boxShadow = "0 4px 14px rgba(0,0,0,.28)"; }}
                           onMouseLeave={e => { e.currentTarget.style.background = "linear-gradient(130deg,rgba(8,145,178,.65),rgba(10,168,191,.45))"; e.currentTarget.style.borderRadius = "14px 4px 14px 4px"; e.currentTarget.style.boxShadow = "0 2px 8px rgba(0,0,0,.18)"; }}>
                           ⚙ Control Panel
+                        </button>
+                        {/* Tombol Logout */}
+                        <button onClick={() => logout()}
+                          style={{
+                            fontSize: "0.6rem", letterSpacing: ".1em", textTransform: "uppercase", fontWeight: 800,
+                            color: "#fff",
+                            background: "linear-gradient(130deg,rgba(180,40,40,.65),rgba(210,60,60,.45))",
+                            border: "1px solid rgba(255,255,255,.5)",
+                            cursor: "pointer", lineHeight: 1.3,
+                            padding: "2px 10px",
+                            borderRadius: "4px 14px 4px 14px",
+                            boxShadow: "0 2px 8px rgba(0,0,0,.18)",
+                            transition: "all .25s"
+                          }}
+                          onMouseEnter={e => { e.currentTarget.style.background = "rgba(255,80,80,.45)"; }}
+                          onMouseLeave={e => { e.currentTarget.style.background = "linear-gradient(130deg,rgba(180,40,40,.65),rgba(210,60,60,.45))"; }}>
+                          ⏻ Logout
                         </button>
                       </div>
                     </div>
