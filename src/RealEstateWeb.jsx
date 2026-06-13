@@ -245,7 +245,7 @@ async function fsSet(docId, payload) {
 
 /* ─── Cloudinary Config ─── */
 const CLOUDINARY = {
-  cloudName:    "dum9j7ym1",
+  cloudName:    "dum9j7yn1",
   uploadPreset: "vastura_clouds",
 };
 
