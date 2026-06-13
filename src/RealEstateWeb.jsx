@@ -2815,7 +2815,7 @@ function LogoDisplay({ content, size = "nav" }) {
     return (
       <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
         <img src={content.logoImage} alt={content.logoText}
-          style={{ height: size === "nav" ? 54 : size === "footer" ? 64 : iconSz, maxWidth: size === "nav" ? 160 : size === "footer" ? 140 : 120, objectFit: "contain", display: "block" }} />
+          style={{ height: size === "nav" ? 68 : size === "footer" ? 64 : iconSz, maxWidth: size === "nav" ? 160 : size === "footer" ? 140 : 120, objectFit: "contain", display: "block" }} />
         <span className={brandClass} style={dynStyle}>
           {lines.map((line, i) => <span key={i} style={{ display: singleLine ? "inline" : "block" }}>{line}</span>)}
         </span>
@@ -10562,7 +10562,7 @@ export default function BricksyTravel() {
                 background: "radial-gradient(ellipse at 40% 60%, rgba(74,72,69,.08) 0%, transparent 100%)",
                 filter: "blur(28px)", transform: "rotate(6deg)" }} />
             </div>
-            <div style={{ position: "relative", zIndex: 1, display: "flex", alignItems: "center", justifyContent: "space-between", height: 72, maxWidth: 1200, margin: "0 auto", gap: 20 }}>
+            <div style={{ position: "relative", zIndex: 1, display: "flex", alignItems: "center", justifyContent: "space-between", height: 82, maxWidth: 1200, margin: "0 auto", gap: 20 }}>
 
               {/* ── LOGO — full multi-line height ── */}
               <button onClick={() => navigateTo("home")} style={{ border: "none", background: "none", padding: 0, flexShrink: 0, height: "100%", display: "flex", alignItems: "center" }}>
