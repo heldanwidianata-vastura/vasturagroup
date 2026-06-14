@@ -6179,7 +6179,8 @@ function ServicesAdmin({ data, save, notify, uploadToCloudinary, onEditStateChan
   };
   const deleteSvc = (id) => {
     if (!window.confirm("Hapus paket ini?")) return;
-    save({ ...data, services: svcs.filter(x => x.id !== id) });
+    const deletedIds = [...(data.deletedServiceIds || []), id];
+    save({ ...data, services: svcs.filter(x => x.id !== id), deletedServiceIds: deletedIds });
     notify("Paket dihapus.");
   };
   const updateFeature = (i, val) => {
@@ -9669,7 +9670,8 @@ export default function BricksyTravel() {
             return patched;
           });
           const existingIds = new Set(sv.map(s => s.id));
-          const missing = dv.filter(s => !existingIds.has(s.id));
+          const deletedIds = new Set(saved.deletedServiceIds || []);
+          const missing = dv.filter(s => !existingIds.has(s.id) && !deletedIds.has(s.id));
           result[key] = [...merged, ...missing];
         }
       } else {
@@ -11183,6 +11185,7 @@ export default function BricksyTravel() {
               { id: "users", label: "Users", show: isAdmin },
               { id: "reviews", label: "Reviews", show: isAdmin },
               { id: "settings", label: "Settings", show: isAdmin },
+              { id: "profil", label: "Profil Akun", show: true },
             ].filter(item => item.show).map(item => (
               <button key={item.id} onClick={() => navigateAdminTab(item.id)}
                 style={{
@@ -11667,6 +11670,130 @@ export default function BricksyTravel() {
                   </div>
                 </div>
               )}
+
+              {/* PROFIL AKUN */}
+              {adminTab === "profil" && (() => {
+                const saveProfileFn = async () => {
+                  const { name, phone, email, desc, photo, oldPass, newPass, confirmPass } = profileEdit;
+                  // Ganti password
+                  if (oldPass || newPass || confirmPass) {
+                    const stored = await fsGet(`profile-${user.username}`);
+                    const currentPass = stored?._password || user.password;
+                    if (oldPass !== currentPass) { notify("Password lama salah.", "error"); return; }
+                    if (newPass.length < 6) { notify("Password baru minimal 6 karakter.", "error"); return; }
+                    if (newPass !== confirmPass) { notify("Konfirmasi password tidak cocok.", "error"); return; }
+                  }
+                  const prev = await fsGet(`profile-${user.username}`) || {};
+                  const patch = { ...prev, name: name || user.name, phone: phone || user.phone, email: email || user.email, desc: desc || user.desc, photo: photo || user.photo };
+                  if (profileEdit.newPass) patch._password = profileEdit.newPass;
+                  await fsSet(`profile-${user.username}`, patch);
+                  setUser(u => ({ ...u, name: patch.name, phone: patch.phone, email: patch.email, desc: patch.desc, photo: patch.photo }));
+                  setProfileEdit(p => ({ ...p, oldPass: "", newPass: "", confirmPass: "" }));
+                  setProfileEditMode(false);
+                  notify("Profil berhasil disimpan!");
+                };
+
+                const inp = (label, key, type = "text", placeholder = "") => (
+                  <div style={{ marginBottom: 16 }}>
+                    <label style={{ display: "block", fontSize: 11, fontWeight: 700, color: "#5A6A6C", textTransform: "uppercase", letterSpacing: ".06em", marginBottom: 6 }}>{label}</label>
+                    <input type={type} value={profileEdit[key] ?? ""} placeholder={placeholder || label}
+                      onChange={e => setProfileEdit(p => ({ ...p, [key]: e.target.value }))}
+                      style={{ width: "100%", padding: "10px 14px", border: "1.5px solid #E8DCC8", borderRadius: 8, fontSize: 14, outline: "none", background: "#fff", boxSizing: "border-box" }} />
+                  </div>
+                );
+
+                return (
+                  <div className="fade-in">
+                    <h1 style={{ fontSize: 24, fontWeight: 500, color: "#2E3D3F", marginBottom: 28 }}>Profil Akun</h1>
+                    <div className="profile-grid">
+                      {/* Left: Foto & Info */}
+                      <div style={{ background: "#fff", borderRadius: 12, padding: "28px 24px", boxShadow: "0 2px 10px rgba(0,0,0,.06)", textAlign: "center" }}>
+                        <div style={{ position: "relative", display: "inline-block", marginBottom: 16 }}>
+                          {(profileEdit.photo || user.photo) ? (
+                            <img src={profileEdit.photo || user.photo} alt="Foto Profil"
+                              style={{ width: 100, height: 100, borderRadius: "50%", objectFit: "cover", border: "3px solid #C9AA71" }}
+                              onError={e => { e.target.style.display = "none"; }} />
+                          ) : (
+                            <div style={{ width: 100, height: 100, borderRadius: "50%", background: "linear-gradient(135deg,#2E3D3F,#8B6914)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 36, color: "#fff", fontWeight: 700, margin: "0 auto" }}>
+                              {(user.name || user.username || "?")[0].toUpperCase()}
+                            </div>
+                          )}
+                        </div>
+                        <div style={{ fontSize: 17, fontWeight: 700, color: "#2E3D3F", marginBottom: 4 }}>{user.name || user.username}</div>
+                        <div style={{ fontSize: 12, color: "#8B6914", fontWeight: 600, marginBottom: 4, textTransform: "uppercase", letterSpacing: ".06em" }}>{user.role}</div>
+                        <div style={{ fontSize: 13, color: "#5A6A6C", marginBottom: 16 }}>{user.email || "-"}</div>
+                        {!profileEditMode && (
+                          <button onClick={() => {
+                            setProfileEdit({ name: user.name || "", phone: user.phone || "", email: user.email || "", desc: user.desc || "", photo: user.photo || "", oldPass: "", newPass: "", confirmPass: "" });
+                            setProfileEditMode(true);
+                          }} style={{ padding: "9px 22px", background: "linear-gradient(130deg,#2E3D3F,#8B6914)", color: "#fff", border: "none", borderRadius: 8, fontSize: 13, fontWeight: 600, cursor: "pointer" }}>
+                            ✏ Edit Profil
+                          </button>
+                        )}
+                      </div>
+
+                      {/* Right: Form */}
+                      <div style={{ background: "#fff", borderRadius: 12, padding: "28px 28px", boxShadow: "0 2px 10px rgba(0,0,0,.06)" }}>
+                        {!profileEditMode ? (
+                          <div>
+                            {[["Nama", user.name], ["Email", user.email], ["No. HP", user.phone], ["Deskripsi", user.desc]].map(([label, val]) => (
+                              <div key={label} style={{ marginBottom: 18, paddingBottom: 18, borderBottom: "1px solid #FAF7F0" }}>
+                                <div style={{ fontSize: 11, fontWeight: 700, color: "#5A6A6C", textTransform: "uppercase", letterSpacing: ".06em", marginBottom: 4 }}>{label}</div>
+                                <div style={{ fontSize: 14, color: "#2E3D3F" }}>{val || <span style={{ color: "#bbb" }}>—</span>}</div>
+                              </div>
+                            ))}
+                          </div>
+                        ) : (
+                          <div>
+                            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0 20px" }}>
+                              <div>{inp("Nama", "name")}</div>
+                              <div>{inp("Email", "email", "email")}</div>
+                              <div>{inp("No. HP", "phone", "tel")}</div>
+                              <div>
+                                <label style={{ display: "block", fontSize: 11, fontWeight: 700, color: "#5A6A6C", textTransform: "uppercase", letterSpacing: ".06em", marginBottom: 6 }}>URL Foto Profil</label>
+                                <div style={{ display: "flex", gap: 8, marginBottom: 16 }}>
+                                  <input type="text" value={profileEdit.photo ?? ""} placeholder="https://..."
+                                    onChange={e => setProfileEdit(p => ({ ...p, photo: e.target.value }))}
+                                    style={{ flex: 1, padding: "10px 14px", border: "1.5px solid #E8DCC8", borderRadius: 8, fontSize: 13, outline: "none" }} />
+                                  {profileEdit.photo && <button onClick={() => setProfileEdit(p => ({ ...p, photo: "" }))} style={{ padding: "0 10px", background: "#fee", color: "#e74c3c", border: "none", borderRadius: 6, cursor: "pointer" }}>✕</button>}
+                                </div>
+                              </div>
+                            </div>
+                            <div style={{ marginBottom: 16 }}>
+                              <label style={{ display: "block", fontSize: 11, fontWeight: 700, color: "#5A6A6C", textTransform: "uppercase", letterSpacing: ".06em", marginBottom: 6 }}>Deskripsi</label>
+                              <textarea value={profileEdit.desc ?? ""} rows={3} placeholder="Deskripsi singkat..."
+                                onChange={e => setProfileEdit(p => ({ ...p, desc: e.target.value }))}
+                                style={{ width: "100%", padding: "10px 14px", border: "1.5px solid #E8DCC8", borderRadius: 8, fontSize: 14, outline: "none", resize: "vertical", boxSizing: "border-box" }} />
+                            </div>
+
+                            {/* Ganti Password */}
+                            <div style={{ marginTop: 4, marginBottom: 20, background: "#FAF7F0", borderRadius: 10, padding: "18px 20px" }}>
+                              <div style={{ fontSize: 13, fontWeight: 700, color: "#2E3D3F", marginBottom: 14 }}>🔒 Ganti Password</div>
+                              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "0 16px" }}>
+                                {inp("Password Lama", "oldPass", "password", "••••••••")}
+                                {inp("Password Baru", "newPass", "password", "Min. 6 karakter")}
+                                {inp("Konfirmasi Baru", "confirmPass", "password", "Ulangi password")}
+                              </div>
+                              <div style={{ fontSize: 11, color: "#5A6A6C" }}>⚠ Kosongkan jika tidak ingin mengganti password.</div>
+                            </div>
+
+                            <div style={{ display: "flex", gap: 10 }}>
+                              <button onClick={saveProfileFn}
+                                style={{ padding: "10px 26px", background: "linear-gradient(130deg,#2E3D3F,#8B6914)", color: "#fff", border: "none", borderRadius: 8, fontSize: 14, fontWeight: 700, cursor: "pointer" }}>
+                                💾 Simpan Perubahan
+                              </button>
+                              <button onClick={() => setProfileEditMode(false)}
+                                style={{ padding: "10px 20px", background: "#F5EDD8", color: "#2E3D3F", border: "none", borderRadius: 8, fontSize: 14, fontWeight: 600, cursor: "pointer" }}>
+                                Batal
+                              </button>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                );
+              })()}
 
               {/* REVIEWS ADMIN */}
               {adminTab === "reviews" && isAdmin && <AdminReviews data={data} save={save} notify={notify} />}
