@@ -10048,7 +10048,9 @@ export default function BricksyTravel() {
 
   /** Tutup admin panel: native back */
   const closeAdmin = () => {
-    window.history.back();
+    window.history.pushState({}, "", "/");
+    setShowAdmin(false);
+    window.scrollTo(0, 0);
   };
 
   /** Navigasi antar tab admin — push ke browser history agar tombol ← browser bisa step-back */
@@ -11802,6 +11804,234 @@ export default function BricksyTravel() {
               {adminTab === "settings" && isAdmin && (
                 <div className="fade-in">
                   <h1 style={{ fontSize: 24, fontWeight: 500, color: "#2E3D3F", marginBottom: 28 }}>Settings</h1>
+
+                  {/* ═══════════════════════════════════════════════════════ */}
+                  {/* SECTION: GAMBAR HALAMAN HOME */}
+                  {/* ═══════════════════════════════════════════════════════ */}
+                  <div style={{ background: "#fff", borderRadius: 8, padding: "22px 24px", marginBottom: 24, boxShadow: "0 2px 8px rgba(0,0,0,.06)", borderTop: "4px solid #3498db" }}>
+                    <h3 style={{ fontSize: 16, fontWeight: 700, color: "#2E3D3F", marginBottom: 4 }}>🏠 Gambar Halaman Home</h3>
+                    <p style={{ fontSize: 12, color: "#5A6A6C", marginBottom: 20, lineHeight: 1.6 }}>
+                      Atur semua gambar yang tampil di halaman utama website — Hero Slideshow, Banner Advertorial, dan Galeri.
+                    </p>
+
+                    {/* Hero Images */}
+                    <div style={{ marginBottom: 24 }}>
+                      <h4 style={{ fontSize: 13, fontWeight: 700, color: "#2E3D3F", marginBottom: 4 }}>🖼 Hero Slideshow (4 Gambar)</h4>
+                      <p style={{ fontSize: 11, color: "#5A6A6C", marginBottom: 12, lineHeight: 1.6 }}>Gambar utama di bagian paling atas halaman. Tampil bergantian saat mode slideshow aktif.</p>
+                      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: 14 }}>
+                        {(data.images?.hero || ["","","",""]).map((img, idx) => (
+                          <div key={idx} style={{ background: "#FAF7F0", borderRadius: 8, padding: 12, border: "1px solid #E8DCC8" }}>
+                            <div style={{ fontSize: 11, fontWeight: 700, color: "#5A6A6C", marginBottom: 8, textTransform: "uppercase", letterSpacing: "0.5px" }}>Hero {idx + 1}</div>
+                            {img ? (
+                              <img src={img} alt={`Hero ${idx+1}`} style={{ width: "100%", height: 110, objectFit: "cover", borderRadius: 6, marginBottom: 8, border: "1px solid #D4C4A0" }}
+                                onError={e => e.target.style.display = "none"} />
+                            ) : (
+                              <div style={{ width: "100%", height: 110, background: "#E8DCC8", borderRadius: 6, marginBottom: 8, display: "flex", alignItems: "center", justifyContent: "center", color: "#5A6A6C", fontSize: 11 }}>Belum ada gambar</div>
+                            )}
+                            <UploadButton label="📁 Upload"
+                              style={{ fontSize: 11, padding: "6px 10px", marginBottom: 6, width: "100%", justifyContent: "center" }}
+                              onDone={urls => {
+                                const newHero = [...(data.images?.hero || ["","","",""])];
+                                newHero[idx] = urls[0];
+                                save({ ...data, images: { ...data.images, hero: newHero } });
+                                notify(`✅ Hero ${idx+1} diperbarui!`);
+                              }}
+                              onError={() => notify("Gagal upload.", "error")} />
+                            <div style={{ display: "flex", gap: 6 }}>
+                              <input id={`hero-img-${idx}`} defaultValue={img} placeholder="atau URL..."
+                                style={{ flex: 1, padding: "6px 8px", border: "1px solid #D4C4A0", borderRadius: 5, fontSize: 11, outline: "none" }} />
+                              <button onClick={() => {
+                                const url = document.getElementById(`hero-img-${idx}`)?.value?.trim();
+                                if (!url) return notify("Masukkan URL.", "error");
+                                const newHero = [...(data.images?.hero || ["","","",""])];
+                                newHero[idx] = url;
+                                save({ ...data, images: { ...data.images, hero: newHero } });
+                                notify(`✅ Hero ${idx+1} disimpan!`);
+                              }} style={{ padding: "6px 10px", background: "#3498db", color: "#fff", borderRadius: 5, fontSize: 11, border: "none", cursor: "pointer", whiteSpace: "nowrap" }}>OK</button>
+                            </div>
+                            {img && (
+                              <button onClick={() => {
+                                const newHero = [...(data.images?.hero || ["","","",""])];
+                                newHero[idx] = "";
+                                save({ ...data, images: { ...data.images, hero: newHero } });
+                                notify(`Hero ${idx+1} dihapus.`);
+                              }} style={{ marginTop: 6, width: "100%", padding: "5px", background: "none", color: "#e74c3c", border: "1px solid #e74c3c", borderRadius: 5, fontSize: 10, cursor: "pointer" }}>🗑 Hapus</button>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Adv/Banner Images */}
+                    <div style={{ marginBottom: 24, paddingTop: 20, borderTop: "1px solid #F0E8D5" }}>
+                      <h4 style={{ fontSize: 13, fontWeight: 700, color: "#2E3D3F", marginBottom: 4 }}>🎯 Gambar Banner Advertorial (2 Gambar)</h4>
+                      <p style={{ fontSize: 11, color: "#5A6A6C", marginBottom: 12, lineHeight: 1.6 }}>Gambar di bagian banner/advertorial di tengah halaman Home.</p>
+                      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: 14 }}>
+                        {(data.images?.adv || ["",""]).map((img, idx) => (
+                          <div key={idx} style={{ background: "#FAF7F0", borderRadius: 8, padding: 12, border: "1px solid #E8DCC8" }}>
+                            <div style={{ fontSize: 11, fontWeight: 700, color: "#5A6A6C", marginBottom: 8, textTransform: "uppercase", letterSpacing: "0.5px" }}>Banner {idx + 1}</div>
+                            {img ? (
+                              <img src={img} alt={`Adv ${idx+1}`} style={{ width: "100%", height: 110, objectFit: "cover", borderRadius: 6, marginBottom: 8, border: "1px solid #D4C4A0" }}
+                                onError={e => e.target.style.display = "none"} />
+                            ) : (
+                              <div style={{ width: "100%", height: 110, background: "#E8DCC8", borderRadius: 6, marginBottom: 8, display: "flex", alignItems: "center", justifyContent: "center", color: "#5A6A6C", fontSize: 11 }}>Belum ada gambar</div>
+                            )}
+                            <UploadButton label="📁 Upload"
+                              style={{ fontSize: 11, padding: "6px 10px", marginBottom: 6, width: "100%", justifyContent: "center" }}
+                              onDone={urls => {
+                                const newAdv = [...(data.images?.adv || ["",""])];
+                                newAdv[idx] = urls[0];
+                                save({ ...data, images: { ...data.images, adv: newAdv } });
+                                notify(`✅ Banner ${idx+1} diperbarui!`);
+                              }}
+                              onError={() => notify("Gagal upload.", "error")} />
+                            <div style={{ display: "flex", gap: 6 }}>
+                              <input id={`adv-img-${idx}`} defaultValue={img} placeholder="atau URL..."
+                                style={{ flex: 1, padding: "6px 8px", border: "1px solid #D4C4A0", borderRadius: 5, fontSize: 11, outline: "none" }} />
+                              <button onClick={() => {
+                                const url = document.getElementById(`adv-img-${idx}`)?.value?.trim();
+                                if (!url) return notify("Masukkan URL.", "error");
+                                const newAdv = [...(data.images?.adv || ["",""])];
+                                newAdv[idx] = url;
+                                save({ ...data, images: { ...data.images, adv: newAdv } });
+                                notify(`✅ Banner ${idx+1} disimpan!`);
+                              }} style={{ padding: "6px 10px", background: "#3498db", color: "#fff", borderRadius: 5, fontSize: 11, border: "none", cursor: "pointer", whiteSpace: "nowrap" }}>OK</button>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Gallery Images */}
+                    <div style={{ paddingTop: 20, borderTop: "1px solid #F0E8D5" }}>
+                      <h4 style={{ fontSize: 13, fontWeight: 700, color: "#2E3D3F", marginBottom: 4 }}>🖼 Galeri Home (6 Gambar)</h4>
+                      <p style={{ fontSize: 11, color: "#5A6A6C", marginBottom: 12, lineHeight: 1.6 }}>Gambar grid galeri di bagian bawah halaman Home.</p>
+                      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))", gap: 12 }}>
+                        {(data.images?.gal || ["","","","","",""]).map((img, idx) => (
+                          <div key={idx} style={{ background: "#FAF7F0", borderRadius: 8, padding: 10, border: "1px solid #E8DCC8" }}>
+                            <div style={{ fontSize: 11, fontWeight: 700, color: "#5A6A6C", marginBottom: 6, textTransform: "uppercase", letterSpacing: "0.5px" }}>Galeri {idx + 1}</div>
+                            {img ? (
+                              <img src={img} alt={`Gal ${idx+1}`} style={{ width: "100%", height: 90, objectFit: "cover", borderRadius: 5, marginBottom: 6, border: "1px solid #D4C4A0" }}
+                                onError={e => e.target.style.display = "none"} />
+                            ) : (
+                              <div style={{ width: "100%", height: 90, background: "#E8DCC8", borderRadius: 5, marginBottom: 6, display: "flex", alignItems: "center", justifyContent: "center", color: "#5A6A6C", fontSize: 11 }}>Kosong</div>
+                            )}
+                            <UploadButton label="📁 Upload"
+                              style={{ fontSize: 10, padding: "5px 8px", marginBottom: 5, width: "100%", justifyContent: "center" }}
+                              onDone={urls => {
+                                const newGal = [...(data.images?.gal || ["","","","","",""])];
+                                newGal[idx] = urls[0];
+                                save({ ...data, images: { ...data.images, gal: newGal } });
+                                notify(`✅ Galeri ${idx+1} diperbarui!`);
+                              }}
+                              onError={() => notify("Gagal upload.", "error")} />
+                            <div style={{ display: "flex", gap: 5 }}>
+                              <input id={`gal-img-${idx}`} defaultValue={img} placeholder="URL..."
+                                style={{ flex: 1, padding: "5px 7px", border: "1px solid #D4C4A0", borderRadius: 5, fontSize: 10, outline: "none" }} />
+                              <button onClick={() => {
+                                const url = document.getElementById(`gal-img-${idx}`)?.value?.trim();
+                                if (!url) return notify("Masukkan URL.", "error");
+                                const newGal = [...(data.images?.gal || ["","","","","",""])];
+                                newGal[idx] = url;
+                                save({ ...data, images: { ...data.images, gal: newGal } });
+                                notify(`✅ Galeri ${idx+1} disimpan!`);
+                              }} style={{ padding: "5px 9px", background: "#3498db", color: "#fff", borderRadius: 5, fontSize: 10, border: "none", cursor: "pointer" }}>OK</button>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* ═══════════════════════════════════════════════════════ */}
+                  {/* SECTION: KONTEN TEKS HALAMAN HOME */}
+                  {/* ═══════════════════════════════════════════════════════ */}
+                  <div style={{ background: "#fff", borderRadius: 8, padding: "22px 24px", marginBottom: 24, boxShadow: "0 2px 8px rgba(0,0,0,.06)", borderTop: "4px solid #27ae60" }}>
+                    <h3 style={{ fontSize: 16, fontWeight: 700, color: "#2E3D3F", marginBottom: 4 }}>✏️ Konten Teks Halaman Home</h3>
+                    <p style={{ fontSize: 12, color: "#5A6A6C", marginBottom: 20, lineHeight: 1.6 }}>
+                      Edit semua teks yang tampil di halaman utama — judul hero, subtitle, teks banner, section konsultasi, dan lainnya.
+                    </p>
+                    {[
+                      { label: "Hero — Judul Utama", key: "heroTitle", placeholder: "Developer Perumahan & Jasa Desain", multiline: false },
+                      { label: "Hero — Subtitle / Deskripsi", key: "heroSub", placeholder: "Kami hadir sebagai mitra terpercaya...", multiline: true },
+                      { label: "Banner Adv — Judul", key: "advTitle", placeholder: "Wujudkan Hunian Impian Anda", multiline: false },
+                      { label: "Banner Adv — Sub Label", key: "advSub", placeholder: "DEVELOPER & JASA PERUMAHAN", multiline: false },
+                      { label: "Banner Adv — Quote", key: "advQuote", placeholder: '"Kutipan inspiratif..."', multiline: true },
+                      { label: "Section Proyek Baru — Judul", key: "newAdvTitle", placeholder: "Proyek Terbaru Kami", multiline: false },
+                      { label: "Section Proyek Baru — Sub", key: "newAdvSub", placeholder: "Temukan portofolio terkini...", multiline: true },
+                      { label: "Section Konsultasi — Judul", key: "bookTitle", placeholder: "Konsultasikan Proyek Anda", multiline: false },
+                      { label: "Section Konsultasi — Sub", key: "bookSub", placeholder: "Tim ahli kami siap membantu...", multiline: true },
+                      { label: "Newsletter — Judul", key: "newsletterTitle", placeholder: "Dapatkan Update Proyek & Promo Terbaru", multiline: false },
+                    ].map(field => {
+                      const fieldId = `home-content-${field.key}`;
+                      return (
+                        <div key={field.key} style={{ marginBottom: 18 }}>
+                          <label style={{ fontSize: 11, fontWeight: 700, color: "#5A6A6C", letterSpacing: "0.8px", textTransform: "uppercase", display: "block", marginBottom: 6 }}>{field.label}</label>
+                          {field.multiline ? (
+                            <textarea id={fieldId} defaultValue={data.content[field.key] || ""} placeholder={field.placeholder} rows={3}
+                              style={{ width: "100%", padding: "9px 12px", border: "1px solid #D4C4A0", borderRadius: 6, fontSize: 13, outline: "none", resize: "vertical", fontFamily: "inherit", lineHeight: 1.6, boxSizing: "border-box" }} />
+                          ) : (
+                            <input id={fieldId} defaultValue={data.content[field.key] || ""} placeholder={field.placeholder}
+                              style={{ width: "100%", padding: "9px 12px", border: "1px solid #D4C4A0", borderRadius: 6, fontSize: 13, outline: "none", boxSizing: "border-box" }} />
+                          )}
+                          <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 6 }}>
+                            <button onClick={() => {
+                              const val = document.getElementById(fieldId)?.value?.trim();
+                              if (!val) return notify(`Isi dulu field ${field.label}.`, "error");
+                              save({ ...data, content: { ...data.content, [field.key]: val } });
+                              notify(`✅ ${field.label} disimpan!`);
+                            }} style={{ padding: "7px 18px", background: "#27ae60", color: "#fff", borderRadius: 6, fontSize: 12, border: "none", fontWeight: 600, cursor: "pointer" }}>Simpan</button>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+
+                  {/* ═══════════════════════════════════════════════════════ */}
+                  {/* SECTION: KONTEN ABOUT & CONTACT */}
+                  {/* ═══════════════════════════════════════════════════════ */}
+                  <div style={{ background: "#fff", borderRadius: 8, padding: "22px 24px", marginBottom: 24, boxShadow: "0 2px 8px rgba(0,0,0,.06)", borderTop: "4px solid #e67e22" }}>
+                    <h3 style={{ fontSize: 16, fontWeight: 700, color: "#2E3D3F", marginBottom: 4 }}>📋 Konten Halaman About & Kontak</h3>
+                    <p style={{ fontSize: 12, color: "#5A6A6C", marginBottom: 20, lineHeight: 1.6 }}>
+                      Edit teks halaman About Us, informasi kontak, jam operasional, dan link media sosial.
+                    </p>
+                    {[
+                      { label: "About — Teks Deskripsi Perusahaan", key: "aboutText", multiline: true },
+                      { label: "About — Hero Label", key: "aboutHeroLabel", multiline: false },
+                      { label: "About — Hero Judul", key: "aboutHeroTitle", multiline: false },
+                      { label: "About — Hero Sub", key: "aboutHeroSub", multiline: true },
+                      { label: "About — Judul 'Why Us'", key: "aboutWhyTitle", multiline: false },
+                      { label: "Kontak — Teks", key: "contactText", multiline: true },
+                      { label: "Kontak — Email", key: "email", multiline: false },
+                      { label: "Kontak — Telepon / WA", key: "phone", multiline: false },
+                      { label: "Kontak — Alamat", key: "address", multiline: true },
+                      { label: "Kontak — Jam Operasional", key: "hours", multiline: false },
+                      { label: "Link WhatsApp Utama", key: "waLink", multiline: false },
+                      { label: "Link Instagram", key: "igLink", multiline: false },
+                      { label: "Link Facebook", key: "fbLink", multiline: false },
+                    ].map(field => {
+                      const fieldId = `about-content-${field.key}`;
+                      return (
+                        <div key={field.key} style={{ marginBottom: 16 }}>
+                          <label style={{ fontSize: 11, fontWeight: 700, color: "#5A6A6C", letterSpacing: "0.8px", textTransform: "uppercase", display: "block", marginBottom: 6 }}>{field.label}</label>
+                          {field.multiline ? (
+                            <textarea id={fieldId} defaultValue={data.content[field.key] || ""} rows={3}
+                              style={{ width: "100%", padding: "9px 12px", border: "1px solid #D4C4A0", borderRadius: 6, fontSize: 13, outline: "none", resize: "vertical", fontFamily: "inherit", lineHeight: 1.6, boxSizing: "border-box" }} />
+                          ) : (
+                            <input id={fieldId} defaultValue={data.content[field.key] || ""}
+                              style={{ width: "100%", padding: "9px 12px", border: "1px solid #D4C4A0", borderRadius: 6, fontSize: 13, outline: "none", boxSizing: "border-box" }} />
+                          )}
+                          <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 6 }}>
+                            <button onClick={() => {
+                              const val = document.getElementById(fieldId)?.value?.trim();
+                              save({ ...data, content: { ...data.content, [field.key]: val } });
+                              notify(`✅ ${field.label} disimpan!`);
+                            }} style={{ padding: "7px 18px", background: "#e67e22", color: "#fff", borderRadius: 6, fontSize: 12, border: "none", fontWeight: 600, cursor: "pointer" }}>Simpan</button>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
 
                   {/* Logo Upload */}
                   <div style={{ background: "#fff", borderRadius: 8, padding: "22px 24px", marginBottom: 24, boxShadow: "0 2px 8px rgba(0,0,0,.06)", borderTop: "4px solid #C9AA71" }}>
