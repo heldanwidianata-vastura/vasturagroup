@@ -3,11 +3,7 @@ node_modules
 .pnp
 .pnp.js
 
-# Build output
-dist
-dist-ssr
-
-# Environment
+# Environment - JANGAN commit .env ke git
 .env
 .env.local
 .env.development.local
@@ -32,5 +28,8 @@ lerna-debug.log*
 *.sln
 *.sw?
 
-# Vercel
+# Vercel local
 .vercel
+
+# CATATAN: folder dist TIDAK di-ignore
+# Vercel akan build otomatis dari source, dist tidak perlu di-push
