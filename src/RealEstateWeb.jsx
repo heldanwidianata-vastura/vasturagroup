@@ -6023,8 +6023,26 @@ function ServicesPage({ content, services, navigateTo, activePaket, onOpenPaket,
     );
   }
 
-  /* ── Services List — New Vastura Design ── */
+  /* ── Services List — Vastura Full Page (pixel-perfect dari desain) ── */
   const filteredServices = activeCategory ? services.filter(s => s.category === activeCategory) : [];
+
+  /* ── Galeri Proyek Data ── */
+  const GALERI_LIST = [
+    { label: "RUMAH MINIMALIS", img: "https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=600&q=80" },
+    { label: "INTERIOR MODERN", img: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=600&q=80" },
+    { label: "PAGAR LASER CUTTING", img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80" },
+    { label: "KANOPI ALDERON", img: "https://images.unsplash.com/photo-1600566752355-35792bedcfea?w=600&q=80" },
+    { label: "KOLAM & TAMAN", img: "https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=600&q=80" },
+    { label: "PINTU ALUMINIUM", img: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=600&q=80" },
+  ];
+
+  /* ── Testimonial Data ── */
+  const TESTIMONI = [
+    { text: "Hasil desain sesuai ekspektasi, tim sangat profesional dan komunikatif. Proyek selesai tepat waktu dan rapi.", stars: 5, name: "Budi Santoso", role: "Pemilik Rumah" },
+    { text: "Sangat puas dengan hasil interior rumah kami. Desainnya elegan dan fungsional, pengerjaan juga rapi.", stars: 5, name: "Dewi Lestari", role: "Ibu Rumah Tangga" },
+    { text: "Pembuatan kanopi dan pagar sangat berkualitas. Harganya juga kompetitif. Recommended!", stars: 5, name: "Andi Setiawan", role: "Wiraswasta" },
+  ];
+  const [testiIdx, setTestiIdx] = useState(0);
 
   return (
     <div className="fade-in" style={{ minHeight: "100vh", background: "#fff", fontFamily: "'Sora', 'DM Sans', sans-serif" }}>
@@ -6036,77 +6054,107 @@ function ServicesPage({ content, services, navigateTo, activePaket, onOpenPaket,
         .sv-card-img { transition: transform .4s ease; }
         .sv-card-link { transition: color .2s; }
         .sv-card-link:hover { color: #C9AA71 !important; }
+        .sv-keung-item { transition: background .2s; }
         .sv-keung-item:hover { background: #FAF7F0 !important; }
-        @media(max-width:900px){ .sv-layanan-grid { grid-template-columns: repeat(3,1fr) !important; } }
-        @media(max-width:640px){ .sv-layanan-grid { grid-template-columns: repeat(2,1fr) !important; } }
-        @media(max-width:400px){ .sv-layanan-grid { grid-template-columns: 1fr !important; } }
+        .sv-galeri-item { position: relative; overflow: hidden; cursor: pointer; }
+        .sv-galeri-item img { transition: transform .4s ease; display:block; width:100%; height:100%; object-fit:cover; }
+        .sv-galeri-item:hover img { transform: scale(1.07); }
+        .sv-galeri-overlay { position:absolute; inset:0; background:linear-gradient(to top, rgba(0,0,0,.72) 0%, transparent 55%); display:flex; align-items:flex-end; padding:14px 16px; }
+        .sv-testi-btn { transition: background .2s, border-color .2s; }
+        .sv-testi-btn:hover { background: #C9AA71 !important; border-color: #C9AA71 !important; }
+        .sv-wa-btn { transition: background .2s; }
+        .sv-wa-btn:hover { background: #1da851 !important; }
+        .sv-lihat-btn { transition: background .2s, color .2s; }
+        .sv-lihat-btn:hover { background: #2E3D3F !important; color: #fff !important; }
+        @media(max-width:900px){ .sv-layanan-grid { grid-template-columns: repeat(3,1fr) !important; } .sv-galeri-grid { grid-template-columns: repeat(3,1fr) !important; } }
+        @media(max-width:640px){ .sv-layanan-grid { grid-template-columns: repeat(2,1fr) !important; } .sv-galeri-grid { grid-template-columns: repeat(2,1fr) !important; } .sv-keung-grid { grid-template-columns: repeat(2,1fr) !important; } .sv-testi-grid { grid-template-columns: 1fr !important; } }
+        @media(max-width:400px){ .sv-layanan-grid { grid-template-columns: 1fr !important; } .sv-galeri-grid { grid-template-columns: 1fr !important; } }
         @media(max-width:700px){ .sv-keung-grid { grid-template-columns: repeat(2,1fr) !important; } }
         @media(max-width:400px){ .sv-keung-grid { grid-template-columns: 1fr !important; } }
       `}</style>
 
-      {/* ── HERO ── */}
-      <div style={{ background: "linear-gradient(135deg,#1a2526 0%,#2E3D3F 45%,#8B6914 80%,#C9AA71 100%)", padding: "clamp(56px,10vw,100px) 5% clamp(60px,10vw,110px)", textAlign: "center", position: "relative", overflow: "hidden" }}>
-        {/* decorative dots */}
-        <div style={{ position:"absolute", inset:0, backgroundImage:"radial-gradient(circle, rgba(255,255,255,.065) 1px, transparent 1px)", backgroundSize:"32px 32px", pointerEvents:"none" }} />
-        {/* glow orbs */}
-        <div style={{ position:"absolute", top:"40%", left:"12%", width:320, height:320, borderRadius:"50%", background:"radial-gradient(circle,rgba(201,170,113,.25) 0%,transparent 70%)", pointerEvents:"none", filter:"blur(24px)" }} />
-        <div style={{ position:"absolute", top:"30%", right:"10%", width:260, height:260, borderRadius:"50%", background:"radial-gradient(circle,rgba(139,105,20,.3) 0%,transparent 70%)", pointerEvents:"none", filter:"blur(20px)" }} />
+      {/* ══════════════════════════════════════
+          HERO SECTION — dengan background foto rumah
+      ══════════════════════════════════════ */}
+      <div style={{ position:"relative", height:"clamp(420px,65vw,640px)", overflow:"hidden", background:"#1a2526" }}>
+        {/* Hero BG image */}
+        <img
+          src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1400&q=85"
+          alt="Vastura Hero"
+          style={{ position:"absolute", inset:0, width:"100%", height:"100%", objectFit:"cover", objectPosition:"center", opacity:.72 }}
+        />
+        {/* dark overlay gradient */}
+        <div style={{ position:"absolute", inset:0, background:"linear-gradient(to right, rgba(0,0,0,.78) 35%, rgba(0,0,0,.28) 100%)" }} />
 
-        <div style={{ position:"relative", zIndex:1, maxWidth:700, margin:"0 auto", animation:"svFadeUp .6s ease both" }}>
-          <div style={{ display:"inline-block", fontSize:"0.6875rem", letterSpacing:"4px", color:"#C9AA71", textTransform:"uppercase", fontWeight:700, marginBottom:16, padding:"5px 18px", border:"1px solid rgba(201,170,113,.4)", borderRadius:20 }}>LAYANAN KAMI</div>
-          <h1 style={{ fontSize:"clamp(2.25rem,5.5vw,3.5rem)", fontWeight:900, color:"#fff", lineHeight:1.08, marginBottom:20, letterSpacing:"-0.02em" }}>
-            {content.servicesPageTitle || "Layanan Terbaik Untuk Anda"}
-          </h1>
-          <p style={{ fontSize:"clamp(1rem,2.5vw,1.125rem)", color:"rgba(255,255,255,.78)", lineHeight:1.8, maxWidth:520, margin:"0 auto 36px" }}>
-            {content.servicesPageSub || "Melayani desain, renovasi, interior, eksterior hingga penataan taman dengan standar profesional."}
-          </p>
-          <div style={{ display:"flex", gap:14, justifyContent:"center", flexWrap:"wrap" }}>
-            <button onClick={() => onWaOpen && onWaOpen()}
-              style={{ padding:"13px 28px", background:"#C9AA71", color:"#1a2526", border:"none", borderRadius:8, fontSize:"0.9375rem", fontWeight:700, cursor:"pointer", display:"flex", alignItems:"center", gap:8, transition:"background .2s" }}
-              onMouseEnter={e=>e.currentTarget.style.background="#b8962a"}
-              onMouseLeave={e=>e.currentTarget.style.background="#C9AA71"}>
-              💬 Konsultasi Gratis
-            </button>
-            <button onClick={() => navigateTo("contact")}
-              style={{ padding:"13px 28px", background:"transparent", color:"#fff", border:"1.5px solid rgba(255,255,255,.4)", borderRadius:8, fontSize:"0.9375rem", fontWeight:600, cursor:"pointer", transition:"border-color .2s" }}
-              onMouseEnter={e=>e.currentTarget.style.borderColor="rgba(255,255,255,.9)"}
-              onMouseLeave={e=>e.currentTarget.style.borderColor="rgba(255,255,255,.4)"}>
-              📞 Hubungi Kami
-            </button>
+        {/* Content */}
+        <div style={{ position:"relative", zIndex:2, height:"100%", display:"flex", alignItems:"center", padding:"0 clamp(24px,6%,120px)" }}>
+          <div style={{ maxWidth:560, animation:"svFadeUp .6s ease both" }}>
+            <h1 style={{ fontSize:"clamp(2rem,5.5vw,3.4rem)", fontWeight:900, color:"#fff", lineHeight:1.08, marginBottom:14, letterSpacing:"-0.01em" }}>
+              <span style={{ display:"block" }}>SOLUSI LENGKAP</span>
+              <span style={{ color:"#C9AA71" }}>DESAIN &amp; KONSTRUKSI</span>
+            </h1>
+            <p style={{ fontSize:"clamp(0.9rem,2vw,1.0625rem)", color:"rgba(255,255,255,.82)", lineHeight:1.75, marginBottom:28, maxWidth:420 }}>
+              Melayani desain, renovasi, interior, eksterior hingga penataan taman dengan standar profesional.
+            </p>
+            <div style={{ display:"flex", gap:14, flexWrap:"wrap", alignItems:"center" }}>
+              <button className="sv-wa-btn" onClick={() => onWaOpen && onWaOpen()}
+                style={{ padding:"13px 26px", background:"#25D366", color:"#fff", border:"none", borderRadius:8, fontSize:"0.9375rem", fontWeight:700, cursor:"pointer", display:"flex", alignItems:"center", gap:8 }}>
+                <span style={{ fontSize:"1.1rem" }}>💬</span> KONSULTASI GRATIS
+              </button>
+              <button style={{ padding:"13px 22px", background:"transparent", color:"#fff", border:"none", borderRadius:8, fontSize:"0.9rem", fontWeight:500, cursor:"pointer", display:"flex", alignItems:"center", gap:8 }}>
+                <span style={{ width:34, height:34, borderRadius:"50%", border:"2px solid rgba(255,255,255,.7)", display:"inline-flex", alignItems:"center", justifyContent:"center", fontSize:"0.75rem" }}>▶</span>
+                LIHAT VIDEO PROFIL PERUSAHAAN
+              </button>
+            </div>
           </div>
         </div>
+
+        {/* Slide dots */}
+        <div style={{ position:"absolute", bottom:20, left:"50%", transform:"translateX(-50%)", display:"flex", gap:8, zIndex:3 }}>
+          {[0,1,2,3].map(i => (
+            <div key={i} style={{ width: i===0 ? 24 : 8, height:8, borderRadius:4, background: i===0 ? "#C9AA71" : "rgba(255,255,255,.45)", transition:"all .3s" }} />
+          ))}
+        </div>
+
+        {/* Arrow prev */}
+        <button style={{ position:"absolute", left:12, top:"50%", transform:"translateY(-50%)", width:38, height:38, borderRadius:"50%", background:"rgba(255,255,255,.18)", border:"none", color:"#fff", fontSize:"1.1rem", cursor:"pointer", zIndex:3, display:"flex", alignItems:"center", justifyContent:"center" }}>‹</button>
+        {/* Arrow next */}
+        <button style={{ position:"absolute", right:12, top:"50%", transform:"translateY(-50%)", width:38, height:38, borderRadius:"50%", background:"rgba(255,255,255,.18)", border:"none", color:"#fff", fontSize:"1.1rem", cursor:"pointer", zIndex:3, display:"flex", alignItems:"center", justifyContent:"center" }}>›</button>
       </div>
 
-      {/* ── KEUNGGULAN STRIP ── */}
-      <div style={{ background:"#fff", borderBottom:"1px solid #F0EAE0", padding:"clamp(28px,4vw,44px) 5%" }}>
+      {/* ══════════════════════════════════════
+          KEUNGGULAN STRIP (6 kolom ikon)
+      ══════════════════════════════════════ */}
+      <div style={{ background:"#fff", borderBottom:"1px solid #F0EAE0", padding:"clamp(24px,3.5vw,40px) 5%" }}>
         <div style={{ maxWidth:1200, margin:"0 auto" }}>
-          <div className="sv-keung-grid" style={{ display:"grid", gridTemplateColumns:"repeat(6,1fr)", gap:16 }}>
+          <div className="sv-keung-grid" style={{ display:"grid", gridTemplateColumns:"repeat(6,1fr)", gap:8 }}>
             {KEUNGGULAN.map((k,i) => (
-              <div key={i} className="sv-keung-item" style={{ textAlign:"center", padding:"20px 12px", borderRadius:12, transition:"background .2s" }}>
-                <div style={{ fontSize:"2rem", marginBottom:10 }}>{k.icon}</div>
-                <div style={{ fontSize:"0.8125rem", fontWeight:700, color:"#1a2526", marginBottom:6 }}>{k.label}</div>
-                <div style={{ fontSize:"0.75rem", color:"#5A6A6C", lineHeight:1.55 }}>{k.desc}</div>
+              <div key={i} className="sv-keung-item" style={{ textAlign:"center", padding:"22px 10px", borderRadius:10 }}>
+                <div style={{ fontSize:"2rem", marginBottom:10, lineHeight:1 }}>{k.icon}</div>
+                <div style={{ fontSize:"0.8125rem", fontWeight:700, color:"#1a2526", marginBottom:5 }}>{k.label}</div>
+                <div style={{ fontSize:"0.73rem", color:"#5A6A6C", lineHeight:1.5 }}>{k.desc}</div>
               </div>
             ))}
           </div>
         </div>
       </div>
 
-      {/* ── LAYANAN CARDS ── */}
-      <section style={{ background:"#fff", padding:"clamp(48px,7vw,88px) 5%" }}>
+      {/* ══════════════════════════════════════
+          LAYANAN SECTION (6 cards)
+      ══════════════════════════════════════ */}
+      <section style={{ background:"#fff", padding:"clamp(44px,6vw,80px) 5%" }}>
         <div style={{ maxWidth:1200, margin:"0 auto" }}>
           {/* Section header */}
-          <div style={{ textAlign:"center", marginBottom:"clamp(32px,5vw,56px)" }}>
-            <div style={{ fontSize:"0.6875rem", letterSpacing:"3px", color:"#C9AA71", textTransform:"uppercase", fontWeight:700, marginBottom:12 }}>LAYANAN KAMI</div>
-            <h2 style={{ fontSize:"clamp(1.75rem,4vw,2.75rem)", fontWeight:900, color:"#1a2526", lineHeight:1.12, letterSpacing:"-0.02em" }}>
+          <div style={{ textAlign:"center", marginBottom:"clamp(28px,4.5vw,52px)" }}>
+            <div style={{ fontSize:"0.6875rem", letterSpacing:"4px", color:"#C9AA71", textTransform:"uppercase", fontWeight:700, marginBottom:12 }}>LAYANAN KAMI</div>
+            <h2 style={{ fontSize:"clamp(1.6rem,3.8vw,2.5rem)", fontWeight:800, color:"#1a2526", lineHeight:1.12, letterSpacing:"-0.01em", margin:0 }}>
               Layanan Terbaik Untuk Anda
             </h2>
           </div>
 
           {/* 6-col card grid */}
-          <div className="sv-layanan-grid" style={{ display:"grid", gridTemplateColumns:"repeat(6,1fr)", gap:20 }}>
+          <div className="sv-layanan-grid" style={{ display:"grid", gridTemplateColumns:"repeat(6,1fr)", gap:18 }}>
             {LAYANAN_LIST.map((lay) => {
-              /* Try to find a matching service in CMS data for the detail page */
               const matchedSvc = services.find(s => s.category === lay.category) || null;
               return (
                 <div key={lay.key} className="sv-card"
@@ -6114,9 +6162,9 @@ function ServicesPage({ content, services, navigateTo, activePaket, onOpenPaket,
                     if (matchedSvc) { openDetail(matchedSvc); }
                     else { onWaOpen && onWaOpen(`Halo! Saya ingin bertanya tentang layanan *${lay.label}* dari VASTURA GROUP.`); }
                   }}
-                  style={{ borderRadius:16, overflow:"hidden", background:"#fff", boxShadow:"0 4px 20px rgba(0,0,0,.08)", border:"1px solid #F0EAE0" }}>
+                  style={{ borderRadius:14, overflow:"hidden", background:"#fff", boxShadow:"0 4px 18px rgba(0,0,0,.07)", border:"1px solid #F0EAE0" }}>
                   {/* Image */}
-                  <div style={{ position:"relative", height:160, overflow:"hidden", background:"#e8e0d0" }}>
+                  <div style={{ position:"relative", height:150, overflow:"hidden", background:"#e8e0d0" }}>
                     <img
                       src={lay.img}
                       alt={lay.label}
@@ -6125,16 +6173,16 @@ function ServicesPage({ content, services, navigateTo, activePaket, onOpenPaket,
                       onError={e => { e.target.style.display="none"; }}
                     />
                     {/* icon badge */}
-                    <div style={{ position:"absolute", bottom:10, left:10, width:38, height:38, borderRadius:"50%", background:lay.color, display:"flex", alignItems:"center", justifyContent:"center", fontSize:"1.125rem", boxShadow:"0 4px 12px rgba(0,0,0,.22)" }}>
+                    <div style={{ position:"absolute", bottom:10, left:10, width:36, height:36, borderRadius:"50%", background:lay.color, display:"flex", alignItems:"center", justifyContent:"center", fontSize:"1.05rem", boxShadow:"0 4px 12px rgba(0,0,0,.22)" }}>
                       {lay.icon}
                     </div>
                   </div>
                   {/* Body */}
-                  <div style={{ padding:"16px 16px 20px" }}>
-                    <h3 style={{ fontSize:"1rem", fontWeight:800, color:"#1a2526", marginBottom:8, lineHeight:1.3 }}>{lay.label}</h3>
-                    <p style={{ fontSize:"0.8125rem", color:"#5A6A6C", lineHeight:1.6, marginBottom:14 }}>{lay.desc}</p>
-                    <span className="sv-card-link" style={{ fontSize:"0.8125rem", fontWeight:700, color:lay.color, display:"flex", alignItems:"center", gap:4 }}>
-                      Selengkapnya <span style={{ fontSize:"1rem" }}>→</span>
+                  <div style={{ padding:"14px 14px 18px" }}>
+                    <h3 style={{ fontSize:"0.9375rem", fontWeight:800, color:"#1a2526", marginBottom:7, lineHeight:1.3 }}>{lay.label}</h3>
+                    <p style={{ fontSize:"0.78rem", color:"#5A6A6C", lineHeight:1.6, marginBottom:12 }}>{lay.desc}</p>
+                    <span className="sv-card-link" style={{ fontSize:"0.78rem", fontWeight:700, color:lay.color, display:"flex", alignItems:"center", gap:3 }}>
+                      Selengkapnya <span style={{ fontSize:"0.9rem" }}>→</span>
                     </span>
                   </div>
                 </div>
@@ -6144,24 +6192,110 @@ function ServicesPage({ content, services, navigateTo, activePaket, onOpenPaket,
         </div>
       </section>
 
-      {/* ── CTA BANNER ── */}
-      <section style={{ background:"linear-gradient(135deg,#1a2526 0%,#2E3D3F 50%,#8B6914 100%)", padding:"clamp(56px,8vw,88px) 5%", textAlign:"center", position:"relative", overflow:"hidden" }}>
-        <div style={{ position:"absolute", inset:0, backgroundImage:"radial-gradient(circle, rgba(255,255,255,.05) 1px, transparent 1px)", backgroundSize:"28px 28px", pointerEvents:"none" }} />
-        <div style={{ position:"relative", zIndex:1, maxWidth:640, margin:"0 auto" }}>
-          <h2 style={{ fontSize:"clamp(1.75rem,4vw,2.5rem)", fontWeight:900, color:"#fff", marginBottom:16, lineHeight:1.15, letterSpacing:"-0.02em" }}>
-            Siap Mewujudkan Hunian Impian Anda?
-          </h2>
-          <p style={{ color:"rgba(255,255,255,.75)", fontSize:"1.0625rem", marginBottom:36, lineHeight:1.7 }}>
-            Konsultasikan kebutuhan Anda sekarang juga secara gratis!
-          </p>
-          <div style={{ display:"flex", gap:16, justifyContent:"center", flexWrap:"wrap" }}>
-            <button onClick={() => onWaOpen && onWaOpen()}
-              style={{ padding:"15px 36px", background:"#C9AA71", color:"#1a2526", border:"none", borderRadius:8, fontSize:"1rem", fontWeight:700, cursor:"pointer", display:"flex", alignItems:"center", gap:8, transition:"background .2s", boxShadow:"0 4px 20px rgba(201,170,113,.35)" }}
-              onMouseEnter={e=>e.currentTarget.style.background="#b8962a"}
-              onMouseLeave={e=>e.currentTarget.style.background="#C9AA71"}>
-              💬 Konsultasi Sekarang
+      {/* ══════════════════════════════════════
+          GALERI PROYEK
+      ══════════════════════════════════════ */}
+      <section style={{ background:"#fff", padding:"0 5% clamp(52px,7vw,88px)" }}>
+        <div style={{ maxWidth:1200, margin:"0 auto" }}>
+          {/* Section header */}
+          <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:20, flexWrap:"wrap", gap:10 }}>
+            <div>
+              <div style={{ width:44, height:3, background:"#C9AA71", borderRadius:2, marginBottom:10 }} />
+              <h2 style={{ fontSize:"clamp(1.4rem,3vw,2rem)", fontWeight:800, color:"#1a2526", margin:0, lineHeight:1.15 }}>Galeri Proyek</h2>
+            </div>
+            <button className="sv-lihat-btn"
+              style={{ padding:"10px 22px", background:"#fff", color:"#1a2526", border:"1.5px solid #1a2526", borderRadius:8, fontSize:"0.85rem", fontWeight:700, cursor:"pointer", display:"flex", alignItems:"center", gap:8, whiteSpace:"nowrap" }}>
+              LIHAT SEMUA PROYEK →
             </button>
           </div>
+
+          {/* 6-col gallery grid */}
+          <div className="sv-galeri-grid" style={{ display:"grid", gridTemplateColumns:"repeat(6,1fr)", gap:0 }}>
+            {GALERI_LIST.map((g,i) => (
+              <div key={i} className="sv-galeri-item" style={{ height:200 }}>
+                <img src={g.img} alt={g.label} onError={e=>{e.target.style.display="none";}} />
+                <div className="sv-galeri-overlay">
+                  <span style={{ fontSize:"0.65rem", fontWeight:800, letterSpacing:"1.5px", color:"#fff", textTransform:"uppercase", textShadow:"0 1px 4px rgba(0,0,0,.6)", lineHeight:1.3 }}>{g.label}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ══════════════════════════════════════
+          TESTIMONIAL
+      ══════════════════════════════════════ */}
+      <section style={{ background:"#1a2526", padding:"clamp(52px,7vw,88px) 5%", position:"relative", overflow:"hidden" }}>
+        {/* deco dots */}
+        <div style={{ position:"absolute", inset:0, backgroundImage:"radial-gradient(circle, rgba(255,255,255,.04) 1px, transparent 1px)", backgroundSize:"28px 28px", pointerEvents:"none" }} />
+        <div style={{ position:"relative", zIndex:1, maxWidth:1200, margin:"0 auto" }}>
+          {/* heading */}
+          <div style={{ textAlign:"center", marginBottom:40 }}>
+            <h2 style={{ fontSize:"clamp(1.5rem,3.5vw,2.2rem)", fontWeight:800, color:"#fff", margin:"0 0 10px", lineHeight:1.15 }}>Apa Kata Klien Kami</h2>
+            <div style={{ width:48, height:3, background:"#C9AA71", borderRadius:2, margin:"0 auto" }} />
+          </div>
+
+          {/* 3 cards */}
+          <div style={{ position:"relative" }}>
+            <div className="sv-testi-grid" style={{ display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:20 }}>
+              {TESTIMONI.map((t,i) => (
+                <div key={i} style={{ background:"rgba(255,255,255,.06)", borderRadius:14, padding:"26px 24px", border:"1px solid rgba(255,255,255,.1)" }}>
+                  <div style={{ fontSize:"2.2rem", color:"#C9AA71", lineHeight:1, marginBottom:14, fontFamily:"Georgia,serif" }}>"</div>
+                  <p style={{ fontSize:"0.875rem", color:"rgba(255,255,255,.82)", lineHeight:1.75, marginBottom:20 }}>{t.text}</p>
+                  {/* Stars */}
+                  <div style={{ display:"flex", gap:3, marginBottom:16 }}>
+                    {Array.from({length:t.stars}).map((_,si) => (
+                      <span key={si} style={{ color:"#C9AA71", fontSize:"0.95rem" }}>★</span>
+                    ))}
+                  </div>
+                  {/* Author */}
+                  <div style={{ display:"flex", alignItems:"center", gap:12 }}>
+                    <div style={{ width:42, height:42, borderRadius:"50%", background:"linear-gradient(135deg,#C9AA71,#8B6914)", display:"flex", alignItems:"center", justifyContent:"center", color:"#fff", fontWeight:800, fontSize:"1rem", flexShrink:0 }}>
+                      {t.name.charAt(0)}
+                    </div>
+                    <div>
+                      <div style={{ fontWeight:700, color:"#fff", fontSize:"0.9rem" }}>{t.name}</div>
+                      <div style={{ fontSize:"0.75rem", color:"rgba(255,255,255,.55)" }}>{t.role}</div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Arrow nav */}
+            <button className="sv-testi-btn" onClick={() => setTestiIdx(p => Math.max(0,p-1))}
+              style={{ position:"absolute", top:"50%", left:-20, transform:"translateY(-50%)", width:38, height:38, borderRadius:"50%", background:"rgba(255,255,255,.1)", border:"1.5px solid rgba(255,255,255,.25)", color:"#fff", fontSize:"1.1rem", cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center" }}>‹</button>
+            <button className="sv-testi-btn" onClick={() => setTestiIdx(p => Math.min(TESTIMONI.length-1,p+1))}
+              style={{ position:"absolute", top:"50%", right:-20, transform:"translateY(-50%)", width:38, height:38, borderRadius:"50%", background:"rgba(255,255,255,.1)", border:"1.5px solid rgba(255,255,255,.25)", color:"#fff", fontSize:"1.1rem", cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center" }}>›</button>
+          </div>
+        </div>
+      </section>
+
+      {/* ══════════════════════════════════════
+          CTA BANNER — Hunian Impian
+      ══════════════════════════════════════ */}
+      <section style={{ position:"relative", overflow:"hidden" }}>
+        {/* BG foto */}
+        <img
+          src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1400&q=80"
+          alt="CTA BG"
+          style={{ position:"absolute", inset:0, width:"100%", height:"100%", objectFit:"cover" }}
+        />
+        <div style={{ position:"absolute", inset:0, background:"rgba(26,37,38,.82)" }} />
+        <div style={{ position:"relative", zIndex:1, padding:"clamp(52px,7vw,88px) 5%", display:"flex", alignItems:"center", justifyContent:"space-between", flexWrap:"wrap", gap:24, maxWidth:1200, margin:"0 auto" }}>
+          <div>
+            <h2 style={{ fontSize:"clamp(1.5rem,3.5vw,2.2rem)", fontWeight:800, color:"#fff", margin:"0 0 8px", lineHeight:1.2 }}>
+              Siap Mewujudkan Hunian Impian Anda?
+            </h2>
+            <p style={{ fontSize:"1rem", color:"rgba(255,255,255,.75)", margin:0 }}>
+              Konsultasikan kebutuhan Anda sekarang juga secara gratis!
+            </p>
+          </div>
+          <button className="sv-wa-btn" onClick={() => onWaOpen && onWaOpen()}
+            style={{ padding:"15px 32px", background:"#25D366", color:"#fff", border:"none", borderRadius:8, fontSize:"1rem", fontWeight:700, cursor:"pointer", display:"flex", alignItems:"center", gap:10, whiteSpace:"nowrap", flexShrink:0, boxShadow:"0 4px 20px rgba(37,211,102,.4)" }}>
+            <span style={{ fontSize:"1.2rem" }}>💬</span> KONSULTASI SEKARANG
+          </button>
         </div>
       </section>
 
