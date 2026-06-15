@@ -7497,40 +7497,117 @@ function AboutPage({ content, images, teamMembers, onWaOpen }) {
       </div>
 
       {/* ── LAYANAN KAMI ── */}
-      <div style={{ padding: "80px 5%", background: "linear-gradient(130deg,#2E3D3F 0%,#3D5254 55%,#8B6914 100%)" }}>
+      <div style={{ padding: "80px 5%", background: "#fff" }}>
         <div style={{ maxWidth: 1200, margin: "0 auto" }}>
-          <div style={{ textAlign: "center", marginBottom: 52 }}>
-            <div style={{ fontSize: "0.6875rem", letterSpacing: "2px", color: "rgba(255,255,255,.75)", textTransform: "uppercase", fontWeight: 700, marginBottom: 12 }}>Apa yang Kami Tawarkan</div>
-            <h2 className="display" style={{ fontSize: "clamp(1.75rem,4vw,2.75rem)", fontWeight: 900, color: "#fff" }}>Layanan Lengkap Kami</h2>
+          {/* Header */}
+          <div style={{ textAlign: "center", marginBottom: 48 }}>
+            <div style={{ fontSize: "0.6875rem", letterSpacing: "3px", color: "#C9AA71", textTransform: "uppercase", fontWeight: 700, marginBottom: 10 }}>LAYANAN KAMI</div>
+            <h2 className="display" style={{ fontSize: "clamp(1.6rem,3.5vw,2.5rem)", fontWeight: 900, color: "#1a1a1a" }}>Layanan Terbaik Untuk Anda</h2>
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 24 }}>
+
+          {/* Cards Grid — 6 kolom sesuai referensi */}
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(6, 1fr)", gap: 20 }} className="layanan-grid">
             {[
-              { icon: "🏠", title: "Gedung & Rumah", color: "#2E3D3F", items: ["Pembangunan Rumah Baru", "Renovasi & Pengembangan", "Konstruksi Gedung Komersial", "RAB & Perencanaan Anggaran", "Konsultasi Teknis Gratis"] },
-              { icon: "🛋️", title: "Interior", color: "#8B6914", items: ["Desain Interior Profesional", "Pemilihan Material & Furnitur", "Custom Kitchen Set & Lemari", "Dekorasi & Aksesoris Ruang", "3D Visualisasi Sebelum Eksekusi"] },
-              { icon: "🔧", title: "Exterior", color: "#3D5254", items: ["Pagar & Pintu Gerbang Custom", "Kanopi & Pergola", "Aluminium & Kusen", "Carport & Teras", "Fasad & Cat Eksterior"] },
-              { icon: "📐", title: "Jasa RAB", color: "#C9AA71", items: ["Rancangan Anggaran Biaya Detail", "Estimasi Material & Upah", "Bill of Quantity (BQ)", "Laporan Progres Biaya", "Revisi RAB Tanpa Batas"] },
-              { icon: "🏛️", title: "Design Rumah / Arsitek", color: "#5A6A6C", items: ["Desain Arsitektur Konseptual", "Gambar Kerja & Denah Lengkap", "Tampak Depan / Samping / Belakang", "IMB & Perizinan Bangunan", "3D Render Eksterior Realistis"] },
-              { icon: "🌿", title: "Taman", color: "#27ae60", items: ["Desain Taman Tropis & Modern", "Penanaman & Perawatan Tanaman", "Sistem Drainase & Irigasi", "Taman Rooftop & Vertikal", "Pembuatan Kolam & Ornamen"] },
+              {
+                icon: "🛋️",
+                title: "Interior",
+                desc: "Desain interior modern, nyaman dan fungsional sesuai kebutuhan Anda.",
+                img: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=600&q=80",
+                slug: "interior"
+              },
+              {
+                icon: "🏠",
+                title: "Eksterior",
+                desc: "Desain eksterior menarik, kokoh dan estetis.",
+                img: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&q=80",
+                slug: "eksterior"
+              },
+              {
+                icon: "📐",
+                title: "Desain & RAB",
+                desc: "Desain arsitektur lengkap dengan RAB yang akurat.",
+                img: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=600&q=80",
+                slug: "desain-rab"
+              },
+              {
+                icon: "🌿",
+                title: "Landscape",
+                desc: "Taman indah dan asri yang menyatu dengan hunian Anda.",
+                img: "https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=600&q=80",
+                slug: "landscape"
+              },
+              {
+                icon: "🪟",
+                title: "Aluminium",
+                desc: "Kusen, pintu & jendela aluminium berkualitas tinggi.",
+                img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80",
+                slug: "aluminium"
+              },
+              {
+                icon: "🏗️",
+                title: "Kanopi",
+                desc: "Kanopi kuat, modern dan tahan segala cuaca.",
+                img: "https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?w=600&q=80",
+                slug: "kanopi"
+              },
             ].map(s => (
-              <div key={s.title} style={{ border: "1px solid rgba(255,255,255,.25)", borderRadius: 12, overflow: "hidden", boxShadow: "0 4px 20px rgba(0,0,0,.12)" }}>
-                <div style={{ background: s.color, padding: "24px 28px", display: "flex", alignItems: "center", gap: 14 }}>
-                  <span style={{ fontSize: 32 }}>{s.icon}</span>
-                  <h3 style={{ fontSize: "1.125rem", fontFamily: "'Playfair Display',serif", fontWeight: 800, color: "#fff" }}>{s.title}</h3>
+              <div key={s.title}
+                style={{ borderRadius: 12, overflow: "hidden", boxShadow: "0 4px 18px rgba(0,0,0,.10)", background: "#fff", display: "flex", flexDirection: "column", transition: "transform .22s, box-shadow .22s", cursor: "pointer" }}
+                onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-6px)"; e.currentTarget.style.boxShadow = "0 12px 36px rgba(0,0,0,.16)"; }}
+                onMouseLeave={e => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "0 4px 18px rgba(0,0,0,.10)"; }}>
+
+                {/* Image area */}
+                <div style={{ position: "relative", height: 170, overflow: "hidden", flexShrink: 0 }}>
+                  <img
+                    src={s.img}
+                    alt={s.title}
+                    loading="lazy"
+                    style={{ width: "100%", height: "100%", objectFit: "cover", transition: "transform .4s" }}
+                    onMouseEnter={e => e.target.style.transform = "scale(1.06)"}
+                    onMouseLeave={e => e.target.style.transform = "scale(1)"}
+                    onError={e => { e.target.parentElement.style.background = "#E8DCC8"; e.target.style.display = "none"; }}
+                  />
+                  {/* Icon circle overlapping bottom of image */}
+                  <div style={{
+                    position: "absolute", bottom: -22, left: "50%", transform: "translateX(-50%)",
+                    width: 48, height: 48, borderRadius: "50%",
+                    background: "linear-gradient(135deg,#2E3D3F 0%,#8B6914 100%)",
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    fontSize: 20, boxShadow: "0 4px 14px rgba(0,0,0,.22)", border: "3px solid #fff"
+                  }}>
+                    {s.icon}
+                  </div>
                 </div>
-                <div style={{ padding: "20px 28px", background: "#fff" }}>
-                  <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: 10 }}>
-                    {s.items.map(item => (
-                      <li key={item} style={{ display: "flex", gap: 10, fontSize: "0.9rem", color: "#2E3D3F", fontWeight: 500 }}>
-                        <span style={{ color: s.color, fontWeight: 700, flexShrink: 0 }}>→</span> {item}
-                      </li>
-                    ))}
-                  </ul>
+
+                {/* Content */}
+                <div style={{ padding: "36px 18px 22px", textAlign: "center", display: "flex", flexDirection: "column", flex: 1 }}>
+                  <h3 style={{ fontSize: "1rem", fontWeight: 800, color: "#1a1a1a", marginBottom: 8 }}>{s.title}</h3>
+                  <p style={{ fontSize: "0.82rem", color: "#5A6A6C", lineHeight: 1.6, marginBottom: 16, flex: 1 }}>{s.desc}</p>
+                  <button
+                    onClick={() => navigateTo("services")}
+                    style={{
+                      background: "none", border: "none", cursor: "pointer",
+                      fontSize: "0.8125rem", fontWeight: 700, color: "#C9AA71",
+                      display: "inline-flex", alignItems: "center", gap: 4,
+                      transition: "gap .2s, color .2s", padding: 0, alignSelf: "center"
+                    }}
+                    onMouseEnter={e => { e.currentTarget.style.gap = "8px"; e.currentTarget.style.color = "#8B6914"; }}
+                    onMouseLeave={e => { e.currentTarget.style.gap = "4px"; e.currentTarget.style.color = "#C9AA71"; }}>
+                    Selengkapnya <span>→</span>
+                  </button>
                 </div>
               </div>
             ))}
           </div>
         </div>
       </div>
+
+      {/* Responsive style untuk layanan-grid */}
+      <style>{`
+        @media (max-width: 1100px) { .layanan-grid { grid-template-columns: repeat(3, 1fr) !important; } }
+        @media (max-width: 720px)  { .layanan-grid { grid-template-columns: repeat(2, 1fr) !important; } }
+        @media (max-width: 480px)  { .layanan-grid { grid-template-columns: 1fr !important; } }
+      `}</style>
 
       {/* ── CONTACT US ── */}
       <div style={{ background: "linear-gradient(130deg,#2E3D3F 0%,#3D5254 45%,#8B6914 78%,#C9AA71 100%)", padding: "80px 5%" }}>
