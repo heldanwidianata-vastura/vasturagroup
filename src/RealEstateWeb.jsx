@@ -5475,9 +5475,77 @@ function PaketBackBar({ svc, onClose }) {
 function ServicesPage({ content, services, navigateTo, activePaket, onOpenPaket, onClosePaket, onWaOpen }) {
   const [selectedService, setSelectedService] = useState(null);
   const [hoveredCard, setHoveredCard] = useState(null);
-
-  const [activeCategory, setActiveCategory] = useState("traveling"); // Default: tab Traveling langsung aktif
   const [activeImg, setActiveImg] = useState(0);
+
+  /* ── NEW: Static layanan list sesuai referensi Vastura ── */
+  const LAYANAN_LIST = [
+    {
+      key: "interior",
+      icon: "🛋️",
+      label: "Interior",
+      desc: "Desain interior modern, nyaman dan fungsional sesuai kebutuhan Anda.",
+      color: "#8B6914",
+      category: "wedding",
+      img: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=600&q=80",
+    },
+    {
+      key: "eksterior",
+      icon: "🏠",
+      label: "Eksterior",
+      desc: "Desain eksterior menarik, kokoh dan estetis.",
+      color: "#3D5254",
+      category: "traveling",
+      img: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&q=80",
+    },
+    {
+      key: "rab",
+      icon: "📐",
+      label: "Desain & RAB",
+      desc: "Desain arsitektur lengkap dengan RAB yang akurat.",
+      color: "#8B6914",
+      category: "traveling",
+      img: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=600&q=80",
+    },
+    {
+      key: "landscape",
+      icon: "🌿",
+      label: "Landscape",
+      desc: "Taman indah dan asri yang menyatu dengan hunian Anda.",
+      color: "#2E7D32",
+      category: "traveling",
+      img: "https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=600&q=80",
+    },
+    {
+      key: "aluminium",
+      icon: "🪟",
+      label: "Aluminium",
+      desc: "Kusen, pintu & jendela aluminium berkualitas tinggi.",
+      color: "#3D5254",
+      category: "event",
+      img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80",
+    },
+    {
+      key: "kanopi",
+      icon: "🏗️",
+      label: "Kanopi",
+      desc: "Kanopi kuat, modern dan tahan segala cuaca.",
+      color: "#8B6914",
+      category: "event",
+      img: "https://images.unsplash.com/photo-1600566752355-35792bedcfea?w=600&q=80",
+    },
+  ];
+
+  const KEUNGGULAN = [
+    { icon: "👷", label: "Tim Profesional", desc: "Tenaga ahli berpengalaman di bidangnya" },
+    { icon: "⏱️", label: "Proses Cepat", desc: "Pengerjaan tepat waktu dan terukur" },
+    { icon: "📋", label: "Budget Transparan", desc: "RAB jelas dan tanpa biaya tersembunyi" },
+    { icon: "🛡️", label: "Material Berkualitas", desc: "Menggunakan bahan terbaik dan tahan lama" },
+    { icon: "✅", label: "Garansi Pekerjaan", desc: "Garansi hingga 1 tahun setelah proyek selesai" },
+    { icon: "💬", label: "Konsultasi Gratis", desc: "Konsultasi gratis sebelum proyek dimulai" },
+  ];
+
+  /* ── Old category-based state (kept for detail page backward compat) ── */
+  const [activeCategory, setActiveCategory] = useState("traveling");
   const [colLayout, setColLayout] = useState(2); // 1 | 2 | 3
   const [activePaketTypeId, setActivePaketTypeId] = useState(null);
 
@@ -5955,154 +6023,143 @@ function ServicesPage({ content, services, navigateTo, activePaket, onOpenPaket,
     );
   }
 
-  /* ── Services List with Category Tabs ── */
+  /* ── Services List — New Vastura Design ── */
   const filteredServices = activeCategory ? services.filter(s => s.category === activeCategory) : [];
 
   return (
-    <div className="fade-in" style={{ minHeight: "100vh", background: "#FAF7F0", /* overflowX removed */ }}>
-      {/* Header — gradient + radial flare like reference */}
-      <div style={{ background: "linear-gradient(120deg,#2E3D3F 0%,#3D5254 40%,#B8962A 72%,#1ed8e8 100%)", padding: "clamp(40px,8vw,72px) 5% clamp(48px,8vw,80px)", textAlign: "center", position: "relative", overflow: "hidden" }}>
-        {/* Flare glow center-right */}
-        <div style={{ position: "absolute", top: "50%", right: "18%", transform: "translateY(-50%)", width: 480, height: 480, borderRadius: "50%", background: "radial-gradient(circle, rgba(30,216,232,.38) 0%, rgba(10,168,191,.18) 40%, transparent 70%)", pointerEvents: "none", filter: "blur(12px)" }} />
-        {/* Flare glow left */}
-        <div style={{ position: "absolute", top: "60%", left: "8%", transform: "translateY(-50%)", width: 280, height: 280, borderRadius: "50%", background: "radial-gradient(circle, rgba(14,165,197,.28) 0%, transparent 70%)", pointerEvents: "none", filter: "blur(20px)" }} />
-        {/* Grid pattern overlay */}
-        <div style={{ position: "absolute", inset: 0, backgroundImage: "radial-gradient(circle, rgba(255,255,255,.07) 1px, transparent 1px)", backgroundSize: "28px 28px", pointerEvents: "none" }} />
-        <div style={{ position: "relative", zIndex: 1, maxWidth: 680, margin: "0 auto" }}>
-          <div style={{ fontSize: "0.6875rem", letterSpacing: "3px", color: "rgba(255,255,255,.7)", textTransform: "uppercase", fontWeight: 700, marginBottom: 14 }}>Apa yang Kami Tawarkan</div>
-          <h1 className="display" style={{ fontSize: "clamp(2rem,5vw,3.25rem)", fontWeight: 900, color: "#fff", lineHeight: 1.08, marginBottom: 18, textShadow: "0 2px 24px rgba(0,0,0,.22)" }}>{content.servicesPageTitle || "Paket Layanan Kami"}</h1>
-          <p style={{ fontSize: "1.0625rem", color: "rgba(255,255,255,.82)", lineHeight: 1.8 }}>{content.servicesPageSub || "Pilih kategori layanan sesuai kebutuhan Anda."}</p>
-        </div>
-      </div>
+    <div className="fade-in" style={{ minHeight: "100vh", background: "#fff", fontFamily: "'Sora', 'DM Sans', sans-serif" }}>
+      <style>{`
+        @keyframes svFadeUp { from { opacity:0; transform:translateY(24px);} to { opacity:1; transform:none;} }
+        .sv-card { transition: transform .25s ease, box-shadow .25s ease; cursor: pointer; }
+        .sv-card:hover { transform: translateY(-6px); box-shadow: 0 20px 50px rgba(0,0,0,.16) !important; }
+        .sv-card:hover .sv-card-img { transform: scale(1.07); }
+        .sv-card-img { transition: transform .4s ease; }
+        .sv-card-link { transition: color .2s; }
+        .sv-card-link:hover { color: #C9AA71 !important; }
+        .sv-keung-item:hover { background: #FAF7F0 !important; }
+        @media(max-width:900px){ .sv-layanan-grid { grid-template-columns: repeat(3,1fr) !important; } }
+        @media(max-width:640px){ .sv-layanan-grid { grid-template-columns: repeat(2,1fr) !important; } }
+        @media(max-width:400px){ .sv-layanan-grid { grid-template-columns: 1fr !important; } }
+        @media(max-width:700px){ .sv-keung-grid { grid-template-columns: repeat(2,1fr) !important; } }
+        @media(max-width:400px){ .sv-keung-grid { grid-template-columns: 1fr !important; } }
+      `}</style>
 
-      {/* Category Buttons */}
-      <div style={{ background: "#fff", borderBottom: "1px solid #E8DCC8", padding: "0 5%" }}>
-        <div style={{ maxWidth: 1200, margin: "0 auto", display: "flex", gap: 0, overflowX: "auto", WebkitOverflowScrolling: "touch", scrollbarWidth: "none", msOverflowStyle: "none" }}>
-          {CATEGORIES.map(cat => {
-            const isActive = activeCategory === cat.key;
-            const count = services.filter(s => s.category === cat.key).length;
-            return (
-              <button key={cat.key} onClick={() => setActiveCategory(isActive ? null : cat.key)}
-                style={{ padding: "16px 20px", border: "none", background: "none", fontSize: "0.875rem", fontWeight: isActive ? 700 : 500,
-                  color: isActive ? cat.color : "#3D5254", borderBottom: isActive ? `3px solid ${cat.color}` : "3px solid transparent",
-                  cursor: "pointer", whiteSpace: "nowrap", transition: "all .25s", display: "flex", alignItems: "center", gap: 6, flexShrink: 0 }}>
-                {cat.label}
-                <span style={{ fontSize: "0.6875rem", background: isActive ? cat.color : "#FAF7F0", color: isActive ? "#fff" : "#5A6A6C", borderRadius: 12, padding: "2px 7px", fontWeight: 700, transition: "all .25s" }}>{count}</span>
-              </button>
-            );
-          })}
-        </div>
-      </div>
+      {/* ── HERO ── */}
+      <div style={{ background: "linear-gradient(135deg,#1a2526 0%,#2E3D3F 45%,#8B6914 80%,#C9AA71 100%)", padding: "clamp(56px,10vw,100px) 5% clamp(60px,10vw,110px)", textAlign: "center", position: "relative", overflow: "hidden" }}>
+        {/* decorative dots */}
+        <div style={{ position:"absolute", inset:0, backgroundImage:"radial-gradient(circle, rgba(255,255,255,.065) 1px, transparent 1px)", backgroundSize:"32px 32px", pointerEvents:"none" }} />
+        {/* glow orbs */}
+        <div style={{ position:"absolute", top:"40%", left:"12%", width:320, height:320, borderRadius:"50%", background:"radial-gradient(circle,rgba(201,170,113,.25) 0%,transparent 70%)", pointerEvents:"none", filter:"blur(24px)" }} />
+        <div style={{ position:"absolute", top:"30%", right:"10%", width:260, height:260, borderRadius:"50%", background:"radial-gradient(circle,rgba(139,105,20,.3) 0%,transparent 70%)", pointerEvents:"none", filter:"blur(20px)" }} />
 
-      <div style={{ maxWidth: 1200, margin: "0 auto", padding: "clamp(24px,5vw,60px) clamp(16px,5%,60px) clamp(48px,6vw,80px)", overflow: "visible" }}>
-        {/* Empty state */}
-        {!activeCategory && (
-          <div style={{ textAlign: "center", padding: "60px 20px" }}>
-            <div style={{ fontSize: 56, marginBottom: 20 }}>👆</div>
-            <h2 className="display" style={{ fontSize: "1.75rem", fontWeight: 900, color: "#2E3D3F", marginBottom: 12 }}>Pilih Kategori Layanan</h2>
-            <p style={{ fontSize: "1rem", color: "#5A6A6C" }}>Klik salah satu tab di atas untuk melihat paket layanan yang tersedia.</p>
-          </div>
-        )}
-
-        {/* Cards Grid */}
-        {activeCategory && (
-          <div style={{ animation: "fadeIn .35s ease" }}>
-            {/* Header row: judul + toggle kolom */}
-            <div style={{ marginBottom: 32, display: "flex", alignItems: "flex-end", justifyContent: "space-between", flexWrap: "wrap", gap: 12 }}>
-              <div>
-                <h2 className="display" style={{ fontSize: "1.5rem", fontWeight: 900, color: "#2E3D3F", marginBottom: 6 }}>
-                  {CATEGORIES.find(c => c.key === activeCategory)?.label}
-                </h2>
-                <p style={{ fontSize: "0.9375rem", color: "#5A6A6C" }}>{filteredServices.length} paket tersedia</p>
-              </div>
-              {/* Toggle Kolom */}
-              <div style={{ display: "flex", gap: 4, background: "#e4f4f8", borderRadius: 10, padding: 4 }}>
-                {[
-                  { cols: 1, icon: "▬", title: "1 kartu / baris" },
-                  { cols: 2, icon: "⊟", title: "2 kartu / baris" },
-                  { cols: 3, icon: "⊞", title: "3 kartu / baris" },
-                ].map(({ cols, icon, title }) => (
-                  <button key={cols} onClick={() => setColLayout(cols)} title={title}
-                    style={{
-                      width: 38, height: 38, borderRadius: 7, border: "none", cursor: "pointer",
-                      fontSize: cols === 3 ? "1.05rem" : cols === 2 ? "1.1rem" : "1.25rem",
-                      background: colLayout === cols
-                        ? (CATEGORIES.find(c => c.key === activeCategory)?.color || "#8B6914")
-                        : "transparent",
-                      color: colLayout === cols ? "#fff" : "#5A6A6C",
-                      fontWeight: 700, transition: "all .18s",
-                      display: "flex", alignItems: "center", justifyContent: "center",
-                      boxShadow: colLayout === cols ? "0 2px 8px rgba(0,0,0,.15)" : "none",
-                    }}>
-                    {icon}
-                  </button>
-                ))}
-              </div>
-            </div>
-            {filteredServices.length === 0 ? (
-              <div style={{ textAlign: "center", padding: "60px 0", color: "#5A6A6C" }}>Belum ada paket untuk kategori ini.</div>
-            ) : activeCategory === "traveling" ? (
-              /* ── TRAVELING: 2-col grid with price accordion cards ── */
-              (() => {
-                const customPkg = filteredServices.find(s => s.pkgId === "custom");
-                const regularPkgs = filteredServices.filter(s => s.pkgId !== "custom");
-                return (
-                  <div>
-                    <div style={{ display: "grid", gridTemplateColumns: colLayout === 1 ? "1fr" : colLayout === 3 ? "repeat(auto-fill, minmax(min(280px, 100%), 1fr))" : "repeat(auto-fill, minmax(min(300px, 100%), 1fr))", gap: colLayout === 1 ? 20 : 24 }}>
-                      {regularPkgs.map(svc => (
-                        <TravelPackageCard key={svc.id} svc={svc} onDetail={() => openDetail(svc)} onWaOpen={onWaOpen} isWide={colLayout === 1} />
-                      ))}
-                    </div>
-                    {customPkg && (
-                      <div style={{ marginTop: 28 }}>
-                        <TravelPackageCardWide svc={customPkg} onDetail={() => openDetail(customPkg)} onWaOpen={onWaOpen} />
-                      </div>
-                    )}
-                  </div>
-                );
-              })()
-            ) : (
-              /* ── EVENT / WEDDING: Traveling-style cards ── */
-              (() => {
-                const customPkg = filteredServices.find(s => s.pkgId === "custom");
-                const regularSvcs = filteredServices.filter(s => s.pkgId !== "custom");
-                return (
-                  <div>
-                    <div style={{ display: "grid", gridTemplateColumns: colLayout === 1 ? "1fr" : colLayout === 3 ? "repeat(auto-fill, minmax(min(280px, 100%), 1fr))" : "repeat(auto-fill, minmax(min(300px, 100%), 1fr))", gap: colLayout === 1 ? 20 : 24 }}>
-                      {regularSvcs.map(svc => (
-                        <EventWeddingPackageCard key={svc.id} svc={svc} onDetail={() => openDetail(svc)} onWaOpen={onWaOpen} isWide={colLayout === 1} categoryPackages={filteredServices} />
-                      ))}
-                    </div>
-                    {customPkg && (
-                      <div style={{ marginTop: 28 }}>
-                        <EventWeddingCustomCardWide svc={customPkg} onDetail={() => openDetail(customPkg)} onWaOpen={onWaOpen} />
-                      </div>
-                    )}
-                  </div>
-                );
-              })()
-            )}
-          </div>
-        )}
-      </div>
-
-      {/* CTA Banner */}
-      <section style={{ background: "linear-gradient(130deg,#2E3D3F 0%,#3D5254 50%,#8B6914 100%)", padding: "72px 5%", textAlign: "center" }}>
-        <div style={{ maxWidth: 600, margin: "0 auto" }}>
-          <h2 className="display" style={{ fontSize: "clamp(1.75rem,4vw,2.5rem)", fontWeight: 900, color: "#fff", marginBottom: 16, lineHeight: 1.15 }}>Tidak Menemukan Paket yang Cocok?</h2>
-          <p style={{ color: "rgba(255,255,255,.75)", fontSize: "1rem", marginBottom: 36, lineHeight: 1.7 }}>Kami siap membuat paket khusus sesuai kebutuhan dan budget Anda.</p>
-          <div style={{ display: "flex", gap: 16, justifyContent: "center", flexWrap: "wrap" }}>
+        <div style={{ position:"relative", zIndex:1, maxWidth:700, margin:"0 auto", animation:"svFadeUp .6s ease both" }}>
+          <div style={{ display:"inline-block", fontSize:"0.6875rem", letterSpacing:"4px", color:"#C9AA71", textTransform:"uppercase", fontWeight:700, marginBottom:16, padding:"5px 18px", border:"1px solid rgba(201,170,113,.4)", borderRadius:20 }}>LAYANAN KAMI</div>
+          <h1 style={{ fontSize:"clamp(2.25rem,5.5vw,3.5rem)", fontWeight:900, color:"#fff", lineHeight:1.08, marginBottom:20, letterSpacing:"-0.02em" }}>
+            {content.servicesPageTitle || "Layanan Terbaik Untuk Anda"}
+          </h1>
+          <p style={{ fontSize:"clamp(1rem,2.5vw,1.125rem)", color:"rgba(255,255,255,.78)", lineHeight:1.8, maxWidth:520, margin:"0 auto 36px" }}>
+            {content.servicesPageSub || "Melayani desain, renovasi, interior, eksterior hingga penataan taman dengan standar profesional."}
+          </p>
+          <div style={{ display:"flex", gap:14, justifyContent:"center", flexWrap:"wrap" }}>
             <button onClick={() => onWaOpen && onWaOpen()}
-              style={{ padding: "14px 32px", background: "#fff", color: "#2E3D3F", border: "none", borderRadius: 8, fontSize: "0.875rem", fontWeight: 700, cursor: "pointer", transition: "background .2s" }}
-              onMouseEnter={e => e.currentTarget.style.background = "#E8DCC8"}
-              onMouseLeave={e => e.currentTarget.style.background = "#fff"}>
-              💬 WhatsApp Kami
+              style={{ padding:"13px 28px", background:"#C9AA71", color:"#1a2526", border:"none", borderRadius:8, fontSize:"0.9375rem", fontWeight:700, cursor:"pointer", display:"flex", alignItems:"center", gap:8, transition:"background .2s" }}
+              onMouseEnter={e=>e.currentTarget.style.background="#b8962a"}
+              onMouseLeave={e=>e.currentTarget.style.background="#C9AA71"}>
+              💬 Konsultasi Gratis
             </button>
-            <button onClick={() => navigateTo("about")}
-              style={{ padding: "14px 32px", background: "transparent", color: "#fff", border: "1.5px solid rgba(255,255,255,.3)", borderRadius: 8, fontSize: "0.875rem", fontWeight: 700, cursor: "pointer", transition: "border-color .2s" }}
-              onMouseEnter={e => e.currentTarget.style.borderColor = "rgba(255,255,255,.8)"}
-              onMouseLeave={e => e.currentTarget.style.borderColor = "rgba(255,255,255,.3)"}>
-              📞 Kontak Kami
+            <button onClick={() => navigateTo("contact")}
+              style={{ padding:"13px 28px", background:"transparent", color:"#fff", border:"1.5px solid rgba(255,255,255,.4)", borderRadius:8, fontSize:"0.9375rem", fontWeight:600, cursor:"pointer", transition:"border-color .2s" }}
+              onMouseEnter={e=>e.currentTarget.style.borderColor="rgba(255,255,255,.9)"}
+              onMouseLeave={e=>e.currentTarget.style.borderColor="rgba(255,255,255,.4)"}>
+              📞 Hubungi Kami
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* ── KEUNGGULAN STRIP ── */}
+      <div style={{ background:"#fff", borderBottom:"1px solid #F0EAE0", padding:"clamp(28px,4vw,44px) 5%" }}>
+        <div style={{ maxWidth:1200, margin:"0 auto" }}>
+          <div className="sv-keung-grid" style={{ display:"grid", gridTemplateColumns:"repeat(6,1fr)", gap:16 }}>
+            {KEUNGGULAN.map((k,i) => (
+              <div key={i} className="sv-keung-item" style={{ textAlign:"center", padding:"20px 12px", borderRadius:12, transition:"background .2s" }}>
+                <div style={{ fontSize:"2rem", marginBottom:10 }}>{k.icon}</div>
+                <div style={{ fontSize:"0.8125rem", fontWeight:700, color:"#1a2526", marginBottom:6 }}>{k.label}</div>
+                <div style={{ fontSize:"0.75rem", color:"#5A6A6C", lineHeight:1.55 }}>{k.desc}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* ── LAYANAN CARDS ── */}
+      <section style={{ background:"#fff", padding:"clamp(48px,7vw,88px) 5%" }}>
+        <div style={{ maxWidth:1200, margin:"0 auto" }}>
+          {/* Section header */}
+          <div style={{ textAlign:"center", marginBottom:"clamp(32px,5vw,56px)" }}>
+            <div style={{ fontSize:"0.6875rem", letterSpacing:"3px", color:"#C9AA71", textTransform:"uppercase", fontWeight:700, marginBottom:12 }}>LAYANAN KAMI</div>
+            <h2 style={{ fontSize:"clamp(1.75rem,4vw,2.75rem)", fontWeight:900, color:"#1a2526", lineHeight:1.12, letterSpacing:"-0.02em" }}>
+              Layanan Terbaik Untuk Anda
+            </h2>
+          </div>
+
+          {/* 6-col card grid */}
+          <div className="sv-layanan-grid" style={{ display:"grid", gridTemplateColumns:"repeat(6,1fr)", gap:20 }}>
+            {LAYANAN_LIST.map((lay) => {
+              /* Try to find a matching service in CMS data for the detail page */
+              const matchedSvc = services.find(s => s.category === lay.category) || null;
+              return (
+                <div key={lay.key} className="sv-card"
+                  onClick={() => {
+                    if (matchedSvc) { openDetail(matchedSvc); }
+                    else { onWaOpen && onWaOpen(`Halo! Saya ingin bertanya tentang layanan *${lay.label}* dari VASTURA GROUP.`); }
+                  }}
+                  style={{ borderRadius:16, overflow:"hidden", background:"#fff", boxShadow:"0 4px 20px rgba(0,0,0,.08)", border:"1px solid #F0EAE0" }}>
+                  {/* Image */}
+                  <div style={{ position:"relative", height:160, overflow:"hidden", background:"#e8e0d0" }}>
+                    <img
+                      src={lay.img}
+                      alt={lay.label}
+                      className="sv-card-img"
+                      style={{ width:"100%", height:"100%", objectFit:"cover", display:"block" }}
+                      onError={e => { e.target.style.display="none"; }}
+                    />
+                    {/* icon badge */}
+                    <div style={{ position:"absolute", bottom:10, left:10, width:38, height:38, borderRadius:"50%", background:lay.color, display:"flex", alignItems:"center", justifyContent:"center", fontSize:"1.125rem", boxShadow:"0 4px 12px rgba(0,0,0,.22)" }}>
+                      {lay.icon}
+                    </div>
+                  </div>
+                  {/* Body */}
+                  <div style={{ padding:"16px 16px 20px" }}>
+                    <h3 style={{ fontSize:"1rem", fontWeight:800, color:"#1a2526", marginBottom:8, lineHeight:1.3 }}>{lay.label}</h3>
+                    <p style={{ fontSize:"0.8125rem", color:"#5A6A6C", lineHeight:1.6, marginBottom:14 }}>{lay.desc}</p>
+                    <span className="sv-card-link" style={{ fontSize:"0.8125rem", fontWeight:700, color:lay.color, display:"flex", alignItems:"center", gap:4 }}>
+                      Selengkapnya <span style={{ fontSize:"1rem" }}>→</span>
+                    </span>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* ── CTA BANNER ── */}
+      <section style={{ background:"linear-gradient(135deg,#1a2526 0%,#2E3D3F 50%,#8B6914 100%)", padding:"clamp(56px,8vw,88px) 5%", textAlign:"center", position:"relative", overflow:"hidden" }}>
+        <div style={{ position:"absolute", inset:0, backgroundImage:"radial-gradient(circle, rgba(255,255,255,.05) 1px, transparent 1px)", backgroundSize:"28px 28px", pointerEvents:"none" }} />
+        <div style={{ position:"relative", zIndex:1, maxWidth:640, margin:"0 auto" }}>
+          <h2 style={{ fontSize:"clamp(1.75rem,4vw,2.5rem)", fontWeight:900, color:"#fff", marginBottom:16, lineHeight:1.15, letterSpacing:"-0.02em" }}>
+            Siap Mewujudkan Hunian Impian Anda?
+          </h2>
+          <p style={{ color:"rgba(255,255,255,.75)", fontSize:"1.0625rem", marginBottom:36, lineHeight:1.7 }}>
+            Konsultasikan kebutuhan Anda sekarang juga secara gratis!
+          </p>
+          <div style={{ display:"flex", gap:16, justifyContent:"center", flexWrap:"wrap" }}>
+            <button onClick={() => onWaOpen && onWaOpen()}
+              style={{ padding:"15px 36px", background:"#C9AA71", color:"#1a2526", border:"none", borderRadius:8, fontSize:"1rem", fontWeight:700, cursor:"pointer", display:"flex", alignItems:"center", gap:8, transition:"background .2s", boxShadow:"0 4px 20px rgba(201,170,113,.35)" }}
+              onMouseEnter={e=>e.currentTarget.style.background="#b8962a"}
+              onMouseLeave={e=>e.currentTarget.style.background="#C9AA71"}>
+              💬 Konsultasi Sekarang
             </button>
           </div>
         </div>
