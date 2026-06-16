@@ -8854,6 +8854,339 @@ function ReviewCard({ review }) {
 }
 
 
+/* ══════════════════════════════════════════════════════════
+   SUB LAYANAN ADMIN — Universal CRUD + Gambar + Teks Setting
+   Dipakai oleh: Home, LayananKami, DesainRab, TemaRumah,
+                 Interior, Pagar, Kanopi, Aluminium, Landscape
+   ══════════════════════════════════════════════════════════ */
+function SubLayananAdmin({
+  title, icon, accentColor = "#8B6914",
+  storeKey, data, save, notify, uploadToCloudinary,
+  pageDesc,
+  sections = [],          // [{key,label,type}]
+  imageGroups = [],       // [{key,label,count,desc}]
+  crudKey,                // key di data untuk array items
+  crudLabel,              // judul tabel CRUD
+  crudFields = [],        // [{key,label,type,placeholder}]
+  crudHasImage = false,
+}) {
+  /* ── state teks / konten ── */
+  const initContent = {};
+  sections.forEach(s => { initContent[s.key] = (data.content?.[s.key] || ""); });
+  const [contentForm, setContentForm] = useState(initContent);
+  const [savingContent, setSavingContent] = useState(false);
+
+  /* ── state gambar ── */
+  const [imgUploading, setImgUploading] = useState({});
+  const [imgUrls, setImgUrls] = useState(() => {
+    const o = {};
+    imageGroups.forEach(g => {
+      for (let i = 0; i < g.count; i++) {
+        const k = `${g.key}_${i}`;
+        o[k] = data.content?.[k] || "";
+      }
+    });
+    return o;
+  });
+
+  /* ── state CRUD items ── */
+  const items = data[crudKey] || [];
+  const emptyItem = () => {
+    const o = {};
+    crudFields.forEach(f => { o[f.key] = ""; });
+    if (crudHasImage) o._img = "";
+    return o;
+  };
+  const [editId, setEditId] = useState(null);
+  const [editForm, setEditForm] = useState(emptyItem());
+  const [showAdd, setShowAdd] = useState(false);
+  const [addForm, setAddForm] = useState(emptyItem());
+  const [crudImgUploading, setCrudImgUploading] = useState(false);
+  const [addImgUploading, setAddImgUploading] = useState(false);
+  const [delConfirm, setDelConfirm] = useState(null);
+
+  /* ── helpers ── */
+  const accent = accentColor;
+  const btnBase = { border: "none", borderRadius: 6, padding: "9px 18px", fontWeight: 700, fontSize: "0.82rem", cursor: "pointer" };
+
+  /* ── save konten teks ── */
+  const handleSaveContent = async () => {
+    setSavingContent(true);
+    try {
+      await save({ ...data, content: { ...(data.content || {}), ...contentForm, ...imgUrls } });
+      notify("✅ Konten teks berhasil disimpan!");
+    } catch { notify("❌ Gagal menyimpan konten."); }
+    setSavingContent(false);
+  };
+
+  /* ── upload gambar section ── */
+  const handleImgUpload = async (groupKey, idx, file) => {
+    if (!file) return;
+    const k = `${groupKey}_${idx}`;
+    setImgUploading(p => ({ ...p, [k]: true }));
+    try {
+      const url = await uploadToCloudinary(file);
+      const newImgUrls = { ...imgUrls, [k]: url };
+      setImgUrls(newImgUrls);
+      await save({ ...data, content: { ...(data.content || {}), ...contentForm, ...newImgUrls } });
+      notify("✅ Gambar berhasil diupload!");
+    } catch { notify("❌ Gagal upload gambar."); }
+    setImgUploading(p => ({ ...p, [k]: false }));
+  };
+
+  const handleImgUrlChange = (groupKey, idx, val) => {
+    const k = `${groupKey}_${idx}`;
+    setImgUrls(p => ({ ...p, [k]: val }));
+  };
+
+  /* ── CRUD helpers ── */
+  const handleSaveEdit = async () => {
+    const updated = items.map(it => it.id === editId ? { ...it, ...editForm } : it);
+    try {
+      await save({ ...data, [crudKey]: updated });
+      notify("✅ Item berhasil diperbarui!");
+      setEditId(null);
+    } catch { notify("❌ Gagal menyimpan."); }
+  };
+
+  const handleAdd = async () => {
+    const newItem = { ...addForm, id: Date.now().toString() };
+    try {
+      await save({ ...data, [crudKey]: [...items, newItem] });
+      notify("✅ Item berhasil ditambahkan!");
+      setAddForm(emptyItem());
+      setShowAdd(false);
+    } catch { notify("❌ Gagal menambahkan item."); }
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      await save({ ...data, [crudKey]: items.filter(it => it.id !== id) });
+      notify("✅ Item dihapus.");
+      setDelConfirm(null);
+    } catch { notify("❌ Gagal menghapus."); }
+  };
+
+  const handleCrudImgUpload = async (file, isAdd = false) => {
+    if (!file) return;
+    if (isAdd) setAddImgUploading(true); else setCrudImgUploading(true);
+    try {
+      const url = await uploadToCloudinary(file);
+      if (isAdd) setAddForm(p => ({ ...p, _img: url }));
+      else setEditForm(p => ({ ...p, _img: url }));
+      notify("✅ Gambar item diupload!");
+    } catch { notify("❌ Gagal upload gambar item."); }
+    if (isAdd) setAddImgUploading(false); else setCrudImgUploading(false);
+  };
+
+  /* ── render field helper ── */
+  const renderField = (f, form, setForm, prefix = "") => (
+    <div key={prefix + f.key} style={{ display: "flex", flexDirection: "column", gap: 5 }}>
+      <label style={{ fontSize: "0.75rem", fontWeight: 700, color: "#5A6A6C", textTransform: "uppercase", letterSpacing: ".06em" }}>{f.label}</label>
+      {f.type === "textarea"
+        ? <textarea value={form[f.key] || ""} onChange={e => setForm(p => ({ ...p, [f.key]: e.target.value }))}
+            placeholder={f.placeholder || ""}
+            rows={3} style={{ padding: "9px 12px", border: "1.5px solid #D5C9B0", borderRadius: 6, fontSize: "0.875rem", color: "#2E3D3F", resize: "vertical", fontFamily: "inherit" }} />
+        : <input type="text" value={form[f.key] || ""} onChange={e => setForm(p => ({ ...p, [f.key]: e.target.value }))}
+            placeholder={f.placeholder || ""}
+            style={{ padding: "9px 12px", border: "1.5px solid #D5C9B0", borderRadius: 6, fontSize: "0.875rem", color: "#2E3D3F" }} />
+      }
+    </div>
+  );
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 28, padding: "4px 0" }}>
+      {/* Header */}
+      <div style={{ background: `linear-gradient(120deg, ${accent}18 0%, #ffffff 100%)`, border: `1.5px solid ${accent}30`, borderRadius: 14, padding: "22px 28px", display: "flex", alignItems: "center", gap: 16 }}>
+        <div style={{ width: 52, height: 52, borderRadius: 12, background: accent, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 26, flexShrink: 0 }}>{icon}</div>
+        <div>
+          <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.35rem", fontWeight: 900, color: "#2E3D3F", margin: 0 }}>{title}</h2>
+          {pageDesc && <p style={{ color: "#5A6A6C", fontSize: "0.85rem", margin: "4px 0 0", lineHeight: 1.5 }}>{pageDesc}</p>}
+        </div>
+      </div>
+
+      {/* ── SEKSI 1: Konten Teks ── */}
+      {sections.length > 0 && (
+        <div style={{ background: "#fff", border: "1.5px solid #E8DCC8", borderRadius: 14, padding: "24px 28px" }}>
+          <h3 style={{ fontSize: "0.9rem", fontWeight: 800, color: accent, textTransform: "uppercase", letterSpacing: ".1em", marginBottom: 20, paddingBottom: 12, borderBottom: `2px solid ${accent}25` }}>
+            📝 Konten Teks
+          </h3>
+          <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+            {sections.map(s => renderField(s, contentForm, setContentForm, "ct_"))}
+          </div>
+          <button onClick={handleSaveContent} disabled={savingContent}
+            style={{ ...btnBase, marginTop: 20, background: accent, color: "#fff", opacity: savingContent ? 0.6 : 1 }}>
+            {savingContent ? "Menyimpan…" : "💾 Simpan Konten Teks"}
+          </button>
+        </div>
+      )}
+
+      {/* ── SEKSI 2: Upload Gambar ── */}
+      {imageGroups.length > 0 && (
+        <div style={{ background: "#fff", border: "1.5px solid #E8DCC8", borderRadius: 14, padding: "24px 28px" }}>
+          <h3 style={{ fontSize: "0.9rem", fontWeight: 800, color: accent, textTransform: "uppercase", letterSpacing: ".1em", marginBottom: 20, paddingBottom: 12, borderBottom: `2px solid ${accent}25` }}>
+            🖼 Upload Gambar
+          </h3>
+          {imageGroups.map(g => (
+            <div key={g.key} style={{ marginBottom: 28 }}>
+              <div style={{ marginBottom: 10 }}>
+                <span style={{ fontWeight: 700, fontSize: "0.875rem", color: "#2E3D3F" }}>{g.label}</span>
+                {g.desc && <span style={{ color: "#5A6A6C", fontSize: "0.8rem", marginLeft: 10 }}>{g.desc}</span>}
+              </div>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(180px,1fr))", gap: 14 }}>
+                {Array.from({ length: g.count }).map((_, i) => {
+                  const k = `${g.key}_${i}`;
+                  const isLoading = imgUploading[k];
+                  const url = imgUrls[k];
+                  return (
+                    <div key={k} style={{ border: "1.5px dashed #C9AA71", borderRadius: 10, padding: 10, background: "#FAF7F0", display: "flex", flexDirection: "column", gap: 8, alignItems: "center" }}>
+                      {url
+                        ? <img src={url} alt="" style={{ width: "100%", height: 100, objectFit: "cover", borderRadius: 7, border: "1px solid #E8DCC8" }} />
+                        : <div style={{ width: "100%", height: 100, background: "#E8DCC8", borderRadius: 7, display: "flex", alignItems: "center", justifyContent: "center", color: "#A89070", fontSize: "0.8rem" }}>Belum ada gambar</div>
+                      }
+                      <span style={{ fontSize: "0.7rem", color: "#A89070", fontWeight: 600 }}>Foto {i + 1}</span>
+                      <label style={{ cursor: "pointer", width: "100%" }}>
+                        <div style={{ background: isLoading ? "#ccc" : accent, color: "#fff", borderRadius: 6, padding: "6px 10px", textAlign: "center", fontSize: "0.75rem", fontWeight: 700, pointerEvents: isLoading ? "none" : "auto" }}>
+                          {isLoading ? "⏳ Uploading…" : "📁 Upload"}
+                        </div>
+                        <input type="file" accept="image/*" style={{ display: "none" }} disabled={isLoading}
+                          onChange={e => handleImgUpload(g.key, i, e.target.files?.[0])} />
+                      </label>
+                      <input type="text" placeholder="atau tempel URL…" value={url}
+                        onChange={e => handleImgUrlChange(g.key, i, e.target.value)}
+                        style={{ width: "100%", padding: "5px 8px", border: "1px solid #D5C9B0", borderRadius: 5, fontSize: "0.72rem", color: "#3D5254", boxSizing: "border-box" }} />
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
+          <button onClick={handleSaveContent} disabled={savingContent}
+            style={{ ...btnBase, background: accent, color: "#fff", opacity: savingContent ? 0.6 : 1 }}>
+            {savingContent ? "Menyimpan…" : "💾 Simpan Semua Gambar"}
+          </button>
+        </div>
+      )}
+
+      {/* ── SEKSI 3: CRUD Items (jika ada crudKey) ── */}
+      {crudKey && (
+        <div style={{ background: "#fff", border: "1.5px solid #E8DCC8", borderRadius: 14, padding: "24px 28px" }}>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 20, paddingBottom: 12, borderBottom: `2px solid ${accent}25` }}>
+            <h3 style={{ fontSize: "0.9rem", fontWeight: 800, color: accent, textTransform: "uppercase", letterSpacing: ".1em", margin: 0 }}>
+              📋 {crudLabel || "Daftar Item"}
+            </h3>
+            <button onClick={() => { setShowAdd(true); setAddForm(emptyItem()); }}
+              style={{ ...btnBase, background: accent, color: "#fff", padding: "8px 16px", fontSize: "0.8rem" }}>
+              + Tambah Item
+            </button>
+          </div>
+
+          {/* Form Tambah */}
+          {showAdd && (
+            <div style={{ background: `${accent}10`, border: `1.5px solid ${accent}40`, borderRadius: 10, padding: "18px 20px", marginBottom: 20 }}>
+              <h4 style={{ fontSize: "0.85rem", fontWeight: 800, color: accent, marginBottom: 14 }}>➕ Tambah Item Baru</h4>
+              <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+                {crudFields.map(f => renderField(f, addForm, setAddForm, "add_"))}
+                {crudHasImage && (
+                  <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                    <label style={{ fontSize: "0.75rem", fontWeight: 700, color: "#5A6A6C", textTransform: "uppercase", letterSpacing: ".06em" }}>Gambar Item</label>
+                    <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                      {addForm._img && <img src={addForm._img} alt="" style={{ width: 72, height: 56, objectFit: "cover", borderRadius: 7, border: "1px solid #E8DCC8" }} />}
+                      <label style={{ cursor: "pointer" }}>
+                        <div style={{ background: addImgUploading ? "#ccc" : accent, color: "#fff", borderRadius: 6, padding: "7px 14px", fontSize: "0.78rem", fontWeight: 700 }}>
+                          {addImgUploading ? "⏳ Uploading…" : "📁 Upload Gambar"}
+                        </div>
+                        <input type="file" accept="image/*" style={{ display: "none" }} disabled={addImgUploading}
+                          onChange={e => handleCrudImgUpload(e.target.files?.[0], true)} />
+                      </label>
+                      <input type="text" placeholder="atau URL gambar…" value={addForm._img || ""}
+                        onChange={e => setAddForm(p => ({ ...p, _img: e.target.value }))}
+                        style={{ flex: 1, padding: "7px 10px", border: "1px solid #D5C9B0", borderRadius: 6, fontSize: "0.8rem" }} />
+                    </div>
+                  </div>
+                )}
+              </div>
+              <div style={{ display: "flex", gap: 10, marginTop: 16 }}>
+                <button onClick={handleAdd} style={{ ...btnBase, background: "#27ae60", color: "#fff" }}>✅ Simpan</button>
+                <button onClick={() => setShowAdd(false)} style={{ ...btnBase, background: "#E8DCC8", color: "#5A6A6C" }}>Batal</button>
+              </div>
+            </div>
+          )}
+
+          {/* Tabel Items */}
+          {items.length === 0 ? (
+            <div style={{ textAlign: "center", padding: "40px 20px", color: "#A89070", fontSize: "0.875rem" }}>
+              Belum ada item. Klik "+ Tambah Item" untuk menambahkan.
+            </div>
+          ) : (
+            <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+              {items.map((item, idx) => (
+                <div key={item.id || idx} style={{ border: "1.5px solid #E8DCC8", borderRadius: 10, overflow: "hidden" }}>
+                  {/* Item header row */}
+                  <div style={{ background: "#FAF7F0", padding: "12px 16px", display: "flex", alignItems: "center", gap: 12 }}>
+                    {item._img && <img src={item._img} alt="" style={{ width: 52, height: 42, objectFit: "cover", borderRadius: 6, flexShrink: 0 }} />}
+                    <div style={{ flex: 1 }}>
+                      <div style={{ fontWeight: 800, color: "#2E3D3F", fontSize: "0.875rem" }}>{item.nama || item[crudFields[0]?.key] || `Item ${idx + 1}`}</div>
+                      {item.harga && <div style={{ fontSize: "0.78rem", color: "#8B6914", fontWeight: 600 }}>{item.harga}</div>}
+                      {item.tagline && <div style={{ fontSize: "0.78rem", color: "#5A6A6C" }}>{item.tagline}</div>}
+                    </div>
+                    <div style={{ display: "flex", gap: 8, flexShrink: 0 }}>
+                      <button onClick={() => { setEditId(item.id); setEditForm({ ...item }); }}
+                        style={{ ...btnBase, background: accent, color: "#fff", padding: "6px 14px", fontSize: "0.78rem" }}>✏️ Edit</button>
+                      <button onClick={() => setDelConfirm(item.id)}
+                        style={{ ...btnBase, background: "#e74c3c", color: "#fff", padding: "6px 14px", fontSize: "0.78rem" }}>🗑 Hapus</button>
+                    </div>
+                  </div>
+
+                  {/* Konfirmasi hapus */}
+                  {delConfirm === item.id && (
+                    <div style={{ background: "#fff5f5", padding: "10px 16px", borderTop: "1px solid #fcc", display: "flex", alignItems: "center", gap: 12 }}>
+                      <span style={{ fontSize: "0.83rem", color: "#c0392b", fontWeight: 600 }}>Yakin hapus item ini?</span>
+                      <button onClick={() => handleDelete(item.id)} style={{ ...btnBase, background: "#e74c3c", color: "#fff", padding: "5px 14px", fontSize: "0.78rem" }}>Ya, Hapus</button>
+                      <button onClick={() => setDelConfirm(null)} style={{ ...btnBase, background: "#E8DCC8", color: "#5A6A6C", padding: "5px 14px", fontSize: "0.78rem" }}>Batal</button>
+                    </div>
+                  )}
+
+                  {/* Form Edit inline */}
+                  {editId === item.id && (
+                    <div style={{ padding: "16px 18px", borderTop: "1.5px solid #E8DCC8", background: "#fff" }}>
+                      <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+                        {crudFields.map(f => renderField(f, editForm, setEditForm, "ed_"))}
+                        {crudHasImage && (
+                          <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                            <label style={{ fontSize: "0.75rem", fontWeight: 700, color: "#5A6A6C", textTransform: "uppercase", letterSpacing: ".06em" }}>Gambar Item</label>
+                            <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                              {editForm._img && <img src={editForm._img} alt="" style={{ width: 72, height: 56, objectFit: "cover", borderRadius: 7, border: "1px solid #E8DCC8" }} />}
+                              <label style={{ cursor: "pointer" }}>
+                                <div style={{ background: crudImgUploading ? "#ccc" : accent, color: "#fff", borderRadius: 6, padding: "7px 14px", fontSize: "0.78rem", fontWeight: 700 }}>
+                                  {crudImgUploading ? "⏳ Uploading…" : "📁 Ganti Gambar"}
+                                </div>
+                                <input type="file" accept="image/*" style={{ display: "none" }} disabled={crudImgUploading}
+                                  onChange={e => handleCrudImgUpload(e.target.files?.[0], false)} />
+                              </label>
+                              <input type="text" placeholder="atau URL gambar…" value={editForm._img || ""}
+                                onChange={e => setEditForm(p => ({ ...p, _img: e.target.value }))}
+                                style={{ flex: 1, padding: "7px 10px", border: "1px solid #D5C9B0", borderRadius: 6, fontSize: "0.8rem" }} />
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                      <div style={{ display: "flex", gap: 10, marginTop: 16 }}>
+                        <button onClick={handleSaveEdit} style={{ ...btnBase, background: "#27ae60", color: "#fff" }}>✅ Simpan Perubahan</button>
+                        <button onClick={() => setEditId(null)} style={{ ...btnBase, background: "#E8DCC8", color: "#5A6A6C" }}>Batal</button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
 /* ─────────────── ADMIN REVIEWS COMPONENT ─────────────── */
 function AdminReviews({ data, save, notify }) {
   const reviews = data.reviews || [];
@@ -12341,7 +12674,16 @@ export default function BricksyTravel() {
             {[
               { id: "dashboard", label: "Dashboard", show: true },
               { id: "content", label: "Konten Website", show: isAdmin },
+              { id: "set_home", label: "⚙ Setting Home", show: isAdmin },
               { id: "services", label: "Layanan", show: isAdmin },
+              { id: "set_layanankami", label: "⚙ Setting Layanan Kami", show: isAdmin },
+              { id: "set_desainrab", label: "⚙ Setting Desain & RAB", show: isAdmin },
+              { id: "set_temarumah", label: "⚙ Setting Tema Rumah", show: isAdmin },
+              { id: "set_interior", label: "⚙ Setting Interior", show: isAdmin },
+              { id: "set_pagar", label: "⚙ Setting Pagar Rumah", show: isAdmin },
+              { id: "set_kanopi", label: "⚙ Setting Kanopi", show: isAdmin },
+              { id: "set_aluminium", label: "⚙ Setting Aluminium", show: isAdmin },
+              { id: "set_landscape", label: "⚙ Setting Landscape & Taman", show: isAdmin },
               { id: "team", label: "Susunan Tim", show: isAdmin },
               { id: "messages", label: "Pesan Masuk", show: canCS },
               { id: "users", label: "Users", show: isAdmin },
@@ -12456,6 +12798,299 @@ export default function BricksyTravel() {
                   uploadToCloudinary={uploadToCloudinary}
                   onEditStateChange={(isEditing) => { servicesEditActiveRef.current = isEditing; }}
                   onCancelEdit={(fn) => { servicesExitEditRef.current = fn; }}
+                />
+              )}
+
+              {/* SETTING HOME */}
+              {adminTab === "set_home" && isAdmin && (
+                <SubLayananAdmin
+                  title="Setting Home"
+                  icon="🏠"
+                  accentColor="#3498db"
+                  storeKey="homeContent"
+                  data={data}
+                  save={save}
+                  notify={notify}
+                  uploadToCloudinary={uploadToCloudinary}
+                  pageDesc="Kelola konten teks dan gambar yang tampil di halaman utama (Home) website."
+                  sections={[
+                    { key: "heroTitle", label: "Judul Hero / Tagline Utama", type: "text" },
+                    { key: "heroSub", label: "Sub-teks Hero (deskripsi singkat)", type: "textarea" },
+                    { key: "homeSectionTitle", label: "Judul Seksi Utama Home", type: "text" },
+                    { key: "homeSectionDesc", label: "Deskripsi Seksi Home", type: "textarea" },
+                    { key: "homeCtaLabel", label: "Label Tombol CTA Home", type: "text" },
+                    { key: "homeCtaLabel2", label: "Label Tombol CTA 2 Home", type: "text" },
+                  ]}
+                  imageGroups={[
+                    { key: "hero", label: "Hero Slideshow", count: 4, desc: "Gambar slideshow utama di bagian atas Home." },
+                    { key: "adv", label: "Banner Advertorial", count: 2, desc: "Gambar banner di tengah halaman Home." },
+                    { key: "gal", label: "Galeri Home", count: 6, desc: "Grid galeri di bagian bawah Home." },
+                  ]}
+                />
+              )}
+
+              {/* SETTING LAYANAN KAMI */}
+              {adminTab === "set_layanankami" && isAdmin && (
+                <SubLayananAdmin
+                  title="Setting Layanan Kami"
+                  icon="🛠"
+                  accentColor="#8B6914"
+                  storeKey="layananKami"
+                  data={data}
+                  save={save}
+                  notify={notify}
+                  uploadToCloudinary={uploadToCloudinary}
+                  pageDesc="Kelola teks & gambar halaman Layanan Kami — daftar layanan utama yang ditampilkan kepada pengunjung."
+                  sections={[
+                    { key: "layananKamiTitle", label: "Judul Halaman Layanan Kami", type: "text" },
+                    { key: "layananKamiSub", label: "Sub-judul / Deskripsi Layanan Kami", type: "textarea" },
+                    { key: "layananKamiCta", label: "Label Tombol CTA", type: "text" },
+                  ]}
+                  imageGroups={[
+                    { key: "layananKamiHero", label: "Gambar Hero Layanan Kami", count: 2, desc: "Gambar banner di halaman Layanan Kami." },
+                    { key: "layananKamiGal", label: "Gambar Galeri Layanan", count: 4, desc: "Gambar pendukung tampilan layanan." },
+                  ]}
+                  crudKey="layananKamiItems"
+                  crudLabel="Daftar Item Layanan"
+                  crudFields={[
+                    { key: "nama", label: "Nama Layanan", type: "text", placeholder: "contoh: Jasa Bangun Rumah" },
+                    { key: "deskripsi", label: "Deskripsi Layanan", type: "textarea", placeholder: "Deskripsi singkat layanan..." },
+                    { key: "icon", label: "Icon / Emoji", type: "text", placeholder: "🏠" },
+                  ]}
+                  crudHasImage
+                />
+              )}
+
+              {/* SETTING DESAIN & RAB */}
+              {adminTab === "set_desainrab" && isAdmin && (
+                <SubLayananAdmin
+                  title="Setting Desain & RAB"
+                  icon="📐"
+                  accentColor="#2980b9"
+                  storeKey="desainRab"
+                  data={data}
+                  save={save}
+                  notify={notify}
+                  uploadToCloudinary={uploadToCloudinary}
+                  pageDesc="Kelola konten halaman Jasa Desain & RAB (Rencana Anggaran Biaya)."
+                  sections={[
+                    { key: "desainRabTitle", label: "Judul Halaman Desain & RAB", type: "text" },
+                    { key: "desainRabSub", label: "Sub-judul / Tagline", type: "textarea" },
+                    { key: "desainRabDesc", label: "Deskripsi Lengkap Layanan", type: "textarea" },
+                    { key: "desainRabCta", label: "Label Tombol CTA", type: "text" },
+                  ]}
+                  imageGroups={[
+                    { key: "desainRabHero", label: "Gambar Hero", count: 2, desc: "Foto utama halaman Desain & RAB." },
+                    { key: "desainRabGal", label: "Galeri Portofolio Desain", count: 6, desc: "Foto hasil desain dan RAB." },
+                  ]}
+                  crudKey="desainRabItems"
+                  crudLabel="Paket / Layanan RAB"
+                  crudFields={[
+                    { key: "nama", label: "Nama Paket", type: "text", placeholder: "contoh: Paket Desain Basic" },
+                    { key: "harga", label: "Harga / Keterangan Harga", type: "text", placeholder: "Rp 2.500.000" },
+                    { key: "deskripsi", label: "Deskripsi Paket", type: "textarea", placeholder: "Termasuk: ..." },
+                  ]}
+                  crudHasImage
+                />
+              )}
+
+              {/* SETTING TEMA RUMAH */}
+              {adminTab === "set_temarumah" && isAdmin && (
+                <SubLayananAdmin
+                  title="Setting Tema Rumah"
+                  icon="🏡"
+                  accentColor="#27ae60"
+                  storeKey="temaRumah"
+                  data={data}
+                  save={save}
+                  notify={notify}
+                  uploadToCloudinary={uploadToCloudinary}
+                  pageDesc="Kelola konten halaman Tema Rumah — tambah, edit, atau hapus tema-tema rumah yang tersedia."
+                  sections={[
+                    { key: "temaRumahTitle", label: "Judul Halaman Tema Rumah", type: "text" },
+                    { key: "temaRumahSub", label: "Sub-judul / Deskripsi", type: "textarea" },
+                    { key: "temaRumahCta", label: "Label Tombol CTA", type: "text" },
+                  ]}
+                  imageGroups={[
+                    { key: "temaRumahHero", label: "Gambar Hero Tema Rumah", count: 2, desc: "Foto banner halaman Tema Rumah." },
+                  ]}
+                  crudKey="temaRumahItems"
+                  crudLabel="Daftar Tema Rumah"
+                  crudFields={[
+                    { key: "nama", label: "Nama Tema", type: "text", placeholder: "contoh: Modern Minimalis" },
+                    { key: "tagline", label: "Tagline / Keterangan Singkat", type: "text", placeholder: "Elegan, bersih, fungsional" },
+                    { key: "deskripsi", label: "Deskripsi Tema", type: "textarea", placeholder: "Detail karakteristik tema..." },
+                    { key: "warna", label: "Warna Aksen (HEX)", type: "text", placeholder: "#2E3D3F" },
+                  ]}
+                  crudHasImage
+                />
+              )}
+
+              {/* SETTING INTERIOR */}
+              {adminTab === "set_interior" && isAdmin && (
+                <SubLayananAdmin
+                  title="Setting Interior"
+                  icon="🛋"
+                  accentColor="#8e44ad"
+                  storeKey="interior"
+                  data={data}
+                  save={save}
+                  notify={notify}
+                  uploadToCloudinary={uploadToCloudinary}
+                  pageDesc="Kelola konten halaman Interior — portofolio, layanan, dan galeri interior."
+                  sections={[
+                    { key: "interiorTitle", label: "Judul Halaman Interior", type: "text" },
+                    { key: "interiorSub", label: "Sub-judul / Tagline", type: "textarea" },
+                    { key: "interiorDesc", label: "Deskripsi Layanan Interior", type: "textarea" },
+                    { key: "interiorCta", label: "Label Tombol CTA", type: "text" },
+                  ]}
+                  imageGroups={[
+                    { key: "interiorHero", label: "Gambar Hero Interior", count: 2, desc: "Foto utama halaman Interior." },
+                    { key: "interiorGal", label: "Galeri Portofolio Interior", count: 8, desc: "Foto hasil pekerjaan interior." },
+                  ]}
+                  crudKey="interiorItems"
+                  crudLabel="Paket / Kategori Interior"
+                  crudFields={[
+                    { key: "nama", label: "Nama Paket / Kategori", type: "text", placeholder: "contoh: Interior Minimalis" },
+                    { key: "harga", label: "Harga / Keterangan Harga", type: "text", placeholder: "Rp 500rb/m²" },
+                    { key: "deskripsi", label: "Deskripsi", type: "textarea", placeholder: "Deskripsi kategori interior..." },
+                  ]}
+                  crudHasImage
+                />
+              )}
+
+              {/* SETTING PAGAR RUMAH */}
+              {adminTab === "set_pagar" && isAdmin && (
+                <SubLayananAdmin
+                  title="Setting Pagar Rumah"
+                  icon="🚧"
+                  accentColor="#c0392b"
+                  storeKey="pagarRumah"
+                  data={data}
+                  save={save}
+                  notify={notify}
+                  uploadToCloudinary={uploadToCloudinary}
+                  pageDesc="Kelola konten halaman Pagar Rumah — jenis, harga, dan galeri pagar."
+                  sections={[
+                    { key: "pagarTitle", label: "Judul Halaman Pagar Rumah", type: "text" },
+                    { key: "pagarSub", label: "Sub-judul / Tagline", type: "textarea" },
+                    { key: "pagarDesc", label: "Deskripsi Layanan Pagar", type: "textarea" },
+                    { key: "pagarCta", label: "Label Tombol CTA", type: "text" },
+                  ]}
+                  imageGroups={[
+                    { key: "pagarHero", label: "Gambar Hero Pagar", count: 2, desc: "Foto banner halaman Pagar Rumah." },
+                    { key: "pagarGal", label: "Galeri Pagar", count: 6, desc: "Foto contoh pagar yang tersedia." },
+                  ]}
+                  crudKey="pagarItems"
+                  crudLabel="Jenis / Model Pagar"
+                  crudFields={[
+                    { key: "nama", label: "Nama Model Pagar", type: "text", placeholder: "contoh: Pagar Hollow Minimalis" },
+                    { key: "material", label: "Material", type: "text", placeholder: "contoh: Besi Hollow" },
+                    { key: "harga", label: "Harga / Keterangan", type: "text", placeholder: "Rp 800rb/m" },
+                    { key: "deskripsi", label: "Deskripsi", type: "textarea", placeholder: "Keunggulan dan detail..." },
+                  ]}
+                  crudHasImage
+                />
+              )}
+
+              {/* SETTING KANOPI */}
+              {adminTab === "set_kanopi" && isAdmin && (
+                <SubLayananAdmin
+                  title="Setting Kanopi"
+                  icon="⛺"
+                  accentColor="#e67e22"
+                  storeKey="kanopi"
+                  data={data}
+                  save={save}
+                  notify={notify}
+                  uploadToCloudinary={uploadToCloudinary}
+                  pageDesc="Kelola konten halaman Kanopi — jenis, spesifikasi, dan galeri kanopi."
+                  sections={[
+                    { key: "kanopiTitle", label: "Judul Halaman Kanopi", type: "text" },
+                    { key: "kanopiSub", label: "Sub-judul / Tagline", type: "textarea" },
+                    { key: "kanopiDesc", label: "Deskripsi Layanan Kanopi", type: "textarea" },
+                    { key: "kanopiCta", label: "Label Tombol CTA", type: "text" },
+                  ]}
+                  imageGroups={[
+                    { key: "kanopiHero", label: "Gambar Hero Kanopi", count: 2, desc: "Foto banner halaman Kanopi." },
+                    { key: "kanopiGal", label: "Galeri Kanopi", count: 6, desc: "Foto contoh kanopi." },
+                  ]}
+                  crudKey="kanopiItems"
+                  crudLabel="Jenis / Model Kanopi"
+                  crudFields={[
+                    { key: "nama", label: "Nama Model Kanopi", type: "text", placeholder: "contoh: Kanopi Polycarbonate" },
+                    { key: "material", label: "Material", type: "text", placeholder: "contoh: Baja Ringan + Polycarbonate" },
+                    { key: "harga", label: "Harga / Keterangan", type: "text", placeholder: "Rp 250rb/m²" },
+                    { key: "deskripsi", label: "Deskripsi", type: "textarea", placeholder: "Keunggulan dan detail..." },
+                  ]}
+                  crudHasImage
+                />
+              )}
+
+              {/* SETTING ALUMINIUM */}
+              {adminTab === "set_aluminium" && isAdmin && (
+                <SubLayananAdmin
+                  title="Setting Aluminium"
+                  icon="🪟"
+                  accentColor="#7f8c8d"
+                  storeKey="aluminium"
+                  data={data}
+                  save={save}
+                  notify={notify}
+                  uploadToCloudinary={uploadToCloudinary}
+                  pageDesc="Kelola konten halaman Aluminium — kusen, pintu, jendela, dan partisi aluminium."
+                  sections={[
+                    { key: "aluminiumTitle", label: "Judul Halaman Aluminium", type: "text" },
+                    { key: "aluminiumSub", label: "Sub-judul / Tagline", type: "textarea" },
+                    { key: "aluminiumDesc", label: "Deskripsi Layanan Aluminium", type: "textarea" },
+                    { key: "aluminiumCta", label: "Label Tombol CTA", type: "text" },
+                  ]}
+                  imageGroups={[
+                    { key: "aluminiumHero", label: "Gambar Hero Aluminium", count: 2, desc: "Foto banner halaman Aluminium." },
+                    { key: "aluminiumGal", label: "Galeri Aluminium", count: 6, desc: "Foto produk aluminium." },
+                  ]}
+                  crudKey="aluminiumItems"
+                  crudLabel="Produk / Jenis Aluminium"
+                  crudFields={[
+                    { key: "nama", label: "Nama Produk", type: "text", placeholder: "contoh: Kusen Aluminium 4\" " },
+                    { key: "spek", label: "Spesifikasi", type: "text", placeholder: "contoh: Tebal 4\", profil Australia" },
+                    { key: "harga", label: "Harga / Keterangan", type: "text", placeholder: "Rp 350rb/m" },
+                    { key: "deskripsi", label: "Deskripsi", type: "textarea", placeholder: "Keunggulan dan detail..." },
+                  ]}
+                  crudHasImage
+                />
+              )}
+
+              {/* SETTING LANDSCAPE & TAMAN */}
+              {adminTab === "set_landscape" && isAdmin && (
+                <SubLayananAdmin
+                  title="Setting Landscape & Taman"
+                  icon="🌿"
+                  accentColor="#16a085"
+                  storeKey="landscape"
+                  data={data}
+                  save={save}
+                  notify={notify}
+                  uploadToCloudinary={uploadToCloudinary}
+                  pageDesc="Kelola konten halaman Landscape & Taman — desain taman, penataan landscape, dan portofolio."
+                  sections={[
+                    { key: "landscapeTitle", label: "Judul Halaman Landscape & Taman", type: "text" },
+                    { key: "landscapeSub", label: "Sub-judul / Tagline", type: "textarea" },
+                    { key: "landscapeDesc", label: "Deskripsi Layanan Landscape", type: "textarea" },
+                    { key: "landscapeCta", label: "Label Tombol CTA", type: "text" },
+                  ]}
+                  imageGroups={[
+                    { key: "landscapeHero", label: "Gambar Hero Landscape", count: 2, desc: "Foto banner halaman Landscape." },
+                    { key: "landscapeGal", label: "Galeri Portofolio Taman", count: 8, desc: "Foto hasil penataan taman." },
+                  ]}
+                  crudKey="landscapeItems"
+                  crudLabel="Layanan / Paket Landscape"
+                  crudFields={[
+                    { key: "nama", label: "Nama Layanan", type: "text", placeholder: "contoh: Taman Tropis Modern" },
+                    { key: "harga", label: "Harga / Keterangan", type: "text", placeholder: "Mulai Rp 3.000.000" },
+                    { key: "deskripsi", label: "Deskripsi", type: "textarea", placeholder: "Detail layanan landscape..." },
+                  ]}
+                  crudHasImage
                 />
               )}
 
