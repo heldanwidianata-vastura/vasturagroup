@@ -9521,39 +9521,650 @@ function DesainRabPage({ onWaOpen }) {
   );
 }
 
-/* ── Page: Tema Rumah ── */
-function TemaRumahPage({ onWaOpen }) {
-  return <DevServicePage
-    pageKey="temarumah"
-    title="Tema Rumah"
-    subtitle="Temukan konsep dan tema rumah yang sesuai gaya hidup Anda — dari modern minimalis, klasik mewah, tropis kontemporer, hingga industrial chic."
-    icon="🏡"
-    heroColor="linear-gradient(135deg,#1a3a2a 0%,#2e7d52 50%,#52b788 100%)"
-    onWaOpen={onWaOpen}
-    sections={[
-      {
-        tag: "Gaya Populer",
-        title: "Pilihan Tema & Konsep Hunian",
-        items: [
-          { icon: "⬜", title: "Modern Minimalis", desc: "Garis bersih, palet netral, ruang terbuka, dan pencahayaan alami yang maksimal." },
-          { icon: "🏛️", title: "Klasik Eropa", desc: "Ornamen mewah, kolom, material premium, dan detail arsitektur yang timeless." },
-          { icon: "🌿", title: "Tropis Kontemporer", desc: "Mengintegrasikan elemen alam — kayu, batu, tanaman — dengan desain modern." },
-          { icon: "⚙️", title: "Industrial Chic", desc: "Material raw seperti beton ekspos, baja, dan bata untuk kesan urban yang kuat." },
-          { icon: "🎎", title: "Japandi", desc: "Perpaduan estetika Jepang dan Skandinavia — sederhana, hangat, dan harmonis." },
-          { icon: "🏖️", title: "Mediterania", desc: "Warna tanah hangat, lengkungan, dan suasana resort yang santai dan elegan." },
-        ]
+/* ═══════════════════════════════════════════════════════════════════
+   TEMA RUMAH — Full Page + Sub-pages per Tema
+   Landing  : /tema-rumah   (100% mirip referensi Vastura)
+   Sub-page : /tema-rumah/:slug  (Denah · Eksterior · Interior · Harga · Kalkulator)
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ── Data semua tema ── */
+const TEMA_DATA = [
+  {
+    id: 1, slug: "modern-minimalis", no: "01", nama: "Modern Minimalis",
+    tagline: "Desain simpel, elegan, dan fungsional dengan garis tegas dan warna netral yang menciptakan kesan luas, bersih, dan modern.",
+    fitur: [
+      { icon: "🏠", label: "Tampilan Modern" }, { icon: "📐", label: "Ruang Lebih Luas" },
+      { icon: "🔧", label: "Perawatan Mudah" }, { icon: "💰", label: "Biaya Efisien" },
+    ],
+    img: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=900&q=80",
+    warna: "#C9AA71",
+    deskripsi: "Modern Minimalis adalah filosofi desain yang mengedepankan fungsi di atas dekorasi. Setiap elemen hadir dengan tujuan — tidak ada ornamen berlebihan, hanya garis bersih, material premium, dan cahaya alami yang memaksimalkan kenyamanan hidup.",
+    detail: {
+      exterior: {
+        desc: "Fasad flat dengan material plester halus atau panel GRC. Warna dominan abu-abu, putih, atau krem. Jendela frameless besar memaksimalkan pandangan keluar. Roster beton atau laser-cut sebagai aksen dekoratif.",
+        poin: ["Material: GRC, ACP, Kaca Tempered", "Atap: Dak beton / genteng metal flat", "Warna: Abu-abu, putih, off-white", "Kaca frameless panoramik"],
       },
-      {
-        tag: "Proses",
-        title: "Tahapan Konsultasi Tema",
-        items: [
-          { icon: "💬", title: "Konsultasi Kebutuhan", desc: "Diskusi mendalam tentang gaya hidup, budget, dan preferensi estetika Anda." },
-          { icon: "🎨", title: "Mood Board & Referensi", desc: "Presentasi visual berupa kolase inspirasi sesuai tema yang dipilih." },
-          { icon: "📐", title: "Aplikasi ke Desain", desc: "Integrasi tema ke denah, fasad, dan interior secara konsisten dan harmonis." },
-        ]
-      }
-    ]}
-  />;
+      interior: {
+        desc: "Palet monokromatik dengan aksen kayu natural. Furniture built-in tersembunyi (hidden storage). Plafon tinggi dengan indirect lighting. Dapur open-plan dengan island bar.",
+        poin: ["Plafon: Gypsum doff dengan hidden lamp", "Lantai: Granit polished 60×60 atau 80×80", "Furnitur: Custom built-in warna putih/abu", "Pencahayaan: LED warm white tersembunyi"],
+      },
+      denah: {
+        desc: "Layout open-plan yang memaksimalkan sirkulasi udara dan cahaya alami. Ruang tamu, ruang makan, dan dapur terhubung tanpa sekat masif.",
+        ruangan: [
+          { nama: "Ruang Tamu", ukuran: "5 × 6 m", ikon: "🛋️" }, { nama: "Ruang Makan", ukuran: "4 × 4 m", ikon: "🍽️" },
+          { nama: "Dapur", ukuran: "3 × 4 m", ikon: "🍳" }, { nama: "Master Bedroom", ukuran: "5 × 5 m", ikon: "🛏️" },
+          { nama: "Kamar 2", ukuran: "4 × 4 m", ikon: "🛏️" }, { nama: "Kamar Mandi", ukuran: "2 × 3 m", ikon: "🚿" },
+          { nama: "Teras Depan", ukuran: "3 × 2 m", ikon: "🏡" }, { nama: "Carport", ukuran: "3 × 6 m", ikon: "🚗" },
+        ],
+      },
+      harga: {
+        paket: [
+          { nama: "Paket Minimalis Standar", luas: "60–80 m²", harga: 350000, termasuk: ["Desain arsitektur", "RAB lengkap", "Pengawasan 1 bulan"] },
+          { nama: "Paket Minimalis Premium", luas: "80–120 m²", harga: 450000, termasuk: ["Desain arsitektur + interior", "RAB + BQ", "Pengawasan penuh", "3D visualisasi"] },
+          { nama: "Paket Minimalis Luxury", luas: "120 m² ke atas", harga: 600000, termasuk: ["Full desain arsitektur, interior, landscape", "RAB + BQ detail", "Pengawasan penuh + QC", "3D + animasi walkthrough"] },
+        ],
+      },
+    },
+  },
+  {
+    id: 2, slug: "skandinavian", no: "02", nama: "Skandinavian",
+    tagline: "Kombinasi warna terang, material alami, dan pencahayaan maksimal untuk menciptakan suasana hangat, nyaman, dan menenangkan.",
+    fitur: [
+      { icon: "🌿", label: "Natural & Hangat" }, { icon: "💡", label: "Pencahayaan Optimal" },
+      { icon: "🛋️", label: "Ruang Nyaman" }, { icon: "✨", label: "Estetika Abadi" },
+    ],
+    img: "https://images.unsplash.com/photo-1449844908441-8829872d2607?w=900&q=80",
+    warna: "#7a9e87",
+    deskripsi: "Skandinavian lahir dari kebutuhan masyarakat Eropa Utara untuk memaksimalkan cahaya di iklim yang gelap. Hasilnya: desain yang bersih, hangat, dan penuh fungsi — dipadu material alami kayu, kain lembut, dan tanaman hijau yang menyegarkan.",
+    detail: {
+      exterior: {
+        desc: "Atap pelana tinggi dengan kemiringan besar, ciri khas arsitektur Skandinavia. Material kayu cedar atau WPC pada fasad memberikan kehangatan visual. Warna putih atau krem dengan aksen kayu coklat terang.",
+        poin: ["Atap: Pelana tinggi / metal berprofil", "Material: Kayu cedar, WPC, bata putih", "Warna: Putih, krem, abu muda, coklat kayu", "Jendela: Besar, double-glass, frame putih"],
+      },
+      interior: {
+        desc: "Palet putih bersih dengan sentuhan kayu pinus terang. Tekstil lembut: wol, linen, katun. Tanaman indoor menjadi elemen dekorasi utama. Dapur Hygge dengan island bar kayu dan bar stool tinggi.",
+        poin: ["Lantai: Vinyl kayu atau parket pinus terang", "Tekstil: Karpet wol, bantal linen, tirai sheer", "Aksen: Tanaman pot, lilin, benda-benda craft", "Furnitur: Kaki kayu runcing, bentuk organik"],
+      },
+      denah: {
+        desc: "Konsep 'Hygge' — menciptakan sudut-sudut nyaman di setiap ruang. Reading nook, cozy corner, dan dapur yang menjadi jantung rumah.",
+        ruangan: [
+          { nama: "Ruang Tamu", ukuran: "5 × 5 m", ikon: "🛋️" }, { nama: "Ruang Makan", ukuran: "4 × 3.5 m", ikon: "🍽️" },
+          { nama: "Dapur Hygge", ukuran: "3.5 × 4 m", ikon: "🍳" }, { nama: "Master Bedroom", ukuran: "4.5 × 5 m", ikon: "🛏️" },
+          { nama: "Kamar 2", ukuran: "3.5 × 4 m", ikon: "🛏️" }, { nama: "Reading Nook", ukuran: "2 × 2 m", ikon: "📚" },
+          { nama: "Kamar Mandi", ukuran: "2.5 × 3 m", ikon: "🚿" }, { nama: "Teras Belakang", ukuran: "4 × 3 m", ikon: "🌿" },
+        ],
+      },
+      harga: {
+        paket: [
+          { nama: "Paket Skandinavia Standar", luas: "60–80 m²", harga: 380000, termasuk: ["Desain arsitektur gaya Skandinavia", "RAB material impor lokal", "3D visualisasi 2 view"] },
+          { nama: "Paket Skandinavia Premium", luas: "80–130 m²", harga: 490000, termasuk: ["Full desain + interior Hygge", "RAB + spesifikasi material", "Pengawasan penuh", "3D + mood board"] },
+          { nama: "Paket Skandinavia Luxury", luas: "130 m² ke atas", harga: 650000, termasuk: ["Desain arsitektur, interior & landscape nordic", "Furniture custom Skandinavia", "Pengawasan + QC ketat", "Animasi walkthrough 3D"] },
+        ],
+      },
+    },
+  },
+  {
+    id: 3, slug: "industrial", no: "03", nama: "Industrial",
+    tagline: "Gaya maskulin dengan material ekspos seperti beton, besi, dan kayu yang menghadirkan kesan tegas, unik, dan berkarakter.",
+    fitur: [
+      { icon: "⚡", label: "Kesan Maskulin" }, { icon: "🏗️", label: "Material Ekspos" },
+      { icon: "🛡️", label: "Tahan Lama" }, { icon: "🔩", label: "Desain Unik" },
+    ],
+    img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=900&q=80",
+    warna: "#6b7c8a",
+    deskripsi: "Industrial mengambil estetika pabrik dan gudang lama — beton ekspos, pipa besi terbuka, bata merah mentah — dan mentransformasinya menjadi hunian yang berkarakter kuat. Setiap 'ketidaksempurnaan' material menjadi elemen desain yang disengaja.",
+    detail: {
+      exterior: {
+        desc: "Fasad bata ekspos atau plester kasar (exposed concrete). Material metal Corten atau besi hitam sebagai aksen. Jendela berukuran besar dengan frame besi hitam. Kesan 'raw' yang disengaja.",
+        poin: ["Material: Bata ekspos, beton kasar, besi hitam", "Atap: Spandek, metal, atau dak beton", "Warna: Abu gelap, hitam, coklat tua, merah bata", "Detail: Pipa galvanis ekspos, baut terlihat"],
+      },
+      interior: {
+        desc: "Plafon beton ekspos atau duct AC yang terlihat. Lantai polished concrete atau vinyl semen. Furnitur besi+kayu kombinasi. Pencahayaan Edison bulb dan track light.",
+        poin: ["Lantai: Polished concrete atau floor hardener", "Plafon: Ekspos rangka baja dan duct", "Pencahayaan: Edison bulb, track light hitam", "Furnitur: Kombinasi besi hollow dan kayu solid"],
+      },
+      denah: {
+        desc: "Open space besar tanpa banyak sekat — tipikal ruang industri yang dikonversi. Mezzanine sebagai ruang tidur atau kerja memberikan kedalaman visual yang dramatik.",
+        ruangan: [
+          { nama: "Ruang Utama (Open)", ukuran: "8 × 10 m", ikon: "🏭" }, { nama: "Dapur Industrial", ukuran: "4 × 5 m", ikon: "🍳" },
+          { nama: "Master Bedroom", ukuran: "5 × 6 m", ikon: "🛏️" }, { nama: "Mezzanine / Studio", ukuran: "4 × 5 m", ikon: "🎨" },
+          { nama: "Kamar Mandi", ukuran: "3 × 3 m", ikon: "🚿" }, { nama: "Workshop / Garasi", ukuran: "6 × 5 m", ikon: "🔧" },
+          { nama: "Ruang Tamu", ukuran: "5 × 6 m", ikon: "🛋️" }, { nama: "Teras / Balkon", ukuran: "3 × 4 m", ikon: "🏗️" },
+        ],
+      },
+      harga: {
+        paket: [
+          { nama: "Paket Industrial Standar", luas: "70–100 m²", harga: 400000, termasuk: ["Desain industrial + finishing ekspos", "RAB + spesifikasi material", "3D visualisasi"] },
+          { nama: "Paket Industrial Premium", luas: "100–150 m²", harga: 520000, termasuk: ["Full desain + interior industrial", "Custom metalwork & carpentry", "Pengawasan penuh", "3D + foto render"] },
+          { nama: "Paket Industrial Luxury", luas: "150 m² ke atas", harga: 700000, termasuk: ["Full package desain + eksekusi", "Material impor + custom fabrication", "QC ketat + garansi pekerjaan", "Dokumentasi foto & video"] },
+        ],
+      },
+    },
+  },
+  {
+    id: 4, slug: "tropical-modern", no: "04", nama: "Tropical Modern",
+    tagline: "Menggabungkan elemen alam dan desain modern untuk sirkulasi udara maksimal dan suasana yang sejuk serta menyegarkan.",
+    fitur: [
+      { icon: "🌴", label: "Sejuk & Alami" }, { icon: "💨", label: "Sirkulasi Udara Baik" },
+      { icon: "⚡", label: "Hemat Energi" }, { icon: "🌞", label: "Nyaman Setiap Saat" },
+    ],
+    img: "https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=900&q=80",
+    warna: "#4a8c6f",
+    deskripsi: "Tropical Modern adalah jawaban sempurna untuk iklim Indonesia. Menggabungkan arsitektur kontemporer dengan elemen tropis — atap lebar, cross-ventilation, material alam, dan tanaman hijau lebat — menciptakan hunian yang sejuk tanpa bergantung penuh pada AC.",
+    detail: {
+      exterior: {
+        desc: "Atap lebar menjorok (overhang) melindungi dari hujan dan panas. Void dan balkon terbuka untuk ventilasi silang. Material kayu, batu alam, dan tanaman sebagai komponen desain utama.",
+        poin: ["Atap: Genteng clay, metal, atau dak dengan taman", "Material: Batu andesit, kayu ulin, bambu laminate", "Vegetasi: Tanaman fasad, vertical garden, kolam koi", "Void: Cross-ventilation pada massa bangunan"],
+      },
+      interior: {
+        desc: "Material alam mendominasi — kayu, rotan, batu alam. Palette hijau, coklat, krem. Ruangan mengalir ke taman atau kolam melalui bukaan besar. Indoor-outdoor living sebagai konsep utama.",
+        poin: ["Lantai: Batu andesit, kayu atau terracotta", "Plafon: Kayu ekspos atau anyaman bambu", "Warna: Hijau, krem, coklat kayu, abu batu", "Furniture: Rotan, kayu jati, material alam"],
+      },
+      denah: {
+        desc: "Zoning yang memisahkan area publik dan privat dengan buffer tanaman. Ruang tengah terbuka ke halaman (courtyard). Teras menjadi ruang sosial utama.",
+        ruangan: [
+          { nama: "Teras & Carport", ukuran: "5 × 6 m", ikon: "🌴" }, { nama: "Ruang Tamu", ukuran: "5 × 6 m", ikon: "🛋️" },
+          { nama: "Ruang Keluarga", ukuran: "5 × 5 m", ikon: "👨‍👩‍👧" }, { nama: "Dapur + Makan", ukuran: "4 × 6 m", ikon: "🍳" },
+          { nama: "Master Bedroom", ukuran: "5 × 5 m", ikon: "🛏️" }, { nama: "Kamar 2 & 3", ukuran: "3.5 × 4 m", ikon: "🛏️" },
+          { nama: "Kolam & Taman", ukuran: "4 × 6 m", ikon: "🌊" }, { nama: "Musholla", ukuran: "2.5 × 3 m", ikon: "🕌" },
+        ],
+      },
+      harga: {
+        paket: [
+          { nama: "Paket Tropical Standar", luas: "80–120 m²", harga: 420000, termasuk: ["Desain tropical modern", "Material lokal premium", "RAB + landscape dasar"] },
+          { nama: "Paket Tropical Premium", luas: "120–180 m²", harga: 550000, termasuk: ["Full desain + interior + landscape", "Material alam pilihan", "Kolam ikan / kolam renang mini", "Pengawasan penuh"] },
+          { nama: "Paket Tropical Luxury", luas: "180 m² ke atas", harga: 750000, termasuk: ["Villa-grade tropical design", "Material import + custom joinery", "Kolam renang + taman profesional", "Full management proyek"] },
+        ],
+      },
+    },
+  },
+  {
+    id: 5, slug: "luxury-modern", no: "05", nama: "Luxury Modern",
+    tagline: "Desain eksklusif dengan detail premium, material berkualitas tinggi, dan tata ruang mewah yang memancarkan prestise.",
+    fitur: [
+      { icon: "👑", label: "Eksklusif" }, { icon: "💎", label: "Material Premium" },
+      { icon: "🏆", label: "Detail Mewah" }, { icon: "⭐", label: "Prestise Tinggi" },
+    ],
+    img: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=900&q=80",
+    warna: "#8B6914",
+    deskripsi: "Luxury Modern adalah puncak ekspresi arsitektur kontemporer. Setiap detail dirancang dengan presisi — material marmer impor, smart home system, kolam renang infinity edge, dan pencahayaan arsitektural yang menciptakan ambiance mewah setiap saat.",
+    detail: {
+      exterior: {
+        desc: "Volume asimetris yang dramatik dengan material marmer eksterior, ACP metalik, dan panel GRC premium. Kolam renang dengan overflow edge sebagai focal point. Landscape impresif dengan pohon palm dan pencahayaan taman yang dramatis.",
+        poin: ["Material: Marmer, ACP brushed gold, GRC custom", "Kolam: Infinity pool dengan overflow edge", "Pencahayaan: Arsitektural LED + uplighting taman", "Smart gate: Akses otomatis dengan sistem keamanan"],
+      },
+      interior: {
+        desc: "Material marmer impor pada lantai dan dinding. Plafon double-volume di ruang tamu. Tangga floating dengan railing kaca frameless. Dapur custom kitchen set dengan appliance premium.",
+        poin: ["Lantai: Marmer Statuario atau Calacatta impor", "Dinding: Feature wall marmer + backlit panel", "Tangga: Floating staircase + LED step-light", "Smart Home: Lighting, AC, security terintegrasi"],
+      },
+      denah: {
+        desc: "Layout mewah dengan foyer grand entrance, ruang tamu double-volume, ruang makan formal terpisah, dan home theater. Kamar utama dengan walk-in closet dan ensuite bathroom spa-grade.",
+        ruangan: [
+          { nama: "Grand Foyer", ukuran: "4 × 5 m", ikon: "🚪" }, { nama: "Ruang Tamu (Double Vol.)", ukuran: "8 × 9 m", ikon: "🛋️" },
+          { nama: "Ruang Makan Formal", ukuran: "5 × 7 m", ikon: "🍽️" }, { nama: "Dapur Premium", ukuran: "5 × 5 m", ikon: "🍳" },
+          { nama: "Master Suite", ukuran: "7 × 8 m", ikon: "👑" }, { nama: "Walk-in Closet", ukuran: "4 × 4 m", ikon: "👗" },
+          { nama: "Home Theater", ukuran: "5 × 6 m", ikon: "🎬" }, { nama: "Kolam Renang", ukuran: "4 × 10 m", ikon: "🏊" },
+        ],
+      },
+      harga: {
+        paket: [
+          { nama: "Paket Luxury Standar", luas: "150–200 m²", harga: 750000, termasuk: ["Full desain arsitektur mewah", "Material premium lokal", "Interior semi-furnished", "RAB + BQ detail"] },
+          { nama: "Paket Luxury Premium", luas: "200–300 m²", harga: 1000000, termasuk: ["Full design + interior + landscape mewah", "Material marmer impor + custom joinery", "Smart home system", "Kolam renang + taman profesional"] },
+          { nama: "Paket Luxury Ultra", luas: "300 m² ke atas", harga: 0, termasuk: ["Desain custom sepenuhnya", "Material world-class tanpa batas", "Full project management", "Konsultasi eksklusif, by appointment only"] },
+        ],
+      },
+    },
+  },
+];
+
+/* ── Kalkulator Luas Lahan ── */
+function KalkulatorLuas({ tema }) {
+  const [luas, setLuas] = useState(100);
+  const [paketIdx, setPaketIdx] = useState(1);
+  const paket = tema.detail.harga.paket[paketIdx];
+  const isCustom = paket.harga === 0;
+  const totalHarga = isCustom ? null : luas * paket.harga;
+  const fmtRp = (n) => "Rp " + n.toLocaleString("id-ID");
+
+  return (
+    <div style={{ background: "linear-gradient(135deg,#1a2a2a 0%,#2E3D3F 60%,#3D5254 100%)", borderRadius: 16, padding: "32px", color: "#fff" }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 24 }}>
+        <span style={{ fontSize: 24 }}>🧮</span>
+        <div>
+          <div style={{ fontSize: "0.65rem", letterSpacing: "0.12em", textTransform: "uppercase", color: tema.warna, fontWeight: 800 }}>ESTIMASI BIAYA</div>
+          <h3 style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.1rem", fontWeight: 800, margin: 0, color: "#fff" }}>Kalkulator Luas Lahan</h3>
+        </div>
+      </div>
+      {/* Pilih Paket */}
+      <div style={{ marginBottom: 20 }}>
+        <label style={{ display: "block", fontSize: "0.65rem", letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(255,255,255,.5)", marginBottom: 8, fontWeight: 700 }}>Pilih Paket</label>
+        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+          {tema.detail.harga.paket.map((p, i) => (
+            <button key={i} onClick={() => setPaketIdx(i)} style={{
+              padding: "10px 14px", borderRadius: 8, cursor: "pointer", textAlign: "left", transition: "all .2s",
+              background: paketIdx === i ? tema.warna + "44" : "rgba(255,255,255,.07)",
+              border: paketIdx === i ? `1.5px solid ${tema.warna}` : "1.5px solid rgba(255,255,255,.15)",
+              color: paketIdx === i ? "#fff" : "rgba(255,255,255,.7)",
+            }}>
+              <div style={{ fontSize: "0.8rem", fontWeight: 700 }}>{p.nama}</div>
+              <div style={{ fontSize: "0.7rem", marginTop: 2, opacity: 0.8 }}>{p.harga === 0 ? "Harga sesuai kebutuhan" : `${fmtRp(p.harga)} / m²`} · {p.luas}</div>
+            </button>
+          ))}
+        </div>
+      </div>
+      {/* Slider */}
+      <div style={{ marginBottom: 20 }}>
+        <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 8 }}>
+          <label style={{ fontSize: "0.65rem", letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(255,255,255,.5)", fontWeight: 700 }}>Luas Bangunan</label>
+          <span style={{ fontSize: "0.95rem", fontWeight: 800, color: tema.warna }}>{luas} m²</span>
+        </div>
+        <input type="range" min={40} max={500} step={5} value={luas} onChange={e => setLuas(+e.target.value)}
+          style={{ width: "100%", accentColor: tema.warna, cursor: "pointer" }} />
+        <div style={{ display: "flex", justifyContent: "space-between", marginTop: 4, fontSize: "0.62rem", color: "rgba(255,255,255,.38)" }}>
+          <span>40 m²</span><span>500 m²</span>
+        </div>
+      </div>
+      {/* Input Manual */}
+      <div style={{ marginBottom: 24 }}>
+        <label style={{ display: "block", fontSize: "0.65rem", letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(255,255,255,.5)", marginBottom: 6, fontWeight: 700 }}>Atau Masukkan Manual</label>
+        <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+          <input type="number" min={40} max={5000} value={luas} onChange={e => setLuas(Math.max(40, +e.target.value))}
+            style={{ flex: 1, padding: "9px 12px", borderRadius: 8, border: "1.5px solid rgba(255,255,255,.2)", background: "rgba(255,255,255,.08)", color: "#fff", fontSize: "0.9rem", outline: "none" }} />
+          <span style={{ color: "rgba(255,255,255,.6)", fontSize: "0.85rem", fontWeight: 600 }}>m²</span>
+        </div>
+      </div>
+      {/* Hasil */}
+      <div style={{ background: isCustom ? "rgba(255,255,255,.08)" : `rgba(${parseInt(tema.warna.slice(1,3),16)},${parseInt(tema.warna.slice(3,5),16)},${parseInt(tema.warna.slice(5,7),16)},.15)`, border: `1.5px solid ${tema.warna}55`, borderRadius: 12, padding: "20px 22px" }}>
+        {isCustom ? (
+          <div style={{ textAlign: "center" }}>
+            <div style={{ fontSize: "1.5rem", marginBottom: 8 }}>👑</div>
+            <div style={{ fontSize: "0.95rem", fontWeight: 700, color: "#fff" }}>Harga Konsultasi Eksklusif</div>
+            <div style={{ fontSize: "0.78rem", color: "rgba(255,255,255,.6)", marginTop: 4 }}>Hubungi tim kami untuk penawaran ultra-luxury</div>
+          </div>
+        ) : (
+          <>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 12 }}>
+              <div>
+                <div style={{ fontSize: "0.62rem", textTransform: "uppercase", letterSpacing: "0.1em", color: "rgba(255,255,255,.5)", fontWeight: 700, marginBottom: 4 }}>Estimasi Total</div>
+                <div style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.6rem", fontWeight: 900, color: tema.warna, lineHeight: 1 }}>{fmtRp(totalHarga)}</div>
+              </div>
+              <div style={{ textAlign: "right" }}>
+                <div style={{ fontSize: "0.62rem", textTransform: "uppercase", letterSpacing: "0.1em", color: "rgba(255,255,255,.5)", fontWeight: 700, marginBottom: 4 }}>Rincian</div>
+                <div style={{ fontSize: "0.78rem", color: "rgba(255,255,255,.68)" }}>{luas} m² × {fmtRp(paket.harga)}</div>
+              </div>
+            </div>
+            <div style={{ borderTop: "1px solid rgba(255,255,255,.1)", paddingTop: 12 }}>
+              <div style={{ fontSize: "0.62rem", textTransform: "uppercase", letterSpacing: "0.1em", color: "rgba(255,255,255,.5)", fontWeight: 700, marginBottom: 6 }}>Sudah Termasuk</div>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+                {paket.termasuk.map((item, i) => (
+                  <span key={i} style={{ fontSize: "0.7rem", background: "rgba(255,255,255,.1)", borderRadius: 20, padding: "3px 10px", color: "rgba(255,255,255,.8)" }}>✓ {item}</span>
+                ))}
+              </div>
+            </div>
+          </>
+        )}
+      </div>
+      <p style={{ fontSize: "0.62rem", color: "rgba(255,255,255,.32)", marginTop: 12, lineHeight: 1.5, textAlign: "center" }}>
+        * Estimasi kasar. Harga final sesuai survei lapangan, spesifikasi material, dan kondisi lahan.
+      </p>
+    </div>
+  );
+}
+
+/* ── Card Content helper (reusable di landing) ── */
+function TemaCardContent({ tema, setTemaSlug }) {
+  return (
+    <>
+      <div style={{ display: "flex", alignItems: "baseline", gap: 12, marginBottom: 12 }}>
+        <span style={{ fontFamily: "'Playfair Display',serif", fontSize: "2.4rem", fontWeight: 900, color: "#E8DCC8", lineHeight: 1 }}>{tema.no}</span>
+        <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.4rem", fontWeight: 900, color: "#2E3D3F", margin: 0, lineHeight: 1 }}>{tema.nama.toUpperCase()}</h2>
+      </div>
+      <div style={{ width: 38, height: 3, background: tema.warna, borderRadius: 2, marginBottom: 14 }} />
+      <p style={{ fontSize: "0.86rem", color: "#5A6A6C", lineHeight: 1.72, marginBottom: 20 }}>{tema.tagline}</p>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 10, marginBottom: 22 }}>
+        {tema.fitur.map((f, i) => (
+          <div key={i} style={{ textAlign: "center" }}>
+            <div style={{ width: 42, height: 42, borderRadius: "50%", background: "#F5EDD8", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "1.1rem", margin: "0 auto 6px" }}>{f.icon}</div>
+            <div style={{ fontSize: "0.62rem", color: "#5A6A6C", fontWeight: 600, lineHeight: 1.3 }}>{f.label}</div>
+          </div>
+        ))}
+      </div>
+      <button onClick={() => setTemaSlug(tema.slug)} style={{
+        display: "inline-flex", alignItems: "center", gap: 7, padding: "9px 20px",
+        border: "1.5px solid #2E3D3F", borderRadius: 3, background: "transparent", color: "#2E3D3F",
+        fontWeight: 700, fontSize: "0.76rem", cursor: "pointer", letterSpacing: ".08em", textTransform: "uppercase",
+        transition: "all .2s",
+      }}
+        onMouseEnter={e => { e.currentTarget.style.background = "#2E3D3F"; e.currentTarget.style.color = "#fff"; }}
+        onMouseLeave={e => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.color = "#2E3D3F"; }}
+      >LIHAT DETAIL <span>→</span></button>
+    </>
+  );
+}
+
+/* ── Detail Page per tema ── */
+function TemaDetailPage({ slug, onWaOpen, onBack }) {
+  const tema = TEMA_DATA.find(t => t.slug === slug);
+  const [activeTab, setActiveTab] = useState("denah");
+
+  useEffect(() => { window.scrollTo(0, 0); }, [slug]);
+
+  if (!tema) return (
+    <div style={{ textAlign: "center", padding: "80px 20px" }}>
+      <div style={{ fontSize: "3rem", marginBottom: 16 }}>🏡</div>
+      <h2 style={{ fontFamily: "'Playfair Display',serif", color: "#2E3D3F" }}>Tema tidak ditemukan</h2>
+      <button onClick={onBack} style={{ marginTop: 16, padding: "10px 24px", background: "#2E3D3F", color: "#fff", border: "none", borderRadius: 8, cursor: "pointer" }}>← Kembali</button>
+    </div>
+  );
+
+  const tabs = [
+    { id: "denah", label: "📐 Denah Ruang" },
+    { id: "exterior", label: "🏠 Eksterior" },
+    { id: "interior", label: "🛋️ Interior" },
+    { id: "harga", label: "💰 Harga & RAB" },
+    { id: "kalkulator", label: "🧮 Kalkulator" },
+  ];
+
+  const PoinItem = ({ text }) => (
+    <div style={{ display: "flex", alignItems: "center", gap: 11, padding: "11px 14px", background: "#FDFAF4", borderRadius: 9, border: "1px solid #F5EDD8" }}>
+      <span style={{ width: 22, height: 22, borderRadius: "50%", background: tema.warna + "22", color: tema.warna, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "0.7rem", fontWeight: 900, flexShrink: 0 }}>✓</span>
+      <span style={{ fontSize: "0.83rem", color: "#2E3D3F", fontWeight: 500 }}>{text}</span>
+    </div>
+  );
+
+  return (
+    <div style={{ fontFamily: "'Nunito','Segoe UI',sans-serif" }}>
+      {/* Back Bar */}
+      <div style={{ background: "linear-gradient(90deg,#1a2a2a,#2E3D3F)", padding: "0 5%", display: "flex", alignItems: "center", justifyContent: "space-between", position: "sticky", top: 0, zIndex: 90, borderBottom: `3px solid ${tema.warna}` }}>
+        <button onClick={onBack} style={{ display: "flex", alignItems: "center", gap: 8, background: "none", border: "none", color: "#C9AA71", fontWeight: 700, fontSize: "0.78rem", cursor: "pointer", padding: "13px 0", letterSpacing: ".06em", textTransform: "uppercase" }}>
+          <span style={{ fontSize: 18 }}>←</span> Kembali ke Tema Rumah
+        </button>
+        <span style={{ fontSize: "0.74rem", color: "rgba(255,255,255,.45)", letterSpacing: ".06em", textTransform: "uppercase", fontWeight: 600 }}>{tema.no} · {tema.nama}</span>
+      </div>
+
+      {/* Hero */}
+      <div style={{ position: "relative", height: 400, overflow: "hidden" }}>
+        <img src={tema.img} alt={tema.nama} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} onError={e => e.target.style.display = "none"} />
+        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to right,rgba(10,20,20,.88) 38%,rgba(10,20,20,.25) 100%)" }} />
+        <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", justifyContent: "flex-end", padding: "36px 5%" }}>
+          <div style={{ fontSize: "0.65rem", letterSpacing: "0.15em", textTransform: "uppercase", color: tema.warna, fontWeight: 800, marginBottom: 7 }}>TEMA RUMAH · {tema.no}</div>
+          <h1 style={{ fontFamily: "'Playfair Display',serif", fontSize: "clamp(1.8rem,4.5vw,3rem)", fontWeight: 900, color: "#fff", margin: "0 0 11px", lineHeight: 1.1, textShadow: "0 2px 18px rgba(0,0,0,.5)" }}>{tema.nama}</h1>
+          <p style={{ fontSize: "0.88rem", color: "rgba(255,255,255,.78)", maxWidth: 520, lineHeight: 1.65, margin: "0 0 20px" }}>{tema.deskripsi}</p>
+          <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+            {tema.fitur.map((f, i) => (
+              <span key={i} style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "6px 13px", background: "rgba(255,255,255,.12)", backdropFilter: "blur(8px)", border: "1px solid rgba(255,255,255,.2)", borderRadius: 20, color: "#fff", fontSize: "0.76rem", fontWeight: 600 }}>{f.icon} {f.label}</span>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Tab Bar */}
+      <div style={{ background: "#fff", borderBottom: "2px solid #F5EDD8", position: "sticky", top: 46, zIndex: 80, overflowX: "auto" }}>
+        <div style={{ display: "flex", padding: "0 4%", minWidth: "max-content" }}>
+          {tabs.map(t => (
+            <button key={t.id} onClick={() => setActiveTab(t.id)} style={{
+              padding: "13px 18px", border: "none", borderBottom: activeTab === t.id ? `3px solid #2E3D3F` : "3px solid transparent",
+              background: activeTab === t.id ? "#fff" : "#FDFAF4", color: activeTab === t.id ? "#2E3D3F" : "#5A6A6C",
+              fontWeight: activeTab === t.id ? 800 : 500, fontSize: "0.78rem", cursor: "pointer", transition: "all .15s", whiteSpace: "nowrap",
+            }}>{t.label}</button>
+          ))}
+        </div>
+      </div>
+
+      {/* Tab Content */}
+      <div style={{ padding: "44px 5% 56px", maxWidth: 1060, margin: "0 auto" }}>
+
+        {activeTab === "denah" && (
+          <div>
+            <div style={{ fontSize: "0.65rem", letterSpacing: ".12em", textTransform: "uppercase", color: tema.warna, fontWeight: 800, marginBottom: 7 }}>DENAH RUANG</div>
+            <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.7rem", fontWeight: 800, color: "#2E3D3F", margin: "0 0 12px" }}>Tata Ruang {tema.nama}</h2>
+            <p style={{ color: "#5A6A6C", lineHeight: 1.7, maxWidth: 660, marginBottom: 28, fontSize: "0.88rem" }}>{tema.detail.denah.desc}</p>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(180px,1fr))", gap: 14 }}>
+              {tema.detail.denah.ruangan.map((r, i) => (
+                <div key={i} style={{ background: "#fff", borderRadius: 12, padding: "18px", boxShadow: "0 2px 10px rgba(0,0,0,.07)", border: "1px solid #F5EDD8", transition: "all .2s" }}
+                  onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = "0 6px 20px rgba(0,0,0,.11)"; }}
+                  onMouseLeave={e => { e.currentTarget.style.transform = ""; e.currentTarget.style.boxShadow = "0 2px 10px rgba(0,0,0,.07)"; }}>
+                  <div style={{ fontSize: "1.6rem", marginBottom: 9 }}>{r.ikon}</div>
+                  <div style={{ fontSize: "0.88rem", fontWeight: 700, color: "#2E3D3F", marginBottom: 5 }}>{r.nama}</div>
+                  <span style={{ display: "inline-block", fontSize: "0.7rem", fontWeight: 700, color: tema.warna, background: tema.warna + "18", borderRadius: 20, padding: "2px 10px" }}>{r.ukuran}</span>
+                </div>
+              ))}
+            </div>
+            <div style={{ marginTop: 30, background: "#FDFAF4", borderRadius: 14, padding: "22px 26px", border: "1px solid #F5EDD8" }}>
+              <div style={{ fontSize: "0.65rem", letterSpacing: ".1em", textTransform: "uppercase", color: "#5A6A6C", fontWeight: 700, marginBottom: 14 }}>Ilustrasi Denah (Skematik)</div>
+              <div style={{ display: "grid", gridTemplateColumns: "3fr 2fr", gap: 4, maxWidth: 480 }}>
+                {tema.detail.denah.ruangan.slice(0, 6).map((r, i) => (
+                  <div key={i} style={{ background: i === 0 ? tema.warna + "20" : "#fff", border: `1.5px solid ${i === 0 ? tema.warna : "#E8DCC8"}`, borderRadius: 6, padding: "9px 12px", gridColumn: i === 0 ? "1 / -1" : undefined }}>
+                    <div style={{ fontSize: "0.7rem", fontWeight: 700, color: "#2E3D3F" }}>{r.nama}</div>
+                    <div style={{ fontSize: "0.62rem", color: "#5A6A6C" }}>{r.ukuran}</div>
+                  </div>
+                ))}
+              </div>
+              <p style={{ fontSize: "0.62rem", color: "#aaa", marginTop: 10 }}>* Denah skematik ilustrasi. Denah aktual disesuaikan kebutuhan & lahan.</p>
+            </div>
+          </div>
+        )}
+
+        {activeTab === "exterior" && (
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 40, alignItems: "start" }}>
+            <div>
+              <div style={{ fontSize: "0.65rem", letterSpacing: ".12em", textTransform: "uppercase", color: tema.warna, fontWeight: 800, marginBottom: 7 }}>EKSTERIOR</div>
+              <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.7rem", fontWeight: 800, color: "#2E3D3F", margin: "0 0 14px" }}>Tampak Luar {tema.nama}</h2>
+              <p style={{ color: "#5A6A6C", lineHeight: 1.75, marginBottom: 22, fontSize: "0.88rem" }}>{tema.detail.exterior.desc}</p>
+              <div style={{ display: "flex", flexDirection: "column", gap: 9 }}>
+                {tema.detail.exterior.poin.map((p, i) => <PoinItem key={i} text={p} />)}
+              </div>
+            </div>
+            <div>
+              <img src={tema.img} alt={tema.nama + " eksterior"} style={{ width: "100%", height: 320, objectFit: "cover", borderRadius: 14, boxShadow: "0 8px 28px rgba(0,0,0,.14)" }} onError={e => e.target.style.display = "none"} />
+              <div style={{ marginTop: 14, background: "#FDFAF4", borderRadius: 11, padding: "14px 18px", border: `1px solid ${tema.warna}30` }}>
+                <div style={{ fontSize: "0.65rem", fontWeight: 700, letterSpacing: ".1em", textTransform: "uppercase", color: tema.warna, marginBottom: 8 }}>Warna Dominan</div>
+                <div style={{ display: "flex", gap: 8 }}>
+                  {[tema.warna, "#2E3D3F", "#F5EDD8", "#FDFAF4"].map((c, i) => (
+                    <div key={i} style={{ width: 34, height: 34, borderRadius: 8, background: c, border: "2px solid rgba(0,0,0,.08)" }} />
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {activeTab === "interior" && (
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 40, alignItems: "start" }}>
+            <div>
+              <img src={tema.img} alt={tema.nama + " interior"} style={{ width: "100%", height: 320, objectFit: "cover", borderRadius: 14, boxShadow: "0 8px 28px rgba(0,0,0,.14)", filter: "brightness(.9) saturate(1.1)" }} onError={e => e.target.style.display = "none"} />
+              <div style={{ marginTop: 14, background: "#FDFAF4", borderRadius: 11, padding: "14px 18px", border: "1px solid #F5EDD8" }}>
+                <div style={{ fontSize: "0.65rem", fontWeight: 700, letterSpacing: ".1em", textTransform: "uppercase", color: "#5A6A6C", marginBottom: 9 }}>Ruangan Unggulan</div>
+                <div style={{ display: "flex", gap: 7, flexWrap: "wrap" }}>
+                  {tema.detail.denah.ruangan.slice(0, 4).map((r, i) => (
+                    <span key={i} style={{ fontSize: "0.74rem", padding: "4px 12px", borderRadius: 20, background: tema.warna + "18", color: "#2E3D3F", fontWeight: 600 }}>{r.ikon} {r.nama}</span>
+                  ))}
+                </div>
+              </div>
+            </div>
+            <div>
+              <div style={{ fontSize: "0.65rem", letterSpacing: ".12em", textTransform: "uppercase", color: tema.warna, fontWeight: 800, marginBottom: 7 }}>INTERIOR</div>
+              <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.7rem", fontWeight: 800, color: "#2E3D3F", margin: "0 0 14px" }}>Dalam Rumah {tema.nama}</h2>
+              <p style={{ color: "#5A6A6C", lineHeight: 1.75, marginBottom: 22, fontSize: "0.88rem" }}>{tema.detail.interior.desc}</p>
+              <div style={{ display: "flex", flexDirection: "column", gap: 9 }}>
+                {tema.detail.interior.poin.map((p, i) => <PoinItem key={i} text={p} />)}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {activeTab === "harga" && (
+          <div>
+            <div style={{ fontSize: "0.65rem", letterSpacing: ".12em", textTransform: "uppercase", color: tema.warna, fontWeight: 800, marginBottom: 7 }}>PAKET HARGA</div>
+            <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.7rem", fontWeight: 800, color: "#2E3D3F", margin: "0 0 12px" }}>Harga & RAB {tema.nama}</h2>
+            <p style={{ color: "#5A6A6C", lineHeight: 1.7, maxWidth: 580, marginBottom: 28, fontSize: "0.88rem" }}>Pilih paket yang sesuai kebutuhan dan budget Anda.</p>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(260px,1fr))", gap: 18, marginBottom: 36 }}>
+              {tema.detail.harga.paket.map((p, i) => (
+                <div key={i} style={{ background: "#fff", borderRadius: 14, border: `2px solid ${i === 1 ? tema.warna : "#F5EDD8"}`, overflow: "hidden", boxShadow: i === 1 ? `0 8px 28px ${tema.warna}20` : "0 2px 10px rgba(0,0,0,.06)", transition: "all .25s" }}
+                  onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-3px)"; e.currentTarget.style.boxShadow = `0 12px 32px rgba(0,0,0,.1)`; }}
+                  onMouseLeave={e => { e.currentTarget.style.transform = ""; e.currentTarget.style.boxShadow = i === 1 ? `0 8px 28px ${tema.warna}20` : "0 2px 10px rgba(0,0,0,.06)"; }}>
+                  {i === 1 && <div style={{ background: tema.warna, color: "#fff", fontSize: "0.62rem", fontWeight: 800, letterSpacing: ".1em", textTransform: "uppercase", textAlign: "center", padding: "5px" }}>⭐ PALING POPULER</div>}
+                  <div style={{ padding: "22px" }}>
+                    <div style={{ fontSize: "0.65rem", fontWeight: 700, letterSpacing: ".1em", textTransform: "uppercase", color: tema.warna, marginBottom: 7 }}>PAKET {i === 0 ? "STANDAR" : i === 1 ? "PREMIUM" : "LUXURY"}</div>
+                    <h3 style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.05rem", fontWeight: 800, color: "#2E3D3F", margin: "0 0 5px" }}>{p.nama}</h3>
+                    <div style={{ fontSize: "0.78rem", color: "#5A6A6C", marginBottom: 18 }}>Luas bangunan: {p.luas}</div>
+                    {p.harga === 0
+                      ? <div style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.35rem", fontWeight: 900, color: "#2E3D3F", marginBottom: 14 }}>Hubungi Kami</div>
+                      : <><div style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.45rem", fontWeight: 900, color: tema.warna, lineHeight: 1 }}>Rp {p.harga.toLocaleString("id-ID")}</div>
+                        <div style={{ fontSize: "0.72rem", color: "#5A6A6C", marginTop: 2, marginBottom: 14 }}>per meter persegi</div></>
+                    }
+                    <div style={{ borderTop: "1px solid #F5EDD8", paddingTop: 14, display: "flex", flexDirection: "column", gap: 7, marginBottom: 16 }}>
+                      {p.termasuk.map((item, j) => (
+                        <div key={j} style={{ display: "flex", gap: 7, alignItems: "flex-start" }}>
+                          <span style={{ color: tema.warna, fontWeight: 700, fontSize: "0.8rem", flexShrink: 0 }}>✓</span>
+                          <span style={{ fontSize: "0.78rem", color: "#3D5254", lineHeight: 1.4 }}>{item}</span>
+                        </div>
+                      ))}
+                    </div>
+                    <button onClick={onWaOpen} style={{ width: "100%", padding: "10px", borderRadius: 7, border: "none", background: i === 1 ? tema.warna : "linear-gradient(90deg,#2E3D3F,#3D5254)", color: "#fff", fontWeight: 700, fontSize: "0.82rem", cursor: "pointer" }}>
+                      💬 Konsultasi Paket Ini
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div style={{ background: "#FDFAF4", borderRadius: 12, padding: "22px 26px", border: "1px solid #F5EDD8" }}>
+              <div style={{ fontWeight: 800, color: "#2E3D3F", marginBottom: 12, fontSize: "0.9rem" }}>📋 Catatan RAB & Harga</div>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
+                {["Harga belum termasuk biaya IMB/PBG", "Harga belum termasuk biaya utilitas (air, listrik)", "Bahan material dapat diganti sesuai budget", "Harga valid per tahun berjalan, hubungi untuk update", "Pembayaran bertahap sesuai progress pekerjaan", "Garansi pekerjaan 6–12 bulan sesuai kontrak"].map((c, i) => (
+                  <div key={i} style={{ display: "flex", gap: 7, alignItems: "flex-start" }}>
+                    <span style={{ color: "#C9AA71", fontWeight: 700 }}>·</span>
+                    <span style={{ fontSize: "0.78rem", color: "#5A6A6C", lineHeight: 1.5 }}>{c}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {activeTab === "kalkulator" && (
+          <div style={{ maxWidth: 540, margin: "0 auto" }}>
+            <div style={{ marginBottom: 28, textAlign: "center" }}>
+              <div style={{ fontSize: "0.65rem", letterSpacing: ".12em", textTransform: "uppercase", color: tema.warna, fontWeight: 800, marginBottom: 7 }}>ESTIMASI BIAYA</div>
+              <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.7rem", fontWeight: 800, color: "#2E3D3F", margin: "0 0 12px" }}>Kalkulator Lahan</h2>
+              <p style={{ color: "#5A6A6C", lineHeight: 1.7, fontSize: "0.88rem" }}>Masukkan luas bangunan Anda untuk estimasi biaya paket {tema.nama}.</p>
+            </div>
+            <KalkulatorLuas tema={tema} />
+            <div style={{ marginTop: 22, textAlign: "center" }}>
+              <button onClick={onWaOpen} style={{ padding: "14px 32px", background: `linear-gradient(135deg,${tema.warna},#C9AA71)`, color: "#fff", border: "none", borderRadius: 8, fontWeight: 800, fontSize: "0.88rem", cursor: "pointer", letterSpacing: ".06em" }}>
+                💬 KONSULTASI GRATIS →
+              </button>
+              <p style={{ fontSize: "0.72rem", color: "#5A6A6C", marginTop: 10 }}>Gratis konsultasi · Respon cepat · Solusi tepat</p>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* CTA Footer */}
+      <div style={{ background: "linear-gradient(135deg,#1a2a2a 0%,#2E3D3F 60%)", padding: "46px 5%", display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center" }}>
+        <div style={{ fontSize: "0.65rem", letterSpacing: ".15em", textTransform: "uppercase", color: tema.warna, fontWeight: 800, marginBottom: 8 }}>SIAP MEMULAI?</div>
+        <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: "clamp(1.35rem,4vw,2.1rem)", fontWeight: 800, color: "#fff", margin: "0 0 14px", lineHeight: 1.25 }}>
+          Wujudkan Rumah {tema.nama} Impian Anda
+        </h2>
+        <p style={{ color: "rgba(255,255,255,.6)", maxWidth: 480, lineHeight: 1.7, marginBottom: 26, fontSize: "0.88rem" }}>
+          Konsultasikan kebutuhan desain rumah Anda dengan tim profesional kami. Gratis, cepat, dan tepat sasaran.
+        </p>
+        <button onClick={onWaOpen} style={{ padding: "15px 34px", background: tema.warna, color: "#fff", border: "none", borderRadius: 7, fontWeight: 800, fontSize: "0.9rem", cursor: "pointer", letterSpacing: ".08em", textTransform: "uppercase", boxShadow: `0 8px 22px ${tema.warna}44` }}>
+          💬 KONSULTASI GRATIS
+        </button>
+      </div>
+    </div>
+  );
+}
+
+/* ── Page: Tema Rumah (Landing + Sub-page router) ── */
+function TemaRumahPage({ onWaOpen, temaSlug, setTemaSlug }) {
+  useEffect(() => { window.scrollTo(0, 0); }, []);
+
+  /* Jika ada slug → tampilkan detail page */
+  if (temaSlug) {
+    return <TemaDetailPage slug={temaSlug} onWaOpen={onWaOpen} onBack={() => setTemaSlug(null)} />;
+  }
+
+  /* Landing /tema-rumah */
+  return (
+    <div style={{ fontFamily: "'Nunito','Segoe UI',sans-serif" }}>
+      {/* Hero */}
+      <div style={{ position: "relative", minHeight: 460, overflow: "hidden", background: "#0f1f1f" }}>
+        <img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=1600&q=85" alt="Tema Rumah Hero"
+          style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", opacity: 0.42 }}
+          onError={e => e.target.style.display = "none"} />
+        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(90deg,rgba(10,25,20,.93) 44%,rgba(10,25,20,.18) 100%)" }} />
+        <div style={{ position: "relative", zIndex: 2, padding: "58px 6% 50px", maxWidth: 620 }}>
+          <div style={{ fontSize: "0.68rem", letterSpacing: "0.18em", textTransform: "uppercase", color: "#C9AA71", fontWeight: 800, marginBottom: 14 }}>TEMA RUMAH</div>
+          <h1 style={{ fontFamily: "'Playfair Display',serif", fontSize: "clamp(1.9rem,5vw,3.2rem)", fontWeight: 900, color: "#fff", lineHeight: 1.1, margin: "0 0 6px" }}>PILIH TEMA RUMAH</h1>
+          <h1 style={{ fontFamily: "'Playfair Display',serif", fontSize: "clamp(1.9rem,5vw,3.2rem)", fontWeight: 900, color: "#C9AA71", lineHeight: 1.1, margin: "0 0 20px" }}>SESUAI KARAKTER ANDA</h1>
+          <p style={{ fontSize: "0.92rem", color: "rgba(255,255,255,.73)", lineHeight: 1.72, marginBottom: 30, maxWidth: 460 }}>
+            Berbagai pilihan tema rumah yang dirancang untuk mewujudkan hunian impian yang estetis, nyaman, dan fungsional.
+          </p>
+          <div style={{ display: "flex", gap: 14, flexWrap: "wrap", alignItems: "center" }}>
+            <button onClick={onWaOpen} style={{ display: "flex", alignItems: "center", gap: 8, padding: "13px 26px", background: "#C9AA71", color: "#fff", border: "none", borderRadius: 4, fontWeight: 800, fontSize: "0.78rem", cursor: "pointer", letterSpacing: ".1em", textTransform: "uppercase", boxShadow: "0 4px 18px rgba(201,170,113,.4)" }}>
+              💬 KONSULTASI GRATIS
+            </button>
+            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+              <span style={{ width: 40, height: 40, borderRadius: "50%", border: "1.5px solid rgba(255,255,255,.45)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "0.68rem", color: "#fff" }}>▶</span>
+              <div>
+                <div style={{ fontSize: "0.68rem", fontWeight: 700, color: "#fff", letterSpacing: ".06em" }}>LIHAT VIDEO</div>
+                <div style={{ fontSize: "0.62rem", color: "rgba(255,255,255,.58)", letterSpacing: ".04em" }}>INSPIRASI TEMA RUMAH</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Tema Cards — alternating layout */}
+      <div style={{ background: "#fff" }}>
+        {TEMA_DATA.map((tema, idx) => {
+          const isEven = idx % 2 === 0;
+          const imgEl = (
+            <div style={{ overflow: "hidden", minHeight: 300 }}>
+              <img src={tema.img} alt={tema.nama} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", transition: "transform .4s" }}
+                onError={e => e.target.style.display = "none"}
+                onMouseEnter={e => e.target.style.transform = "scale(1.04)"}
+                onMouseLeave={e => e.target.style.transform = ""} />
+            </div>
+          );
+          const contentEl = (
+            <div style={{ padding: "44px 46px", display: "flex", flexDirection: "column", justifyContent: "center" }}>
+              <TemaCardContent tema={tema} setTemaSlug={setTemaSlug} />
+            </div>
+          );
+          return (
+            <div key={tema.id} style={{ display: "grid", gridTemplateColumns: "1fr 1fr", borderBottom: "1px solid #F5EDD8", background: idx % 2 === 1 ? "#FDFAF4" : "#fff", transition: "box-shadow .25s" }}
+              onMouseEnter={e => e.currentTarget.style.boxShadow = "0 8px 28px rgba(0,0,0,.08)"}
+              onMouseLeave={e => e.currentTarget.style.boxShadow = ""}>
+              {isEven ? <>{imgEl}{contentEl}</> : <>{contentEl}{imgEl}</>}
+            </div>
+          );
+        })}
+      </div>
+
+      {/* CTA Section */}
+      <div style={{ background: "linear-gradient(135deg,#1a2a2a 0%,#2E3D3F 52%,#3D5254 100%)", padding: "54px 6%", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 40, alignItems: "center" }}>
+        <div>
+          <div style={{ fontSize: "0.65rem", letterSpacing: ".18em", textTransform: "uppercase", color: "#C9AA71", fontWeight: 800, marginBottom: 12 }}>SIAP MEMULAI?</div>
+          <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: "clamp(1.35rem,3.5vw,2rem)", fontWeight: 800, color: "#fff", margin: "0 0 14px", lineHeight: 1.25 }}>
+            Wujudkan Rumah Impian Anda<br />Bersama VASTURA GROUP
+          </h2>
+          <p style={{ fontSize: "0.84rem", color: "rgba(255,255,255,.6)", lineHeight: 1.7 }}>Konsultasikan kebutuhan desain rumah Anda dengan tim profesional kami.</p>
+        </div>
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 14 }}>
+          <button onClick={onWaOpen} style={{ padding: "15px 34px", background: "#C9AA71", color: "#fff", border: "none", borderRadius: 4, fontWeight: 800, fontSize: "0.84rem", cursor: "pointer", letterSpacing: ".1em", textTransform: "uppercase", boxShadow: "0 8px 22px rgba(201,170,113,.32)" }}>
+            💬 KONSULTASI GRATIS
+          </button>
+          <div style={{ display: "flex", gap: 20 }}>
+            {["✅ Gratis Konsultasi", "⚡ Respon Cepat", "🎯 Solusi Tepat"].map((t, i) => (
+              <span key={i} style={{ fontSize: "0.74rem", color: "rgba(255,255,255,.62)", fontWeight: 600 }}>{t}</span>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 /* ── Page: Interior ── */
@@ -10004,6 +10615,7 @@ export default function BricksyTravel() {
   const [canBack, setCanBack] = useState(false);
   const [canFwd,  setCanFwd]  = useState(false);
   const [readPost, setReadPost] = useState(null);
+  const [temaSlug, setTemaSlug] = useState(null);
   const [showLogin, setShowLogin] = useState(false);
   const [comingSoon, setComingSoon] = useState(null); // null | "google" | "apple"
   const [showAdmin, setShowAdmin] = useState(() => getInitialShowAdmin()); // restore dari URL /control-panel
@@ -10550,7 +11162,7 @@ export default function BricksyTravel() {
     spaMaxDepth.current = newDepth; // navigasi baru → hapus forward history
     setCanBack(true);
     setCanFwd(false);
-    setPage(p); setReadPost(null); setActivePaket(null); setMobileMenu(false);
+    setPage(p); setReadPost(null); setActivePaket(null); setTemaSlug(null); setMobileMenu(false);
     window.scrollTo(0, 0);
   };
 
@@ -11702,7 +12314,7 @@ export default function BricksyTravel() {
 
               {/* SUB-SERVICE PAGES */}
               {page === "desainrab"   && <DesainRabPage   onWaOpen={openWaPicker} />}
-              {page === "temarumah"   && <TemaRumahPage   onWaOpen={openWaPicker} />}
+              {page === "temarumah"   && <TemaRumahPage   onWaOpen={openWaPicker} temaSlug={temaSlug} setTemaSlug={setTemaSlug} />}
               {page === "interior"    && <InteriorPage    onWaOpen={openWaPicker} />}
               {page === "pagar"       && <PagarPage       onWaOpen={openWaPicker} />}
               {page === "kanopi"      && <KanopiPage      onWaOpen={openWaPicker} />}
