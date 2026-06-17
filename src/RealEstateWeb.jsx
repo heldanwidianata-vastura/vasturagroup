@@ -1648,6 +1648,145 @@ const DEFAULT_DATA = {
     { id: 4, name: "Dini Rahayu", role: "Event Organizer", quotes: "Kreativitas adalah kunci event yang tak terlupakan.", photo: "https://ui-avatars.com/api/?name=Dini+Rahayu&size=300&background=27ae60&color=fff&bold=true" },
   ],
   users: HARDCODED_USERS.map((u, i) => ({ id: i + 1, ...u, email: `${u.username}@vastura.com`, active: true })),
+
+  /* ── Daftar Tema Rumah (editable via Control Panel) ── */
+  temaRumahItems: [
+    {
+      id: "1", slug: "modern-minimalis", no: "01", nama: "Modern Minimalis",
+      tagline: "Desain simpel, elegan, dan fungsional dengan garis tegas dan warna netral yang menciptakan kesan luas, bersih, dan modern.",
+      deskripsi: "Modern Minimalis adalah filosofi desain yang mengedepankan fungsi di atas dekorasi. Setiap elemen hadir dengan tujuan — tidak ada ornamen berlebihan, hanya garis bersih, material premium, dan cahaya alami yang memaksimalkan kenyamanan hidup.",
+      warna: "#C9AA71",
+      _img: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=900&q=80",
+      fitur: JSON.stringify([
+        { icon: "🏠", label: "Tampilan Modern" }, { icon: "📐", label: "Ruang Lebih Luas" },
+        { icon: "🔧", label: "Perawatan Mudah" }, { icon: "💰", label: "Biaya Efisien" },
+      ]),
+      exteriorDesc: "Fasad flat dengan material plester halus atau panel GRC. Warna dominan abu-abu, putih, atau krem. Jendela frameless besar memaksimalkan pandangan keluar.",
+      exteriorPoin: "Material: GRC, ACP, Kaca Tempered|Atap: Dak beton / genteng metal flat|Warna: Abu-abu, putih, off-white|Kaca frameless panoramik",
+      interiorDesc: "Palet monokromatik dengan aksen kayu natural. Furniture built-in tersembunyi (hidden storage). Plafon tinggi dengan indirect lighting.",
+      interiorPoin: "Plafon: Gypsum doff dengan hidden lamp|Lantai: Granit polished 60×60 atau 80×80|Furnitur: Custom built-in warna putih/abu|Pencahayaan: LED warm white tersembunyi",
+      denahDesc: "Layout open-plan yang memaksimalkan sirkulasi udara dan cahaya alami. Ruang tamu, ruang makan, dan dapur terhubung tanpa sekat masif.",
+      denahRuangan: JSON.stringify([
+        { nama: "Ruang Tamu", ukuran: "5 × 6 m", ikon: "🛋️" }, { nama: "Ruang Makan", ukuran: "4 × 4 m", ikon: "🍽️" },
+        { nama: "Dapur", ukuran: "3 × 4 m", ikon: "🍳" }, { nama: "Master Bedroom", ukuran: "5 × 5 m", ikon: "🛏️" },
+        { nama: "Kamar 2", ukuran: "4 × 4 m", ikon: "🛏️" }, { nama: "Kamar Mandi", ukuran: "2 × 3 m", ikon: "🚿" },
+        { nama: "Teras Depan", ukuran: "3 × 2 m", ikon: "🏡" }, { nama: "Carport", ukuran: "3 × 6 m", ikon: "🚗" },
+      ]),
+      paket: JSON.stringify([
+        { nama: "Paket Minimalis Standar", luas: "60–80 m²", harga: 350000, termasuk: ["Desain arsitektur", "RAB lengkap", "Pengawasan 1 bulan"] },
+        { nama: "Paket Minimalis Premium", luas: "80–120 m²", harga: 450000, termasuk: ["Desain arsitektur + interior", "RAB + BQ", "Pengawasan penuh", "3D visualisasi"] },
+        { nama: "Paket Minimalis Luxury", luas: "120 m² ke atas", harga: 600000, termasuk: ["Full desain arsitektur, interior, landscape", "RAB + BQ detail", "Pengawasan penuh + QC", "3D + animasi walkthrough"] },
+      ]),
+    },
+    {
+      id: "2", slug: "skandinavian", no: "02", nama: "Skandinavian",
+      tagline: "Kombinasi warna terang, material alami, dan pencahayaan maksimal untuk menciptakan suasana hangat, nyaman, dan menenangkan.",
+      deskripsi: "Skandinavian lahir dari kebutuhan masyarakat Eropa Utara untuk memaksimalkan cahaya di iklim yang gelap. Hasilnya: desain yang bersih, hangat, dan penuh fungsi — dipadu material alami kayu, kain lembut, dan tanaman hijau yang menyegarkan.",
+      warna: "#7a9e87",
+      _img: "https://images.unsplash.com/photo-1449844908441-8829872d2607?w=900&q=80",
+      fitur: JSON.stringify([
+        { icon: "🌿", label: "Natural & Hangat" }, { icon: "💡", label: "Pencahayaan Optimal" },
+        { icon: "🛋️", label: "Ruang Nyaman" }, { icon: "✨", label: "Estetika Abadi" },
+      ]),
+      exteriorDesc: "Atap pelana tinggi dengan kemiringan besar, ciri khas arsitektur Skandinavia. Material kayu cedar atau WPC pada fasad memberikan kehangatan visual.",
+      exteriorPoin: "Atap: Pelana tinggi / metal berprofil|Material: Kayu cedar, WPC, bata putih|Warna: Putih, krem, abu muda, coklat kayu|Jendela: Besar, double-glass, frame putih",
+      interiorDesc: "Palet putih bersih dengan sentuhan kayu pinus terang. Tekstil lembut: wol, linen, katun. Tanaman indoor menjadi elemen dekorasi utama.",
+      interiorPoin: "Lantai: Vinyl kayu atau parket pinus terang|Tekstil: Karpet wol, bantal linen, tirai sheer|Aksen: Tanaman pot, lilin, benda-benda craft|Furnitur: Kaki kayu runcing, bentuk organik",
+      denahDesc: "Konsep 'Hygge' — menciptakan sudut-sudut nyaman di setiap ruang. Reading nook, cozy corner, dan dapur yang menjadi jantung rumah.",
+      denahRuangan: JSON.stringify([
+        { nama: "Ruang Tamu", ukuran: "5 × 5 m", ikon: "🛋️" }, { nama: "Ruang Makan", ukuran: "4 × 3.5 m", ikon: "🍽️" },
+        { nama: "Dapur Hygge", ukuran: "3.5 × 4 m", ikon: "🍳" }, { nama: "Master Bedroom", ukuran: "4.5 × 5 m", ikon: "🛏️" },
+        { nama: "Kamar 2", ukuran: "3.5 × 4 m", ikon: "🛏️" }, { nama: "Reading Nook", ukuran: "2 × 2 m", ikon: "📚" },
+        { nama: "Kamar Mandi", ukuran: "2.5 × 3 m", ikon: "🚿" }, { nama: "Teras Belakang", ukuran: "4 × 3 m", ikon: "🌿" },
+      ]),
+      paket: JSON.stringify([
+        { nama: "Paket Skandinavia Standar", luas: "60–80 m²", harga: 380000, termasuk: ["Desain arsitektur gaya Skandinavia", "RAB material impor lokal", "3D visualisasi 2 view"] },
+        { nama: "Paket Skandinavia Premium", luas: "80–130 m²", harga: 490000, termasuk: ["Full desain + interior Hygge", "RAB + spesifikasi material", "Pengawasan penuh", "3D + mood board"] },
+        { nama: "Paket Skandinavia Luxury", luas: "130 m² ke atas", harga: 650000, termasuk: ["Desain arsitektur, interior & landscape nordic", "Furniture custom Skandinavia", "Pengawasan + QC ketat", "Animasi walkthrough 3D"] },
+      ]),
+    },
+    {
+      id: "3", slug: "industrial", no: "03", nama: "Industrial",
+      tagline: "Gaya maskulin dengan material ekspos seperti beton, besi, dan kayu yang menghadirkan kesan tegas, unik, dan berkarakter.",
+      deskripsi: "Industrial mengambil estetika pabrik dan gudang lama — beton ekspos, pipa besi terbuka, bata merah mentah — dan mentransformasinya menjadi hunian yang berkarakter kuat.",
+      warna: "#6b7c8a",
+      _img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=900&q=80",
+      fitur: JSON.stringify([
+        { icon: "⚡", label: "Kesan Maskulin" }, { icon: "🏗️", label: "Material Ekspos" },
+        { icon: "🛡️", label: "Tahan Lama" }, { icon: "🔩", label: "Desain Unik" },
+      ]),
+      exteriorDesc: "Fasad bata ekspos atau plester kasar (exposed concrete). Material metal Corten atau besi hitam sebagai aksen. Jendela berukuran besar dengan frame besi hitam.",
+      exteriorPoin: "Material: Bata ekspos, beton kasar, besi hitam|Atap: Spandek, metal, atau dak beton|Warna: Abu gelap, hitam, coklat tua, merah bata|Detail: Pipa galvanis ekspos, baut terlihat",
+      interiorDesc: "Plafon beton ekspos atau duct AC yang terlihat. Lantai polished concrete atau vinyl semen. Furnitur besi+kayu kombinasi. Pencahayaan Edison bulb dan track light.",
+      interiorPoin: "Lantai: Polished concrete atau floor hardener|Plafon: Ekspos rangka baja dan duct|Pencahayaan: Edison bulb, track light hitam|Furnitur: Kombinasi besi hollow dan kayu solid",
+      denahDesc: "Open space besar tanpa banyak sekat — tipikal ruang industri yang dikonversi. Mezzanine sebagai ruang tidur atau kerja memberikan kedalaman visual yang dramatik.",
+      denahRuangan: JSON.stringify([
+        { nama: "Ruang Utama (Open)", ukuran: "8 × 10 m", ikon: "🏭" }, { nama: "Dapur Industrial", ukuran: "4 × 5 m", ikon: "🍳" },
+        { nama: "Master Bedroom", ukuran: "5 × 6 m", ikon: "🛏️" }, { nama: "Mezzanine / Studio", ukuran: "4 × 5 m", ikon: "🎨" },
+        { nama: "Kamar Mandi", ukuran: "3 × 3 m", ikon: "🚿" }, { nama: "Workshop / Garasi", ukuran: "6 × 5 m", ikon: "🔧" },
+        { nama: "Ruang Tamu", ukuran: "5 × 6 m", ikon: "🛋️" }, { nama: "Teras / Balkon", ukuran: "3 × 4 m", ikon: "🏗️" },
+      ]),
+      paket: JSON.stringify([
+        { nama: "Paket Industrial Standar", luas: "70–100 m²", harga: 400000, termasuk: ["Desain industrial + finishing ekspos", "RAB + spesifikasi material", "3D visualisasi"] },
+        { nama: "Paket Industrial Premium", luas: "100–150 m²", harga: 520000, termasuk: ["Full desain + interior industrial", "Custom metalwork & carpentry", "Pengawasan penuh", "3D + foto render"] },
+        { nama: "Paket Industrial Luxury", luas: "150 m² ke atas", harga: 700000, termasuk: ["Full package desain + eksekusi", "Material impor + custom fabrication", "QC ketat + garansi pekerjaan", "Dokumentasi foto & video"] },
+      ]),
+    },
+    {
+      id: "4", slug: "tropical-modern", no: "04", nama: "Tropical Modern",
+      tagline: "Menggabungkan elemen alam dan desain modern untuk sirkulasi udara maksimal dan suasana yang sejuk serta menyegarkan.",
+      deskripsi: "Tropical Modern adalah jawaban sempurna untuk iklim Indonesia. Menggabungkan arsitektur kontemporer dengan elemen tropis — atap lebar, cross-ventilation, material alam, dan tanaman hijau lebat.",
+      warna: "#4a8c6f",
+      _img: "https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=900&q=80",
+      fitur: JSON.stringify([
+        { icon: "🌴", label: "Sejuk & Alami" }, { icon: "💨", label: "Sirkulasi Udara Baik" },
+        { icon: "⚡", label: "Hemat Energi" }, { icon: "🌞", label: "Nyaman Setiap Saat" },
+      ]),
+      exteriorDesc: "Atap lebar menjorok (overhang) melindungi dari hujan dan panas. Void dan balkon terbuka untuk ventilasi silang. Material kayu, batu alam, dan tanaman sebagai komponen desain utama.",
+      exteriorPoin: "Atap: Genteng clay, metal, atau dak dengan taman|Material: Batu andesit, kayu ulin, bambu laminate|Vegetasi: Tanaman fasad, vertical garden, kolam koi|Void: Cross-ventilation pada massa bangunan",
+      interiorDesc: "Material alam mendominasi — kayu, rotan, batu alam. Palette hijau, coklat, krem. Ruangan mengalir ke taman atau kolam melalui bukaan besar.",
+      interiorPoin: "Lantai: Batu andesit, kayu atau terracotta|Plafon: Kayu ekspos atau anyaman bambu|Warna: Hijau, krem, coklat kayu, abu batu|Furniture: Rotan, kayu jati, material alam",
+      denahDesc: "Zoning yang memisahkan area publik dan privat dengan buffer tanaman. Ruang tengah terbuka ke halaman (courtyard).",
+      denahRuangan: JSON.stringify([
+        { nama: "Teras & Carport", ukuran: "5 × 6 m", ikon: "🌴" }, { nama: "Ruang Tamu", ukuran: "5 × 6 m", ikon: "🛋️" },
+        { nama: "Ruang Keluarga", ukuran: "5 × 5 m", ikon: "👨‍👩‍👧" }, { nama: "Dapur + Makan", ukuran: "4 × 6 m", ikon: "🍳" },
+        { nama: "Master Bedroom", ukuran: "5 × 5 m", ikon: "🛏️" }, { nama: "Kamar 2 & 3", ukuran: "3.5 × 4 m", ikon: "🛏️" },
+        { nama: "Kolam & Taman", ukuran: "4 × 6 m", ikon: "🌊" }, { nama: "Musholla", ukuran: "2.5 × 3 m", ikon: "🕌" },
+      ]),
+      paket: JSON.stringify([
+        { nama: "Paket Tropical Standar", luas: "80–120 m²", harga: 420000, termasuk: ["Desain tropical modern", "Material lokal premium", "RAB + landscape dasar"] },
+        { nama: "Paket Tropical Premium", luas: "120–180 m²", harga: 550000, termasuk: ["Full desain + interior + landscape", "Material alam pilihan", "Kolam ikan / kolam renang mini", "Pengawasan penuh"] },
+        { nama: "Paket Tropical Luxury", luas: "180 m² ke atas", harga: 750000, termasuk: ["Villa-grade tropical design", "Material import + custom joinery", "Kolam renang + taman profesional", "Full management proyek"] },
+      ]),
+    },
+    {
+      id: "5", slug: "luxury-modern", no: "05", nama: "Luxury Modern",
+      tagline: "Desain eksklusif dengan detail premium, material berkualitas tinggi, dan tata ruang mewah yang memancarkan prestise.",
+      deskripsi: "Luxury Modern adalah puncak ekspresi arsitektur kontemporer. Setiap detail dirancang dengan presisi — material marmer impor, smart home system, kolam renang infinity edge, dan pencahayaan arsitektural.",
+      warna: "#8B6914",
+      _img: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=900&q=80",
+      fitur: JSON.stringify([
+        { icon: "👑", label: "Eksklusif" }, { icon: "💎", label: "Material Premium" },
+        { icon: "🏆", label: "Detail Mewah" }, { icon: "⭐", label: "Prestise Tinggi" },
+      ]),
+      exteriorDesc: "Volume asimetris yang dramatik dengan material marmer eksterior, ACP metalik, dan panel GRC premium. Kolam renang dengan overflow edge sebagai focal point.",
+      exteriorPoin: "Material: Marmer, ACP brushed gold, GRC custom|Kolam: Infinity pool dengan overflow edge|Pencahayaan: Arsitektural LED + uplighting taman|Smart gate: Akses otomatis dengan sistem keamanan",
+      interiorDesc: "Material marmer impor pada lantai dan dinding. Plafon double-volume di ruang tamu. Tangga floating dengan railing kaca frameless.",
+      interiorPoin: "Lantai: Marmer Statuario atau Calacatta impor|Dinding: Feature wall marmer + backlit panel|Tangga: Floating staircase + LED step-light|Smart Home: Lighting, AC, security terintegrasi",
+      denahDesc: "Layout mewah dengan foyer grand entrance, ruang tamu double-volume, ruang makan formal terpisah, dan home theater.",
+      denahRuangan: JSON.stringify([
+        { nama: "Grand Foyer", ukuran: "4 × 5 m", ikon: "🚪" }, { nama: "Ruang Tamu (Double Vol.)", ukuran: "8 × 9 m", ikon: "🛋️" },
+        { nama: "Ruang Makan Formal", ukuran: "5 × 7 m", ikon: "🍽️" }, { nama: "Dapur Premium", ukuran: "5 × 5 m", ikon: "🍳" },
+        { nama: "Master Suite", ukuran: "7 × 8 m", ikon: "👑" }, { nama: "Walk-in Closet", ukuran: "4 × 4 m", ikon: "👗" },
+        { nama: "Home Theater", ukuran: "5 × 6 m", ikon: "🎬" }, { nama: "Kolam Renang", ukuran: "4 × 10 m", ikon: "🏊" },
+      ]),
+      paket: JSON.stringify([
+        { nama: "Paket Luxury Standar", luas: "150–200 m²", harga: 750000, termasuk: ["Full desain arsitektur mewah", "Material premium lokal", "Interior semi-furnished", "RAB + BQ detail"] },
+        { nama: "Paket Luxury Premium", luas: "200–300 m²", harga: 1000000, termasuk: ["Full design + interior + landscape mewah", "Material marmer impor + custom joinery", "Smart home system", "Kolam renang + taman profesional"] },
+        { nama: "Paket Luxury Ultra", luas: "300 m² ke atas", harga: 0, termasuk: ["Desain custom sepenuhnya", "Material world-class tanpa batas", "Full project management", "Konsultasi eksklusif, by appointment only"] },
+      ]),
+    },
+  ],
 };
 
 /* ─────────────── GLOBAL STYLES ─────────────── */
@@ -10175,8 +10314,36 @@ function TemaCardContent({ tema, setTemaSlug }) {
 }
 
 /* ── Detail Page per tema ── */
-function TemaDetailPage({ slug, onWaOpen, onBack }) {
-  const tema = TEMA_DATA.find(t => t.slug === slug);
+/* ── Helper: konversi item CMS → format TEMA_DATA ── */
+function parseTemaItem(item) {
+  const tryJSON = (str, fallback) => {
+    try { return JSON.parse(str); } catch { return fallback; }
+  };
+  const splitPoin = (str) => (str || "").split("|").map(s => s.trim()).filter(Boolean);
+  return {
+    id:       item.id,
+    slug:     item.slug || item.nama?.toLowerCase().replace(/\s+/g, "-") || String(item.id),
+    no:       item.no || String(item.id).padStart(2, "0"),
+    nama:     item.nama || "",
+    tagline:  item.tagline || "",
+    deskripsi:item.deskripsi || "",
+    warna:    item.warna || "#C9AA71",
+    img:      item._img || "",
+    fitur:    tryJSON(item.fitur, []),
+    detail: {
+      exterior:  { desc: item.exteriorDesc || "", poin: splitPoin(item.exteriorPoin) },
+      interior:  { desc: item.interiorDesc || "", poin: splitPoin(item.interiorPoin) },
+      denah:     { desc: item.denahDesc || "", ruangan: tryJSON(item.denahRuangan, []) },
+      harga:     { paket: tryJSON(item.paket, []) },
+    },
+  };
+}
+
+function TemaDetailPage({ slug, onWaOpen, onBack, temaItems }) {
+  /* Coba ambil dari CMS dulu, fallback ke TEMA_DATA hardcoded */
+  const cmsItems = (temaItems || []).map(parseTemaItem);
+  const allTema  = cmsItems.length > 0 ? cmsItems : TEMA_DATA;
+  const tema     = allTema.find(t => t.slug === slug);
   const [activeTab, setActiveTab] = useState("denah");
 
   useEffect(() => { window.scrollTo(0, 0); }, [slug]);
@@ -10410,12 +10577,16 @@ function TemaDetailPage({ slug, onWaOpen, onBack }) {
 }
 
 /* ── Page: Tema Rumah (Landing + Sub-page router) ── */
-function TemaRumahPage({ onWaOpen, temaSlug, setTemaSlug }) {
+function TemaRumahPage({ onWaOpen, temaSlug, setTemaSlug, temaItems }) {
   useEffect(() => { window.scrollTo(0, 0); }, []);
+
+  /* Gunakan data CMS jika ada, fallback ke TEMA_DATA hardcoded */
+  const cmsItems   = (temaItems || []).map(parseTemaItem);
+  const activeData = cmsItems.length > 0 ? cmsItems : TEMA_DATA;
 
   /* Jika ada slug → tampilkan detail page */
   if (temaSlug) {
-    return <TemaDetailPage slug={temaSlug} onWaOpen={onWaOpen} onBack={() => setTemaSlug(null)} />;
+    return <TemaDetailPage slug={temaSlug} onWaOpen={onWaOpen} onBack={() => setTemaSlug(null)} temaItems={temaItems} />;
   }
 
   /* Landing /tema-rumah */
@@ -10451,7 +10622,7 @@ function TemaRumahPage({ onWaOpen, temaSlug, setTemaSlug }) {
 
       {/* Tema Cards — alternating layout */}
       <div style={{ background: "#fff" }}>
-        {TEMA_DATA.map((tema, idx) => {
+        {activeData.map((tema, idx) => {
           const isEven = idx % 2 === 0;
           const imgEl = (
             <div style={{ overflow: "hidden", minHeight: 300 }}>
@@ -12647,7 +12818,7 @@ export default function BricksyTravel() {
 
               {/* SUB-SERVICE PAGES */}
               {page === "desainrab"   && <DesainRabPage   onWaOpen={openWaPicker} />}
-              {page === "temarumah"   && <TemaRumahPage   onWaOpen={openWaPicker} temaSlug={temaSlug} setTemaSlug={setTemaSlug} />}
+              {page === "temarumah"   && <TemaRumahPage   onWaOpen={openWaPicker} temaSlug={temaSlug} setTemaSlug={setTemaSlug} temaItems={data.temaRumahItems} />}
               {page === "interior"    && <InteriorPage    onWaOpen={openWaPicker} />}
               {page === "pagar"       && <PagarPage       onWaOpen={openWaPicker} />}
               {page === "kanopi"      && <KanopiPage      onWaOpen={openWaPicker} />}
@@ -12917,10 +13088,20 @@ export default function BricksyTravel() {
                   crudKey="temaRumahItems"
                   crudLabel="Daftar Tema Rumah"
                   crudFields={[
+                    { key: "no", label: "Nomor Urut (contoh: 01)", type: "text", placeholder: "01" },
                     { key: "nama", label: "Nama Tema", type: "text", placeholder: "contoh: Modern Minimalis" },
+                    { key: "slug", label: "Slug URL (huruf kecil, tanda hubung)", type: "text", placeholder: "modern-minimalis" },
                     { key: "tagline", label: "Tagline / Keterangan Singkat", type: "text", placeholder: "Elegan, bersih, fungsional" },
                     { key: "deskripsi", label: "Deskripsi Tema", type: "textarea", placeholder: "Detail karakteristik tema..." },
-                    { key: "warna", label: "Warna Aksen (HEX)", type: "text", placeholder: "#2E3D3F" },
+                    { key: "warna", label: "Warna Aksen (HEX, contoh: #C9AA71)", type: "text", placeholder: "#C9AA71" },
+                    { key: "fitur", label: "Fitur (JSON array: [{\"icon\":\"🏠\",\"label\":\"Tampilan Modern\"},...] maks 4 item)", type: "textarea", placeholder: '[{"icon":"🏠","label":"Tampilan Modern"},{"icon":"📐","label":"Ruang Lebih Luas"}]' },
+                    { key: "exteriorDesc", label: "Deskripsi Eksterior", type: "textarea", placeholder: "Deskripsi tampilan luar bangunan..." },
+                    { key: "exteriorPoin", label: "Poin-poin Eksterior (pisahkan dengan tanda |)", type: "textarea", placeholder: "Material: GRC, ACP|Atap: Dak beton|Warna: Abu-abu, putih" },
+                    { key: "interiorDesc", label: "Deskripsi Interior", type: "textarea", placeholder: "Deskripsi tampilan dalam bangunan..." },
+                    { key: "interiorPoin", label: "Poin-poin Interior (pisahkan dengan tanda |)", type: "textarea", placeholder: "Lantai: Granit 60×60|Plafon: Gypsum doff|Furnitur: Custom built-in" },
+                    { key: "denahDesc", label: "Deskripsi Denah Ruang", type: "textarea", placeholder: "Deskripsi layout dan tata ruang..." },
+                    { key: "denahRuangan", label: "Daftar Ruangan (JSON array: [{\"nama\":\"Ruang Tamu\",\"ukuran\":\"5 × 6 m\",\"ikon\":\"🛋️\"},...] )", type: "textarea", placeholder: '[{"nama":"Ruang Tamu","ukuran":"5 × 6 m","ikon":"🛋️"}]' },
+                    { key: "paket", label: "Paket Harga (JSON array: [{\"nama\":\"Paket Standar\",\"luas\":\"60–80 m²\",\"harga\":350000,\"termasuk\":[\"item1\"]},...] — harga dalam Rupiah/m², 0 = Hubungi Kami)", type: "textarea", placeholder: '[{"nama":"Paket Standar","luas":"60–80 m²","harga":350000,"termasuk":["Desain arsitektur","RAB lengkap"]}]' },
                   ]}
                   crudHasImage
                 />
