@@ -1649,143 +1649,187 @@ const DEFAULT_DATA = {
   ],
   users: HARDCODED_USERS.map((u, i) => ({ id: i + 1, ...u, email: `${u.username}@vastura.com`, active: true })),
 
-  /* ── Daftar Tema Rumah (editable via Control Panel) ── */
+  /* ═══════════════════════════════════════════════
+     ABOUT PAGE — semua konten editable
+  ═══════════════════════════════════════════════ */
+  aboutStats: [
+    { id:"s1", num:"500+", label:"Klien Puas" },
+    { id:"s2", num:"7+",   label:"Tahun Pengalaman" },
+    { id:"s3", num:"100+", label:"Event Sukses" },
+    { id:"s4", num:"24/7", label:"Layanan Support" },
+  ],
+  aboutValues: [
+    { id:"v1", icon:"✈️", title:"Expert Travel Planning",    desc:"Kami merencanakan setiap detail perjalanan Anda — dari tiket, akomodasi, hingga tur lokal — agar Anda bisa menikmati tanpa khawatir." },
+    { id:"v2", icon:"🛋️", title:"Interior",                 desc:"Transformasi ruang hidup Anda dengan desain interior profesional — dari konsep, pemilihan material, hingga pemasangan." },
+    { id:"v3", icon:"🔧", title:"Exterior",                  desc:"Pagar, kanopi, aluminium, dan landscape yang mempercantik fasad dan halaman rumah Anda secara menyeluruh." },
+    { id:"v4", icon:"🛡️", title:"Terpercaya & Aman",        desc:"Kepercayaan klien adalah prioritas kami. Setiap layanan dirancang dengan standar keamanan dan profesionalisme tinggi." },
+    { id:"v5", icon:"🌟", title:"Pengalaman Bertahun-tahun", desc:"Didukung tim berpengalaman yang telah melayani ratusan klien puas di seluruh Indonesia." },
+    { id:"v6", icon:"💬", title:"Layanan 24/7",              desc:"Tim customer service kami siap membantu kapan saja, memastikan setiap pertanyaan dan kebutuhan Anda terpenuhi." },
+  ],
+  aboutTimeline: [
+    { id:"t1", year:"2018", title:"VASTURA GROUP Berdiri",       desc:"Didirikan dengan visi memberikan layanan travel & event berkualitas di Malang." },
+    { id:"t2", year:"2019", title:"Ekspansi Interior & Exterior", desc:"Membuka divisi Interior dan Exterior yang langsung mendapat respons positif dari pasar." },
+    { id:"t3", year:"2021", title:"100+ Klien",                  desc:"Mencapai 100+ klien puas meskipun pandemi, dengan inovasi layanan virtual event." },
+    { id:"t4", year:"2023", title:"Platform Digital",             desc:"Meluncurkan platform digital untuk memudahkan pemesanan dan komunikasi dengan klien." },
+    { id:"t5", year:"2025", title:"Berkembang Pesat",             desc:"Hadir di berbagai kota besar Indonesia dengan jaringan mitra lokal yang kuat." },
+  ],
+  aboutLayanan: [
+    { id:"l1", icon:"🛋️", title:"Interior",    desc:"Desain interior modern, nyaman dan fungsional sesuai kebutuhan Anda.",          img:"https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=600&q=80", slug:"interior" },
+    { id:"l2", icon:"🏠", title:"Eksterior",   desc:"Desain eksterior menarik, kokoh dan estetis.",                                   img:"https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&q=80", slug:"eksterior" },
+    { id:"l3", icon:"📐", title:"Desain & RAB",desc:"Desain arsitektur lengkap dengan RAB yang akurat.",                              img:"https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=600&q=80", slug:"desainrab" },
+    { id:"l4", icon:"🌿", title:"Landscape",   desc:"Taman indah dan asri yang menyatu dengan hunian Anda.",                         img:"https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=600&q=80", slug:"landscape" },
+    { id:"l5", icon:"🪟", title:"Aluminium",   desc:"Kusen, pintu & jendela aluminium berkualitas tinggi.",                          img:"https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80", slug:"aluminium" },
+    { id:"l6", icon:"🏗️", title:"Kanopi",      desc:"Kanopi kuat, modern dan tahan segala cuaca.",                                   img:"https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?w=600&q=80", slug:"kanopi" },
+  ],
+  aboutVisi: "Menjadi perusahaan travel dan organizer terkemuka di Indonesia yang dikenal atas pelayanan profesional, kreativitas, dan kemampuan mewujudkan momen-momen tak terlupakan bagi setiap klien.",
+  aboutMisi: "Memberikan layanan terbaik dengan standar profesional tinggi|Memastikan kepuasan klien di setiap momen yang kami tangani|Berinovasi dalam layanan travel & event secara berkelanjutan|Membangun kepercayaan jangka panjang bersama klien dan mitra",
+
+  /* ═══════════════════════════════════════════════
+     DESAIN & RAB PAGE — semua konten editable
+  ═══════════════════════════════════════════════ */
+  desainRabProses: [
+    { id:"p1", no:"01", icon:"👥", label:"Konsultasi",    desc:"Konsultasi kebutuhan, konsep desain & budget awal." },
+    { id:"p2", no:"02", icon:"📍", label:"Survey Lokasi", desc:"Survey lokasi untuk pengambilan data dan analisa." },
+    { id:"p3", no:"03", icon:"💡", label:"Konsep Desain", desc:"Pembuatan konsep desain sesuai kebutuhan Anda." },
+    { id:"p4", no:"04", icon:"✏️", label:"Revisi Desain", desc:"Revisi desain hingga sesuai dengan keinginan." },
+    { id:"p5", no:"05", icon:"📋", label:"Final Drawing",  desc:"Penyelesaian gambar kerja dan dokumen lengkap." },
+    { id:"p6", no:"06", icon:"💰", label:"RAB & Estimasi", desc:"Perhitungan RAB detail dan estimasi biaya." },
+  ],
+  desainRabDapatkan: [
+    { id:"d1", icon:"🏠", title:"Denah Ruangan",         desc:"Denah arsitektur dengan ukuran yang presisi dan detail." },
+    { id:"d2", icon:"📄", title:"Gambar Kerja Lengkap",  desc:"Gambar kerja teknis untuk panduan pelaksanaan konstruksi." },
+    { id:"d3", icon:"📐", title:"Tampak & Potongan",     desc:"Tampak depan, samping, belakang dan potongan bangunan." },
+    { id:"d4", icon:"📊", title:"RAB Detail",            desc:"Rincian anggaran biaya material dan upah secara transparan." },
+    { id:"d5", icon:"🖥️", title:"3D Rendering",          desc:"Visualisasi 3D eksterior & interior realistis dan detail." },
+    { id:"d6", icon:"🔄", title:"Konsultasi & Revisi",   desc:"Revisi desain fleksibel sampai Anda puas dengan hasilnya." },
+  ],
+  desainRabGaleri: [
+    { id:"g1", label:"Desain Rumah Modern 2 Lantai",  luas:"220 m²", _img:"https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&q=80" },
+    { id:"g2", label:"Desain Rumah Minimalis",         luas:"150 m²", _img:"https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=600&q=80" },
+    { id:"g3", label:"Desain Rumah Classic Modern",    luas:"300 m²", _img:"https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=600&q=80" },
+    { id:"g4", label:"Desain Villa Tropis Modern",     luas:"450 m²", _img:"https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?w=600&q=80" },
+    { id:"g5", label:"Desain Rumah Industrial",        luas:"180 m²", _img:"https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=600&q=80" },
+  ],
+  desainRabPaket: [
+    { id:"pk1", label:"PAKET BASIC",    tag:"",              sub:"Cocok untuk rumah kecil / minimalis",    harga:"6.000",  satuan:"/m²", isRekomendasi:false, fitur:"Denah Arsitektur|Tampak Depan|3D Eksterior|RAB Estimasi|2x Revisi" },
+    { id:"pk2", label:"PAKET STANDARD", tag:"REKOMENDASI",   sub:"Cocok untuk rumah tinggal",              harga:"9.000",  satuan:"/m²", isRekomendasi:true,  fitur:"Denah Arsitektur|Tampak & Potongan|3D Eksterior & Interior|Gambar Kerja Lengkap|RAB Detail|3x Revisi" },
+    { id:"pk3", label:"PAKET PREMIUM",  tag:"",              sub:"Cocok untuk rumah mewah / villa",        harga:"12.000", satuan:"/m²", isRekomendasi:false, fitur:"Semua Fitur Standard|Video Animasi 3D|Detail Struktur|Konsultasi Intensif|Revisi Unlimited" },
+  ],
+  desainRabFaq: [
+    { id:"f1", q:"Berapa lama waktu pengerjaan desain?",        a:"Tergantung kompleksitas proyek. Rata-rata 7–14 hari kerja untuk desain rumah standar, dan 14–30 hari untuk proyek besar/villa." },
+    { id:"f2", q:"Apakah bisa hanya desain tanpa RAB?",          a:"Bisa. Kami menyediakan layanan desain saja tanpa RAB, maupun RAB saja tanpa desain sesuai kebutuhan Anda." },
+    { id:"f3", q:"Apakah revisi desain dikenakan biaya?",        a:"Revisi sudah termasuk dalam paket sesuai jumlah yang tertera. Revisi di luar batas paket dikenakan biaya tambahan." },
+    { id:"f4", q:"Apakah melayani seluruh Indonesia?",           a:"Ya, kami melayani desain untuk seluruh wilayah Indonesia secara online maupun dengan survei langsung untuk area tertentu." },
+    { id:"f5", q:"Apakah sudah termasuk perhitungan struktur?",  a:"Untuk Paket Premium sudah termasuk. Paket Basic dan Standard bisa ditambahkan dengan biaya terpisah." },
+    { id:"f6", q:"Bagaimana cara memulai proyek?",               a:"Hubungi kami via WhatsApp, lakukan konsultasi gratis, lalu kami akan menyiapkan proposal dan timeline pengerjaan." },
+  ],
+
+  /* ═══════════════════════════════════════════════
+     SUB-LAYANAN PAGES (Interior, Pagar, Kanopi, Aluminium, Landscape)
+     Tiap page: title, subtitle, icon, heroColor, sections (array of {tag,title,items})
+  ═══════════════════════════════════════════════ */
+  interiorPage: {
+    title:"Desain Interior", subtitle:"Wujudkan interior impian Anda — dari teras hingga kamar tidur, setiap ruang dirancang indah, fungsional, dan mencerminkan kepribadian Anda.", icon:"🛋️", heroColor:"linear-gradient(135deg,#4a1942 0%,#7b3f8a 50%,#b565c0 100%)",
+    sections: [
+      { id:"sec1", tag:"Ruang Utama", title:"Layanan Desain Interior Lengkap", items:[
+        { id:"i1", icon:"🏠", title:"Teras",        desc:"Desain teras yang menyambut — kombinasi material, pencahayaan, dan tanaman hias yang harmonis." },
+        { id:"i2", icon:"🛋️", title:"Ruang Tamu",  desc:"Furnitur elegan, layout optimal, dan dekorasi yang menciptakan kesan pertama yang kuat." },
+        { id:"i3", icon:"👨‍👩‍👧", title:"Ruang Keluarga", desc:"Ruang hangat dan fungsional untuk quality time keluarga dengan konsep cozy living." },
+        { id:"i4", icon:"🛏️", title:"Kamar Tidur", desc:"Desain kamar nyaman dan personal — dari master bedroom hingga kamar anak yang kreatif." },
+        { id:"i5", icon:"🚿", title:"Kamar Mandi",  desc:"Bathroom modern dengan material premium, pencahayaan spa, dan layout yang efisien." },
+        { id:"i6", icon:"🍳", title:"Kitchen Set",   desc:"Dapur impian dengan kabinet custom, material tahan lama, dan ergonomis untuk memasak." },
+        { id:"i7", icon:"🔲", title:"Plafon",        desc:"Desain plafon kreatif — drop ceiling, gypsum, kayu, dan pencahayaan tersembunyi (hidden lamp)." },
+        { id:"i8", icon:"📺", title:"Backdrop TV",   desc:"Feature wall TV yang menjadi focal point ruangan — material batu alam, kayu, panel 3D, dll." },
+      ]},
+      { id:"sec2", tag:"Proses Kerja", title:"Alur Proyek Interior", items:[
+        { id:"i9",  icon:"📝", title:"Survei & Ukur",        desc:"Tim kami datang langsung ke lokasi untuk mengukur dan memahami kondisi lapangan." },
+        { id:"i10", icon:"🎨", title:"Konsep & 3D Visual",   desc:"Presentasi desain 3D lengkap sebelum eksekusi agar Anda tahu hasilnya." },
+        { id:"i11", icon:"🔨", title:"Eksekusi & Finishing",  desc:"Pengerjaan oleh tenaga ahli berpengalaman dengan quality control ketat." },
+      ]},
+    ],
+  },
+  pagarPage: {
+    title:"Pagar Rumah", subtitle:"Pagar bukan sekadar keamanan — ini ekspresi pertama rumah Anda. Kami menghadirkan pagar yang kokoh, estetis, dan sesuai karakter hunian Anda.", icon:"🔒", heroColor:"linear-gradient(135deg,#1a1a2e 0%,#16213e 50%,#0f3460 100%)",
+    sections: [
+      { id:"sec1", tag:"Jenis Pagar", title:"Pilihan Model & Material Pagar", items:[
+        { id:"p1", icon:"🔩", title:"Pagar Besi Tempa",         desc:"Klasik dan kokoh, tersedia berbagai motif ornamen — cocok untuk rumah gaya Eropa atau klasik." },
+        { id:"p2", icon:"⬛", title:"Pagar Hollow Minimalis",   desc:"Garis bersih dari besi hollow finishing cat duco — populer untuk rumah modern minimalis." },
+        { id:"p3", icon:"🌿", title:"Pagar Panel Kayu + Besi",  desc:"Kombinasi kayu solid/WPC dengan rangka besi — kesan natural namun tetap modern dan tahan lama." },
+        { id:"p4", icon:"🧱", title:"Pagar Tembok + Ornamen",   desc:"Dinding bata/batako finishing plester dengan sisipan ornamen besi atau roster kerawang." },
+        { id:"p5", icon:"🚪", title:"Pintu Gerbang Otomatis",   desc:"Gate geser/lipat dengan motor otomatis dan remote control untuk kemudahan akses." },
+        { id:"p6", icon:"✨", title:"Pagar Stainless Steel",    desc:"Tampilan premium dan anti karat — pilihan ideal untuk hunian mewah dan eksklusif." },
+      ]},
+      { id:"sec2", tag:"Proses", title:"Cara Kerja Kami", items:[
+        { id:"p7", icon:"📐", title:"Survei & Desain",    desc:"Pengukuran lokasi dan presentasi desain 3D sebelum produksi dimulai." },
+        { id:"p8", icon:"🏭", title:"Fabrikasi Custom",   desc:"Diproduksi sesuai ukuran dan desain di workshop kami dengan standar kualitas tinggi." },
+        { id:"p9", icon:"🔧", title:"Instalasi & Finishing", desc:"Pemasangan oleh tim terlatih, termasuk cat, galvanis, atau finishing sesuai spesifikasi." },
+      ]},
+    ],
+  },
+  kanopiPage: {
+    title:"Kanopi", subtitle:"Lindungi carport, teras, atau area outdoor Anda dengan kanopi yang fungsional dan estetis. Berbagai material dan model tersedia sesuai kebutuhan.", icon:"🏗️", heroColor:"linear-gradient(135deg,#1b4332 0%,#2d6a4f 50%,#52b788 100%)",
+    sections: [
+      { id:"sec1", tag:"Jenis Kanopi", title:"Model & Material Kanopi", items:[
+        { id:"k1", icon:"🔵", title:"Kanopi Polycarbonate",        desc:"Ringan, tembus cahaya, dan tahan UV. Pilihan paling populer untuk carport dan teras." },
+        { id:"k2", icon:"🔩", title:"Kanopi Rangka Besi Hollow",   desc:"Struktur kokoh dari besi hollow galvanis dengan penutup atap polycarbonate atau spandek." },
+        { id:"k3", icon:"🌊", title:"Kanopi Alderon / UPVC",       desc:"Material anti karat, ringan, dan estetis — tidak perlu cat ulang, perawatan minimal." },
+        { id:"k4", icon:"🏠", title:"Kanopi Atap Kaca",            desc:"Tampilan premium dan modern, memaksimalkan cahaya alami sekaligus terlindungi dari hujan." },
+        { id:"k5", icon:"🎨", title:"Kanopi Custom Laser Cut",     desc:"Ornamen plat besi dengan pola custom dipotong laser untuk sentuhan artistik yang unik." },
+        { id:"k6", icon:"🔑", title:"Kanopi Alderon (HPL)",        desc:"Panel HPL berwarna-warni untuk tampilan modern dan colorful sesuai selera." },
+      ]},
+      { id:"sec2", tag:"Area Aplikasi", title:"Dimana Kanopi Dipasang?", items:[
+        { id:"k7", icon:"🚗", title:"Carport / Garasi",         desc:"Pelindung kendaraan dari panas dan hujan sekaligus mempercantik area depan rumah." },
+        { id:"k8", icon:"☕", title:"Teras Belakang / Balkon",  desc:"Jadikan teras sebagai ruang outdoor yang nyaman sepanjang hari sepanjang tahun." },
+        { id:"k9", icon:"🏪", title:"Ruko & Komersial",         desc:"Kanopi teras ruko, restoran, atau kafe yang meningkatkan daya tarik eksterior bisnis." },
+      ]},
+    ],
+  },
+  aluminiumPage: {
+    title:"Aluminium", subtitle:"Kusen, pintu, jendela, dan partisi aluminium berkualitas tinggi — ringan, anti karat, dan tersedia dalam berbagai profil dan warna finishing.", icon:"🔲", heroColor:"linear-gradient(135deg,#2b2d42 0%,#555b6e 50%,#8d99ae 100%)",
+    sections: [
+      { id:"sec1", tag:"Produk Aluminium", title:"Rangkaian Produk Aluminium Kami", items:[
+        { id:"a1", icon:"🪟", title:"Kusen & Jendela Aluminium",     desc:"Anti karat, tidak perlu dicat ulang, dan tersedia sistem swing, casement, maupun sliding." },
+        { id:"a2", icon:"🚪", title:"Pintu Aluminium",                desc:"Ringan namun kuat — pilihan ideal untuk pintu kamar mandi, balkon, dan eksterior." },
+        { id:"a3", icon:"🔲", title:"Partisi Aluminium & Kaca",       desc:"Pembatas ruang kantor atau rumah yang elegan dan mudah disesuaikan." },
+        { id:"a4", icon:"🌿", title:"Fasad Aluminium Composite",      desc:"ACP (Aluminium Composite Panel) untuk cladding fasad eksterior modern dan premium." },
+        { id:"a5", icon:"🏠", title:"Canopy Aluminium",               desc:"Kanopi dari profil aluminium ekstrusi — ringan, anti karat, dan estetis." },
+        { id:"a6", icon:"📐", title:"Railing & Handrail",             desc:"Pegangan tangga dan railing balkon dari aluminium finishing powder coat aneka warna." },
+      ]},
+      { id:"sec2", tag:"Keunggulan", title:"Mengapa Memilih Aluminium?", items:[
+        { id:"a7", icon:"🛡️", title:"Anti Karat & Tahan Lama", desc:"Tidak berkarat meski terpapar hujan dan panas ekstrem — perawatan minimal, usia panjang." },
+        { id:"a8", icon:"⚡",  title:"Ringan & Kuat",           desc:"Ratio kekuatan-bobot tinggi sehingga tidak membebani struktur bangunan." },
+        { id:"a9", icon:"🎨", title:"Aneka Pilihan Warna",      desc:"Finishing powder coat dengan ratusan pilihan warna agar cocok dengan tema hunian Anda." },
+      ]},
+    ],
+  },
+  landscapePage: {
+    title:"Landscape & Taman", subtitle:"Ciptakan taman impian yang asri, hijau, dan menenangkan. Kami menghadirkan desain landscape profesional untuk hunian, perumahan, maupun area komersial.", icon:"🌳", heroColor:"linear-gradient(135deg,#1a472a 0%,#2d6a4f 50%,#40916c 100%)",
+    sections: [
+      { id:"sec1", tag:"Layanan Taman", title:"Layanan Landscape Kami", items:[
+        { id:"ls1", icon:"🌿", title:"Desain Taman Depan",          desc:"Taman depan yang mempercantik fasad rumah — paduan tanaman, batu, dan lampu taman." },
+        { id:"ls2", icon:"🏡", title:"Taman Belakang / Rooftop",    desc:"Oasis pribadi di halaman belakang atau atap rumah untuk relaksasi dan hiburan keluarga." },
+        { id:"ls3", icon:"🌺", title:"Vertical Garden",              desc:"Dinding hijau vertikal sebagai elemen dekoratif sekaligus penyejuk udara di ruang terbatas." },
+        { id:"ls4", icon:"💧", title:"Kolam Hias & Air Mancur",     desc:"Fitur air yang menenangkan — dari kolam ikan koi hingga waterfall minimalis modern." },
+        { id:"ls5", icon:"💡", title:"Lampu Taman & Outdoor Lighting", desc:"Pencahayaan artistik yang memperindah taman di malam hari sekaligus meningkatkan keamanan." },
+        { id:"ls6", icon:"🌱", title:"Perawatan Taman Berkala",     desc:"Jasa perawatan rutin: pemangkasan, pemupukan, penyiraman, dan penggantian tanaman." },
+      ]},
+      { id:"sec2", tag:"Material & Elemen", title:"Elemen Taman Premium", items:[
+        { id:"ls7", icon:"🪨", title:"Batu Alam & Kerikil", desc:"Batu andesit, batu candi, kerikil warna — untuk jalur taman, dinding, dan aksen dekoratif." },
+        { id:"ls8", icon:"🌳", title:"Tanaman Pilihan",     desc:"Seleksi tanaman sesuai iklim lokal — tahan panas, mudah dirawat, dan bernilai estetis tinggi." },
+        { id:"ls9", icon:"🏗️", title:"Pergola & Gazebo",   desc:"Struktur atap taman dari kayu atau besi untuk area duduk yang nyaman di luar ruangan." },
+      ]},
+    ],
+  },
+
+  /* ═══════════════════════════════════════════════
+     TEMA RUMAH — editable via Control Panel
+  ═══════════════════════════════════════════════ */
   temaRumahItems: [
-    {
-      id: "1", slug: "modern-minimalis", no: "01", nama: "Modern Minimalis",
-      tagline: "Desain simpel, elegan, dan fungsional dengan garis tegas dan warna netral yang menciptakan kesan luas, bersih, dan modern.",
-      deskripsi: "Modern Minimalis adalah filosofi desain yang mengedepankan fungsi di atas dekorasi. Setiap elemen hadir dengan tujuan — tidak ada ornamen berlebihan, hanya garis bersih, material premium, dan cahaya alami yang memaksimalkan kenyamanan hidup.",
-      warna: "#C9AA71",
-      _img: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=900&q=80",
-      fitur: JSON.stringify([
-        { icon: "🏠", label: "Tampilan Modern" }, { icon: "📐", label: "Ruang Lebih Luas" },
-        { icon: "🔧", label: "Perawatan Mudah" }, { icon: "💰", label: "Biaya Efisien" },
-      ]),
-      exteriorDesc: "Fasad flat dengan material plester halus atau panel GRC. Warna dominan abu-abu, putih, atau krem. Jendela frameless besar memaksimalkan pandangan keluar.",
-      exteriorPoin: "Material: GRC, ACP, Kaca Tempered|Atap: Dak beton / genteng metal flat|Warna: Abu-abu, putih, off-white|Kaca frameless panoramik",
-      interiorDesc: "Palet monokromatik dengan aksen kayu natural. Furniture built-in tersembunyi (hidden storage). Plafon tinggi dengan indirect lighting.",
-      interiorPoin: "Plafon: Gypsum doff dengan hidden lamp|Lantai: Granit polished 60×60 atau 80×80|Furnitur: Custom built-in warna putih/abu|Pencahayaan: LED warm white tersembunyi",
-      denahDesc: "Layout open-plan yang memaksimalkan sirkulasi udara dan cahaya alami. Ruang tamu, ruang makan, dan dapur terhubung tanpa sekat masif.",
-      denahRuangan: JSON.stringify([
-        { nama: "Ruang Tamu", ukuran: "5 × 6 m", ikon: "🛋️" }, { nama: "Ruang Makan", ukuran: "4 × 4 m", ikon: "🍽️" },
-        { nama: "Dapur", ukuran: "3 × 4 m", ikon: "🍳" }, { nama: "Master Bedroom", ukuran: "5 × 5 m", ikon: "🛏️" },
-        { nama: "Kamar 2", ukuran: "4 × 4 m", ikon: "🛏️" }, { nama: "Kamar Mandi", ukuran: "2 × 3 m", ikon: "🚿" },
-        { nama: "Teras Depan", ukuran: "3 × 2 m", ikon: "🏡" }, { nama: "Carport", ukuran: "3 × 6 m", ikon: "🚗" },
-      ]),
-      paket: JSON.stringify([
-        { nama: "Paket Minimalis Standar", luas: "60–80 m²", harga: 350000, termasuk: ["Desain arsitektur", "RAB lengkap", "Pengawasan 1 bulan"] },
-        { nama: "Paket Minimalis Premium", luas: "80–120 m²", harga: 450000, termasuk: ["Desain arsitektur + interior", "RAB + BQ", "Pengawasan penuh", "3D visualisasi"] },
-        { nama: "Paket Minimalis Luxury", luas: "120 m² ke atas", harga: 600000, termasuk: ["Full desain arsitektur, interior, landscape", "RAB + BQ detail", "Pengawasan penuh + QC", "3D + animasi walkthrough"] },
-      ]),
-    },
-    {
-      id: "2", slug: "skandinavian", no: "02", nama: "Skandinavian",
-      tagline: "Kombinasi warna terang, material alami, dan pencahayaan maksimal untuk menciptakan suasana hangat, nyaman, dan menenangkan.",
-      deskripsi: "Skandinavian lahir dari kebutuhan masyarakat Eropa Utara untuk memaksimalkan cahaya di iklim yang gelap. Hasilnya: desain yang bersih, hangat, dan penuh fungsi — dipadu material alami kayu, kain lembut, dan tanaman hijau yang menyegarkan.",
-      warna: "#7a9e87",
-      _img: "https://images.unsplash.com/photo-1449844908441-8829872d2607?w=900&q=80",
-      fitur: JSON.stringify([
-        { icon: "🌿", label: "Natural & Hangat" }, { icon: "💡", label: "Pencahayaan Optimal" },
-        { icon: "🛋️", label: "Ruang Nyaman" }, { icon: "✨", label: "Estetika Abadi" },
-      ]),
-      exteriorDesc: "Atap pelana tinggi dengan kemiringan besar, ciri khas arsitektur Skandinavia. Material kayu cedar atau WPC pada fasad memberikan kehangatan visual.",
-      exteriorPoin: "Atap: Pelana tinggi / metal berprofil|Material: Kayu cedar, WPC, bata putih|Warna: Putih, krem, abu muda, coklat kayu|Jendela: Besar, double-glass, frame putih",
-      interiorDesc: "Palet putih bersih dengan sentuhan kayu pinus terang. Tekstil lembut: wol, linen, katun. Tanaman indoor menjadi elemen dekorasi utama.",
-      interiorPoin: "Lantai: Vinyl kayu atau parket pinus terang|Tekstil: Karpet wol, bantal linen, tirai sheer|Aksen: Tanaman pot, lilin, benda-benda craft|Furnitur: Kaki kayu runcing, bentuk organik",
-      denahDesc: "Konsep 'Hygge' — menciptakan sudut-sudut nyaman di setiap ruang. Reading nook, cozy corner, dan dapur yang menjadi jantung rumah.",
-      denahRuangan: JSON.stringify([
-        { nama: "Ruang Tamu", ukuran: "5 × 5 m", ikon: "🛋️" }, { nama: "Ruang Makan", ukuran: "4 × 3.5 m", ikon: "🍽️" },
-        { nama: "Dapur Hygge", ukuran: "3.5 × 4 m", ikon: "🍳" }, { nama: "Master Bedroom", ukuran: "4.5 × 5 m", ikon: "🛏️" },
-        { nama: "Kamar 2", ukuran: "3.5 × 4 m", ikon: "🛏️" }, { nama: "Reading Nook", ukuran: "2 × 2 m", ikon: "📚" },
-        { nama: "Kamar Mandi", ukuran: "2.5 × 3 m", ikon: "🚿" }, { nama: "Teras Belakang", ukuran: "4 × 3 m", ikon: "🌿" },
-      ]),
-      paket: JSON.stringify([
-        { nama: "Paket Skandinavia Standar", luas: "60–80 m²", harga: 380000, termasuk: ["Desain arsitektur gaya Skandinavia", "RAB material impor lokal", "3D visualisasi 2 view"] },
-        { nama: "Paket Skandinavia Premium", luas: "80–130 m²", harga: 490000, termasuk: ["Full desain + interior Hygge", "RAB + spesifikasi material", "Pengawasan penuh", "3D + mood board"] },
-        { nama: "Paket Skandinavia Luxury", luas: "130 m² ke atas", harga: 650000, termasuk: ["Desain arsitektur, interior & landscape nordic", "Furniture custom Skandinavia", "Pengawasan + QC ketat", "Animasi walkthrough 3D"] },
-      ]),
-    },
-    {
-      id: "3", slug: "industrial", no: "03", nama: "Industrial",
-      tagline: "Gaya maskulin dengan material ekspos seperti beton, besi, dan kayu yang menghadirkan kesan tegas, unik, dan berkarakter.",
-      deskripsi: "Industrial mengambil estetika pabrik dan gudang lama — beton ekspos, pipa besi terbuka, bata merah mentah — dan mentransformasinya menjadi hunian yang berkarakter kuat.",
-      warna: "#6b7c8a",
-      _img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=900&q=80",
-      fitur: JSON.stringify([
-        { icon: "⚡", label: "Kesan Maskulin" }, { icon: "🏗️", label: "Material Ekspos" },
-        { icon: "🛡️", label: "Tahan Lama" }, { icon: "🔩", label: "Desain Unik" },
-      ]),
-      exteriorDesc: "Fasad bata ekspos atau plester kasar (exposed concrete). Material metal Corten atau besi hitam sebagai aksen. Jendela berukuran besar dengan frame besi hitam.",
-      exteriorPoin: "Material: Bata ekspos, beton kasar, besi hitam|Atap: Spandek, metal, atau dak beton|Warna: Abu gelap, hitam, coklat tua, merah bata|Detail: Pipa galvanis ekspos, baut terlihat",
-      interiorDesc: "Plafon beton ekspos atau duct AC yang terlihat. Lantai polished concrete atau vinyl semen. Furnitur besi+kayu kombinasi. Pencahayaan Edison bulb dan track light.",
-      interiorPoin: "Lantai: Polished concrete atau floor hardener|Plafon: Ekspos rangka baja dan duct|Pencahayaan: Edison bulb, track light hitam|Furnitur: Kombinasi besi hollow dan kayu solid",
-      denahDesc: "Open space besar tanpa banyak sekat — tipikal ruang industri yang dikonversi. Mezzanine sebagai ruang tidur atau kerja memberikan kedalaman visual yang dramatik.",
-      denahRuangan: JSON.stringify([
-        { nama: "Ruang Utama (Open)", ukuran: "8 × 10 m", ikon: "🏭" }, { nama: "Dapur Industrial", ukuran: "4 × 5 m", ikon: "🍳" },
-        { nama: "Master Bedroom", ukuran: "5 × 6 m", ikon: "🛏️" }, { nama: "Mezzanine / Studio", ukuran: "4 × 5 m", ikon: "🎨" },
-        { nama: "Kamar Mandi", ukuran: "3 × 3 m", ikon: "🚿" }, { nama: "Workshop / Garasi", ukuran: "6 × 5 m", ikon: "🔧" },
-        { nama: "Ruang Tamu", ukuran: "5 × 6 m", ikon: "🛋️" }, { nama: "Teras / Balkon", ukuran: "3 × 4 m", ikon: "🏗️" },
-      ]),
-      paket: JSON.stringify([
-        { nama: "Paket Industrial Standar", luas: "70–100 m²", harga: 400000, termasuk: ["Desain industrial + finishing ekspos", "RAB + spesifikasi material", "3D visualisasi"] },
-        { nama: "Paket Industrial Premium", luas: "100–150 m²", harga: 520000, termasuk: ["Full desain + interior industrial", "Custom metalwork & carpentry", "Pengawasan penuh", "3D + foto render"] },
-        { nama: "Paket Industrial Luxury", luas: "150 m² ke atas", harga: 700000, termasuk: ["Full package desain + eksekusi", "Material impor + custom fabrication", "QC ketat + garansi pekerjaan", "Dokumentasi foto & video"] },
-      ]),
-    },
-    {
-      id: "4", slug: "tropical-modern", no: "04", nama: "Tropical Modern",
-      tagline: "Menggabungkan elemen alam dan desain modern untuk sirkulasi udara maksimal dan suasana yang sejuk serta menyegarkan.",
-      deskripsi: "Tropical Modern adalah jawaban sempurna untuk iklim Indonesia. Menggabungkan arsitektur kontemporer dengan elemen tropis — atap lebar, cross-ventilation, material alam, dan tanaman hijau lebat.",
-      warna: "#4a8c6f",
-      _img: "https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=900&q=80",
-      fitur: JSON.stringify([
-        { icon: "🌴", label: "Sejuk & Alami" }, { icon: "💨", label: "Sirkulasi Udara Baik" },
-        { icon: "⚡", label: "Hemat Energi" }, { icon: "🌞", label: "Nyaman Setiap Saat" },
-      ]),
-      exteriorDesc: "Atap lebar menjorok (overhang) melindungi dari hujan dan panas. Void dan balkon terbuka untuk ventilasi silang. Material kayu, batu alam, dan tanaman sebagai komponen desain utama.",
-      exteriorPoin: "Atap: Genteng clay, metal, atau dak dengan taman|Material: Batu andesit, kayu ulin, bambu laminate|Vegetasi: Tanaman fasad, vertical garden, kolam koi|Void: Cross-ventilation pada massa bangunan",
-      interiorDesc: "Material alam mendominasi — kayu, rotan, batu alam. Palette hijau, coklat, krem. Ruangan mengalir ke taman atau kolam melalui bukaan besar.",
-      interiorPoin: "Lantai: Batu andesit, kayu atau terracotta|Plafon: Kayu ekspos atau anyaman bambu|Warna: Hijau, krem, coklat kayu, abu batu|Furniture: Rotan, kayu jati, material alam",
-      denahDesc: "Zoning yang memisahkan area publik dan privat dengan buffer tanaman. Ruang tengah terbuka ke halaman (courtyard).",
-      denahRuangan: JSON.stringify([
-        { nama: "Teras & Carport", ukuran: "5 × 6 m", ikon: "🌴" }, { nama: "Ruang Tamu", ukuran: "5 × 6 m", ikon: "🛋️" },
-        { nama: "Ruang Keluarga", ukuran: "5 × 5 m", ikon: "👨‍👩‍👧" }, { nama: "Dapur + Makan", ukuran: "4 × 6 m", ikon: "🍳" },
-        { nama: "Master Bedroom", ukuran: "5 × 5 m", ikon: "🛏️" }, { nama: "Kamar 2 & 3", ukuran: "3.5 × 4 m", ikon: "🛏️" },
-        { nama: "Kolam & Taman", ukuran: "4 × 6 m", ikon: "🌊" }, { nama: "Musholla", ukuran: "2.5 × 3 m", ikon: "🕌" },
-      ]),
-      paket: JSON.stringify([
-        { nama: "Paket Tropical Standar", luas: "80–120 m²", harga: 420000, termasuk: ["Desain tropical modern", "Material lokal premium", "RAB + landscape dasar"] },
-        { nama: "Paket Tropical Premium", luas: "120–180 m²", harga: 550000, termasuk: ["Full desain + interior + landscape", "Material alam pilihan", "Kolam ikan / kolam renang mini", "Pengawasan penuh"] },
-        { nama: "Paket Tropical Luxury", luas: "180 m² ke atas", harga: 750000, termasuk: ["Villa-grade tropical design", "Material import + custom joinery", "Kolam renang + taman profesional", "Full management proyek"] },
-      ]),
-    },
-    {
-      id: "5", slug: "luxury-modern", no: "05", nama: "Luxury Modern",
-      tagline: "Desain eksklusif dengan detail premium, material berkualitas tinggi, dan tata ruang mewah yang memancarkan prestise.",
-      deskripsi: "Luxury Modern adalah puncak ekspresi arsitektur kontemporer. Setiap detail dirancang dengan presisi — material marmer impor, smart home system, kolam renang infinity edge, dan pencahayaan arsitektural.",
-      warna: "#8B6914",
-      _img: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=900&q=80",
-      fitur: JSON.stringify([
-        { icon: "👑", label: "Eksklusif" }, { icon: "💎", label: "Material Premium" },
-        { icon: "🏆", label: "Detail Mewah" }, { icon: "⭐", label: "Prestise Tinggi" },
-      ]),
-      exteriorDesc: "Volume asimetris yang dramatik dengan material marmer eksterior, ACP metalik, dan panel GRC premium. Kolam renang dengan overflow edge sebagai focal point.",
-      exteriorPoin: "Material: Marmer, ACP brushed gold, GRC custom|Kolam: Infinity pool dengan overflow edge|Pencahayaan: Arsitektural LED + uplighting taman|Smart gate: Akses otomatis dengan sistem keamanan",
-      interiorDesc: "Material marmer impor pada lantai dan dinding. Plafon double-volume di ruang tamu. Tangga floating dengan railing kaca frameless.",
-      interiorPoin: "Lantai: Marmer Statuario atau Calacatta impor|Dinding: Feature wall marmer + backlit panel|Tangga: Floating staircase + LED step-light|Smart Home: Lighting, AC, security terintegrasi",
-      denahDesc: "Layout mewah dengan foyer grand entrance, ruang tamu double-volume, ruang makan formal terpisah, dan home theater.",
-      denahRuangan: JSON.stringify([
-        { nama: "Grand Foyer", ukuran: "4 × 5 m", ikon: "🚪" }, { nama: "Ruang Tamu (Double Vol.)", ukuran: "8 × 9 m", ikon: "🛋️" },
-        { nama: "Ruang Makan Formal", ukuran: "5 × 7 m", ikon: "🍽️" }, { nama: "Dapur Premium", ukuran: "5 × 5 m", ikon: "🍳" },
-        { nama: "Master Suite", ukuran: "7 × 8 m", ikon: "👑" }, { nama: "Walk-in Closet", ukuran: "4 × 4 m", ikon: "👗" },
-        { nama: "Home Theater", ukuran: "5 × 6 m", ikon: "🎬" }, { nama: "Kolam Renang", ukuran: "4 × 10 m", ikon: "🏊" },
-      ]),
-      paket: JSON.stringify([
-        { nama: "Paket Luxury Standar", luas: "150–200 m²", harga: 750000, termasuk: ["Full desain arsitektur mewah", "Material premium lokal", "Interior semi-furnished", "RAB + BQ detail"] },
-        { nama: "Paket Luxury Premium", luas: "200–300 m²", harga: 1000000, termasuk: ["Full design + interior + landscape mewah", "Material marmer impor + custom joinery", "Smart home system", "Kolam renang + taman profesional"] },
-        { nama: "Paket Luxury Ultra", luas: "300 m² ke atas", harga: 0, termasuk: ["Desain custom sepenuhnya", "Material world-class tanpa batas", "Full project management", "Konsultasi eksklusif, by appointment only"] },
-      ]),
-    },
+    { id:"1", slug:"modern-minimalis", no:"01", nama:"Modern Minimalis", tagline:"Desain simpel, elegan, dan fungsional dengan garis tegas dan warna netral yang menciptakan kesan luas, bersih, dan modern.", deskripsi:"Modern Minimalis adalah filosofi desain yang mengedepankan fungsi di atas dekorasi. Setiap elemen hadir dengan tujuan — tidak ada ornamen berlebihan, hanya garis bersih, material premium, dan cahaya alami yang memaksimalkan kenyamanan hidup.", warna:"#C9AA71", _img:"https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=900&q=80", fitur:JSON.stringify([{icon:"🏠",label:"Tampilan Modern"},{icon:"📐",label:"Ruang Lebih Luas"},{icon:"🔧",label:"Perawatan Mudah"},{icon:"💰",label:"Biaya Efisien"}]), exteriorDesc:"Fasad flat dengan material plester halus atau panel GRC. Warna dominan abu-abu, putih, atau krem.", exteriorPoin:"Material: GRC, ACP, Kaca Tempered|Atap: Dak beton / genteng metal flat|Warna: Abu-abu, putih, off-white|Kaca frameless panoramik", interiorDesc:"Palet monokromatik dengan aksen kayu natural. Furniture built-in tersembunyi. Plafon tinggi dengan indirect lighting.", interiorPoin:"Plafon: Gypsum doff dengan hidden lamp|Lantai: Granit polished 60×60 atau 80×80|Furnitur: Custom built-in warna putih/abu|Pencahayaan: LED warm white tersembunyi", denahDesc:"Layout open-plan yang memaksimalkan sirkulasi udara dan cahaya alami.", denahRuangan:JSON.stringify([{nama:"Ruang Tamu",ukuran:"5 × 6 m",ikon:"🛋️"},{nama:"Ruang Makan",ukuran:"4 × 4 m",ikon:"🍽️"},{nama:"Dapur",ukuran:"3 × 4 m",ikon:"🍳"},{nama:"Master Bedroom",ukuran:"5 × 5 m",ikon:"🛏️"},{nama:"Kamar 2",ukuran:"4 × 4 m",ikon:"🛏️"},{nama:"Kamar Mandi",ukuran:"2 × 3 m",ikon:"🚿"},{nama:"Teras Depan",ukuran:"3 × 2 m",ikon:"🏡"},{nama:"Carport",ukuran:"3 × 6 m",ikon:"🚗"}]), paket:JSON.stringify([{nama:"Paket Minimalis Standar",luas:"60–80 m²",harga:350000,termasuk:["Desain arsitektur","RAB lengkap","Pengawasan 1 bulan"]},{nama:"Paket Minimalis Premium",luas:"80–120 m²",harga:450000,termasuk:["Desain arsitektur + interior","RAB + BQ","Pengawasan penuh","3D visualisasi"]},{nama:"Paket Minimalis Luxury",luas:"120 m² ke atas",harga:600000,termasuk:["Full desain arsitektur, interior, landscape","RAB + BQ detail","Pengawasan penuh + QC","3D + animasi walkthrough"]}]) },
+    { id:"2", slug:"skandinavian", no:"02", nama:"Skandinavian", tagline:"Kombinasi warna terang, material alami, dan pencahayaan maksimal untuk menciptakan suasana hangat, nyaman, dan menenangkan.", deskripsi:"Skandinavian lahir dari kebutuhan masyarakat Eropa Utara untuk memaksimalkan cahaya di iklim yang gelap. Hasilnya: desain yang bersih, hangat, dan penuh fungsi.", warna:"#7a9e87", _img:"https://images.unsplash.com/photo-1449844908441-8829872d2607?w=900&q=80", fitur:JSON.stringify([{icon:"🌿",label:"Natural & Hangat"},{icon:"💡",label:"Pencahayaan Optimal"},{icon:"🛋️",label:"Ruang Nyaman"},{icon:"✨",label:"Estetika Abadi"}]), exteriorDesc:"Atap pelana tinggi dengan kemiringan besar, ciri khas arsitektur Skandinavia. Material kayu cedar atau WPC.", exteriorPoin:"Atap: Pelana tinggi / metal berprofil|Material: Kayu cedar, WPC, bata putih|Warna: Putih, krem, abu muda, coklat kayu|Jendela: Besar, double-glass, frame putih", interiorDesc:"Palet putih bersih dengan sentuhan kayu pinus terang. Tekstil lembut: wol, linen, katun.", interiorPoin:"Lantai: Vinyl kayu atau parket pinus terang|Tekstil: Karpet wol, bantal linen, tirai sheer|Aksen: Tanaman pot, lilin, benda-benda craft|Furnitur: Kaki kayu runcing, bentuk organik", denahDesc:"Konsep 'Hygge' — menciptakan sudut-sudut nyaman di setiap ruang. Reading nook, cozy corner.", denahRuangan:JSON.stringify([{nama:"Ruang Tamu",ukuran:"5 × 5 m",ikon:"🛋️"},{nama:"Ruang Makan",ukuran:"4 × 3.5 m",ikon:"🍽️"},{nama:"Dapur Hygge",ukuran:"3.5 × 4 m",ikon:"🍳"},{nama:"Master Bedroom",ukuran:"4.5 × 5 m",ikon:"🛏️"},{nama:"Kamar 2",ukuran:"3.5 × 4 m",ikon:"🛏️"},{nama:"Reading Nook",ukuran:"2 × 2 m",ikon:"📚"},{nama:"Kamar Mandi",ukuran:"2.5 × 3 m",ikon:"🚿"},{nama:"Teras Belakang",ukuran:"4 × 3 m",ikon:"🌿"}]), paket:JSON.stringify([{nama:"Paket Skandinavia Standar",luas:"60–80 m²",harga:380000,termasuk:["Desain arsitektur gaya Skandinavia","RAB material impor lokal","3D visualisasi 2 view"]},{nama:"Paket Skandinavia Premium",luas:"80–130 m²",harga:490000,termasuk:["Full desain + interior Hygge","RAB + spesifikasi material","Pengawasan penuh","3D + mood board"]},{nama:"Paket Skandinavia Luxury",luas:"130 m² ke atas",harga:650000,termasuk:["Desain arsitektur, interior & landscape nordic","Furniture custom Skandinavia","Pengawasan + QC ketat","Animasi walkthrough 3D"]}]) },
+    { id:"3", slug:"industrial", no:"03", nama:"Industrial", tagline:"Gaya maskulin dengan material ekspos seperti beton, besi, dan kayu yang menghadirkan kesan tegas, unik, dan berkarakter.", deskripsi:"Industrial mengambil estetika pabrik dan gudang lama — beton ekspos, pipa besi terbuka, bata merah mentah — dan mentransformasinya menjadi hunian yang berkarakter kuat.", warna:"#6b7c8a", _img:"https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=900&q=80", fitur:JSON.stringify([{icon:"⚡",label:"Kesan Maskulin"},{icon:"🏗️",label:"Material Ekspos"},{icon:"🛡️",label:"Tahan Lama"},{icon:"🔩",label:"Desain Unik"}]), exteriorDesc:"Fasad bata ekspos atau plester kasar. Material metal Corten atau besi hitam sebagai aksen.", exteriorPoin:"Material: Bata ekspos, beton kasar, besi hitam|Atap: Spandek, metal, atau dak beton|Warna: Abu gelap, hitam, coklat tua, merah bata|Detail: Pipa galvanis ekspos, baut terlihat", interiorDesc:"Plafon beton ekspos atau duct AC yang terlihat. Lantai polished concrete. Furnitur besi+kayu kombinasi.", interiorPoin:"Lantai: Polished concrete atau floor hardener|Plafon: Ekspos rangka baja dan duct|Pencahayaan: Edison bulb, track light hitam|Furnitur: Kombinasi besi hollow dan kayu solid", denahDesc:"Open space besar tanpa banyak sekat. Mezzanine sebagai ruang tidur atau kerja.", denahRuangan:JSON.stringify([{nama:"Ruang Utama (Open)",ukuran:"8 × 10 m",ikon:"🏭"},{nama:"Dapur Industrial",ukuran:"4 × 5 m",ikon:"🍳"},{nama:"Master Bedroom",ukuran:"5 × 6 m",ikon:"🛏️"},{nama:"Mezzanine / Studio",ukuran:"4 × 5 m",ikon:"🎨"},{nama:"Kamar Mandi",ukuran:"3 × 3 m",ikon:"🚿"},{nama:"Workshop / Garasi",ukuran:"6 × 5 m",ikon:"🔧"},{nama:"Ruang Tamu",ukuran:"5 × 6 m",ikon:"🛋️"},{nama:"Teras / Balkon",ukuran:"3 × 4 m",ikon:"🏗️"}]), paket:JSON.stringify([{nama:"Paket Industrial Standar",luas:"70–100 m²",harga:400000,termasuk:["Desain industrial + finishing ekspos","RAB + spesifikasi material","3D visualisasi"]},{nama:"Paket Industrial Premium",luas:"100–150 m²",harga:520000,termasuk:["Full desain + interior industrial","Custom metalwork & carpentry","Pengawasan penuh","3D + foto render"]},{nama:"Paket Industrial Luxury",luas:"150 m² ke atas",harga:700000,termasuk:["Full package desain + eksekusi","Material impor + custom fabrication","QC ketat + garansi pekerjaan","Dokumentasi foto & video"]}]) },
+    { id:"4", slug:"tropical-modern", no:"04", nama:"Tropical Modern", tagline:"Menggabungkan elemen alam dan desain modern untuk sirkulasi udara maksimal dan suasana yang sejuk serta menyegarkan.", deskripsi:"Tropical Modern adalah jawaban sempurna untuk iklim Indonesia. Menggabungkan arsitektur kontemporer dengan elemen tropis — atap lebar, cross-ventilation, material alam.", warna:"#4a8c6f", _img:"https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=900&q=80", fitur:JSON.stringify([{icon:"🌴",label:"Sejuk & Alami"},{icon:"💨",label:"Sirkulasi Udara Baik"},{icon:"⚡",label:"Hemat Energi"},{icon:"🌞",label:"Nyaman Setiap Saat"}]), exteriorDesc:"Atap lebar menjorok (overhang) melindungi dari hujan dan panas. Material kayu, batu alam, dan tanaman sebagai komponen desain utama.", exteriorPoin:"Atap: Genteng clay, metal, atau dak dengan taman|Material: Batu andesit, kayu ulin, bambu laminate|Vegetasi: Tanaman fasad, vertical garden, kolam koi|Void: Cross-ventilation pada massa bangunan", interiorDesc:"Material alam mendominasi — kayu, rotan, batu alam. Ruangan mengalir ke taman melalui bukaan besar.", interiorPoin:"Lantai: Batu andesit, kayu atau terracotta|Plafon: Kayu ekspos atau anyaman bambu|Warna: Hijau, krem, coklat kayu, abu batu|Furniture: Rotan, kayu jati, material alam", denahDesc:"Zoning yang memisahkan area publik dan privat dengan buffer tanaman. Ruang tengah terbuka ke halaman.", denahRuangan:JSON.stringify([{nama:"Teras & Carport",ukuran:"5 × 6 m",ikon:"🌴"},{nama:"Ruang Tamu",ukuran:"5 × 6 m",ikon:"🛋️"},{nama:"Ruang Keluarga",ukuran:"5 × 5 m",ikon:"👨‍👩‍👧"},{nama:"Dapur + Makan",ukuran:"4 × 6 m",ikon:"🍳"},{nama:"Master Bedroom",ukuran:"5 × 5 m",ikon:"🛏️"},{nama:"Kamar 2 & 3",ukuran:"3.5 × 4 m",ikon:"🛏️"},{nama:"Kolam & Taman",ukuran:"4 × 6 m",ikon:"🌊"},{nama:"Musholla",ukuran:"2.5 × 3 m",ikon:"🕌"}]), paket:JSON.stringify([{nama:"Paket Tropical Standar",luas:"80–120 m²",harga:420000,termasuk:["Desain tropical modern","Material lokal premium","RAB + landscape dasar"]},{nama:"Paket Tropical Premium",luas:"120–180 m²",harga:550000,termasuk:["Full desain + interior + landscape","Material alam pilihan","Kolam ikan / kolam renang mini","Pengawasan penuh"]},{nama:"Paket Tropical Luxury",luas:"180 m² ke atas",harga:750000,termasuk:["Villa-grade tropical design","Material import + custom joinery","Kolam renang + taman profesional","Full management proyek"]}]) },
+    { id:"5", slug:"luxury-modern", no:"05", nama:"Luxury Modern", tagline:"Desain eksklusif dengan detail premium, material berkualitas tinggi, dan tata ruang mewah yang memancarkan prestise.", deskripsi:"Luxury Modern adalah puncak ekspresi arsitektur kontemporer. Setiap detail dirancang dengan presisi — material marmer impor, smart home system, kolam renang infinity edge.", warna:"#8B6914", _img:"https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=900&q=80", fitur:JSON.stringify([{icon:"👑",label:"Eksklusif"},{icon:"💎",label:"Material Premium"},{icon:"🏆",label:"Detail Mewah"},{icon:"⭐",label:"Prestise Tinggi"}]), exteriorDesc:"Volume asimetris yang dramatik dengan material marmer eksterior, ACP metalik, dan panel GRC premium.", exteriorPoin:"Material: Marmer, ACP brushed gold, GRC custom|Kolam: Infinity pool dengan overflow edge|Pencahayaan: Arsitektural LED + uplighting taman|Smart gate: Akses otomatis dengan sistem keamanan", interiorDesc:"Material marmer impor pada lantai dan dinding. Plafon double-volume di ruang tamu. Tangga floating.", interiorPoin:"Lantai: Marmer Statuario atau Calacatta impor|Dinding: Feature wall marmer + backlit panel|Tangga: Floating staircase + LED step-light|Smart Home: Lighting, AC, security terintegrasi", denahDesc:"Layout mewah dengan foyer grand entrance, ruang tamu double-volume, ruang makan formal terpisah, dan home theater.", denahRuangan:JSON.stringify([{nama:"Grand Foyer",ukuran:"4 × 5 m",ikon:"🚪"},{nama:"Ruang Tamu (Double Vol.)",ukuran:"8 × 9 m",ikon:"🛋️"},{nama:"Ruang Makan Formal",ukuran:"5 × 7 m",ikon:"🍽️"},{nama:"Dapur Premium",ukuran:"5 × 5 m",ikon:"🍳"},{nama:"Master Suite",ukuran:"7 × 8 m",ikon:"👑"},{nama:"Walk-in Closet",ukuran:"4 × 4 m",ikon:"👗"},{nama:"Home Theater",ukuran:"5 × 6 m",ikon:"🎬"},{nama:"Kolam Renang",ukuran:"4 × 10 m",ikon:"🏊"}]), paket:JSON.stringify([{nama:"Paket Luxury Standar",luas:"150–200 m²",harga:750000,termasuk:["Full desain arsitektur mewah","Material premium lokal","Interior semi-furnished","RAB + BQ detail"]},{nama:"Paket Luxury Premium",luas:"200–300 m²",harga:1000000,termasuk:["Full design + interior + landscape mewah","Material marmer impor + custom joinery","Smart home system","Kolam renang + taman profesional"]},{nama:"Paket Luxury Ultra",luas:"300 m² ke atas",harga:0,termasuk:["Desain custom sepenuhnya","Material world-class tanpa batas","Full project management","Konsultasi eksklusif, by appointment only"]}]) },
   ],
 };
 
@@ -7631,7 +7675,7 @@ function ServicesAdmin({ data, save, notify, uploadToCloudinary, onEditStateChan
 }
 
 /* ─────────────── ABOUT PAGE ─────────────── */
-function AboutPage({ content, images, teamMembers, onWaOpen }) {
+function AboutPage({ content, images, teamMembers, onWaOpen, data }) {
   const [contactForm, setContactForm] = useState({ name: "", email: "", phone: "", subject: "", message: "" });
   const [contactSent, setContactSent] = useState(false);
 
@@ -7653,29 +7697,14 @@ function AboutPage({ content, images, teamMembers, onWaOpen }) {
     setTimeout(() => { setContactSent(false); setContactForm({ name: "", email: "", phone: "", subject: "", message: "" }); }, 4000);
   };
 
-  const values = [
-    { icon: "✈️", title: "Expert Travel Planning", desc: "Kami merencanakan setiap detail perjalanan Anda — dari tiket, akomodasi, hingga tur lokal — agar Anda bisa menikmati tanpa khawatir." },
-    { icon: "🛋️", title: "Interior", desc: "Transformasi ruang hidup Anda dengan desain interior profesional — dari konsep, pemilihan material, hingga pemasangan." },
-    { icon: "🔧", title: "Exterior", desc: "Pagar, kanopi, aluminium, dan landscape yang mempercantik fasad dan halaman rumah Anda secara menyeluruh." },
-    { icon: "🛡️", title: "Terpercaya & Aman", desc: "Kepercayaan klien adalah prioritas kami. Setiap layanan dirancang dengan standar keamanan dan profesionalisme tinggi." },
-    { icon: "🌟", title: "Pengalaman Bertahun-tahun", desc: "Didukung tim berpengalaman yang telah melayani ratusan klien puas di seluruh Indonesia." },
-    { icon: "💬", title: "Layanan 24/7", desc: "Tim customer service kami siap membantu kapan saja, memastikan setiap pertanyaan dan kebutuhan Anda terpenuhi." },
-  ];
-
-  const timeline = [
-    { year: "2018", title: "VASTURA GROUP Berdiri", desc: "Didirikan dengan visi memberikan layanan travel & event berkualitas di Malang." },
-    { year: "2019", title: "Ekspansi Interior & Exterior", desc: "Membuka divisi Interior dan Exterior yang langsung mendapat respons positif dari pasar." },
-    { year: "2021", title: "100+ Klien", desc: "Mencapai 100+ klien puas meskipun pandemi, dengan inovasi layanan virtual event." },
-    { year: "2023", title: "Platform Digital", desc: "Meluncurkan platform digital untuk memudahkan pemesanan dan komunikasi dengan klien." },
-    { year: "2025", title: "Berkembang Pesat", desc: "Hadir di berbagai kota besar Indonesia dengan jaringan mitra lokal yang kuat." },
-  ];
-
-  const team = [
-    { name: "Tim Kreatif", role: "Event & Dekorasi", icon: "🎨" },
-    { name: "Tim Konstruksi", role: "Gedung & Rumah", icon: "🏗️" },
-    { name: "Tim Wedding", role: "Koordinator Pernikahan", icon: "💐" },
-    { name: "Tim CS", role: "Layanan Pelanggan", icon: "🤝" },
-  ];
+  /* ── Baca dari CMS, fallback ke hardcoded ── */
+  const values   = data?.aboutValues   || [];
+  const timeline = data?.aboutTimeline || [];
+  const layanan  = data?.aboutLayanan  || [];
+  const stats    = data?.aboutStats    || [];
+  const visi     = data?.aboutVisi     || content?.aboutVisi || "Menjadi perusahaan travel dan organizer terkemuka di Indonesia.";
+  const misiRaw  = data?.aboutMisi     || content?.aboutMisi || "";
+  const misiArr  = misiRaw ? misiRaw.split("|").map(s=>s.trim()).filter(Boolean) : [];
 
   return (
     <div className="fade-in" style={{ minHeight: "100vh", background: "#fff" }}>
@@ -7725,13 +7754,8 @@ function AboutPage({ content, images, teamMembers, onWaOpen }) {
       {/* ── STATS STRIP ── */}
       <div style={{ background: "linear-gradient(130deg,#2E3D3F 0%,#3D5254 45%,#8B6914 78%,#C9AA71 100%)", padding: "36px 5%" }}>
         <div style={{ maxWidth: 1200, margin: "0 auto", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))", gap: 24, textAlign: "center" }}>
-          {[
-            { num: "500+", label: "Klien Puas" },
-            { num: "7+", label: "Tahun Pengalaman" },
-            { num: "100+", label: "Event Sukses" },
-            { num: "24/7", label: "Layanan Support" },
-          ].map(s => (
-            <div key={s.label}>
+          {stats.map(s => (
+            <div key={s.id||s.label}>
               <div style={{ fontSize: "clamp(1.75rem,4vw,2.5rem)", fontWeight: 900, color: "#D4AF37", fontFamily: "'Playfair Display',serif", lineHeight: 1 }}>{s.num}</div>
               <div style={{ fontSize: "0.8125rem", color: "rgba(255,255,255,.65)", marginTop: 6, fontWeight: 500, letterSpacing: ".04em" }}>{s.label}</div>
             </div>
@@ -7746,15 +7770,15 @@ function AboutPage({ content, images, teamMembers, onWaOpen }) {
             <div style={{ fontSize: 36, marginBottom: 20 }}>🎯</div>
             <h3 style={{ fontSize: "1.5rem", fontFamily: "'Playfair Display',serif", fontWeight: 800, marginBottom: 16, color: "#fff" }}>Visi Kami</h3>
             <p style={{ fontSize: "0.9375rem", lineHeight: 1.85, color: "rgba(255,255,255,.8)" }}>
-              Menjadi perusahaan travel dan organizer terkemuka di Indonesia yang dikenal atas pelayanan profesional, kreativitas, dan kemampuan mewujudkan momen-momen tak terlupakan bagi setiap klien.
+              {visi}
             </p>
           </div>
           <div style={{ background: "#FAF7F0", borderRadius: 12, padding: "40px 36px", borderLeft: "4px solid #8B6914" }}>
             <div style={{ fontSize: 36, marginBottom: 20 }}>🚀</div>
             <h3 style={{ fontSize: "1.5rem", fontFamily: "'Playfair Display',serif", fontWeight: 800, marginBottom: 16, color: "#2E3D3F" }}>Misi Kami</h3>
             <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: 12 }}>
-              {["Memberikan layanan terbaik dengan standar profesional tinggi", "Memastikan kepuasan klien di setiap momen yang kami tangani", "Berinovasi dalam layanan travel & event secara berkelanjutan", "Membangun kepercayaan jangka panjang bersama klien dan mitra"].map(m => (
-                <li key={m} style={{ display: "flex", gap: 10, fontSize: "0.9rem", color: "#3D5254", lineHeight: 1.6 }}>
+              {misiArr.map((m,i) => (
+                <li key={i} style={{ display: "flex", gap: 10, fontSize: "0.9rem", color: "#3D5254", lineHeight: 1.6 }}>
                   <span style={{ color: "#8B6914", fontWeight: 700, flexShrink: 0 }}>✓</span>
                   {m}
                 </li>
@@ -7773,7 +7797,7 @@ function AboutPage({ content, images, teamMembers, onWaOpen }) {
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 24 }}>
             {values.map((v, i) => (
-              <div key={v.title} className="hover-lift" style={{ background: "#fff", borderRadius: 12, padding: "32px 28px", boxShadow: "0 2px 12px rgba(46,61,63,.06)", borderTop: "3px solid #8B6914", transition: "all .3s" }}>
+              <div key={v.id||v.title} className="hover-lift" style={{ background: "#fff", borderRadius: 12, padding: "32px 28px", boxShadow: "0 2px 12px rgba(46,61,63,.06)", borderTop: "3px solid #8B6914", transition: "all .3s" }}>
                 <div style={{ fontSize: 36, marginBottom: 16 }}>{v.icon}</div>
                 <h3 style={{ fontSize: "1.05rem", fontFamily: "'Playfair Display',serif", fontWeight: 700, color: "#2E3D3F", marginBottom: 10 }}>{v.title}</h3>
                 <p style={{ fontSize: "0.9rem", color: "#3D5254", lineHeight: 1.75, whiteSpace: "pre-line" }}>{v.desc}</p>
@@ -7782,6 +7806,35 @@ function AboutPage({ content, images, teamMembers, onWaOpen }) {
           </div>
         </div>
       </div>
+
+      {/* ── PERJALANAN PERUSAHAAN (Timeline) ── */}
+      {timeline.length > 0 && (
+        <div style={{ background: "#FAF7F0", padding: "80px 5%" }}>
+          <div style={{ maxWidth: 900, margin: "0 auto" }}>
+            <div style={{ textAlign: "center", marginBottom: 52 }}>
+              <div style={{ fontSize: "0.6875rem", letterSpacing: "2px", color: "#8B6914", textTransform: "uppercase", fontWeight: 700, marginBottom: 12 }}>Milestone Kami</div>
+              <h2 className="display" style={{ fontSize: "clamp(1.75rem,4vw,2.75rem)", fontWeight: 900, color: "#2E3D3F" }}>Perjalanan VASTURA GROUP</h2>
+            </div>
+            <div style={{ position: "relative" }}>
+              {/* Garis vertikal */}
+              <div style={{ position: "absolute", left: "50%", top: 0, bottom: 0, width: 2, background: "linear-gradient(180deg,#8B6914,#C9AA71)", transform: "translateX(-50%)", borderRadius: 2 }} />
+              {timeline.map((t, i) => (
+                <div key={t.id||i} style={{ display: "flex", alignItems: "center", gap: 28, marginBottom: 40, flexDirection: i % 2 === 0 ? "row" : "row-reverse" }}>
+                  <div style={{ flex: 1, background: "#fff", borderRadius: 12, padding: "20px 24px", boxShadow: "0 2px 12px rgba(0,0,0,.07)", border: "1px solid #E8DCC8", textAlign: i % 2 === 0 ? "right" : "left" }}>
+                    <div style={{ fontSize: "0.7rem", fontWeight: 700, color: "#8B6914", letterSpacing: ".1em", textTransform: "uppercase", marginBottom: 6 }}>{t.year}</div>
+                    <div style={{ fontSize: "1rem", fontWeight: 800, color: "#2E3D3F", marginBottom: 6 }}>{t.title}</div>
+                    <div style={{ fontSize: "0.85rem", color: "#5A6A6C", lineHeight: 1.6 }}>{t.desc}</div>
+                  </div>
+                  <div style={{ width: 44, height: 44, borderRadius: "50%", background: "linear-gradient(135deg,#2E3D3F,#8B6914)", display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", fontWeight: 900, fontSize: "0.8rem", flexShrink: 0, zIndex: 1, boxShadow: "0 4px 14px rgba(0,0,0,.2)", border: "3px solid #fff" }}>
+                    {t.year?.slice(-2) || String(i+1).padStart(2,"0")}
+                  </div>
+                  <div style={{ flex: 1 }} />
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* ── SUSUNAN TIM ── */}
       <div style={{ padding: "80px 5%" }}>
@@ -7837,51 +7890,8 @@ function AboutPage({ content, images, teamMembers, onWaOpen }) {
 
           {/* Cards Grid — 6 kolom sesuai referensi */}
           <div style={{ display: "grid", gridTemplateColumns: "repeat(6, 1fr)", gap: 20 }} className="layanan-grid">
-            {[
-              {
-                icon: "🛋️",
-                title: "Interior",
-                desc: "Desain interior modern, nyaman dan fungsional sesuai kebutuhan Anda.",
-                img: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=600&q=80",
-                slug: "interior"
-              },
-              {
-                icon: "🏠",
-                title: "Eksterior",
-                desc: "Desain eksterior menarik, kokoh dan estetis.",
-                img: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&q=80",
-                slug: "eksterior"
-              },
-              {
-                icon: "📐",
-                title: "Desain & RAB",
-                desc: "Desain arsitektur lengkap dengan RAB yang akurat.",
-                img: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=600&q=80",
-                slug: "desain-rab"
-              },
-              {
-                icon: "🌿",
-                title: "Landscape",
-                desc: "Taman indah dan asri yang menyatu dengan hunian Anda.",
-                img: "https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=600&q=80",
-                slug: "landscape"
-              },
-              {
-                icon: "🪟",
-                title: "Aluminium",
-                desc: "Kusen, pintu & jendela aluminium berkualitas tinggi.",
-                img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80",
-                slug: "aluminium"
-              },
-              {
-                icon: "🏗️",
-                title: "Kanopi",
-                desc: "Kanopi kuat, modern dan tahan segala cuaca.",
-                img: "https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?w=600&q=80",
-                slug: "kanopi"
-              },
-            ].map(s => (
-              <div key={s.title}
+            {layanan.map(s => (
+              <div key={s.id||s.title}
                 style={{ borderRadius: 12, overflow: "hidden", boxShadow: "0 4px 18px rgba(0,0,0,.10)", background: "#fff", display: "flex", flexDirection: "column", transition: "transform .22s, box-shadow .22s", cursor: "pointer" }}
                 onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-6px)"; e.currentTarget.style.boxShadow = "0 12px 36px rgba(0,0,0,.16)"; }}
                 onMouseLeave={e => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "0 4px 18px rgba(0,0,0,.10)"; }}>
@@ -7889,7 +7899,7 @@ function AboutPage({ content, images, teamMembers, onWaOpen }) {
                 {/* Image area */}
                 <div style={{ position: "relative", height: 170, overflow: "hidden", flexShrink: 0 }}>
                   <img
-                    src={s.img}
+                    src={s._img||s.img}
                     alt={s.title}
                     loading="lazy"
                     style={{ width: "100%", height: "100%", objectFit: "cover", transition: "transform .4s" }}
@@ -7897,7 +7907,6 @@ function AboutPage({ content, images, teamMembers, onWaOpen }) {
                     onMouseLeave={e => e.target.style.transform = "scale(1)"}
                     onError={e => { e.target.parentElement.style.background = "#E8DCC8"; e.target.style.display = "none"; }}
                   />
-                  {/* Icon circle overlapping bottom of image */}
                   <div style={{
                     position: "absolute", bottom: -22, left: "50%", transform: "translateX(-50%)",
                     width: 48, height: 48, borderRadius: "50%",
@@ -9002,63 +9011,49 @@ function SubLayananAdmin({
   title, icon, accentColor = "#8B6914",
   storeKey, data, save, notify, uploadToCloudinary,
   pageDesc,
-  sections = [],          // [{key,label,type}]
-  imageGroups = [],       // [{key,label,count,desc}]
-  crudKey,                // key di data untuk array items
-  crudLabel,              // judul tabel CRUD
-  crudFields = [],        // [{key,label,type,placeholder}]
-  crudHasImage = false,
+  sections = [],
+  imageGroups = [],
+  crudKey, crudLabel, crudFields = [], crudHasImage = false,
+  multiCrud = [],
 }) {
-  /* ── state teks / konten ── */
+  const allCruds = [
+    ...(crudKey ? [{ crudKey, crudLabel, crudFields, crudHasImage }] : []),
+    ...multiCrud,
+  ];
   const initContent = {};
-  sections.forEach(s => { initContent[s.key] = (data.content?.[s.key] || ""); });
+  sections.forEach(s => { initContent[s.key] = data.content?.[s.key] || data[s.key] || ""; });
   const [contentForm, setContentForm] = useState(initContent);
   const [savingContent, setSavingContent] = useState(false);
-
-  /* ── state gambar ── */
   const [imgUploading, setImgUploading] = useState({});
   const [imgUrls, setImgUrls] = useState(() => {
     const o = {};
     imageGroups.forEach(g => {
-      for (let i = 0; i < g.count; i++) {
-        const k = `${g.key}_${i}`;
-        o[k] = data.content?.[k] || "";
-      }
+      for (let i = 0; i < g.count; i++) { const k = `${g.key}_${i}`; o[k] = data.content?.[k] || ""; }
     });
     return o;
   });
-
-  /* ── state CRUD items ── */
-  const items = data[crudKey] || [];
-  const emptyItem = () => {
+  const makeCrudState = () => {
     const o = {};
-    crudFields.forEach(f => { o[f.key] = ""; });
-    if (crudHasImage) o._img = "";
+    allCruds.forEach(c => {
+      const ef = {}; c.crudFields.forEach(f => { ef[f.key] = ""; }); if (c.crudHasImage) ef._img = "";
+      o[c.crudKey] = { editId: null, editForm: { ...ef }, showAdd: false, addForm: { ...ef }, uploading: false, addUploading: false, delConfirm: null };
+    });
     return o;
   };
-  const [editId, setEditId] = useState(null);
-  const [editForm, setEditForm] = useState(emptyItem());
-  const [showAdd, setShowAdd] = useState(false);
-  const [addForm, setAddForm] = useState(emptyItem());
-  const [crudImgUploading, setCrudImgUploading] = useState(false);
-  const [addImgUploading, setAddImgUploading] = useState(false);
-  const [delConfirm, setDelConfirm] = useState(null);
-
-  /* ── helpers ── */
+  const [crudStates, setCrudStates] = useState(makeCrudState);
+  const setCrud = (key, patch) => setCrudStates(prev => ({ ...prev, [key]: { ...prev[key], ...patch } }));
   const accent = accentColor;
   const btnBase = { border: "none", borderRadius: 6, padding: "9px 18px", fontWeight: 700, fontSize: "0.82rem", cursor: "pointer" };
-
-  /* ── save konten teks ── */
   const handleSaveContent = async () => {
     setSavingContent(true);
     try {
-      await save({ ...data, content: { ...(data.content || {}), ...contentForm, ...imgUrls } });
+      const topLevel = {};
+      sections.forEach(s => { topLevel[s.key] = contentForm[s.key] || ""; });
+      await save({ ...data, content: { ...(data.content || {}), ...contentForm, ...imgUrls }, ...topLevel });
       notify("✅ Konten teks berhasil disimpan!");
     } catch { notify("❌ Gagal menyimpan konten."); }
     setSavingContent(false);
   };
-
-  /* ── upload gambar section ── */
   const handleImgUpload = async (groupKey, idx, file) => {
     if (!file) return;
     const k = `${groupKey}_${idx}`;
@@ -9072,70 +9067,153 @@ function SubLayananAdmin({
     } catch { notify("❌ Gagal upload gambar."); }
     setImgUploading(p => ({ ...p, [k]: false }));
   };
-
   const handleImgUrlChange = (groupKey, idx, val) => {
-    const k = `${groupKey}_${idx}`;
-    setImgUrls(p => ({ ...p, [k]: val }));
+    const k = `${groupKey}_${idx}`; setImgUrls(p => ({ ...p, [k]: val }));
   };
-
-  /* ── CRUD helpers ── */
-  const handleSaveEdit = async () => {
-    const updated = items.map(it => it.id === editId ? { ...it, ...editForm } : it);
-    try {
-      await save({ ...data, [crudKey]: updated });
-      notify("✅ Item berhasil diperbarui!");
-      setEditId(null);
-    } catch { notify("❌ Gagal menyimpan."); }
+  const handleSaveEdit = async (c) => {
+    const items = data[c.crudKey] || []; const cs = crudStates[c.crudKey];
+    const updated = items.map(it => it.id === cs.editId ? { ...it, ...cs.editForm } : it);
+    try { await save({ ...data, [c.crudKey]: updated }); notify("✅ Item berhasil diperbarui!"); setCrud(c.crudKey, { editId: null }); }
+    catch { notify("❌ Gagal menyimpan."); }
   };
-
-  const handleAdd = async () => {
-    const newItem = { ...addForm, id: Date.now().toString() };
+  const handleAdd = async (c) => {
+    const items = data[c.crudKey] || []; const cs = crudStates[c.crudKey];
+    const newItem = { ...cs.addForm, id: Date.now().toString() };
     try {
-      await save({ ...data, [crudKey]: [...items, newItem] });
-      notify("✅ Item berhasil ditambahkan!");
-      setAddForm(emptyItem());
-      setShowAdd(false);
+      await save({ ...data, [c.crudKey]: [...items, newItem] }); notify("✅ Item berhasil ditambahkan!");
+      const ef = {}; c.crudFields.forEach(f => { ef[f.key] = ""; }); if (c.crudHasImage) ef._img = "";
+      setCrud(c.crudKey, { showAdd: false, addForm: ef });
     } catch { notify("❌ Gagal menambahkan item."); }
   };
-
-  const handleDelete = async (id) => {
-    try {
-      await save({ ...data, [crudKey]: items.filter(it => it.id !== id) });
-      notify("✅ Item dihapus.");
-      setDelConfirm(null);
-    } catch { notify("❌ Gagal menghapus."); }
+  const handleDelete = async (c, id) => {
+    const items = data[c.crudKey] || [];
+    try { await save({ ...data, [c.crudKey]: items.filter(it => it.id !== id) }); notify("✅ Item dihapus."); setCrud(c.crudKey, { delConfirm: null }); }
+    catch { notify("❌ Gagal menghapus."); }
   };
-
-  const handleCrudImgUpload = async (file, isAdd = false) => {
+  const handleCrudImgUpload = async (c, file, isAdd = false) => {
     if (!file) return;
-    if (isAdd) setAddImgUploading(true); else setCrudImgUploading(true);
+    setCrud(c.crudKey, isAdd ? { addUploading: true } : { uploading: true });
     try {
-      const url = await uploadToCloudinary(file);
-      if (isAdd) setAddForm(p => ({ ...p, _img: url }));
-      else setEditForm(p => ({ ...p, _img: url }));
+      const url = await uploadToCloudinary(file); const cs = crudStates[c.crudKey];
+      if (isAdd) setCrud(c.crudKey, { addForm: { ...cs.addForm, _img: url }, addUploading: false });
+      else setCrud(c.crudKey, { editForm: { ...cs.editForm, _img: url }, uploading: false });
       notify("✅ Gambar item diupload!");
-    } catch { notify("❌ Gagal upload gambar item."); }
-    if (isAdd) setAddImgUploading(false); else setCrudImgUploading(false);
+    } catch { notify("❌ Gagal upload gambar item."); setCrud(c.crudKey, isAdd ? { addUploading: false } : { uploading: false }); }
   };
-
-  /* ── render field helper ── */
-  const renderField = (f, form, setForm, prefix = "") => (
+  const renderField = (f, form, onChange, prefix = "") => (
     <div key={prefix + f.key} style={{ display: "flex", flexDirection: "column", gap: 5 }}>
       <label style={{ fontSize: "0.75rem", fontWeight: 700, color: "#5A6A6C", textTransform: "uppercase", letterSpacing: ".06em" }}>{f.label}</label>
       {f.type === "textarea"
-        ? <textarea value={form[f.key] || ""} onChange={e => setForm(p => ({ ...p, [f.key]: e.target.value }))}
-            placeholder={f.placeholder || ""}
-            rows={3} style={{ padding: "9px 12px", border: "1.5px solid #D5C9B0", borderRadius: 6, fontSize: "0.875rem", color: "#2E3D3F", resize: "vertical", fontFamily: "inherit" }} />
-        : <input type="text" value={form[f.key] || ""} onChange={e => setForm(p => ({ ...p, [f.key]: e.target.value }))}
-            placeholder={f.placeholder || ""}
+        ? <textarea value={form[f.key] || ""} onChange={e => onChange(p => ({ ...p, [f.key]: e.target.value }))} placeholder={f.placeholder || ""} rows={3}
+            style={{ padding: "9px 12px", border: "1.5px solid #D5C9B0", borderRadius: 6, fontSize: "0.875rem", color: "#2E3D3F", resize: "vertical", fontFamily: "inherit" }} />
+        : <input type="text" value={form[f.key] || ""} onChange={e => onChange(p => ({ ...p, [f.key]: e.target.value }))} placeholder={f.placeholder || ""}
             style={{ padding: "9px 12px", border: "1.5px solid #D5C9B0", borderRadius: 6, fontSize: "0.875rem", color: "#2E3D3F" }} />
       }
     </div>
   );
-
+  const renderCrudSection = (c) => {
+    const items = data[c.crudKey] || [];
+    const cs = crudStates[c.crudKey] || {};
+    const emptyForm = () => { const o = {}; c.crudFields.forEach(f => { o[f.key] = ""; }); if (c.crudHasImage) o._img = ""; return o; };
+    const setEditForm = (updFn) => setCrud(c.crudKey, { editForm: typeof updFn === "function" ? updFn(cs.editForm) : updFn });
+    const setAddForm  = (updFn) => setCrud(c.crudKey, { addForm:  typeof updFn === "function" ? updFn(cs.addForm)  : updFn });
+    return (
+      <div key={c.crudKey} style={{ background: "#fff", border: "1.5px solid #E8DCC8", borderRadius: 14, padding: "24px 28px" }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 20, paddingBottom: 12, borderBottom: `2px solid ${accent}25` }}>
+          <h3 style={{ fontSize: "0.9rem", fontWeight: 800, color: accent, textTransform: "uppercase", letterSpacing: ".1em", margin: 0 }}>📋 {c.crudLabel || "Daftar Item"}</h3>
+          <button onClick={() => setCrud(c.crudKey, { showAdd: true, addForm: emptyForm() })} style={{ ...btnBase, background: accent, color: "#fff", padding: "8px 16px", fontSize: "0.8rem" }}>+ Tambah Item</button>
+        </div>
+        {cs.showAdd && (
+          <div style={{ background: "#FAF7F0", border: `1.5px solid ${accent}40`, borderRadius: 10, padding: 20, marginBottom: 20 }}>
+            <h4 style={{ margin: "0 0 14px", fontSize: "0.85rem", fontWeight: 700, color: accent }}>➕ Tambah Item Baru</h4>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+              {c.crudFields.map(f => renderField(f, cs.addForm, setAddForm, "add_"))}
+            </div>
+            {c.crudHasImage && (
+              <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 6 }}>
+                <label style={{ fontSize: "0.75rem", fontWeight: 700, color: "#5A6A6C", textTransform: "uppercase" }}>Foto / Gambar</label>
+                {cs.addForm._img && <img src={cs.addForm._img} alt="" style={{ width: 120, height: 80, objectFit: "cover", borderRadius: 6, marginBottom: 4 }} />}
+                <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+                  <label style={{ cursor: "pointer" }}>
+                    <div style={{ background: accent, color: "#fff", borderRadius: 6, padding: "6px 12px", fontSize: "0.78rem", fontWeight: 700 }}>{cs.addUploading ? "⏳ Uploading…" : "📁 Upload Foto"}</div>
+                    <input type="file" accept="image/*" style={{ display: "none" }} onChange={e => handleCrudImgUpload(c, e.target.files?.[0], true)} />
+                  </label>
+                  <input type="text" placeholder="atau tempel URL…" value={cs.addForm._img || ""}
+                    onChange={e => setCrud(c.crudKey, { addForm: { ...cs.addForm, _img: e.target.value } })}
+                    style={{ flex: 1, padding: "6px 10px", border: "1.5px solid #D5C9B0", borderRadius: 6, fontSize: "0.82rem" }} />
+                </div>
+              </div>
+            )}
+            <div style={{ display: "flex", gap: 10, marginTop: 16 }}>
+              <button onClick={() => handleAdd(c)} style={{ ...btnBase, background: accent, color: "#fff" }}>✅ Simpan Item</button>
+              <button onClick={() => setCrud(c.crudKey, { showAdd: false })} style={{ ...btnBase, background: "#f1f1f1", color: "#555" }}>Batal</button>
+            </div>
+          </div>
+        )}
+        {items.length === 0
+          ? <p style={{ color: "#A89070", fontSize: "0.85rem", textAlign: "center", padding: "24px 0" }}>Belum ada item. Klik "+ Tambah Item" untuk menambahkan.</p>
+          : items.map(item => (
+            <div key={item.id} style={{ border: "1.5px solid #E8DCC8", borderRadius: 10, padding: 16, marginBottom: 12, background: cs.editId === item.id ? "#FAF7F0" : "#fff" }}>
+              {cs.editId === item.id ? (
+                <>
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 12 }}>
+                    {c.crudFields.map(f => renderField(f, cs.editForm, setEditForm, "edit_"))}
+                  </div>
+                  {c.crudHasImage && (
+                    <div style={{ marginBottom: 12 }}>
+                      {cs.editForm._img && <img src={cs.editForm._img} alt="" style={{ width: 120, height: 80, objectFit: "cover", borderRadius: 6, marginBottom: 6 }} />}
+                      <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+                        <label style={{ cursor: "pointer" }}>
+                          <div style={{ background: accent, color: "#fff", borderRadius: 6, padding: "6px 12px", fontSize: "0.78rem", fontWeight: 700 }}>{cs.uploading ? "⏳ Uploading…" : "📁 Ganti Foto"}</div>
+                          <input type="file" accept="image/*" style={{ display: "none" }} onChange={e => handleCrudImgUpload(c, e.target.files?.[0], false)} />
+                        </label>
+                        <input type="text" placeholder="atau tempel URL…" value={cs.editForm._img || ""}
+                          onChange={e => setCrud(c.crudKey, { editForm: { ...cs.editForm, _img: e.target.value } })}
+                          style={{ flex: 1, padding: "6px 10px", border: "1.5px solid #D5C9B0", borderRadius: 6, fontSize: "0.82rem" }} />
+                      </div>
+                    </div>
+                  )}
+                  <div style={{ display: "flex", gap: 10 }}>
+                    <button onClick={() => handleSaveEdit(c)} style={{ ...btnBase, background: "#27ae60", color: "#fff" }}>✅ Simpan Perubahan</button>
+                    <button onClick={() => setCrud(c.crudKey, { editId: null })} style={{ ...btnBase, background: "#E8DCC8", color: "#5A6A6C" }}>Batal</button>
+                  </div>
+                </>
+              ) : (
+                <div style={{ display: "flex", alignItems: "flex-start", gap: 14 }}>
+                  {c.crudHasImage && item._img && (
+                    <img src={item._img} alt="" style={{ width: 70, height: 55, objectFit: "cover", borderRadius: 7, flexShrink: 0, border: "1px solid #E8DCC8" }} />
+                  )}
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ fontWeight: 700, fontSize: "0.875rem", color: "#2E3D3F", marginBottom: 3 }}>{item[c.crudFields[0]?.key] || `Item #${item.id}`}</div>
+                    {c.crudFields.slice(1, 3).map(f => (
+                      <div key={f.key} style={{ fontSize: "0.78rem", color: "#5A6A6C", lineHeight: 1.4, marginBottom: 1 }}>
+                        <strong>{f.label}:</strong> {String(item[f.key] || "—").slice(0, 80)}{String(item[f.key] || "").length > 80 ? "…" : ""}
+                      </div>
+                    ))}
+                  </div>
+                  <div style={{ display: "flex", gap: 8, flexShrink: 0 }}>
+                    <button onClick={() => {
+                      const ef = {}; c.crudFields.forEach(f => { ef[f.key] = item[f.key] || ""; }); if (c.crudHasImage) ef._img = item._img || "";
+                      setCrud(c.crudKey, { editId: item.id, editForm: ef });
+                    }} style={{ ...btnBase, background: "#f0f4f4", color: "#2E3D3F", padding: "7px 14px" }}>✏️ Edit</button>
+                    {cs.delConfirm === item.id
+                      ? (<>
+                          <button onClick={() => handleDelete(c, item.id)} style={{ ...btnBase, background: "#e74c3c", color: "#fff", padding: "7px 14px" }}>Yakin Hapus?</button>
+                          <button onClick={() => setCrud(c.crudKey, { delConfirm: null })} style={{ ...btnBase, background: "#f1f1f1", color: "#555", padding: "7px 12px" }}>Batal</button>
+                        </>)
+                      : <button onClick={() => setCrud(c.crudKey, { delConfirm: item.id })} style={{ ...btnBase, background: "#fdf0f0", color: "#e74c3c", border: "1px solid #f5c6c6", padding: "7px 14px" }}>🗑 Hapus</button>
+                    }
+                  </div>
+                </div>
+              )}
+            </div>
+          ))
+        }
+      </div>
+    );
+  };
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 28, padding: "4px 0" }}>
-      {/* Header */}
       <div style={{ background: `linear-gradient(120deg, ${accent}18 0%, #ffffff 100%)`, border: `1.5px solid ${accent}30`, borderRadius: 14, padding: "22px 28px", display: "flex", alignItems: "center", gap: 16 }}>
         <div style={{ width: 52, height: 52, borderRadius: 12, background: accent, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 26, flexShrink: 0 }}>{icon}</div>
         <div>
@@ -9143,29 +9221,20 @@ function SubLayananAdmin({
           {pageDesc && <p style={{ color: "#5A6A6C", fontSize: "0.85rem", margin: "4px 0 0", lineHeight: 1.5 }}>{pageDesc}</p>}
         </div>
       </div>
-
-      {/* ── SEKSI 1: Konten Teks ── */}
       {sections.length > 0 && (
         <div style={{ background: "#fff", border: "1.5px solid #E8DCC8", borderRadius: 14, padding: "24px 28px" }}>
-          <h3 style={{ fontSize: "0.9rem", fontWeight: 800, color: accent, textTransform: "uppercase", letterSpacing: ".1em", marginBottom: 20, paddingBottom: 12, borderBottom: `2px solid ${accent}25` }}>
-            📝 Konten Teks
-          </h3>
+          <h3 style={{ fontSize: "0.9rem", fontWeight: 800, color: accent, textTransform: "uppercase", letterSpacing: ".1em", marginBottom: 20, paddingBottom: 12, borderBottom: `2px solid ${accent}25` }}>📝 Konten Teks</h3>
           <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
             {sections.map(s => renderField(s, contentForm, setContentForm, "ct_"))}
           </div>
-          <button onClick={handleSaveContent} disabled={savingContent}
-            style={{ ...btnBase, marginTop: 20, background: accent, color: "#fff", opacity: savingContent ? 0.6 : 1 }}>
+          <button onClick={handleSaveContent} disabled={savingContent} style={{ ...btnBase, marginTop: 20, background: accent, color: "#fff", opacity: savingContent ? 0.6 : 1 }}>
             {savingContent ? "Menyimpan…" : "💾 Simpan Konten Teks"}
           </button>
         </div>
       )}
-
-      {/* ── SEKSI 2: Upload Gambar ── */}
       {imageGroups.length > 0 && (
         <div style={{ background: "#fff", border: "1.5px solid #E8DCC8", borderRadius: 14, padding: "24px 28px" }}>
-          <h3 style={{ fontSize: "0.9rem", fontWeight: 800, color: accent, textTransform: "uppercase", letterSpacing: ".1em", marginBottom: 20, paddingBottom: 12, borderBottom: `2px solid ${accent}25` }}>
-            🖼 Upload Gambar
-          </h3>
+          <h3 style={{ fontSize: "0.9rem", fontWeight: 800, color: accent, textTransform: "uppercase", letterSpacing: ".1em", marginBottom: 20, paddingBottom: 12, borderBottom: `2px solid ${accent}25` }}>🖼 Upload Gambar</h3>
           {imageGroups.map(g => (
             <div key={g.key} style={{ marginBottom: 28 }}>
               <div style={{ marginBottom: 10 }}>
@@ -9174,25 +9243,19 @@ function SubLayananAdmin({
               </div>
               <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(180px,1fr))", gap: 14 }}>
                 {Array.from({ length: g.count }).map((_, i) => {
-                  const k = `${g.key}_${i}`;
-                  const isLoading = imgUploading[k];
-                  const url = imgUrls[k];
+                  const k = `${g.key}_${i}`; const isLoading = imgUploading[k]; const url = imgUrls[k];
                   return (
                     <div key={k} style={{ border: "1.5px dashed #C9AA71", borderRadius: 10, padding: 10, background: "#FAF7F0", display: "flex", flexDirection: "column", gap: 8, alignItems: "center" }}>
-                      {url
-                        ? <img src={url} alt="" style={{ width: "100%", height: 100, objectFit: "cover", borderRadius: 7, border: "1px solid #E8DCC8" }} />
-                        : <div style={{ width: "100%", height: 100, background: "#E8DCC8", borderRadius: 7, display: "flex", alignItems: "center", justifyContent: "center", color: "#A89070", fontSize: "0.8rem" }}>Belum ada gambar</div>
-                      }
+                      {url ? <img src={url} alt="" style={{ width: "100%", height: 100, objectFit: "cover", borderRadius: 7, border: "1px solid #E8DCC8" }} />
+                           : <div style={{ width: "100%", height: 100, background: "#E8DCC8", borderRadius: 7, display: "flex", alignItems: "center", justifyContent: "center", color: "#A89070", fontSize: "0.8rem" }}>Belum ada gambar</div>}
                       <span style={{ fontSize: "0.7rem", color: "#A89070", fontWeight: 600 }}>Foto {i + 1}</span>
                       <label style={{ cursor: "pointer", width: "100%" }}>
-                        <div style={{ background: isLoading ? "#ccc" : accent, color: "#fff", borderRadius: 6, padding: "6px 10px", textAlign: "center", fontSize: "0.75rem", fontWeight: 700, pointerEvents: isLoading ? "none" : "auto" }}>
+                        <div style={{ background: isLoading ? "#ccc" : accent, color: "#fff", borderRadius: 6, padding: "6px 10px", textAlign: "center", fontSize: "0.75rem", fontWeight: 700 }}>
                           {isLoading ? "⏳ Uploading…" : "📁 Upload"}
                         </div>
-                        <input type="file" accept="image/*" style={{ display: "none" }} disabled={isLoading}
-                          onChange={e => handleImgUpload(g.key, i, e.target.files?.[0])} />
+                        <input type="file" accept="image/*" style={{ display: "none" }} disabled={isLoading} onChange={e => handleImgUpload(g.key, i, e.target.files?.[0])} />
                       </label>
-                      <input type="text" placeholder="atau tempel URL…" value={url}
-                        onChange={e => handleImgUrlChange(g.key, i, e.target.value)}
+                      <input type="text" placeholder="atau tempel URL…" value={url} onChange={e => handleImgUrlChange(g.key, i, e.target.value)}
                         style={{ width: "100%", padding: "5px 8px", border: "1px solid #D5C9B0", borderRadius: 5, fontSize: "0.72rem", color: "#3D5254", boxSizing: "border-box" }} />
                     </div>
                   );
@@ -9200,131 +9263,16 @@ function SubLayananAdmin({
               </div>
             </div>
           ))}
-          <button onClick={handleSaveContent} disabled={savingContent}
-            style={{ ...btnBase, background: accent, color: "#fff", opacity: savingContent ? 0.6 : 1 }}>
+          <button onClick={handleSaveContent} disabled={savingContent} style={{ ...btnBase, background: accent, color: "#fff", opacity: savingContent ? 0.6 : 1 }}>
             {savingContent ? "Menyimpan…" : "💾 Simpan Semua Gambar"}
           </button>
         </div>
       )}
-
-      {/* ── SEKSI 3: CRUD Items (jika ada crudKey) ── */}
-      {crudKey && (
-        <div style={{ background: "#fff", border: "1.5px solid #E8DCC8", borderRadius: 14, padding: "24px 28px" }}>
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 20, paddingBottom: 12, borderBottom: `2px solid ${accent}25` }}>
-            <h3 style={{ fontSize: "0.9rem", fontWeight: 800, color: accent, textTransform: "uppercase", letterSpacing: ".1em", margin: 0 }}>
-              📋 {crudLabel || "Daftar Item"}
-            </h3>
-            <button onClick={() => { setShowAdd(true); setAddForm(emptyItem()); }}
-              style={{ ...btnBase, background: accent, color: "#fff", padding: "8px 16px", fontSize: "0.8rem" }}>
-              + Tambah Item
-            </button>
-          </div>
-
-          {/* Form Tambah */}
-          {showAdd && (
-            <div style={{ background: `${accent}10`, border: `1.5px solid ${accent}40`, borderRadius: 10, padding: "18px 20px", marginBottom: 20 }}>
-              <h4 style={{ fontSize: "0.85rem", fontWeight: 800, color: accent, marginBottom: 14 }}>➕ Tambah Item Baru</h4>
-              <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-                {crudFields.map(f => renderField(f, addForm, setAddForm, "add_"))}
-                {crudHasImage && (
-                  <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-                    <label style={{ fontSize: "0.75rem", fontWeight: 700, color: "#5A6A6C", textTransform: "uppercase", letterSpacing: ".06em" }}>Gambar Item</label>
-                    <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                      {addForm._img && <img src={addForm._img} alt="" style={{ width: 72, height: 56, objectFit: "cover", borderRadius: 7, border: "1px solid #E8DCC8" }} />}
-                      <label style={{ cursor: "pointer" }}>
-                        <div style={{ background: addImgUploading ? "#ccc" : accent, color: "#fff", borderRadius: 6, padding: "7px 14px", fontSize: "0.78rem", fontWeight: 700 }}>
-                          {addImgUploading ? "⏳ Uploading…" : "📁 Upload Gambar"}
-                        </div>
-                        <input type="file" accept="image/*" style={{ display: "none" }} disabled={addImgUploading}
-                          onChange={e => handleCrudImgUpload(e.target.files?.[0], true)} />
-                      </label>
-                      <input type="text" placeholder="atau URL gambar…" value={addForm._img || ""}
-                        onChange={e => setAddForm(p => ({ ...p, _img: e.target.value }))}
-                        style={{ flex: 1, padding: "7px 10px", border: "1px solid #D5C9B0", borderRadius: 6, fontSize: "0.8rem" }} />
-                    </div>
-                  </div>
-                )}
-              </div>
-              <div style={{ display: "flex", gap: 10, marginTop: 16 }}>
-                <button onClick={handleAdd} style={{ ...btnBase, background: "#27ae60", color: "#fff" }}>✅ Simpan</button>
-                <button onClick={() => setShowAdd(false)} style={{ ...btnBase, background: "#E8DCC8", color: "#5A6A6C" }}>Batal</button>
-              </div>
-            </div>
-          )}
-
-          {/* Tabel Items */}
-          {items.length === 0 ? (
-            <div style={{ textAlign: "center", padding: "40px 20px", color: "#A89070", fontSize: "0.875rem" }}>
-              Belum ada item. Klik "+ Tambah Item" untuk menambahkan.
-            </div>
-          ) : (
-            <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-              {items.map((item, idx) => (
-                <div key={item.id || idx} style={{ border: "1.5px solid #E8DCC8", borderRadius: 10, overflow: "hidden" }}>
-                  {/* Item header row */}
-                  <div style={{ background: "#FAF7F0", padding: "12px 16px", display: "flex", alignItems: "center", gap: 12 }}>
-                    {item._img && <img src={item._img} alt="" style={{ width: 52, height: 42, objectFit: "cover", borderRadius: 6, flexShrink: 0 }} />}
-                    <div style={{ flex: 1 }}>
-                      <div style={{ fontWeight: 800, color: "#2E3D3F", fontSize: "0.875rem" }}>{item.nama || item[crudFields[0]?.key] || `Item ${idx + 1}`}</div>
-                      {item.harga && <div style={{ fontSize: "0.78rem", color: "#8B6914", fontWeight: 600 }}>{item.harga}</div>}
-                      {item.tagline && <div style={{ fontSize: "0.78rem", color: "#5A6A6C" }}>{item.tagline}</div>}
-                    </div>
-                    <div style={{ display: "flex", gap: 8, flexShrink: 0 }}>
-                      <button onClick={() => { setEditId(item.id); setEditForm({ ...item }); }}
-                        style={{ ...btnBase, background: accent, color: "#fff", padding: "6px 14px", fontSize: "0.78rem" }}>✏️ Edit</button>
-                      <button onClick={() => setDelConfirm(item.id)}
-                        style={{ ...btnBase, background: "#e74c3c", color: "#fff", padding: "6px 14px", fontSize: "0.78rem" }}>🗑 Hapus</button>
-                    </div>
-                  </div>
-
-                  {/* Konfirmasi hapus */}
-                  {delConfirm === item.id && (
-                    <div style={{ background: "#fff5f5", padding: "10px 16px", borderTop: "1px solid #fcc", display: "flex", alignItems: "center", gap: 12 }}>
-                      <span style={{ fontSize: "0.83rem", color: "#c0392b", fontWeight: 600 }}>Yakin hapus item ini?</span>
-                      <button onClick={() => handleDelete(item.id)} style={{ ...btnBase, background: "#e74c3c", color: "#fff", padding: "5px 14px", fontSize: "0.78rem" }}>Ya, Hapus</button>
-                      <button onClick={() => setDelConfirm(null)} style={{ ...btnBase, background: "#E8DCC8", color: "#5A6A6C", padding: "5px 14px", fontSize: "0.78rem" }}>Batal</button>
-                    </div>
-                  )}
-
-                  {/* Form Edit inline */}
-                  {editId === item.id && (
-                    <div style={{ padding: "16px 18px", borderTop: "1.5px solid #E8DCC8", background: "#fff" }}>
-                      <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-                        {crudFields.map(f => renderField(f, editForm, setEditForm, "ed_"))}
-                        {crudHasImage && (
-                          <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-                            <label style={{ fontSize: "0.75rem", fontWeight: 700, color: "#5A6A6C", textTransform: "uppercase", letterSpacing: ".06em" }}>Gambar Item</label>
-                            <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                              {editForm._img && <img src={editForm._img} alt="" style={{ width: 72, height: 56, objectFit: "cover", borderRadius: 7, border: "1px solid #E8DCC8" }} />}
-                              <label style={{ cursor: "pointer" }}>
-                                <div style={{ background: crudImgUploading ? "#ccc" : accent, color: "#fff", borderRadius: 6, padding: "7px 14px", fontSize: "0.78rem", fontWeight: 700 }}>
-                                  {crudImgUploading ? "⏳ Uploading…" : "📁 Ganti Gambar"}
-                                </div>
-                                <input type="file" accept="image/*" style={{ display: "none" }} disabled={crudImgUploading}
-                                  onChange={e => handleCrudImgUpload(e.target.files?.[0], false)} />
-                              </label>
-                              <input type="text" placeholder="atau URL gambar…" value={editForm._img || ""}
-                                onChange={e => setEditForm(p => ({ ...p, _img: e.target.value }))}
-                                style={{ flex: 1, padding: "7px 10px", border: "1px solid #D5C9B0", borderRadius: 6, fontSize: "0.8rem" }} />
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                      <div style={{ display: "flex", gap: 10, marginTop: 16 }}>
-                        <button onClick={handleSaveEdit} style={{ ...btnBase, background: "#27ae60", color: "#fff" }}>✅ Simpan Perubahan</button>
-                        <button onClick={() => setEditId(null)} style={{ ...btnBase, background: "#E8DCC8", color: "#5A6A6C" }}>Batal</button>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-      )}
+      {allCruds.map(c => renderCrudSection(c))}
     </div>
   );
 }
+
 
 /* ─────────────── ADMIN REVIEWS COMPONENT ─────────────── */
 function AdminReviews({ data, save, notify }) {
@@ -9684,65 +9632,16 @@ function DevServicePage({ pageKey, title, subtitle, icon, heroColor, sections, c
 }
 
 /* ── Page: Jasa Desain & RAB ── */
-function DesainRabPage({ onWaOpen }) {
+function DesainRabPage({ onWaOpen, data }) {
   const [openFaq, setOpenFaq] = useState(null);
   const [activePaket, setActivePaket] = useState(null);
 
-  const PROSES = [
-    { no:"01", icon:"👥", label:"Konsultasi", desc:"Konsultasi kebutuhan, konsep desain & budget awal." },
-    { no:"02", icon:"📍", label:"Survey Lokasi", desc:"Survey lokasi untuk pengambilan data dan analisa." },
-    { no:"03", icon:"💡", label:"Konsep Desain", desc:"Pembuatan konsep desain sesuai kebutuhan Anda." },
-    { no:"04", icon:"✏️", label:"Revisi Desain", desc:"Revisi desain hingga sesuai dengan keinginan." },
-    { no:"05", icon:"📋", label:"Final Drawing", desc:"Penyelesaian gambar kerja dan dokumen lengkap." },
-    { no:"06", icon:"💰", label:"RAB & Estimasi", desc:"Perhitungan RAB detail dan estimasi biaya." },
-  ];
-
-  const DAPATKAN = [
-    { icon:"🏠", title:"Denah Ruangan", desc:"Denah arsitektur dengan ukuran yang presisi dan detail." },
-    { icon:"📄", title:"Gambar Kerja Lengkap", desc:"Gambar kerja teknis untuk panduan pelaksanaan konstruksi." },
-    { icon:"📐", title:"Tampak & Potongan", desc:"Tampak depan, samping, belakang dan potongan bangunan." },
-    { icon:"📊", title:"RAB Detail", desc:"Rincian anggaran biaya material dan upah secara transparan." },
-    { icon:"🖥️", title:"3D Rendering", desc:"Visualisasi 3D eksterior & interior realistis dan detail." },
-    { icon:"🔄", title:"Konsultasi & Revisi", desc:"Revisi desain fleksibel sampai Anda puas dengan hasilnya." },
-  ];
-
-  const GALERI = [
-    { label:"Desain Rumah Modern 2 Lantai", luas:"220 m²", img:"https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&q=80" },
-    { label:"Desain Rumah Minimalis", luas:"150 m²", img:"https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=600&q=80" },
-    { label:"Desain Rumah Classic Modern", luas:"300 m²", img:"https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=600&q=80" },
-    { label:"Desain Villa Tropis Modern", luas:"450 m²", img:"https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?w=600&q=80" },
-    { label:"Desain Rumah Industrial", luas:"180 m²", img:"https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=600&q=80" },
-  ];
-
-  const PAKET = [
-    {
-      key:"basic", label:"PAKET BASIC", tag:null, sub:"Cocok untuk rumah kecil / minimalis",
-      harga:"6.000", satuan:"/m²", color:"#1a2526", bgCard:"#fff", textColor:"#1a2526", border:"1.5px solid #d9d9d9",
-      fitur:["Denah Arsitektur","Tampak Depan","3D Eksterior","RAB Estimasi","2x Revisi"],
-      btnBg:"#fff", btnColor:"#1a2526", btnBorder:"1.5px solid #1a2526", btnLabel:"PILIH PAKET BASIC",
-    },
-    {
-      key:"standard", label:"PAKET STANDARD", tag:"REKOMENDASI", sub:"Cocok untuk rumah tinggal",
-      harga:"9.000", satuan:"/m²", color:"#C9AA71", bgCard:"#1a2526", textColor:"#fff", border:"2px solid #C9AA71",
-      fitur:["Denah Arsitektur","Tampak & Potongan","3D Eksterior & Interior","Gambar Kerja Lengkap","RAB Detail","3x Revisi"],
-      btnBg:"#C9AA71", btnColor:"#1a2526", btnBorder:"none", btnLabel:"PILIH PAKET STANDARD",
-    },
-    {
-      key:"premium", label:"PAKET PREMIUM", tag:null, sub:"Cocok untuk rumah mewah / villa",
-      harga:"12.000", satuan:"/m²", color:"#1a2526", bgCard:"#fff", textColor:"#1a2526", border:"1.5px solid #d9d9d9",
-      fitur:["Semua Fitur Standard","Video Animasi 3D","Detail Struktur","Konsultasi Intensif","Revisi Unlimited"],
-      btnBg:"#fff", btnColor:"#1a2526", btnBorder:"1.5px solid #1a2526", btnLabel:"PILIH PAKET PREMIUM",
-    },
-  ];
-
-  const FAQ = [
-    { q:"Berapa lama waktu pengerjaan desain?", a:"Tergantung kompleksitas proyek. Rata-rata 7–14 hari kerja untuk desain rumah standar, dan 14–30 hari untuk proyek besar/villa." },
-    { q:"Apakah bisa hanya desain tanpa RAB?", a:"Bisa. Kami menyediakan layanan desain saja tanpa RAB, maupun RAB saja tanpa desain sesuai kebutuhan Anda." },
-    { q:"Apakah revisi desain dikenakan biaya?", a:"Revisi sudah termasuk dalam paket sesuai jumlah yang tertera. Revisi di luar batas paket dikenakan biaya tambahan." },
-    { q:"Apakah melayani seluruh Indonesia?", a:"Ya, kami melayani desain untuk seluruh wilayah Indonesia secara online maupun dengan survei langsung untuk area tertentu." },
-    { q:"Apakah sudah termasuk perhitungan struktur?", a:"Untuk Paket Premium sudah termasuk. Paket Basic dan Standard bisa ditambahkan dengan biaya terpisah." },
-    { q:"Bagaimana cara memulai proyek?", a:"Hubungi kami via WhatsApp, lakukan konsultasi gratis, lalu kami akan menyiapkan proposal dan timeline pengerjaan." },
-  ];
+  /* ── Baca dari CMS, fallback ke nilai default jika belum diisi ── */
+  const PROSES    = data?.desainRabProses    || [];
+  const DAPATKAN  = data?.desainRabDapatkan  || [];
+  const GALERI    = data?.desainRabGaleri    || [];
+  const PAKET     = data?.desainRabPaket     || [];
+  const FAQ       = data?.desainRabFaq       || [];
 
   const waMsg = "Halo! Saya tertarik dengan layanan *Jasa Desain & RAB* dari VASTURA GROUP. Mohon informasi lebih lanjut.";
 
@@ -9881,8 +9780,8 @@ function DesainRabPage({ onWaOpen }) {
           </div>
           <div className="dr-galeri-grid" style={{ display:"grid", gridTemplateColumns:"repeat(5,1fr)", gap:14, marginBottom:28 }}>
             {GALERI.map((g,i)=>(
-              <div key={i} className="dr-galeri-item" style={{ height:200 }}>
-                <img src={g.img} alt={g.label} onError={e=>{e.target.style.display="none";}} />
+              <div key={g.id||i} className="dr-galeri-item" style={{ height:200 }}>
+                <img src={g._img||g.img} alt={g.label} onError={e=>{e.target.style.display="none";}} />
                 <div style={{ background:"#fff", padding:"10px 12px" }}>
                   <div style={{ fontWeight:700, fontSize:"0.8rem", color:"#1a2526", lineHeight:1.35, marginBottom:3 }}>{g.label}</div>
                   <div style={{ fontSize:"0.7rem", color:"#5A6A6C" }}>Luas Bangunan {g.luas}</div>
@@ -9907,34 +9806,38 @@ function DesainRabPage({ onWaOpen }) {
             <div style={{ width:48, height:3, background:"#C9AA71", borderRadius:2, margin:"14px auto 0" }} />
           </div>
           <div className="dr-paket-grid" style={{ display:"grid", gridTemplateColumns:"1fr 1fr 1fr 1fr", gap:18, alignItems:"stretch" }}>
-            {PAKET.map(p=>(
-              <div key={p.key} style={{ borderRadius:14, background:p.bgCard, border:p.border, overflow:"hidden", display:"flex", flexDirection:"column", boxShadow: p.key==="standard"?"0 12px 40px rgba(0,0,0,.2)":"0 4px 14px rgba(0,0,0,.07)", position:"relative" }}>
-                {p.tag && (
-                  <div style={{ background:"#C9AA71", color:"#1a2526", textAlign:"center", fontSize:"0.62rem", fontWeight:800, letterSpacing:"2px", padding:"5px 0" }}>{p.tag}</div>
+            {PAKET.map((p,pi)=>{
+              const isRek = p.isRekomendasi === true || p.isRekomendasi === "true";
+              const fiturArr = typeof p.fitur === "string" ? p.fitur.split("|").map(s=>s.trim()).filter(Boolean) : (Array.isArray(p.fitur) ? p.fitur : []);
+              return (
+              <div key={p.id||pi} style={{ borderRadius:14, background:isRek?"#1a2526":"#fff", border:isRek?"2px solid #C9AA71":"1.5px solid #d9d9d9", overflow:"hidden", display:"flex", flexDirection:"column", boxShadow: isRek?"0 12px 40px rgba(0,0,0,.2)":"0 4px 14px rgba(0,0,0,.07)", position:"relative" }}>
+                {isRek && (
+                  <div style={{ background:"#C9AA71", color:"#1a2526", textAlign:"center", fontSize:"0.62rem", fontWeight:800, letterSpacing:"2px", padding:"5px 0" }}>{p.tag||"REKOMENDASI"}</div>
                 )}
                 <div style={{ padding:"24px 22px", flex:1, display:"flex", flexDirection:"column" }}>
-                  <div style={{ fontSize:"0.72rem", fontWeight:800, letterSpacing:"2px", color:p.key==="standard"?"#C9AA71":"#5A6A6C", marginBottom:6 }}>{p.label}</div>
-                  <div style={{ fontSize:"0.78rem", color:p.key==="standard"?"rgba(255,255,255,.65)":"#5A6A6C", marginBottom:18 }}>{p.sub}</div>
+                  <div style={{ fontSize:"0.72rem", fontWeight:800, letterSpacing:"2px", color:isRek?"#C9AA71":"#5A6A6C", marginBottom:6 }}>{p.label}</div>
+                  <div style={{ fontSize:"0.78rem", color:isRek?"rgba(255,255,255,.65)":"#5A6A6C", marginBottom:18 }}>{p.sub}</div>
                   <div style={{ marginBottom:22 }}>
-                    <span style={{ fontSize:"0.75rem", fontWeight:700, color:p.key==="standard"?"#fff":"#1a2526", verticalAlign:"top", lineHeight:2 }}>Rp </span>
-                    <span style={{ fontSize:"2rem", fontWeight:900, color:p.key==="standard"?"#C9AA71":"#1a2526", lineHeight:1 }}>{p.harga}</span>
-                    <span style={{ fontSize:"0.8rem", color:p.key==="standard"?"rgba(255,255,255,.6)":"#5A6A6C" }}>{p.satuan}</span>
+                    <span style={{ fontSize:"0.75rem", fontWeight:700, color:isRek?"#fff":"#1a2526", verticalAlign:"top", lineHeight:2 }}>Rp </span>
+                    <span style={{ fontSize:"2rem", fontWeight:900, color:isRek?"#C9AA71":"#1a2526", lineHeight:1 }}>{p.harga}</span>
+                    <span style={{ fontSize:"0.8rem", color:isRek?"rgba(255,255,255,.6)":"#5A6A6C" }}>{p.satuan||"/m²"}</span>
                   </div>
                   <div style={{ flex:1, marginBottom:24 }}>
-                    {p.fitur.map((f,i)=>(
+                    {fiturArr.map((f,i)=>(
                       <div key={i} style={{ display:"flex", alignItems:"center", gap:8, marginBottom:9 }}>
                         <span style={{ color:"#C9AA71", fontWeight:700, fontSize:"0.85rem" }}>✓</span>
-                        <span style={{ fontSize:"0.8rem", color:p.key==="standard"?"rgba(255,255,255,.85)":"#1a2526" }}>{f}</span>
+                        <span style={{ fontSize:"0.8rem", color:isRek?"rgba(255,255,255,.85)":"#1a2526" }}>{f}</span>
                       </div>
                     ))}
                   </div>
                   <button className="dr-paket-btn" onClick={()=>onWaOpen&&onWaOpen(`Halo! Saya ingin menggunakan *${p.label}* Jasa Desain & RAB VASTURA GROUP.`)}
-                    style={{ padding:"12px", background:p.btnBg, color:p.btnColor, border:p.btnBorder, borderRadius:8, fontSize:"0.78rem", fontWeight:800, letterSpacing:"0.5px", width:"100%", cursor:"pointer" }}>
-                    {p.btnLabel}
+                    style={{ padding:"12px", background:isRek?"#C9AA71":"#fff", color:isRek?"#1a2526":"#1a2526", border:isRek?"none":"1.5px solid #1a2526", borderRadius:8, fontSize:"0.78rem", fontWeight:800, letterSpacing:"0.5px", width:"100%", cursor:"pointer" }}>
+                    PILIH {p.label}
                   </button>
                 </div>
               </div>
-            ))}
+              );
+            })}
             {/* Custom box */}
             <div style={{ borderRadius:14, background:"#1a2526", padding:"28px 24px", display:"flex", flexDirection:"column", justifyContent:"center", boxShadow:"0 4px 14px rgba(0,0,0,.15)" }}>
               <div style={{ fontWeight:800, fontSize:"1rem", color:"#fff", marginBottom:10 }}>Butuh Paket Custom?</div>
@@ -10314,33 +10217,31 @@ function TemaCardContent({ tema, setTemaSlug }) {
 }
 
 /* ── Detail Page per tema ── */
-/* ── Helper: konversi item CMS → format TEMA_DATA ── */
+/* ── Helper: parse CMS item flat → format TEMA_DATA ── */
 function parseTemaItem(item) {
-  const tryJSON = (str, fallback) => {
-    try { return JSON.parse(str); } catch { return fallback; }
-  };
+  const tryJSON = (str, fallback) => { try { return JSON.parse(str); } catch { return fallback; } };
   const splitPoin = (str) => (str || "").split("|").map(s => s.trim()).filter(Boolean);
   return {
     id:       item.id,
-    slug:     item.slug || item.nama?.toLowerCase().replace(/\s+/g, "-") || String(item.id),
-    no:       item.no || String(item.id).padStart(2, "0"),
-    nama:     item.nama || "",
+    slug:     item.slug || (item.nama || "").toLowerCase().replace(/\s+/g, "-") || String(item.id),
+    no:       item.no   || String(item.id).padStart(2, "0"),
+    nama:     item.nama    || "",
     tagline:  item.tagline || "",
     deskripsi:item.deskripsi || "",
-    warna:    item.warna || "#C9AA71",
-    img:      item._img || "",
+    warna:    item.warna    || "#C9AA71",
+    img:      item._img     || item.img || "",
     fitur:    tryJSON(item.fitur, []),
     detail: {
-      exterior:  { desc: item.exteriorDesc || "", poin: splitPoin(item.exteriorPoin) },
-      interior:  { desc: item.interiorDesc || "", poin: splitPoin(item.interiorPoin) },
-      denah:     { desc: item.denahDesc || "", ruangan: tryJSON(item.denahRuangan, []) },
-      harga:     { paket: tryJSON(item.paket, []) },
+      exterior: { desc: item.exteriorDesc || "", poin: splitPoin(item.exteriorPoin) },
+      interior: { desc: item.interiorDesc || "", poin: splitPoin(item.interiorPoin) },
+      denah:    { desc: item.denahDesc || "",    ruangan: tryJSON(item.denahRuangan, []) },
+      harga:    { paket: tryJSON(item.paket, []) },
     },
   };
 }
 
 function TemaDetailPage({ slug, onWaOpen, onBack, temaItems }) {
-  /* Coba ambil dari CMS dulu, fallback ke TEMA_DATA hardcoded */
+  /* CMS data override → fallback TEMA_DATA hardcoded */
   const cmsItems = (temaItems || []).map(parseTemaItem);
   const allTema  = cmsItems.length > 0 ? cmsItems : TEMA_DATA;
   const tema     = allTema.find(t => t.slug === slug);
@@ -10357,10 +10258,10 @@ function TemaDetailPage({ slug, onWaOpen, onBack, temaItems }) {
   );
 
   const tabs = [
-    { id: "denah", label: "📐 Denah Ruang" },
-    { id: "exterior", label: "🏠 Eksterior" },
-    { id: "interior", label: "🛋️ Interior" },
-    { id: "harga", label: "💰 Harga & RAB" },
+    { id: "denah",      label: "📐 Denah Ruang" },
+    { id: "exterior",   label: "🏠 Eksterior" },
+    { id: "interior",   label: "🛋️ Interior" },
+    { id: "harga",      label: "💰 Harga & RAB" },
     { id: "kalkulator", label: "🧮 Kalkulator" },
   ];
 
@@ -10580,7 +10481,7 @@ function TemaDetailPage({ slug, onWaOpen, onBack, temaItems }) {
 function TemaRumahPage({ onWaOpen, temaSlug, setTemaSlug, temaItems }) {
   useEffect(() => { window.scrollTo(0, 0); }, []);
 
-  /* Gunakan data CMS jika ada, fallback ke TEMA_DATA hardcoded */
+  /* CMS data override → fallback TEMA_DATA hardcoded */
   const cmsItems   = (temaItems || []).map(parseTemaItem);
   const activeData = cmsItems.length > 0 ? cmsItems : TEMA_DATA;
 
@@ -10672,180 +10573,70 @@ function TemaRumahPage({ onWaOpen, temaSlug, setTemaSlug, temaItems }) {
 }
 
 /* ── Page: Interior ── */
-function InteriorPage({ onWaOpen }) {
-  return <DevServicePage
-    pageKey="interior"
-    title="Desain Interior"
-    subtitle="Wujudkan interior impian Anda — dari teras hingga kamar tidur, setiap ruang dirancang indah, fungsional, dan mencerminkan kepribadian Anda."
-    icon="🛋️"
-    heroColor="linear-gradient(135deg,#4a1942 0%,#7b3f8a 50%,#b565c0 100%)"
-    onWaOpen={onWaOpen}
-    sections={[
-      {
-        tag: "Ruang Utama",
-        title: "Layanan Desain Interior Lengkap",
-        items: [
-          { icon: "🏠", title: "Teras", desc: "Desain teras yang menyambut — kombinasi material, pencahayaan, dan tanaman hias yang harmonis." },
-          { icon: "🛋️", title: "Ruang Tamu", desc: "Furnitur elegan, layout optimal, dan dekorasi yang menciptakan kesan pertama yang kuat." },
-          { icon: "👨‍👩‍👧", title: "Ruang Keluarga", desc: "Ruang hangat dan fungsional untuk quality time keluarga dengan konsep cozy living." },
-          { icon: "🛏️", title: "Kamar Tidur", desc: "Desain kamar nyaman dan personal — dari master bedroom hingga kamar anak yang kreatif." },
-          { icon: "🚿", title: "Kamar Mandi", desc: "Bathroom modern dengan material premium, pencahayaan spa, dan layout yang efisien." },
-          { icon: "🍳", title: "Kitchen Set", desc: "Dapur impian dengan kabinet custom, material tahan lama, dan ergonomis untuk memasak." },
-          { icon: "🔲", title: "Plafon", desc: "Desain plafon kreatif — drop ceiling, gypsum, kayu, dan pencahayaan tersembunyi (hidden lamp)." },
-          { icon: "📺", title: "Backdrop TV", desc: "Feature wall TV yang menjadi focal point ruangan — material batu alam, kayu, panel 3D, dll." },
-        ]
-      },
-      {
-        tag: "Proses Kerja",
-        title: "Alur Proyek Interior",
-        items: [
-          { icon: "📝", title: "Survei & Ukur", desc: "Tim kami datang langsung ke lokasi untuk mengukur dan memahami kondisi lapangan." },
-          { icon: "🎨", title: "Konsep & 3D Visual", desc: "Presentasi desain 3D lengkap sebelum eksekusi agar Anda tahu hasilnya." },
-          { icon: "🔨", title: "Eksekusi & Finishing", desc: "Pengerjaan oleh tenaga ahli berpengalaman dengan quality control ketat." },
-        ]
-      }
-    ]}
-  />;
+/* ── Helper: parse section items yang tersimpan sebagai JSON string ── */
+function parseSectionItems(sec) {
+  if (!sec) return sec;
+  if (Array.isArray(sec.items)) return sec;
+  try { return { ...sec, items: JSON.parse(sec.items) }; } catch { return sec; }
+}
+
+function InteriorPage({ onWaOpen, data }) {
+  const pg       = data?.interiorPage || {};
+  const cmsSecs  = (data?.interiorPageSections || []).map(parseSectionItems);
+  const title    = data?.content?.interiorTitle    || data?.interiorTitle    || pg.title    || "Desain Interior";
+  const subtitle = data?.content?.interiorSub      || data?.interiorSub      || pg.subtitle || "Wujudkan interior impian Anda — dari teras hingga kamar tidur, setiap ruang dirancang indah, fungsional, dan mencerminkan kepribadian Anda.";
+  const icon     = data?.content?.interiorIcon     || data?.interiorIcon     || pg.icon     || "🛋️";
+  const heroClr  = data?.content?.interiorHeroColor|| data?.interiorHeroColor|| pg.heroColor|| "linear-gradient(135deg,#4a1942 0%,#7b3f8a 50%,#b565c0 100%)";
+  return <DevServicePage pageKey="interior" title={title} subtitle={subtitle} icon={icon} heroColor={heroClr} onWaOpen={onWaOpen}
+    sections={cmsSecs.length > 0 ? cmsSecs : (pg.sections || [])} />;
 }
 
 /* ── Page: Pagar Rumah ── */
-function PagarPage({ onWaOpen }) {
-  return <DevServicePage
-    pageKey="pagar"
-    title="Pagar Rumah"
-    subtitle="Pagar bukan sekadar keamanan — ini ekspresi pertama rumah Anda. Kami menghadirkan pagar yang kokoh, estetis, dan sesuai karakter hunian Anda."
-    icon="🔒"
-    heroColor="linear-gradient(135deg,#1a1a2e 0%,#16213e 50%,#0f3460 100%)"
-    onWaOpen={onWaOpen}
-    sections={[
-      {
-        tag: "Jenis Pagar",
-        title: "Pilihan Model & Material Pagar",
-        items: [
-          { icon: "🔩", title: "Pagar Besi Tempa", desc: "Klasik dan kokoh, tersedia berbagai motif ornamen — cocok untuk rumah gaya Eropa atau klasik." },
-          { icon: "⬛", title: "Pagar Hollow Minimalis", desc: "Garis bersih dari besi hollow finishing cat duco — populer untuk rumah modern minimalis." },
-          { icon: "🌿", title: "Pagar Panel Kayu + Besi", desc: "Kombinasi kayu solid/WPC dengan rangka besi — kesan natural namun tetap modern dan tahan lama." },
-          { icon: "🧱", title: "Pagar Tembok + Ornamen", desc: "Dinding bata/batako finishing plester dengan sisipan ornamen besi atau roster kerawang." },
-          { icon: "🚪", title: "Pintu Gerbang Otomatis", desc: "Gate geser/lipat dengan motor otomatis dan remote control untuk kemudahan akses." },
-          { icon: "✨", title: "Pagar Stainless Steel", desc: "Tampilan premium dan anti karat — pilihan ideal untuk hunian mewah dan eksklusif." },
-        ]
-      },
-      {
-        tag: "Proses",
-        title: "Cara Kerja Kami",
-        items: [
-          { icon: "📐", title: "Survei & Desain", desc: "Pengukuran lokasi dan presentasi desain 3D sebelum produksi dimulai." },
-          { icon: "🏭", title: "Fabrikasi Custom", desc: "Diproduksi sesuai ukuran dan desain di workshop kami dengan standar kualitas tinggi." },
-          { icon: "🔧", title: "Instalasi & Finishing", desc: "Pemasangan oleh tim terlatih, termasuk cat, galvanis, atau finishing sesuai spesifikasi." },
-        ]
-      }
-    ]}
-  />;
+function PagarPage({ onWaOpen, data }) {
+  const pg       = data?.pagarPage || {};
+  const cmsSecs  = (data?.pagarPageSections || []).map(parseSectionItems);
+  const title    = data?.content?.pagarTitle    || data?.pagarTitle    || pg.title    || "Pagar Rumah";
+  const subtitle = data?.content?.pagarSub      || data?.pagarSub      || pg.subtitle || "Pagar bukan sekadar keamanan — ini ekspresi pertama rumah Anda. Kami menghadirkan pagar yang kokoh, estetis, dan sesuai karakter hunian Anda.";
+  const icon     = data?.content?.pagarIcon     || data?.pagarIcon     || pg.icon     || "🔒";
+  const heroClr  = data?.content?.pagarHeroColor|| data?.pagarHeroColor|| pg.heroColor|| "linear-gradient(135deg,#1a1a2e 0%,#16213e 50%,#0f3460 100%)";
+  return <DevServicePage pageKey="pagar" title={title} subtitle={subtitle} icon={icon} heroColor={heroClr} onWaOpen={onWaOpen}
+    sections={cmsSecs.length > 0 ? cmsSecs : (pg.sections || [])} />;
 }
 
 /* ── Page: Kanopi ── */
-function KanopiPage({ onWaOpen }) {
-  return <DevServicePage
-    pageKey="kanopi"
-    title="Kanopi"
-    subtitle="Lindungi carport, teras, atau area outdoor Anda dengan kanopi yang fungsional dan estetis. Berbagai material dan model tersedia sesuai kebutuhan."
-    icon="🏗️"
-    heroColor="linear-gradient(135deg,#1b4332 0%,#2d6a4f 50%,#52b788 100%)"
-    onWaOpen={onWaOpen}
-    sections={[
-      {
-        tag: "Jenis Kanopi",
-        title: "Model & Material Kanopi",
-        items: [
-          { icon: "🔵", title: "Kanopi Polycarbonate", desc: "Ringan, tembus cahaya, dan tahan UV. Pilihan paling populer untuk carport dan teras." },
-          { icon: "🔩", title: "Kanopi Rangka Besi Hollow", desc: "Struktur kokoh dari besi hollow galvanis dengan penutup atap polycarbonate atau spandek." },
-          { icon: "🌊", title: "Kanopi Alderon / UPVC", desc: "Material anti karat, ringan, dan estetis — tidak perlu cat ulang, perawatan minimal." },
-          { icon: "🏠", title: "Kanopi Atap Kaca", desc: "Tampilan premium dan modern, memaksimalkan cahaya alami sekaligus terlindungi dari hujan." },
-          { icon: "🎨", title: "Kanopi Custom Laser Cut", desc: "Ornamen plat besi dengan pola custom dipotong laser untuk sentuhan artistik yang unik." },
-          { icon: "🔑", title: "Kanopi Alderon (HPL)", desc: "Panel HPL berwarna-warni untuk tampilan modern dan colorful sesuai selera." },
-        ]
-      },
-      {
-        tag: "Area Aplikasi",
-        title: "Dimana Kanopi Dipasang?",
-        items: [
-          { icon: "🚗", title: "Carport / Garasi", desc: "Pelindung kendaraan dari panas dan hujan sekaligus mempercantik area depan rumah." },
-          { icon: "☕", title: "Teras Belakang / Balkon", desc: "Jadikan teras sebagai ruang outdoor yang nyaman sepanjang hari sepanjang tahun." },
-          { icon: "🏪", title: "Ruko & Komersial", desc: "Kanopi teras ruko, restoran, atau kafe yang meningkatkan daya tarik eksterior bisnis." },
-        ]
-      }
-    ]}
-  />;
+function KanopiPage({ onWaOpen, data }) {
+  const pg       = data?.kanopiPage || {};
+  const cmsSecs  = (data?.kanopiPageSections || []).map(parseSectionItems);
+  const title    = data?.content?.kanopiTitle    || data?.kanopiTitle    || pg.title    || "Kanopi";
+  const subtitle = data?.content?.kanopiSub      || data?.kanopiSub      || pg.subtitle || "Lindungi carport, teras, atau area outdoor Anda dengan kanopi yang fungsional dan estetis. Berbagai material dan model tersedia sesuai kebutuhan.";
+  const icon     = data?.content?.kanopiIcon     || data?.kanopiIcon     || pg.icon     || "🏗️";
+  const heroClr  = data?.content?.kanopiHeroColor|| data?.kanopiHeroColor|| pg.heroColor|| "linear-gradient(135deg,#1b4332 0%,#2d6a4f 50%,#52b788 100%)";
+  return <DevServicePage pageKey="kanopi" title={title} subtitle={subtitle} icon={icon} heroColor={heroClr} onWaOpen={onWaOpen}
+    sections={cmsSecs.length > 0 ? cmsSecs : (pg.sections || [])} />;
 }
 
 /* ── Page: Aluminium ── */
-function AluminiumPage({ onWaOpen }) {
-  return <DevServicePage
-    pageKey="aluminium"
-    title="Aluminium"
-    subtitle="Kusen, pintu, jendela, dan partisi aluminium berkualitas tinggi — ringan, anti karat, dan tersedia dalam berbagai profil dan warna finishing."
-    icon="🔲"
-    heroColor="linear-gradient(135deg,#2b2d42 0%,#555b6e 50%,#8d99ae 100%)"
-    onWaOpen={onWaOpen}
-    sections={[
-      {
-        tag: "Produk Aluminium",
-        title: "Rangkaian Produk Aluminium Kami",
-        items: [
-          { icon: "🪟", title: "Kusen & Jendela Aluminium", desc: "Anti karat, tidak perlu dicat ulang, dan tersedia sistem swing, casement, maupun sliding." },
-          { icon: "🚪", title: "Pintu Aluminium", desc: "Ringan namun kuat — pilihan ideal untuk pintu kamar mandi, balkon, dan eksterior." },
-          { icon: "🔲", title: "Partisi Aluminium & Kaca", desc: "Pembatas ruang kantor atau rumah yang elegan dan mudah disesuaikan." },
-          { icon: "🌿", title: "Fasad Aluminium Composite", desc: "ACP (Aluminium Composite Panel) untuk cladding fasad eksterior modern dan premium." },
-          { icon: "🏠", title: "Canopy Aluminium", desc: "Kanopi dari profil aluminium ekstrusi — ringan, anti karat, dan estetis." },
-          { icon: "📐", title: "Railing & Handrail", desc: "Pegangan tangga dan railing balkon dari aluminium finishing powder coat aneka warna." },
-        ]
-      },
-      {
-        tag: "Keunggulan",
-        title: "Mengapa Memilih Aluminium?",
-        items: [
-          { icon: "🛡️", title: "Anti Karat & Tahan Lama", desc: "Tidak berkarat meski terpapar hujan dan panas ekstrem — perawatan minimal, usia panjang." },
-          { icon: "⚡", title: "Ringan & Kuat", desc: "Ratio kekuatan-bobot tinggi sehingga tidak membebani struktur bangunan." },
-          { icon: "🎨", title: "Aneka Pilihan Warna", desc: "Finishing powder coat dengan ratusan pilihan warna agar cocok dengan tema hunian Anda." },
-        ]
-      }
-    ]}
-  />;
+function AluminiumPage({ onWaOpen, data }) {
+  const pg       = data?.aluminiumPage || {};
+  const cmsSecs  = (data?.aluminiumPageSections || []).map(parseSectionItems);
+  const title    = data?.content?.aluminiumTitle    || data?.aluminiumTitle    || pg.title    || "Aluminium";
+  const subtitle = data?.content?.aluminiumSub      || data?.aluminiumSub      || pg.subtitle || "Kusen, pintu, jendela, dan partisi aluminium berkualitas tinggi — ringan, anti karat, dan tersedia dalam berbagai profil dan warna finishing.";
+  const icon     = data?.content?.aluminiumIcon     || data?.aluminiumIcon     || pg.icon     || "🔲";
+  const heroClr  = data?.content?.aluminiumHeroColor|| data?.aluminiumHeroColor|| pg.heroColor|| "linear-gradient(135deg,#2b2d42 0%,#555b6e 50%,#8d99ae 100%)";
+  return <DevServicePage pageKey="aluminium" title={title} subtitle={subtitle} icon={icon} heroColor={heroClr} onWaOpen={onWaOpen}
+    sections={cmsSecs.length > 0 ? cmsSecs : (pg.sections || [])} />;
 }
 
 /* ── Page: Landscape & Taman ── */
-function LandscapePage({ onWaOpen }) {
-  return <DevServicePage
-    pageKey="landscape"
-    title="Landscape & Taman"
-    subtitle="Ciptakan taman impian yang asri, hijau, dan menenangkan. Kami menghadirkan desain landscape profesional untuk hunian, perumahan, maupun area komersial."
-    icon="🌳"
-    heroColor="linear-gradient(135deg,#1a472a 0%,#2d6a4f 50%,#40916c 100%)"
-    onWaOpen={onWaOpen}
-    sections={[
-      {
-        tag: "Layanan Taman",
-        title: "Layanan Landscape Kami",
-        items: [
-          { icon: "🌿", title: "Desain Taman Depan", desc: "Taman depan yang mempercantik fasad rumah — paduan tanaman, batu, dan lampu taman." },
-          { icon: "🏡", title: "Taman Belakang / Rooftop", desc: "Oasis pribadi di halaman belakang atau atap rumah untuk relaksasi dan hiburan keluarga." },
-          { icon: "🌺", title: "Vertical Garden", desc: "Dinding hijau vertikal sebagai elemen dekoratif sekaligus penyejuk udara di ruang terbatas." },
-          { icon: "💧", title: "Kolam Hias & Air Mancur", desc: "Fitur air yang menenangkan — dari kolam ikan koi hingga waterfall minimalis modern." },
-          { icon: "💡", title: "Lampu Taman & Outdoor Lighting", desc: "Pencahayaan artistik yang memperindah taman di malam hari sekaligus meningkatkan keamanan." },
-          { icon: "🌱", title: "Perawatan Taman Berkala", desc: "Jasa perawatan rutin: pemangkasan, pemupukan, penyiraman, dan penggantian tanaman." },
-        ]
-      },
-      {
-        tag: "Material & Elemen",
-        title: "Elemen Taman Premium",
-        items: [
-          { icon: "🪨", title: "Batu Alam & Kerikil", desc: "Batu andesit, batu candi, kerikil warna — untuk jalur taman, dinding, dan aksen dekoratif." },
-          { icon: "🌳", title: "Tanaman Pilihan", desc: "Seleksi tanaman sesuai iklim lokal — tahan panas, mudah dirawat, dan bernilai estetis tinggi." },
-          { icon: "🏗️", title: "Pergola & Gazebo", desc: "Struktur atap taman dari kayu atau besi untuk area duduk yang nyaman di luar ruangan." },
-        ]
-      }
-    ]}
-  />;
+function LandscapePage({ onWaOpen, data }) {
+  const pg       = data?.landscapePage || {};
+  const cmsSecs  = (data?.landscapePageSections || []).map(parseSectionItems);
+  const title    = data?.content?.landscapeTitle    || data?.landscapeTitle    || pg.title    || "Landscape & Taman";
+  const subtitle = data?.content?.landscapeSub      || data?.landscapeSub      || pg.subtitle || "Ciptakan taman impian yang asri, hijau, dan menenangkan. Kami menghadirkan desain landscape profesional untuk hunian, perumahan, maupun area komersial.";
+  const icon     = data?.content?.landscapeIcon     || data?.landscapeIcon     || pg.icon     || "🌳";
+  const heroClr  = data?.content?.landscapeHeroColor|| data?.landscapeHeroColor|| pg.heroColor|| "linear-gradient(135deg,#1a472a 0%,#2d6a4f 50%,#40916c 100%)";
+  return <DevServicePage pageKey="landscape" title={title} subtitle={subtitle} icon={icon} heroColor={heroClr} onWaOpen={onWaOpen}
+    sections={cmsSecs.length > 0 ? cmsSecs : (pg.sections || [])} />;
 }
 
 /* ════════════════════════════════════════════ WA PICKER MODAL ════════════════════════════════════════════ */
@@ -12811,19 +12602,19 @@ export default function BricksyTravel() {
 
 
               {/* ABOUT PAGE */}
-              {page === "about" && <AboutPage content={data.content} images={data.images} teamMembers={data.teamMembers || []} onWaOpen={openWaPicker} />}
+              {page === "about" && <AboutPage content={data.content} images={data.images} teamMembers={data.teamMembers || []} onWaOpen={openWaPicker} data={data} />}
 
               {/* SERVICES PAGE */}
               {(page === "services" || activePaket) && <ServicesPage content={data.content} services={data.services || []} navigateTo={navigateTo} activePaket={activePaket} onOpenPaket={openPaket} onClosePaket={closePaket} onWaOpen={openWaPicker} />}
 
               {/* SUB-SERVICE PAGES */}
-              {page === "desainrab"   && <DesainRabPage   onWaOpen={openWaPicker} />}
+              {page === "desainrab"   && <DesainRabPage   onWaOpen={openWaPicker} data={data} />}
               {page === "temarumah"   && <TemaRumahPage   onWaOpen={openWaPicker} temaSlug={temaSlug} setTemaSlug={setTemaSlug} temaItems={data.temaRumahItems} />}
-              {page === "interior"    && <InteriorPage    onWaOpen={openWaPicker} />}
-              {page === "pagar"       && <PagarPage       onWaOpen={openWaPicker} />}
-              {page === "kanopi"      && <KanopiPage      onWaOpen={openWaPicker} />}
-              {page === "aluminium"   && <AluminiumPage   onWaOpen={openWaPicker} />}
-              {page === "landscape"   && <LandscapePage   onWaOpen={openWaPicker} />}
+              {page === "interior"    && <InteriorPage    onWaOpen={openWaPicker} data={data} />}
+              {page === "pagar"       && <PagarPage       onWaOpen={openWaPicker} data={data} />}
+              {page === "kanopi"      && <KanopiPage      onWaOpen={openWaPicker} data={data} />}
+              {page === "aluminium"   && <AluminiumPage   onWaOpen={openWaPicker} data={data} />}
+              {page === "landscape"   && <LandscapePage   onWaOpen={openWaPicker} data={data} />}
 
               {/* NEWS / SHOP / DESTINATIONS */}
               {["news", "shop", "destinations"].includes(page) && (
@@ -12845,16 +12636,17 @@ export default function BricksyTravel() {
             {[
               { id: "dashboard", label: "Dashboard", show: true },
               { id: "content", label: "Konten Website", show: isAdmin },
-              { id: "set_home", label: "⚙ Setting Home", show: isAdmin },
-              { id: "services", label: "Layanan", show: isAdmin },
-              { id: "set_layanankami", label: "⚙ Setting Layanan Kami", show: isAdmin },
-              { id: "set_desainrab", label: "⚙ Setting Desain & RAB", show: isAdmin },
-              { id: "set_temarumah", label: "⚙ Setting Tema Rumah", show: isAdmin },
-              { id: "set_interior", label: "⚙ Setting Interior", show: isAdmin },
-              { id: "set_pagar", label: "⚙ Setting Pagar Rumah", show: isAdmin },
-              { id: "set_kanopi", label: "⚙ Setting Kanopi", show: isAdmin },
-              { id: "set_aluminium", label: "⚙ Setting Aluminium", show: isAdmin },
-              { id: "set_landscape", label: "⚙ Setting Landscape & Taman", show: isAdmin },
+              { id: "set_home",       label: "⚙ Setting Home",              show: isAdmin },
+              { id: "set_about",      label: "⚙ Setting About",             show: isAdmin },
+              { id: "services",       label: "Layanan",                      show: isAdmin },
+              { id: "set_layanankami",label: "⚙ Setting Layanan Kami",      show: isAdmin },
+              { id: "set_desainrab",  label: "⚙ Setting Desain & RAB",      show: isAdmin },
+              { id: "set_temarumah",  label: "⚙ Setting Tema Rumah",        show: isAdmin },
+              { id: "set_interior",   label: "⚙ Setting Interior",          show: isAdmin },
+              { id: "set_pagar",      label: "⚙ Setting Pagar Rumah",       show: isAdmin },
+              { id: "set_kanopi",     label: "⚙ Setting Kanopi",            show: isAdmin },
+              { id: "set_aluminium",  label: "⚙ Setting Aluminium",         show: isAdmin },
+              { id: "set_landscape",  label: "⚙ Setting Landscape & Taman", show: isAdmin },
               { id: "team", label: "Susunan Tim", show: isAdmin },
               { id: "messages", label: "Pesan Masuk", show: canCS },
               { id: "users", label: "Users", show: isAdmin },
@@ -13033,6 +12825,74 @@ export default function BricksyTravel() {
               )}
 
               {/* SETTING DESAIN & RAB */}
+              {/* SETTING ABOUT */}
+              {adminTab === "set_about" && isAdmin && (
+                <SubLayananAdmin
+                  title="Setting Halaman About"
+                  icon="🏢"
+                  accentColor="#2E3D3F"
+                  storeKey="about"
+                  data={data}
+                  save={save}
+                  notify={notify}
+                  uploadToCloudinary={uploadToCloudinary}
+                  pageDesc="Kelola semua konten halaman About — hero, visi/misi, statistik, nilai perusahaan, timeline perjalanan, dan kartu layanan."
+                  sections={[
+                    { key: "aboutHeroLabel", label: "Label Hero (kecil di atas judul)",     type: "text" },
+                    { key: "aboutHeroTitle", label: "Judul Utama Hero",                     type: "text" },
+                    { key: "aboutHeroSub",   label: "Sub-judul / Deskripsi Hero",           type: "textarea" },
+                    { key: "aboutWhyTitle",  label: "Judul Seksi 'Mengapa Memilih Kami'",  type: "text" },
+                    { key: "aboutText",      label: "Deskripsi Perusahaan (paragraf)",      type: "textarea" },
+                    { key: "aboutVisi",      label: "Visi Perusahaan",                      type: "textarea" },
+                    { key: "aboutMisi",      label: "Misi Perusahaan (pisahkan dengan tanda |)", type: "textarea",
+                      placeholder: "Memberikan layanan terbaik|Memastikan kepuasan klien|Berinovasi secara berkelanjutan" },
+                  ]}
+                  imageGroups={[
+                    { key: "aboutHero",   label: "Gambar Hero About",   count: 2, desc: "Foto banner halaman About." },
+                    { key: "aboutImages", label: "Foto Perusahaan",     count: 4, desc: "Foto tim, kantor, atau kegiatan." },
+                  ]}
+                  multiCrud={[
+                    {
+                      crudKey: "aboutStats",
+                      crudLabel: "Statistik / Angka Pencapaian",
+                      crudFields: [
+                        { key: "num",   label: "Angka / Nilai",  type: "text", placeholder: "500+" },
+                        { key: "label", label: "Label Statistik",type: "text", placeholder: "Klien Puas" },
+                      ],
+                    },
+                    {
+                      crudKey: "aboutValues",
+                      crudLabel: "Nilai Perusahaan / Mengapa Memilih Kami",
+                      crudFields: [
+                        { key: "icon",  label: "Emoji Icon",   type: "text",     placeholder: "✈️" },
+                        { key: "title", label: "Judul Nilai",  type: "text",     placeholder: "Expert Travel Planning" },
+                        { key: "desc",  label: "Deskripsi",    type: "textarea", placeholder: "Penjelasan nilai perusahaan..." },
+                      ],
+                    },
+                    {
+                      crudKey: "aboutTimeline",
+                      crudLabel: "Timeline Perjalanan Perusahaan",
+                      crudFields: [
+                        { key: "year",  label: "Tahun",         type: "text",     placeholder: "2018" },
+                        { key: "title", label: "Judul Momen",   type: "text",     placeholder: "VASTURA GROUP Berdiri" },
+                        { key: "desc",  label: "Deskripsi",     type: "textarea", placeholder: "Cerita singkat momen ini..." },
+                      ],
+                    },
+                    {
+                      crudKey: "aboutLayanan",
+                      crudLabel: "Kartu Layanan di Halaman About",
+                      crudFields: [
+                        { key: "icon",  label: "Emoji Icon",          type: "text",     placeholder: "🛋️" },
+                        { key: "title", label: "Nama Layanan",         type: "text",     placeholder: "Interior" },
+                        { key: "desc",  label: "Deskripsi Singkat",   type: "textarea", placeholder: "Desain interior modern..." },
+                        { key: "slug",  label: "Slug Halaman Tujuan", type: "text",     placeholder: "interior" },
+                      ],
+                      crudHasImage: true,
+                    },
+                  ]}
+                />
+              )}
+
               {adminTab === "set_desainrab" && isAdmin && (
                 <SubLayananAdmin
                   title="Setting Desain & RAB"
@@ -13043,25 +12903,67 @@ export default function BricksyTravel() {
                   save={save}
                   notify={notify}
                   uploadToCloudinary={uploadToCloudinary}
-                  pageDesc="Kelola konten halaman Jasa Desain & RAB (Rencana Anggaran Biaya)."
+                  pageDesc="Kelola semua konten halaman Desain & RAB — proses, galeri, paket harga, dan FAQ."
                   sections={[
                     { key: "desainRabTitle", label: "Judul Halaman Desain & RAB", type: "text" },
-                    { key: "desainRabSub", label: "Sub-judul / Tagline", type: "textarea" },
-                    { key: "desainRabDesc", label: "Deskripsi Lengkap Layanan", type: "textarea" },
-                    { key: "desainRabCta", label: "Label Tombol CTA", type: "text" },
+                    { key: "desainRabSub",   label: "Sub-judul / Tagline",         type: "textarea" },
+                    { key: "desainRabDesc",  label: "Deskripsi Lengkap Layanan",   type: "textarea" },
+                    { key: "desainRabCta",   label: "Label Tombol CTA",            type: "text" },
                   ]}
                   imageGroups={[
-                    { key: "desainRabHero", label: "Gambar Hero", count: 2, desc: "Foto utama halaman Desain & RAB." },
-                    { key: "desainRabGal", label: "Galeri Portofolio Desain", count: 6, desc: "Foto hasil desain dan RAB." },
+                    { key: "desainRabHero", label: "Gambar Hero",              count: 2, desc: "Foto utama halaman Desain & RAB." },
                   ]}
-                  crudKey="desainRabItems"
-                  crudLabel="Paket / Layanan RAB"
-                  crudFields={[
-                    { key: "nama", label: "Nama Paket", type: "text", placeholder: "contoh: Paket Desain Basic" },
-                    { key: "harga", label: "Harga / Keterangan Harga", type: "text", placeholder: "Rp 2.500.000" },
-                    { key: "deskripsi", label: "Deskripsi Paket", type: "textarea", placeholder: "Termasuk: ..." },
+                  multiCrud={[
+                    {
+                      crudKey: "desainRabProses",
+                      crudLabel: "Alur Proses Kerja",
+                      crudFields: [
+                        { key: "no",    label: "Nomor Urut (01–06)",  type: "text",     placeholder: "01" },
+                        { key: "icon",  label: "Emoji Icon",          type: "text",     placeholder: "👥" },
+                        { key: "label", label: "Label Langkah",       type: "text",     placeholder: "Konsultasi" },
+                        { key: "desc",  label: "Deskripsi Langkah",   type: "textarea", placeholder: "Konsultasi kebutuhan & budget awal." },
+                      ],
+                    },
+                    {
+                      crudKey: "desainRabDapatkan",
+                      crudLabel: "Yang Anda Dapatkan",
+                      crudFields: [
+                        { key: "icon",  label: "Emoji Icon",  type: "text",     placeholder: "🏠" },
+                        { key: "title", label: "Judul Item",  type: "text",     placeholder: "Denah Ruangan" },
+                        { key: "desc",  label: "Deskripsi",   type: "textarea", placeholder: "Penjelasan singkat..." },
+                      ],
+                    },
+                    {
+                      crudKey: "desainRabGaleri",
+                      crudLabel: "Galeri Portofolio",
+                      crudFields: [
+                        { key: "label", label: "Judul Foto",           type: "text", placeholder: "Desain Rumah Modern" },
+                        { key: "luas",  label: "Luas Bangunan",        type: "text", placeholder: "220 m²" },
+                      ],
+                      crudHasImage: true,
+                    },
+                    {
+                      crudKey: "desainRabPaket",
+                      crudLabel: "Paket Harga",
+                      crudFields: [
+                        { key: "label",         label: "Nama Paket",                   type: "text",     placeholder: "PAKET BASIC" },
+                        { key: "tag",           label: "Tag Badge (kosongkan jika tidak ada)", type: "text", placeholder: "REKOMENDASI" },
+                        { key: "sub",           label: "Sub-keterangan Paket",         type: "text",     placeholder: "Cocok untuk rumah kecil" },
+                        { key: "harga",         label: "Harga (angka saja, contoh: 6.000)", type: "text", placeholder: "6.000" },
+                        { key: "satuan",        label: "Satuan Harga",                 type: "text",     placeholder: "/m²" },
+                        { key: "isRekomendasi", label: "Jadikan Paket Rekomendasi (isi: true / false)", type: "text", placeholder: "false" },
+                        { key: "fitur",         label: "Fitur (pisah dengan tanda |)", type: "textarea", placeholder: "Denah Arsitektur|Tampak Depan|RAB Estimasi" },
+                      ],
+                    },
+                    {
+                      crudKey: "desainRabFaq",
+                      crudLabel: "FAQ (Pertanyaan Umum)",
+                      crudFields: [
+                        { key: "q", label: "Pertanyaan", type: "text",     placeholder: "Berapa lama waktu pengerjaan?" },
+                        { key: "a", label: "Jawaban",    type: "textarea", placeholder: "Jawaban lengkap..." },
+                      ],
+                    },
                   ]}
-                  crudHasImage
                 />
               )}
 
@@ -13076,11 +12978,11 @@ export default function BricksyTravel() {
                   save={save}
                   notify={notify}
                   uploadToCloudinary={uploadToCloudinary}
-                  pageDesc="Kelola konten halaman Tema Rumah — tambah, edit, atau hapus tema-tema rumah yang tersedia."
+                  pageDesc="Kelola semua tema rumah — tambah, edit, atau hapus tema beserta detail eksterior, interior, denah, dan paket harga."
                   sections={[
-                    { key: "temaRumahTitle", label: "Judul Halaman Tema Rumah", type: "text" },
-                    { key: "temaRumahSub", label: "Sub-judul / Deskripsi", type: "textarea" },
-                    { key: "temaRumahCta", label: "Label Tombol CTA", type: "text" },
+                    { key: "temaRumahTitle", label: "Judul Halaman Tema Rumah",    type: "text" },
+                    { key: "temaRumahSub",   label: "Sub-judul / Deskripsi",       type: "textarea" },
+                    { key: "temaRumahCta",   label: "Label Tombol CTA",            type: "text" },
                   ]}
                   imageGroups={[
                     { key: "temaRumahHero", label: "Gambar Hero Tema Rumah", count: 2, desc: "Foto banner halaman Tema Rumah." },
@@ -13088,20 +12990,20 @@ export default function BricksyTravel() {
                   crudKey="temaRumahItems"
                   crudLabel="Daftar Tema Rumah"
                   crudFields={[
-                    { key: "no", label: "Nomor Urut (contoh: 01)", type: "text", placeholder: "01" },
-                    { key: "nama", label: "Nama Tema", type: "text", placeholder: "contoh: Modern Minimalis" },
-                    { key: "slug", label: "Slug URL (huruf kecil, tanda hubung)", type: "text", placeholder: "modern-minimalis" },
-                    { key: "tagline", label: "Tagline / Keterangan Singkat", type: "text", placeholder: "Elegan, bersih, fungsional" },
-                    { key: "deskripsi", label: "Deskripsi Tema", type: "textarea", placeholder: "Detail karakteristik tema..." },
-                    { key: "warna", label: "Warna Aksen (HEX, contoh: #C9AA71)", type: "text", placeholder: "#C9AA71" },
-                    { key: "fitur", label: "Fitur (JSON array: [{\"icon\":\"🏠\",\"label\":\"Tampilan Modern\"},...] maks 4 item)", type: "textarea", placeholder: '[{"icon":"🏠","label":"Tampilan Modern"},{"icon":"📐","label":"Ruang Lebih Luas"}]' },
-                    { key: "exteriorDesc", label: "Deskripsi Eksterior", type: "textarea", placeholder: "Deskripsi tampilan luar bangunan..." },
-                    { key: "exteriorPoin", label: "Poin-poin Eksterior (pisahkan dengan tanda |)", type: "textarea", placeholder: "Material: GRC, ACP|Atap: Dak beton|Warna: Abu-abu, putih" },
-                    { key: "interiorDesc", label: "Deskripsi Interior", type: "textarea", placeholder: "Deskripsi tampilan dalam bangunan..." },
-                    { key: "interiorPoin", label: "Poin-poin Interior (pisahkan dengan tanda |)", type: "textarea", placeholder: "Lantai: Granit 60×60|Plafon: Gypsum doff|Furnitur: Custom built-in" },
-                    { key: "denahDesc", label: "Deskripsi Denah Ruang", type: "textarea", placeholder: "Deskripsi layout dan tata ruang..." },
-                    { key: "denahRuangan", label: "Daftar Ruangan (JSON array: [{\"nama\":\"Ruang Tamu\",\"ukuran\":\"5 × 6 m\",\"ikon\":\"🛋️\"},...] )", type: "textarea", placeholder: '[{"nama":"Ruang Tamu","ukuran":"5 × 6 m","ikon":"🛋️"}]' },
-                    { key: "paket", label: "Paket Harga (JSON array: [{\"nama\":\"Paket Standar\",\"luas\":\"60–80 m²\",\"harga\":350000,\"termasuk\":[\"item1\"]},...] — harga dalam Rupiah/m², 0 = Hubungi Kami)", type: "textarea", placeholder: '[{"nama":"Paket Standar","luas":"60–80 m²","harga":350000,"termasuk":["Desain arsitektur","RAB lengkap"]}]' },
+                    { key: "no",            label: "Nomor Urut (contoh: 01)",                    type: "text",     placeholder: "01" },
+                    { key: "nama",          label: "Nama Tema",                                  type: "text",     placeholder: "Modern Minimalis" },
+                    { key: "slug",          label: "Slug URL (huruf kecil + tanda hubung)",      type: "text",     placeholder: "modern-minimalis" },
+                    { key: "tagline",       label: "Tagline Singkat",                            type: "text",     placeholder: "Desain simpel, elegan, dan fungsional" },
+                    { key: "deskripsi",     label: "Deskripsi Tema",                             type: "textarea", placeholder: "Penjelasan karakteristik tema secara lengkap..." },
+                    { key: "warna",         label: "Warna Aksen (HEX, contoh: #C9AA71)",        type: "text",     placeholder: "#C9AA71" },
+                    { key: "fitur",         label: "Fitur Unggulan (JSON: [{\"icon\":\"🏠\",\"label\":\"Tampilan Modern\"},...] maks 4)", type: "textarea", placeholder: '[{"icon":"🏠","label":"Tampilan Modern"},{"icon":"📐","label":"Ruang Lebih Luas"}]' },
+                    { key: "exteriorDesc",  label: "Deskripsi Eksterior",                       type: "textarea", placeholder: "Fasad flat dengan material plester halus..." },
+                    { key: "exteriorPoin",  label: "Poin Eksterior (pisah dengan |)",           type: "textarea", placeholder: "Material: GRC, ACP|Atap: Dak beton|Warna: Abu-abu" },
+                    { key: "interiorDesc",  label: "Deskripsi Interior",                        type: "textarea", placeholder: "Palet monokromatik dengan aksen kayu natural..." },
+                    { key: "interiorPoin",  label: "Poin Interior (pisah dengan |)",            type: "textarea", placeholder: "Lantai: Granit 60×60|Plafon: Gypsum doff" },
+                    { key: "denahDesc",     label: "Deskripsi Denah Ruang",                     type: "textarea", placeholder: "Layout open-plan yang memaksimalkan sirkulasi udara..." },
+                    { key: "denahRuangan",  label: "Daftar Ruangan (JSON: [{\"nama\":\"Ruang Tamu\",\"ukuran\":\"5×6 m\",\"ikon\":\"🛋️\"},...] )", type: "textarea", placeholder: '[{"nama":"Ruang Tamu","ukuran":"5 × 6 m","ikon":"🛋️"}]' },
+                    { key: "paket",         label: "Paket Harga (JSON: [{\"nama\":\"Paket Standar\",\"luas\":\"60–80 m²\",\"harga\":350000,\"termasuk\":[\"item1\",...]},...] — harga 0 = Hubungi Kami)", type: "textarea", placeholder: '[{"nama":"Paket Standar","luas":"60–80 m²","harga":350000,"termasuk":["Desain arsitektur","RAB lengkap"]}]' },
                   ]}
                   crudHasImage
                 />
@@ -13111,32 +13013,46 @@ export default function BricksyTravel() {
               {adminTab === "set_interior" && isAdmin && (
                 <SubLayananAdmin
                   title="Setting Interior"
-                  icon="🛋"
+                  icon="🛋️"
                   accentColor="#8e44ad"
                   storeKey="interior"
                   data={data}
                   save={save}
                   notify={notify}
                   uploadToCloudinary={uploadToCloudinary}
-                  pageDesc="Kelola konten halaman Interior — portofolio, layanan, dan galeri interior."
+                  pageDesc="Kelola konten halaman Interior — judul, sub-judul, warna hero, dan semua kartu layanan per-seksi."
                   sections={[
-                    { key: "interiorTitle", label: "Judul Halaman Interior", type: "text" },
-                    { key: "interiorSub", label: "Sub-judul / Tagline", type: "textarea" },
-                    { key: "interiorDesc", label: "Deskripsi Layanan Interior", type: "textarea" },
-                    { key: "interiorCta", label: "Label Tombol CTA", type: "text" },
+                    { key: "interiorTitle",     label: "Judul Halaman Interior",       type: "text" },
+                    { key: "interiorSub",       label: "Sub-judul / Tagline",          type: "textarea" },
+                    { key: "interiorIcon",      label: "Icon / Emoji Halaman",         type: "text",     placeholder: "🛋️" },
+                    { key: "interiorHeroColor", label: "Warna Hero (CSS gradient/hex)", type: "text",    placeholder: "linear-gradient(135deg,#4a1942 0%,#b565c0 100%)" },
                   ]}
                   imageGroups={[
-                    { key: "interiorHero", label: "Gambar Hero Interior", count: 2, desc: "Foto utama halaman Interior." },
-                    { key: "interiorGal", label: "Galeri Portofolio Interior", count: 8, desc: "Foto hasil pekerjaan interior." },
+                    { key: "interiorHero", label: "Gambar Hero Interior",       count: 2, desc: "Foto utama halaman Interior." },
+                    { key: "interiorGal",  label: "Galeri Portofolio Interior", count: 8, desc: "Foto hasil pekerjaan interior." },
                   ]}
-                  crudKey="interiorItems"
-                  crudLabel="Paket / Kategori Interior"
-                  crudFields={[
-                    { key: "nama", label: "Nama Paket / Kategori", type: "text", placeholder: "contoh: Interior Minimalis" },
-                    { key: "harga", label: "Harga / Keterangan Harga", type: "text", placeholder: "Rp 500rb/m²" },
-                    { key: "deskripsi", label: "Deskripsi", type: "textarea", placeholder: "Deskripsi kategori interior..." },
+                  multiCrud={[
+                    {
+                      crudKey: "interiorPageSections",
+                      crudLabel: "Seksi Konten (Grup Kartu Layanan)",
+                      crudFields: [
+                        { key: "tag",   label: "Tag / Label Seksi",  type: "text", placeholder: "Ruang Utama" },
+                        { key: "title", label: "Judul Seksi",        type: "text", placeholder: "Layanan Desain Interior Lengkap" },
+                        { key: "items", label: "Kartu Layanan (JSON: [{\"id\":\"i1\",\"icon\":\"🏠\",\"title\":\"Teras\",\"desc\":\"...\"},...] )", type: "textarea",
+                          placeholder: '[{"id":"i1","icon":"🏠","title":"Teras","desc":"Desain teras yang menyambut."}]' },
+                      ],
+                    },
+                    {
+                      crudKey: "interiorItems",
+                      crudLabel: "Paket / Kategori Harga Interior",
+                      crudFields: [
+                        { key: "nama",      label: "Nama Paket",           type: "text",     placeholder: "Interior Minimalis" },
+                        { key: "harga",     label: "Harga / Keterangan",   type: "text",     placeholder: "Rp 500rb/m²" },
+                        { key: "deskripsi", label: "Deskripsi",            type: "textarea", placeholder: "Termasuk furnitur, plafon, cat..." },
+                      ],
+                      crudHasImage: true,
+                    },
                   ]}
-                  crudHasImage
                 />
               )}
 
@@ -13151,26 +13067,40 @@ export default function BricksyTravel() {
                   save={save}
                   notify={notify}
                   uploadToCloudinary={uploadToCloudinary}
-                  pageDesc="Kelola konten halaman Pagar Rumah — jenis, harga, dan galeri pagar."
+                  pageDesc="Kelola konten halaman Pagar Rumah — judul, hero, seksi kartu layanan, dan galeri."
                   sections={[
-                    { key: "pagarTitle", label: "Judul Halaman Pagar Rumah", type: "text" },
-                    { key: "pagarSub", label: "Sub-judul / Tagline", type: "textarea" },
-                    { key: "pagarDesc", label: "Deskripsi Layanan Pagar", type: "textarea" },
-                    { key: "pagarCta", label: "Label Tombol CTA", type: "text" },
+                    { key: "pagarTitle",     label: "Judul Halaman Pagar Rumah",     type: "text" },
+                    { key: "pagarSub",       label: "Sub-judul / Tagline",           type: "textarea" },
+                    { key: "pagarIcon",      label: "Icon / Emoji Halaman",          type: "text",     placeholder: "🔒" },
+                    { key: "pagarHeroColor", label: "Warna Hero (CSS gradient/hex)", type: "text",     placeholder: "linear-gradient(135deg,#1a1a2e 0%,#0f3460 100%)" },
                   ]}
                   imageGroups={[
                     { key: "pagarHero", label: "Gambar Hero Pagar", count: 2, desc: "Foto banner halaman Pagar Rumah." },
-                    { key: "pagarGal", label: "Galeri Pagar", count: 6, desc: "Foto contoh pagar yang tersedia." },
+                    { key: "pagarGal",  label: "Galeri Pagar",      count: 6, desc: "Foto contoh pagar yang tersedia." },
                   ]}
-                  crudKey="pagarItems"
-                  crudLabel="Jenis / Model Pagar"
-                  crudFields={[
-                    { key: "nama", label: "Nama Model Pagar", type: "text", placeholder: "contoh: Pagar Hollow Minimalis" },
-                    { key: "material", label: "Material", type: "text", placeholder: "contoh: Besi Hollow" },
-                    { key: "harga", label: "Harga / Keterangan", type: "text", placeholder: "Rp 800rb/m" },
-                    { key: "deskripsi", label: "Deskripsi", type: "textarea", placeholder: "Keunggulan dan detail..." },
+                  multiCrud={[
+                    {
+                      crudKey: "pagarPageSections",
+                      crudLabel: "Seksi Konten (Grup Kartu Layanan)",
+                      crudFields: [
+                        { key: "tag",   label: "Tag / Label Seksi", type: "text", placeholder: "Jenis Pagar" },
+                        { key: "title", label: "Judul Seksi",       type: "text", placeholder: "Pilihan Model & Material Pagar" },
+                        { key: "items", label: "Kartu Layanan (JSON: [{\"id\":\"p1\",\"icon\":\"🔩\",\"title\":\"Pagar Besi Tempa\",\"desc\":\"...\"},...] )", type: "textarea",
+                          placeholder: '[{"id":"p1","icon":"🔩","title":"Pagar Besi Tempa","desc":"Klasik dan kokoh."}]' },
+                      ],
+                    },
+                    {
+                      crudKey: "pagarItems",
+                      crudLabel: "Jenis / Model Pagar (Harga)",
+                      crudFields: [
+                        { key: "nama",      label: "Nama Model Pagar",  type: "text",     placeholder: "Pagar Hollow Minimalis" },
+                        { key: "material",  label: "Material",          type: "text",     placeholder: "Besi Hollow" },
+                        { key: "harga",     label: "Harga / Keterangan",type: "text",     placeholder: "Rp 800rb/m" },
+                        { key: "deskripsi", label: "Deskripsi",         type: "textarea", placeholder: "Keunggulan dan detail..." },
+                      ],
+                      crudHasImage: true,
+                    },
                   ]}
-                  crudHasImage
                 />
               )}
 
@@ -13185,26 +13115,40 @@ export default function BricksyTravel() {
                   save={save}
                   notify={notify}
                   uploadToCloudinary={uploadToCloudinary}
-                  pageDesc="Kelola konten halaman Kanopi — jenis, spesifikasi, dan galeri kanopi."
+                  pageDesc="Kelola konten halaman Kanopi — judul, hero, seksi kartu layanan, dan galeri."
                   sections={[
-                    { key: "kanopiTitle", label: "Judul Halaman Kanopi", type: "text" },
-                    { key: "kanopiSub", label: "Sub-judul / Tagline", type: "textarea" },
-                    { key: "kanopiDesc", label: "Deskripsi Layanan Kanopi", type: "textarea" },
-                    { key: "kanopiCta", label: "Label Tombol CTA", type: "text" },
+                    { key: "kanopiTitle",     label: "Judul Halaman Kanopi",         type: "text" },
+                    { key: "kanopiSub",       label: "Sub-judul / Tagline",          type: "textarea" },
+                    { key: "kanopiIcon",      label: "Icon / Emoji Halaman",         type: "text",     placeholder: "🏗️" },
+                    { key: "kanopiHeroColor", label: "Warna Hero (CSS gradient/hex)", type: "text",    placeholder: "linear-gradient(135deg,#1b4332 0%,#52b788 100%)" },
                   ]}
                   imageGroups={[
                     { key: "kanopiHero", label: "Gambar Hero Kanopi", count: 2, desc: "Foto banner halaman Kanopi." },
-                    { key: "kanopiGal", label: "Galeri Kanopi", count: 6, desc: "Foto contoh kanopi." },
+                    { key: "kanopiGal",  label: "Galeri Kanopi",      count: 6, desc: "Foto contoh kanopi." },
                   ]}
-                  crudKey="kanopiItems"
-                  crudLabel="Jenis / Model Kanopi"
-                  crudFields={[
-                    { key: "nama", label: "Nama Model Kanopi", type: "text", placeholder: "contoh: Kanopi Polycarbonate" },
-                    { key: "material", label: "Material", type: "text", placeholder: "contoh: Baja Ringan + Polycarbonate" },
-                    { key: "harga", label: "Harga / Keterangan", type: "text", placeholder: "Rp 250rb/m²" },
-                    { key: "deskripsi", label: "Deskripsi", type: "textarea", placeholder: "Keunggulan dan detail..." },
+                  multiCrud={[
+                    {
+                      crudKey: "kanopiPageSections",
+                      crudLabel: "Seksi Konten (Grup Kartu Layanan)",
+                      crudFields: [
+                        { key: "tag",   label: "Tag / Label Seksi", type: "text", placeholder: "Jenis Kanopi" },
+                        { key: "title", label: "Judul Seksi",       type: "text", placeholder: "Model & Material Kanopi" },
+                        { key: "items", label: "Kartu Layanan (JSON: [{\"id\":\"k1\",\"icon\":\"🔵\",\"title\":\"Kanopi Polycarbonate\",\"desc\":\"...\"},...] )", type: "textarea",
+                          placeholder: '[{"id":"k1","icon":"🔵","title":"Kanopi Polycarbonate","desc":"Ringan dan tahan UV."}]' },
+                      ],
+                    },
+                    {
+                      crudKey: "kanopiItems",
+                      crudLabel: "Jenis / Model Kanopi (Harga)",
+                      crudFields: [
+                        { key: "nama",      label: "Nama Model Kanopi",  type: "text",     placeholder: "Kanopi Polycarbonate" },
+                        { key: "material",  label: "Material",           type: "text",     placeholder: "Baja Ringan + Polycarbonate" },
+                        { key: "harga",     label: "Harga / Keterangan", type: "text",     placeholder: "Rp 250rb/m²" },
+                        { key: "deskripsi", label: "Deskripsi",          type: "textarea", placeholder: "Keunggulan dan detail..." },
+                      ],
+                      crudHasImage: true,
+                    },
                   ]}
-                  crudHasImage
                 />
               )}
 
@@ -13219,26 +13163,40 @@ export default function BricksyTravel() {
                   save={save}
                   notify={notify}
                   uploadToCloudinary={uploadToCloudinary}
-                  pageDesc="Kelola konten halaman Aluminium — kusen, pintu, jendela, dan partisi aluminium."
+                  pageDesc="Kelola konten halaman Aluminium — judul, hero, seksi kartu layanan, dan galeri."
                   sections={[
-                    { key: "aluminiumTitle", label: "Judul Halaman Aluminium", type: "text" },
-                    { key: "aluminiumSub", label: "Sub-judul / Tagline", type: "textarea" },
-                    { key: "aluminiumDesc", label: "Deskripsi Layanan Aluminium", type: "textarea" },
-                    { key: "aluminiumCta", label: "Label Tombol CTA", type: "text" },
+                    { key: "aluminiumTitle",     label: "Judul Halaman Aluminium",      type: "text" },
+                    { key: "aluminiumSub",       label: "Sub-judul / Tagline",          type: "textarea" },
+                    { key: "aluminiumIcon",      label: "Icon / Emoji Halaman",         type: "text",     placeholder: "🔲" },
+                    { key: "aluminiumHeroColor", label: "Warna Hero (CSS gradient/hex)", type: "text",    placeholder: "linear-gradient(135deg,#2b2d42 0%,#8d99ae 100%)" },
                   ]}
                   imageGroups={[
                     { key: "aluminiumHero", label: "Gambar Hero Aluminium", count: 2, desc: "Foto banner halaman Aluminium." },
-                    { key: "aluminiumGal", label: "Galeri Aluminium", count: 6, desc: "Foto produk aluminium." },
+                    { key: "aluminiumGal",  label: "Galeri Aluminium",      count: 6, desc: "Foto produk aluminium." },
                   ]}
-                  crudKey="aluminiumItems"
-                  crudLabel="Produk / Jenis Aluminium"
-                  crudFields={[
-                    { key: "nama", label: "Nama Produk", type: "text", placeholder: "contoh: Kusen Aluminium 4\" " },
-                    { key: "spek", label: "Spesifikasi", type: "text", placeholder: "contoh: Tebal 4\", profil Australia" },
-                    { key: "harga", label: "Harga / Keterangan", type: "text", placeholder: "Rp 350rb/m" },
-                    { key: "deskripsi", label: "Deskripsi", type: "textarea", placeholder: "Keunggulan dan detail..." },
+                  multiCrud={[
+                    {
+                      crudKey: "aluminiumPageSections",
+                      crudLabel: "Seksi Konten (Grup Kartu Layanan)",
+                      crudFields: [
+                        { key: "tag",   label: "Tag / Label Seksi", type: "text", placeholder: "Produk Aluminium" },
+                        { key: "title", label: "Judul Seksi",       type: "text", placeholder: "Rangkaian Produk Aluminium Kami" },
+                        { key: "items", label: "Kartu Layanan (JSON: [{\"id\":\"a1\",\"icon\":\"🪟\",\"title\":\"Kusen Aluminium\",\"desc\":\"...\"},...] )", type: "textarea",
+                          placeholder: '[{"id":"a1","icon":"🪟","title":"Kusen Aluminium","desc":"Anti karat, tidak perlu dicat ulang."}]' },
+                      ],
+                    },
+                    {
+                      crudKey: "aluminiumItems",
+                      crudLabel: "Produk / Jenis Aluminium (Harga)",
+                      crudFields: [
+                        { key: "nama",      label: "Nama Produk",        type: "text",     placeholder: "Kusen Aluminium 4\"" },
+                        { key: "spek",      label: "Spesifikasi",        type: "text",     placeholder: "Tebal 4\", profil Australia" },
+                        { key: "harga",     label: "Harga / Keterangan", type: "text",     placeholder: "Rp 350rb/m" },
+                        { key: "deskripsi", label: "Deskripsi",          type: "textarea", placeholder: "Keunggulan dan detail..." },
+                      ],
+                      crudHasImage: true,
+                    },
                   ]}
-                  crudHasImage
                 />
               )}
 
@@ -13253,25 +13211,39 @@ export default function BricksyTravel() {
                   save={save}
                   notify={notify}
                   uploadToCloudinary={uploadToCloudinary}
-                  pageDesc="Kelola konten halaman Landscape & Taman — desain taman, penataan landscape, dan portofolio."
+                  pageDesc="Kelola konten halaman Landscape & Taman — judul, hero, seksi kartu layanan, dan galeri."
                   sections={[
-                    { key: "landscapeTitle", label: "Judul Halaman Landscape & Taman", type: "text" },
-                    { key: "landscapeSub", label: "Sub-judul / Tagline", type: "textarea" },
-                    { key: "landscapeDesc", label: "Deskripsi Layanan Landscape", type: "textarea" },
-                    { key: "landscapeCta", label: "Label Tombol CTA", type: "text" },
+                    { key: "landscapeTitle",     label: "Judul Halaman Landscape",      type: "text" },
+                    { key: "landscapeSub",       label: "Sub-judul / Tagline",          type: "textarea" },
+                    { key: "landscapeIcon",      label: "Icon / Emoji Halaman",         type: "text",     placeholder: "🌳" },
+                    { key: "landscapeHeroColor", label: "Warna Hero (CSS gradient/hex)", type: "text",    placeholder: "linear-gradient(135deg,#1a472a 0%,#40916c 100%)" },
                   ]}
                   imageGroups={[
-                    { key: "landscapeHero", label: "Gambar Hero Landscape", count: 2, desc: "Foto banner halaman Landscape." },
-                    { key: "landscapeGal", label: "Galeri Portofolio Taman", count: 8, desc: "Foto hasil penataan taman." },
+                    { key: "landscapeHero", label: "Gambar Hero Landscape",     count: 2, desc: "Foto banner halaman Landscape." },
+                    { key: "landscapeGal",  label: "Galeri Portofolio Taman",   count: 8, desc: "Foto hasil penataan taman." },
                   ]}
-                  crudKey="landscapeItems"
-                  crudLabel="Layanan / Paket Landscape"
-                  crudFields={[
-                    { key: "nama", label: "Nama Layanan", type: "text", placeholder: "contoh: Taman Tropis Modern" },
-                    { key: "harga", label: "Harga / Keterangan", type: "text", placeholder: "Mulai Rp 3.000.000" },
-                    { key: "deskripsi", label: "Deskripsi", type: "textarea", placeholder: "Detail layanan landscape..." },
+                  multiCrud={[
+                    {
+                      crudKey: "landscapePageSections",
+                      crudLabel: "Seksi Konten (Grup Kartu Layanan)",
+                      crudFields: [
+                        { key: "tag",   label: "Tag / Label Seksi", type: "text", placeholder: "Layanan Taman" },
+                        { key: "title", label: "Judul Seksi",       type: "text", placeholder: "Layanan Landscape Kami" },
+                        { key: "items", label: "Kartu Layanan (JSON: [{\"id\":\"ls1\",\"icon\":\"🌿\",\"title\":\"Desain Taman Depan\",\"desc\":\"...\"},...] )", type: "textarea",
+                          placeholder: '[{"id":"ls1","icon":"🌿","title":"Desain Taman Depan","desc":"Taman depan yang mempercantik fasad."}]' },
+                      ],
+                    },
+                    {
+                      crudKey: "landscapeItems",
+                      crudLabel: "Layanan / Paket Landscape (Harga)",
+                      crudFields: [
+                        { key: "nama",      label: "Nama Layanan",       type: "text",     placeholder: "Taman Tropis Modern" },
+                        { key: "harga",     label: "Harga / Keterangan", type: "text",     placeholder: "Mulai Rp 3.000.000" },
+                        { key: "deskripsi", label: "Deskripsi",          type: "textarea", placeholder: "Detail layanan landscape..." },
+                      ],
+                      crudHasImage: true,
+                    },
                   ]}
-                  crudHasImage
                 />
               )}
 
