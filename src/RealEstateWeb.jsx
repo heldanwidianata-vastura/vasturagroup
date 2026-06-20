@@ -674,6 +674,7 @@ const DEFAULT_DATA = {
     fbLink: "https://facebook.com/vastura_group",
     logoText: "VASTURA\nGROUP",
     logoImage: "",
+    footerLogoImage: "",
     logoSingleLine: false,
     logoFont: "Playfair Display",
     logoColor: "#111111",
@@ -684,6 +685,13 @@ const DEFAULT_DATA = {
     nav9: "Interior", nav10: "Pagar Rumah", nav11: "Kanopi", nav12: "Aluminium", nav13: "Landscape & Taman",
     servicesPageTitle: "Paket Layanan Kami",
     servicesPageSub: "Pilih paket yang sesuai dengan kebutuhan Anda. Setiap paket dirancang untuk memberikan pengalaman terbaik bersama VASTURA GROUP.",
+    waTemplates: {
+      umum:       "Halo VASTURA GROUP! 👋\n\nSaya ingin mengetahui lebih lanjut tentang layanan Anda.\n\nTerima kasih!",
+      paket:      "Halo VASTURA GROUP! 👋\n\nSaya tertarik dengan paket:\n*{judul_paket}*\n\nBisakah saya mendapatkan informasi lebih lanjut?\n\nTerima kasih!",
+      konsultasi: "Halo VASTURA GROUP! 👋\n\nSaya ingin konsultasi mengenai proyek properti saya.\n\nMohon bantuannya. Terima kasih!",
+      desainrab:  "Halo VASTURA GROUP! 👋\n\nSaya tertarik dengan jasa *Desain & RAB*:\n*{judul_paket}*\n\nBoleh saya konsultasi lebih lanjut?\n\nTerima kasih!",
+      layanan:    "Halo VASTURA GROUP! 👋\n\nSaya ingin bertanya tentang layanan:\n*{judul_layanan}*\n\nMohon informasinya. Terima kasih!",
+    },
   },
   posts: DEFAULT_POSTS,
   cats: ["Experience Thailand", "Best Adventures", "Sea & Beach", "Hiking Tours", "Kayaking Tours", "Winter Destinations"],
@@ -4299,7 +4307,7 @@ function EventWeddingCustomCardWide({ svc, onDetail, onWaOpen }) {
             onMouseLeave={e => { e.currentTarget.style.opacity = "1"; e.currentTarget.style.transform = "scale(1)"; }}>
             Lihat Detail &amp; Konsultasi
           </button>
-          <button onClick={() => onWaOpen && onWaOpen(`Halo VASTURA GROUP! 👋\n\nSaya tertarik dengan paket:\n*${svc.title}*\n\nMohon informasi lebih lanjut. Terima kasih!`)}
+          <button onClick={() => onWaOpen && onWaOpen({ key: "paket", vars: { judul_paket: svc.title } })}
             style={{ padding: "12px 24px", background: "#25d366", color: "#fff", borderRadius: 10, fontSize: "0.9375rem", fontWeight: 700, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 8, border: "none", transition: "opacity .2s", width: isMobile ? "100%" : "auto" }}
             onMouseEnter={e => e.currentTarget.style.opacity = ".85"}
             onMouseLeave={e => e.currentTarget.style.opacity = "1"}>
@@ -4408,7 +4416,7 @@ function EventWeddingPackageCard({ svc, onDetail, onWaOpen, isWide, categoryPack
                 </div>
               </div>
               <div style={{ display: "flex", flexDirection: "column", flexShrink: 0, gap: 0 }}>
-                <button onClick={e => { e.stopPropagation(); onWaOpen && onWaOpen(`Halo, saya tertarik dengan ${svc.title}`); }}
+                <button onClick={e => { e.stopPropagation(); onWaOpen && onWaOpen({ key: "paket", vars: { judul_paket: svc.title } }); }}
                   style={{ padding: "8px 20px", background: "#25D366", color: "#fff", border: "none", fontSize: "0.8125rem", fontWeight: 700, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 5, borderBottom: "1px solid rgba(255,255,255,.2)" }}>
                   💬 WA
                 </button>
@@ -4559,7 +4567,7 @@ function EventWeddingPackageCard({ svc, onDetail, onWaOpen, isWide, categoryPack
       {/* Footer CTA */}
       <div style={{ padding: "10px 12px 12px", background: al, borderLeft: `1px solid ${ac}25`, borderRight: `1px solid ${ac}25`, borderBottom: `1px solid ${ac}25`, borderRadius: "0 0 14px 14px", display: "flex", gap: 8 }}>
         <button
-          onClick={() => onWaOpen && onWaOpen(`Halo, saya tertarik dengan ${svc.title}`)}
+          onClick={() => onWaOpen && onWaOpen({ key: "paket", vars: { judul_paket: svc.title } })}
           style={{ flex: 1, padding: "10px 0", background: "#25D366", color: "#fff", border: "none", borderRadius: 8, fontSize: "0.75rem", fontWeight: 700, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 4 }}>
           💬 WA
         </button>
@@ -4632,7 +4640,7 @@ function TravelPackageCardWide({ svc, onDetail, onWaOpen }) {
             onMouseLeave={e => e.currentTarget.style.opacity = "1"}>
             Lihat Detail &amp; Konsultasi
           </button>
-          <button onClick={() => onWaOpen && onWaOpen(`Halo VASTURA GROUP! 👋\n\nSaya tertarik dengan paket:\n*${svc.title}*\n\nMohon informasi lebih lanjut. Terima kasih!`)}
+          <button onClick={() => onWaOpen && onWaOpen({ key: "paket", vars: { judul_paket: svc.title } })}
             style={{ padding: "12px 24px", background: "#25d366", color: "#fff", borderRadius: 10, fontSize: "0.9375rem", fontWeight: 700, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 8, border: "none", transition: "opacity .2s", width: isMobile ? "100%" : "auto" }}
             onMouseEnter={e => e.currentTarget.style.opacity = ".85"}
             onMouseLeave={e => e.currentTarget.style.opacity = "1"}>
@@ -4753,7 +4761,7 @@ function TravelPackageCard({ svc, onDetail, onWaOpen, isWide }) {
             </div>
             {/* CTA buttons */}
             <div style={{ display: "flex", flexDirection: "column", gap: 0, flexShrink: 0 }}>
-              <button onClick={() => onWaOpen && onWaOpen(`Halo, saya tertarik dengan ${svc.title}`)}
+              <button onClick={() => onWaOpen && onWaOpen({ key: "paket", vars: { judul_paket: svc.title } })}
                 style={{ flex: 1, padding: "0 24px", background: "#25D366", color: "#fff", border: "none", fontSize: "0.8125rem", fontWeight: 700, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 5, borderBottom: "1px solid rgba(255,255,255,.2)" }}>
                 💬 WA
               </button>
@@ -4895,7 +4903,7 @@ function TravelPackageCard({ svc, onDetail, onWaOpen, isWide }) {
       {/* Footer CTA */}
       <div style={{ padding: "12px 14px 14px", background: al, borderLeft: `1px solid ${ac}25`, borderRight: `1px solid ${ac}25`, borderBottom: `1px solid ${ac}25`, borderRadius: "0 0 14px 14px", display: "flex", gap: 8 }}>
         <button
-          onClick={() => onWaOpen && onWaOpen(`Halo, saya tertarik dengan ${svc.title}`)}
+          onClick={() => onWaOpen && onWaOpen({ key: "paket", vars: { judul_paket: svc.title } })}
           style={{ flex: 1, padding: "9px 0", background: "#25D366", color: "#fff", border: "none", borderRadius: 8, fontSize: "0.75rem", fontWeight: 700, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 4 }}>
           💬 WA
         </button>
@@ -5080,7 +5088,7 @@ function TravelPackageDetailModal({ svc, onClose, onWaOpen }) {
             <p style={{ color: "rgba(255,255,255,.8)", fontSize: "0.875rem", marginBottom: 16, lineHeight: 1.65 }}>Tertarik dengan paket ini? Hubungi kami untuk konsultasi gratis dan penawaran terbaik!</p>
             <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
               <button
-                onClick={() => onWaOpen && onWaOpen(`Halo VASTURA GROUP! 👋\n\nSaya tertarik dengan:\n*${svc.title}*\nHarga: ${svc.price} ${svc.priceNote}\n\nMohon informasi lebih lanjut. Terima kasih!`)}
+                onClick={() => onWaOpen && onWaOpen({ key: "paket", vars: { judul_paket: `${svc.title} — ${svc.price} ${svc.priceNote}` } })}
                 style={{ padding: "11px 28px", background: "#25D366", color: "#fff", border: "none", borderRadius: 8, fontSize: "0.875rem", fontWeight: 700, cursor: "pointer", display: "flex", alignItems: "center", gap: 6 }}>
                 💬 WhatsApp Sekarang
               </button>
@@ -5580,8 +5588,7 @@ function ServicesPage({ content, services, navigateTo, activePaket, onOpenPaket,
   }, [activePaket, services.length]);
 
   const handleBook = (svc) => {
-    const text = `Halo VASTURA GROUP! 👋\n\nSaya tertarik dengan:\n*${svc.title}*\nHarga: ${svc.price} ${svc.priceNote}${svc._extraMsg || ""}\n\nMohon informasi lebih lanjut.\n\nTerima kasih!`;
-    if (onWaOpen) onWaOpen(text);
+    if (onWaOpen) onWaOpen({ key: "paket", vars: { judul_paket: `${svc.title} — ${svc.price} ${svc.priceNote}${svc._extraMsg || ""}` } });
   };
 
   // ── State untuk selector paket di sidebar
@@ -6160,7 +6167,7 @@ function ServicesPage({ content, services, navigateTo, activePaket, onOpenPaket,
                 <div key={lay.key} className="sv-card"
                   onClick={() => {
                     if (matchedSvc) { openDetail(matchedSvc); }
-                    else { onWaOpen && onWaOpen(`Halo! Saya ingin bertanya tentang layanan *${lay.label}* dari VASTURA GROUP.`); }
+                    else { onWaOpen && onWaOpen({ key: "layanan", vars: { judul_layanan: lay.label } }); }
                   }}
                   style={{ borderRadius:14, overflow:"hidden", background:"#fff", boxShadow:"0 4px 18px rgba(0,0,0,.07)", border:"1px solid #F0EAE0" }}>
                   {/* Image */}
@@ -7509,6 +7516,7 @@ function AboutPage({ content, images, teamMembers, onWaOpen }) {
       "Pesan:",
       contactForm.message,
     ].join("\n");
+    // Form kontak: kirim langsung sebagai string (data dari user, bukan template admin)
     if (onWaOpen) onWaOpen(lines);
     setContactSent(true);
     setTimeout(() => { setContactSent(false); setContactForm({ name: "", email: "", phone: "", subject: "", message: "" }); }, 4000);
@@ -9485,7 +9493,7 @@ const getInitialShowAdmin = () => {
 
 /* ─────────────── REUSABLE SERVICE PAGE TEMPLATE ─────────────── */
 function DevServicePage({ pageKey, title, subtitle, icon, heroColor, sections, ctaText, onWaOpen }) {
-  const waText = `Halo! Saya tertarik dengan layanan *${title}* dari VASTURA GROUP. Mohon informasi lebih lanjut. Terima kasih!`;
+  const waText = { key: "layanan", vars: { judul_layanan: title } };
   return (
     <div style={{ paddingTop: 72, minHeight: "100vh", background: "#f8fbfd" }}>
       {/* Hero Banner */}
@@ -9620,7 +9628,7 @@ function DesainRabPage({ onWaOpen }) {
     { q:"Bagaimana cara memulai proyek?", a:"Hubungi kami via WhatsApp, lakukan konsultasi gratis, lalu kami akan menyiapkan proposal dan timeline pengerjaan." },
   ];
 
-  const waMsg = "Halo! Saya tertarik dengan layanan *Jasa Desain & RAB* dari VASTURA GROUP. Mohon informasi lebih lanjut.";
+  const waMsg = { key: "desainrab", vars: { judul_paket: "Jasa Desain & RAB" } };
 
   return (
     <div style={{ minHeight:"100vh", background:"#fff", fontFamily:"'Sora','DM Sans',sans-serif" }}>
@@ -9804,7 +9812,7 @@ function DesainRabPage({ onWaOpen }) {
                       </div>
                     ))}
                   </div>
-                  <button className="dr-paket-btn" onClick={()=>onWaOpen&&onWaOpen(`Halo! Saya ingin menggunakan *${p.label}* Jasa Desain & RAB VASTURA GROUP.`)}
+                  <button className="dr-paket-btn" onClick={()=>onWaOpen&&onWaOpen({ key: "desainrab", vars: { judul_paket: p.label } })}
                     style={{ padding:"12px", background:p.btnBg, color:p.btnColor, border:p.btnBorder, borderRadius:8, fontSize:"0.78rem", fontWeight:800, letterSpacing:"0.5px", width:"100%", cursor:"pointer" }}>
                     {p.btnLabel}
                   </button>
@@ -9815,7 +9823,7 @@ function DesainRabPage({ onWaOpen }) {
             <div style={{ borderRadius:14, background:"#1a2526", padding:"28px 24px", display:"flex", flexDirection:"column", justifyContent:"center", boxShadow:"0 4px 14px rgba(0,0,0,.15)" }}>
               <div style={{ fontWeight:800, fontSize:"1rem", color:"#fff", marginBottom:10 }}>Butuh Paket Custom?</div>
               <p style={{ fontSize:"0.8rem", color:"rgba(255,255,255,.7)", lineHeight:1.65, marginBottom:22 }}>Kami siap menyesuaikan kebutuhan proyek Anda.</p>
-              <button onClick={()=>onWaOpen&&onWaOpen("Halo! Saya ingin konsultasi paket *Custom* Jasa Desain & RAB VASTURA GROUP.")}
+              <button onClick={()=>onWaOpen&&onWaOpen({ key: "desainrab", vars: { judul_paket: "Custom" } })}
                 style={{ padding:"12px 16px", background:"#C9AA71", color:"#1a2526", border:"none", borderRadius:8, fontSize:"0.8rem", fontWeight:800, cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center", gap:8 }}>
                 KONSULTASI SEKARANG 💬
               </button>
@@ -10692,6 +10700,19 @@ function LandscapePage({ onWaOpen }) {
   />;
 }
 
+/* ════════════════════════════════════════════ WA TEMPLATE HELPER ════════════════════════════════════════════ */
+/**
+ * buildWaMsg(templates, key, vars)
+ * - templates : data.content.waTemplates
+ * - key       : "umum" | "paket" | "konsultasi" | "desainrab" | "layanan"
+ * - vars      : { judul_paket, harga, judul_layanan, ... }
+ * Mengganti placeholder {xxx} dengan nilai vars, lalu memformat \n
+ */
+function buildWaMsg(templates = {}, key = "umum", vars = {}) {
+  const tpl = templates[key] || templates.umum || "Halo VASTURA GROUP!";
+  return tpl.replace(/\{(\w+)\}/g, (_, k) => vars[k] || "");
+}
+
 /* ════════════════════════════════════════════ WA PICKER MODAL ════════════════════════════════════════════ */
 function WaPickerModal({ admins = [], msgText = "", onClose }) {
   if (!admins || admins.length === 0) return null;
@@ -11041,7 +11062,7 @@ function SubPageCatalog({ heroColor, heroIcon, title, subtitle, breadcrumb, cata
                     <div style={{ fontSize:"0.65rem", color:"#8B9A9C", letterSpacing:".06em", textTransform:"uppercase", marginBottom:2 }}>Harga</div>
                     <div style={{ fontSize:"0.9rem", fontWeight:800, color:"#8B6914" }}>{formatHarga(item.harga)}</div>
                   </div>
-                  <button onClick={()=>onWaOpen && onWaOpen(`Halo VASTURA GROUP! 👋\nSaya tertarik dengan *${item.nama}*.\nMohon info lebih lanjut.`)}
+                  <button onClick={()=>onWaOpen && onWaOpen({ key: "layanan", vars: { judul_layanan: item.nama } })}
                     style={{ background:"linear-gradient(135deg,#2E3D3F,#8B6914)", color:"#fff", border:"none", borderRadius:8, padding:"9px 16px", fontSize:"0.75rem", fontWeight:700, cursor:"pointer", letterSpacing:".04em" }}>
                     Konsultasi
                   </button>
@@ -11056,7 +11077,7 @@ function SubPageCatalog({ heroColor, heroIcon, title, subtitle, breadcrumb, cata
           <div style={{ fontSize:"0.75rem", letterSpacing:".14em", textTransform:"uppercase", color:"#C9AA71", fontWeight:700, marginBottom:12 }}>Konsultasi Gratis</div>
           <h3 style={{ fontFamily:"'Playfair Display',serif", fontSize:"clamp(1.25rem,3vw,1.75rem)", fontWeight:900, margin:"0 0 12px" }}>Tidak menemukan yang sesuai?</h3>
           <p style={{ color:"rgba(255,255,255,.7)", fontSize:"0.875rem", margin:"0 0 24px", lineHeight:1.7 }}>Kami siap membuat desain custom sesuai kebutuhan dan budget Anda.</p>
-          <button onClick={()=>onWaOpen && onWaOpen("Halo VASTURA GROUP! Saya ingin konsultasi desain custom.")}
+          <button onClick={()=>onWaOpen && onWaOpen({ key: "konsultasi", vars: {} })}
             style={{ background:"#C9AA71", color:"#2E3D3F", border:"none", borderRadius:10, padding:"14px 32px", fontSize:"0.9rem", fontWeight:800, cursor:"pointer", letterSpacing:".05em" }}>
             💬 Konsultasi Sekarang
           </button>
@@ -11419,7 +11440,23 @@ export default function BricksyTravel() {
   const [mapQuery, setMapQuery] = useState("");
   const [mapLocation, setMapLocation] = useState("Malang, Jawa Timur, Indonesia");
   const mapDebounceRef = useRef(null);
-  const openWaPicker = (msgText = "") => setWaPicker({ msgText });
+  // openWaPicker menerima string langsung ATAU {key, vars} untuk template
+  const openWaPicker = (msgOrObj = "") => {
+    if (typeof msgOrObj === "object" && msgOrObj !== null && msgOrObj.key) {
+      const { key, vars = {} } = msgOrObj;
+      const tpl = data.content.waTemplates || {};
+      setWaPicker({ msgText: buildWaMsg(tpl, key, vars) });
+    } else {
+      // backward compat: string biasa → override langsung tanpa template
+      // KECUALI string kosong → pakai template "umum"
+      if (!msgOrObj) {
+        const tpl = data.content.waTemplates || {};
+        setWaPicker({ msgText: buildWaMsg(tpl, "umum", {}) });
+      } else {
+        setWaPicker({ msgText: String(msgOrObj) });
+      }
+    }
+  };
 
   // ── Scroll Reveal for RE home ──
   useEffect(() => {
@@ -12897,7 +12934,7 @@ export default function BricksyTravel() {
                       }
                       .running-text-inner {
                         display: inline-block;
-                        animation: marqueeScroll 28s linear infinite;
+                        animation: marqueeScroll 55s linear infinite;
                         color: #ffffff;
                         font-weight: 700;
                         font-size: 1rem;
@@ -13024,7 +13061,15 @@ export default function BricksyTravel() {
                   <section className="re-contact" id="re-contact-section">
                     <div className="re-contact-grid">
                       <div className="re-slide-left">
-                        <div className="re-contact-logo">VASTURA<br />GROUP</div>
+                        {(data.content.footerLogoImage || data.content.logoImage) ? (
+                          <img
+                            src={data.content.footerLogoImage || data.content.logoImage}
+                            alt={data.content.logoText?.replace("\n"," ") || "VASTURA GROUP"}
+                            style={{ height: 72, maxWidth: 200, objectFit: "contain", display: "block", marginBottom: 16 }}
+                          />
+                        ) : (
+                          <div className="re-contact-logo">VASTURA<br />GROUP</div>
+                        )}
                         <p style={{ fontFamily:"'Jost',sans-serif", fontSize:".85rem", color:"var(--re-grey-md)", lineHeight:1.8, marginBottom:14 }}>
                           {data.content.email || "halo@vastura.co.id"}
                         </p>
@@ -13046,7 +13091,7 @@ export default function BricksyTravel() {
                         <div style={{ gridColumn:"1 / -1", marginTop:8 }}>
                           <button
                             className="re-btn re-btn-dark"
-                            onClick={() => openWaPicker("Halo VASTURA GROUP! Saya ingin berkonsultasi mengenai properti.")}
+                            onClick={() => openWaPicker({ key: "konsultasi", vars: {} })}
                           >
                             Hubungi Kami
                           </button>
@@ -14053,6 +14098,85 @@ export default function BricksyTravel() {
                   <h1 style={{ fontSize: 24, fontWeight: 500, color: "#2E3D3F", marginBottom: 28 }}>Settings</h1>
 
                   {/* ═══════════════════════════════════════════════════════ */}
+                  {/* SECTION: LOGO */}
+                  {/* ═══════════════════════════════════════════════════════ */}
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20, marginBottom: 24 }}>
+
+                    {/* ── Logo Navbar / Header ── */}
+                    <div style={{ background: "#fff", borderRadius: 8, padding: "22px 24px", boxShadow: "0 2px 8px rgba(0,0,0,.06)", borderTop: "4px solid #C9AA71" }}>
+                      <h3 style={{ fontSize: 15, fontWeight: 700, color: "#2E3D3F", marginBottom: 4 }}>🔝 Logo Navbar / Header</h3>
+                      <p style={{ fontSize: 12, color: "#5A6A6C", marginBottom: 14, lineHeight: 1.6 }}>
+                        Tampil di navigasi atas dan admin panel. PNG transparan, rasio 3:1 atau 4:1 direkomendasikan.
+                      </p>
+                      {data.content.logoImage ? (
+                        <div style={{ display: "flex", flexDirection: "column", gap: 8, alignItems: "center", marginBottom: 12 }}>
+                          <img src={data.content.logoImage} alt="Logo Navbar"
+                            style={{ height: 56, maxWidth: 180, objectFit: "contain", border: "1px solid #F5EDD8", borderRadius: 6, padding: 8, background: "#FAF7F0" }} />
+                          <button onClick={() => { save({ ...data, content: { ...data.content, logoImage: "" } }); notify("Logo navbar dihapus."); }}
+                            style={{ fontSize: 11, padding: "4px 12px", background: "#fee", color: "#e74c3c", borderRadius: 6, border: "none", cursor: "pointer" }}>Hapus Logo</button>
+                        </div>
+                      ) : (
+                        <div style={{ height: 56, background: "#FAF7F0", borderRadius: 6, marginBottom: 12, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, color: "#5A6A6C", border: "1px dashed #D4C4A0" }}>Belum ada logo navbar</div>
+                      )}
+                      <UploadButton label="📁 Upload Logo Navbar"
+                        onDone={urls => {
+                          save({ ...data, content: { ...data.content, logoImage: urls[0] } });
+                          notify("✅ Logo navbar berhasil diupload!");
+                        }}
+                        onError={() => notify("Gagal upload logo navbar.", "error")} />
+                      <label style={{ fontSize: 11, fontWeight: 600, color: "#5A6A6C", letterSpacing: "1px", textTransform: "uppercase", display: "block", marginTop: 10, marginBottom: 4 }}>Atau URL</label>
+                      <div style={{ display: "flex", gap: 8 }}>
+                        <input placeholder="https://..." defaultValue={data.content.logoImage}
+                          id="logo-navbar-url-input"
+                          style={{ flex: 1, padding: "8px 10px", border: "1px solid #D4C4A0", borderRadius: 6, fontSize: 12, outline: "none" }} />
+                        <button onClick={() => {
+                          const url = document.getElementById("logo-navbar-url-input")?.value?.trim();
+                          if (!url) return notify("Masukkan URL logo navbar.", "error");
+                          save({ ...data, content: { ...data.content, logoImage: url } });
+                          notify("✅ Logo navbar URL disimpan!");
+                        }} style={{ padding: "8px 14px", background: "#C9AA71", color: "#fff", borderRadius: 6, fontSize: 12, border: "none", cursor: "pointer", fontWeight: 600 }}>Apply</button>
+                      </div>
+                    </div>
+
+                    {/* ── Logo Footer ── */}
+                    <div style={{ background: "#fff", borderRadius: 8, padding: "22px 24px", boxShadow: "0 2px 8px rgba(0,0,0,.06)", borderTop: "4px solid #3D5254" }}>
+                      <h3 style={{ fontSize: 15, fontWeight: 700, color: "#2E3D3F", marginBottom: 4 }}>🔻 Logo Footer</h3>
+                      <p style={{ fontSize: 12, color: "#5A6A6C", marginBottom: 14, lineHeight: 1.6 }}>
+                        Tampil di bagian bawah halaman (section Kontak). Jika kosong, akan menggunakan Logo Navbar sebagai fallback.
+                      </p>
+                      {data.content.footerLogoImage ? (
+                        <div style={{ display: "flex", flexDirection: "column", gap: 8, alignItems: "center", marginBottom: 12 }}>
+                          <img src={data.content.footerLogoImage} alt="Logo Footer"
+                            style={{ height: 56, maxWidth: 180, objectFit: "contain", border: "1px solid #F5EDD8", borderRadius: 6, padding: 8, background: "#FAF7F0" }} />
+                          <button onClick={() => { save({ ...data, content: { ...data.content, footerLogoImage: "" } }); notify("Logo footer dihapus."); }}
+                            style={{ fontSize: 11, padding: "4px 12px", background: "#fee", color: "#e74c3c", borderRadius: 6, border: "none", cursor: "pointer" }}>Hapus Logo</button>
+                        </div>
+                      ) : (
+                        <div style={{ height: 56, background: "#FAF7F0", borderRadius: 6, marginBottom: 12, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, color: "#5A6A6C", border: "1px dashed #D4C4A0" }}>Belum ada logo footer (pakai logo navbar)</div>
+                      )}
+                      <UploadButton label="📁 Upload Logo Footer"
+                        onDone={urls => {
+                          save({ ...data, content: { ...data.content, footerLogoImage: urls[0] } });
+                          notify("✅ Logo footer berhasil diupload!");
+                        }}
+                        onError={() => notify("Gagal upload logo footer.", "error")} />
+                      <label style={{ fontSize: 11, fontWeight: 600, color: "#5A6A6C", letterSpacing: "1px", textTransform: "uppercase", display: "block", marginTop: 10, marginBottom: 4 }}>Atau URL</label>
+                      <div style={{ display: "flex", gap: 8 }}>
+                        <input placeholder="https://..." defaultValue={data.content.footerLogoImage}
+                          id="logo-footer-url-input"
+                          style={{ flex: 1, padding: "8px 10px", border: "1px solid #D4C4A0", borderRadius: 6, fontSize: 12, outline: "none" }} />
+                        <button onClick={() => {
+                          const url = document.getElementById("logo-footer-url-input")?.value?.trim();
+                          if (!url) return notify("Masukkan URL logo footer.", "error");
+                          save({ ...data, content: { ...data.content, footerLogoImage: url } });
+                          notify("✅ Logo footer URL disimpan!");
+                        }} style={{ padding: "8px 14px", background: "#3D5254", color: "#fff", borderRadius: 6, fontSize: 12, border: "none", cursor: "pointer", fontWeight: 600 }}>Apply</button>
+                      </div>
+                    </div>
+
+                  </div>
+
+                  {/* ═══════════════════════════════════════════════════════ */}
                   {/* SECTION: GAMBAR HALAMAN HOME */}
                   {/* ═══════════════════════════════════════════════════════ */}
                   <div style={{ background: "#fff", borderRadius: 8, padding: "22px 24px", marginBottom: 24, boxShadow: "0 2px 8px rgba(0,0,0,.06)", borderTop: "4px solid #3498db" }}>
@@ -14280,43 +14404,75 @@ export default function BricksyTravel() {
                     })}
                   </div>
 
-                  {/* Logo Upload */}
-                  <div style={{ background: "#fff", borderRadius: 8, padding: "22px 24px", marginBottom: 24, boxShadow: "0 2px 8px rgba(0,0,0,.06)", borderTop: "4px solid #C9AA71" }}>
-                    <h3 style={{ fontSize: 15, fontWeight: 500, color: "#2E3D3F", marginBottom: 6 }}>🖼 Logo Upload</h3>
-                    <p style={{ fontSize: 12, color: "#5A6A6C", marginBottom: 16, lineHeight: 1.6 }}>
-                      Upload logo untuk ditampilkan di navbar, footer, admin panel, dan tab browser (favicon). Jika tidak diupload, nama brand teks akan digunakan.
+                  {/* ═══════════════════════════════════════════════════════ */}
+                  {/* SECTION: TEMPLATE WHATSAPP */}
+                  {/* ═══════════════════════════════════════════════════════ */}
+                  <div style={{ background: "#fff", borderRadius: 8, padding: "22px 24px", marginBottom: 24, boxShadow: "0 2px 8px rgba(0,0,0,.06)", borderTop: "4px solid #25d366" }}>
+                    <h3 style={{ fontSize: 15, fontWeight: 700, color: "#2E3D3F", marginBottom: 4 }}>💬 Template Pesan WhatsApp</h3>
+                    <p style={{ fontSize: 12, color: "#5A6A6C", marginBottom: 6, lineHeight: 1.6 }}>
+                      Atur teks template yang akan muncul otomatis saat pengunjung klik tombol WhatsApp.
+                      Gunakan <code style={{ background: "#f0fdf4", padding: "1px 5px", borderRadius: 4, color: "#16a34a", fontSize: 11 }}>{"{judul_paket}"}</code> atau <code style={{ background: "#f0fdf4", padding: "1px 5px", borderRadius: 4, color: "#16a34a", fontSize: 11 }}>{"{judul_layanan}"}</code> sebagai variabel dinamis yang otomatis terisi nama paket/layanan.
                     </p>
-                    <div style={{ display: "flex", gap: 20, alignItems: "flex-start", flexWrap: "wrap" }}>
-                      {data.content.logoImage && (
-                        <div style={{ display: "flex", flexDirection: "column", gap: 8, alignItems: "center" }}>
-                          <img src={data.content.logoImage} alt="Logo" style={{ height: 60, maxWidth: 180, objectFit: "contain", border: "1px solid #F5EDD8", borderRadius: 6, padding: 8, background: "#FAF7F0" }} />
-                          <button onClick={() => { save({ ...data, content: { ...data.content, logoImage: "" } }); notify("Logo removed."); }}
-                            style={{ fontSize: 11, padding: "4px 12px", background: "#fee", color: "#e74c3c", borderRadius: 6, border: "none" }}>Remove Logo</button>
+                    <p style={{ fontSize: 11, color: "#888", marginBottom: 18 }}>Gunakan <strong>*teks*</strong> untuk cetak tebal di WhatsApp. Baris baru dengan Enter.</p>
+
+                    {[
+                      { key: "umum",       icon: "🏠", label: "Template Umum",          hint: "Dipakai saat klik tombol WA tanpa konteks spesifik" },
+                      { key: "paket",      icon: "📦", label: "Template Paket",          hint: 'Variabel: {judul_paket} → otomatis terisi nama paket yang diklik' },
+                      { key: "konsultasi", icon: "🤝", label: "Template Konsultasi",     hint: "Dipakai tombol Hubungi Kami / Konsultasi" },
+                      { key: "desainrab",  icon: "📐", label: "Template Desain & RAB",   hint: 'Variabel: {judul_paket} → otomatis terisi nama paket desain' },
+                      { key: "layanan",    icon: "⚙️",  label: "Template Layanan",        hint: 'Variabel: {judul_layanan} → otomatis terisi nama layanan yang diklik' },
+                    ].map(({ key, icon, label, hint }) => {
+                      const tpl = data.content.waTemplates || {};
+                      const val = tpl[key] || "";
+                      return (
+                        <div key={key} style={{ marginBottom: 20 }}>
+                          <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
+                            <span style={{ fontSize: 16 }}>{icon}</span>
+                            <span style={{ fontSize: 13, fontWeight: 700, color: "#2E3D3F" }}>{label}</span>
+                          </div>
+                          <p style={{ fontSize: 11, color: "#888", marginBottom: 6 }}>{hint}</p>
+                          <textarea
+                            rows={5}
+                            id={`wa-tpl-${key}`}
+                            defaultValue={val}
+                            style={{ width: "100%", padding: "10px 12px", border: "1.5px solid #D4C4A0", borderRadius: 8, fontSize: 12, fontFamily: "monospace", resize: "vertical", outline: "none", boxSizing: "border-box", lineHeight: 1.7 }}
+                            onFocus={e => e.target.style.borderColor = "#25d366"}
+                            onBlur={e => e.target.style.borderColor = "#D4C4A0"}
+                          />
+                          <div style={{ display: "flex", gap: 8, marginTop: 6 }}>
+                            <button onClick={() => {
+                              const newVal = document.getElementById(`wa-tpl-${key}`)?.value ?? "";
+                              save({ ...data, content: { ...data.content, waTemplates: { ...(data.content.waTemplates || {}), [key]: newVal } } });
+                              notify(`✅ Template "${label}" disimpan!`);
+                            }} style={{ padding: "6px 16px", background: "#25d366", color: "#fff", borderRadius: 6, fontSize: 12, border: "none", cursor: "pointer", fontWeight: 600 }}>
+                              💾 Simpan
+                            </button>
+                            <button onClick={() => {
+                              // Preview: buka WA picker dengan template ini
+                              const newVal = document.getElementById(`wa-tpl-${key}`)?.value ?? "";
+                              const preview = newVal
+                                .replace(/{judul_paket}/g, "Contoh Nama Paket")
+                                .replace(/{judul_layanan}/g, "Contoh Layanan")
+                                .replace(/{harga}/g, "Rp 5.000.000");
+                              window.open("https://wa.me/?text=" + encodeURIComponent(preview), "_blank");
+                            }} style={{ padding: "6px 16px", background: "#f0fdf4", color: "#16a34a", borderRadius: 6, fontSize: 12, border: "1.5px solid #25d366", cursor: "pointer", fontWeight: 600 }}>
+                              👁 Preview
+                            </button>
+                          </div>
                         </div>
-                      )}
-                      <div style={{ display: "flex", flexDirection: "column", gap: 8, flex: 1, minWidth: 240 }}>
-                        <label style={{ fontSize: 11, fontWeight: 600, color: "#5A6A6C", letterSpacing: "1px", textTransform: "uppercase" }}>Upload File Logo</label>
-                        <UploadButton label="📁 Pilih File Logo"
-                          onDone={urls => {
-                            save({ ...data, content: { ...data.content, logoImage: urls[0] } });
-                            notify("Logo uploaded & applied to all sections!");
-                          }}
-                          onError={() => notify("Gagal upload logo. Coba lagi.", "error")} />
-                        <label style={{ fontSize: 11, fontWeight: 600, color: "#5A6A6C", letterSpacing: "1px", textTransform: "uppercase", marginTop: 4 }}>Atau URL Gambar</label>
-                        <div style={{ display: "flex", gap: 8 }}>
-                          <input placeholder="https://..." defaultValue={data.content.logoImage}
-                            id="logo-url-input"
-                            style={{ flex: 1, padding: "8px 10px", border: "1px solid #D4C4A0", borderRadius: 6, fontSize: 12, outline: "none" }} />
-                          <button onClick={() => {
-                            const url = document.getElementById("logo-url-input")?.value?.trim();
-                            if (!url) return notify("Masukkan URL logo.", "error");
-                            save({ ...data, content: { ...data.content, logoImage: url } });
-                            notify("Logo URL applied!");
-                          }} style={{ padding: "8px 14px", background: "#C9AA71", color: "#fff", borderRadius: 6, fontSize: 12, border: "none" }}>Apply</button>
-                        </div>
-                        <p style={{ fontSize: 11, color: "#5A6A6C" }}>Disarankan: PNG transparan, min 200px lebar, rasio 3:1 atau 4:1</p>
-                      </div>
-                    </div>
+                      );
+                    })}
+
+                    <button onClick={() => {
+                      // Simpan semua template sekaligus
+                      const keys = ["umum", "paket", "konsultasi", "desainrab", "layanan"];
+                      const newTpl = {};
+                      keys.forEach(k => { newTpl[k] = document.getElementById(`wa-tpl-${k}`)?.value ?? ""; });
+                      save({ ...data, content: { ...data.content, waTemplates: newTpl } });
+                      notify("✅ Semua template WhatsApp berhasil disimpan!");
+                    }} style={{ width: "100%", padding: "12px 0", background: "#2E3D3F", color: "#fff", borderRadius: 8, fontSize: 13, border: "none", cursor: "pointer", fontWeight: 700, marginTop: 8 }}>
+                      💾 Simpan Semua Template
+                    </button>
                   </div>
 
                   {/* Founding Year */}
