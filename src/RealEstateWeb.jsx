@@ -679,7 +679,7 @@ const DEFAULT_DATA = {
     logoColor: "#111111",
     logoShadow: "0 1px 6px rgba(0,0,0,.35), 0 2px 14px rgba(0,0,0,.18)",
     loginBtnText: "LOGIN",
-    nav1: "Home", nav2: "About", nav3: "Program Affiliate", nav4: "Gedung & Rumah", nav5: "Interior", nav6: "Layanan Kami",
+    nav1: "Home", nav2: "About", nav3: "Program Affiliate", nav4: "Rumah Subsidi", nav5: "Interior", nav6: "Layanan Kami",
     nav7: "Jasa Desain & RAB", nav8: "Tema Rumah",
     nav9: "Interior", nav10: "Pagar Rumah", nav11: "Kanopi", nav12: "Aluminium", nav13: "Landscape & Taman",
     servicesPageTitle: "Paket Layanan Kami",
@@ -12126,7 +12126,6 @@ export default function BricksyTravel() {
   const navItems = [
     { key: "home",  label: data.content.nav1 || "Home" },
     { key: "about", label: data.content.nav2 || "About" },
-    { key: "news",  label: data.content.nav3 || "Program Affiliate" },
   ];
   // Dropdown: Layanan Developer (termasuk Interior & Eksterior)
   const navDropdownLayanan = [
@@ -12144,7 +12143,7 @@ export default function BricksyTravel() {
   const navDropdownInterior = [];
   // Dropdown: Galeri Proyek (artikel sections)
   const navDropdownGaleri = [
-    { key: "shop", label: data.content.nav4 || "Program Renovasi Rumah Subsidi" },
+    { key: "shop", label: data.content.nav4 || "Rumah Subsidi" },
   ];
   // All keys that are "active" as pages for highlight purposes
   const allNavKeys = [
@@ -12881,6 +12880,37 @@ export default function BricksyTravel() {
                       </button>
                     </div>
                   </section>
+
+                  {/* ══ RUNNING TEXT / MARQUEE ══ */}
+                  <div style={{
+                    background: "#cc0000",
+                    overflow: "hidden",
+                    whiteSpace: "nowrap",
+                    padding: "14px 0",
+                    position: "relative",
+                    zIndex: 10,
+                  }}>
+                    <style>{`
+                      @keyframes marqueeScroll {
+                        0%   { transform: translateX(100vw); }
+                        100% { transform: translateX(-100%); }
+                      }
+                      .running-text-inner {
+                        display: inline-block;
+                        animation: marqueeScroll 28s linear infinite;
+                        color: #ffffff;
+                        font-weight: 700;
+                        font-size: 1rem;
+                        letter-spacing: 0.03em;
+                      }
+                      @media (max-width: 600px) {
+                        .running-text-inner { font-size: 0.875rem; }
+                      }
+                    `}</style>
+                    <span className="running-text-inner">
+                      🔴&nbsp;&nbsp;PUNYA INFO PROYEK KONSTRUKSI?&nbsp;&nbsp;Referensikan kepada perusahaan kami dan dapatkan komisi hingga 3% dari nilai proyek apabila kami terpilih sebagai mitra pelaksana.&nbsp;&nbsp;Legal, transparan, dan tanpa modal.&nbsp;&nbsp;Hubungi kami sekarang!&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;🔴&nbsp;&nbsp;PUNYA INFO PROYEK KONSTRUKSI?&nbsp;&nbsp;Referensikan kepada perusahaan kami dan dapatkan komisi hingga 3% dari nilai proyek apabila kami terpilih sebagai mitra pelaksana.&nbsp;&nbsp;Legal, transparan, dan tanpa modal.&nbsp;&nbsp;Hubungi kami sekarang!
+                    </span>
+                  </div>
 
                   {/* ══ ABOUT ══ */}
                   <section className="re-about">
