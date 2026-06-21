@@ -2062,8 +2062,6 @@ const GS = () => (
     @media(max-width:640px){
       nav{background:linear-gradient(105deg,#ffffff 0%,#e8f9fb 30%,#a8dde8 62%,#B8962A 100%)!important;backdrop-filter:none!important;padding:0 4%!important;overflow:visible!important}
       nav>div:not(.mobile-dropdown){height:60px!important;gap:10px!important}
-      /* Fix 10: logo lebih kecil di mobile */
-      nav img{height:42px!important;max-width:86px!important;width:auto!important}
     }
     /* Fix logo wrap — tablet & smartphone (semua layar ≤900px) */
     @media(max-width:900px){
@@ -2071,7 +2069,7 @@ const GS = () => (
       .navbar-logo-wrap > div > div:first-child { width: 40px !important; height: 40px !important; border-radius: 8px !important; }
       .navbar-logo-wrap > div > div:first-child svg { width: 18px !important; height: 18px !important; }
       .navbar-logo-wrap > div > span.logo-brand { font-size: 0.82rem !important; line-height: 1.15 !important; }
-      .navbar-logo-wrap img { height: 40px !important; max-width: 80px !important; }
+      .navbar-logo-wrap img { height: 44px !important; max-width: 110px !important; width: auto !important; flex-shrink: 0 !important; }
     }
 
     /* 2. Hero Slideshow — readable height, no side gradients overflow */
@@ -2830,9 +2828,9 @@ function LogoDisplay({ content, size = "nav" }) {
 
   if (content.logoImage) {
     return (
-      <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 12, flexShrink: 0 }}>
         <img src={content.logoImage} alt={content.logoText}
-          style={{ height: size === "nav" ? 68 : size === "footer" ? 64 : iconSz, maxWidth: size === "nav" ? 160 : size === "footer" ? 140 : 120, objectFit: "contain", display: "block" }} />
+          style={{ height: size === "nav" ? 68 : size === "footer" ? 64 : iconSz, maxWidth: size === "nav" ? 160 : size === "footer" ? 140 : 120, objectFit: "contain", display: "block", flexShrink: 0 }} />
         <span className={brandClass} style={dynStyle}>
           {lines.map((line, i) => <span key={i} style={{ display: singleLine ? "inline" : "block" }}>{line}</span>)}
         </span>
