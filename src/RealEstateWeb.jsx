@@ -8214,8 +8214,8 @@ function SubLayananAdmin({
           {items.length === 0 ? (
             <div style={{ textAlign: "center", padding: "40px 20px", color: "#A89070", fontSize: "0.875rem" }}>
               {defaultItems && defaultItems.length > 0
-                ? <>Belum ada item. Klik <strong>"📥 Muat Data Hardcoded"</strong> untuk mengimpor data yang sudah ada di halaman, atau klik "+ Tambah Item" untuk menambahkan manual.</>
-                : "Belum ada item. Klik "+ Tambah Item" untuk menambahkan."}
+                ? <>Belum ada item. Klik <strong>&#34;📥 Muat Data Hardcoded&#34;</strong> untuk mengimpor data yang sudah ada di halaman, atau klik &#34;+ Tambah Item&#34; untuk menambahkan manual.</>
+                : <>Belum ada item. Klik &#34;+ Tambah Item&#34; untuk menambahkan.</>}
             </div>
           ) : (
             <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
