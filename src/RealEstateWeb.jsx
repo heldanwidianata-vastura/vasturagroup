@@ -5480,68 +5480,21 @@ function PaketBackBar({ svc, onClose }) {
 }
 
 /* ─────────────── SERVICES PAGE ─────────────── */
+const LAYANAN_LIST = [
+  { key: "interior", icon: "🛋️", label: "Interior", desc: "Desain interior modern, nyaman dan fungsional sesuai kebutuhan Anda.", color: "#8B6914", category: "wedding", img: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=600&q=80" },
+  { key: "eksterior", icon: "🏠", label: "Eksterior", desc: "Desain eksterior menarik, kokoh dan estetis.", color: "#3D5254", category: "traveling", img: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&q=80" },
+  { key: "rab", icon: "📐", label: "Desain & RAB", desc: "Desain arsitektur lengkap dengan RAB yang akurat.", color: "#8B6914", category: "traveling", img: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=600&q=80" },
+  { key: "landscape", icon: "🌿", label: "Landscape", desc: "Taman indah dan asri yang menyatu dengan hunian Anda.", color: "#2E7D32", category: "traveling", img: "https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=600&q=80" },
+  { key: "aluminium", icon: "🪟", label: "Aluminium", desc: "Kusen, pintu & jendela aluminium berkualitas tinggi.", color: "#3D5254", category: "event", img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80" },
+  { key: "kanopi", icon: "🏗️", label: "Kanopi", desc: "Kanopi kuat, modern dan tahan segala cuaca.", color: "#8B6914", category: "event", img: "https://images.unsplash.com/photo-1600566752355-35792bedcfea?w=600&q=80" },
+];
+
 function ServicesPage({ content, services, navigateTo, activePaket, onOpenPaket, onClosePaket, onWaOpen }) {
   const [selectedService, setSelectedService] = useState(null);
   const [hoveredCard, setHoveredCard] = useState(null);
   const [activeImg, setActiveImg] = useState(0);
 
-  /* ── NEW: Static layanan list sesuai referensi Vastura ── */
-  const LAYANAN_LIST = [
-    {
-      key: "interior",
-      icon: "🛋️",
-      label: "Interior",
-      desc: "Desain interior modern, nyaman dan fungsional sesuai kebutuhan Anda.",
-      color: "#8B6914",
-      category: "wedding",
-      img: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=600&q=80",
-    },
-    {
-      key: "eksterior",
-      icon: "🏠",
-      label: "Eksterior",
-      desc: "Desain eksterior menarik, kokoh dan estetis.",
-      color: "#3D5254",
-      category: "traveling",
-      img: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&q=80",
-    },
-    {
-      key: "rab",
-      icon: "📐",
-      label: "Desain & RAB",
-      desc: "Desain arsitektur lengkap dengan RAB yang akurat.",
-      color: "#8B6914",
-      category: "traveling",
-      img: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=600&q=80",
-    },
-    {
-      key: "landscape",
-      icon: "🌿",
-      label: "Landscape",
-      desc: "Taman indah dan asri yang menyatu dengan hunian Anda.",
-      color: "#2E7D32",
-      category: "traveling",
-      img: "https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=600&q=80",
-    },
-    {
-      key: "aluminium",
-      icon: "🪟",
-      label: "Aluminium",
-      desc: "Kusen, pintu & jendela aluminium berkualitas tinggi.",
-      color: "#3D5254",
-      category: "event",
-      img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80",
-    },
-    {
-      key: "kanopi",
-      icon: "🏗️",
-      label: "Kanopi",
-      desc: "Kanopi kuat, modern dan tahan segala cuaca.",
-      color: "#8B6914",
-      category: "event",
-      img: "https://images.unsplash.com/photo-1600566752355-35792bedcfea?w=600&q=80",
-    },
-  ];
+  /* ── Static layanan list — defined at module scope as LAYANAN_LIST ── */
 
   const KEUNGGULAN = [
     { icon: "👷", label: "Tim Profesional", desc: "Tenaga ahli berpengalaman di bidangnya" },
@@ -7690,6 +7643,7 @@ function SubLayananAdmin({
   crudLabel,              // judul tabel CRUD
   crudFields = [],        // [{key,label,type,placeholder}]
   crudHasImage = false,
+  defaultItems = null,    // data hardcoded untuk seed ke Firestore
 }) {
   /* ── state teks / konten ── */
   const initContent = {};
@@ -7725,6 +7679,25 @@ function SubLayananAdmin({
   const [crudImgUploading, setCrudImgUploading] = useState(false);
   const [addImgUploading, setAddImgUploading] = useState(false);
   const [delConfirm, setDelConfirm] = useState(null);
+  const [seeding, setSeeding] = useState(false);
+  const [seedConfirm, setSeedConfirm] = useState(false);
+
+  /* ── seed dari data hardcoded ── */
+  const handleSeedDefault = async () => {
+    if (!defaultItems || defaultItems.length === 0) return;
+    setSeeding(true);
+    try {
+      // Generic: ambil semua key dari item defaultItems, pastikan ada id
+      const seeded = defaultItems.map((item, i) => ({
+        ...item,
+        id: item.id ? item.id.toString() : (Date.now() + i).toString(),
+      }));
+      await save({ ...data, [crudKey]: seeded });
+      notify("✅ Data hardcoded berhasil dimuat ke Firestore!");
+      setSeedConfirm(false);
+    } catch { notify("❌ Gagal memuat data default."); }
+    setSeeding(false);
+  };
 
   /* ── helpers ── */
   const accent = accentColor;
@@ -7892,15 +7865,50 @@ function SubLayananAdmin({
       {/* ── SEKSI 3: CRUD Items (jika ada crudKey) ── */}
       {crudKey && (
         <div style={{ background: "#fff", border: "1.5px solid #E8DCC8", borderRadius: 14, padding: "24px 28px" }}>
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 20, paddingBottom: 12, borderBottom: `2px solid ${accent}25` }}>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 20, paddingBottom: 12, borderBottom: `2px solid ${accent}25`, flexWrap: "wrap", gap: 10 }}>
             <h3 style={{ fontSize: "0.9rem", fontWeight: 800, color: accent, textTransform: "uppercase", letterSpacing: ".1em", margin: 0 }}>
               📋 {crudLabel || "Daftar Item"}
             </h3>
-            <button onClick={() => { setShowAdd(true); setAddForm(emptyItem()); }}
-              style={{ ...btnBase, background: accent, color: "#fff", padding: "8px 16px", fontSize: "0.8rem" }}>
-              + Tambah Item
-            </button>
+            <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+              {defaultItems && defaultItems.length > 0 && items.length === 0 && !seedConfirm && (
+                <button onClick={() => setSeedConfirm(true)}
+                  style={{ ...btnBase, background: "#f39c12", color: "#fff", padding: "8px 16px", fontSize: "0.8rem" }}>
+                  📥 Muat Data Hardcoded
+                </button>
+              )}
+              {defaultItems && defaultItems.length > 0 && items.length > 0 && !seedConfirm && (
+                <button onClick={() => setSeedConfirm(true)}
+                  style={{ ...btnBase, background: "#e67e22", color: "#fff", padding: "8px 14px", fontSize: "0.75rem", opacity: 0.85 }}>
+                  🔄 Reset ke Default
+                </button>
+              )}
+              <button onClick={() => { setShowAdd(true); setAddForm(emptyItem()); }}
+                style={{ ...btnBase, background: accent, color: "#fff", padding: "8px 16px", fontSize: "0.8rem" }}>
+                + Tambah Item
+              </button>
+            </div>
           </div>
+
+          {/* Konfirmasi seed */}
+          {seedConfirm && (
+            <div style={{ background: "#fff8e1", border: "1.5px solid #f39c12", borderRadius: 10, padding: "14px 18px", marginBottom: 18, display: "flex", alignItems: "center", gap: 14, flexWrap: "wrap" }}>
+              <span style={{ fontSize: "0.85rem", color: "#8B6914", fontWeight: 600 }}>
+                {items.length > 0
+                  ? "⚠️ Ini akan mengganti semua item saat ini dengan data hardcoded. Lanjutkan?"
+                  : "📥 Muat data hardcoded ke Firestore? Data akan tersimpan dan bisa diedit."}
+              </span>
+              <div style={{ display: "flex", gap: 8 }}>
+                <button onClick={handleSeedDefault} disabled={seeding}
+                  style={{ ...btnBase, background: "#f39c12", color: "#fff", padding: "6px 16px", fontSize: "0.8rem", opacity: seeding ? 0.6 : 1 }}>
+                  {seeding ? "⏳ Memuat…" : "Ya, Muat"}
+                </button>
+                <button onClick={() => setSeedConfirm(false)}
+                  style={{ ...btnBase, background: "#E8DCC8", color: "#5A6A6C", padding: "6px 14px", fontSize: "0.8rem" }}>
+                  Batal
+                </button>
+              </div>
+            </div>
+          )}
 
           {/* Form Tambah */}
           {showAdd && (
@@ -7937,7 +7945,9 @@ function SubLayananAdmin({
           {/* Tabel Items */}
           {items.length === 0 ? (
             <div style={{ textAlign: "center", padding: "40px 20px", color: "#A89070", fontSize: "0.875rem" }}>
-              Belum ada item. Klik "+ Tambah Item" untuk menambahkan.
+              {defaultItems && defaultItems.length > 0
+                ? <>Belum ada item. Klik <strong>"📥 Muat Data Hardcoded"</strong> untuk mengimpor data yang sudah ada di halaman, atau klik "+ Tambah Item" untuk menambahkan manual.</>
+                : "Belum ada item. Klik "+ Tambah Item" untuk menambahkan."}
             </div>
           ) : (
             <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
@@ -8381,6 +8391,27 @@ function DevServicePage({ pageKey, title, subtitle, icon, heroColor, sections, c
 }
 
 /* ── Page: Jasa Desain & RAB ── */
+const DESAIN_RAB_PAKET = [
+  {
+    key:"basic", label:"PAKET BASIC", tag:null, sub:"Cocok untuk rumah kecil / minimalis",
+    harga:"6.000", satuan:"/m²", color:"#1a2526", bgCard:"#fff", textColor:"#1a2526", border:"1.5px solid #d9d9d9",
+    fitur:["Denah Arsitektur","Tampak Depan","3D Eksterior","RAB Estimasi","2x Revisi"],
+    btnBg:"#fff", btnColor:"#1a2526", btnBorder:"1.5px solid #1a2526", btnLabel:"PILIH PAKET BASIC",
+  },
+  {
+    key:"standard", label:"PAKET STANDARD", tag:"REKOMENDASI", sub:"Cocok untuk rumah tinggal",
+    harga:"9.000", satuan:"/m²", color:"#C9AA71", bgCard:"#1a2526", textColor:"#fff", border:"2px solid #C9AA71",
+    fitur:["Denah Arsitektur","Tampak & Potongan","3D Eksterior & Interior","Gambar Kerja Lengkap","RAB Detail","3x Revisi"],
+    btnBg:"#C9AA71", btnColor:"#1a2526", btnBorder:"none", btnLabel:"PILIH PAKET STANDARD",
+  },
+  {
+    key:"premium", label:"PAKET PREMIUM", tag:null, sub:"Cocok untuk rumah mewah / villa",
+    harga:"12.000", satuan:"/m²", color:"#1a2526", bgCard:"#fff", textColor:"#1a2526", border:"1.5px solid #d9d9d9",
+    fitur:["Semua Fitur Standard","Video Animasi 3D","Detail Struktur","Konsultasi Intensif","Revisi Unlimited"],
+    btnBg:"#fff", btnColor:"#1a2526", btnBorder:"1.5px solid #1a2526", btnLabel:"PILIH PAKET PREMIUM",
+  },
+];
+
 function DesainRabPage({ onWaOpen }) {
   const [openFaq, setOpenFaq] = useState(null);
   const [activePaket, setActivePaket] = useState(null);
@@ -8411,26 +8442,7 @@ function DesainRabPage({ onWaOpen }) {
     { label:"Desain Rumah Industrial", luas:"180 m²", img:"https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=600&q=80" },
   ];
 
-  const PAKET = [
-    {
-      key:"basic", label:"PAKET BASIC", tag:null, sub:"Cocok untuk rumah kecil / minimalis",
-      harga:"6.000", satuan:"/m²", color:"#1a2526", bgCard:"#fff", textColor:"#1a2526", border:"1.5px solid #d9d9d9",
-      fitur:["Denah Arsitektur","Tampak Depan","3D Eksterior","RAB Estimasi","2x Revisi"],
-      btnBg:"#fff", btnColor:"#1a2526", btnBorder:"1.5px solid #1a2526", btnLabel:"PILIH PAKET BASIC",
-    },
-    {
-      key:"standard", label:"PAKET STANDARD", tag:"REKOMENDASI", sub:"Cocok untuk rumah tinggal",
-      harga:"9.000", satuan:"/m²", color:"#C9AA71", bgCard:"#1a2526", textColor:"#fff", border:"2px solid #C9AA71",
-      fitur:["Denah Arsitektur","Tampak & Potongan","3D Eksterior & Interior","Gambar Kerja Lengkap","RAB Detail","3x Revisi"],
-      btnBg:"#C9AA71", btnColor:"#1a2526", btnBorder:"none", btnLabel:"PILIH PAKET STANDARD",
-    },
-    {
-      key:"premium", label:"PAKET PREMIUM", tag:null, sub:"Cocok untuk rumah mewah / villa",
-      harga:"12.000", satuan:"/m²", color:"#1a2526", bgCard:"#fff", textColor:"#1a2526", border:"1.5px solid #d9d9d9",
-      fitur:["Semua Fitur Standard","Video Animasi 3D","Detail Struktur","Konsultasi Intensif","Revisi Unlimited"],
-      btnBg:"#fff", btnColor:"#1a2526", btnBorder:"1.5px solid #1a2526", btnLabel:"PILIH PAKET PREMIUM",
-    },
-  ];
+  const PAKET = DESAIN_RAB_PAKET;
 
   const FAQ = [
     { q:"Berapa lama waktu pengerjaan desain?", a:"Tergantung kompleksitas proyek. Rata-rata 7–14 hari kerja untuk desain rumah standar, dan 14–30 hari untuk proyek besar/villa." },
@@ -11460,6 +11472,30 @@ export default function BricksyTravel() {
                   </button>
                 }
               </div>
+              {/* ── LOGIN kecil samar di navbar mobile (hanya jika belum login) ── */}
+              {!user && (
+                <button
+                  className="show-sm"
+                  onClick={() => setShowLogin(true)}
+                  style={{
+                    fontSize: "0.6rem", letterSpacing: ".1em", textTransform: "uppercase", fontWeight: 700,
+                    color: "var(--re-black)", opacity: 0.38,
+                    background: "transparent",
+                    border: "1px solid rgba(20,18,16,.22)",
+                    borderRadius: 5,
+                    padding: "5px 9px",
+                    cursor: "pointer",
+                    transition: "opacity .2s",
+                    lineHeight: 1.3,
+                    flexShrink: 0,
+                  }}
+                  onMouseEnter={e => { e.currentTarget.style.opacity = "0.7"; }}
+                  onMouseLeave={e => { e.currentTarget.style.opacity = "0.38"; }}
+                  aria-label="Login"
+                >
+                  {data.content.loginBtnText || "LOGIN"}
+                </button>
+              )}
               <button className="show-sm" onClick={() => setMobileMenu(!mobileMenu)}
                 style={{ 
                   fontSize: 22, 
@@ -11535,10 +11571,32 @@ export default function BricksyTravel() {
                   </div>
                 )}
                 {!user && (
-                  <button onClick={() => { setShowLogin(true); setMobileMenu(false); }}
-                    style={{ padding: "13px 16px", border: "none", background: "linear-gradient(135deg,#3D5254,#C9AA71)", borderRadius: 10, fontSize: "1rem", color: "#fff", textAlign: "center", fontWeight: 700, marginTop: 4, position: "relative", zIndex: 1 }}>
-                    🔑 Login
-                  </button>
+                  <div style={{ padding: "12px 18px 4px", borderTop: "1px solid var(--re-grey-lt)", marginTop: 8 }}>
+                    <button onClick={() => { setShowLogin(true); setMobileMenu(false); }}
+                      style={{
+                        padding: "7px 14px",
+                        border: "1px solid rgba(20,18,16,.18)",
+                        background: "transparent",
+                        borderRadius: 6,
+                        fontSize: "0.7rem",
+                        letterSpacing: ".1em",
+                        textTransform: "uppercase",
+                        fontWeight: 700,
+                        color: "var(--re-black)",
+                        opacity: 0.45,
+                        cursor: "pointer",
+                        fontFamily: "'Jost',sans-serif",
+                        transition: "opacity .2s",
+                        display: "block",
+                        width: "100%",
+                        textAlign: "center",
+                      }}
+                      onMouseEnter={e => { e.currentTarget.style.opacity = "0.75"; }}
+                      onMouseLeave={e => { e.currentTarget.style.opacity = "0.45"; }}
+                    >
+                      {data.content.loginBtnText || "LOGIN"}
+                    </button>
+                  </div>
                 )}
               </div>
             )}
@@ -12165,6 +12223,13 @@ export default function BricksyTravel() {
                     { key: "icon", label: "Icon / Emoji", type: "text", placeholder: "🏠" },
                   ]}
                   crudHasImage
+                  defaultItems={LAYANAN_LIST.map((l, i) => ({
+                    id: l.key || String(i + 1),
+                    nama: l.label,
+                    deskripsi: l.desc || "",
+                    icon: l.icon || "",
+                    _img: l.img || "",
+                  }))}
                 />
               )}
 
@@ -12198,6 +12263,13 @@ export default function BricksyTravel() {
                     { key: "deskripsi", label: "Deskripsi Paket", type: "textarea", placeholder: "Termasuk: ..." },
                   ]}
                   crudHasImage
+                  defaultItems={DESAIN_RAB_PAKET.map((p, i) => ({
+                    id: p.key || String(i + 1),
+                    nama: p.label,
+                    harga: `Rp ${p.harga}${p.satuan || ""}`,
+                    deskripsi: [p.sub || "", ...(p.fitur || [])].filter(Boolean).join(" | "),
+                    _img: "",
+                  }))}
                 />
               )}
 
@@ -12230,6 +12302,7 @@ export default function BricksyTravel() {
                     { key: "warna", label: "Warna Aksen (HEX)", type: "text", placeholder: "#2E3D3F" },
                   ]}
                   crudHasImage
+                  defaultItems={TEMA_DATA}
                 />
               )}
 
@@ -12263,6 +12336,17 @@ export default function BricksyTravel() {
                     { key: "deskripsi", label: "Deskripsi", type: "textarea", placeholder: "Deskripsi kategori interior..." },
                   ]}
                   crudHasImage
+                  defaultItems={[
+                    ...Object.entries(CATALOG_DATA)
+                      .filter(([k]) => k.startsWith("interior/"))
+                      .flatMap(([k, v]) => v.items.map(item => ({
+                        id: item.id,
+                        nama: item.nama,
+                        harga: item.harga ? `Rp ${item.harga.toLocaleString("id-ID")}` : (item.style || ""),
+                        deskripsi: [item.desc, item.material ? `Material: ${item.material}` : "", item.fitur ? item.fitur.join(", ") : ""].filter(Boolean).join(" | "),
+                        _img: item.img || "",
+                      })))
+                  ]}
                 />
               )}
 
@@ -12297,6 +12381,14 @@ export default function BricksyTravel() {
                     { key: "deskripsi", label: "Deskripsi", type: "textarea", placeholder: "Keunggulan dan detail..." },
                   ]}
                   crudHasImage
+                  defaultItems={CATALOG_DATA["eksterior/pagar"].items.map(item => ({
+                    id: item.id,
+                    nama: item.nama,
+                    material: item.material || "",
+                    harga: item.harga ? `Rp ${item.harga.toLocaleString("id-ID")}/m` : "",
+                    deskripsi: [item.desc, item.fitur ? item.fitur.join(", ") : ""].filter(Boolean).join(" | "),
+                    _img: item.img || "",
+                  }))}
                 />
               )}
 
@@ -12331,6 +12423,14 @@ export default function BricksyTravel() {
                     { key: "deskripsi", label: "Deskripsi", type: "textarea", placeholder: "Keunggulan dan detail..." },
                   ]}
                   crudHasImage
+                  defaultItems={CATALOG_DATA["eksterior/kanopi"].items.map(item => ({
+                    id: item.id,
+                    nama: item.nama,
+                    material: item.material || "",
+                    harga: item.harga ? `Rp ${item.harga.toLocaleString("id-ID")}/m²` : "",
+                    deskripsi: [item.desc, item.fitur ? item.fitur.join(", ") : ""].filter(Boolean).join(" | "),
+                    _img: item.img || "",
+                  }))}
                 />
               )}
 
@@ -12365,6 +12465,14 @@ export default function BricksyTravel() {
                     { key: "deskripsi", label: "Deskripsi", type: "textarea", placeholder: "Keunggulan dan detail..." },
                   ]}
                   crudHasImage
+                  defaultItems={CATALOG_DATA["eksterior/aluminium"].items.map(item => ({
+                    id: item.id,
+                    nama: item.nama,
+                    spek: item.material || "",
+                    harga: item.harga ? `Rp ${item.harga.toLocaleString("id-ID")}/m` : "",
+                    deskripsi: [item.desc, item.fitur ? item.fitur.join(", ") : ""].filter(Boolean).join(" | "),
+                    _img: item.img || "",
+                  }))}
                 />
               )}
 
@@ -12398,6 +12506,13 @@ export default function BricksyTravel() {
                     { key: "deskripsi", label: "Deskripsi", type: "textarea", placeholder: "Detail layanan landscape..." },
                   ]}
                   crudHasImage
+                  defaultItems={CATALOG_DATA["eksterior/taman-landscape"].items.map(item => ({
+                    id: item.id,
+                    nama: item.nama,
+                    harga: item.harga ? `Rp ${item.harga.toLocaleString("id-ID")}` : "",
+                    deskripsi: [item.desc, item.fitur ? item.fitur.join(", ") : ""].filter(Boolean).join(" | "),
+                    _img: item.img || "",
+                  }))}
                 />
               )}
 
