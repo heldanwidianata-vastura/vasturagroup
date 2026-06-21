@@ -2064,6 +2064,14 @@ const GS = () => (
       /* Fix 10: logo lebih kecil di mobile */
       nav img{height:42px!important;max-width:86px!important;width:auto!important}
     }
+    /* Fix logo wrap — tablet & smartphone (semua layar ≤900px) */
+    @media(max-width:900px){
+      .navbar-logo-wrap > div { gap: 8px !important; }
+      .navbar-logo-wrap > div > div:first-child { width: 40px !important; height: 40px !important; border-radius: 8px !important; }
+      .navbar-logo-wrap > div > div:first-child svg { width: 18px !important; height: 18px !important; }
+      .navbar-logo-wrap > div > span.logo-brand { font-size: 0.82rem !important; line-height: 1.15 !important; }
+      .navbar-logo-wrap img { height: 40px !important; max-width: 80px !important; }
+    }
 
     /* 2. Hero Slideshow — readable height, no side gradients overflow */
     @media(max-width:640px){
@@ -6978,6 +6986,258 @@ function HomeIntroSlideshow({ data }) {
 }
 
 /* ─────────────── HERO SLIDESHOW ─────────────── */
+/* ════════════════════════════════════════════════════════
+   LENS FLARE EFFECT — interaktif mengikuti mouse
+════════════════════════════════════════════════════════ */
+function LensFlareEffect() {
+  const canvasRef = useRef(null);
+  const mouseRef  = useRef({ x: 0.5, y: 0.35 });
+  const targetRef = useRef({ x: 0.5, y: 0.35 });
+  const rafRef    = useRef(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+
+    const resize = () => {
+      canvas.width  = canvas.offsetWidth;
+      canvas.height = canvas.offsetHeight;
+    };
+    resize();
+    window.addEventListener("resize", resize);
+
+    const onMove = (e) => {
+      const r = canvas.getBoundingClientRect();
+      const cx = (e.clientX ?? e.touches?.[0]?.clientX) - r.left;
+      const cy = (e.clientY ?? e.touches?.[0]?.clientY) - r.top;
+      targetRef.current = { x: cx / r.width, y: cy / r.height };
+    };
+    canvas.parentElement.addEventListener("mousemove", onMove);
+    canvas.parentElement.addEventListener("touchmove", onMove, { passive: true });
+
+    const FLARES = [
+      { offset: 0.0,  radius: 0.22, alpha: 0.55, color: [255,230,160] },
+      { offset: 0.18, radius: 0.06, alpha: 0.35, color: [255,220,120] },
+      { offset: 0.32, radius: 0.09, alpha: 0.22, color: [200,180,255] },
+      { offset: 0.50, radius: 0.14, alpha: 0.18, color: [255,255,220] },
+      { offset: 0.65, radius: 0.04, alpha: 0.45, color: [255,200,100] },
+      { offset: 0.80, radius: 0.07, alpha: 0.20, color: [180,220,255] },
+      { offset: 1.00, radius: 0.10, alpha: 0.15, color: [255,240,200] },
+    ];
+
+    const drawFlare = (cx, cy, r, alpha, color) => {
+      const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, r);
+      g.addColorStop(0,   `rgba(${color.join(",")},${alpha})`);
+      g.addColorStop(0.4, `rgba(${color.join(",")},${alpha * 0.4})`);
+      g.addColorStop(1,   `rgba(${color.join(",")},0)`);
+      ctx.fillStyle = g;
+      ctx.beginPath();
+      ctx.arc(cx, cy, r, 0, Math.PI * 2);
+      ctx.fill();
+    };
+
+    const drawStreak = (sx, sy, ex, ey, alpha) => {
+      ctx.save();
+      ctx.globalAlpha = alpha;
+      const g = ctx.createLinearGradient(sx, sy, ex, ey);
+      g.addColorStop(0,   "rgba(255,240,180,0)");
+      g.addColorStop(0.5, "rgba(255,240,180,0.6)");
+      g.addColorStop(1,   "rgba(255,240,180,0)");
+      ctx.strokeStyle = g;
+      ctx.lineWidth   = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(sx, sy);
+      ctx.lineTo(ex, ey);
+      ctx.stroke();
+      ctx.restore();
+    };
+
+    const loop = () => {
+      const m = mouseRef.current;
+      const t = targetRef.current;
+      // ease lerp
+      m.x += (t.x - m.x) * 0.06;
+      m.y += (t.y - m.y) * 0.06;
+
+      const w = canvas.width;
+      const h = canvas.height;
+      const ox = m.x * w;
+      const oy = m.y * h;
+      const cx2 = w / 2;
+      const cy2 = h / 2;
+      const dx  = cx2 - ox;
+      const dy  = cy2 - oy;
+
+      ctx.clearRect(0, 0, w, h);
+
+      // streak line
+      drawStreak(ox - dx * 1.8, oy - dy * 1.8, ox + dx * 1.8, oy + dy * 1.8, 0.18);
+
+      FLARES.forEach(f => {
+        const fx = ox + dx * f.offset * 2;
+        const fy = oy + dy * f.offset * 2;
+        const fr = f.radius * Math.min(w, h);
+        drawFlare(fx, fy, fr, f.alpha, f.color);
+      });
+
+      // bright core
+      drawFlare(ox, oy, Math.min(w, h) * 0.05, 0.9, [255, 255, 240]);
+
+      rafRef.current = requestAnimationFrame(loop);
+    };
+    rafRef.current = requestAnimationFrame(loop);
+
+    return () => {
+      cancelAnimationFrame(rafRef.current);
+      window.removeEventListener("resize", resize);
+      canvas.parentElement?.removeEventListener("mousemove", onMove);
+      canvas.parentElement?.removeEventListener("touchmove", onMove);
+    };
+  }, []);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      style={{
+        position: "absolute", inset: 0,
+        width: "100%", height: "100%",
+        pointerEvents: "none",
+        zIndex: 16,
+        mixBlendMode: "screen",
+      }}
+    />
+  );
+}
+
+/* ════════════════════════════════════════════════════════
+   WATER DROPS EFFECT — tetesan air interaktif
+════════════════════════════════════════════════════════ */
+function WaterDropsEffect() {
+  const canvasRef = useRef(null);
+  const dropsRef  = useRef([]);
+  const rafRef    = useRef(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+
+    const resize = () => {
+      canvas.width  = canvas.offsetWidth;
+      canvas.height = canvas.offsetHeight;
+    };
+    resize();
+    window.addEventListener("resize", resize);
+
+    /* Spawn click/tap drop */
+    const spawnDrop = (cx, cy) => {
+      dropsRef.current.push({
+        x: cx, y: cy,
+        r: 0, maxR: 80 + Math.random() * 80,
+        alpha: 0.7,
+        speed: 1.4 + Math.random() * 1.2,
+        ripples: [],
+      });
+    };
+
+    const onClick = (e) => {
+      const r = canvas.getBoundingClientRect();
+      spawnDrop(
+        (e.clientX ?? e.touches?.[0]?.clientX) - r.left,
+        (e.clientY ?? e.touches?.[0]?.clientY) - r.top,
+      );
+    };
+    canvas.parentElement.addEventListener("click",     onClick);
+    canvas.parentElement.addEventListener("touchstart", onClick, { passive: true });
+
+    /* Auto-spawn random drops */
+    const autoSpawn = () => {
+      if (dropsRef.current.length < 12) {
+        const w = canvas.width;
+        const h = canvas.height;
+        spawnDrop(
+          Math.random() * w,
+          Math.random() * h * 0.7,
+        );
+      }
+    };
+    const autoTimer = setInterval(autoSpawn, 1200);
+
+    const drawDrop = (d) => {
+      if (d.alpha <= 0) return;
+      ctx.save();
+      ctx.globalAlpha = d.alpha;
+
+      // outer ring
+      ctx.strokeStyle = `rgba(180,220,255,${d.alpha})`;
+      ctx.lineWidth   = 1.8;
+      ctx.beginPath();
+      ctx.ellipse(d.x, d.y, d.r, d.r * 0.45, 0, 0, Math.PI * 2);
+      ctx.stroke();
+
+      // inner shimmer
+      if (d.r > 10) {
+        ctx.strokeStyle = `rgba(255,255,255,${d.alpha * 0.5})`;
+        ctx.lineWidth   = 0.8;
+        ctx.beginPath();
+        ctx.ellipse(d.x, d.y, d.r * 0.55, d.r * 0.25, 0, 0, Math.PI * 2);
+        ctx.stroke();
+      }
+
+      // highlight dot at top
+      const hg = ctx.createRadialGradient(d.x, d.y - d.r * 0.3, 0, d.x, d.y - d.r * 0.3, d.r * 0.18);
+      hg.addColorStop(0, `rgba(255,255,255,${d.alpha * 0.9})`);
+      hg.addColorStop(1, `rgba(255,255,255,0)`);
+      ctx.fillStyle = hg;
+      ctx.beginPath();
+      ctx.arc(d.x, d.y - d.r * 0.3, d.r * 0.18, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.restore();
+    };
+
+    const loop = () => {
+      const w = canvas.width;
+      const h = canvas.height;
+      ctx.clearRect(0, 0, w, h);
+
+      dropsRef.current = dropsRef.current.filter(d => d.alpha > 0.02);
+
+      dropsRef.current.forEach(d => {
+        d.r     += d.speed;
+        d.alpha -= d.speed / d.maxR * 0.85;
+        if (d.alpha < 0) d.alpha = 0;
+        drawDrop(d);
+      });
+
+      rafRef.current = requestAnimationFrame(loop);
+    };
+    rafRef.current = requestAnimationFrame(loop);
+
+    return () => {
+      cancelAnimationFrame(rafRef.current);
+      clearInterval(autoTimer);
+      window.removeEventListener("resize", resize);
+      canvas.parentElement?.removeEventListener("click",     onClick);
+      canvas.parentElement?.removeEventListener("touchstart", onClick);
+    };
+  }, []);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      style={{
+        position: "absolute", inset: 0,
+        width: "100%", height: "100%",
+        pointerEvents: "none",
+        zIndex: 17,
+        mixBlendMode: "screen",
+      }}
+    />
+  );
+}
+
 function HeroSlideshow({ data, navigateTo }) {
   const heroMode = data.content?.heroMode || "slideshow";
 
@@ -7088,6 +7348,8 @@ function HeroSlideshow({ data, navigateTo }) {
         {/* Side gradients */}
         <div style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: "18%", background: "linear-gradient(to right, rgba(4,8,15,.82) 0%, rgba(4,8,15,0) 100%)", zIndex: 15, pointerEvents: "none" }} />
         <div style={{ position: "absolute", right: 0, top: 0, bottom: 0, width: "18%", background: "linear-gradient(to left, rgba(4,8,15,.82) 0%, rgba(4,8,15,0) 100%)", zIndex: 15, pointerEvents: "none" }} />
+        <LensFlareEffect />
+        <WaterDropsEffect />
       </section>
     );
   }
@@ -7204,6 +7466,12 @@ function HeroSlideshow({ data, navigateTo }) {
           </div>
         </div>
       </div>
+
+      {/* ══ LENS FLARE EFFECT ══ */}
+      <LensFlareEffect />
+
+      {/* ══ WATER DROPS EFFECT ══ */}
+      <WaterDropsEffect />
 
       {/* Side gradient overlays — solid edge, fade to center */}
       <div className="hero-side-grad" style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: "18%", background: "linear-gradient(to right, rgba(4,8,15,.82) 0%, rgba(4,8,15,.45) 50%, rgba(4,8,15,0) 100%)", zIndex: 15, pointerEvents: "none" }} />
@@ -9800,10 +10068,9 @@ function MobileLayananAccordion({ page, navigateTo, setMobileMenu, navDropdownLa
           {subOpen==="eksterior" && (
             <div style={{ borderLeft:"2px solid #C9AA71", marginLeft:28 }}>
               {[
-                {key:"eksterior/pagar",          label:"🔒 Pagar"},
-                {key:"eksterior/kanopi",          label:"🏗️ Kanopi"},
-                {key:"eksterior/aluminium",       label:"🪟 Aluminium"},
-                {key:"eksterior/taman-landscape", label:"🌳 Taman Landscape"},
+                {key:"eksterior/pagar",     label:"🔒 Pagar"},
+                {key:"eksterior/kanopi",    label:"🏗️ Kanopi"},
+                {key:"eksterior/aluminium", label:"🪟 Aluminium"},
               ].map(sub=>(
                 <button key={sub.key} onClick={()=>{ navigateTo(sub.key); setMobileMenu(false); setOpen(false); setSubOpen(null); }}
                   style={mBtn(page===sub.key, 2)}>
@@ -11009,13 +11276,13 @@ export default function BricksyTravel() {
     { key: "pagar",     label: data.content.nav10 || "Pagar Rumah" },
     { key: "kanopi",    label: data.content.nav11 || "Kanopi" },
     { key: "aluminium", label: data.content.nav12 || "Aluminium" },
-    { key: "landscape", label: data.content.nav13 || "Landscape & Taman" },
   ];
   // Interior & Eksterior sudah digabung ke navDropdownLayanan
   const navDropdownInterior = [];
-  // Dropdown: Galeri Proyek (artikel sections)
+  // Dropdown: Program Renovasi — Rumah Subsidi & Landscape & Taman
   const navDropdownGaleri = [
-    { key: "shop", label: data.content.nav4 || "Rumah Subsidi" },
+    { key: "shop",      label: data.content.nav4  || "Rumah Subsidi" },
+    { key: "landscape", label: data.content.nav13 || "Landscape & Taman" },
   ];
   // All keys that are "active" as pages for highlight purposes
   const allNavKeys = [
@@ -11366,8 +11633,10 @@ export default function BricksyTravel() {
             <div style={{ position: "relative", zIndex: 1, display: "flex", alignItems: "center", justifyContent: "space-between", height: 82, maxWidth: 1200, margin: "0 auto", gap: 20 }}>
 
               {/* ── LOGO — full multi-line height ── */}
-              <button onClick={() => navigateTo("home")} style={{ border: "none", background: "none", padding: 0, flexShrink: 0, height: "100%", display: "flex", alignItems: "center" }}>
-                <LogoDisplay content={data.content} size="nav" />
+              <button onClick={() => navigateTo("home")} style={{ border: "none", background: "none", padding: 0, flexShrink: 0, height: "100%", display: "flex", alignItems: "center", overflow: "visible", minWidth: 0 }}>
+                <div className="navbar-logo-wrap">
+                  <LogoDisplay content={data.content} size="nav" />
+                </div>
               </button>
 
               {/* ── DESKTOP NAV with Dropdowns ── */}
