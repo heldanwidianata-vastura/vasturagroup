@@ -240,7 +240,8 @@ async function fsGet(docId) {
   } catch { return null; }
 }
 async function fsSet(docId, payload) {
-  try { await setDoc(doc(_db, FS_COLLECTION, docId), payload); } catch {}
+  try { await setDoc(doc(_db, FS_COLLECTION, docId), payload); return true; }
+  catch (e) { console.error("[Firestore] Gagal simpan ke", docId, e); return false; }
 }
 
 /* ─── Cloudinary Config ─── */
@@ -10950,7 +10951,8 @@ export default function BricksyTravel() {
     dataRef.current = safeData; // sync ref agar popstate closure selalu punya data terbaru
     const payload = JSON.stringify(safeData);
     // Simpan ke Firestore (cloud) + window.storage (lokal backup)
-    await fsSet("main", { payload, updatedAt: Date.now() });
+    const ok = await fsSet("main", { payload, updatedAt: Date.now() });
+    if (!ok) notify("⚠ Gagal simpan ke cloud (Firestore). Cek koneksi/izin — perubahan hanya tersimpan lokal & bisa hilang saat refresh.", "error");
     try { await window.storage?.set("bricksy-v2", payload); } catch {}
     try { localStorage.setItem("realestate-cache-v2", payload); } catch {}
   };
@@ -11741,30 +11743,6 @@ export default function BricksyTravel() {
                   </button>
                 }
               </div>
-              {/* ── LOGIN kecil samar di navbar mobile (hanya jika belum login) ── */}
-              {!user && (
-                <button
-                  className="show-sm"
-                  onClick={() => setShowLogin(true)}
-                  style={{
-                    fontSize: "0.6rem", letterSpacing: ".1em", textTransform: "uppercase", fontWeight: 700,
-                    color: "var(--re-black)", opacity: 0.38,
-                    background: "transparent",
-                    border: "1px solid rgba(20,18,16,.22)",
-                    borderRadius: 5,
-                    padding: "5px 9px",
-                    cursor: "pointer",
-                    transition: "opacity .2s",
-                    lineHeight: 1.3,
-                    flexShrink: 0,
-                  }}
-                  onMouseEnter={e => { e.currentTarget.style.opacity = "0.7"; }}
-                  onMouseLeave={e => { e.currentTarget.style.opacity = "0.38"; }}
-                  aria-label="Login"
-                >
-                  {data.content.loginBtnText || "LOGIN"}
-                </button>
-              )}
               <button className="show-sm" onClick={() => setMobileMenu(!mobileMenu)}
                 style={{ 
                   fontSize: 22, 
@@ -11840,30 +11818,26 @@ export default function BricksyTravel() {
                   </div>
                 )}
                 {!user && (
-                  <div style={{ padding: "12px 18px 4px", borderTop: "1px solid var(--re-grey-lt)", marginTop: 8 }}>
+                  <div style={{ padding: "12px 18px 4px", borderTop: "1px solid var(--re-grey-lt)", marginTop: 8, display: "flex", justifyContent: "center" }}>
                     <button onClick={() => { setShowLogin(true); setMobileMenu(false); }}
+                      aria-label="Login"
+                      title="Login"
                       style={{
-                        padding: "7px 14px",
+                        width: 38, height: 38,
                         border: "1px solid rgba(20,18,16,.18)",
                         background: "transparent",
-                        borderRadius: 6,
-                        fontSize: "0.7rem",
-                        letterSpacing: ".1em",
-                        textTransform: "uppercase",
-                        fontWeight: 700,
+                        borderRadius: "50%",
+                        display: "flex", alignItems: "center", justifyContent: "center",
+                        fontSize: "1.05rem",
                         color: "var(--re-black)",
                         opacity: 0.45,
                         cursor: "pointer",
-                        fontFamily: "'Jost',sans-serif",
-                        transition: "opacity .2s",
-                        display: "block",
-                        width: "100%",
-                        textAlign: "center",
+                        transition: "opacity .2s, background .2s",
                       }}
-                      onMouseEnter={e => { e.currentTarget.style.opacity = "0.75"; }}
-                      onMouseLeave={e => { e.currentTarget.style.opacity = "0.45"; }}
+                      onMouseEnter={e => { e.currentTarget.style.opacity = "0.85"; e.currentTarget.style.background = "var(--re-grey-lt)"; }}
+                      onMouseLeave={e => { e.currentTarget.style.opacity = "0.45"; e.currentTarget.style.background = "transparent"; }}
                     >
-                      {data.content.loginBtnText || "LOGIN"}
+                      ⚙
                     </button>
                   </div>
                 )}
@@ -11873,114 +11847,6 @@ export default function BricksyTravel() {
 
           {/* Spacer to push content below fixed navbar */}
           <div style={{ height: "clamp(60px,10vw,96px)" }} />
-
-          {/* ── NAVIGASI MAJU / MUNDUR ── */}
-          {(() => {
-            const isMobileNav = window.innerWidth <= 768;
-            const PAGE_LABELS = { home: "Beranda", about: "Tentang Kami", services: "Layanan", destinations: "Destinasi", news: "Berita", shop: "Toko" };
-            const currentLabel = PAGE_LABELS[page] || page || "Halaman";
-            if (isMobileNav) {
-              /* ── MOBILE: bold rectangle pill di kiri bawah ── */
-              return (
-                <div style={{
-                  position: "fixed", bottom: 20, left: 12, zIndex: 9989,
-                  display: "flex", alignItems: "center",
-                  background: "#2E3D3F",
-                  borderRadius: 10, overflow: "hidden",
-                  boxShadow: "0 4px 18px rgba(13,59,102,.45), 0 2px 6px rgba(0,0,0,.2)",
-                  border: "2px solid rgba(255,255,255,.15)",
-                }}>
-                  {/* Tombol Mundur */}
-                  <button onClick={spaBack} disabled={!canBack} aria-label="Halaman sebelumnya"
-                    style={{
-                      width: 52, height: 48, border: "none",
-                      background: canBack ? "transparent" : "rgba(255,255,255,.05)",
-                      display: "flex", alignItems: "center", justifyContent: "center",
-                      cursor: canBack ? "pointer" : "default",
-                      opacity: canBack ? 1 : 0.35,
-                      WebkitTapHighlightColor: "transparent",
-                      transition: "background .15s",
-                    }}
-                    onPointerDown={e => { if (canBack) e.currentTarget.style.background = "rgba(255,255,255,.15)"; }}
-                    onPointerUp={e => { e.currentTarget.style.background = "transparent"; }}
-                    onPointerLeave={e => { e.currentTarget.style.background = "transparent"; }}
-                  >
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                      <polyline points="15 18 9 12 15 6" />
-                    </svg>
-                  </button>
-                  {/* Label halaman aktif */}
-                  <div style={{
-                    padding: "0 10px", fontSize: "0.6875rem", fontWeight: 800,
-                    color: "#fff", whiteSpace: "nowrap",
-                    maxWidth: 88, overflow: "hidden", textOverflow: "ellipsis",
-                    fontFamily: "'DM Sans',sans-serif", lineHeight: 1,
-                    borderLeft: "1px solid rgba(255,255,255,.2)", borderRight: "1px solid rgba(255,255,255,.2)",
-                    height: 48, display: "flex", alignItems: "center",
-                    textTransform: "uppercase", letterSpacing: ".05em",
-                  }}>
-                    {currentLabel}
-                  </div>
-                  {/* Tombol Maju */}
-                  <button onClick={spaForward} disabled={!canFwd} aria-label="Halaman berikutnya"
-                    style={{
-                      width: 52, height: 48, border: "none",
-                      background: canFwd ? "transparent" : "rgba(255,255,255,.05)",
-                      display: "flex", alignItems: "center", justifyContent: "center",
-                      cursor: canFwd ? "pointer" : "default",
-                      opacity: canFwd ? 1 : 0.35,
-                      WebkitTapHighlightColor: "transparent",
-                      transition: "background .15s",
-                    }}
-                    onPointerDown={e => { if (canFwd) e.currentTarget.style.background = "rgba(255,255,255,.15)"; }}
-                    onPointerUp={e => { e.currentTarget.style.background = "transparent"; }}
-                    onPointerLeave={e => { e.currentTarget.style.background = "transparent"; }}
-                  >
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                      <polyline points="9 18 15 12 9 6" />
-                    </svg>
-                  </button>
-                </div>
-              );
-            }
-            /* ── DESKTOP: dua tombol persegi panjang bold vertikal di kanan ── */
-            return (
-              <div style={{ position: "fixed", bottom: 100, right: 20, zIndex: 9989, display: "flex", flexDirection: "column", gap: 6 }}>
-                <button onClick={spaForward} disabled={!canFwd} title="Maju"
-                  style={{
-                    width: 52, height: 44, borderRadius: 8, border: "none",
-                    background: canFwd ? "linear-gradient(135deg,#2E3D3F,#8B6914)" : "rgba(200,210,220,.55)",
-                    boxShadow: canFwd ? "0 4px 14px rgba(13,59,102,.40)" : "0 2px 6px rgba(0,0,0,.12)",
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                    cursor: canFwd ? "pointer" : "default", opacity: canFwd ? 1 : 0.45,
-                    transition: "transform .18s, box-shadow .18s, opacity .18s",
-                  }}
-                  onMouseEnter={e => { if (canFwd) { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = "0 8px 22px rgba(13,59,102,.5)"; }}}
-                  onMouseLeave={e => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = canFwd ? "0 4px 14px rgba(13,59,102,.40)" : "0 2px 6px rgba(0,0,0,.12)"; }}
-                >
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                    <polyline points="9 18 15 12 9 6" />
-                  </svg>
-                </button>
-                <button onClick={spaBack} disabled={!canBack} title="Mundur"
-                  style={{
-                    width: 52, height: 44, borderRadius: 8, border: "none",
-                    background: canBack ? "linear-gradient(135deg,#2E3D3F,#8B6914)" : "rgba(200,210,220,.55)",
-                    boxShadow: canBack ? "0 4px 14px rgba(13,59,102,.40)" : "0 2px 6px rgba(0,0,0,.12)",
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                    cursor: canBack ? "pointer" : "default", opacity: canBack ? 1 : 0.45,
-                    transition: "transform .18s, box-shadow .18s, opacity .18s",
-                  }}
-                  onMouseEnter={e => { if (canBack) { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = "0 8px 22px rgba(13,59,102,.5)"; }}}
-                  onMouseLeave={e => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = canBack ? "0 4px 14px rgba(13,59,102,.40)" : "0 2px 6px rgba(0,0,0,.12)"; }}
-                >
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                    <polyline points="15 18 9 12 15 6" />
-                  </svg>
-                </button>
-              </div>
-            );
-          })()}
 
           {/* ── WA PICKER MODAL ── */}
           {waPicker && (
