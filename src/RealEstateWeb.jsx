@@ -240,7 +240,8 @@ async function fsGet(docId) {
   } catch { return null; }
 }
 async function fsSet(docId, payload) {
-  try { await setDoc(doc(_db, FS_COLLECTION, docId), payload); } catch {}
+  try { await setDoc(doc(_db, FS_COLLECTION, docId), payload); return true; }
+  catch (e) { console.error("[Firestore] Gagal simpan ke", docId, e); return false; }
 }
 
 /* ─── Cloudinary Config ─── */
@@ -666,10 +667,10 @@ const DEFAULT_DATA = {
     address: "Perumahan Puri Mangundikaran, Blok B5 No.21, Kel. Mangundikaran, Kec. Nganjuk, Kab. Nganjuk",
     hours: "Senin – Sabtu: 08.00 – 20.00 WIB",
     waAdmins: [
-      { id: 1, name: "Heldan Widiananta", jabatan: "Chief Executive Officer", wa: "https://wa.me/6282140294820", primary: true },
-      { id: 2, name: "Fredy", jabatan: "Admin", wa: "https://wa.me/6281233275485", primary: false },
+      { id: 1, name: "Fredy – Admin Utama", wa: "https://wa.me/6281233275485" },
+      { id: 2, name: "Heldan – CS", wa: "https://wa.me/6282140294820" },
     ],
-    waLink: "https://wa.me/6282140294820",
+    waLink: "https://wa.me/6281233275485",
     igLink: "https://instagram.com/vastura_group",
     fbLink: "https://facebook.com/vastura_group",
     logoText: "VASTURA\nGROUP",
@@ -1774,10 +1775,8 @@ const GS = () => (
     @media(min-width:901px){
       .anim-fade-up{opacity:0;transform:translateY(32px);transition:opacity .7s cubic-bezier(.22,1,.36,1),transform .7s cubic-bezier(.22,1,.36,1)}
       .anim-fade-up.visible{opacity:1;transform:translateY(0)}
-      .anim-fade-up.exit{opacity:0;transform:translateY(-24px);transition:opacity .45s ease,transform .45s ease}
       .anim-zoom{opacity:0;transform:scale(.94);transition:opacity .65s ease,transform .65s ease}
       .anim-zoom.visible{opacity:1;transform:scale(1)}
-      .anim-zoom.exit{opacity:0;transform:scale(.96);transition:opacity .45s ease,transform .45s ease}
       .btn-magnetic{transition:transform .25s cubic-bezier(.34,1.56,.64,1),box-shadow .25s}
       .btn-magnetic:hover{transform:scale(1.045) translateY(-2px);box-shadow:0 12px 32px rgba(46,61,63,.18)}
       .post-card{transition:transform .35s cubic-bezier(.22,1,.36,1),box-shadow .35s;transform-style:preserve-3d}
@@ -2063,8 +2062,6 @@ const GS = () => (
     @media(max-width:640px){
       nav{background:linear-gradient(105deg,#ffffff 0%,#e8f9fb 30%,#a8dde8 62%,#B8962A 100%)!important;backdrop-filter:none!important;padding:0 4%!important;overflow:visible!important}
       nav>div:not(.mobile-dropdown){height:60px!important;gap:10px!important}
-      /* Fix 10: logo mobile — diperbesar */
-      nav img{height:52px!important;max-width:160px!important;width:auto!important}
     }
     /* Fix logo wrap — tablet & smartphone (semua layar ≤900px) */
     @media(max-width:900px){
@@ -2072,7 +2069,7 @@ const GS = () => (
       .navbar-logo-wrap > div > div:first-child { width: 40px !important; height: 40px !important; border-radius: 8px !important; }
       .navbar-logo-wrap > div > div:first-child svg { width: 18px !important; height: 18px !important; }
       .navbar-logo-wrap > div > span.logo-brand { font-size: 0.82rem !important; line-height: 1.15 !important; }
-      .navbar-logo-wrap img { height: 52px !important; max-width: 160px !important; }
+      .navbar-logo-wrap img { height: 44px !important; max-width: 110px !important; width: auto !important; flex-shrink: 0 !important; }
     }
 
     /* 2. Hero Slideshow — readable height, no side gradients overflow */
@@ -2460,45 +2457,26 @@ const GS = () => (
     /* ── Scroll Reveal animations ── */
     @keyframes re-fadeUp { from{opacity:0;transform:translateY(40px)} to{opacity:1;transform:translateY(0)} }
     @keyframes re-fadeIn  { from{opacity:0} to{opacity:1} }
-    @keyframes re-slideLeft  { from{opacity:0;transform:translateX(-70px) scaleX(.96)} to{opacity:1;transform:translateX(0) scaleX(1)} }
-    @keyframes re-slideLeftOut { from{opacity:1;transform:translateX(0) scaleX(1)} to{opacity:0;transform:translateX(-50px) scaleX(.96)} }
-    @keyframes re-slideRight { from{opacity:0;transform:translateX(70px) scaleX(.96)} to{opacity:1;transform:translateX(0) scaleX(1)} }
-    @keyframes re-slideRightOut { from{opacity:1;transform:translateX(0) scaleX(1)} to{opacity:0;transform:translateX(50px) scaleX(.96)} }
+    @keyframes re-slideLeft  { from{opacity:0;transform:translateX(-50px)} to{opacity:1;transform:translateX(0)} }
+    @keyframes re-slideRight { from{opacity:0;transform:translateX(50px)} to{opacity:1;transform:translateX(0)} }
     @keyframes re-scaleIn { from{opacity:0;transform:scale(.92)} to{opacity:1;transform:scale(1)} }
-    @keyframes re-scaleOut { from{opacity:1;transform:scale(1)} to{opacity:0;transform:scale(.94)} }
     @keyframes re-smokeFloat { 0%,100%{transform:translateY(0) rotate(-3deg);opacity:.4} 50%{transform:translateY(-18px) rotate(3deg);opacity:.18} }
     @keyframes re-flareGlow  { 0%,100%{opacity:.55;transform:scale(1)} 50%{opacity:.85;transform:scale(1.08)} }
     @keyframes re-sash { 0%{transform:translateX(-120%) skewX(-8deg)} 100%{transform:translateX(220%) skewX(-8deg)} }
-    /* Tirai/Curtain — gambar membuka seperti tirai pertunjukan */
-    @keyframes re-curtainLeft  { 0%{opacity:0;clip-path:inset(0 100% 0 0);transform:translateX(-28px)} 60%{opacity:1} 100%{opacity:1;clip-path:inset(0 0% 0 0);transform:translateX(0)} }
-    @keyframes re-curtainRight { 0%{opacity:0;clip-path:inset(0 0 0 100%);transform:translateX(28px)} 60%{opacity:1} 100%{opacity:1;clip-path:inset(0 0 0 0%);transform:translateX(0)} }
-    @keyframes re-curtainLeftOut  { from{opacity:1;clip-path:inset(0 0% 0 0);transform:translateX(0)} to{opacity:0;clip-path:inset(0 100% 0 0);transform:translateX(-20px)} }
-    @keyframes re-curtainRightOut { from{opacity:1;clip-path:inset(0 0 0 0%);transform:translateX(0)} to{opacity:0;clip-path:inset(0 0 0 100%);transform:translateX(20px)} }
-    /* Dissolve/melebur — untuk teks */
-    @keyframes re-dissolveIn  { 0%{opacity:0;filter:blur(8px);transform:translateY(18px) scale(.98)} 70%{filter:blur(0)} 100%{opacity:1;filter:blur(0);transform:translateY(0) scale(1)} }
-    @keyframes re-dissolveOut { 0%{opacity:1;filter:blur(0);transform:translateY(0)} 100%{opacity:0;filter:blur(6px);transform:translateY(-14px)} }
 
-    /* BASE STATE — semua elemen reveal tersembunyi */
-    .re-reveal, .re-slide-left, .re-slide-right, .re-scale-in { opacity:0; will-change:transform,opacity; }
-
-    /* ENTER animations */
-    .re-reveal.visible                    { animation: re-dissolveIn .85s cubic-bezier(.22,1,.36,1) both; }
-    .re-slide-left.visible                { animation: re-curtainLeft .9s cubic-bezier(.22,1,.36,1) both; }
-    .re-slide-right.visible               { animation: re-curtainRight .9s cubic-bezier(.22,1,.36,1) both; }
-    .re-scale-in.visible                  { animation: re-scaleIn .8s cubic-bezier(.22,1,.36,1) both; }
-
-    /* EXIT animations — keluar viewport */
-    .re-reveal.exit                       { animation: re-dissolveOut .5s cubic-bezier(.4,0,1,1) both !important; }
-    .re-slide-left.exit                   { animation: re-curtainLeftOut .5s cubic-bezier(.4,0,1,1) both !important; }
-    .re-slide-right.exit                  { animation: re-curtainRightOut .5s cubic-bezier(.4,0,1,1) both !important; }
-    .re-scale-in.exit                     { animation: re-scaleOut .5s cubic-bezier(.4,0,1,1) both !important; }
-
-    /* Stagger delays */
-    .delay-1 { animation-delay:.08s !important; }
-    .delay-2 { animation-delay:.18s !important; }
-    .delay-3 { animation-delay:.28s !important; }
-    .delay-4 { animation-delay:.40s !important; }
-    .delay-5 { animation-delay:.52s !important; }
+    .re-reveal { opacity:0; }
+    .re-reveal.visible { animation: re-fadeUp .75s cubic-bezier(.22,1,.36,1) both; }
+    .re-reveal.visible.delay-1 { animation-delay:.12s }
+    .re-reveal.visible.delay-2 { animation-delay:.24s }
+    .re-reveal.visible.delay-3 { animation-delay:.36s }
+    .re-reveal.visible.delay-4 { animation-delay:.48s }
+    .re-reveal.visible.delay-5 { animation-delay:.60s }
+    .re-slide-left  { opacity:0; }
+    .re-slide-left.visible  { animation: re-slideLeft .8s cubic-bezier(.22,1,.36,1) both; }
+    .re-slide-right { opacity:0; }
+    .re-slide-right.visible { animation: re-slideRight .8s cubic-bezier(.22,1,.36,1) both; }
+    .re-scale-in { opacity:0; }
+    .re-scale-in.visible { animation: re-scaleIn .7s cubic-bezier(.22,1,.36,1) both; }
 
     /* ── Hover float for all buttons ── */
     .re-btn {
@@ -2526,32 +2504,6 @@ const GS = () => (
       backdrop-filter:blur(8px);
     }
     .re-btn-ghost:hover { background:rgba(255,255,255,.28); }
-    /* Tombol hero desktop */
-    .re-hero-content .re-btn-ghost {
-      padding:8px 22px; font-size:.68rem; letter-spacing:.18em;
-    }
-    /* Tombol hero mobile & tablet — lebih kecil */
-    @media(max-width:900px) {
-      .re-hero-content .re-btn-ghost {
-        padding:6px 16px !important; font-size:.6rem !important;
-        letter-spacing:.14em !important; border-width:1px !important;
-      }
-      .re-hero-h1 {
-        font-size: clamp(1.9rem, 7.5vw, 3rem) !important;
-        margin-bottom: 18px !important;
-        line-height: 1.1 !important;
-      }
-    }
-    @media(max-width:600px) {
-      .re-hero-content .re-btn-ghost {
-        padding:5px 14px !important; font-size:.56rem !important;
-        letter-spacing:.12em !important;
-      }
-      .re-hero-h1 {
-        font-size: clamp(1.6rem, 8vw, 2.4rem) !important;
-        margin-bottom: 14px !important;
-      }
-    }
 
     /* ── Ornament layers ── */
     .re-smoke-orb {
@@ -2574,21 +2526,10 @@ const GS = () => (
 
     /* ── Hero Home ── */
     .re-hero {
-      position:relative; width:100%; height:75vh;
-      min-height:300px; max-height:900px;
+      position:relative; width:100%; height:100vh; min-height:600px;
       overflow:hidden; display:flex; align-items:flex-end;
     }
-    .re-hero-img {
-      position:absolute; inset:0; width:100%; height:100%;
-      object-fit:cover; object-position:center center;
-      display:block;
-    }
-    /* video tag support */
-    .re-hero video.re-hero-img, section.re-hero > video {
-      position:absolute; inset:0; width:100%; height:100%;
-      object-fit:cover; object-position:center center;
-      display:block;
-    }
+    .re-hero-img { position:absolute; inset:0; object-fit:cover; width:100%; height:100%; }
     .re-hero-overlay {
       position:absolute; inset:0;
       background:linear-gradient(to top, rgba(14,12,10,.72) 0%, rgba(14,12,10,.35) 45%, rgba(14,12,10,.1) 75%, transparent 100%);
@@ -2608,8 +2549,8 @@ const GS = () => (
     }
     .re-hero-h1 {
       font-family:'Cormorant Upright',serif; font-size:clamp(2.8rem,6.5vw,5rem);
-      font-weight:300; color:#fff; line-height:1.08; letter-spacing:-.01em;
-      margin-bottom:28px;
+      font-weight:300; color:#fff; line-height:1.05; letter-spacing:-.01em;
+      margin-bottom:32px;
     }
 
     /* ── About Section ── */
@@ -2706,21 +2647,7 @@ const GS = () => (
       .re-contact-grid { grid-template-columns:1fr; gap:40px; }
     }
     @media(max-width:600px) {
-      /* Hero mobile — 75vh konsisten, video tidak terpotong aneh, fokus tengah */
-      .re-hero {
-        height: 75vw !important;
-        min-height: 280px !important;
-        max-height: 520px !important;
-      }
-      .re-hero-img {
-        object-position: center center !important;
-      }
-      .re-hero-h1 {
-        font-size: clamp(1.2rem, 5.5vw, 1.75rem) !important;
-        margin-bottom: 10px !important;
-      }
-      .re-hero-content { padding:0 5% 22px !important; }
-      .re-hero-eyebrow { margin-bottom:7px; font-size:.56rem; }
+      .re-hero-content { padding:0 5% 60px; }
       .re-about { padding:64px 5%; }
       .re-quote-img { height:360px; }
       .re-listings { padding:60px 5%; }
@@ -2883,20 +2810,52 @@ function CEF({ val, multiline, onChange, onSave }) {
 }
 
 /* ─────────────── LOGO DISPLAY ─────────────── */
-const VASTURA_LOGO_URL = "https://res.cloudinary.com/dum9j7yn1/image/upload/v1782103987/Vastura_Origina_No-BG2_g59oud.png";
-
 function LogoDisplay({ content, size = "nav" }) {
-  const isMobileNav = size === "mobile-nav";
-  const isFooter    = size === "footer";
-  const isAdmin     = size === "admin";
-  const h    = isMobileNav ? 52 : isAdmin ? 32 : isFooter ? 56 : 62;
-  const maxW = isMobileNav ? 160 : isAdmin ? 90 : isFooter ? 160 : 190;
+  const rawText = content.logoText || "";
+  const singleLine = content.logoSingleLine;
+  const lines = singleLine ? [rawText.replace(/\n/g, " ")] : rawText.split("\n");
+  const iconSz = size === "nav" ? 72 : size === "footer" ? 52 : 34;
+
+  // Styling dinamis — hanya berlaku di nav (bukan footer/admin)
+  const isNav = size === "nav";
+  const dynStyle = isNav ? {
+    fontFamily: `'${content.logoFont || "Playfair Display"}', serif`,
+    color: content.logoColor || "#111111",
+    textShadow: content.logoShadow || "0 1px 6px rgba(0,0,0,.35), 0 2px 14px rgba(0,0,0,.18)",
+  } : {};
+
+  const brandClass = size === "admin" ? "logo-brand-admin" : size === "footer" ? "logo-brand-footer" : "logo-brand";
+
+  if (content.logoImage) {
+    return (
+      <div style={{ display: "flex", alignItems: "center", gap: 12, flexShrink: 0 }}>
+        <img src={content.logoImage} alt={content.logoText}
+          style={{ height: size === "nav" ? 68 : size === "footer" ? 64 : iconSz, maxWidth: size === "nav" ? 160 : size === "footer" ? 140 : 120, objectFit: "contain", display: "block", flexShrink: 0 }} />
+        <span className={brandClass} style={dynStyle}>
+          {lines.map((line, i) => <span key={i} style={{ display: singleLine ? "inline" : "block" }}>{line}</span>)}
+        </span>
+      </div>
+    );
+  }
   return (
-    <img
-      src={VASTURA_LOGO_URL}
-      alt="Vastura Group"
-      style={{ height: h, maxWidth: maxW, width: "auto", objectFit: "contain", display: "block" }}
-    />
+    <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+      <div style={{
+        width: iconSz, height: iconSz,
+        borderRadius: size === "nav" ? 12 : 8,
+        border: `1.5px dashed ${size === "admin" ? "rgba(255,255,255,.3)" : "#A89070"}`,
+        display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
+        background: size === "admin" ? "rgba(255,255,255,.06)" : "rgba(61,143,171,.06)"
+      }}>
+        <svg viewBox="0 0 24 24" fill="none" stroke={size === "admin" ? "rgba(255,255,255,.4)" : "#C9AA71"} strokeWidth="1.5"
+          width={size === "nav" ? 32 : 18} height={size === "nav" ? 32 : 18}>
+          <rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/>
+          <polyline points="21 15 16 10 5 21"/>
+        </svg>
+      </div>
+      <span className={brandClass} style={dynStyle}>
+        {lines.map((line, i) => <span key={i} style={{ display: singleLine ? "inline" : "block" }}>{i > 0 && singleLine ? " " + line : line}</span>)}
+      </span>
+    </div>
   );
 }
 
@@ -9874,113 +9833,48 @@ function buildWaMsg(templates = {}, key = "umum", vars = {}) {
 function WaPickerModal({ admins = [], msgText = "", onClose }) {
   if (!admins || admins.length === 0) return null;
 
-  // Urutkan: primary selalu di atas
-  const sorted = [...admins].sort((a, b) => (b.primary ? 1 : 0) - (a.primary ? 1 : 0));
-
   return (
     <div onClick={onClose}
-      style={{ position: "fixed", inset: 0, zIndex: 9995, background: "rgba(10,20,30,.55)",
-        backdropFilter: "blur(7px)", display: "flex", alignItems: "center", justifyContent: "center",
-        padding: "12px" }}>
+      style={{ position: "fixed", inset: 0, zIndex: 9995, background: "rgba(10,20,30,.50)",
+        backdropFilter: "blur(6px)", display: "flex", alignItems: "center", justifyContent: "center" }}>
       <div onClick={e => e.stopPropagation()}
-        style={{ background: "#fff", borderRadius: 16, padding: "16px 18px 14px", maxWidth: 360, width: "100%",
-          maxHeight: "92vh", overflowY: "auto", boxShadow: "0 24px 64px rgba(0,0,0,.22)", position: "relative" }}>
-
-        {/* Close */}
+        style={{ background: "#fff", borderRadius: 16, padding: "32px 28px", maxWidth: 360, width: "90%",
+          boxShadow: "0 20px 60px rgba(0,0,0,.2)", position: "relative" }}>
         <button onClick={onClose}
-          style={{ position: "absolute", top: 10, right: 12, background: "none", border: "none",
-            fontSize: 20, color: "#2E3D3F", cursor: "pointer", lineHeight: 1, opacity: .5 }}>✕</button>
+          style={{ position: "absolute", top: 16, right: 16, background: "none", border: "none",
+            fontSize: 24, color: "#2E3D3F", cursor: "pointer", lineHeight: 1 }}>✕</button>
 
-        {/* Header — Logo + Judul */}
-        <div style={{ textAlign: "center", marginBottom: 12 }}>
-          <div style={{ display: "flex", justifyContent: "center", marginBottom: 7 }}>
-            <img src={VASTURA_LOGO_URL} alt="Vastura Group"
-              style={{ height: 40, maxWidth: 140, width: "auto", objectFit: "contain" }} />
-          </div>
-          <h2 style={{ fontSize: 15, fontWeight: 800, color: "#2E3D3F", margin: "0 0 2px", letterSpacing: ".02em" }}>
-            Hubungi Kami via WhatsApp
-          </h2>
-          <p style={{ fontSize: 11, color: "#5A6A6C", margin: 0 }}>
-            Pilih kontak yang ingin Anda hubungi
-          </p>
-        </div>
+        <h2 style={{ fontSize: 20, fontWeight: 700, color: "#2E3D3F", marginBottom: 6, textAlign: "center" }}>
+          Hubungi Kami via WhatsApp
+        </h2>
+        <p style={{ fontSize: 13, color: "#5A6A6C", textAlign: "center", marginBottom: 24 }}>
+          Pilih kontak yang ingin Anda hubungi
+        </p>
 
-        {/* Admin cards */}
-        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-          {sorted.map(admin => {
-            const waUrl = admin.wa + (msgText ? `?text=${encodeURIComponent(msgText)}` : "");
-            const isPrimary = !!admin.primary;
-            return (
-              <div key={admin.id}
-                style={{
-                  border: isPrimary ? "2px solid #25d366" : "1.5px solid #E8DCC8",
-                  borderRadius: 10,
-                  background: isPrimary ? "#f0fdf4" : "#FDFAF4",
-                  overflow: "hidden",
-                }}>
-
-                {isPrimary && (
-                  <div style={{ background: "#25d366", color: "#fff", fontSize: 9.5, fontWeight: 800,
-                    letterSpacing: ".1em", textTransform: "uppercase", padding: "3px 12px" }}>
-                    ⭐ WhatsApp Utama
-                  </div>
-                )}
-
-                <div style={{ padding: "10px 14px 10px", display: "flex", alignItems: "center", gap: 12 }}>
-                  {/* Info kiri: Nama + Jabatan */}
-                  <div style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{ fontSize: 8.5, fontWeight: 700, color: "#A89070", letterSpacing: ".1em",
-                      textTransform: "uppercase", marginBottom: 1 }}>Nama</div>
-                    <div style={{ fontSize: 14, fontWeight: 800, color: "#2E3D3F", marginBottom: 4,
-                      whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
-                      {admin.name || "—"}
-                    </div>
-                    <div style={{ fontSize: 8.5, fontWeight: 700, color: "#A89070", letterSpacing: ".1em",
-                      textTransform: "uppercase", marginBottom: 1 }}>Jabatan</div>
-                    <div style={{ fontSize: 11, color: "#5A6A6C" }}>
-                      {admin.jabatan || "—"}
-                    </div>
-                  </div>
-
-                  {/* Tombol WA kanan — kompak vertikal */}
-                  <a href={waUrl} target="_blank" rel="noopener noreferrer"
-                    style={{
-                      display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 4,
-                      padding: "9px 13px",
-                      background: isPrimary ? "#25d366" : "#2E3D3F",
-                      color: "#fff", textDecoration: "none",
-                      borderRadius: 8, fontSize: 11, fontWeight: 700,
-                      flexShrink: 0, whiteSpace: "nowrap",
-                      transition: "opacity .18s",
-                    }}
-                    onMouseEnter={e => { e.currentTarget.style.opacity = ".85"; }}
-                    onMouseLeave={e => { e.currentTarget.style.opacity = "1"; }}>
-                    <svg viewBox="0 0 24 24" fill="currentColor" width="15" height="15">
-                      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
-                      <path d="M12 0C5.373 0 0 5.373 0 12c0 2.125.558 4.126 1.535 5.862L0 24l6.341-1.512C8.024 23.452 9.973 24 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.92 0-3.71-.507-5.25-1.39l-.375-.224-3.887.927.958-3.788-.245-.39C2.507 15.64 2 13.882 2 12 2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/>
-                    </svg>
-                    Chat via<br/>WhatsApp
-                  </a>
+        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+          {admins.map(admin => (
+            <a key={admin.id} href={admin.wa + (msgText ? `?text=${encodeURIComponent(msgText)}` : "")}
+              target="_blank" rel="noopener noreferrer"
+              style={{ display: "flex", alignItems: "center", gap: 14, padding: "14px 16px",
+                border: "1.5px solid #E8DCC8", borderRadius: 10, background: "#FDFAF4",
+                textDecoration: "none", cursor: "pointer", transition: "all .2s" }}
+              onMouseEnter={e => { e.currentTarget.style.borderColor = "#25d366"; e.currentTarget.style.background = "#f0fdf4"; }}
+              onMouseLeave={e => { e.currentTarget.style.borderColor = "#E8DCC8"; e.currentTarget.style.background = "#FDFAF4"; }}>
+              <span style={{ fontSize: 24 }}>💬</span>
+              <div style={{ flex: 1 }}>
+                <div style={{ fontSize: 14, fontWeight: 700, color: "#2E3D3F" }}>{admin.name}</div>
+                <div style={{ fontSize: 12, color: "#5A6A6C", marginTop: 2 }}>
+                  {admin.wa.replace("https://wa.me/", "+").replace(/(\d{2})(\d{3})(\d{4})(\d+)/, "$1 $2-$3-$4")}
                 </div>
               </div>
-            );
-          })}
-        </div>
-
-        {/* Jam Layanan */}
-        <div style={{ textAlign: "center", marginTop: 10, padding: "8px 0 6px",
-          borderTop: "1px solid #F0EAD8" }}>
-          <div style={{ fontSize: 9.5, fontWeight: 700, color: "#A89070", letterSpacing: ".1em",
-            textTransform: "uppercase", marginBottom: 2 }}>Jam Layanan</div>
-          <div style={{ fontSize: 11.5, fontWeight: 600, color: "#5A6A6C", marginBottom: 1 }}>Setiap Hari</div>
-          <div style={{ fontSize: 13, fontWeight: 800, color: "#2E3D3F", letterSpacing: ".04em" }}>
-            — 08.00 – 17.00 —
-          </div>
+              <span style={{ fontSize: 14, color: "#25d366" }}>→</span>
+            </a>
+          ))}
         </div>
 
         <button onClick={onClose}
-          style={{ width: "100%", marginTop: 8, padding: "9px 0", border: "1.5px solid #E8DCC8",
-            borderRadius: 8, background: "transparent", color: "#5A6A6C", fontSize: 12, fontWeight: 600,
+          style={{ width: "100%", marginTop: 20, padding: "11px 0", border: "1.5px solid #E8DCC8",
+            borderRadius: 8, background: "transparent", color: "#5A6A6C", fontSize: 13, fontWeight: 600,
             cursor: "pointer", transition: "all .2s" }}
           onMouseEnter={e => { e.currentTarget.style.borderColor = "#2E3D3F"; e.currentTarget.style.color = "#2E3D3F"; }}
           onMouseLeave={e => { e.currentTarget.style.borderColor = "#E8DCC8"; e.currentTarget.style.color = "#5A6A6C"; }}>
@@ -10006,7 +9900,7 @@ function WaAdminManager({ admins = [], onSave, notify }) {
   }
   function addAdmin() {
     const newId = Date.now();
-    setList(prev => [...prev, { id: newId, name: "", jabatan: "", wa: "https://wa.me/62", primary: false }]);
+    setList(prev => [...prev, { id: newId, name: "", wa: "https://wa.me/62", primary: false }]);
     setDirty(true);
   }
   function removeAdmin(id) {
@@ -10040,14 +9934,10 @@ function WaAdminManager({ admins = [], onSave, notify }) {
           </div>
           <div>
             <label style={labelStyle}>Nama Admin</label>
-            <input style={inputStyle} value={admin.name} onChange={e => update(admin.id, "name", e.target.value)} placeholder="cth: Heldan Widiananta" />
+            <input style={inputStyle} value={admin.name} onChange={e => update(admin.id, "name", e.target.value)} placeholder="cth: Fredy – Admin Utama" />
           </div>
           <div>
-            <label style={labelStyle}>Jabatan</label>
-            <input style={inputStyle} value={admin.jabatan || ""} onChange={e => update(admin.id, "jabatan", e.target.value)} placeholder="cth: Chief Executive Officer" />
-          </div>
-          <div>
-            <label style={labelStyle}>Nomor WA Link (format: https://wa.me/628xxx)</label>
+            <label style={labelStyle}>Nomor WA (format: https://wa.me/628xxx)</label>
             <input style={inputStyle} value={admin.wa} onChange={e => update(admin.id, "wa", e.target.value)} placeholder="https://wa.me/628123456789" />
           </div>
         </div>
@@ -10639,6 +10529,7 @@ export default function BricksyTravel() {
   const [adminSection, setAdminSection] = useState("news");
   const [loginForm, setLoginForm] = useState({ username: "", password: "" });
   const [loginErr, setLoginErr] = useState("");
+  const [loginLoading, setLoginLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   // Forgot password flow: null | "input_user" | "input_email" | "input_otp" | "input_newpass"
   const [forgotStep, setForgotStep] = useState(null);
@@ -10665,7 +10556,6 @@ export default function BricksyTravel() {
   const [mapQuery, setMapQuery] = useState("");
   const [mapLocation, setMapLocation] = useState("Malang, Jawa Timur, Indonesia");
   const mapDebounceRef = useRef(null);
-  const heroVideoRef = useRef(null); // force-autoplay hero background video
   // openWaPicker menerima string langsung ATAU {key, vars} untuk template
   const openWaPicker = (msgOrObj = "") => {
     if (typeof msgOrObj === "object" && msgOrObj !== null && msgOrObj.key) {
@@ -10685,59 +10575,12 @@ export default function BricksyTravel() {
   };
 
   // ── Scroll Reveal for RE home ──
-  // ── Force autoplay hero video (bypass browser autoplay policy) ──────────
-  useEffect(() => {
-    const vid = heroVideoRef.current;
-    if (!vid) return;
-    vid.muted = true;
-    vid.volume = 0;
-    const tryPlay = () => {
-      vid.play().catch(() => {
-        // Jika gagal, tunggu interaksi user pertama lalu play otomatis
-        const onInteract = () => {
-          vid.play().catch(() => {});
-        };
-        document.addEventListener("click", onInteract, { once: true });
-        document.addEventListener("touchstart", onInteract, { once: true });
-        document.addEventListener("keydown", onInteract, { once: true });
-      });
-    };
-    // Play ulang saat tab kembali aktif
-    const onVisible = () => {
-      if (document.visibilityState === "visible") vid.play().catch(() => {});
-    };
-    document.addEventListener("visibilitychange", onVisible);
-    if (vid.readyState >= 2) {
-      tryPlay();
-    } else {
-      vid.addEventListener("canplay", tryPlay, { once: true });
-    }
-    return () => {
-      document.removeEventListener("visibilitychange", onVisible);
-    };
-  }, []);
-
   useEffect(() => {
     if (page !== "home") return;
-    const SELECTORS = ".re-reveal,.re-slide-left,.re-slide-right,.re-scale-in";
-    const els = document.querySelectorAll(SELECTORS);
+    const els = document.querySelectorAll(".re-reveal,.re-slide-left,.re-slide-right,.re-scale-in");
     const obs = new IntersectionObserver((entries) => {
-      entries.forEach(e => {
-        if (e.isIntersecting) {
-          // Masuk viewport: hapus exit, tambah visible
-          e.target.classList.remove("exit");
-          void e.target.offsetWidth; // reflow agar animasi restart
-          e.target.classList.add("visible");
-        } else {
-          // Keluar viewport: hapus visible, tambah exit (hanya jika pernah visible)
-          if (e.target.classList.contains("visible")) {
-            e.target.classList.remove("visible");
-            void e.target.offsetWidth;
-            e.target.classList.add("exit");
-          }
-        }
-      });
-    }, { threshold: 0.1, rootMargin: "0px 0px -40px 0px" });
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add("visible"); obs.unobserve(e.target); } });
+    }, { threshold: 0.12 });
     els.forEach(el => obs.observe(el));
     return () => obs.disconnect();
   }, [page]);
@@ -10766,20 +10609,8 @@ export default function BricksyTravel() {
 
     // Scroll-reveal IntersectionObserver
     const observer = new IntersectionObserver((entries) => {
-      entries.forEach(e => {
-        if (e.isIntersecting) {
-          e.target.classList.remove("exit");
-          void e.target.offsetWidth;
-          e.target.classList.add("visible");
-        } else {
-          if (e.target.classList.contains("visible")) {
-            e.target.classList.remove("visible");
-            void e.target.offsetWidth;
-            e.target.classList.add("exit");
-          }
-        }
-      });
-    }, { threshold: 0.1, rootMargin: "0px 0px -40px 0px" });
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add("visible"); } });
+    }, { threshold: 0.12 });
     document.querySelectorAll(".anim-fade-up, .anim-zoom").forEach(el => observer.observe(el));
 
     return () => {
@@ -11119,7 +10950,8 @@ export default function BricksyTravel() {
     dataRef.current = safeData; // sync ref agar popstate closure selalu punya data terbaru
     const payload = JSON.stringify(safeData);
     // Simpan ke Firestore (cloud) + window.storage (lokal backup)
-    await fsSet("main", { payload, updatedAt: Date.now() });
+    const ok = await fsSet("main", { payload, updatedAt: Date.now() });
+    if (!ok) notify("⚠ Gagal simpan ke cloud (Firestore). Cek koneksi/izin — perubahan hanya tersimpan lokal & bisa hilang saat refresh.", "error");
     try { await window.storage?.set("bricksy-v2", payload); } catch {}
     try { localStorage.setItem("realestate-cache-v2", payload); } catch {}
   };
@@ -11130,8 +10962,16 @@ export default function BricksyTravel() {
   };
 
   const login = async () => {
+    if (loginLoading) return;
+    setLoginErr("");
+    setLoginLoading(true);
+    const t0 = Date.now();
     const u = HARDCODED_USERS.find(x => x.username === loginForm.username);
-    if (!u) { setLoginErr("Invalid username or password."); return; }
+    if (!u) {
+      const elapsed = Date.now() - t0;
+      if (elapsed < 500) await new Promise(r => setTimeout(r, 500 - elapsed));
+      setLoginErr("Invalid username or password."); setLoginLoading(false); return;
+    }
     // Check for password override in storage
     let savedPass = u.password;
     let profile = { name: u.name, phone: u.phone, email: u.email, desc: u.desc, photo: u.photo };
@@ -11142,10 +10982,14 @@ export default function BricksyTravel() {
         profile = { name: r.name ?? profile.name, phone: r.phone ?? profile.phone, email: r.email ?? profile.email, desc: r.desc ?? profile.desc, photo: r.photo ?? profile.photo };
       }
     } catch {}
-    if (loginForm.password !== savedPass) { setLoginErr("Invalid username or password."); return; }
+    // Beri jeda minimum agar animasi loading terlihat, tidak "kedip" sekejap
+    const elapsed = Date.now() - t0;
+    if (elapsed < 500) await new Promise(r => setTimeout(r, 500 - elapsed));
+    if (loginForm.password !== savedPass) { setLoginErr("Invalid username or password."); setLoginLoading(false); return; }
     const sessionUser = { ...u, ...profile };
     setUser(sessionUser);
     sessionSave(sessionUser);
+    setLoginLoading(false);
     setShowLogin(false); setLoginErr(""); setLoginForm({ username: "", password: "" });
     notify(`Welcome back, ${profile.name || u.username}!`);
   };
@@ -11648,17 +11492,55 @@ export default function BricksyTravel() {
                   </div>
                 </div>
 
-                <button onClick={login}
+                <button onClick={login} disabled={loginLoading}
                   style={{ width: "100%", marginTop: 20, padding: "12px 0", background: "linear-gradient(130deg,#2E3D3F 0%,#3D5254 45%,#8B6914 78%,#C9AA71 100%)",
-                    color: "#fff", border: "none", borderRadius: 8, fontSize: 14, fontWeight: 700, cursor: "pointer",
+                    color: "#fff", border: "none", borderRadius: 8, fontSize: 14, fontWeight: 700, cursor: loginLoading ? "default" : "pointer",
+                    opacity: loginLoading ? 0.75 : 1,
+                    display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
                     transition: "all .2s" }}
-                  onMouseEnter={e => e.currentTarget.style.boxShadow = "0 8px 20px rgba(139,105,20,.35)"}
+                  onMouseEnter={e => { if (!loginLoading) e.currentTarget.style.boxShadow = "0 8px 20px rgba(139,105,20,.35)"; }}
                   onMouseLeave={e => e.currentTarget.style.boxShadow = "none"}>
-                  Masuk
+                  {loginLoading && (
+                    <span style={{
+                      width: 15, height: 15, borderRadius: "50%",
+                      border: "2px solid rgba(255,255,255,.35)", borderTopColor: "#fff",
+                      animation: "spin .7s linear infinite", flexShrink: 0,
+                    }} />
+                  )}
+                  {loginLoading ? "Memproses..." : "Masuk"}
                 </button>
 
+                {/* ── Divider ── */}
+                <div style={{ display: "flex", alignItems: "center", gap: 10, margin: "20px 0 14px" }}>
+                  <div style={{ flex: 1, height: 1, background: "#E8DCC8" }} />
+                  <span style={{ fontSize: 11, color: "#A89070", fontWeight: 600, letterSpacing: ".5px" }}>ATAU</span>
+                  <div style={{ flex: 1, height: 1, background: "#E8DCC8" }} />
+                </div>
+
+                {/* ── Social login (dekoratif) ── */}
+                <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                  <button type="button" onClick={() => notify("Login dengan Google belum tersedia.", "error")}
+                    style={{ width: "100%", padding: "10px 0", background: "#fff", color: "#2E3D3F",
+                      border: "1.5px solid #E8DCC8", borderRadius: 8, fontSize: 13, fontWeight: 600, cursor: "pointer",
+                      display: "flex", alignItems: "center", justifyContent: "center", gap: 10, transition: "all .2s" }}
+                    onMouseEnter={e => { e.currentTarget.style.background = "#FDFAF4"; e.currentTarget.style.borderColor = "#C9AA71"; }}
+                    onMouseLeave={e => { e.currentTarget.style.background = "#fff"; e.currentTarget.style.borderColor = "#E8DCC8"; }}>
+                    <svg width="16" height="16" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.4 29.3 35 24 35c-6.1 0-11.3-3.6-13.7-8.8l-7.1 5.5C7.1 39.3 14.8 44 24 44c11 0 19.9-8 19.9-19.5 0-1.4-.1-2.7-.3-4z"/><path fill="#FF3D00" d="M3.2 14.7l7.1 5.5C12.3 16.6 17.7 13 24 13c3.1 0 5.9 1.1 8.1 2.9l6.4-6.2C34.6 6.5 29.6 4 24 4 15.6 4 8.3 8.7 4.7 15.4z"/><path fill="#4CAF50" d="M24 44c5.5 0 10.5-2.1 14.1-5.6l-6.8-5.6C29.3 34.4 26.8 35 24 35c-5.3 0-9.7-2.6-11.3-7l-7.1 5.5C8.3 39.3 15.6 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.3 4-4.2 5.3l6.8 5.6C41.6 35.8 44 30.5 44 24.5c0-1.4-.1-2.7-.4-4z"/></svg>
+                    Login dengan Google
+                  </button>
+                  <button type="button" onClick={() => notify("Login dengan Apple ID belum tersedia.", "error")}
+                    style={{ width: "100%", padding: "10px 0", background: "#000", color: "#fff",
+                      border: "1.5px solid #000", borderRadius: 8, fontSize: 13, fontWeight: 600, cursor: "pointer",
+                      display: "flex", alignItems: "center", justifyContent: "center", gap: 10, transition: "opacity .2s" }}
+                    onMouseEnter={e => { e.currentTarget.style.opacity = "0.85"; }}
+                    onMouseLeave={e => { e.currentTarget.style.opacity = "1"; }}>
+                    <svg width="15" height="15" viewBox="0 0 384 512" fill="#fff"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C42.7 141.9 0 184.5 0 268.4c0 36.6 6.5 74.4 19.5 113.4 17.4 51.6 80 178.9 145 176.8 34.2-.9 58.4-24.3 102-24.3 42.3 0 64.6 24.3 102.5 24.3 65.5-1 122.7-117 139.2-168.6-89-41.8-91.5-122.4-89.5-121.3zM257 100.8c25.7-30.5 23.4-58.4 22.6-68.4-22.8 1.3-49.2 15.8-64.5 33.7-17 19.2-26.9 43-24.7 67.9 24.5 1.8 47-10.8 66.6-33.2z"/></svg>
+                    Login dengan Apple ID
+                  </button>
+                </div>
+
                 <button onClick={() => { setForgotStep("input_user"); setLoginErr(""); }}
-                  style={{ width: "100%", marginTop: 10, padding: "10px 0", background: "transparent", 
+                  style={{ width: "100%", marginTop: 14, padding: "10px 0", background: "transparent", 
                     color: "#8B6914", border: "none", fontSize: 12, fontWeight: 600, cursor: "pointer",
                     textDecoration: "underline", letterSpacing: ".3px" }}>
                   Lupa Password?
@@ -11801,14 +11683,11 @@ export default function BricksyTravel() {
             </div>
             <div style={{ position: "relative", zIndex: 1, display: "flex", alignItems: "center", justifyContent: "space-between", height: 82, maxWidth: 1200, margin: "0 auto", gap: 20 }}>
 
-              {/* ── LOGO ── */}
+              {/* ── LOGO — full multi-line height ── */}
               <button onClick={() => navigateTo("home")} style={{ border: "none", background: "none", padding: 0, flexShrink: 0, height: "100%", display: "flex", alignItems: "center", overflow: "visible", minWidth: 0 }}>
-                <span className="hide-sm">
+                <div className="navbar-logo-wrap">
                   <LogoDisplay content={data.content} size="nav" />
-                </span>
-                <span className="show-sm">
-                  <LogoDisplay content={data.content} size="mobile-nav" />
-                </span>
+                </div>
               </button>
 
               {/* ── DESKTOP NAV with Dropdowns ── */}
@@ -11987,26 +11866,27 @@ export default function BricksyTravel() {
                     </button>
                   </div>
                 )}
-                {/* ── Gear icon tersembunyi — hanya untuk admin login, tanpa teks ── */}
                 {!user && (
-                  <div style={{ display: "flex", justifyContent: "flex-end", padding: "10px 4px 0", borderTop: "1px solid var(--re-grey-lt)", marginTop: 8 }}>
-                    <button
-                      onClick={() => { setShowLogin(true); setMobileMenu(false); }}
+                  <div style={{ padding: "12px 18px 4px", borderTop: "1px solid var(--re-grey-lt)", marginTop: 8, display: "flex", justifyContent: "flex-end" }}>
+                    <button onClick={() => { setShowLogin(true); setMobileMenu(false); }}
+                      aria-label="Login"
+                      title="Login"
                       style={{
-                        width: 28, height: 28,
-                        border: "none", background: "transparent",
-                        cursor: "pointer", opacity: 0.22,
+                        width: 38, height: 38,
+                        border: "1px solid rgba(20,18,16,.18)",
+                        background: "transparent",
+                        borderRadius: "50%",
                         display: "flex", alignItems: "center", justifyContent: "center",
-                        transition: "opacity .2s", borderRadius: 4,
+                        fontSize: "1.05rem",
+                        color: "var(--re-black)",
+                        opacity: 0.45,
+                        cursor: "pointer",
+                        transition: "opacity .2s, background .2s",
                       }}
-                      onMouseEnter={e => { e.currentTarget.style.opacity = "0.55"; }}
-                      onMouseLeave={e => { e.currentTarget.style.opacity = "0.22"; }}
-                      aria-label="Login admin"
+                      onMouseEnter={e => { e.currentTarget.style.opacity = "0.85"; e.currentTarget.style.background = "var(--re-grey-lt)"; }}
+                      onMouseLeave={e => { e.currentTarget.style.opacity = "0.45"; e.currentTarget.style.background = "transparent"; }}
                     >
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" width="16" height="16" style={{ color: "var(--re-black)" }}>
-                        <circle cx="12" cy="12" r="3"/>
-                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
-                      </svg>
+                      ⚙
                     </button>
                   </div>
                 )}
@@ -12016,49 +11896,6 @@ export default function BricksyTravel() {
 
           {/* Spacer to push content below fixed navbar */}
           <div style={{ height: "clamp(60px,10vw,96px)" }} />
-
-          {/* ── NAVIGASI MAJU / MUNDUR ── */}
-          {(() => {
-            const isMobileNav = window.innerWidth <= 768;
-            if (isMobileNav) return null; // hapus floating nav di mobile
-            /* ── DESKTOP: dua tombol persegi panjang bold vertikal di kanan ── */
-            return (
-              <div style={{ position: "fixed", bottom: 100, right: 20, zIndex: 9989, display: "flex", flexDirection: "column", gap: 6 }}>
-                <button onClick={spaForward} disabled={!canFwd} title="Maju"
-                  style={{
-                    width: 52, height: 44, borderRadius: 8, border: "none",
-                    background: canFwd ? "linear-gradient(135deg,#2E3D3F,#8B6914)" : "rgba(200,210,220,.55)",
-                    boxShadow: canFwd ? "0 4px 14px rgba(13,59,102,.40)" : "0 2px 6px rgba(0,0,0,.12)",
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                    cursor: canFwd ? "pointer" : "default", opacity: canFwd ? 1 : 0.45,
-                    transition: "transform .18s, box-shadow .18s, opacity .18s",
-                  }}
-                  onMouseEnter={e => { if (canFwd) { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = "0 8px 22px rgba(13,59,102,.5)"; }}}
-                  onMouseLeave={e => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = canFwd ? "0 4px 14px rgba(13,59,102,.40)" : "0 2px 6px rgba(0,0,0,.12)"; }}
-                >
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                    <polyline points="9 18 15 12 9 6" />
-                  </svg>
-                </button>
-                <button onClick={spaBack} disabled={!canBack} title="Mundur"
-                  style={{
-                    width: 52, height: 44, borderRadius: 8, border: "none",
-                    background: canBack ? "linear-gradient(135deg,#2E3D3F,#8B6914)" : "rgba(200,210,220,.55)",
-                    boxShadow: canBack ? "0 4px 14px rgba(13,59,102,.40)" : "0 2px 6px rgba(0,0,0,.12)",
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                    cursor: canBack ? "pointer" : "default", opacity: canBack ? 1 : 0.45,
-                    transition: "transform .18s, box-shadow .18s, opacity .18s",
-                  }}
-                  onMouseEnter={e => { if (canBack) { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = "0 8px 22px rgba(13,59,102,.5)"; }}}
-                  onMouseLeave={e => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = canBack ? "0 4px 14px rgba(13,59,102,.40)" : "0 2px 6px rgba(0,0,0,.12)"; }}
-                >
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                    <polyline points="15 18 9 12 15 6" />
-                  </svg>
-                </button>
-              </div>
-            );
-          })()}
 
           {/* ── WA PICKER MODAL ── */}
           {waPicker && (
@@ -12117,20 +11954,11 @@ export default function BricksyTravel() {
                 <>
                   {/* ══ HERO ══ */}
                   <section className="re-hero">
-                    {/* Background Video Hero */}
-                    <video
-                      ref={heroVideoRef}
+                    <img
                       className="re-hero-img"
-                      autoPlay
-                      muted
-                      loop
-                      playsInline
-                      preload="auto"
-                      style={{ objectFit:"cover", objectPosition:"center center" }}
-                    >
-                      <source src="https://res.cloudinary.com/dum9j7yn1/video/upload/q_auto,vc_auto/v1782135360/Backgroud_Video_Hero_nfxtof.mp4" type="video/mp4" />
-                      <source src="https://res.cloudinary.com/dum9j7yn1/video/upload/v1782135360/Backgroud_Video_Hero_nfxtof.mov" type="video/quicktime" />
-                    </video>
+                      src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=1600&q=85&auto=format&fit=crop"
+                      alt="Interior Premium"
+                    />
                     <div className="re-hero-overlay" />
                     {/* Smoke ornaments */}
                     <div style={{ position:"absolute",inset:0,pointerEvents:"none",zIndex:1,overflow:"hidden" }}>
@@ -12144,7 +11972,7 @@ export default function BricksyTravel() {
                     <div className="re-hero-content">
                       <div className="re-hero-eyebrow">VASTURA GROUP</div>
                       <h1 className="re-hero-h1">
-                        Ubah Rumah Impian<br />Menjadi Kenyataan
+                        Ubah rumah impian<br />menjadi kenyataan
                       </h1>
                       <button
                         className="re-btn re-btn-ghost"
@@ -12160,12 +11988,9 @@ export default function BricksyTravel() {
                     background: "#cc0000",
                     overflow: "hidden",
                     whiteSpace: "nowrap",
-                    padding: "5px 0",
+                    padding: "14px 0",
                     position: "relative",
                     zIndex: 10,
-                    lineHeight: 1,
-                    display: "flex",
-                    alignItems: "center",
                   }}>
                     <style>{`
                       @keyframes marqueeScroll {
@@ -12177,13 +12002,11 @@ export default function BricksyTravel() {
                         animation: marqueeScroll 55s linear infinite;
                         color: #ffffff;
                         font-weight: 700;
-                        font-size: 0.78rem;
-                        letter-spacing: 0.04em;
-                        line-height: 1;
-                        vertical-align: middle;
+                        font-size: 1rem;
+                        letter-spacing: 0.03em;
                       }
                       @media (max-width: 600px) {
-                        .running-text-inner { font-size: 0.72rem; }
+                        .running-text-inner { font-size: 0.875rem; }
                       }
                     `}</style>
                     <span className="running-text-inner">
@@ -12251,10 +12074,10 @@ export default function BricksyTravel() {
                         },
                       ].map((prop, i) => (
                         <div key={i} className="re-listing-item" style={{ direction: prop.imgRight ? "rtl" : "ltr" }}>
-                          <div className={`re-listing-img-wrap ${prop.imgRight ? "re-slide-right" : "re-slide-left"} delay-${(i%3)+1}`} style={{ direction:"ltr" }}>
+                          <div className={`re-listing-img-wrap re-scale-in delay-${(i%3)+1}`} style={{ direction:"ltr" }}>
                             <img src={prop.img} alt={prop.title} />
                           </div>
-                          <div className={`re-listing-info re-reveal delay-${(i%3)+2}`} style={{ direction:"ltr" }}>
+                          <div className={`re-listing-info ${prop.imgRight ? "re-slide-right" : "re-slide-left"} delay-${(i%3)+2}`} style={{ direction:"ltr" }}>
                             <h3 className="re-listing-title">{prop.title}</h3>
                             <p className="re-listing-desc">{prop.desc}</p>
                             <button
@@ -12284,7 +12107,7 @@ export default function BricksyTravel() {
                           { num:"05", title:"Penataan & Gaya Rumah", desc:"Ingin listing Anda lebih menarik? Biarkan kami memandu Anda.", img:"https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&q=80&auto=format&fit=crop" },
                           { num:"06", title:"Konsultasi Investasi", desc:"Ingin kembangkan portofolio Anda? Tim kami siap bantu.", img:"https://images.unsplash.com/photo-1560520653-9e0e4c89eb11?w=600&q=80&auto=format&fit=crop" },
                         ].map((svc, i) => (
-                          <div key={i} className={`re-service-card ${i%2===0 ? "re-slide-left" : "re-slide-right"} delay-${(i%5)+1}`}>
+                          <div key={i} className={`re-service-card re-reveal delay-${(i%5)+1}`}>
                             <div className="re-service-card-img">
                               <img src={svc.img} alt={svc.title} />
                             </div>
