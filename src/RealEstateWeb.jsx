@@ -666,10 +666,10 @@ const DEFAULT_DATA = {
     address: "Perumahan Puri Mangundikaran, Blok B5 No.21, Kel. Mangundikaran, Kec. Nganjuk, Kab. Nganjuk",
     hours: "Senin – Sabtu: 08.00 – 20.00 WIB",
     waAdmins: [
-      { id: 1, name: "Fredy – Admin Utama", wa: "https://wa.me/6281233275485" },
-      { id: 2, name: "Heldan – CS", wa: "https://wa.me/6282140294820" },
+      { id: 1, name: "Heldan Widiananta", jabatan: "Chief Executive Officer", wa: "https://wa.me/6282140294820", primary: true },
+      { id: 2, name: "Fredy", jabatan: "Admin", wa: "https://wa.me/6281233275485", primary: false },
     ],
-    waLink: "https://wa.me/6281233275485",
+    waLink: "https://wa.me/6282140294820",
     igLink: "https://instagram.com/vastura_group",
     fbLink: "https://facebook.com/vastura_group",
     logoText: "VASTURA\nGROUP",
@@ -2811,60 +2811,20 @@ function CEF({ val, multiline, onChange, onSave }) {
 }
 
 /* ─────────────── LOGO DISPLAY ─────────────── */
+const VASTURA_LOGO_URL = "https://res.cloudinary.com/dum9j7yn1/image/upload/v1782098893/Vastura_Origina_No-BG2_vbxuif.png";
+
 function LogoDisplay({ content, size = "nav" }) {
-  const rawText = content.logoText || "";
-  const singleLine = content.logoSingleLine;
-  const lines = singleLine ? [rawText.replace(/\n/g, " ")] : rawText.split("\n");
   const isMobileNav = size === "mobile-nav";
-  const iconSz = size === "nav" ? 72 : isMobileNav ? 36 : size === "footer" ? 52 : 34;
-
-  // Styling dinamis — hanya berlaku di nav (bukan footer/admin)
-  const isNav = size === "nav" || isMobileNav;
-  const dynStyle = isNav ? {
-    fontFamily: `'${content.logoFont || "Playfair Display"}', serif`,
-    color: content.logoColor || "#111111",
-    textShadow: content.logoShadow || "0 1px 6px rgba(0,0,0,.35), 0 2px 14px rgba(0,0,0,.18)",
-  } : {};
-
-  const brandClass = size === "admin" ? "logo-brand-admin" : size === "footer" ? "logo-brand-footer" : "logo-brand";
-  const brandStyle = isMobileNav
-    ? { ...dynStyle, fontSize: "0.78rem", lineHeight: 1.15 }
-    : dynStyle;
-
-  if (content.logoImage) {
-    return (
-      <div style={{ display: "flex", alignItems: "center", gap: isMobileNav ? 7 : 12 }}>
-        <img src={content.logoImage} alt={content.logoText}
-          style={{
-            height: size === "nav" ? 68 : isMobileNav ? 36 : size === "footer" ? 64 : iconSz,
-            maxWidth: size === "nav" ? 160 : isMobileNav ? 80 : size === "footer" ? 140 : 120,
-            objectFit: "contain", display: "block"
-          }} />
-        <span className={brandClass} style={brandStyle}>
-          {lines.map((line, i) => <span key={i} style={{ display: singleLine ? "inline" : "block" }}>{line}</span>)}
-        </span>
-      </div>
-    );
-  }
+  const isFooter    = size === "footer";
+  const isAdmin     = size === "admin";
+  const h    = isMobileNav ? 38 : isAdmin ? 32 : isFooter ? 56 : 62;
+  const maxW = isMobileNav ? 120 : isAdmin ? 90 : isFooter ? 160 : 190;
   return (
-    <div style={{ display: "flex", alignItems: "center", gap: isMobileNav ? 7 : 12 }}>
-      <div style={{
-        width: iconSz, height: iconSz,
-        borderRadius: (size === "nav" || isMobileNav) ? (isMobileNav ? 8 : 12) : 8,
-        border: `1.5px dashed ${size === "admin" ? "rgba(255,255,255,.3)" : "#A89070"}`,
-        display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
-        background: size === "admin" ? "rgba(255,255,255,.06)" : "rgba(61,143,171,.06)"
-      }}>
-        <svg viewBox="0 0 24 24" fill="none" stroke={size === "admin" ? "rgba(255,255,255,.4)" : "#C9AA71"} strokeWidth="1.5"
-          width={isMobileNav ? 16 : size === "nav" ? 32 : 18} height={isMobileNav ? 16 : size === "nav" ? 32 : 18}>
-          <rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/>
-          <polyline points="21 15 16 10 5 21"/>
-        </svg>
-      </div>
-      <span className={brandClass} style={brandStyle}>
-        {lines.map((line, i) => <span key={i} style={{ display: singleLine ? "inline" : "block" }}>{i > 0 && singleLine ? " " + line : line}</span>)}
-      </span>
-    </div>
+    <img
+      src={VASTURA_LOGO_URL}
+      alt="Vastura Group"
+      style={{ height: h, maxWidth: maxW, width: "auto", objectFit: "contain", display: "block" }}
+    />
   );
 }
 
@@ -9842,48 +9802,96 @@ function buildWaMsg(templates = {}, key = "umum", vars = {}) {
 function WaPickerModal({ admins = [], msgText = "", onClose }) {
   if (!admins || admins.length === 0) return null;
 
+  // Urutkan: primary selalu di atas
+  const sorted = [...admins].sort((a, b) => (b.primary ? 1 : 0) - (a.primary ? 1 : 0));
+
   return (
     <div onClick={onClose}
-      style={{ position: "fixed", inset: 0, zIndex: 9995, background: "rgba(10,20,30,.50)",
-        backdropFilter: "blur(6px)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+      style={{ position: "fixed", inset: 0, zIndex: 9995, background: "rgba(10,20,30,.55)",
+        backdropFilter: "blur(7px)", display: "flex", alignItems: "center", justifyContent: "center" }}>
       <div onClick={e => e.stopPropagation()}
-        style={{ background: "#fff", borderRadius: 16, padding: "32px 28px", maxWidth: 360, width: "90%",
-          boxShadow: "0 20px 60px rgba(0,0,0,.2)", position: "relative" }}>
+        style={{ background: "#fff", borderRadius: 18, padding: "28px 24px 22px", maxWidth: 360, width: "90%",
+          boxShadow: "0 24px 64px rgba(0,0,0,.22)", position: "relative" }}>
+
+        {/* Close */}
         <button onClick={onClose}
-          style={{ position: "absolute", top: 16, right: 16, background: "none", border: "none",
-            fontSize: 24, color: "#2E3D3F", cursor: "pointer", lineHeight: 1 }}>✕</button>
+          style={{ position: "absolute", top: 14, right: 14, background: "none", border: "none",
+            fontSize: 22, color: "#2E3D3F", cursor: "pointer", lineHeight: 1, opacity: .6 }}>✕</button>
 
-        <h2 style={{ fontSize: 20, fontWeight: 700, color: "#2E3D3F", marginBottom: 6, textAlign: "center" }}>
-          Hubungi Kami via WhatsApp
-        </h2>
-        <p style={{ fontSize: 13, color: "#5A6A6C", textAlign: "center", marginBottom: 24 }}>
-          Pilih kontak yang ingin Anda hubungi
-        </p>
+        {/* Header */}
+        <div style={{ textAlign: "center", marginBottom: 20 }}>
+          <div style={{ fontSize: 30, marginBottom: 6 }}>💬</div>
+          <h2 style={{ fontSize: 17, fontWeight: 800, color: "#2E3D3F", margin: "0 0 4px", letterSpacing: ".02em" }}>
+            Hubungi Kami via WhatsApp
+          </h2>
+          <p style={{ fontSize: 12, color: "#5A6A6C", margin: 0 }}>
+            Pilih kontak yang ingin Anda hubungi
+          </p>
+        </div>
 
+        {/* Admin cards — 3 baris: Nama, Jabatan, WaLink */}
         <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-          {admins.map(admin => (
-            <a key={admin.id} href={admin.wa + (msgText ? `?text=${encodeURIComponent(msgText)}` : "")}
-              target="_blank" rel="noopener noreferrer"
-              style={{ display: "flex", alignItems: "center", gap: 14, padding: "14px 16px",
-                border: "1.5px solid #E8DCC8", borderRadius: 10, background: "#FDFAF4",
-                textDecoration: "none", cursor: "pointer", transition: "all .2s" }}
-              onMouseEnter={e => { e.currentTarget.style.borderColor = "#25d366"; e.currentTarget.style.background = "#f0fdf4"; }}
-              onMouseLeave={e => { e.currentTarget.style.borderColor = "#E8DCC8"; e.currentTarget.style.background = "#FDFAF4"; }}>
-              <span style={{ fontSize: 24 }}>💬</span>
-              <div style={{ flex: 1 }}>
-                <div style={{ fontSize: 14, fontWeight: 700, color: "#2E3D3F" }}>{admin.name}</div>
-                <div style={{ fontSize: 12, color: "#5A6A6C", marginTop: 2 }}>
-                  {admin.wa.replace("https://wa.me/", "+").replace(/(\d{2})(\d{3})(\d{4})(\d+)/, "$1 $2-$3-$4")}
+          {sorted.map(admin => {
+            const waUrl = admin.wa + (msgText ? `?text=${encodeURIComponent(msgText)}` : "");
+            const isPrimary = !!admin.primary;
+            return (
+              <div key={admin.id}
+                style={{
+                  border: isPrimary ? "2px solid #25d366" : "1.5px solid #E8DCC8",
+                  borderRadius: 12,
+                  background: isPrimary ? "#f0fdf4" : "#FDFAF4",
+                  overflow: "hidden",
+                }}>
+
+                {isPrimary && (
+                  <div style={{ background: "#25d366", color: "#fff", fontSize: 10, fontWeight: 800,
+                    letterSpacing: ".12em", textTransform: "uppercase", padding: "4px 14px" }}>
+                    ⭐ Whatsapp Utama
+                  </div>
+                )}
+
+                <div style={{ padding: "14px 16px 12px" }}>
+                  {/* Baris 1 — Nama */}
+                  <div style={{ fontSize: 9, fontWeight: 700, color: "#A89070", letterSpacing: ".1em",
+                    textTransform: "uppercase", marginBottom: 2 }}>Nama</div>
+                  <div style={{ fontSize: 15, fontWeight: 800, color: "#2E3D3F", marginBottom: 10 }}>
+                    {admin.name || "—"}
+                  </div>
+
+                  {/* Baris 2 — Jabatan */}
+                  <div style={{ fontSize: 9, fontWeight: 700, color: "#A89070", letterSpacing: ".1em",
+                    textTransform: "uppercase", marginBottom: 2 }}>Jabatan</div>
+                  <div style={{ fontSize: 12, color: "#5A6A6C", marginBottom: 14 }}>
+                    {admin.jabatan || "—"}
+                  </div>
+
+                  {/* Baris 3 — WaLink button */}
+                  <a href={waUrl} target="_blank" rel="noopener noreferrer"
+                    style={{
+                      display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
+                      padding: "10px 16px",
+                      background: isPrimary ? "#25d366" : "#2E3D3F",
+                      color: "#fff", textDecoration: "none",
+                      borderRadius: 8, fontSize: 13, fontWeight: 700,
+                      transition: "opacity .18s",
+                    }}
+                    onMouseEnter={e => { e.currentTarget.style.opacity = ".85"; }}
+                    onMouseLeave={e => { e.currentTarget.style.opacity = "1"; }}>
+                    <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
+                      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+                      <path d="M12 0C5.373 0 0 5.373 0 12c0 2.125.558 4.126 1.535 5.862L0 24l6.341-1.512C8.024 23.452 9.973 24 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.92 0-3.71-.507-5.25-1.39l-.375-.224-3.887.927.958-3.788-.245-.39C2.507 15.64 2 13.882 2 12 2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/>
+                    </svg>
+                    Chat via WhatsApp
+                  </a>
                 </div>
               </div>
-              <span style={{ fontSize: 14, color: "#25d366" }}>→</span>
-            </a>
-          ))}
+            );
+          })}
         </div>
 
         <button onClick={onClose}
-          style={{ width: "100%", marginTop: 20, padding: "11px 0", border: "1.5px solid #E8DCC8",
-            borderRadius: 8, background: "transparent", color: "#5A6A6C", fontSize: 13, fontWeight: 600,
+          style={{ width: "100%", marginTop: 16, padding: "10px 0", border: "1.5px solid #E8DCC8",
+            borderRadius: 8, background: "transparent", color: "#5A6A6C", fontSize: 12, fontWeight: 600,
             cursor: "pointer", transition: "all .2s" }}
           onMouseEnter={e => { e.currentTarget.style.borderColor = "#2E3D3F"; e.currentTarget.style.color = "#2E3D3F"; }}
           onMouseLeave={e => { e.currentTarget.style.borderColor = "#E8DCC8"; e.currentTarget.style.color = "#5A6A6C"; }}>
@@ -9909,7 +9917,7 @@ function WaAdminManager({ admins = [], onSave, notify }) {
   }
   function addAdmin() {
     const newId = Date.now();
-    setList(prev => [...prev, { id: newId, name: "", wa: "https://wa.me/62", primary: false }]);
+    setList(prev => [...prev, { id: newId, name: "", jabatan: "", wa: "https://wa.me/62", primary: false }]);
     setDirty(true);
   }
   function removeAdmin(id) {
@@ -9943,10 +9951,14 @@ function WaAdminManager({ admins = [], onSave, notify }) {
           </div>
           <div>
             <label style={labelStyle}>Nama Admin</label>
-            <input style={inputStyle} value={admin.name} onChange={e => update(admin.id, "name", e.target.value)} placeholder="cth: Fredy – Admin Utama" />
+            <input style={inputStyle} value={admin.name} onChange={e => update(admin.id, "name", e.target.value)} placeholder="cth: Heldan Widiananta" />
           </div>
           <div>
-            <label style={labelStyle}>Nomor WA (format: https://wa.me/628xxx)</label>
+            <label style={labelStyle}>Jabatan</label>
+            <input style={inputStyle} value={admin.jabatan || ""} onChange={e => update(admin.id, "jabatan", e.target.value)} placeholder="cth: Chief Executive Officer" />
+          </div>
+          <div>
+            <label style={labelStyle}>Nomor WA Link (format: https://wa.me/628xxx)</label>
             <input style={inputStyle} value={admin.wa} onChange={e => update(admin.id, "wa", e.target.value)} placeholder="https://wa.me/628123456789" />
           </div>
         </div>
@@ -11642,12 +11654,10 @@ export default function BricksyTravel() {
 
               {/* ── LOGO ── */}
               <button onClick={() => navigateTo("home")} style={{ border: "none", background: "none", padding: 0, flexShrink: 0, height: "100%", display: "flex", alignItems: "center", overflow: "visible", minWidth: 0 }}>
-                {/* Desktop logo */}
                 <span className="hide-sm">
                   <LogoDisplay content={data.content} size="nav" />
                 </span>
-                {/* Mobile/tablet logo — ukuran kecil */}
-                <span className="show-sm" style={{ display: "flex", alignItems: "center" }}>
+                <span className="show-sm">
                   <LogoDisplay content={data.content} size="mobile-nav" />
                 </span>
               </button>
