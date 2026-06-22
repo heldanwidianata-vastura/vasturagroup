@@ -2526,6 +2526,10 @@ const GS = () => (
       backdrop-filter:blur(8px);
     }
     .re-btn-ghost:hover { background:rgba(255,255,255,.28); }
+    /* Tombol hero lebih kecil */
+    .re-hero-content .re-btn-ghost {
+      padding:8px 22px; font-size:.68rem; letter-spacing:.18em;
+    }
 
     /* ── Ornament layers ── */
     .re-smoke-orb {
@@ -2548,7 +2552,7 @@ const GS = () => (
 
     /* ── Hero Home ── */
     .re-hero {
-      position:relative; width:100%; height:100vh; min-height:600px;
+      position:relative; width:100%; height:75vh; min-height:480px;
       overflow:hidden; display:flex; align-items:flex-end;
     }
     .re-hero-img { position:absolute; inset:0; object-fit:cover; width:100%; height:100%; }
@@ -2672,8 +2676,8 @@ const GS = () => (
       /* Hero landscape di mobile — rasio ~16:9 agar tidak terlalu panjang */
       .re-hero {
         height: 56.25vw !important;
-        min-height: 220px !important;
-        max-height: 400px !important;
+        min-height: 200px !important;
+        max-height: 360px !important;
       }
       .re-hero-h1 {
         font-size: clamp(1.25rem, 6vw, 1.8rem) !important;
@@ -12078,9 +12082,12 @@ export default function BricksyTravel() {
                     background: "#cc0000",
                     overflow: "hidden",
                     whiteSpace: "nowrap",
-                    padding: "14px 0",
+                    padding: "5px 0",
                     position: "relative",
                     zIndex: 10,
+                    lineHeight: 1,
+                    display: "flex",
+                    alignItems: "center",
                   }}>
                     <style>{`
                       @keyframes marqueeScroll {
@@ -12092,11 +12099,13 @@ export default function BricksyTravel() {
                         animation: marqueeScroll 55s linear infinite;
                         color: #ffffff;
                         font-weight: 700;
-                        font-size: 1rem;
-                        letter-spacing: 0.03em;
+                        font-size: 0.78rem;
+                        letter-spacing: 0.04em;
+                        line-height: 1;
+                        vertical-align: middle;
                       }
                       @media (max-width: 600px) {
-                        .running-text-inner { font-size: 0.875rem; }
+                        .running-text-inner { font-size: 0.72rem; }
                       }
                     `}</style>
                     <span className="running-text-inner">
