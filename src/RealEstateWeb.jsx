@@ -9829,29 +9829,33 @@ function WaPickerModal({ admins = [], msgText = "", onClose }) {
   return (
     <div onClick={onClose}
       style={{ position: "fixed", inset: 0, zIndex: 9995, background: "rgba(10,20,30,.55)",
-        backdropFilter: "blur(7px)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+        backdropFilter: "blur(7px)", display: "flex", alignItems: "center", justifyContent: "center",
+        padding: "12px" }}>
       <div onClick={e => e.stopPropagation()}
-        style={{ background: "#fff", borderRadius: 18, padding: "28px 24px 22px", maxWidth: 360, width: "90%",
-          boxShadow: "0 24px 64px rgba(0,0,0,.22)", position: "relative" }}>
+        style={{ background: "#fff", borderRadius: 16, padding: "16px 18px 14px", maxWidth: 360, width: "100%",
+          maxHeight: "92vh", overflowY: "auto", boxShadow: "0 24px 64px rgba(0,0,0,.22)", position: "relative" }}>
 
         {/* Close */}
         <button onClick={onClose}
-          style={{ position: "absolute", top: 14, right: 14, background: "none", border: "none",
-            fontSize: 22, color: "#2E3D3F", cursor: "pointer", lineHeight: 1, opacity: .6 }}>✕</button>
+          style={{ position: "absolute", top: 10, right: 12, background: "none", border: "none",
+            fontSize: 20, color: "#2E3D3F", cursor: "pointer", lineHeight: 1, opacity: .5 }}>✕</button>
 
-        {/* Header */}
-        <div style={{ textAlign: "center", marginBottom: 20 }}>
-          <div style={{ fontSize: 30, marginBottom: 6 }}>💬</div>
-          <h2 style={{ fontSize: 17, fontWeight: 800, color: "#2E3D3F", margin: "0 0 4px", letterSpacing: ".02em" }}>
+        {/* Header — Logo + Judul */}
+        <div style={{ textAlign: "center", marginBottom: 12 }}>
+          <div style={{ display: "flex", justifyContent: "center", marginBottom: 7 }}>
+            <img src={VASTURA_LOGO_URL} alt="Vastura Group"
+              style={{ height: 40, maxWidth: 140, width: "auto", objectFit: "contain" }} />
+          </div>
+          <h2 style={{ fontSize: 15, fontWeight: 800, color: "#2E3D3F", margin: "0 0 2px", letterSpacing: ".02em" }}>
             Hubungi Kami via WhatsApp
           </h2>
-          <p style={{ fontSize: 12, color: "#5A6A6C", margin: 0 }}>
+          <p style={{ fontSize: 11, color: "#5A6A6C", margin: 0 }}>
             Pilih kontak yang ingin Anda hubungi
           </p>
         </div>
 
-        {/* Admin cards — 3 baris: Nama, Jabatan, WaLink */}
-        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+        {/* Admin cards */}
+        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
           {sorted.map(admin => {
             const waUrl = admin.wa + (msgText ? `?text=${encodeURIComponent(msgText)}` : "");
             const isPrimary = !!admin.primary;
@@ -9859,50 +9863,52 @@ function WaPickerModal({ admins = [], msgText = "", onClose }) {
               <div key={admin.id}
                 style={{
                   border: isPrimary ? "2px solid #25d366" : "1.5px solid #E8DCC8",
-                  borderRadius: 12,
+                  borderRadius: 10,
                   background: isPrimary ? "#f0fdf4" : "#FDFAF4",
                   overflow: "hidden",
                 }}>
 
                 {isPrimary && (
-                  <div style={{ background: "#25d366", color: "#fff", fontSize: 10, fontWeight: 800,
-                    letterSpacing: ".12em", textTransform: "uppercase", padding: "4px 14px" }}>
-                    ⭐ Whatsapp Utama
+                  <div style={{ background: "#25d366", color: "#fff", fontSize: 9.5, fontWeight: 800,
+                    letterSpacing: ".1em", textTransform: "uppercase", padding: "3px 12px" }}>
+                    ⭐ WhatsApp Utama
                   </div>
                 )}
 
-                <div style={{ padding: "14px 16px 12px" }}>
-                  {/* Baris 1 — Nama */}
-                  <div style={{ fontSize: 9, fontWeight: 700, color: "#A89070", letterSpacing: ".1em",
-                    textTransform: "uppercase", marginBottom: 2 }}>Nama</div>
-                  <div style={{ fontSize: 15, fontWeight: 800, color: "#2E3D3F", marginBottom: 10 }}>
-                    {admin.name || "—"}
+                <div style={{ padding: "10px 14px 10px", display: "flex", alignItems: "center", gap: 12 }}>
+                  {/* Info kiri: Nama + Jabatan */}
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ fontSize: 8.5, fontWeight: 700, color: "#A89070", letterSpacing: ".1em",
+                      textTransform: "uppercase", marginBottom: 1 }}>Nama</div>
+                    <div style={{ fontSize: 14, fontWeight: 800, color: "#2E3D3F", marginBottom: 4,
+                      whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                      {admin.name || "—"}
+                    </div>
+                    <div style={{ fontSize: 8.5, fontWeight: 700, color: "#A89070", letterSpacing: ".1em",
+                      textTransform: "uppercase", marginBottom: 1 }}>Jabatan</div>
+                    <div style={{ fontSize: 11, color: "#5A6A6C" }}>
+                      {admin.jabatan || "—"}
+                    </div>
                   </div>
 
-                  {/* Baris 2 — Jabatan */}
-                  <div style={{ fontSize: 9, fontWeight: 700, color: "#A89070", letterSpacing: ".1em",
-                    textTransform: "uppercase", marginBottom: 2 }}>Jabatan</div>
-                  <div style={{ fontSize: 12, color: "#5A6A6C", marginBottom: 14 }}>
-                    {admin.jabatan || "—"}
-                  </div>
-
-                  {/* Baris 3 — WaLink button */}
+                  {/* Tombol WA kanan — kompak vertikal */}
                   <a href={waUrl} target="_blank" rel="noopener noreferrer"
                     style={{
-                      display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
-                      padding: "10px 16px",
+                      display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 4,
+                      padding: "9px 13px",
                       background: isPrimary ? "#25d366" : "#2E3D3F",
                       color: "#fff", textDecoration: "none",
-                      borderRadius: 8, fontSize: 13, fontWeight: 700,
+                      borderRadius: 8, fontSize: 11, fontWeight: 700,
+                      flexShrink: 0, whiteSpace: "nowrap",
                       transition: "opacity .18s",
                     }}
                     onMouseEnter={e => { e.currentTarget.style.opacity = ".85"; }}
                     onMouseLeave={e => { e.currentTarget.style.opacity = "1"; }}>
-                    <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
+                    <svg viewBox="0 0 24 24" fill="currentColor" width="15" height="15">
                       <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
                       <path d="M12 0C5.373 0 0 5.373 0 12c0 2.125.558 4.126 1.535 5.862L0 24l6.341-1.512C8.024 23.452 9.973 24 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.92 0-3.71-.507-5.25-1.39l-.375-.224-3.887.927.958-3.788-.245-.39C2.507 15.64 2 13.882 2 12 2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/>
                     </svg>
-                    Chat via WhatsApp
+                    Chat via<br/>WhatsApp
                   </a>
                 </div>
               </div>
@@ -9911,16 +9917,18 @@ function WaPickerModal({ admins = [], msgText = "", onClose }) {
         </div>
 
         {/* Jam Layanan */}
-        <div style={{ textAlign: "center", marginTop: 14, marginBottom: 4, padding: "10px 0 8px",
+        <div style={{ textAlign: "center", marginTop: 10, padding: "8px 0 6px",
           borderTop: "1px solid #F0EAD8" }}>
-          <div style={{ fontSize: 11, color: "#A89070", letterSpacing: ".08em", textTransform: "uppercase",
-            fontWeight: 700, marginBottom: 3 }}>Jam Layanan</div>
-          <div style={{ fontSize: 13, fontWeight: 600, color: "#2E3D3F" }}>Senin – Jumat: 08.00 – 17.00</div>
-          <div style={{ fontSize: 12, color: "#5A6A6C" }}>Sabtu: 08.00 – 13.00</div>
+          <div style={{ fontSize: 9.5, fontWeight: 700, color: "#A89070", letterSpacing: ".1em",
+            textTransform: "uppercase", marginBottom: 2 }}>Jam Layanan</div>
+          <div style={{ fontSize: 11.5, fontWeight: 600, color: "#5A6A6C", marginBottom: 1 }}>Setiap Hari</div>
+          <div style={{ fontSize: 13, fontWeight: 800, color: "#2E3D3F", letterSpacing: ".04em" }}>
+            — 08.00 – 17.00 —
+          </div>
         </div>
 
         <button onClick={onClose}
-          style={{ width: "100%", marginTop: 10, padding: "10px 0", border: "1.5px solid #E8DCC8",
+          style={{ width: "100%", marginTop: 8, padding: "9px 0", border: "1.5px solid #E8DCC8",
             borderRadius: 8, background: "transparent", color: "#5A6A6C", fontSize: 12, fontWeight: 600,
             cursor: "pointer", transition: "all .2s" }}
           onMouseEnter={e => { e.currentTarget.style.borderColor = "#2E3D3F"; e.currentTarget.style.color = "#2E3D3F"; }}
