@@ -240,8 +240,7 @@ async function fsGet(docId) {
   } catch { return null; }
 }
 async function fsSet(docId, payload) {
-  try { await setDoc(doc(_db, FS_COLLECTION, docId), payload); return true; }
-  catch (e) { console.error("[Firestore] Gagal simpan ke", docId, e); return false; }
+  try { await setDoc(doc(_db, FS_COLLECTION, docId), payload); } catch {}
 }
 
 /* ─── Cloudinary Config ─── */
@@ -2062,6 +2061,8 @@ const GS = () => (
     @media(max-width:640px){
       nav{background:linear-gradient(105deg,#ffffff 0%,#e8f9fb 30%,#a8dde8 62%,#B8962A 100%)!important;backdrop-filter:none!important;padding:0 4%!important;overflow:visible!important}
       nav>div:not(.mobile-dropdown){height:60px!important;gap:10px!important}
+      /* Fix 10: logo lebih kecil di mobile */
+      nav img{height:42px!important;max-width:86px!important;width:auto!important}
     }
     /* Fix logo wrap — tablet & smartphone (semua layar ≤900px) */
     @media(max-width:900px){
@@ -2069,7 +2070,7 @@ const GS = () => (
       .navbar-logo-wrap > div > div:first-child { width: 40px !important; height: 40px !important; border-radius: 8px !important; }
       .navbar-logo-wrap > div > div:first-child svg { width: 18px !important; height: 18px !important; }
       .navbar-logo-wrap > div > span.logo-brand { font-size: 0.82rem !important; line-height: 1.15 !important; }
-      .navbar-logo-wrap img { height: 44px !important; max-width: 110px !important; width: auto !important; flex-shrink: 0 !important; }
+      .navbar-logo-wrap img { height: 40px !important; max-width: 80px !important; }
     }
 
     /* 2. Hero Slideshow — readable height, no side gradients overflow */
@@ -2814,10 +2815,11 @@ function LogoDisplay({ content, size = "nav" }) {
   const rawText = content.logoText || "";
   const singleLine = content.logoSingleLine;
   const lines = singleLine ? [rawText.replace(/\n/g, " ")] : rawText.split("\n");
-  const iconSz = size === "nav" ? 72 : size === "footer" ? 52 : 34;
+  const isMobileNav = size === "mobile-nav";
+  const iconSz = size === "nav" ? 72 : isMobileNav ? 36 : size === "footer" ? 52 : 34;
 
   // Styling dinamis — hanya berlaku di nav (bukan footer/admin)
-  const isNav = size === "nav";
+  const isNav = size === "nav" || isMobileNav;
   const dynStyle = isNav ? {
     fontFamily: `'${content.logoFont || "Playfair Display"}', serif`,
     color: content.logoColor || "#111111",
@@ -2825,34 +2827,41 @@ function LogoDisplay({ content, size = "nav" }) {
   } : {};
 
   const brandClass = size === "admin" ? "logo-brand-admin" : size === "footer" ? "logo-brand-footer" : "logo-brand";
+  const brandStyle = isMobileNav
+    ? { ...dynStyle, fontSize: "0.78rem", lineHeight: 1.15 }
+    : dynStyle;
 
   if (content.logoImage) {
     return (
-      <div style={{ display: "flex", alignItems: "center", gap: 12, flexShrink: 0 }}>
+      <div style={{ display: "flex", alignItems: "center", gap: isMobileNav ? 7 : 12 }}>
         <img src={content.logoImage} alt={content.logoText}
-          style={{ height: size === "nav" ? 68 : size === "footer" ? 64 : iconSz, maxWidth: size === "nav" ? 160 : size === "footer" ? 140 : 120, objectFit: "contain", display: "block", flexShrink: 0 }} />
-        <span className={brandClass} style={dynStyle}>
+          style={{
+            height: size === "nav" ? 68 : isMobileNav ? 36 : size === "footer" ? 64 : iconSz,
+            maxWidth: size === "nav" ? 160 : isMobileNav ? 80 : size === "footer" ? 140 : 120,
+            objectFit: "contain", display: "block"
+          }} />
+        <span className={brandClass} style={brandStyle}>
           {lines.map((line, i) => <span key={i} style={{ display: singleLine ? "inline" : "block" }}>{line}</span>)}
         </span>
       </div>
     );
   }
   return (
-    <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+    <div style={{ display: "flex", alignItems: "center", gap: isMobileNav ? 7 : 12 }}>
       <div style={{
         width: iconSz, height: iconSz,
-        borderRadius: size === "nav" ? 12 : 8,
+        borderRadius: (size === "nav" || isMobileNav) ? (isMobileNav ? 8 : 12) : 8,
         border: `1.5px dashed ${size === "admin" ? "rgba(255,255,255,.3)" : "#A89070"}`,
         display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
         background: size === "admin" ? "rgba(255,255,255,.06)" : "rgba(61,143,171,.06)"
       }}>
         <svg viewBox="0 0 24 24" fill="none" stroke={size === "admin" ? "rgba(255,255,255,.4)" : "#C9AA71"} strokeWidth="1.5"
-          width={size === "nav" ? 32 : 18} height={size === "nav" ? 32 : 18}>
+          width={isMobileNav ? 16 : size === "nav" ? 32 : 18} height={isMobileNav ? 16 : size === "nav" ? 32 : 18}>
           <rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/>
           <polyline points="21 15 16 10 5 21"/>
         </svg>
       </div>
-      <span className={brandClass} style={dynStyle}>
+      <span className={brandClass} style={brandStyle}>
         {lines.map((line, i) => <span key={i} style={{ display: singleLine ? "inline" : "block" }}>{i > 0 && singleLine ? " " + line : line}</span>)}
       </span>
     </div>
@@ -10949,8 +10958,7 @@ export default function BricksyTravel() {
     dataRef.current = safeData; // sync ref agar popstate closure selalu punya data terbaru
     const payload = JSON.stringify(safeData);
     // Simpan ke Firestore (cloud) + window.storage (lokal backup)
-    const ok = await fsSet("main", { payload, updatedAt: Date.now() });
-    if (!ok) notify("⚠ Gagal simpan ke cloud (Firestore). Cek koneksi/izin — perubahan hanya tersimpan lokal & bisa hilang saat refresh.", "error");
+    await fsSet("main", { payload, updatedAt: Date.now() });
     try { await window.storage?.set("bricksy-v2", payload); } catch {}
     try { localStorage.setItem("realestate-cache-v2", payload); } catch {}
   };
@@ -11632,11 +11640,16 @@ export default function BricksyTravel() {
             </div>
             <div style={{ position: "relative", zIndex: 1, display: "flex", alignItems: "center", justifyContent: "space-between", height: 82, maxWidth: 1200, margin: "0 auto", gap: 20 }}>
 
-              {/* ── LOGO — full multi-line height ── */}
+              {/* ── LOGO ── */}
               <button onClick={() => navigateTo("home")} style={{ border: "none", background: "none", padding: 0, flexShrink: 0, height: "100%", display: "flex", alignItems: "center", overflow: "visible", minWidth: 0 }}>
-                <div className="navbar-logo-wrap">
+                {/* Desktop logo */}
+                <span className="hide-sm">
                   <LogoDisplay content={data.content} size="nav" />
-                </div>
+                </span>
+                {/* Mobile/tablet logo — ukuran kecil */}
+                <span className="show-sm" style={{ display: "flex", alignItems: "center" }}>
+                  <LogoDisplay content={data.content} size="mobile-nav" />
+                </span>
               </button>
 
               {/* ── DESKTOP NAV with Dropdowns ── */}
@@ -11815,27 +11828,26 @@ export default function BricksyTravel() {
                     </button>
                   </div>
                 )}
+                {/* ── Gear icon tersembunyi — hanya untuk admin login, tanpa teks ── */}
                 {!user && (
-                  <div style={{ padding: "12px 18px 4px", borderTop: "1px solid var(--re-grey-lt)", marginTop: 8, display: "flex", justifyContent: "center" }}>
-                    <button onClick={() => { setShowLogin(true); setMobileMenu(false); }}
-                      aria-label="Login"
-                      title="Login"
+                  <div style={{ display: "flex", justifyContent: "flex-end", padding: "10px 4px 0", borderTop: "1px solid var(--re-grey-lt)", marginTop: 8 }}>
+                    <button
+                      onClick={() => { setShowLogin(true); setMobileMenu(false); }}
                       style={{
-                        width: 38, height: 38,
-                        border: "1px solid rgba(20,18,16,.18)",
-                        background: "transparent",
-                        borderRadius: "50%",
+                        width: 28, height: 28,
+                        border: "none", background: "transparent",
+                        cursor: "pointer", opacity: 0.22,
                         display: "flex", alignItems: "center", justifyContent: "center",
-                        fontSize: "1.05rem",
-                        color: "var(--re-black)",
-                        opacity: 0.45,
-                        cursor: "pointer",
-                        transition: "opacity .2s, background .2s",
+                        transition: "opacity .2s", borderRadius: 4,
                       }}
-                      onMouseEnter={e => { e.currentTarget.style.opacity = "0.85"; e.currentTarget.style.background = "var(--re-grey-lt)"; }}
-                      onMouseLeave={e => { e.currentTarget.style.opacity = "0.45"; e.currentTarget.style.background = "transparent"; }}
+                      onMouseEnter={e => { e.currentTarget.style.opacity = "0.55"; }}
+                      onMouseLeave={e => { e.currentTarget.style.opacity = "0.22"; }}
+                      aria-label="Login admin"
                     >
-                      ⚙
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" width="16" height="16" style={{ color: "var(--re-black)" }}>
+                        <circle cx="12" cy="12" r="3"/>
+                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                      </svg>
                     </button>
                   </div>
                 )}
@@ -11845,6 +11857,49 @@ export default function BricksyTravel() {
 
           {/* Spacer to push content below fixed navbar */}
           <div style={{ height: "clamp(60px,10vw,96px)" }} />
+
+          {/* ── NAVIGASI MAJU / MUNDUR ── */}
+          {(() => {
+            const isMobileNav = window.innerWidth <= 768;
+            if (isMobileNav) return null; // hapus floating nav di mobile
+            /* ── DESKTOP: dua tombol persegi panjang bold vertikal di kanan ── */
+            return (
+              <div style={{ position: "fixed", bottom: 100, right: 20, zIndex: 9989, display: "flex", flexDirection: "column", gap: 6 }}>
+                <button onClick={spaForward} disabled={!canFwd} title="Maju"
+                  style={{
+                    width: 52, height: 44, borderRadius: 8, border: "none",
+                    background: canFwd ? "linear-gradient(135deg,#2E3D3F,#8B6914)" : "rgba(200,210,220,.55)",
+                    boxShadow: canFwd ? "0 4px 14px rgba(13,59,102,.40)" : "0 2px 6px rgba(0,0,0,.12)",
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    cursor: canFwd ? "pointer" : "default", opacity: canFwd ? 1 : 0.45,
+                    transition: "transform .18s, box-shadow .18s, opacity .18s",
+                  }}
+                  onMouseEnter={e => { if (canFwd) { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = "0 8px 22px rgba(13,59,102,.5)"; }}}
+                  onMouseLeave={e => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = canFwd ? "0 4px 14px rgba(13,59,102,.40)" : "0 2px 6px rgba(0,0,0,.12)"; }}
+                >
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="9 18 15 12 9 6" />
+                  </svg>
+                </button>
+                <button onClick={spaBack} disabled={!canBack} title="Mundur"
+                  style={{
+                    width: 52, height: 44, borderRadius: 8, border: "none",
+                    background: canBack ? "linear-gradient(135deg,#2E3D3F,#8B6914)" : "rgba(200,210,220,.55)",
+                    boxShadow: canBack ? "0 4px 14px rgba(13,59,102,.40)" : "0 2px 6px rgba(0,0,0,.12)",
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    cursor: canBack ? "pointer" : "default", opacity: canBack ? 1 : 0.45,
+                    transition: "transform .18s, box-shadow .18s, opacity .18s",
+                  }}
+                  onMouseEnter={e => { if (canBack) { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = "0 8px 22px rgba(13,59,102,.5)"; }}}
+                  onMouseLeave={e => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = canBack ? "0 4px 14px rgba(13,59,102,.40)" : "0 2px 6px rgba(0,0,0,.12)"; }}
+                >
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="15 18 9 12 15 6" />
+                  </svg>
+                </button>
+              </div>
+            );
+          })()}
 
           {/* ── WA PICKER MODAL ── */}
           {waPicker && (
