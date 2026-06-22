@@ -1774,8 +1774,10 @@ const GS = () => (
     @media(min-width:901px){
       .anim-fade-up{opacity:0;transform:translateY(32px);transition:opacity .7s cubic-bezier(.22,1,.36,1),transform .7s cubic-bezier(.22,1,.36,1)}
       .anim-fade-up.visible{opacity:1;transform:translateY(0)}
+      .anim-fade-up.exit{opacity:0;transform:translateY(-24px);transition:opacity .45s ease,transform .45s ease}
       .anim-zoom{opacity:0;transform:scale(.94);transition:opacity .65s ease,transform .65s ease}
       .anim-zoom.visible{opacity:1;transform:scale(1)}
+      .anim-zoom.exit{opacity:0;transform:scale(.96);transition:opacity .45s ease,transform .45s ease}
       .btn-magnetic{transition:transform .25s cubic-bezier(.34,1.56,.64,1),box-shadow .25s}
       .btn-magnetic:hover{transform:scale(1.045) translateY(-2px);box-shadow:0 12px 32px rgba(46,61,63,.18)}
       .post-card{transition:transform .35s cubic-bezier(.22,1,.36,1),box-shadow .35s;transform-style:preserve-3d}
@@ -2458,26 +2460,45 @@ const GS = () => (
     /* ── Scroll Reveal animations ── */
     @keyframes re-fadeUp { from{opacity:0;transform:translateY(40px)} to{opacity:1;transform:translateY(0)} }
     @keyframes re-fadeIn  { from{opacity:0} to{opacity:1} }
-    @keyframes re-slideLeft  { from{opacity:0;transform:translateX(-50px)} to{opacity:1;transform:translateX(0)} }
-    @keyframes re-slideRight { from{opacity:0;transform:translateX(50px)} to{opacity:1;transform:translateX(0)} }
+    @keyframes re-slideLeft  { from{opacity:0;transform:translateX(-70px) scaleX(.96)} to{opacity:1;transform:translateX(0) scaleX(1)} }
+    @keyframes re-slideLeftOut { from{opacity:1;transform:translateX(0) scaleX(1)} to{opacity:0;transform:translateX(-50px) scaleX(.96)} }
+    @keyframes re-slideRight { from{opacity:0;transform:translateX(70px) scaleX(.96)} to{opacity:1;transform:translateX(0) scaleX(1)} }
+    @keyframes re-slideRightOut { from{opacity:1;transform:translateX(0) scaleX(1)} to{opacity:0;transform:translateX(50px) scaleX(.96)} }
     @keyframes re-scaleIn { from{opacity:0;transform:scale(.92)} to{opacity:1;transform:scale(1)} }
+    @keyframes re-scaleOut { from{opacity:1;transform:scale(1)} to{opacity:0;transform:scale(.94)} }
     @keyframes re-smokeFloat { 0%,100%{transform:translateY(0) rotate(-3deg);opacity:.4} 50%{transform:translateY(-18px) rotate(3deg);opacity:.18} }
     @keyframes re-flareGlow  { 0%,100%{opacity:.55;transform:scale(1)} 50%{opacity:.85;transform:scale(1.08)} }
     @keyframes re-sash { 0%{transform:translateX(-120%) skewX(-8deg)} 100%{transform:translateX(220%) skewX(-8deg)} }
+    /* Tirai/Curtain — gambar membuka seperti tirai pertunjukan */
+    @keyframes re-curtainLeft  { 0%{opacity:0;clip-path:inset(0 100% 0 0);transform:translateX(-28px)} 60%{opacity:1} 100%{opacity:1;clip-path:inset(0 0% 0 0);transform:translateX(0)} }
+    @keyframes re-curtainRight { 0%{opacity:0;clip-path:inset(0 0 0 100%);transform:translateX(28px)} 60%{opacity:1} 100%{opacity:1;clip-path:inset(0 0 0 0%);transform:translateX(0)} }
+    @keyframes re-curtainLeftOut  { from{opacity:1;clip-path:inset(0 0% 0 0);transform:translateX(0)} to{opacity:0;clip-path:inset(0 100% 0 0);transform:translateX(-20px)} }
+    @keyframes re-curtainRightOut { from{opacity:1;clip-path:inset(0 0 0 0%);transform:translateX(0)} to{opacity:0;clip-path:inset(0 0 0 100%);transform:translateX(20px)} }
+    /* Dissolve/melebur — untuk teks */
+    @keyframes re-dissolveIn  { 0%{opacity:0;filter:blur(8px);transform:translateY(18px) scale(.98)} 70%{filter:blur(0)} 100%{opacity:1;filter:blur(0);transform:translateY(0) scale(1)} }
+    @keyframes re-dissolveOut { 0%{opacity:1;filter:blur(0);transform:translateY(0)} 100%{opacity:0;filter:blur(6px);transform:translateY(-14px)} }
 
-    .re-reveal { opacity:0; }
-    .re-reveal.visible { animation: re-fadeUp .75s cubic-bezier(.22,1,.36,1) both; }
-    .re-reveal.visible.delay-1 { animation-delay:.12s }
-    .re-reveal.visible.delay-2 { animation-delay:.24s }
-    .re-reveal.visible.delay-3 { animation-delay:.36s }
-    .re-reveal.visible.delay-4 { animation-delay:.48s }
-    .re-reveal.visible.delay-5 { animation-delay:.60s }
-    .re-slide-left  { opacity:0; }
-    .re-slide-left.visible  { animation: re-slideLeft .8s cubic-bezier(.22,1,.36,1) both; }
-    .re-slide-right { opacity:0; }
-    .re-slide-right.visible { animation: re-slideRight .8s cubic-bezier(.22,1,.36,1) both; }
-    .re-scale-in { opacity:0; }
-    .re-scale-in.visible { animation: re-scaleIn .7s cubic-bezier(.22,1,.36,1) both; }
+    /* BASE STATE — semua elemen reveal tersembunyi */
+    .re-reveal, .re-slide-left, .re-slide-right, .re-scale-in { opacity:0; will-change:transform,opacity; }
+
+    /* ENTER animations */
+    .re-reveal.visible                    { animation: re-dissolveIn .85s cubic-bezier(.22,1,.36,1) both; }
+    .re-slide-left.visible                { animation: re-curtainLeft .9s cubic-bezier(.22,1,.36,1) both; }
+    .re-slide-right.visible               { animation: re-curtainRight .9s cubic-bezier(.22,1,.36,1) both; }
+    .re-scale-in.visible                  { animation: re-scaleIn .8s cubic-bezier(.22,1,.36,1) both; }
+
+    /* EXIT animations — keluar viewport */
+    .re-reveal.exit                       { animation: re-dissolveOut .5s cubic-bezier(.4,0,1,1) both !important; }
+    .re-slide-left.exit                   { animation: re-curtainLeftOut .5s cubic-bezier(.4,0,1,1) both !important; }
+    .re-slide-right.exit                  { animation: re-curtainRightOut .5s cubic-bezier(.4,0,1,1) both !important; }
+    .re-scale-in.exit                     { animation: re-scaleOut .5s cubic-bezier(.4,0,1,1) both !important; }
+
+    /* Stagger delays */
+    .delay-1 { animation-delay:.08s !important; }
+    .delay-2 { animation-delay:.18s !important; }
+    .delay-3 { animation-delay:.28s !important; }
+    .delay-4 { animation-delay:.40s !important; }
+    .delay-5 { animation-delay:.52s !important; }
 
     /* ── Hover float for all buttons ── */
     .re-btn {
@@ -9889,8 +9910,17 @@ function WaPickerModal({ admins = [], msgText = "", onClose }) {
           })}
         </div>
 
+        {/* Jam Layanan */}
+        <div style={{ textAlign: "center", marginTop: 14, marginBottom: 4, padding: "10px 0 8px",
+          borderTop: "1px solid #F0EAD8" }}>
+          <div style={{ fontSize: 11, color: "#A89070", letterSpacing: ".08em", textTransform: "uppercase",
+            fontWeight: 700, marginBottom: 3 }}>Jam Layanan</div>
+          <div style={{ fontSize: 13, fontWeight: 600, color: "#2E3D3F" }}>Senin – Jumat: 08.00 – 17.00</div>
+          <div style={{ fontSize: 12, color: "#5A6A6C" }}>Sabtu: 08.00 – 13.00</div>
+        </div>
+
         <button onClick={onClose}
-          style={{ width: "100%", marginTop: 16, padding: "10px 0", border: "1.5px solid #E8DCC8",
+          style={{ width: "100%", marginTop: 10, padding: "10px 0", border: "1.5px solid #E8DCC8",
             borderRadius: 8, background: "transparent", color: "#5A6A6C", fontSize: 12, fontWeight: 600,
             cursor: "pointer", transition: "all .2s" }}
           onMouseEnter={e => { e.currentTarget.style.borderColor = "#2E3D3F"; e.currentTarget.style.color = "#2E3D3F"; }}
@@ -10597,10 +10627,25 @@ export default function BricksyTravel() {
   // ── Scroll Reveal for RE home ──
   useEffect(() => {
     if (page !== "home") return;
-    const els = document.querySelectorAll(".re-reveal,.re-slide-left,.re-slide-right,.re-scale-in");
+    const SELECTORS = ".re-reveal,.re-slide-left,.re-slide-right,.re-scale-in";
+    const els = document.querySelectorAll(SELECTORS);
     const obs = new IntersectionObserver((entries) => {
-      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add("visible"); obs.unobserve(e.target); } });
-    }, { threshold: 0.12 });
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          // Masuk viewport: hapus exit, tambah visible
+          e.target.classList.remove("exit");
+          void e.target.offsetWidth; // reflow agar animasi restart
+          e.target.classList.add("visible");
+        } else {
+          // Keluar viewport: hapus visible, tambah exit (hanya jika pernah visible)
+          if (e.target.classList.contains("visible")) {
+            e.target.classList.remove("visible");
+            void e.target.offsetWidth;
+            e.target.classList.add("exit");
+          }
+        }
+      });
+    }, { threshold: 0.1, rootMargin: "0px 0px -40px 0px" });
     els.forEach(el => obs.observe(el));
     return () => obs.disconnect();
   }, [page]);
@@ -10629,8 +10674,20 @@ export default function BricksyTravel() {
 
     // Scroll-reveal IntersectionObserver
     const observer = new IntersectionObserver((entries) => {
-      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add("visible"); } });
-    }, { threshold: 0.12 });
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.remove("exit");
+          void e.target.offsetWidth;
+          e.target.classList.add("visible");
+        } else {
+          if (e.target.classList.contains("visible")) {
+            e.target.classList.remove("visible");
+            void e.target.offsetWidth;
+            e.target.classList.add("exit");
+          }
+        }
+      });
+    }, { threshold: 0.1, rootMargin: "0px 0px -40px 0px" });
     document.querySelectorAll(".anim-fade-up, .anim-zoom").forEach(el => observer.observe(el));
 
     return () => {
@@ -12088,10 +12145,10 @@ export default function BricksyTravel() {
                         },
                       ].map((prop, i) => (
                         <div key={i} className="re-listing-item" style={{ direction: prop.imgRight ? "rtl" : "ltr" }}>
-                          <div className={`re-listing-img-wrap re-scale-in delay-${(i%3)+1}`} style={{ direction:"ltr" }}>
+                          <div className={`re-listing-img-wrap ${prop.imgRight ? "re-slide-right" : "re-slide-left"} delay-${(i%3)+1}`} style={{ direction:"ltr" }}>
                             <img src={prop.img} alt={prop.title} />
                           </div>
-                          <div className={`re-listing-info ${prop.imgRight ? "re-slide-right" : "re-slide-left"} delay-${(i%3)+2}`} style={{ direction:"ltr" }}>
+                          <div className={`re-listing-info re-reveal delay-${(i%3)+2}`} style={{ direction:"ltr" }}>
                             <h3 className="re-listing-title">{prop.title}</h3>
                             <p className="re-listing-desc">{prop.desc}</p>
                             <button
@@ -12121,7 +12178,7 @@ export default function BricksyTravel() {
                           { num:"05", title:"Penataan & Gaya Rumah", desc:"Ingin listing Anda lebih menarik? Biarkan kami memandu Anda.", img:"https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&q=80&auto=format&fit=crop" },
                           { num:"06", title:"Konsultasi Investasi", desc:"Ingin kembangkan portofolio Anda? Tim kami siap bantu.", img:"https://images.unsplash.com/photo-1560520653-9e0e4c89eb11?w=600&q=80&auto=format&fit=crop" },
                         ].map((svc, i) => (
-                          <div key={i} className={`re-service-card re-reveal delay-${(i%5)+1}`}>
+                          <div key={i} className={`re-service-card ${i%2===0 ? "re-slide-left" : "re-slide-right"} delay-${(i%5)+1}`}>
                             <div className="re-service-card-img">
                               <img src={svc.img} alt={svc.title} />
                             </div>
