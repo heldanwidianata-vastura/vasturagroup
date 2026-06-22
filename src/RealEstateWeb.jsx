@@ -2061,8 +2061,8 @@ const GS = () => (
     @media(max-width:640px){
       nav{background:linear-gradient(105deg,#ffffff 0%,#e8f9fb 30%,#a8dde8 62%,#B8962A 100%)!important;backdrop-filter:none!important;padding:0 4%!important;overflow:visible!important}
       nav>div:not(.mobile-dropdown){height:60px!important;gap:10px!important}
-      /* Fix 10: logo lebih kecil di mobile */
-      nav img{height:42px!important;max-width:86px!important;width:auto!important}
+      /* Fix 10: logo mobile — diperbesar */
+      nav img{height:52px!important;max-width:160px!important;width:auto!important}
     }
     /* Fix logo wrap — tablet & smartphone (semua layar ≤900px) */
     @media(max-width:900px){
@@ -2070,7 +2070,7 @@ const GS = () => (
       .navbar-logo-wrap > div > div:first-child { width: 40px !important; height: 40px !important; border-radius: 8px !important; }
       .navbar-logo-wrap > div > div:first-child svg { width: 18px !important; height: 18px !important; }
       .navbar-logo-wrap > div > span.logo-brand { font-size: 0.82rem !important; line-height: 1.15 !important; }
-      .navbar-logo-wrap img { height: 40px !important; max-width: 80px !important; }
+      .navbar-logo-wrap img { height: 52px !important; max-width: 160px !important; }
     }
 
     /* 2. Hero Slideshow — readable height, no side gradients overflow */
@@ -2811,14 +2811,14 @@ function CEF({ val, multiline, onChange, onSave }) {
 }
 
 /* ─────────────── LOGO DISPLAY ─────────────── */
-const VASTURA_LOGO_URL = "https://res.cloudinary.com/dum9j7yn1/image/upload/v1782098893/Vastura_Origina_No-BG2_vbxuif.png";
+const VASTURA_LOGO_URL = "https://res.cloudinary.com/dum9j7yn1/image/upload/v1782103987/Vastura_Origina_No-BG2_g59oud.png";
 
 function LogoDisplay({ content, size = "nav" }) {
   const isMobileNav = size === "mobile-nav";
   const isFooter    = size === "footer";
   const isAdmin     = size === "admin";
-  const h    = isMobileNav ? 38 : isAdmin ? 32 : isFooter ? 56 : 62;
-  const maxW = isMobileNav ? 120 : isAdmin ? 90 : isFooter ? 160 : 190;
+  const h    = isMobileNav ? 52 : isAdmin ? 32 : isFooter ? 56 : 62;
+  const maxW = isMobileNav ? 160 : isAdmin ? 90 : isFooter ? 160 : 190;
   return (
     <img
       src={VASTURA_LOGO_URL}
