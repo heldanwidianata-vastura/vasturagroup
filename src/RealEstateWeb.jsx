@@ -2552,10 +2552,21 @@ const GS = () => (
 
     /* ── Hero Home ── */
     .re-hero {
-      position:relative; width:100%; height:75vh; min-height:480px;
+      position:relative; width:100%; height:75vh;
+      min-height:300px; max-height:900px;
       overflow:hidden; display:flex; align-items:flex-end;
     }
-    .re-hero-img { position:absolute; inset:0; object-fit:cover; width:100%; height:100%; }
+    .re-hero-img {
+      position:absolute; inset:0; width:100%; height:100%;
+      object-fit:cover; object-position:center center;
+      display:block;
+    }
+    /* video tag support */
+    .re-hero video.re-hero-img, section.re-hero > video {
+      position:absolute; inset:0; width:100%; height:100%;
+      object-fit:cover; object-position:center center;
+      display:block;
+    }
     .re-hero-overlay {
       position:absolute; inset:0;
       background:linear-gradient(to top, rgba(14,12,10,.72) 0%, rgba(14,12,10,.35) 45%, rgba(14,12,10,.1) 75%, transparent 100%);
@@ -2673,18 +2684,21 @@ const GS = () => (
       .re-contact-grid { grid-template-columns:1fr; gap:40px; }
     }
     @media(max-width:600px) {
-      /* Hero landscape di mobile — rasio ~16:9 agar tidak terlalu panjang */
+      /* Hero mobile — 75vh konsisten, video tidak terpotong aneh, fokus tengah */
       .re-hero {
-        height: 56.25vw !important;
-        min-height: 200px !important;
-        max-height: 360px !important;
+        height: 75vw !important;
+        min-height: 280px !important;
+        max-height: 520px !important;
+      }
+      .re-hero-img {
+        object-position: center center !important;
       }
       .re-hero-h1 {
-        font-size: clamp(1.25rem, 6vw, 1.8rem) !important;
-        margin-bottom: 12px !important;
+        font-size: clamp(1.2rem, 5.5vw, 1.75rem) !important;
+        margin-bottom: 10px !important;
       }
-      .re-hero-content { padding:0 5% 24px !important; }
-      .re-hero-eyebrow { margin-bottom:8px; font-size:.58rem; }
+      .re-hero-content { padding:0 5% 22px !important; }
+      .re-hero-eyebrow { margin-bottom:7px; font-size:.56rem; }
       .re-about { padding:64px 5%; }
       .re-quote-img { height:360px; }
       .re-listings { padding:60px 5%; }
@@ -12048,11 +12062,19 @@ export default function BricksyTravel() {
                 <>
                   {/* ══ HERO ══ */}
                   <section className="re-hero">
-                    <img
+                    {/* Background Video Hero */}
+                    <video
                       className="re-hero-img"
-                      src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=1600&q=85&auto=format&fit=crop"
-                      alt="Interior Premium"
-                    />
+                      autoPlay
+                      muted
+                      loop
+                      playsInline
+                      preload="auto"
+                      style={{ objectFit:"cover", objectPosition:"center center" }}
+                    >
+                      <source src="https://res.cloudinary.com/dum9j7yn1/video/upload/q_auto,vc_auto/v1782135360/Backgroud_Video_Hero_nfxtof.mp4" type="video/mp4" />
+                      <source src="https://res.cloudinary.com/dum9j7yn1/video/upload/v1782135360/Backgroud_Video_Hero_nfxtof.mov" type="video/quicktime" />
+                    </video>
                     <div className="re-hero-overlay" />
                     {/* Smoke ornaments */}
                     <div style={{ position:"absolute",inset:0,pointerEvents:"none",zIndex:1,overflow:"hidden" }}>
