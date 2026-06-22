@@ -2669,7 +2669,18 @@ const GS = () => (
       .re-contact-grid { grid-template-columns:1fr; gap:40px; }
     }
     @media(max-width:600px) {
-      .re-hero-content { padding:0 5% 60px; }
+      /* Hero landscape di mobile — rasio ~16:9 agar tidak terlalu panjang */
+      .re-hero {
+        height: 56.25vw !important;
+        min-height: 220px !important;
+        max-height: 400px !important;
+      }
+      .re-hero-h1 {
+        font-size: clamp(1.25rem, 6vw, 1.8rem) !important;
+        margin-bottom: 12px !important;
+      }
+      .re-hero-content { padding:0 5% 24px !important; }
+      .re-hero-eyebrow { margin-bottom:8px; font-size:.58rem; }
       .re-about { padding:64px 5%; }
       .re-quote-img { height:360px; }
       .re-listings { padding:60px 5%; }
