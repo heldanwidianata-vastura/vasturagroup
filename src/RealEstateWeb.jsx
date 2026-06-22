@@ -2526,9 +2526,31 @@ const GS = () => (
       backdrop-filter:blur(8px);
     }
     .re-btn-ghost:hover { background:rgba(255,255,255,.28); }
-    /* Tombol hero lebih kecil */
+    /* Tombol hero desktop */
     .re-hero-content .re-btn-ghost {
       padding:8px 22px; font-size:.68rem; letter-spacing:.18em;
+    }
+    /* Tombol hero mobile & tablet — lebih kecil */
+    @media(max-width:900px) {
+      .re-hero-content .re-btn-ghost {
+        padding:6px 16px !important; font-size:.6rem !important;
+        letter-spacing:.14em !important; border-width:1px !important;
+      }
+      .re-hero-h1 {
+        font-size: clamp(1.9rem, 7.5vw, 3rem) !important;
+        margin-bottom: 18px !important;
+        line-height: 1.1 !important;
+      }
+    }
+    @media(max-width:600px) {
+      .re-hero-content .re-btn-ghost {
+        padding:5px 14px !important; font-size:.56rem !important;
+        letter-spacing:.12em !important;
+      }
+      .re-hero-h1 {
+        font-size: clamp(1.6rem, 8vw, 2.4rem) !important;
+        margin-bottom: 14px !important;
+      }
     }
 
     /* ── Ornament layers ── */
@@ -2586,8 +2608,8 @@ const GS = () => (
     }
     .re-hero-h1 {
       font-family:'Cormorant Upright',serif; font-size:clamp(2.8rem,6.5vw,5rem);
-      font-weight:300; color:#fff; line-height:1.05; letter-spacing:-.01em;
-      margin-bottom:32px;
+      font-weight:300; color:#fff; line-height:1.08; letter-spacing:-.01em;
+      margin-bottom:28px;
     }
 
     /* ── About Section ── */
@@ -10643,6 +10665,7 @@ export default function BricksyTravel() {
   const [mapQuery, setMapQuery] = useState("");
   const [mapLocation, setMapLocation] = useState("Malang, Jawa Timur, Indonesia");
   const mapDebounceRef = useRef(null);
+  const heroVideoRef = useRef(null); // force-autoplay hero background video
   // openWaPicker menerima string langsung ATAU {key, vars} untuk template
   const openWaPicker = (msgOrObj = "") => {
     if (typeof msgOrObj === "object" && msgOrObj !== null && msgOrObj.key) {
@@ -10662,6 +10685,38 @@ export default function BricksyTravel() {
   };
 
   // ── Scroll Reveal for RE home ──
+  // ── Force autoplay hero video (bypass browser autoplay policy) ──────────
+  useEffect(() => {
+    const vid = heroVideoRef.current;
+    if (!vid) return;
+    vid.muted = true;
+    vid.volume = 0;
+    const tryPlay = () => {
+      vid.play().catch(() => {
+        // Jika gagal, tunggu interaksi user pertama lalu play otomatis
+        const onInteract = () => {
+          vid.play().catch(() => {});
+        };
+        document.addEventListener("click", onInteract, { once: true });
+        document.addEventListener("touchstart", onInteract, { once: true });
+        document.addEventListener("keydown", onInteract, { once: true });
+      });
+    };
+    // Play ulang saat tab kembali aktif
+    const onVisible = () => {
+      if (document.visibilityState === "visible") vid.play().catch(() => {});
+    };
+    document.addEventListener("visibilitychange", onVisible);
+    if (vid.readyState >= 2) {
+      tryPlay();
+    } else {
+      vid.addEventListener("canplay", tryPlay, { once: true });
+    }
+    return () => {
+      document.removeEventListener("visibilitychange", onVisible);
+    };
+  }, []);
+
   useEffect(() => {
     if (page !== "home") return;
     const SELECTORS = ".re-reveal,.re-slide-left,.re-slide-right,.re-scale-in";
@@ -12064,6 +12119,7 @@ export default function BricksyTravel() {
                   <section className="re-hero">
                     {/* Background Video Hero */}
                     <video
+                      ref={heroVideoRef}
                       className="re-hero-img"
                       autoPlay
                       muted
@@ -12088,7 +12144,7 @@ export default function BricksyTravel() {
                     <div className="re-hero-content">
                       <div className="re-hero-eyebrow">VASTURA GROUP</div>
                       <h1 className="re-hero-h1">
-                        Ubah rumah impian<br />menjadi kenyataan
+                        Ubah Rumah Impian<br />Menjadi Kenyataan
                       </h1>
                       <button
                         className="re-btn re-btn-ghost"
