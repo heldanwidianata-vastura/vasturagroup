@@ -10224,11 +10224,58 @@ function LsMiniSlide({ slides, height = "100%" }) {
 // 6 kategori disusun: baris-1 = 1 cell, baris-2 = 3 cell, baris-3 = 2 cell
 const MAG_LAYOUT = [1, 3, 2]; // total = 6, sesuai jumlah LANDSCAPE_CATEGORIES
 
+/* ── Sub-komponen kartu info landscape dengan dropdown includes ── */
+function LsInfoCard({ cat, fmt, onWaOpen }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <div className="ls-info-card">
+      {/* Judul */}
+      <h3 className="ls-card-title">{cat.icon} {cat.title.replace("Contoh Desain ", "")}</h3>
+
+      {/* Deskripsi — selalu tampil */}
+      <p className="ls-desc">{cat.desc}</p>
+
+      {/* Harga + CTA row */}
+      <div className="ls-cta-row">
+        <div className="ls-price-badge">
+          <span className="lb">Mulai dari</span>
+          <span className="vl">{fmt(cat.startFrom)} / {cat.satuan}</span>
+        </div>
+        <button className="ls-cta-btn"
+          onClick={() => onWaOpen && onWaOpen({ key: "layanan", vars: { judul_layanan: cat.title } })}>
+          🌿 Konsultasi Gratis
+        </button>
+      </div>
+
+      {/* Tombol toggle dropdown includes */}
+      <button className="ls-toggle-btn" onClick={() => setOpen(o => !o)}>
+        <span>{open ? "▲" : "▼"}</span>
+        <span>{open ? "Sembunyikan Detail Paket" : "✅ Lihat Yang Termasuk dalam Paket"}</span>
+      </button>
+
+      {/* Dropdown includes — muncul saat open */}
+      {open && (
+        <div className="ls-includes-box">
+          <div className="ls-includes-title">✅ Yang Termasuk dalam Paket</div>
+          <div className="ls-includes-grid">
+            {(cat.includes || []).map((inc, idx) => (
+              <div key={idx} className="ls-include-item">
+                <span className="ic">{inc.icon}</span>
+                <span className="tx">{inc.item}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 function LandscapePage({ onWaOpen }) {
   useEffect(() => { window.scrollTo(0, 0); }, []);
   const fmt = (n) => "Rp " + n.toLocaleString("id-ID") + ",-";
 
-  // Susun 6 kategori ke rows berdasar MAG_LAYOUT
+  // Susun 6 kategori ke rows berdasar MAG_LAYOUT (desktop)
   const rows = [];
   let pos = 0;
   for (const cols of MAG_LAYOUT) {
@@ -10237,34 +10284,68 @@ function LandscapePage({ onWaOpen }) {
     pos += cols;
   }
 
-  // Tinggi cell berdasar jumlah kolom di baris tersebut
+  // Tinggi slideshow berdasar jumlah kolom di baris tersebut (desktop)
   const heightMap = { 1: 520, 2: 420, 3: 360 };
 
   return (
     <div style={{ background: "#0d1f18", minHeight: "100vh" }}>
       <style>{`
-        @keyframes lmFade{from{opacity:0;transform:scale(1.05)}to{opacity:1;transform:scale(1)}}
+        @keyframes lmFade { from { opacity:0; transform:scale(1.05) } to { opacity:1; transform:scale(1) } }
+        @keyframes lsDropIn { from { opacity:0; transform:translateY(-8px) } to { opacity:1; transform:translateY(0) } }
+
+        /* ── Wrap cell ── */
         .ls-wrap { position:relative; }
         .ls-img-box { position:relative; overflow:hidden; }
         .ls-img-box:hover .ls-mag-overlay-btn { opacity:1 !important; }
+
+        /* ── Overlay badge & pill ── */
         .ls-cat-badge { position:absolute; top:14px; left:14px; z-index:3; }
         .ls-price-pill { position:absolute; top:14px; right:14px; z-index:3; background:rgba(201,170,113,.93); backdrop-filter:blur(6px); color:#1a2a1a; font-size:.62rem; font-weight:900; letter-spacing:.06em; padding:5px 12px; border-radius:20px; white-space:nowrap; }
         .ls-mag-overlay-btn { opacity:0; transition:opacity .3s; position:absolute; bottom:16px; right:14px; z-index:4; }
-        .ls-info-card { background:#fff; padding:22px 20px 24px; }
-        .ls-info-card h3 { font-family:'Playfair Display',serif; font-size:clamp(.9rem,2vw,1.1rem); font-weight:900; color:#1a2a1a; margin:0 0 8px; }
-        .ls-info-card p.ls-desc { font-size:.825rem; color:#4a5a4a; line-height:1.7; margin:0 0 18px; }
-        .ls-includes-title { font-size:.6rem; font-weight:900; letter-spacing:.14em; text-transform:uppercase; color:#2d6a4f; margin:0 0 10px; padding-bottom:6px; border-bottom:2px solid #e8f4ec; }
-        .ls-includes-grid { display:grid; grid-template-columns:1fr 1fr; gap:5px 10px; }
-        .ls-include-item { display:flex; align-items:flex-start; gap:7px; }
-        .ls-include-item span.ic { font-size:.85rem; flex-shrink:0; margin-top:1px; }
-        .ls-include-item span.tx { font-size:.75rem; color:#2E3D3F; line-height:1.45; }
-        .ls-cta-row { margin-top:18px; display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap; }
-        .ls-price-badge { background:#f0fdf4; border:1.5px solid #86efac; border-radius:8px; padding:6px 14px; }
-        .ls-price-badge span.lb { display:block; font-size:.58rem; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:#166534; }
-        .ls-price-badge span.vl { display:block; font-size:.82rem; font-weight:900; color:#14532d; }
-        .ls-cta-btn { background:#1a472a; color:#fff; border:none; border-radius:8px; padding:9px 18px; font-size:.75rem; font-weight:800; cursor:pointer; white-space:nowrap; transition:background .2s; }
+
+        /* ── Kartu putih ── */
+        .ls-info-card { background:#fff; padding:20px 18px 22px; }
+        .ls-card-title { font-family:'Playfair Display',serif; font-size:clamp(.88rem,1.8vw,1.05rem); font-weight:900; color:#1a2a1a; margin:0 0 8px; line-height:1.3; }
+        .ls-desc { font-size:.825rem; color:#4a5a4a; line-height:1.7; margin:0 0 14px; }
+
+        /* ── Harga + CTA ── */
+        .ls-cta-row { display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap; margin-bottom:12px; }
+        .ls-price-badge { background:#f0fdf4; border:1.5px solid #86efac; border-radius:8px; padding:6px 14px; flex-shrink:0; }
+        .ls-price-badge span.lb { display:block; font-size:.56rem; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:#166534; }
+        .ls-price-badge span.vl { display:block; font-size:.8rem; font-weight:900; color:#14532d; white-space:nowrap; }
+        .ls-cta-btn { background:#1a472a; color:#fff; border:none; border-radius:8px; padding:9px 16px; font-size:.73rem; font-weight:800; cursor:pointer; white-space:nowrap; transition:background .2s; flex:1; min-width:130px; text-align:center; }
         .ls-cta-btn:hover { background:#2d6a4f; }
-        @media(max-width:640px){ .ls-includes-grid{ grid-template-columns:1fr; } .ls-cta-row{ flex-direction:column; align-items:stretch; } }
+
+        /* ── Toggle button ── */
+        .ls-toggle-btn { width:100%; display:flex; align-items:center; justify-content:center; gap:8px; background:#f4faf6; border:1.5px solid #bbf7d0; border-radius:8px; padding:9px 14px; font-size:.75rem; font-weight:800; color:#166534; cursor:pointer; transition:all .2s; }
+        .ls-toggle-btn:hover { background:#dcfce7; border-color:#4ade80; }
+        .ls-toggle-btn span:first-child { font-size:.65rem; }
+
+        /* ── Dropdown includes ── */
+        .ls-includes-box { margin-top:12px; border-top:2px dashed #bbf7d0; padding-top:14px; animation:lsDropIn .22s ease; }
+        .ls-includes-title { font-size:.6rem; font-weight:900; letter-spacing:.14em; text-transform:uppercase; color:#2d6a4f; margin:0 0 10px; }
+        .ls-includes-grid { display:grid; grid-template-columns:1fr 1fr; gap:6px 12px; }
+        .ls-include-item { display:flex; align-items:flex-start; gap:7px; }
+        .ls-include-item span.ic { font-size:.82rem; flex-shrink:0; margin-top:1px; }
+        .ls-include-item span.tx { font-size:.73rem; color:#2E3D3F; line-height:1.45; }
+
+        /* ── MOBILE: 1 kolom penuh, slideshow height lebih pendek ── */
+        @media (max-width: 767px) {
+          .ls-desktop-grid { display:none !important; }
+          .ls-mobile-list { display:flex !important; flex-direction:column; gap:4px; padding:4px 0 0; }
+          .ls-mobile-item { width:100%; }
+          .ls-mobile-slide { height:260px !important; }
+          .ls-includes-grid { grid-template-columns:1fr; }
+          .ls-cta-row { flex-direction:column; align-items:stretch; }
+          .ls-cta-btn { text-align:center; }
+          .ls-price-pill { font-size:.56rem; padding:4px 9px; }
+        }
+
+        /* ── DESKTOP: magazine grid, mobile list tersembunyi ── */
+        @media (min-width: 768px) {
+          .ls-mobile-list { display:none !important; }
+          .ls-desktop-grid { display:flex !important; }
+        }
       `}</style>
 
       {/* ── HERO ── */}
@@ -10289,9 +10370,11 @@ function LandscapePage({ onWaOpen }) {
         </div>
       </div>
 
-      {/* ── MAGAZINE GRID ── */}
-      {/* Baris 1: 1 kolom  |  Baris 2: 3 kolom  |  Baris 3: 2 kolom */}
-      <div style={{ display: "flex", flexDirection: "column", gap: 4, padding: "4px 0 0" }}>
+      {/* ══════════════════════════════════════════════════
+          DESKTOP: Magazine Grid (1 | 3 | 2 kolom)
+          Tersembunyi di mobile via CSS
+      ══════════════════════════════════════════════════ */}
+      <div className="ls-desktop-grid" style={{ flexDirection: "column", gap: 4, padding: "4px 0 0" }}>
         {rows.map((row, ri) => {
           const h = heightMap[row.cols] || 360;
           return (
@@ -10299,11 +10382,11 @@ function LandscapePage({ onWaOpen }) {
               {row.cats.map((cat) => (
                 <div key={cat.id} className="ls-wrap">
 
-                  {/* ── FOTO SLIDESHOW ── */}
+                  {/* Foto slideshow */}
                   <div className="ls-img-box" style={{ height: h, position: "relative", overflow: "hidden" }}>
                     <LsMiniSlide slides={cat.slides} height={`${h}px`} />
 
-                    {/* Badge kategori kiri atas */}
+                    {/* Badge kiri atas */}
                     <div className="ls-cat-badge">
                       <div style={{ background: "rgba(13,31,24,.78)", backdropFilter: "blur(8px)", color: "#C9AA71", fontSize: "0.62rem", fontWeight: 800, letterSpacing: ".1em", textTransform: "uppercase", padding: "5px 13px", borderRadius: 20, display: "flex", alignItems: "center", gap: 6 }}>
                         <span>{cat.icon}</span>{cat.title.replace("Contoh Desain ", "")}
@@ -10311,9 +10394,7 @@ function LandscapePage({ onWaOpen }) {
                     </div>
 
                     {/* Harga kanan atas */}
-                    <div className="ls-price-pill">
-                      Mulai {fmt(cat.startFrom)} / {cat.satuan}
-                    </div>
+                    <div className="ls-price-pill">Mulai {fmt(cat.startFrom)} / {cat.satuan}</div>
 
                     {/* CTA hover */}
                     <div className="ls-mag-overlay-btn">
@@ -10324,39 +10405,42 @@ function LandscapePage({ onWaOpen }) {
                     </div>
                   </div>
 
-                  {/* ── KARTU PUTIH DESKRIPSI & INCLUDES ── */}
-                  <div className="ls-info-card">
-                    <h3>{cat.icon} {cat.title.replace("Contoh Desain ", "")}</h3>
-                    <p className="ls-desc">{cat.desc}</p>
-
-                    {/* Apa yang didapat */}
-                    <div className="ls-includes-title">✅ Yang Termasuk dalam Paket</div>
-                    <div className="ls-includes-grid">
-                      {(cat.includes || []).map((inc, idx) => (
-                        <div key={idx} className="ls-include-item">
-                          <span className="ic">{inc.icon}</span>
-                          <span className="tx">{inc.item}</span>
-                        </div>
-                      ))}
-                    </div>
-
-                    {/* Harga + CTA */}
-                    <div className="ls-cta-row">
-                      <div className="ls-price-badge">
-                        <span className="lb">Mulai dari</span>
-                        <span className="vl">{fmt(cat.startFrom)} / {cat.satuan}</span>
-                      </div>
-                      <button className="ls-cta-btn"
-                        onClick={() => onWaOpen && onWaOpen({ key: "layanan", vars: { judul_layanan: cat.title } })}>
-                        🌿 Konsultasi Gratis
-                      </button>
-                    </div>
-                  </div>
+                  {/* Kartu putih dengan dropdown includes */}
+                  <LsInfoCard cat={cat} fmt={fmt} onWaOpen={onWaOpen} />
                 </div>
               ))}
             </div>
           );
         })}
+      </div>
+
+      {/* ══════════════════════════════════════════════════
+          MOBILE: 1 Kolom Penuh (semua kategori berurutan)
+          Tersembunyi di desktop via CSS
+      ══════════════════════════════════════════════════ */}
+      <div className="ls-mobile-list">
+        {LANDSCAPE_CATEGORIES.map((cat) => (
+          <div key={cat.id} className="ls-mobile-item ls-wrap">
+
+            {/* Foto slideshow — tinggi lebih pendek di mobile */}
+            <div className="ls-img-box ls-mobile-slide" style={{ position: "relative", overflow: "hidden", height: 260 }}>
+              <LsMiniSlide slides={cat.slides} height="260px" />
+
+              {/* Badge kiri atas */}
+              <div className="ls-cat-badge">
+                <div style={{ background: "rgba(13,31,24,.82)", backdropFilter: "blur(8px)", color: "#C9AA71", fontSize: "0.6rem", fontWeight: 800, letterSpacing: ".1em", textTransform: "uppercase", padding: "4px 11px", borderRadius: 20, display: "flex", alignItems: "center", gap: 5 }}>
+                  <span>{cat.icon}</span>{cat.title.replace("Contoh Desain ", "")}
+                </div>
+              </div>
+
+              {/* Harga kanan atas */}
+              <div className="ls-price-pill">Mulai {fmt(cat.startFrom)} / {cat.satuan}</div>
+            </div>
+
+            {/* Kartu putih dengan dropdown includes */}
+            <LsInfoCard cat={cat} fmt={fmt} onWaOpen={onWaOpen} />
+          </div>
+        ))}
       </div>
 
       {/* ── ELEMEN TAMAN PREMIUM ── */}
