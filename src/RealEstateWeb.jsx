@@ -10016,6 +10016,16 @@ const LANDSCAPE_CATEGORIES = [
     desc: "Kesan pertama hunian Anda dimulai dari taman depan. Kami menghadirkan desain teras dan taman depan yang memukau — dari gaya minimalis modern hingga tropis nan asri.",
     startFrom: 4500000,
     satuan: "paket",
+    includes: [
+      { icon: "📐", item: "Konsultasi & survei lokasi gratis" },
+      { icon: "🎨", item: "Desain 3D taman depan (2 konsep pilihan)" },
+      { icon: "🌱", item: "Penanaman tanaman hias pilihan (min. 10 jenis)" },
+      { icon: "🪨", item: "Jalur stepping stone / batu andesit" },
+      { icon: "💡", item: "Instalasi lampu sorot taman (2 titik)" },
+      { icon: "🌿", item: "Mulsa & pupuk organik dasar" },
+      { icon: "🔧", item: "Sistem irigasi drip sederhana" },
+      { icon: "📋", item: "Garansi perawatan 30 hari setelah pemasangan" },
+    ],
     slides: [
       { img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80", tema: "Minimalis Modern", desc: "Taman depan bersih dengan jalur batu andesit, tanaman hias rendah, dan lampu sorot tersembunyi. Cocok untuk rumah bergaya kontemporer." },
       { img: "https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=800&q=80", tema: "Tropis Resort", desc: "Nuansa villa tropis di depan rumah — palm mini, heliconia, dan kerikil putih menciptakan ambiance resort yang mewah." },
@@ -10032,6 +10042,17 @@ const LANDSCAPE_CATEGORIES = [
     desc: "Halaman belakang adalah surga pribadi Anda. Kami mengubahnya menjadi oasis relaksasi — area bermain anak, ruang makan outdoor, hingga taman sayur organik.",
     startFrom: 7500000,
     satuan: "paket",
+    includes: [
+      { icon: "📐", item: "Konsultasi & survei lahan belakang gratis" },
+      { icon: "🎨", item: "Desain 3D komprehensif (3 konsep pilihan)" },
+      { icon: "🌳", item: "Penanaman pohon peneduh & tanaman hias (min. 15 jenis)" },
+      { icon: "🏗️", item: "Pergola atau gazebo kayu ulin (opsional, extra)" },
+      { icon: "🪵", item: "Deck kayu composite atau batu paving area duduk" },
+      { icon: "💧", item: "Sistem irigasi otomatis dengan timer" },
+      { icon: "🌿", item: "Rumput premium (Gajah Mini / Zoysia)" },
+      { icon: "💡", item: "Paket lampu taman dasar (4 titik)" },
+      { icon: "📋", item: "Garansi perawatan 60 hari setelah pemasangan" },
+    ],
     slides: [
       { img: "https://images.unsplash.com/photo-1600210492493-0946911123ea?w=800&q=80", tema: "Outdoor Living Room", desc: "Ruang keluarga terbuka di taman belakang — sofa outdoor, pergola kayu, dan area BBQ. Sempurna untuk berkumpul keluarga." },
       { img: "https://images.unsplash.com/photo-1558905586-b022cc14d2b3?w=800&q=80", tema: "Tropical Oasis", desc: "Lebatnya tanaman tropis menciptakan privasi alami. Kolam mini, deck kayu, dan hammock — liburan tanpa pergi jauh." },
@@ -10048,6 +10069,17 @@ const LANDSCAPE_CATEGORIES = [
     desc: "Manfaatkan atap dak Anda menjadi taman rooftop yang spektakuler. Kami merancang taman atap yang ringan, tahan angin, dan memiliki sistem drainase sempurna.",
     startFrom: 12000000,
     satuan: "paket",
+    includes: [
+      { icon: "📐", item: "Analisis struktural beban atap gratis" },
+      { icon: "🎨", item: "Desain 3D rooftop garden (2 konsep)" },
+      { icon: "🏗️", item: "Sistem drainase & waterproofing profesional" },
+      { icon: "🪴", item: "Media tanam ringan (campuran perlite & cocopeat)" },
+      { icon: "🌿", item: "Tanaman tahan angin & UV pilihan (min. 12 jenis)" },
+      { icon: "🪵", item: "Deck composite atau keramit anti-slip area jalan" },
+      { icon: "🔒", item: "Railing pengaman stainless / kaca" },
+      { icon: "💡", item: "Instalasi pencahayaan ambiance outdoor (6 titik)" },
+      { icon: "📋", item: "Garansi drainase & perawatan 90 hari" },
+    ],
     slides: [
       { img: "https://images.unsplash.com/photo-1567016432779-094069958ea5?w=800&q=80", tema: "Sky Lounge Garden", desc: "Lounge eksklusif di atap dengan sofa outdoor premium, tanaman dalam pot besar, dan pencahayaan ambiance malam hari." },
       { img: "https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=800&q=80", tema: "Minimalis Urban", desc: "Desain bersih untuk rooftop kota — deck composite, tanaman pot rendah, dan railing kaca untuk view kota yang maksimal." },
@@ -10064,6 +10096,16 @@ const LANDSCAPE_CATEGORIES = [
     desc: "Solusi taman untuk ruang terbatas. Dinding hijau vertikal kami hadir sebagai statement piece yang hidup — menyejukkan, memperindah, dan meningkatkan kualitas udara.",
     startFrom: 2800000,
     satuan: "m²",
+    includes: [
+      { icon: "📐", item: "Konsultasi & pengukuran dinding gratis" },
+      { icon: "🏗️", item: "Rangka sistem panel modular (GI / aluminium)" },
+      { icon: "🌱", item: "Media tanam hidroponik / cocopeat premium" },
+      { icon: "🌿", item: "Pilihan 20+ jenis tanaman hias / herba / sukulen" },
+      { icon: "💧", item: "Sistem irigasi drip otomatis + timer digital" },
+      { icon: "🔧", item: "Instalasi & finishing rapi (bisa indoor/outdoor)" },
+      { icon: "☀️", item: "Suplemen grow-light untuk area indoor (opsional)" },
+      { icon: "📋", item: "Garansi tumbuh tanaman 30 hari + panduan perawatan" },
+    ],
     slides: [
       { img: "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=800&q=80", tema: "Living Wall Interior", desc: "Dinding hidup di dalam ruangan — sistem irigasi otomatis tersembunyi, media tanam hidroponik, dan pilihan 30+ jenis tanaman hias." },
       { img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80", tema: "Facade Vertical Garden", desc: "Tampak depan rumah yang memukau dengan vertical garden fasad. Tanaman tahan UV dan cuaca, perawatan minimal." },
@@ -10080,6 +10122,16 @@ const LANDSCAPE_CATEGORIES = [
     desc: "Suara gemericik air adalah musik alami paling menenangkan. Kolam hias dan air mancur kami dirancang untuk keindahan visual sekaligus menciptakan mikroklimat yang sejuk.",
     startFrom: 8000000,
     satuan: "paket",
+    includes: [
+      { icon: "📐", item: "Desain & layout kolam custom sesuai lahan" },
+      { icon: "🏗️", item: "Konstruksi dinding & lantai kolam (beton waterproof)" },
+      { icon: "🔧", item: "Sistem sirkulasi pompa & filter biologis" },
+      { icon: "🪨", item: "Finishing batu alam / keramik antik pilihan" },
+      { icon: "💡", item: "Lampu LED underwater berwarna (RGB)" },
+      { icon: "🐟", item: "Starter pack ikan koi / ikan hias (opsional)" },
+      { icon: "🌿", item: "Tanaman air & border kolam (teratai, eceng mini)" },
+      { icon: "📋", item: "Garansi kebocoran & sistem 90 hari" },
+    ],
     slides: [
       { img: "https://images.unsplash.com/photo-1523301343968-6a6ebf63c672?w=800&q=80", tema: "Kolam Koi Jepang", desc: "Kolam koi bergaya Jepang lengkap dengan filter biologis, batu suiseki, jembatan mini kayu, dan ikan koi pilihan warna-warni." },
       { img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80", tema: "Waterfall Minimalis", desc: "Air terjun dinding batu alam yang elegan. Suara gemericik konstan menciptakan ambiance premium di halaman rumah Anda." },
@@ -10096,6 +10148,16 @@ const LANDSCAPE_CATEGORIES = [
     desc: "Taman yang indah di siang hari harus tetap memukau di malam hari. Sistem pencahayaan outdoor kami mengubah taman menjadi panggung cahaya yang dramatis dan romantis.",
     startFrom: 1500000,
     satuan: "paket",
+    includes: [
+      { icon: "📐", item: "Perencanaan titik lampu & layout pencahayaan" },
+      { icon: "💡", item: "Lampu taman LED (min. 4 titik, IP65 weatherproof)" },
+      { icon: "🔌", item: "Instalasi kabel tanam bawah tanah rapi & aman" },
+      { icon: "🌙", item: "Timer otomatis atau sensor cahaya senja-fajar" },
+      { icon: "🎨", item: "Pilihan warna: warm white, cool white, atau RGB" },
+      { icon: "☀️", item: "Opsi solar-powered untuk area tanpa listrik" },
+      { icon: "🔧", item: "Panel kontrol & MCB proteksi outdoor" },
+      { icon: "📋", item: "Garansi instalasi & produk 1 tahun" },
+    ],
     slides: [
       { img: "https://images.unsplash.com/photo-1558905586-b022cc14d2b3?w=800&q=80", tema: "Fairy Light Garden", desc: "Ribuan lampu kabel tembaga menyelimuti pepohonan dan pergola — menciptakan suasana magis seperti bintang di taman Anda." },
       { img: "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=800&q=80", tema: "Uplighting Dramatic", desc: "Lampu sorot LED dari bawah yang menyinari pohon dan dinding — efek dramatis yang menonjolkan tekstur dan bentuk tanaman." },
@@ -10182,12 +10244,27 @@ function LandscapePage({ onWaOpen }) {
     <div style={{ background: "#0d1f18", minHeight: "100vh" }}>
       <style>{`
         @keyframes lmFade{from{opacity:0;transform:scale(1.05)}to{opacity:1;transform:scale(1)}}
-        .ls-mag-cell { position:relative; overflow:hidden; cursor:pointer; }
-        .ls-mag-cell:hover .ls-mag-overlay-btn { opacity:1 !important; }
+        .ls-wrap { position:relative; }
+        .ls-img-box { position:relative; overflow:hidden; }
+        .ls-img-box:hover .ls-mag-overlay-btn { opacity:1 !important; }
         .ls-cat-badge { position:absolute; top:14px; left:14px; z-index:3; }
         .ls-price-pill { position:absolute; top:14px; right:14px; z-index:3; background:rgba(201,170,113,.93); backdrop-filter:blur(6px); color:#1a2a1a; font-size:.62rem; font-weight:900; letter-spacing:.06em; padding:5px 12px; border-radius:20px; white-space:nowrap; }
         .ls-mag-overlay-btn { opacity:0; transition:opacity .3s; position:absolute; bottom:16px; right:14px; z-index:4; }
-        .ls-desc-box { position:absolute; bottom:0; left:0; right:0; padding:18px 16px 14px; background:linear-gradient(to top,rgba(0,0,0,.82) 0%,transparent 100%); z-index:2; pointer-events:none; }
+        .ls-info-card { background:#fff; padding:22px 20px 24px; }
+        .ls-info-card h3 { font-family:'Playfair Display',serif; font-size:clamp(.9rem,2vw,1.1rem); font-weight:900; color:#1a2a1a; margin:0 0 8px; }
+        .ls-info-card p.ls-desc { font-size:.825rem; color:#4a5a4a; line-height:1.7; margin:0 0 18px; }
+        .ls-includes-title { font-size:.6rem; font-weight:900; letter-spacing:.14em; text-transform:uppercase; color:#2d6a4f; margin:0 0 10px; padding-bottom:6px; border-bottom:2px solid #e8f4ec; }
+        .ls-includes-grid { display:grid; grid-template-columns:1fr 1fr; gap:5px 10px; }
+        .ls-include-item { display:flex; align-items:flex-start; gap:7px; }
+        .ls-include-item span.ic { font-size:.85rem; flex-shrink:0; margin-top:1px; }
+        .ls-include-item span.tx { font-size:.75rem; color:#2E3D3F; line-height:1.45; }
+        .ls-cta-row { margin-top:18px; display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap; }
+        .ls-price-badge { background:#f0fdf4; border:1.5px solid #86efac; border-radius:8px; padding:6px 14px; }
+        .ls-price-badge span.lb { display:block; font-size:.58rem; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:#166534; }
+        .ls-price-badge span.vl { display:block; font-size:.82rem; font-weight:900; color:#14532d; }
+        .ls-cta-btn { background:#1a472a; color:#fff; border:none; border-radius:8px; padding:9px 18px; font-size:.75rem; font-weight:800; cursor:pointer; white-space:nowrap; transition:background .2s; }
+        .ls-cta-btn:hover { background:#2d6a4f; }
+        @media(max-width:640px){ .ls-includes-grid{ grid-template-columns:1fr; } .ls-cta-row{ flex-direction:column; align-items:stretch; } }
       `}</style>
 
       {/* ── HERO ── */}
@@ -10218,38 +10295,62 @@ function LandscapePage({ onWaOpen }) {
         {rows.map((row, ri) => {
           const h = heightMap[row.cols] || 360;
           return (
-            <div key={ri} style={{ display: "grid", gridTemplateColumns: `repeat(${row.cols}, 1fr)`, gap: 4 }}>
+            <div key={ri} style={{ display: "grid", gridTemplateColumns: `repeat(${row.cols}, 1fr)`, gap: 4, alignItems: "start" }}>
               {row.cats.map((cat) => (
-                <div key={cat.id} className="ls-mag-cell" style={{ height: h }}>
+                <div key={cat.id} className="ls-wrap">
 
-                  {/* Slideshow 6 foto kategori ini */}
-                  <LsMiniSlide slides={cat.slides} height={`${h}px`} />
+                  {/* ── FOTO SLIDESHOW ── */}
+                  <div className="ls-img-box" style={{ height: h, position: "relative", overflow: "hidden" }}>
+                    <LsMiniSlide slides={cat.slides} height={`${h}px`} />
 
-                  {/* Badge kategori kiri atas */}
-                  <div className="ls-cat-badge">
-                    <div style={{ background: "rgba(13,31,24,.78)", backdropFilter: "blur(8px)", color: "#C9AA71", fontSize: "0.62rem", fontWeight: 800, letterSpacing: ".1em", textTransform: "uppercase", padding: "5px 13px", borderRadius: 20, display: "flex", alignItems: "center", gap: 6 }}>
-                      <span>{cat.icon}</span>{cat.title.replace("Contoh Desain ", "")}
+                    {/* Badge kategori kiri atas */}
+                    <div className="ls-cat-badge">
+                      <div style={{ background: "rgba(13,31,24,.78)", backdropFilter: "blur(8px)", color: "#C9AA71", fontSize: "0.62rem", fontWeight: 800, letterSpacing: ".1em", textTransform: "uppercase", padding: "5px 13px", borderRadius: 20, display: "flex", alignItems: "center", gap: 6 }}>
+                        <span>{cat.icon}</span>{cat.title.replace("Contoh Desain ", "")}
+                      </div>
+                    </div>
+
+                    {/* Harga kanan atas */}
+                    <div className="ls-price-pill">
+                      Mulai {fmt(cat.startFrom)} / {cat.satuan}
+                    </div>
+
+                    {/* CTA hover */}
+                    <div className="ls-mag-overlay-btn">
+                      <button onClick={() => onWaOpen && onWaOpen({ key: "layanan", vars: { judul_layanan: cat.title } })}
+                        style={{ background: "#C9AA71", color: "#1a2a1a", border: "none", borderRadius: 8, padding: "9px 18px", fontSize: "0.75rem", fontWeight: 800, cursor: "pointer", whiteSpace: "nowrap", boxShadow: "0 4px 14px rgba(0,0,0,.3)" }}>
+                        🌿 Tanya Harga & Detail
+                      </button>
                     </div>
                   </div>
 
-                  {/* Harga kanan atas */}
-                  <div className="ls-price-pill">
-                    Mulai {fmt(cat.startFrom)} / {cat.satuan}
-                  </div>
+                  {/* ── KARTU PUTIH DESKRIPSI & INCLUDES ── */}
+                  <div className="ls-info-card">
+                    <h3>{cat.icon} {cat.title.replace("Contoh Desain ", "")}</h3>
+                    <p className="ls-desc">{cat.desc}</p>
 
-                  {/* Deskripsi bottom */}
-                  <div className="ls-desc-box">
-                    <p style={{ color: "rgba(255,255,255,.88)", fontSize: "0.78rem", lineHeight: 1.55, margin: 0, display: "-webkit-box", WebkitLineClamp: row.cols === 1 ? 3 : 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>
-                      {cat.desc}
-                    </p>
-                  </div>
+                    {/* Apa yang didapat */}
+                    <div className="ls-includes-title">✅ Yang Termasuk dalam Paket</div>
+                    <div className="ls-includes-grid">
+                      {(cat.includes || []).map((inc, idx) => (
+                        <div key={idx} className="ls-include-item">
+                          <span className="ic">{inc.icon}</span>
+                          <span className="tx">{inc.item}</span>
+                        </div>
+                      ))}
+                    </div>
 
-                  {/* CTA hover */}
-                  <div className="ls-mag-overlay-btn">
-                    <button onClick={() => onWaOpen && onWaOpen({ key: "layanan", vars: { judul_layanan: cat.title } })}
-                      style={{ background: "#C9AA71", color: "#1a2a1a", border: "none", borderRadius: 8, padding: "9px 18px", fontSize: "0.75rem", fontWeight: 800, cursor: "pointer", whiteSpace: "nowrap", boxShadow: "0 4px 14px rgba(0,0,0,.3)" }}>
-                      🌿 Tanya Harga & Detail
-                    </button>
+                    {/* Harga + CTA */}
+                    <div className="ls-cta-row">
+                      <div className="ls-price-badge">
+                        <span className="lb">Mulai dari</span>
+                        <span className="vl">{fmt(cat.startFrom)} / {cat.satuan}</span>
+                      </div>
+                      <button className="ls-cta-btn"
+                        onClick={() => onWaOpen && onWaOpen({ key: "layanan", vars: { judul_layanan: cat.title } })}>
+                        🌿 Konsultasi Gratis
+                      </button>
+                    </div>
                   </div>
                 </div>
               ))}
