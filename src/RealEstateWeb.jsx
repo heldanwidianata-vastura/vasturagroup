@@ -10128,34 +10128,24 @@ function LsMiniSlide({ slides, height = "100%" }) {
 }
 
 /* ── Magazine Row Patterns ── */
-// Pattern: array of column counts per row, cycling
-const MAG_PATTERNS = [
-  [1], [3], [2], [1], [2], [3], [1], [2],
-];
+// 6 kategori disusun: baris-1 = 1 cell, baris-2 = 3 cell, baris-3 = 2 cell
+const MAG_LAYOUT = [1, 3, 2]; // total = 6, sesuai jumlah LANDSCAPE_CATEGORIES
 
 function LandscapePage({ onWaOpen }) {
   useEffect(() => { window.scrollTo(0, 0); }, []);
   const fmt = (n) => "Rp " + n.toLocaleString("id-ID") + ",-";
 
-  // Flatten all slides dari semua kategori → magazine cells
-  const allCells = LANDSCAPE_CATEGORIES.flatMap(cat =>
-    cat.slides.map(slide => ({ ...slide, catId: cat.id, catTitle: cat.title, catIcon: cat.icon, catStart: cat.startFrom, catSatuan: cat.satuan, catSlides: cat.slides }))
-  );
-
-  // Susun ke rows berdasar MAG_PATTERNS
+  // Susun 6 kategori ke rows berdasar MAG_LAYOUT
   const rows = [];
   let pos = 0;
-  let patIdx = 0;
-  while (pos < allCells.length) {
-    const cols = MAG_PATTERNS[patIdx % MAG_PATTERNS.length];
-    const rowCells = allCells.slice(pos, pos + cols);
-    if (rowCells.length > 0) rows.push({ cols: rowCells.length, cells: rowCells });
+  for (const cols of MAG_LAYOUT) {
+    const slice = LANDSCAPE_CATEGORIES.slice(pos, pos + cols);
+    if (slice.length > 0) rows.push({ cols: slice.length, cats: slice });
     pos += cols;
-    patIdx++;
   }
 
-  // Cell heights berdasar kolom count
-  const heightMap = { 1: 480, 2: 380, 3: 300 };
+  // Tinggi cell berdasar jumlah kolom di baris tersebut
+  const heightMap = { 1: 520, 2: 420, 3: 360 };
 
   return (
     <div style={{ background: "#0d1f18", minHeight: "100vh" }}>
@@ -10163,9 +10153,10 @@ function LandscapePage({ onWaOpen }) {
         @keyframes lmFade{from{opacity:0;transform:scale(1.05)}to{opacity:1;transform:scale(1)}}
         .ls-mag-cell { position:relative; overflow:hidden; cursor:pointer; }
         .ls-mag-cell:hover .ls-mag-overlay-btn { opacity:1 !important; }
-        .ls-cat-header { position:absolute; top:12px; left:12px; z-index:3; display:flex; align-items:center; gap:7px; }
-        .ls-price-pill { position:absolute; top:12px; right:12px; z-index:3; background:rgba(201,170,113,.92); backdrop-filter:blur(6px); color:#1a2a1a; font-size:.6rem; font-weight:900; letter-spacing:.06em; padding:4px 10px; border-radius:20px; text-transform:uppercase; }
-        .ls-mag-overlay-btn { opacity:0; transition:opacity .3s; position:absolute; bottom:70px; right:12px; z-index:4; }
+        .ls-cat-badge { position:absolute; top:14px; left:14px; z-index:3; }
+        .ls-price-pill { position:absolute; top:14px; right:14px; z-index:3; background:rgba(201,170,113,.93); backdrop-filter:blur(6px); color:#1a2a1a; font-size:.62rem; font-weight:900; letter-spacing:.06em; padding:5px 12px; border-radius:20px; white-space:nowrap; }
+        .ls-mag-overlay-btn { opacity:0; transition:opacity .3s; position:absolute; bottom:16px; right:14px; z-index:4; }
+        .ls-desc-box { position:absolute; bottom:0; left:0; right:0; padding:18px 16px 14px; background:linear-gradient(to top,rgba(0,0,0,.82) 0%,transparent 100%); z-index:2; pointer-events:none; }
       `}</style>
 
       {/* ── HERO ── */}
@@ -10191,68 +10182,49 @@ function LandscapePage({ onWaOpen }) {
       </div>
 
       {/* ── MAGAZINE GRID ── */}
-      <div style={{ padding: "0" }}>
-        {rows.map((row, ri) => (
-          <div key={ri} style={{ display: "grid", gridTemplateColumns: `repeat(${row.cols}, 1fr)`, gap: 3 }}>
-            {row.cells.map((cell, ci) => {
-              const h = heightMap[row.cols] || 320;
-              return (
-                <div key={ci} className="ls-mag-cell" style={{ height: h }}>
-                  {/* Slideshow — pakai semua slides dari kategori yang sama */}
-                  <LsMiniSlide slides={cell.catSlides} height={`${h}px`} />
+      {/* Baris 1: 1 kolom  |  Baris 2: 3 kolom  |  Baris 3: 2 kolom */}
+      <div style={{ display: "flex", flexDirection: "column", gap: 4, padding: "4px 0 0" }}>
+        {rows.map((row, ri) => {
+          const h = heightMap[row.cols] || 360;
+          return (
+            <div key={ri} style={{ display: "grid", gridTemplateColumns: `repeat(${row.cols}, 1fr)`, gap: 4 }}>
+              {row.cats.map((cat) => (
+                <div key={cat.id} className="ls-mag-cell" style={{ height: h }}>
 
-                  {/* Kategori badge */}
-                  <div className="ls-cat-header">
-                    <div style={{ background: "rgba(13,31,24,.7)", backdropFilter: "blur(6px)", color: "#C9AA71", fontSize: "0.6rem", fontWeight: 800, letterSpacing: ".1em", textTransform: "uppercase", padding: "4px 10px", borderRadius: 20, display: "flex", alignItems: "center", gap: 5 }}>
-                      <span>{cell.catIcon}</span>{cell.catTitle.replace("Contoh Desain ", "")}
+                  {/* Slideshow 6 foto kategori ini */}
+                  <LsMiniSlide slides={cat.slides} height={`${h}px`} />
+
+                  {/* Badge kategori kiri atas */}
+                  <div className="ls-cat-badge">
+                    <div style={{ background: "rgba(13,31,24,.78)", backdropFilter: "blur(8px)", color: "#C9AA71", fontSize: "0.62rem", fontWeight: 800, letterSpacing: ".1em", textTransform: "uppercase", padding: "5px 13px", borderRadius: 20, display: "flex", alignItems: "center", gap: 6 }}>
+                      <span>{cat.icon}</span>{cat.title.replace("Contoh Desain ", "")}
                     </div>
                   </div>
 
-                  {/* Harga pill */}
+                  {/* Harga kanan atas */}
                   <div className="ls-price-pill">
-                    Mulai {fmt(cell.catStart)}/{cell.catSatuan}
+                    Mulai {fmt(cat.startFrom)} / {cat.satuan}
                   </div>
 
-                  {/* CTA hover button */}
+                  {/* Deskripsi bottom */}
+                  <div className="ls-desc-box">
+                    <p style={{ color: "rgba(255,255,255,.88)", fontSize: "0.78rem", lineHeight: 1.55, margin: 0, display: "-webkit-box", WebkitLineClamp: row.cols === 1 ? 3 : 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>
+                      {cat.desc}
+                    </p>
+                  </div>
+
+                  {/* CTA hover */}
                   <div className="ls-mag-overlay-btn">
-                    <button onClick={() => onWaOpen && onWaOpen({ key: "layanan", vars: { judul_layanan: cell.catTitle } })}
-                      style={{ background: "#C9AA71", color: "#1a2a1a", border: "none", borderRadius: 8, padding: "8px 16px", fontSize: "0.72rem", fontWeight: 800, cursor: "pointer", whiteSpace: "nowrap" }}>
-                      🌿 Tanya Harga
+                    <button onClick={() => onWaOpen && onWaOpen({ key: "layanan", vars: { judul_layanan: cat.title } })}
+                      style={{ background: "#C9AA71", color: "#1a2a1a", border: "none", borderRadius: 8, padding: "9px 18px", fontSize: "0.75rem", fontWeight: 800, cursor: "pointer", whiteSpace: "nowrap", boxShadow: "0 4px 14px rgba(0,0,0,.3)" }}>
+                      🌿 Tanya Harga & Detail
                     </button>
                   </div>
                 </div>
-              );
-            })}
-          </div>
-        ))}
-      </div>
-
-      {/* ── LEGEND / KATEGORI SUMMARY ── */}
-      <div style={{ background: "#0d1f18", padding: "48px 5% 40px" }}>
-        <div style={{ maxWidth: 1280, margin: "0 auto" }}>
-          <div style={{ textAlign: "center", marginBottom: 36 }}>
-            <div style={{ fontSize: "0.65rem", fontWeight: 800, letterSpacing: ".14em", textTransform: "uppercase", color: "#40916c", marginBottom: 8 }}>Layanan Kami</div>
-            <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: "clamp(1.3rem,3.5vw,2rem)", fontWeight: 900, color: "#fff", margin: 0 }}>Semua Kategori Landscape</h2>
-          </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(240px,1fr))", gap: 16 }}>
-            {LANDSCAPE_CATEGORIES.map(cat => (
-              <div key={cat.id} style={{ background: "rgba(255,255,255,.05)", border: "1px solid rgba(255,255,255,.1)", borderRadius: 14, padding: "20px 18px", transition: "background .2s" }}
-                onMouseEnter={e => e.currentTarget.style.background = "rgba(255,255,255,.09)"}
-                onMouseLeave={e => e.currentTarget.style.background = "rgba(255,255,255,.05)"}>
-                <div style={{ fontSize: 22, marginBottom: 10 }}>{cat.icon}</div>
-                <h3 style={{ fontSize: "0.875rem", fontWeight: 800, color: "#fff", margin: "0 0 6px", lineHeight: 1.3 }}>{cat.title.replace("Contoh Desain ", "")}</h3>
-                <p style={{ fontSize: "0.75rem", color: "rgba(255,255,255,.55)", lineHeight: 1.6, margin: "0 0 14px" }}>{cat.desc.split("—")[0].trim()}</p>
-                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                  <span style={{ fontSize: "0.7rem", fontWeight: 800, color: "#C9AA71" }}>Mulai {fmt(cat.startFrom)}/{cat.satuan}</span>
-                  <button onClick={() => onWaOpen && onWaOpen({ key: "layanan", vars: { judul_layanan: cat.title } })}
-                    style={{ background: "transparent", border: "1px solid rgba(201,170,113,.5)", color: "#C9AA71", fontSize: "0.65rem", fontWeight: 700, padding: "4px 12px", borderRadius: 20, cursor: "pointer" }}>
-                    Detail →
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+              ))}
+            </div>
+          );
+        })}
       </div>
 
       {/* ── ELEMEN TAMAN PREMIUM ── */}
