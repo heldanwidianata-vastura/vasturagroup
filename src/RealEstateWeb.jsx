@@ -6203,10 +6203,9 @@ function ServicesPage({ content, services, navigateTo, activePaket, onOpenPaket,
       {/* ══════════════════════════════════════
           GALERI PROYEK
       ══════════════════════════════════════ */}
-      <section style={{ background:"#fff", padding:"0 5% clamp(52px,7vw,88px)" }}>
-        <div style={{ maxWidth:1200, margin:"0 auto" }}>
-          {/* Section header */}
-          <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:20, flexWrap:"wrap", gap:10 }}>
+      <section style={{ background:"#fff", padding:"0 0 clamp(52px,7vw,88px)" }}>
+        <div style={{ maxWidth:1200, margin:"0 auto", padding:"0 5% 20px" }}>
+          <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", flexWrap:"wrap", gap:10 }}>
             <div>
               <div style={{ width:44, height:3, background:"#C9AA71", borderRadius:2, marginBottom:10 }} />
               <h2 style={{ fontSize:"clamp(1.4rem,3vw,2rem)", fontWeight:800, color:"#1a2526", margin:0, lineHeight:1.15 }}>Galeri Proyek</h2>
@@ -6216,13 +6215,32 @@ function ServicesPage({ content, services, navigateTo, activePaket, onOpenPaket,
               LIHAT SEMUA PROYEK →
             </button>
           </div>
+        </div>
 
-          {/* 6-col gallery grid */}
-          <div className="sv-galeri-grid" style={{ display:"grid", gridTemplateColumns:"repeat(6,1fr)", gap:0 }}>
-            {GALERI_LIST.map((g,i) => (
-              <div key={i} className="sv-galeri-item" style={{ height:200 }}>
-                <img src={g.img} alt={g.label} onError={e=>{e.target.style.display="none";}} />
-                <div className="sv-galeri-overlay">
+        {/* ── MARQUEE RUNNER ── */}
+        <style>{`
+          @keyframes svMarquee { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+          .sv-marquee-track { display:flex; width:max-content; animation:svMarquee 24s linear infinite; }
+          .sv-marquee-track:hover { animation-play-state:paused; }
+          .sv-marquee-wrap { overflow:hidden; width:100%; position:relative; }
+          .sv-marquee-wrap::before,.sv-marquee-wrap::after {
+            content:""; position:absolute; top:0; bottom:0; width:80px; z-index:2; pointer-events:none;
+          }
+          .sv-marquee-wrap::before { left:0; background:linear-gradient(to right,#fff,transparent); }
+          .sv-marquee-wrap::after  { right:0; background:linear-gradient(to left,#fff,transparent); }
+          .sv-mgcard { flex:0 0 auto; width:320px; height:210px; margin-right:6px; position:relative; overflow:hidden; cursor:pointer; }
+          .sv-mgcard img { width:100%; height:100%; object-fit:cover; display:block; transition:transform .45s; }
+          .sv-mgcard:hover img { transform:scale(1.08); }
+          .sv-mgcard-overlay { position:absolute; inset:0; background:linear-gradient(to top,rgba(0,0,0,.72) 0%,transparent 55%); display:flex; align-items:flex-end; padding:14px 16px; opacity:0; transition:opacity .3s; }
+          .sv-mgcard:hover .sv-mgcard-overlay { opacity:1; }
+        `}</style>
+
+        <div className="sv-marquee-wrap">
+          <div className="sv-marquee-track">
+            {[...GALERI_LIST, ...GALERI_LIST, ...GALERI_LIST, ...GALERI_LIST].map((g, i) => (
+              <div key={i} className="sv-mgcard">
+                <img src={g.img} alt={g.label} onError={e => { e.target.style.display="none"; }} />
+                <div className="sv-mgcard-overlay">
                   <span style={{ fontSize:"0.65rem", fontWeight:800, letterSpacing:"1.5px", color:"#fff", textTransform:"uppercase", textShadow:"0 1px 4px rgba(0,0,0,.6)", lineHeight:1.3 }}>{g.label}</span>
                 </div>
               </div>
@@ -8889,29 +8907,55 @@ function DesainRabPage({ onWaOpen }) {
       </section>
 
       {/* ══ CONTOH HASIL DESAIN ══ */}
-      <section style={{ background:"#fff", padding:"clamp(48px,7vw,80px) 5%" }}>
-        <div style={{ maxWidth:1200, margin:"0 auto" }}>
-          <div style={{ textAlign:"center", marginBottom:36 }}>
+      <section style={{ background:"#fff", padding:"clamp(48px,7vw,80px) 0" }}>
+        <div style={{ maxWidth:1200, margin:"0 auto", padding:"0 5%", marginBottom:36 }}>
+          <div style={{ textAlign:"center" }}>
             <div style={{ fontSize:"0.7rem", letterSpacing:"4px", color:"#C9AA71", textTransform:"uppercase", fontWeight:700, marginBottom:10 }}>PORTOFOLIO</div>
             <h2 style={{ fontSize:"clamp(1.5rem,3.5vw,2.2rem)", fontWeight:800, color:"#1a2526", margin:0 }}>CONTOH HASIL DESAIN</h2>
             <div style={{ width:48, height:3, background:"#C9AA71", borderRadius:2, margin:"14px auto 0" }} />
           </div>
-          <div className="dr-galeri-grid" style={{ display:"grid", gridTemplateColumns:"repeat(5,1fr)", gap:14, marginBottom:28 }}>
-            {GALERI.map((g,i)=>(
-              <div key={i} className="dr-galeri-item" style={{ height:200 }}>
-                <img src={g.img} alt={g.label} onError={e=>{e.target.style.display="none";}} />
-                <div style={{ background:"#fff", padding:"10px 12px" }}>
-                  <div style={{ fontWeight:700, fontSize:"0.8rem", color:"#1a2526", lineHeight:1.35, marginBottom:3 }}>{g.label}</div>
-                  <div style={{ fontSize:"0.7rem", color:"#5A6A6C" }}>Luas Bangunan {g.luas}</div>
+        </div>
+
+        {/* ── MARQUEE RUNNER ── */}
+        <style>{`
+          @keyframes drMarquee { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+          .dr-marquee-track { display:flex; width:max-content; animation:drMarquee 28s linear infinite; }
+          .dr-marquee-track:hover { animation-play-state:paused; }
+          .dr-marquee-wrap { overflow:hidden; width:100%; position:relative; }
+          .dr-marquee-wrap::before,.dr-marquee-wrap::after {
+            content:""; position:absolute; top:0; bottom:0; width:80px; z-index:2; pointer-events:none;
+          }
+          .dr-marquee-wrap::before { left:0; background:linear-gradient(to right,#fff 0%,transparent 100%); }
+          .dr-marquee-wrap::after  { right:0; background:linear-gradient(to left,#fff 0%,transparent 100%); }
+          .dr-gcard { flex:0 0 auto; width:280px; margin-right:18px; border-radius:12px; overflow:hidden; box-shadow:0 3px 16px rgba(0,0,0,.09); transition:transform .3s,box-shadow .3s; cursor:pointer; background:#fff; }
+          .dr-gcard:hover { transform:translateY(-6px); box-shadow:0 12px 32px rgba(0,0,0,.16); }
+          .dr-gcard img { width:100%; height:192px; object-fit:cover; display:block; transition:transform .45s; }
+          .dr-gcard:hover img { transform:scale(1.06); }
+        `}</style>
+
+        <div className="dr-marquee-wrap">
+          <div className="dr-marquee-track">
+            {/* Render dua kali untuk loop seamless */}
+            {[...GALERI, ...GALERI, ...GALERI, ...GALERI].map((g, i) => (
+              <div key={i} className="dr-gcard">
+                <div style={{ overflow:"hidden" }}>
+                  <img src={g.img} alt={g.label} onError={e=>{e.target.style.display="none";}} />
+                </div>
+                <div style={{ padding:"12px 14px 14px", background:"#fff" }}>
+                  <div style={{ fontWeight:800, fontSize:"0.8125rem", color:"#1a2526", lineHeight:1.35, marginBottom:4 }}>{g.label}</div>
+                  <div style={{ display:"flex", alignItems:"center", gap:5, fontSize:"0.7rem", color:"#5A6A6C" }}>
+                    <span style={{ color:"#C9AA71", fontWeight:700 }}>📐</span> Luas {g.luas}
+                  </div>
                 </div>
               </div>
             ))}
           </div>
-          <div style={{ textAlign:"center" }}>
-            <button style={{ padding:"11px 28px", background:"#fff", color:"#1a2526", border:"1.5px solid #1a2526", borderRadius:7, fontSize:"0.85rem", fontWeight:700, cursor:"pointer" }}>
-              LIHAT SEMUA PROYEK +
-            </button>
-          </div>
+        </div>
+
+        <div style={{ textAlign:"center", marginTop:32, padding:"0 5%" }}>
+          <button style={{ padding:"11px 28px", background:"#fff", color:"#1a2526", border:"1.5px solid #1a2526", borderRadius:7, fontSize:"0.85rem", fontWeight:700, cursor:"pointer" }}>
+            LIHAT SEMUA PROYEK +
+          </button>
         </div>
       </section>
 
@@ -9300,6 +9344,119 @@ function KalkulatorLuas({ tema }) {
 }
 
 /* ── Card Content helper (reusable di landing) ── */
+/* ── Per-tema photo sets untuk slideshow ── */
+const TEMA_PHOTOS = {
+  "modern-minimalis": [
+    { img: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=900&q=80", label: "Fasad Modern Minimalis" },
+    { img: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=900&q=80", label: "Eksterior Bersih & Tegas" },
+    { img: "https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=900&q=80", label: "Rumah 2 Lantai Minimalis" },
+    { img: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=900&q=80", label: "Desain Carport Minimalis" },
+    { img: "https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?w=900&q=80", label: "Interior Open Plan" },
+    { img: "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=900&q=80", label: "Dapur Minimalis Modern" },
+  ],
+  "skandinavian": [
+    { img: "https://images.unsplash.com/photo-1449844908441-8829872d2607?w=900&q=80", label: "Fasad Skandinavian" },
+    { img: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=900&q=80", label: "Interior Hygge Living Room" },
+    { img: "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=900&q=80", label: "Kamar Tidur Skandinavian" },
+    { img: "https://images.unsplash.com/photo-1600566752355-35792bedcfea?w=900&q=80", label: "Dapur Putih Natural" },
+    { img: "https://images.unsplash.com/photo-1524758631624-e2822e304c36?w=900&q=80", label: "Ruang Tamu Hangat" },
+    { img: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=900&q=80", label: "Reading Nook Cozy" },
+  ],
+  "industrial": [
+    { img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=900&q=80", label: "Eksterior Industrial Raw" },
+    { img: "https://images.unsplash.com/photo-1560448204-603b3fc33ddc?w=900&q=80", label: "Interior Beton Ekspos" },
+    { img: "https://images.unsplash.com/photo-1567016432779-094069958ea5?w=900&q=80", label: "Ruang Tamu Industrial" },
+    { img: "https://images.unsplash.com/photo-1600121848594-d8644e57abab?w=900&q=80", label: "Dapur Industrial Chic" },
+    { img: "https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=900&q=80", label: "Mezzanine & Open Space" },
+    { img: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=900&q=80", label: "Edison Bulb Lighting" },
+  ],
+  "tropical-modern": [
+    { img: "https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=900&q=80", label: "Villa Tropis Modern" },
+    { img: "https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=900&q=80", label: "Fasad dengan Taman Lebat" },
+    { img: "https://images.unsplash.com/photo-1592595896551-12b371d546d5?w=900&q=80", label: "Kolam & Teras Tropis" },
+    { img: "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=900&q=80", label: "Ruang Tamu Indoor-Outdoor" },
+    { img: "https://images.unsplash.com/photo-1600210492493-0946911123ea?w=900&q=80", label: "Teras Santai Rotan" },
+    { img: "https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?w=900&q=80", label: "Kolam Renang Natural" },
+  ],
+  "klasik-mediterania": [
+    { img: "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=900&q=80", label: "Fasad Mediterania Putih" },
+    { img: "https://images.unsplash.com/photo-1523217162808-bba68bde2d61?w=900&q=80", label: "Pilar & Arch Klasik" },
+    { img: "https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?w=900&q=80", label: "Teras Mediterania Mewah" },
+    { img: "https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?w=900&q=80", label: "Interior Klasik Elegan" },
+    { img: "https://images.unsplash.com/photo-1558905586-b022cc14d2b3?w=900&q=80", label: "Taman Lavender & Batu" },
+    { img: "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=900&q=80", label: "Ruang Makan Klasik" },
+  ],
+};
+
+/* ── Slideshow komponen untuk Tema Card ── */
+function TemaPhotoSlideshow({ slug, nama }) {
+  const photos = TEMA_PHOTOS[slug] || [];
+  const [idx, setIdx] = useState(0);
+  const timerRef = useRef(null);
+
+  useEffect(() => {
+    if (photos.length < 2) return;
+    timerRef.current = setInterval(() => setIdx(p => (p + 1) % photos.length), 3500);
+    return () => clearInterval(timerRef.current);
+  }, [photos.length]);
+
+  const goTo = (i) => {
+    setIdx(i);
+    clearInterval(timerRef.current);
+    timerRef.current = setInterval(() => setIdx(p => (p + 1) % photos.length), 3500);
+  };
+
+  if (photos.length === 0) return (
+    <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", background: "#E8DCC8", fontSize: "2.5rem" }}>🏡</div>
+  );
+
+  const cur = photos[idx];
+  return (
+    <div style={{ position: "relative", width: "100%", height: "100%", overflow: "hidden" }}>
+      <style>{`
+        @keyframes temaFade { from{opacity:0;transform:scale(1.04)} to{opacity:1;transform:scale(1)} }
+      `}</style>
+
+      {/* Image */}
+      <img key={idx} src={cur.img} alt={cur.label}
+        style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", animation: "temaFade .55s ease both" }}
+        onError={e => { e.target.style.display = "none"; }} />
+
+      {/* Overlay bottom gradient */}
+      <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(0,0,0,.55) 0%, transparent 50%)", pointerEvents: "none" }} />
+
+      {/* Label */}
+      <div style={{ position: "absolute", bottom: 48, left: 14, right: 14 }}>
+        <span style={{ background: "rgba(0,0,0,.45)", backdropFilter: "blur(6px)", color: "#fff", fontSize: "0.65rem", fontWeight: 700, letterSpacing: ".1em", textTransform: "uppercase", padding: "4px 10px", borderRadius: 20 }}>
+          {cur.label}
+        </span>
+      </div>
+
+      {/* Dots */}
+      <div style={{ position: "absolute", bottom: 14, left: 0, right: 0, display: "flex", justifyContent: "center", gap: 6 }}>
+        {photos.map((_, i) => (
+          <button key={i} onClick={() => goTo(i)}
+            style={{ width: i === idx ? 18 : 6, height: 6, borderRadius: 3, background: i === idx ? "#C9AA71" : "rgba(255,255,255,.55)", border: "none", cursor: "pointer", padding: 0, transition: "all .3s" }} />
+        ))}
+      </div>
+
+      {/* Side arrows — appear on hover via CSS */}
+      {photos.length > 1 && ["◀","▶"].map((ch, d) => (
+        <button key={d}
+          onClick={() => goTo((idx + (d === 0 ? -1 : 1) + photos.length) % photos.length)}
+          style={{ position: "absolute", top: "50%", [d === 0 ? "left" : "right"]: 10, transform: "translateY(-50%)", background: "rgba(0,0,0,.38)", backdropFilter: "blur(4px)", border: "none", color: "#fff", fontSize: 14, width: 32, height: 32, borderRadius: "50%", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}>
+          {ch}
+        </button>
+      ))}
+
+      {/* Counter badge */}
+      <div style={{ position: "absolute", top: 12, right: 12, background: "rgba(0,0,0,.45)", backdropFilter: "blur(4px)", color: "#C9AA71", fontSize: "0.62rem", fontWeight: 800, padding: "3px 9px", borderRadius: 20 }}>
+        {idx + 1}/{photos.length}
+      </div>
+    </div>
+  );
+}
+
 function TemaCardContent({ tema, setTemaSlug }) {
   return (
     <>
@@ -9585,8 +9742,8 @@ function TemaRumahPage({ onWaOpen, temaSlug, setTemaSlug }) {
           transition: box-shadow .25s;
         }
         .tema-card-grid:hover { box-shadow: 0 8px 28px rgba(0,0,0,.08); }
-        .tema-card-img { overflow: hidden; min-height: 300px; }
-        .tema-card-img img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .4s; }
+        .tema-card-img { overflow: hidden; min-height: 340px; position: relative; }
+        .tema-card-img > div { width: 100%; height: 100%; min-height: 340px; }
         .tema-card-content { padding: 44px 46px; display: flex; flex-direction: column; justify-content: center; }
         .tema-cta-grid {
           background: linear-gradient(135deg,#1a2a2a 0%,#2E3D3F 52%,#3D5254 100%);
@@ -9637,10 +9794,7 @@ function TemaRumahPage({ onWaOpen, temaSlug, setTemaSlug }) {
           const isEven = idx % 2 === 0;
           const imgEl = (
             <div className="tema-card-img">
-              <img src={tema.img} alt={tema.nama}
-                onError={e => e.target.style.display = "none"}
-                onMouseEnter={e => e.target.style.transform = "scale(1.04)"}
-                onMouseLeave={e => e.target.style.transform = ""} />
+              <TemaPhotoSlideshow slug={tema.slug} nama={tema.nama} />
             </div>
           );
           const contentEl = (
@@ -9822,244 +9976,325 @@ function AluminiumPage({ onWaOpen }) {
   />;
 }
 
-/* ─────────────── LANDSCAPE SLIDESHOW SECTION ─────────────── */
-function LandscapeCategorySection({ categoryKey, data, onWaOpen }) {
-  const [slideIdx, setSlideIdx] = useState(0);
+/* ── Page: Landscape & Taman ── */
+const LANDSCAPE_CATEGORIES = [
+  {
+    id: "taman-depan",
+    icon: "🌿",
+    title: "Contoh Desain Taman Depan",
+    desc: "Kesan pertama hunian Anda dimulai dari taman depan. Kami menghadirkan desain teras dan taman depan yang memukau — dari gaya minimalis modern hingga tropis nan asri.",
+    startFrom: 4500000,
+    satuan: "paket",
+    slides: [
+      { img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80", tema: "Minimalis Modern", desc: "Taman depan bersih dengan jalur batu andesit, tanaman hias rendah, dan lampu sorot tersembunyi. Cocok untuk rumah bergaya kontemporer." },
+      { img: "https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=800&q=80", tema: "Tropis Resort", desc: "Nuansa villa tropis di depan rumah — palm mini, heliconia, dan kerikil putih menciptakan ambiance resort yang mewah." },
+      { img: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&q=80", tema: "Japanese Zen", desc: "Taman gaya Jepang dengan batu stepping, lumut hijau, bambu, dan air mengalir. Tenang dan meditatif setiap hari." },
+      { img: "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=800&q=80", tema: "Teras Santai Bohemian", desc: "Area teras dengan pergola rotan, tanaman merambat, dan kursi outdoor. Tempat bersantai paling favorit di sore hari." },
+      { img: "https://images.unsplash.com/photo-1524758631624-e2822e304c36?w=800&q=80", tema: "Klasik Eropa", desc: "Simetri elegan khas taman Eropa — pagar hidup teratur, pot bunga warna-warni, dan jalur batu bata merah yang menawan." },
+      { img: "https://images.unsplash.com/photo-1563911302283-d2bc129e7570?w=800&q=80", tema: "Modern Industrial", desc: "Konsep industrial dengan raised planter box besi cor, tanaman sukulen, dan pencahayaan warm-white di malam hari." },
+    ]
+  },
+  {
+    id: "taman-belakang",
+    icon: "🏡",
+    title: "Contoh Desain Taman Belakang",
+    desc: "Halaman belakang adalah surga pribadi Anda. Kami mengubahnya menjadi oasis relaksasi — area bermain anak, ruang makan outdoor, hingga taman sayur organik.",
+    startFrom: 7500000,
+    satuan: "paket",
+    slides: [
+      { img: "https://images.unsplash.com/photo-1600210492493-0946911123ea?w=800&q=80", tema: "Outdoor Living Room", desc: "Ruang keluarga terbuka di taman belakang — sofa outdoor, pergola kayu, dan area BBQ. Sempurna untuk berkumpul keluarga." },
+      { img: "https://images.unsplash.com/photo-1558905586-b022cc14d2b3?w=800&q=80", tema: "Tropical Oasis", desc: "Lebatnya tanaman tropis menciptakan privasi alami. Kolam mini, deck kayu, dan hammock — liburan tanpa pergi jauh." },
+      { img: "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=800&q=80", tema: "Minimalis Elegan", desc: "Rumput hijau terawat, border batu, dan stepping stone. Desain simpel yang tidak memerlukan perawatan intensif." },
+      { img: "https://images.unsplash.com/photo-1592595896551-12b371d546d5?w=800&q=80", tema: "Taman Bermain Keluarga", desc: "Zona bermain anak yang aman dengan rumput sintetis lembut, ayunan, dan area sandbox. Dikombinasikan taman orang tua." },
+      { img: "https://images.unsplash.com/photo-1523301343968-6a6ebf63c672?w=800&q=80", tema: "Mediterania", desc: "Inspiraasi taman Mediterania — lavender, rosemary, batu koral, dan pergola besi tempa. Romantis dan wangi sepanjang hari." },
+      { img: "https://images.unsplash.com/photo-1585771724684-38269d6639fd?w=800&q=80", tema: "Taman Sayur Organik", desc: "Raised bed box kayu untuk sayur dan herba organik. Estetis sekaligus produktif — petik langsung dari taman rumah." },
+    ]
+  },
+  {
+    id: "rooftop",
+    icon: "🏙️",
+    title: "Contoh Desain Roof Top Garden",
+    desc: "Manfaatkan atap dak Anda menjadi taman rooftop yang spektakuler. Kami merancang taman atap yang ringan, tahan angin, dan memiliki sistem drainase sempurna.",
+    startFrom: 12000000,
+    satuan: "paket",
+    slides: [
+      { img: "https://images.unsplash.com/photo-1567016432779-094069958ea5?w=800&q=80", tema: "Sky Lounge Garden", desc: "Lounge eksklusif di atap dengan sofa outdoor premium, tanaman dalam pot besar, dan pencahayaan ambiance malam hari." },
+      { img: "https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=800&q=80", tema: "Minimalis Urban", desc: "Desain bersih untuk rooftop kota — deck composite, tanaman pot rendah, dan railing kaca untuk view kota yang maksimal." },
+      { img: "https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?w=800&q=80", tema: "Tropical Rooftop", desc: "Suasana resort di atas gedung. Tanaman tropis tinggi sebagai windbreak alami, hammock, dan area santai yang teduh." },
+      { img: "https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=800&q=80", tema: "Rooftop Dining", desc: "Area makan outdoor di atap dengan meja kayu solid, lampu gantung vintage, dan taman herba aromatik di sekelilingnya." },
+      { img: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&q=80", tema: "Green Roof Modern", desc: "Atap hijau dengan sistem tanam modular ringan. Menurunkan suhu bangunan sekaligus menciptakan estetika hijau dari bawah." },
+      { img: "https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?w=800&q=80", tema: "Zen Rooftop", desc: "Keheningan di atas ketinggian. Kerikil zen, tanaman bonsai, dan bangku meditasi — meditasi pagi yang mewah setiap hari." },
+    ]
+  },
+  {
+    id: "vertical-garden",
+    icon: "🌺",
+    title: "Contoh Desain Vertical Garden",
+    desc: "Solusi taman untuk ruang terbatas. Dinding hijau vertikal kami hadir sebagai statement piece yang hidup — menyejukkan, memperindah, dan meningkatkan kualitas udara.",
+    startFrom: 2800000,
+    satuan: "m²",
+    slides: [
+      { img: "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=800&q=80", tema: "Living Wall Interior", desc: "Dinding hidup di dalam ruangan — sistem irigasi otomatis tersembunyi, media tanam hidroponik, dan pilihan 30+ jenis tanaman hias." },
+      { img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80", tema: "Facade Vertical Garden", desc: "Tampak depan rumah yang memukau dengan vertical garden fasad. Tanaman tahan UV dan cuaca, perawatan minimal." },
+      { img: "https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=800&q=80", tema: "Herb Wall Kitchen", desc: "Dinding herba aromatik di area dapur — basil, mint, rosemary, thyme. Segar, wangi, dan bisa dipetik kapan saja." },
+      { img: "https://images.unsplash.com/photo-1524758631624-e2822e304c36?w=800&q=80", tema: "Office Green Wall", desc: "Vertical garden di area kerja atau lobby kantor. Terbukti meningkatkan produktivitas dan mengurangi stres karyawan." },
+      { img: "https://images.unsplash.com/photo-1600210492493-0946911123ea?w=800&q=80", tema: "Tropical Statement Wall", desc: "Komposisi tanaman tropis dramatis — monstera, philodendron, dan pakis raksasa. Bold dan instagrammable." },
+      { img: "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=800&q=80", tema: "Minimalis Moss Wall", desc: "Dinding lumut hijau yang tidak membutuhkan air — ideal untuk indoor tanpa sinar langsung. Estetis dan zero maintenance." },
+    ]
+  },
+  {
+    id: "kolam-hias",
+    icon: "💧",
+    title: "Contoh Desain Kolam Hias & Air Mancur",
+    desc: "Suara gemericik air adalah musik alami paling menenangkan. Kolam hias dan air mancur kami dirancang untuk keindahan visual sekaligus menciptakan mikroklimat yang sejuk.",
+    startFrom: 8000000,
+    satuan: "paket",
+    slides: [
+      { img: "https://images.unsplash.com/photo-1523301343968-6a6ebf63c672?w=800&q=80", tema: "Kolam Koi Jepang", desc: "Kolam koi bergaya Jepang lengkap dengan filter biologis, batu suiseki, jembatan mini kayu, dan ikan koi pilihan warna-warni." },
+      { img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80", tema: "Waterfall Minimalis", desc: "Air terjun dinding batu alam yang elegan. Suara gemericik konstan menciptakan ambiance premium di halaman rumah Anda." },
+      { img: "https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=800&q=80", tema: "Fountain Klasik", desc: "Air mancur tengah taman bergaya klasik Eropa — patung lion head, mangkuk bertingkat, dan pencahayaan bawah air berwarna." },
+      { img: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&q=80", tema: "Kolam Renang Natural", desc: "Natural pool dengan border batu andesit, filter tanaman, dan waterfall tepi — kolam yang menyatu sempurna dengan taman." },
+      { img: "https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=800&q=80", tema: "Air Mancur Modern", desc: "Instalasi air mancur geometris modern dari stainless steel. Jet air presisi dengan sistem kontrol otomatis dan LED underwater." },
+      { img: "https://images.unsplash.com/photo-1592595896551-12b371d546d5?w=800&q=80", tema: "Kolam Teratai", desc: "Kolam dangkal dengan teratai dan eceng gondok — habitat alami yang juga berfungsi sebagai biofilter alami yang indah." },
+    ]
+  },
+  {
+    id: "lampu-taman",
+    icon: "💡",
+    title: "Contoh Desain Lampu Taman & Outdoor Lighting",
+    desc: "Taman yang indah di siang hari harus tetap memukau di malam hari. Sistem pencahayaan outdoor kami mengubah taman menjadi panggung cahaya yang dramatis dan romantis.",
+    startFrom: 1500000,
+    satuan: "paket",
+    slides: [
+      { img: "https://images.unsplash.com/photo-1558905586-b022cc14d2b3?w=800&q=80", tema: "Fairy Light Garden", desc: "Ribuan lampu kabel tembaga menyelimuti pepohonan dan pergola — menciptakan suasana magis seperti bintang di taman Anda." },
+      { img: "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=800&q=80", tema: "Uplighting Dramatic", desc: "Lampu sorot LED dari bawah yang menyinari pohon dan dinding — efek dramatis yang menonjolkan tekstur dan bentuk tanaman." },
+      { img: "https://images.unsplash.com/photo-1563911302283-d2bc129e7570?w=800&q=80", tema: "Solar Path Lighting", desc: "Lampu jalur solar-powered di sepanjang stepping stone. Otomatis menyala saat gelap — hemat energi dan instalasi mudah." },
+      { img: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&q=80", tema: "Lantern Taman Klasik", desc: "Lentera besi tempa bergaya klasik sebagai focal point taman. Tersedia dalam versi gas, listrik, dan solar." },
+      { img: "https://images.unsplash.com/photo-1524758631624-e2822e304c36?w=800&q=80", tema: "LED Underwater Kolam", desc: "Pencahayaan dalam air berwarna RGB untuk kolam hias dan air mancur. Efek spektakuler dengan kendali remote atau smartphone." },
+      { img: "https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=800&q=80", tema: "String Light Pergola", desc: "Lampu bohlam vintage di atas pergola outdoor — ambiance bistro Eropa untuk area makan terbuka Anda." },
+    ]
+  },
+];
+
+const ELEMEN_PREMIUM = [
+  { icon: "🪨", title: "Batu Alam & Kerikil", desc: "Batu andesit, batu candi, kerikil warna — untuk jalur taman, dinding, dan aksen dekoratif.", img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&q=80" },
+  { icon: "🌳", title: "Tanaman Pilihan Premium", desc: "Seleksi tanaman sesuai iklim lokal — tahan panas, mudah dirawat, dan bernilai estetis tinggi.", img: "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=400&q=80" },
+  { icon: "🏗️", title: "Pergola & Gazebo", desc: "Struktur atap taman dari kayu ulin atau besi untuk area duduk yang nyaman di luar ruangan.", img: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=400&q=80" },
+  { icon: "🌺", title: "Tanaman Hias Eksotis", desc: "Koleksi tanaman hias langka dan eksotis — heliconia, bromelia, monstera deliciosa, agave.", img: "https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=400&q=80" },
+  { icon: "🪵", title: "Deck & Paving Custom", desc: "Decking kayu ulin, composite, atau batu paving motif custom untuk area duduk dan jalur taman.", img: "https://images.unsplash.com/photo-1558905586-b022cc14d2b3?w=400&q=80" },
+  { icon: "🦋", title: "Dekorasi & Aksesoris", desc: "Patung taman, pot artisanal, windchime, dan elemen dekorasi outdoor untuk sentuhan personal.", img: "https://images.unsplash.com/photo-1524758631624-e2822e304c36?w=400&q=80" },
+];
+
+/* ── Mini Slideshow untuk tiap cell magazine grid ── */
+function LsMiniSlide({ slides, height = "100%" }) {
+  const [idx, setIdx] = useState(0);
   const timerRef = useRef(null);
-
-  // Pull config from data.content, with fallbacks
-  const cfg = data.content?.landscapeCategories?.[categoryKey] || {};
-
-  const title    = cfg.title    || "";
-  const subtitle = cfg.subtitle || "";
-  const desc     = cfg.desc     || "";
-  const startFrom= cfg.startFrom|| "";
-  const icon     = cfg.icon     || "🌿";
-  const accent   = cfg.accent   || "#1a472a";
-
-  // 6 slides per category
-  const slides = Array.from({ length: 6 }, (_, i) => ({
-    img:   cfg[`slide${i}_img`]  || "",
-    title: cfg[`slide${i}_title`]|| `Contoh Design ${i+1}`,
-    desc:  cfg[`slide${i}_desc`] || "",
-  }));
-
-  const validSlides = slides.filter(s => s.img || s.title);
-  const total = validSlides.length || 1;
-
-  useEffect(() => {
-    timerRef.current = setInterval(() => {
-      setSlideIdx(prev => (prev + 1) % total);
-    }, 3500);
-    return () => clearInterval(timerRef.current);
-  }, [total]);
-
-  const goTo = (i) => {
+  const startTimer = useCallback(() => {
     clearInterval(timerRef.current);
-    setSlideIdx(i);
-    timerRef.current = setInterval(() => setSlideIdx(prev => (prev + 1) % total), 3500);
-  };
-
-  const cur = validSlides[slideIdx] || slides[0];
-
+    timerRef.current = setInterval(() => setIdx(p => (p + 1) % slides.length), 3800 + Math.random() * 1200);
+  }, [slides.length]);
+  useEffect(() => { startTimer(); return () => clearInterval(timerRef.current); }, [startTimer]);
+  const go = (d) => { setIdx(p => (p + d + slides.length) % slides.length); startTimer(); };
+  const sl = slides[idx];
   return (
-    <div style={{ marginBottom: 60 }}>
-      {/* Section Header */}
-      <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 22 }}>
-        <div style={{ width: 4, height: 44, background: `linear-gradient(180deg,${accent},${accent}99)`, borderRadius: 4, flexShrink: 0 }} />
-        <div>
-          <div style={{ fontSize: "0.68rem", letterSpacing: ".14em", textTransform: "uppercase", color: accent, fontWeight: 700, marginBottom: 4 }}>{icon} Contoh Design {title}</div>
-          <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: "clamp(1.2rem,2.8vw,1.65rem)", fontWeight: 900, color: "#2E3D3F", lineHeight: 1.2 }}>{title}</h2>
-          {subtitle && <p style={{ fontSize: "0.85rem", color: "#5A6A6C", marginTop: 4 }}>{subtitle}</p>}
-        </div>
+    <div style={{ position: "relative", width: "100%", height, overflow: "hidden" }}>
+      <style>{`@keyframes lmFade{from{opacity:0;transform:scale(1.05)}to{opacity:1;transform:scale(1)}}`}</style>
+      <img key={idx} src={sl.img} alt={sl.tema}
+        style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", animation: "lmFade .55s ease" }}
+        onError={e => { e.target.style.display = "none"; }} />
+      {/* Gradient overlay */}
+      <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(0,0,0,.78) 0%, rgba(0,0,0,.05) 55%, transparent 100%)", pointerEvents: "none" }} />
+      {/* Info bottom */}
+      <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, padding: "16px 14px 14px" }}>
+        <div style={{ fontSize: "0.6rem", fontWeight: 800, letterSpacing: ".1em", textTransform: "uppercase", color: "#C9AA71", marginBottom: 3 }}>{sl.tema}</div>
+        <p style={{ fontSize: "0.72rem", color: "rgba(255,255,255,.88)", lineHeight: 1.5, margin: 0, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>{sl.desc}</p>
       </div>
-
-      {/* Slideshow */}
-      <div style={{ background: "#fff", borderRadius: 16, overflow: "hidden", boxShadow: "0 4px 24px rgba(0,0,0,.1)", display: "flex", flexDirection: "column" }}>
-        {/* Image area */}
-        <div style={{ position: "relative", paddingTop: "52%", background: "#f0f4f0", overflow: "hidden" }}>
-          {cur.img ? (
-            <img src={cur.img} alt={cur.title}
-              style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", transition: "opacity .4s" }}
-              onError={e => { e.target.style.display = "none"; }} />
-          ) : (
-            <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column", gap: 8, color: "#a0b0a0" }}>
-              <span style={{ fontSize: 48 }}>🌿</span>
-              <span style={{ fontSize: 13, fontWeight: 600 }}>Tambahkan foto di Control Panel</span>
-            </div>
-          )}
-          {/* Slide counter badge */}
-          <div style={{ position: "absolute", top: 14, right: 14, background: "rgba(0,0,0,.52)", color: "#fff", borderRadius: 20, padding: "4px 12px", fontSize: 12, fontWeight: 700 }}>
-            {slideIdx + 1} / {total}
-          </div>
-          {/* Nav arrows */}
-          {total > 1 && (
-            <>
-              <button onClick={() => goTo((slideIdx - 1 + total) % total)}
-                style={{ position: "absolute", left: 10, top: "50%", transform: "translateY(-50%)", background: "rgba(0,0,0,.42)", color: "#fff", border: "none", borderRadius: "50%", width: 36, height: 36, fontSize: 18, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}>‹</button>
-              <button onClick={() => goTo((slideIdx + 1) % total)}
-                style={{ position: "absolute", right: 10, top: "50%", transform: "translateY(-50%)", background: "rgba(0,0,0,.42)", color: "#fff", border: "none", borderRadius: "50%", width: 36, height: 36, fontSize: 18, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}>›</button>
-            </>
-          )}
-        </div>
-
-        {/* Slide info */}
-        <div style={{ padding: "20px 24px 10px" }}>
-          <h3 style={{ fontSize: "1rem", fontWeight: 700, color: "#2E3D3F", marginBottom: 6 }}>{cur.title}</h3>
-          {cur.desc && <p style={{ fontSize: "0.875rem", color: "#5A6A6C", lineHeight: 1.65, marginBottom: 10 }}>{cur.desc}</p>}
-        </div>
-
-        {/* Dot nav */}
-        {total > 1 && (
-          <div style={{ display: "flex", gap: 6, padding: "0 24px 14px", justifyContent: "center" }}>
-            {Array.from({ length: total }).map((_, i) => (
-              <button key={i} onClick={() => goTo(i)}
-                style={{ width: i === slideIdx ? 22 : 8, height: 8, borderRadius: 4, background: i === slideIdx ? accent : "#D4C4A0", border: "none", cursor: "pointer", transition: "all .2s", padding: 0 }} />
-            ))}
-          </div>
-        )}
-
-        {/* Price + CTA */}
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "14px 24px 22px", borderTop: "1px solid #f0f0f0", flexWrap: "wrap", gap: 12 }}>
-          <div>
-            {desc && <p style={{ fontSize: "0.8rem", color: "#5A6A6C", marginBottom: 6, maxWidth: 400 }}>{desc}</p>}
-            {startFrom && (
-              <div style={{ display: "flex", alignItems: "baseline", gap: 6 }}>
-                <span style={{ fontSize: "0.75rem", color: "#8B9A9C", fontWeight: 600 }}>Harga Start From :</span>
-                <span style={{ fontSize: "1.1rem", fontWeight: 900, color: accent, fontFamily: "'Playfair Display',serif" }}>{startFrom}</span>
-              </div>
-            )}
-          </div>
-          <button onClick={() => onWaOpen && onWaOpen({ key: "layanan", vars: { judul_layanan: title } })}
-            style={{ padding: "10px 22px", background: accent, color: "#fff", border: "none", borderRadius: 6, fontSize: "0.82rem", fontWeight: 700, cursor: "pointer", whiteSpace: "nowrap" }}>
-            Konsultasi Gratis →
-          </button>
-        </div>
+      {/* Counter */}
+      <div style={{ position: "absolute", top: 10, right: 10, background: "rgba(0,0,0,.45)", backdropFilter: "blur(4px)", color: "#C9AA71", fontSize: "0.58rem", fontWeight: 800, padding: "2px 8px", borderRadius: 20 }}>{idx + 1}/{slides.length}</div>
+      {/* Arrows */}
+      {slides.length > 1 && [["◀", -1], ["▶", 1]].map(([ch, d], i) => (
+        <button key={i} onClick={() => go(d)}
+          style={{ position: "absolute", top: "50%", [i === 0 ? "left" : "right"]: 8, transform: "translateY(-50%)", background: "rgba(0,0,0,.35)", backdropFilter: "blur(4px)", border: "none", color: "#fff", fontSize: 12, width: 28, height: 28, borderRadius: "50%", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 2 }}>{ch}</button>
+      ))}
+      {/* Dots */}
+      <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, display: "flex", justifyContent: "center", gap: 4, paddingBottom: 6 }}>
+        {slides.map((_, i) => (
+          <div key={i} onClick={() => { setIdx(i); startTimer(); }}
+            style={{ width: i === idx ? 14 : 5, height: 5, borderRadius: 3, background: i === idx ? "#C9AA71" : "rgba(255,255,255,.4)", cursor: "pointer", transition: "all .3s" }} />
+        ))}
       </div>
     </div>
   );
 }
 
-/* ── Page: Landscape & Taman ── */
-function LandscapePage({ data, onWaOpen }) {
-  const c = data?.content || {};
-  const heroColor = "linear-gradient(135deg,#1a472a 0%,#2d6a4f 50%,#40916c 100%)";
-  const waText = { key: "layanan", vars: { judul_layanan: "Landscape & Taman" } };
+/* ── Magazine Row Patterns ── */
+// Pattern: array of column counts per row, cycling
+const MAG_PATTERNS = [
+  [1], [3], [2], [1], [2], [3], [1], [2],
+];
 
-  // Landscape categories
-  const CATEGORIES = [
-    { key: "tamanDepan",   icon: "🏡", accent: "#2d6a4f", defaultTitle: "Taman Depan" },
-    { key: "tamanBelakang",icon: "🌳", accent: "#1a472a", defaultTitle: "Taman Belakang" },
-    { key: "rooftop",      icon: "🏙️", accent: "#2c5282", defaultTitle: "Roof Top" },
-    { key: "verticalGarden",icon:"🌿", accent: "#276749", defaultTitle: "Vertical Garden" },
-    { key: "kolamHias",   icon: "💧", accent: "#0e7490", defaultTitle: "Kolam Hias & Air Mancur" },
-    { key: "lampuTaman",  icon: "💡", accent: "#b45309", defaultTitle: "Lampu Taman Outdoor Lighting" },
-  ];
+function LandscapePage({ onWaOpen }) {
+  useEffect(() => { window.scrollTo(0, 0); }, []);
+  const fmt = (n) => "Rp " + n.toLocaleString("id-ID") + ",-";
 
-  // Elemen Premium (with images from data.content)
-  const elemenPremium = [
-    { key: "elemenBatu",  icon: "🪨", defaultTitle: "Batu Alam & Kerikil", defaultDesc: "Batu andesit, batu candi, kerikil warna — untuk jalur taman, dinding, dan aksen dekoratif." },
-    { key: "elemenTanaman",icon:"🌳", defaultTitle: "Tanaman Pilihan",      defaultDesc: "Seleksi tanaman sesuai iklim lokal — tahan panas, mudah dirawat, dan bernilai estetis tinggi." },
-    { key: "elemenPergola",icon:"🏗️",defaultTitle: "Pergola & Gazebo",     defaultDesc: "Struktur atap taman dari kayu atau besi untuk area duduk yang nyaman di luar ruangan." },
-  ];
+  // Flatten all slides dari semua kategori → magazine cells
+  const allCells = LANDSCAPE_CATEGORIES.flatMap(cat =>
+    cat.slides.map(slide => ({ ...slide, catId: cat.id, catTitle: cat.title, catIcon: cat.icon, catStart: cat.startFrom, catSatuan: cat.satuan, catSlides: cat.slides }))
+  );
+
+  // Susun ke rows berdasar MAG_PATTERNS
+  const rows = [];
+  let pos = 0;
+  let patIdx = 0;
+  while (pos < allCells.length) {
+    const cols = MAG_PATTERNS[patIdx % MAG_PATTERNS.length];
+    const rowCells = allCells.slice(pos, pos + cols);
+    if (rowCells.length > 0) rows.push({ cols: rowCells.length, cells: rowCells });
+    pos += cols;
+    patIdx++;
+  }
+
+  // Cell heights berdasar kolom count
+  const heightMap = { 1: 480, 2: 380, 3: 300 };
 
   return (
-    <div style={{ paddingTop: 72, minHeight: "100vh", background: "#f8fbfd" }}>
-      {/* Hero Banner */}
-      <div style={{ background: heroColor, padding: "64px 5% 56px", textAlign: "center", position: "relative", overflow: "hidden" }}>
-        <div style={{ position: "absolute", inset: 0, opacity: 0.08, backgroundImage: "radial-gradient(circle at 20% 50%, #fff 0%, transparent 50%), radial-gradient(circle at 80% 20%, #fff 0%, transparent 40%)" }} />
-        <div style={{ position: "relative", zIndex: 1, maxWidth: 800, margin: "0 auto" }}>
-          <div style={{ fontSize: "3.5rem", marginBottom: 16 }}>🌳</div>
-          <h1 style={{ fontFamily: "'Playfair Display',serif", fontSize: "clamp(1.8rem,4vw,3rem)", fontWeight: 900, color: "#fff", marginBottom: 16, lineHeight: 1.2 }}>
-            {c.landscapeTitle || "Landscape & Taman"}
-          </h1>
-          <p style={{ fontSize: "clamp(0.9rem,2vw,1.1rem)", color: "rgba(255,255,255,.85)", lineHeight: 1.7, maxWidth: 600, margin: "0 auto 28px" }}>
-            {c.landscapeSub || "Ciptakan taman impian yang asri, hijau, dan menenangkan. Kami menghadirkan desain landscape profesional untuk hunian, perumahan, maupun area komersial."}
+    <div style={{ background: "#0d1f18", minHeight: "100vh" }}>
+      <style>{`
+        @keyframes lmFade{from{opacity:0;transform:scale(1.05)}to{opacity:1;transform:scale(1)}}
+        .ls-mag-cell { position:relative; overflow:hidden; cursor:pointer; }
+        .ls-mag-cell:hover .ls-mag-overlay-btn { opacity:1 !important; }
+        .ls-cat-header { position:absolute; top:12px; left:12px; z-index:3; display:flex; align-items:center; gap:7px; }
+        .ls-price-pill { position:absolute; top:12px; right:12px; z-index:3; background:rgba(201,170,113,.92); backdrop-filter:blur(6px); color:#1a2a1a; font-size:.6rem; font-weight:900; letter-spacing:.06em; padding:4px 10px; border-radius:20px; text-transform:uppercase; }
+        .ls-mag-overlay-btn { opacity:0; transition:opacity .3s; position:absolute; bottom:70px; right:12px; z-index:4; }
+      `}</style>
+
+      {/* ── HERO ── */}
+      <div style={{ background: "linear-gradient(135deg,#0d2b1a 0%,#1a472a 60%,#2d6a4f 100%)", padding: "64px 5% 56px", textAlign: "center", position: "relative", overflow: "hidden" }}>
+        <div style={{ position: "absolute", inset: 0, opacity: 0.07, backgroundImage: "radial-gradient(circle,#fff 1px,transparent 1px)", backgroundSize: "36px 36px", pointerEvents: "none" }} />
+        <div style={{ position: "relative", zIndex: 1, maxWidth: 680, margin: "0 auto" }}>
+          <div style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "rgba(255,255,255,.1)", borderRadius: 20, padding: "5px 16px", marginBottom: 18 }}>
+            <span style={{ fontSize: "0.65rem", fontWeight: 800, letterSpacing: ".16em", textTransform: "uppercase", color: "#A8D5B5" }}>VASTURA GROUP · LANDSCAPE</span>
+          </div>
+          <div style={{ fontSize: "clamp(2rem,7vw,3.5rem)", marginBottom: 10 }}>🌳</div>
+          <h1 style={{ fontFamily: "'Playfair Display',serif", fontSize: "clamp(1.75rem,5vw,2.75rem)", fontWeight: 900, color: "#fff", margin: "0 0 14px", lineHeight: 1.2 }}>Landscape & Taman</h1>
+          <p style={{ fontSize: "clamp(.875rem,2vw,1rem)", color: "rgba(255,255,255,.75)", lineHeight: 1.8, margin: "0 0 26px" }}>
+            Dari taman depan hingga rooftop garden — kami wujudkan setiap sudut hijau impian Anda.
           </p>
-          <button onClick={() => onWaOpen && onWaOpen(waText)}
-            style={{ padding: "13px 32px", background: "#e8a020", color: "#fff", border: "none", borderRadius: 4, fontSize: "0.875rem", fontWeight: 800, letterSpacing: ".1em", textTransform: "uppercase", cursor: "pointer", boxShadow: "0 4px 20px rgba(0,0,0,.25)" }}>
-            Konsultasi Gratis →
-          </button>
+          <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
+            {LANDSCAPE_CATEGORIES.map(cat => (
+              <span key={cat.id} style={{ background: "rgba(255,255,255,.1)", color: "rgba(255,255,255,.85)", fontSize: "0.7rem", fontWeight: 700, padding: "5px 14px", borderRadius: 20, border: "1px solid rgba(255,255,255,.15)" }}>
+                {cat.icon} {cat.title.replace("Contoh Desain ", "")}
+              </span>
+            ))}
+          </div>
         </div>
       </div>
 
-      {/* Category Slideshows */}
-      <div style={{ maxWidth: 1100, margin: "0 auto", padding: "56px 5%" }}>
-        {CATEGORIES.map(cat => {
-          // Inject default title & icon if not set in data
-          const catData = {
-            ...data,
-            content: {
-              ...c,
-              landscapeCategories: {
-                ...(c.landscapeCategories || {}),
-                [cat.key]: {
-                  icon: cat.icon,
-                  accent: cat.accent,
-                  title: cat.defaultTitle,
-                  ...(c.landscapeCategories?.[cat.key] || {}),
-                  // Ensure title fallback
-                  title: c.landscapeCategories?.[cat.key]?.title || cat.defaultTitle,
-                }
-              }
-            }
-          };
-          return (
-            <LandscapeCategorySection
-              key={cat.key}
-              categoryKey={cat.key}
-              data={catData}
-              onWaOpen={onWaOpen}
-            />
-          );
-        })}
-
-        {/* Elemen Taman Premium */}
-        <div style={{ marginBottom: 56 }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 28 }}>
-            <div style={{ width: 4, height: 40, background: "linear-gradient(180deg,#8B6914,#B8962A)", borderRadius: 4, flexShrink: 0 }} />
-            <div>
-              <div style={{ fontSize: "0.7rem", letterSpacing: ".14em", textTransform: "uppercase", color: "#8B6914", fontWeight: 700, marginBottom: 4 }}>Material & Elemen</div>
-              <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: "clamp(1.25rem,3vw,1.75rem)", fontWeight: 900, color: "#2E3D3F", lineHeight: 1.25 }}>Elemen Taman Premium</h2>
-            </div>
-          </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(280px,1fr))", gap: 20 }}>
-            {elemenPremium.map((el) => {
-              const elCfg = c.landscapeElemen?.[el.key] || {};
-              const elImg = elCfg.img || "";
+      {/* ── MAGAZINE GRID ── */}
+      <div style={{ padding: "0" }}>
+        {rows.map((row, ri) => (
+          <div key={ri} style={{ display: "grid", gridTemplateColumns: `repeat(${row.cols}, 1fr)`, gap: 3 }}>
+            {row.cells.map((cell, ci) => {
+              const h = heightMap[row.cols] || 320;
               return (
-                <div key={el.key} style={{ background: "#fff", borderRadius: 14, overflow: "hidden", boxShadow: "0 2px 14px rgba(0,0,0,.07)", border: "1px solid #e8f4fb", transition: "transform .2s, box-shadow .2s" }}
-                  onMouseEnter={e => { e.currentTarget.style.transform="translateY(-4px)"; e.currentTarget.style.boxShadow="0 8px 28px rgba(8,145,178,.18)"; }}
-                  onMouseLeave={e => { e.currentTarget.style.transform="none"; e.currentTarget.style.boxShadow="0 2px 14px rgba(0,0,0,.07)"; }}>
-                  {/* Image */}
-                  <div style={{ position: "relative", paddingTop: "56%", background: "#f0f4f0", overflow: "hidden" }}>
-                    {elImg ? (
-                      <img src={elImg} alt={elCfg.title || el.defaultTitle}
-                        style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }}
-                        onError={e => e.target.style.display="none"} />
-                    ) : (
-                      <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                        <span style={{ fontSize: 40 }}>{el.icon}</span>
-                      </div>
-                    )}
+                <div key={ci} className="ls-mag-cell" style={{ height: h }}>
+                  {/* Slideshow — pakai semua slides dari kategori yang sama */}
+                  <LsMiniSlide slides={cell.catSlides} height={`${h}px`} />
+
+                  {/* Kategori badge */}
+                  <div className="ls-cat-header">
+                    <div style={{ background: "rgba(13,31,24,.7)", backdropFilter: "blur(6px)", color: "#C9AA71", fontSize: "0.6rem", fontWeight: 800, letterSpacing: ".1em", textTransform: "uppercase", padding: "4px 10px", borderRadius: 20, display: "flex", alignItems: "center", gap: 5 }}>
+                      <span>{cell.catIcon}</span>{cell.catTitle.replace("Contoh Desain ", "")}
+                    </div>
                   </div>
-                  <div style={{ padding: "18px 20px 20px" }}>
-                    <h3 style={{ fontSize: "1rem", fontWeight: 700, color: "#2E3D3F", marginBottom: 8 }}>{elCfg.title || el.defaultTitle}</h3>
-                    <p style={{ fontSize: "0.875rem", color: "#5A6A6C", lineHeight: 1.65 }}>{elCfg.desc || el.defaultDesc}</p>
+
+                  {/* Harga pill */}
+                  <div className="ls-price-pill">
+                    Mulai {fmt(cell.catStart)}/{cell.catSatuan}
+                  </div>
+
+                  {/* CTA hover button */}
+                  <div className="ls-mag-overlay-btn">
+                    <button onClick={() => onWaOpen && onWaOpen({ key: "layanan", vars: { judul_layanan: cell.catTitle } })}
+                      style={{ background: "#C9AA71", color: "#1a2a1a", border: "none", borderRadius: 8, padding: "8px 16px", fontSize: "0.72rem", fontWeight: 800, cursor: "pointer", whiteSpace: "nowrap" }}>
+                      🌿 Tanya Harga
+                    </button>
                   </div>
                 </div>
               );
             })}
           </div>
-        </div>
+        ))}
+      </div>
 
-        {/* CTA Banner */}
-        <div style={{ background: "linear-gradient(130deg,#1a472a 0%,#2d6a4f 50%,#8B6914 100%)", borderRadius: 16, padding: "40px 40px", textAlign: "center", boxShadow: "0 8px 32px rgba(8,145,178,.25)" }}>
-          <h3 style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.6rem", fontWeight: 900, color: "#fff", marginBottom: 12 }}>Wujudkan Taman Impian Anda</h3>
-          <p style={{ color: "rgba(255,255,255,.85)", marginBottom: 24, fontSize: "0.95rem" }}>Konsultasikan kebutuhan taman Anda bersama tim ahli kami — gratis & tanpa komitmen.</p>
-          <button onClick={() => onWaOpen && onWaOpen(waText)}
-            style={{ padding: "13px 36px", background: "#e8a020", color: "#fff", border: "none", borderRadius: 4, fontSize: "0.875rem", fontWeight: 800, letterSpacing: ".1em", textTransform: "uppercase", cursor: "pointer" }}>
-            Hubungi Kami via WhatsApp
+      {/* ── LEGEND / KATEGORI SUMMARY ── */}
+      <div style={{ background: "#0d1f18", padding: "48px 5% 40px" }}>
+        <div style={{ maxWidth: 1280, margin: "0 auto" }}>
+          <div style={{ textAlign: "center", marginBottom: 36 }}>
+            <div style={{ fontSize: "0.65rem", fontWeight: 800, letterSpacing: ".14em", textTransform: "uppercase", color: "#40916c", marginBottom: 8 }}>Layanan Kami</div>
+            <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: "clamp(1.3rem,3.5vw,2rem)", fontWeight: 900, color: "#fff", margin: 0 }}>Semua Kategori Landscape</h2>
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(240px,1fr))", gap: 16 }}>
+            {LANDSCAPE_CATEGORIES.map(cat => (
+              <div key={cat.id} style={{ background: "rgba(255,255,255,.05)", border: "1px solid rgba(255,255,255,.1)", borderRadius: 14, padding: "20px 18px", transition: "background .2s" }}
+                onMouseEnter={e => e.currentTarget.style.background = "rgba(255,255,255,.09)"}
+                onMouseLeave={e => e.currentTarget.style.background = "rgba(255,255,255,.05)"}>
+                <div style={{ fontSize: 22, marginBottom: 10 }}>{cat.icon}</div>
+                <h3 style={{ fontSize: "0.875rem", fontWeight: 800, color: "#fff", margin: "0 0 6px", lineHeight: 1.3 }}>{cat.title.replace("Contoh Desain ", "")}</h3>
+                <p style={{ fontSize: "0.75rem", color: "rgba(255,255,255,.55)", lineHeight: 1.6, margin: "0 0 14px" }}>{cat.desc.split("—")[0].trim()}</p>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                  <span style={{ fontSize: "0.7rem", fontWeight: 800, color: "#C9AA71" }}>Mulai {fmt(cat.startFrom)}/{cat.satuan}</span>
+                  <button onClick={() => onWaOpen && onWaOpen({ key: "layanan", vars: { judul_layanan: cat.title } })}
+                    style={{ background: "transparent", border: "1px solid rgba(201,170,113,.5)", color: "#C9AA71", fontSize: "0.65rem", fontWeight: 700, padding: "4px 12px", borderRadius: 20, cursor: "pointer" }}>
+                    Detail →
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* ── ELEMEN TAMAN PREMIUM ── */}
+      <div style={{ background: "#fff", padding: "64px 5%", borderTop: "3px solid #1a472a" }}>
+        <div style={{ maxWidth: 1280, margin: "0 auto" }}>
+          <div style={{ textAlign: "center", marginBottom: 48 }}>
+            <div style={{ fontSize: "0.65rem", fontWeight: 800, letterSpacing: ".14em", textTransform: "uppercase", color: "#40916c", marginBottom: 8 }}>Material & Elemen</div>
+            <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: "clamp(1.5rem,4vw,2.25rem)", fontWeight: 900, color: "#2E3D3F", margin: "0 0 14px" }}>Elemen Taman Premium</h2>
+            <p style={{ fontSize: "0.9375rem", color: "#5A6A6C", maxWidth: 520, margin: "0 auto", lineHeight: 1.75 }}>Kami hanya menggunakan material terpilih untuk memastikan taman Anda indah, tahan lama, dan mudah dirawat.</p>
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(280px,1fr))", gap: 24 }}>
+            {ELEMEN_PREMIUM.map((el, i) => (
+              <div key={i} style={{ background: "#FAF7F0", borderRadius: 14, overflow: "hidden", border: "1px solid #E8DCC8", transition: "box-shadow .2s" }}
+                onMouseEnter={e => e.currentTarget.style.boxShadow = "0 8px 28px rgba(0,0,0,.1)"}
+                onMouseLeave={e => e.currentTarget.style.boxShadow = "none"}>
+                <div style={{ height: 160, overflow: "hidden", background: "#E8DCC8" }}>
+                  <img src={el.img} alt={el.title} loading="lazy"
+                    style={{ width: "100%", height: "100%", objectFit: "cover", transition: "transform .4s" }}
+                    onMouseEnter={e => e.target.style.transform = "scale(1.07)"}
+                    onMouseLeave={e => e.target.style.transform = "scale(1)"}
+                    onError={e => { e.target.parentElement.innerHTML = `<div style="height:100%;display:flex;align-items:center;justify-content:center;font-size:2rem">${el.icon}</div>`; }} />
+                </div>
+                <div style={{ padding: "18px 18px 20px" }}>
+                  <div style={{ fontSize: 20, marginBottom: 8 }}>{el.icon}</div>
+                  <h3 style={{ fontSize: "0.9375rem", fontWeight: 800, color: "#2E3D3F", margin: "0 0 8px" }}>{el.title}</h3>
+                  <p style={{ fontSize: "0.8125rem", color: "#5A6A6C", lineHeight: 1.65, margin: 0 }}>{el.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* ── CTA BOTTOM ── */}
+      <div style={{ padding: "60px 5%", textAlign: "center", background: "#0d1f18" }}>
+        <div style={{ maxWidth: 600, margin: "0 auto", background: "linear-gradient(135deg,#1a472a 0%,#2d6a4f 100%)", borderRadius: 20, padding: "48px 32px", color: "#fff" }}>
+          <div style={{ fontSize: "0.7rem", letterSpacing: ".14em", textTransform: "uppercase", color: "#A8D5B5", fontWeight: 700, marginBottom: 12 }}>Konsultasi Gratis</div>
+          <h3 style={{ fontFamily: "'Playfair Display',serif", fontSize: "clamp(1.25rem,3vw,1.75rem)", fontWeight: 900, margin: "0 0 12px" }}>Wujudkan Taman Impian Anda</h3>
+          <p style={{ color: "rgba(255,255,255,.75)", fontSize: "0.9rem", margin: "0 0 28px", lineHeight: 1.7 }}>Tim landscape kami siap membantu dari survei, desain, hingga pemasangan dan perawatan berkala.</p>
+          <button onClick={() => onWaOpen && onWaOpen({ key: "konsultasi", vars: {} })}
+            style={{ background: "#C9AA71", color: "#2E3D3F", border: "none", borderRadius: 10, padding: "15px 36px", fontSize: "0.95rem", fontWeight: 800, cursor: "pointer", letterSpacing: ".05em" }}>
+            🌳 Hubungi Tim Landscape Kami
           </button>
         </div>
       </div>
@@ -10327,7 +10562,7 @@ function MobileLayananAccordion({ page, navigateTo, setMobileMenu, navDropdownLa
   });
 
   const isLayananActive = [...topPages,
-    "interior/kamar-tidur","interior/kamar-mandi","interior/ruang-keluarga","interior/ruang-tamu","interior/kitchen-set","interior/ruang-kerja",
+    "interior/kamar-tidur","interior/kamar-mandi","interior/ruang-keluarga","interior/ruang-tamu","interior/kitchen-set","interior/ruang-kerja","interior/plafon-modern",
     "eksterior/pagar","eksterior/kanopi","eksterior/aluminium","eksterior/taman-landscape",
   ].some(k=>k===page);
 
@@ -10369,6 +10604,7 @@ function MobileLayananAccordion({ page, navigateTo, setMobileMenu, navDropdownLa
                 {key:"interior/ruang-tamu",     label:"🛋️ Ruang Tamu"},
                 {key:"interior/kitchen-set",    label:"🍳 Kitchen Set"},
                 {key:"interior/ruang-kerja",    label:"💼 Ruang Kerja"},
+                {key:"interior/plafon-modern",  label:"🏛️ Plafon Modern"},
               ].map(sub=>(
                 <button key={sub.key} onClick={()=>{ navigateTo(sub.key); setMobileMenu(false); setOpen(false); setSubOpen(null); }}
                   style={mBtn(page===sub.key, 2)}>
@@ -10407,12 +10643,13 @@ function MobileLayananAccordion({ page, navigateTo, setMobileMenu, navDropdownLa
 /* ═══════════════════════════════════════════════════════════════════
    SUB-PAGE CATALOG COMPONENT — dipakai oleh semua halaman baru
 ═══════════════════════════════════════════════════════════════════ */
-function SubPageCatalog({ heroColor, heroIcon, title, subtitle, breadcrumb, catalogData, onWaOpen, navigateTo }) {
+function SubPageCatalog({ heroColor, heroIcon, title, subtitle, breadcrumb, catalogData, onWaOpen, navigateTo, satuan }) {
   const [hoverId, setHoverId] = useState(null);
 
   const formatHarga = (n) => {
     if (!n || n === 0) return "Hubungi Kami";
-    return "Mulai Rp " + Number(n).toLocaleString("id-ID");
+    const suffix = satuan ? ` / ${satuan}` : "";
+    return "Mulai Rp " + Number(n).toLocaleString("id-ID") + suffix;
   };
 
   return (
@@ -10664,17 +10901,19 @@ const CATALOG_DATA = {
   },
   "interior/plafon-modern": {
     heroColor:"linear-gradient(135deg,#1a1a2e 0%,#16213e 50%,#0f3460 100%)",
-    heroIcon:"🏛️", title:"Plafon Modern", subtitle:"Desain plafon modern yang memperindah interior rumah — dari minimalis elegan hingga mewah artistik.",
+    heroIcon:"🏛️", title:"Plafon Modern", subtitle:"Transformasi langit-langit ruangan menjadi karya seni arsitektur — elegan, modern, dan bernilai premium.",
     breadcrumb:[{label:"Beranda",page:"home"},{label:"Interior",page:"interior"},{label:"Plafon Modern"}],
+    satuan:"m²",
     items:[
-      {id:"pf1", nama:"Plafon Minimalis Rata", style:"Minimalis", material:"Gypsum Board 9mm", desc:"Plafon polos bersih tanpa ornamen — cocok untuk ruangan modern minimalis yang mengutamakan keluasan visual.", harga:85000, fitur:["Anti Retak","Easy Paint","Clean Look"], img:"https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&q=80"},
-      {id:"pf2", nama:"Drop Ceiling / Coffered", style:"Klasik Mewah", material:"Gypsum + Rangka Metal", desc:"Plafon bertingkat dengan frame dekoratif. Memberikan dimensi dan kedalaman pada ruangan.", harga:145000, fitur:["Multi Level","Hidden Lamp","Premium Feel"], img:"https://images.unsplash.com/photo-1616594039964-ae9021a400a0?w=600&q=80"},
-      {id:"pf3", nama:"Plafon Cove Lighting", style:"Romantis", material:"Gypsum + LED Strip", desc:"Profil cekungan tersembunyi dengan lampu LED strip — menciptakan efek cahaya tidak langsung yang dramatis.", harga:175000, fitur:["Hidden LED","Ambient Glow","Custom Color"], img:"https://images.unsplash.com/photo-1567016432779-094069958ea5?w=600&q=80"},
-      {id:"pf4", nama:"Plafon PVC Motif", style:"Ekonomis Premium", material:"PVC Panel 8mm", desc:"Panel PVC motif kayu atau marmer. Tahan air, ringan, dan mudah dipasang — ideal untuk kamar mandi dan dapur.", harga:65000, fitur:["Tahan Air","Anti Jamur","Easy Install"], img:"https://images.unsplash.com/photo-1600566752355-35792bedcfea?w=600&q=80"},
-      {id:"pf5", nama:"Plafon Ekspos Industrial", style:"Industrial", material:"Beton + Cat Ekspos", desc:"Plafon beton ekspos atau besi IWF terlihat. Nuansa gudang modern yang kuat dan berkarakter.", harga:95000, fitur:["Exposed Look","Industrial Vibe","Durable"], img:"https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80"},
-      {id:"pf6", nama:"Plafon Akustik Panel", style:"Profesional", material:"Rockwool Panel + Gypsum", desc:"Solusi akustik untuk home theater, ruang kerja, dan studio rekaman. Meredam suara secara optimal.", harga:220000, fitur:["Sound Absorb","Noise Control","Studio Grade"], img:"https://images.unsplash.com/photo-1497366216548-37526070297c?w=600&q=80"},
-      {id:"pf7", nama:"Plafon Kayu Shiplap", style:"Natural Warm", material:"Kayu Pinus / Merbau", desc:"Papan kayu susun horizontal memberikan kehangatan alami. Cocok untuk ruang keluarga dan kamar tidur.", harga:185000, fitur:["Natural Wood","Warm Vibe","Durable"], img:"https://images.unsplash.com/photo-1600210492493-0946911123ea?w=600&q=80"},
-      {id:"pf8", nama:"Plafon Stretched Ceiling", style:"Futuristik", material:"Membran PVC Stretch", desc:"Membran PVC elastis yang direntangkan — finishing gloss atau matte, bisa backlit untuk tampilan futuristik.", harga:280000, fitur:["Backlit Option","Gloss/Matte","Waterproof"], img:"https://images.unsplash.com/photo-1560448204-603b3fc33ddc?w=600&q=80"},
+      {id:"pl1", nama:"Plafon Minimalis Rata", style:"Clean", material:"Gypsum Board 9mm", desc:"Plafon datar bersih tanpa ornamen. Cocok untuk desain minimalis dan kontemporer — cat putih atau warna netral.", harga:85000, fitur:["Tanpa Ornamen","Cat Custom","Anti Retak"], img:"https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=600&q=80"},
+      {id:"pl2", nama:"Drop Ceiling / Cove Ceiling", style:"Modern Luxury", material:"Gypsum Board + LED Strip", desc:"Plafon bertingkat dengan rongga tersembunyi untuk lampu LED strip. Efek cahaya ambient yang dramatis dan mewah.", harga:185000, fitur:["LED Hidden Light","Bertingkat","Dramatic Effect"], img:"https://images.unsplash.com/photo-1560448204-603b3fc33ddc?w=600&q=80"},
+      {id:"pl3", nama:"Plafon Coffered / Grid Box", style:"Classic Modern", material:"Gypsum + Kayu MDF", desc:"Kotak-kotak simetris bergaya klasik yang timeless. Memberikan kedalaman visual dan kesan ruangan yang tinggi.", harga:220000, fitur:["Simetris Elegan","Timeless","Kesan Tinggi"], img:"https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=600&q=80"},
+      {id:"pl4", nama:"Plafon Tray / Recessed", style:"Elegant", material:"Gypsum Board + Spotlight", desc:"Plafon tengah menjorok ke dalam (tray) dengan pencahayaan tersembunyi di tepinya. Fokus di tengah ruangan.", harga:165000, fitur:["Recessed Light","Focal Point","Elegant"], img:"https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=600&q=80"},
+      {id:"pl5", nama:"Plafon Kayu / Wood Slat", style:"Natural Warm", material:"Kayu Pinus / Jati / SPC", desc:"Bilah kayu horizontal yang hangat dan natural. Memberikan tekstur dan kehangatan pada langit-langit ruangan.", harga:275000, fitur:["Tekstur Natural","Warm Vibes","Sound Absorb"], img:"https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=600&q=80"},
+      {id:"pl6", nama:"Plafon PVC Motif", style:"Budget Friendly", material:"PVC Panel 30cm", desc:"Panel PVC bermotif kayu, marmer, atau polos. Tahan lembab, anti rayap, dan pemasangan cepat.", harga:65000, fitur:["Anti Lembab","Anti Rayap","Cepat Pasang"], img:"https://images.unsplash.com/photo-1600121848594-d8644e57abab?w=600&q=80"},
+      {id:"pl7", nama:"Plafon Ekspos Industrial", style:"Industrial Chic", material:"Beton Ekspos / Cat Gelap", desc:"Langit-langit tanpa penutup — pipa, rangka besi, dan beton dibiarkan terlihat. Bold dan berkarakter kuat.", harga:95000, fitur:["Bold Statement","No Gypsum","Raw Aesthetic"], img:"https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80"},
+      {id:"pl8", nama:"Plafon Stretched Ceiling", style:"Premium Futuristic", material:"PVC Membran Stretch", desc:"Membran PVC elastis yang ditarik sempurna — bisa transparan, mirror, atau dicetak gambar bintang/langit.", harga:320000, fitur:["Motif Custom","Mirror Option","Seamless"], img:"https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?w=600&q=80"},
+      {id:"pl9", nama:"Plafon Gypsum Ornamental", style:"Klasik Mewah", material:"Gypsum + Ornamen Cetak", desc:"Plafon dengan ornamen bunga, roset, dan border ukiran gypsum cetak. Cocok untuk ruang tamu dan ruang makan formal.", harga:195000, fitur:["Ornamen Cetak","Klasik Elegan","Rosette Center"], img:"https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=600&q=80"},
     ]
   },
 };
@@ -10691,6 +10930,7 @@ function SubInteriorPage({ pageKey, onWaOpen, navigateTo }) {
     title={config.title} subtitle={config.subtitle}
     breadcrumb={config.breadcrumb}
     catalogData={config.items}
+    satuan={config.satuan || null}
     onWaOpen={onWaOpen} navigateTo={navigateTo}
   />;
 }
@@ -10838,203 +11078,6 @@ function NavDropdownGaleri({ page, navigateTo, navDropdownGaleri }) {
           ))}
         </div>
       )}
-    </div>
-  );
-}
-
-/* ─────────────────────────────────────────────────────────────────
-   LANDSCAPE ADMIN PANEL — kelola 6 kategori + elemen premium
-───────────────────────────────────────────────────────────────── */
-function LandscapeAdminPanel({ data, save, notify, uploadToCloudinary }) {
-  const [activeTab, setActiveTab] = useState("header");
-  const c = data?.content || {};
-
-  // Helper: save nested landscapeCategories key
-  const saveCategory = (catKey, field, value) => {
-    const updated = {
-      ...data,
-      content: {
-        ...c,
-        landscapeCategories: {
-          ...(c.landscapeCategories || {}),
-          [catKey]: {
-            ...(c.landscapeCategories?.[catKey] || {}),
-            [field]: value,
-          }
-        }
-      }
-    };
-    save(updated);
-  };
-
-  const saveElemen = (elKey, field, value) => {
-    const updated = {
-      ...data,
-      content: {
-        ...c,
-        landscapeElemen: {
-          ...(c.landscapeElemen || {}),
-          [elKey]: {
-            ...(c.landscapeElemen?.[elKey] || {}),
-            [field]: value,
-          }
-        }
-      }
-    };
-    save(updated);
-  };
-
-  const saveContent = (field, value) => {
-    save({ ...data, content: { ...c, [field]: value } });
-  };
-
-  const CATEGORIES = [
-    { key: "tamanDepan",    label: "🏡 Taman Depan",                   accent: "#2d6a4f" },
-    { key: "tamanBelakang", label: "🌳 Taman Belakang",                accent: "#1a472a" },
-    { key: "rooftop",       label: "🏙️ Roof Top",                      accent: "#2c5282" },
-    { key: "verticalGarden",label: "🌿 Vertical Garden",               accent: "#276749" },
-    { key: "kolamHias",     label: "💧 Kolam Hias & Air Mancur",       accent: "#0e7490" },
-    { key: "lampuTaman",    label: "💡 Lampu Taman Outdoor Lighting",  accent: "#b45309" },
-  ];
-  const ELEMEN = [
-    { key: "elemenBatu",    label: "🪨 Batu Alam & Kerikil" },
-    { key: "elemenTanaman", label: "🌳 Tanaman Pilihan" },
-    { key: "elemenPergola", label: "🏗️ Pergola & Gazebo" },
-  ];
-
-  const tabStyle = (t) => ({
-    padding: "8px 16px", border: "none", borderRadius: 6, cursor: "pointer", fontSize: 12, fontWeight: 600,
-    background: activeTab === t ? "#16a085" : "#f0f0f0",
-    color: activeTab === t ? "#fff" : "#444",
-  });
-  const fieldStyle = { width: "100%", padding: "9px 12px", borderRadius: 6, border: "1px solid #ddd", fontSize: 13, boxSizing: "border-box", marginBottom: 10 };
-  const labelStyle = { fontSize: 12, fontWeight: 700, color: "#3D5254", marginBottom: 4, display: "block" };
-
-  const currentCat = CATEGORIES.find(c => c.key === activeTab);
-  const currentEl  = ELEMEN.find(e => e.key === activeTab);
-
-  return (
-    <div className="fade-in">
-      <h1 style={{ fontSize: 22, fontWeight: 700, color: "#2E3D3F", marginBottom: 6 }}>⚙ Setting Landscape &amp; Taman</h1>
-      <p style={{ fontSize: 13, color: "#5A6A6C", marginBottom: 20 }}>Kelola konten halaman Landscape — slideshow per kategori (6 foto + deskripsi + harga), dan elemen premium.</p>
-
-      {/* Tab Navigation */}
-      <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 28 }}>
-        <button style={tabStyle("header")} onClick={() => setActiveTab("header")}>🌿 Header & Hero</button>
-        {CATEGORIES.map(cat => (
-          <button key={cat.key} style={tabStyle(cat.key)} onClick={() => setActiveTab(cat.key)}>{cat.label}</button>
-        ))}
-        {ELEMEN.map(el => (
-          <button key={el.key} style={tabStyle(el.key)} onClick={() => setActiveTab(el.key)}>{el.label}</button>
-        ))}
-      </div>
-
-      {/* ─ Header & Hero ─ */}
-      {activeTab === "header" && (
-        <div style={{ background: "#fff", borderRadius: 12, padding: 28, boxShadow: "0 2px 12px rgba(0,0,0,.06)" }}>
-          <h2 style={{ fontSize: 16, fontWeight: 700, marginBottom: 18 }}>Header Halaman Landscape</h2>
-          <label style={labelStyle}>Judul Halaman</label>
-          <input style={fieldStyle} value={c.landscapeTitle || ""} onChange={e => saveContent("landscapeTitle", e.target.value)} placeholder="Landscape & Taman" />
-          <label style={labelStyle}>Sub-judul / Tagline</label>
-          <textarea style={{ ...fieldStyle, minHeight: 80, resize: "vertical" }} value={c.landscapeSub || ""} onChange={e => saveContent("landscapeSub", e.target.value)} placeholder="Ciptakan taman impian yang asri..." />
-          <button onClick={() => notify("Tersimpan ✓")} style={{ padding: "10px 24px", background: "#16a085", color: "#fff", border: "none", borderRadius: 6, fontWeight: 700, cursor: "pointer" }}>Simpan Header</button>
-        </div>
-      )}
-
-      {/* ─ Category Slideshow Settings ─ */}
-      {currentCat && (() => {
-        const cat = currentCat;
-        const cfg = c.landscapeCategories?.[cat.key] || {};
-        return (
-          <div style={{ background: "#fff", borderRadius: 12, padding: 28, boxShadow: "0 2px 12px rgba(0,0,0,.06)" }}>
-            <h2 style={{ fontSize: 16, fontWeight: 700, marginBottom: 4 }}>{cat.label}</h2>
-            <p style={{ fontSize: 12, color: "#5A6A6C", marginBottom: 20 }}>Isi 6 foto slideshow + judul + deskripsi per slide, serta info harga kategori ini.</p>
-
-            <label style={labelStyle}>Judul Kategori</label>
-            <input style={fieldStyle} value={cfg.title || ""} onChange={e => saveCategory(cat.key, "title", e.target.value)} placeholder={cat.label.replace(/^.{2}\s*/,"")} />
-            <label style={labelStyle}>Sub-judul</label>
-            <input style={fieldStyle} value={cfg.subtitle || ""} onChange={e => saveCategory(cat.key, "subtitle", e.target.value)} placeholder="Tagline kategori taman..." />
-            <label style={labelStyle}>Deskripsi Singkat (tampil di atas harga)</label>
-            <textarea style={{ ...fieldStyle, minHeight: 70, resize: "vertical" }} value={cfg.desc || ""} onChange={e => saveCategory(cat.key, "desc", e.target.value)} placeholder="Deskripsi layanan..." />
-            <label style={labelStyle}>Harga Start From (contoh: Rp 5.000.000,-)</label>
-            <input style={fieldStyle} value={cfg.startFrom || ""} onChange={e => saveCategory(cat.key, "startFrom", e.target.value)} placeholder="Rp 5.000.000,-" />
-
-            <div style={{ borderTop: "1px solid #eee", margin: "20px 0", paddingTop: 20 }}>
-              <h3 style={{ fontSize: 14, fontWeight: 700, color: "#2E3D3F", marginBottom: 16 }}>6 Slide Foto</h3>
-              {Array.from({ length: 6 }, (_, i) => (
-                <div key={i} style={{ background: "#f8f9fa", borderRadius: 8, padding: 16, marginBottom: 14 }}>
-                  <div style={{ fontSize: 13, fontWeight: 700, color: "#2E3D3F", marginBottom: 10 }}>Slide {i + 1}</div>
-                  <label style={labelStyle}>Judul Slide</label>
-                  <input style={fieldStyle} value={cfg[`slide${i}_title`] || ""} onChange={e => saveCategory(cat.key, `slide${i}_title`, e.target.value)} placeholder={`Contoh Design ${i+1}`} />
-                  <label style={labelStyle}>Deskripsi Slide</label>
-                  <textarea style={{ ...fieldStyle, minHeight: 60, resize: "vertical" }} value={cfg[`slide${i}_desc`] || ""} onChange={e => saveCategory(cat.key, `slide${i}_desc`, e.target.value)} placeholder="Keterangan foto..." />
-                  <label style={labelStyle}>URL Foto</label>
-                  <input style={fieldStyle} value={cfg[`slide${i}_img`] || ""} onChange={e => saveCategory(cat.key, `slide${i}_img`, e.target.value)} placeholder="https://... atau upload di bawah" />
-                  {uploadToCloudinary && (
-                    <div>
-                      <input type="file" accept="image/*" id={`ls_${cat.key}_s${i}`} style={{ display: "none" }}
-                        onChange={async (ev) => {
-                          if (!ev.target.files[0]) return;
-                          notify("Mengupload foto...");
-                          const url = await uploadToCloudinary(ev.target.files[0]);
-                          if (url) { saveCategory(cat.key, `slide${i}_img`, url); notify("Upload berhasil ✓"); }
-                          else notify("Upload gagal.");
-                        }} />
-                      <label htmlFor={`ls_${cat.key}_s${i}`} style={{ display: "inline-block", padding: "7px 16px", background: "#16a085", color: "#fff", borderRadius: 6, cursor: "pointer", fontSize: 12, fontWeight: 700 }}>
-                        📷 Upload Foto Slide {i+1}
-                      </label>
-                      {cfg[`slide${i}_img`] && (
-                        <img src={cfg[`slide${i}_img`]} alt="" style={{ width: 80, height: 56, objectFit: "cover", borderRadius: 4, marginLeft: 12, verticalAlign: "middle" }} onError={e=>e.target.style.display="none"} />
-                      )}
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
-            <button onClick={() => notify("Perubahan telah tersimpan otomatis ✓")} style={{ padding: "10px 24px", background: "#16a085", color: "#fff", border: "none", borderRadius: 6, fontWeight: 700, cursor: "pointer" }}>Simpan Kategori</button>
-          </div>
-        );
-      })()}
-
-      {/* ─ Elemen Premium Settings ─ */}
-      {currentEl && (() => {
-        const el = currentEl;
-        const elCfg = c.landscapeElemen?.[el.key] || {};
-        return (
-          <div style={{ background: "#fff", borderRadius: 12, padding: 28, boxShadow: "0 2px 12px rgba(0,0,0,.06)" }}>
-            <h2 style={{ fontSize: 16, fontWeight: 700, marginBottom: 4 }}>{el.label}</h2>
-            <p style={{ fontSize: 12, color: "#5A6A6C", marginBottom: 20 }}>Kelola judul, deskripsi, dan foto elemen premium.</p>
-
-            <label style={labelStyle}>Judul Elemen</label>
-            <input style={fieldStyle} value={elCfg.title || ""} onChange={e => saveElemen(el.key, "title", e.target.value)} placeholder={el.label.replace(/^.{2}\s*/,"")} />
-            <label style={labelStyle}>Deskripsi</label>
-            <textarea style={{ ...fieldStyle, minHeight: 80, resize: "vertical" }} value={elCfg.desc || ""} onChange={e => saveElemen(el.key, "desc", e.target.value)} placeholder="Keterangan elemen taman..." />
-            <label style={labelStyle}>URL Foto</label>
-            <input style={fieldStyle} value={elCfg.img || ""} onChange={e => saveElemen(el.key, "img", e.target.value)} placeholder="https://..." />
-            {uploadToCloudinary && (
-              <div style={{ marginTop: 6 }}>
-                <input type="file" accept="image/*" id={`le_${el.key}`} style={{ display: "none" }}
-                  onChange={async (ev) => {
-                    if (!ev.target.files[0]) return;
-                    notify("Mengupload...");
-                    const url = await uploadToCloudinary(ev.target.files[0]);
-                    if (url) { saveElemen(el.key, "img", url); notify("Upload berhasil ✓"); }
-                    else notify("Upload gagal.");
-                  }} />
-                <label htmlFor={`le_${el.key}`} style={{ display: "inline-block", padding: "7px 16px", background: "#16a085", color: "#fff", borderRadius: 6, cursor: "pointer", fontSize: 12, fontWeight: 700 }}>
-                  📷 Upload Foto Elemen
-                </label>
-                {elCfg.img && (
-                  <img src={elCfg.img} alt="" style={{ width: 80, height: 56, objectFit: "cover", borderRadius: 4, marginLeft: 12, verticalAlign: "middle" }} onError={e=>e.target.style.display="none"} />
-                )}
-              </div>
-            )}
-            <div style={{ marginTop: 20 }}>
-              <button onClick={() => notify("Perubahan telah tersimpan ✓")} style={{ padding: "10px 24px", background: "#16a085", color: "#fff", border: "none", borderRadius: 6, fontWeight: 700, cursor: "pointer" }}>Simpan Elemen</button>
-            </div>
-          </div>
-        );
-      })()}
     </div>
   );
 }
@@ -12808,7 +12851,7 @@ export default function BricksyTravel() {
               {page === "pagar"       && <PagarPage       onWaOpen={openWaPicker} />}
               {page === "kanopi"      && <KanopiPage      onWaOpen={openWaPicker} />}
               {page === "aluminium"   && <AluminiumPage   onWaOpen={openWaPicker} />}
-              {page === "landscape"   && <LandscapePage   data={data} onWaOpen={openWaPicker} />}
+              {page === "landscape"   && <LandscapePage   onWaOpen={openWaPicker} />}
               {/* ── Sub-halaman Interior ── */}
               {["interior/kamar-tidur","interior/kamar-mandi","interior/ruang-keluarga","interior/ruang-tamu","interior/kitchen-set","interior/ruang-kerja","interior/plafon-modern"].includes(page) &&
                 <SubInteriorPage pageKey={page} onWaOpen={openWaPicker} navigateTo={navigateTo} />}
@@ -12845,7 +12888,6 @@ export default function BricksyTravel() {
               { id: "set_kanopi", label: "⚙ Setting Kanopi", show: isAdmin },
               { id: "set_aluminium", label: "⚙ Setting Aluminium", show: isAdmin },
               { id: "set_landscape", label: "⚙ Setting Landscape & Taman", show: isAdmin },
-              { id: "set_plafon", label: "⚙ Setting Plafon Modern", show: isAdmin },
               { id: "team", label: "Susunan Tim", show: isAdmin },
               { id: "messages", label: "Pesan Masuk", show: canCS },
               { id: "users", label: "Users", show: isAdmin },
@@ -13263,50 +13305,39 @@ export default function BricksyTravel() {
 
               {/* SETTING LANDSCAPE & TAMAN */}
               {adminTab === "set_landscape" && isAdmin && (
-                <LandscapeAdminPanel
-                  data={data} save={save} notify={notify} uploadToCloudinary={uploadToCloudinary}
-                />
-              )}
-
-              {/* SETTING PLAFON MODERN */}
-              {adminTab === "set_plafon" && isAdmin && (
                 <SubLayananAdmin
-                  title="Setting Plafon Modern"
-                  icon="🏛️"
-                  accentColor="#0f3460"
-                  storeKey="plafon"
+                  title="Setting Landscape & Taman"
+                  icon="🌿"
+                  accentColor="#16a085"
+                  storeKey="landscape"
                   data={data}
                   save={save}
                   notify={notify}
                   uploadToCloudinary={uploadToCloudinary}
-                  pageDesc="Kelola katalog gaya plafon modern — nama tema, harga per meter, dan foto contoh desain."
+                  pageDesc="Kelola konten halaman Landscape & Taman — desain taman, penataan landscape, dan portofolio."
                   sections={[
-                    { key: "plafonTitle",    label: "Judul Halaman Plafon Modern", type: "text" },
-                    { key: "plafonSubtitle", label: "Sub-judul / Tagline", type: "textarea" },
-                    { key: "plafonNote",     label: "Catatan / Disclaimer Harga", type: "text" },
+                    { key: "landscapeTitle", label: "Judul Halaman Landscape & Taman", type: "text" },
+                    { key: "landscapeSub", label: "Sub-judul / Tagline", type: "textarea" },
+                    { key: "landscapeDesc", label: "Deskripsi Layanan Landscape", type: "textarea" },
+                    { key: "landscapeCta", label: "Label Tombol CTA", type: "text" },
                   ]}
                   imageGroups={[
-                    { key: "plafonHero", label: "Gambar Hero Plafon", count: 2, desc: "Foto banner halaman Plafon Modern." },
+                    { key: "landscapeHero", label: "Gambar Hero Landscape", count: 2, desc: "Foto banner halaman Landscape." },
+                    { key: "landscapeGal", label: "Galeri Portofolio Taman", count: 8, desc: "Foto hasil penataan taman." },
                   ]}
-                  crudKey="plafonItems"
-                  crudLabel="Gaya / Tema Plafon"
+                  crudKey="landscapeItems"
+                  crudLabel="Layanan / Paket Landscape"
                   crudFields={[
-                    { key: "nama",       label: "Nama Tema Plafon", type: "text",     placeholder: "contoh: Plafon Cove Lighting" },
-                    { key: "style",      label: "Style / Kategori",  type: "text",     placeholder: "contoh: Romantis" },
-                    { key: "material",   label: "Material",          type: "text",     placeholder: "contoh: Gypsum Board 9mm" },
-                    { key: "harga",      label: "Harga Per Meter (Rp)", type: "text", placeholder: "contoh: 85.000" },
-                    { key: "deskripsi",  label: "Deskripsi",         type: "textarea", placeholder: "Keterangan desain plafon..." },
-                    { key: "fitur",      label: "Fitur Unggulan (pisah koma)", type: "text", placeholder: "Anti Retak, Easy Paint, Clean Look" },
+                    { key: "nama", label: "Nama Layanan", type: "text", placeholder: "contoh: Taman Tropis Modern" },
+                    { key: "harga", label: "Harga / Keterangan", type: "text", placeholder: "Mulai Rp 3.000.000" },
+                    { key: "deskripsi", label: "Deskripsi", type: "textarea", placeholder: "Detail layanan landscape..." },
                   ]}
                   crudHasImage
-                  defaultItems={CATALOG_DATA["interior/plafon-modern"].items.map(item => ({
+                  defaultItems={CATALOG_DATA["eksterior/taman-landscape"].items.map(item => ({
                     id: item.id,
                     nama: item.nama,
-                    style: item.style || "",
-                    material: item.material || "",
-                    harga: item.harga ? `${item.harga.toLocaleString("id-ID")}` : "",
-                    deskripsi: item.desc || "",
-                    fitur: (item.fitur || []).join(", "),
+                    harga: item.harga ? `Rp ${item.harga.toLocaleString("id-ID")}` : "",
+                    deskripsi: [item.desc, item.fitur ? item.fitur.join(", ") : ""].filter(Boolean).join(" | "),
                     _img: item.img || "",
                   }))}
                 />
