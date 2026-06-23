@@ -2594,8 +2594,9 @@ const GS = () => (
       background:linear-gradient(to top, rgba(14,12,10,.72) 0%, rgba(14,12,10,.35) 45%, rgba(14,12,10,.1) 75%, transparent 100%);
     }
     .re-hero-content {
-      position:relative; z-index:2; padding:0 6% 80px; max-width:760px;
+      position:relative; z-index:2; padding:0 6% 48px; max-width:760px;
       animation:re-fadeUp .9s cubic-bezier(.22,1,.36,1) .15s both;
+      overflow:hidden;
     }
     .re-hero-eyebrow {
       font-family:'Jost',sans-serif; font-size:.65rem; letter-spacing:.28em;
@@ -7393,8 +7394,18 @@ function HeroSlideshow({ data, navigateTo }) {
               {data.content?.heroTitle || "Travel & Relax"}
             </h1>
             {data.content?.heroSub && (
-              <p style={{ fontSize: "0.9375rem", color: "rgba(255,255,255,.82)", lineHeight: 1.8, marginBottom: 32 }}>
-                {data.content.heroSub.length > 120 ? data.content.heroSub.slice(0, 120) + "…" : data.content.heroSub}
+              <p style={{
+                fontSize: "0.9375rem",
+                color: "rgba(255,255,255,.82)",
+                lineHeight: 1.8,
+                marginBottom: 32,
+                display: "-webkit-box",
+                WebkitLineClamp: 3,
+                WebkitBoxOrient: "vertical",
+                overflow: "hidden",
+                maxHeight: "5.4em",
+              }}>
+                {data.content.heroSub.length > 160 ? data.content.heroSub.slice(0, 160) + "…" : data.content.heroSub}
               </p>
             )}
             <div style={{ display: "flex", gap: 12, flexWrap: "wrap", justifyContent: "center" }}>
@@ -7449,7 +7460,7 @@ function HeroSlideshow({ data, navigateTo }) {
   const animating = prev !== null; // derived — true selama transisi berlangsung
 
   return (
-    <section style={{ position: "relative", width: "100%", height: "clamp(560px,88vh,800px)", overflow: "hidden", background: "#04080f" }}>
+    <section className="hero-slideshow-section" style={{ position: "relative", width: "100%", height: "clamp(560px,88vh,800px)", overflow: "hidden", background: "#04080f" }}>
       <style>{`
         @keyframes heroTxtIn { from { opacity:0; transform:translateY(28px); } to { opacity:1; transform:none; } }
         @keyframes heroDotPulse { 0%,100%{transform:scale(1);opacity:.8;} 50%{transform:scale(1.3);opacity:1;} }
@@ -7464,6 +7475,16 @@ function HeroSlideshow({ data, navigateTo }) {
         .hero-dot:hover { transform: scale(1.3); }
         .hero-arrow { transition: all .2s; cursor: pointer; background: rgba(255,255,255,.12); border: 1.5px solid rgba(255,255,255,.25); color: #fff; border-radius: 50%; width: 44px; height: 44px; display:flex; align-items:center; justify-content:center; font-size:18px; }
         .hero-arrow:hover { background: rgba(255,255,255,.28); }
+        @media (max-width: 768px) {
+          .hero-slide-content-box { padding: 0 5% !important; }
+          .hero-slide-title { font-size: clamp(1.2rem, 5vw, 1.75rem) !important; margin-bottom: 10px !important; -webkit-line-clamp: 2 !important; }
+          .hero-slide-excerpt { font-size: 0.8125rem !important; line-height: 1.6 !important; margin-bottom: 18px !important; -webkit-line-clamp: 2 !important; max-height: 3.2em !important; }
+          .hero-slide-btns { gap: 8px !important; }
+          .hero-slide-btns button { padding: 10px 18px !important; font-size: 0.75rem !important; }
+        }
+        @media (max-width: 768px) and (orientation: landscape) {
+          .hero-slideshow-section { height: 100vw !important; min-height: 280px !important; max-height: 400px !important; }
+        }
       `}</style>
 
       {/* SLIDES */}
@@ -7483,14 +7504,14 @@ function HeroSlideshow({ data, navigateTo }) {
       </div>
 
       {/* CONTENT OVERLAY — rata tengah */}
-      <div style={{ position: "relative", zIndex: 10, height: "100%", display: "flex", alignItems: "center", justifyContent: "center", padding: "0 6%", textAlign: "center" }}>
-        <div style={{ maxWidth: 780, animation: animating ? "none" : "heroTxtIn .6s ease both" }} key={current}>
+      <div className="hero-slide-content-box" style={{ position: "relative", zIndex: 10, height: "100%", display: "flex", alignItems: "center", justifyContent: "center", padding: "0 6%", textAlign: "center", overflow: "hidden" }}>
+        <div style={{ maxWidth: 780, width: "100%", animation: animating ? "none" : "heroTxtIn .6s ease both" }} key={current}>
           {/* Label */}
           <div style={{ display: "inline-block", background: "#e8a020", color: "#fff", fontSize: "0.6875rem", fontWeight: 800, letterSpacing: ".18em", textTransform: "uppercase", padding: "5px 14px", borderRadius: 2, marginBottom: 18 }}>
             {SECTION_LABEL[sl.section] || "VASTURA GROUP"}
           </div>
           {/* Title — max 2 baris, potong sisanya */}
-          <h1 style={{
+          <h1 className="hero-slide-title" style={{
             fontFamily: "'Playfair Display',serif",
             fontSize: "clamp(1.75rem,4.2vw,2.8rem)",
             fontWeight: 900,
@@ -7507,12 +7528,22 @@ function HeroSlideshow({ data, navigateTo }) {
           </h1>
           {/* Excerpt */}
           {sl.excerpt && (
-            <p style={{ fontSize: "0.9375rem", color: "rgba(255,255,255,.82)", lineHeight: 1.8, marginBottom: 32, whiteSpace: "pre-line" }}>
-              {sl.excerpt.length > 120 ? sl.excerpt.slice(0, 120) + "…" : sl.excerpt}
+            <p className="hero-slide-excerpt" style={{
+              fontSize: "0.9375rem",
+              color: "rgba(255,255,255,.82)",
+              lineHeight: 1.8,
+              marginBottom: 32,
+              display: "-webkit-box",
+              WebkitLineClamp: 3,
+              WebkitBoxOrient: "vertical",
+              overflow: "hidden",
+              maxHeight: "5.4em",
+            }}>
+              {sl.excerpt.length > 160 ? sl.excerpt.slice(0, 160) + "…" : sl.excerpt}
             </p>
           )}
           {/* CTA Buttons — centered */}
-          <div style={{ display: "flex", gap: 12, flexWrap: "wrap", justifyContent: "center" }}>
+          <div className="hero-slide-btns" style={{ display: "flex", gap: 12, flexWrap: "wrap", justifyContent: "center" }}>
             <button className="hero-cta-btn" onClick={() => navigateTo("services")}
               style={{ padding: "13px 30px", background: "#e8a020", color: "#fff", border: "none", borderRadius: 3, fontSize: "0.8125rem", fontWeight: 800, letterSpacing: ".1em", textTransform: "uppercase", cursor: "pointer" }}>
               Read More →
