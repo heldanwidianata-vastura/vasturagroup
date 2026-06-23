@@ -9823,38 +9823,290 @@ function AluminiumPage({ onWaOpen }) {
 }
 
 /* ── Page: Landscape & Taman ── */
+const LANDSCAPE_CATEGORIES = [
+  {
+    id: "taman-depan",
+    icon: "🌿",
+    title: "Contoh Desain Taman Depan",
+    desc: "Kesan pertama hunian Anda dimulai dari taman depan. Kami menghadirkan desain teras dan taman depan yang memukau — dari gaya minimalis modern hingga tropis nan asri.",
+    startFrom: 4500000,
+    satuan: "paket",
+    slides: [
+      { img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80", tema: "Minimalis Modern", desc: "Taman depan bersih dengan jalur batu andesit, tanaman hias rendah, dan lampu sorot tersembunyi. Cocok untuk rumah bergaya kontemporer." },
+      { img: "https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=800&q=80", tema: "Tropis Resort", desc: "Nuansa villa tropis di depan rumah — palm mini, heliconia, dan kerikil putih menciptakan ambiance resort yang mewah." },
+      { img: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&q=80", tema: "Japanese Zen", desc: "Taman gaya Jepang dengan batu stepping, lumut hijau, bambu, dan air mengalir. Tenang dan meditatif setiap hari." },
+      { img: "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=800&q=80", tema: "Teras Santai Bohemian", desc: "Area teras dengan pergola rotan, tanaman merambat, dan kursi outdoor. Tempat bersantai paling favorit di sore hari." },
+      { img: "https://images.unsplash.com/photo-1524758631624-e2822e304c36?w=800&q=80", tema: "Klasik Eropa", desc: "Simetri elegan khas taman Eropa — pagar hidup teratur, pot bunga warna-warni, dan jalur batu bata merah yang menawan." },
+      { img: "https://images.unsplash.com/photo-1563911302283-d2bc129e7570?w=800&q=80", tema: "Modern Industrial", desc: "Konsep industrial dengan raised planter box besi cor, tanaman sukulen, dan pencahayaan warm-white di malam hari." },
+    ]
+  },
+  {
+    id: "taman-belakang",
+    icon: "🏡",
+    title: "Contoh Desain Taman Belakang",
+    desc: "Halaman belakang adalah surga pribadi Anda. Kami mengubahnya menjadi oasis relaksasi — area bermain anak, ruang makan outdoor, hingga taman sayur organik.",
+    startFrom: 7500000,
+    satuan: "paket",
+    slides: [
+      { img: "https://images.unsplash.com/photo-1600210492493-0946911123ea?w=800&q=80", tema: "Outdoor Living Room", desc: "Ruang keluarga terbuka di taman belakang — sofa outdoor, pergola kayu, dan area BBQ. Sempurna untuk berkumpul keluarga." },
+      { img: "https://images.unsplash.com/photo-1558905586-b022cc14d2b3?w=800&q=80", tema: "Tropical Oasis", desc: "Lebatnya tanaman tropis menciptakan privasi alami. Kolam mini, deck kayu, dan hammock — liburan tanpa pergi jauh." },
+      { img: "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=800&q=80", tema: "Minimalis Elegan", desc: "Rumput hijau terawat, border batu, dan stepping stone. Desain simpel yang tidak memerlukan perawatan intensif." },
+      { img: "https://images.unsplash.com/photo-1592595896551-12b371d546d5?w=800&q=80", tema: "Taman Bermain Keluarga", desc: "Zona bermain anak yang aman dengan rumput sintetis lembut, ayunan, dan area sandbox. Dikombinasikan taman orang tua." },
+      { img: "https://images.unsplash.com/photo-1523301343968-6a6ebf63c672?w=800&q=80", tema: "Mediterania", desc: "Inspiraasi taman Mediterania — lavender, rosemary, batu koral, dan pergola besi tempa. Romantis dan wangi sepanjang hari." },
+      { img: "https://images.unsplash.com/photo-1585771724684-38269d6639fd?w=800&q=80", tema: "Taman Sayur Organik", desc: "Raised bed box kayu untuk sayur dan herba organik. Estetis sekaligus produktif — petik langsung dari taman rumah." },
+    ]
+  },
+  {
+    id: "rooftop",
+    icon: "🏙️",
+    title: "Contoh Desain Roof Top Garden",
+    desc: "Manfaatkan atap dak Anda menjadi taman rooftop yang spektakuler. Kami merancang taman atap yang ringan, tahan angin, dan memiliki sistem drainase sempurna.",
+    startFrom: 12000000,
+    satuan: "paket",
+    slides: [
+      { img: "https://images.unsplash.com/photo-1567016432779-094069958ea5?w=800&q=80", tema: "Sky Lounge Garden", desc: "Lounge eksklusif di atap dengan sofa outdoor premium, tanaman dalam pot besar, dan pencahayaan ambiance malam hari." },
+      { img: "https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=800&q=80", tema: "Minimalis Urban", desc: "Desain bersih untuk rooftop kota — deck composite, tanaman pot rendah, dan railing kaca untuk view kota yang maksimal." },
+      { img: "https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?w=800&q=80", tema: "Tropical Rooftop", desc: "Suasana resort di atas gedung. Tanaman tropis tinggi sebagai windbreak alami, hammock, dan area santai yang teduh." },
+      { img: "https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=800&q=80", tema: "Rooftop Dining", desc: "Area makan outdoor di atap dengan meja kayu solid, lampu gantung vintage, dan taman herba aromatik di sekelilingnya." },
+      { img: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&q=80", tema: "Green Roof Modern", desc: "Atap hijau dengan sistem tanam modular ringan. Menurunkan suhu bangunan sekaligus menciptakan estetika hijau dari bawah." },
+      { img: "https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?w=800&q=80", tema: "Zen Rooftop", desc: "Keheningan di atas ketinggian. Kerikil zen, tanaman bonsai, dan bangku meditasi — meditasi pagi yang mewah setiap hari." },
+    ]
+  },
+  {
+    id: "vertical-garden",
+    icon: "🌺",
+    title: "Contoh Desain Vertical Garden",
+    desc: "Solusi taman untuk ruang terbatas. Dinding hijau vertikal kami hadir sebagai statement piece yang hidup — menyejukkan, memperindah, dan meningkatkan kualitas udara.",
+    startFrom: 2800000,
+    satuan: "m²",
+    slides: [
+      { img: "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=800&q=80", tema: "Living Wall Interior", desc: "Dinding hidup di dalam ruangan — sistem irigasi otomatis tersembunyi, media tanam hidroponik, dan pilihan 30+ jenis tanaman hias." },
+      { img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80", tema: "Facade Vertical Garden", desc: "Tampak depan rumah yang memukau dengan vertical garden fasad. Tanaman tahan UV dan cuaca, perawatan minimal." },
+      { img: "https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=800&q=80", tema: "Herb Wall Kitchen", desc: "Dinding herba aromatik di area dapur — basil, mint, rosemary, thyme. Segar, wangi, dan bisa dipetik kapan saja." },
+      { img: "https://images.unsplash.com/photo-1524758631624-e2822e304c36?w=800&q=80", tema: "Office Green Wall", desc: "Vertical garden di area kerja atau lobby kantor. Terbukti meningkatkan produktivitas dan mengurangi stres karyawan." },
+      { img: "https://images.unsplash.com/photo-1600210492493-0946911123ea?w=800&q=80", tema: "Tropical Statement Wall", desc: "Komposisi tanaman tropis dramatis — monstera, philodendron, dan pakis raksasa. Bold dan instagrammable." },
+      { img: "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=800&q=80", tema: "Minimalis Moss Wall", desc: "Dinding lumut hijau yang tidak membutuhkan air — ideal untuk indoor tanpa sinar langsung. Estetis dan zero maintenance." },
+    ]
+  },
+  {
+    id: "kolam-hias",
+    icon: "💧",
+    title: "Contoh Desain Kolam Hias & Air Mancur",
+    desc: "Suara gemericik air adalah musik alami paling menenangkan. Kolam hias dan air mancur kami dirancang untuk keindahan visual sekaligus menciptakan mikroklimat yang sejuk.",
+    startFrom: 8000000,
+    satuan: "paket",
+    slides: [
+      { img: "https://images.unsplash.com/photo-1523301343968-6a6ebf63c672?w=800&q=80", tema: "Kolam Koi Jepang", desc: "Kolam koi bergaya Jepang lengkap dengan filter biologis, batu suiseki, jembatan mini kayu, dan ikan koi pilihan warna-warni." },
+      { img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80", tema: "Waterfall Minimalis", desc: "Air terjun dinding batu alam yang elegan. Suara gemericik konstan menciptakan ambiance premium di halaman rumah Anda." },
+      { img: "https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=800&q=80", tema: "Fountain Klasik", desc: "Air mancur tengah taman bergaya klasik Eropa — patung lion head, mangkuk bertingkat, dan pencahayaan bawah air berwarna." },
+      { img: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&q=80", tema: "Kolam Renang Natural", desc: "Natural pool dengan border batu andesit, filter tanaman, dan waterfall tepi — kolam yang menyatu sempurna dengan taman." },
+      { img: "https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=800&q=80", tema: "Air Mancur Modern", desc: "Instalasi air mancur geometris modern dari stainless steel. Jet air presisi dengan sistem kontrol otomatis dan LED underwater." },
+      { img: "https://images.unsplash.com/photo-1592595896551-12b371d546d5?w=800&q=80", tema: "Kolam Teratai", desc: "Kolam dangkal dengan teratai dan eceng gondok — habitat alami yang juga berfungsi sebagai biofilter alami yang indah." },
+    ]
+  },
+  {
+    id: "lampu-taman",
+    icon: "💡",
+    title: "Contoh Desain Lampu Taman & Outdoor Lighting",
+    desc: "Taman yang indah di siang hari harus tetap memukau di malam hari. Sistem pencahayaan outdoor kami mengubah taman menjadi panggung cahaya yang dramatis dan romantis.",
+    startFrom: 1500000,
+    satuan: "paket",
+    slides: [
+      { img: "https://images.unsplash.com/photo-1558905586-b022cc14d2b3?w=800&q=80", tema: "Fairy Light Garden", desc: "Ribuan lampu kabel tembaga menyelimuti pepohonan dan pergola — menciptakan suasana magis seperti bintang di taman Anda." },
+      { img: "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=800&q=80", tema: "Uplighting Dramatic", desc: "Lampu sorot LED dari bawah yang menyinari pohon dan dinding — efek dramatis yang menonjolkan tekstur dan bentuk tanaman." },
+      { img: "https://images.unsplash.com/photo-1563911302283-d2bc129e7570?w=800&q=80", tema: "Solar Path Lighting", desc: "Lampu jalur solar-powered di sepanjang stepping stone. Otomatis menyala saat gelap — hemat energi dan instalasi mudah." },
+      { img: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&q=80", tema: "Lantern Taman Klasik", desc: "Lentera besi tempa bergaya klasik sebagai focal point taman. Tersedia dalam versi gas, listrik, dan solar." },
+      { img: "https://images.unsplash.com/photo-1524758631624-e2822e304c36?w=800&q=80", tema: "LED Underwater Kolam", desc: "Pencahayaan dalam air berwarna RGB untuk kolam hias dan air mancur. Efek spektakuler dengan kendali remote atau smartphone." },
+      { img: "https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=800&q=80", tema: "String Light Pergola", desc: "Lampu bohlam vintage di atas pergola outdoor — ambiance bistro Eropa untuk area makan terbuka Anda." },
+    ]
+  },
+];
+
+const ELEMEN_PREMIUM = [
+  { icon: "🪨", title: "Batu Alam & Kerikil", desc: "Batu andesit, batu candi, kerikil warna — untuk jalur taman, dinding, dan aksen dekoratif.", img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&q=80" },
+  { icon: "🌳", title: "Tanaman Pilihan Premium", desc: "Seleksi tanaman sesuai iklim lokal — tahan panas, mudah dirawat, dan bernilai estetis tinggi.", img: "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=400&q=80" },
+  { icon: "🏗️", title: "Pergola & Gazebo", desc: "Struktur atap taman dari kayu ulin atau besi untuk area duduk yang nyaman di luar ruangan.", img: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=400&q=80" },
+  { icon: "🌺", title: "Tanaman Hias Eksotis", desc: "Koleksi tanaman hias langka dan eksotis — heliconia, bromelia, monstera deliciosa, agave.", img: "https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=400&q=80" },
+  { icon: "🪵", title: "Deck & Paving Custom", desc: "Decking kayu ulin, composite, atau batu paving motif custom untuk area duduk dan jalur taman.", img: "https://images.unsplash.com/photo-1558905586-b022cc14d2b3?w=400&q=80" },
+  { icon: "🦋", title: "Dekorasi & Aksesoris", desc: "Patung taman, pot artisanal, windchime, dan elemen dekorasi outdoor untuk sentuhan personal.", img: "https://images.unsplash.com/photo-1524758631624-e2822e304c36?w=400&q=80" },
+];
+
+function LandscapeSlideshow({ slides }) {
+  const [idx, setIdx] = useState(0);
+  const timerRef = useRef(null);
+
+  const goTo = useCallback((i) => {
+    setIdx(i);
+    clearInterval(timerRef.current);
+    timerRef.current = setInterval(() => setIdx(p => (p + 1) % slides.length), 4000);
+  }, [slides.length]);
+
+  useEffect(() => {
+    timerRef.current = setInterval(() => setIdx(p => (p + 1) % slides.length), 4000);
+    return () => clearInterval(timerRef.current);
+  }, [slides.length]);
+
+  const slide = slides[idx];
+  return (
+    <div style={{ position: "relative", borderRadius: 16, overflow: "hidden", boxShadow: "0 12px 40px rgba(0,0,0,.18)" }}>
+      {/* Image */}
+      <div style={{ position: "relative", height: 340, overflow: "hidden", background: "#1a472a" }}>
+        <img key={idx} src={slide.img} alt={slide.tema}
+          style={{ width: "100%", height: "100%", objectFit: "cover", animation: "lsFade .5s ease" }}
+          onError={e => { e.target.style.display = "none"; }} />
+        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(0,0,0,.72) 0%, rgba(0,0,0,.1) 60%, transparent 100%)" }} />
+        {/* Tema badge */}
+        <div style={{ position: "absolute", top: 16, left: 16, background: "rgba(46,61,63,.85)", backdropFilter: "blur(8px)", color: "#C9AA71", fontSize: "0.68rem", fontWeight: 800, letterSpacing: ".1em", textTransform: "uppercase", padding: "5px 14px", borderRadius: 20 }}>
+          {slide.tema}
+        </div>
+        {/* Counter */}
+        <div style={{ position: "absolute", top: 16, right: 16, background: "rgba(0,0,0,.5)", color: "#fff", fontSize: "0.7rem", fontWeight: 700, padding: "4px 10px", borderRadius: 20 }}>
+          {idx + 1} / {slides.length}
+        </div>
+        {/* Desc */}
+        <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, padding: "20px 20px 18px" }}>
+          <p style={{ color: "#fff", fontSize: "0.88rem", lineHeight: 1.65, margin: 0, textShadow: "0 1px 4px rgba(0,0,0,.5)" }}>{slide.desc}</p>
+        </div>
+        {/* Nav arrows */}
+        {["◀", "▶"].map((ch, d) => (
+          <button key={d} onClick={() => goTo((idx + (d === 0 ? -1 : 1) + slides.length) % slides.length)}
+            style={{ position: "absolute", top: "50%", [d === 0 ? "left" : "right"]: 12, transform: "translateY(-50%)", background: "rgba(255,255,255,.18)", backdropFilter: "blur(6px)", border: "none", color: "#fff", fontSize: 16, width: 36, height: 36, borderRadius: "50%", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", transition: "background .2s" }}
+            onMouseEnter={e => e.currentTarget.style.background = "rgba(255,255,255,.36)"}
+            onMouseLeave={e => e.currentTarget.style.background = "rgba(255,255,255,.18)"}>
+            {ch}
+          </button>
+        ))}
+      </div>
+      {/* Dots */}
+      <div style={{ display: "flex", justifyContent: "center", gap: 7, padding: "14px 0", background: "#fff" }}>
+        {slides.map((_, i) => (
+          <button key={i} onClick={() => goTo(i)}
+            style={{ width: i === idx ? 22 : 8, height: 8, borderRadius: 4, background: i === idx ? "#2d6a4f" : "#C9AA71", border: "none", cursor: "pointer", transition: "all .3s", padding: 0 }} />
+        ))}
+      </div>
+    </div>
+  );
+}
+
 function LandscapePage({ onWaOpen }) {
-  return <DevServicePage
-    pageKey="landscape"
-    title="Landscape & Taman"
-    subtitle="Ciptakan taman impian yang asri, hijau, dan menenangkan. Kami menghadirkan desain landscape profesional untuk hunian, perumahan, maupun area komersial."
-    icon="🌳"
-    heroColor="linear-gradient(135deg,#1a472a 0%,#2d6a4f 50%,#40916c 100%)"
-    onWaOpen={onWaOpen}
-    sections={[
-      {
-        tag: "Layanan Taman",
-        title: "Layanan Landscape Kami",
-        items: [
-          { icon: "🌿", title: "Desain Taman Depan", desc: "Taman depan yang mempercantik fasad rumah — paduan tanaman, batu, dan lampu taman." },
-          { icon: "🏡", title: "Taman Belakang / Rooftop", desc: "Oasis pribadi di halaman belakang atau atap rumah untuk relaksasi dan hiburan keluarga." },
-          { icon: "🌺", title: "Vertical Garden", desc: "Dinding hijau vertikal sebagai elemen dekoratif sekaligus penyejuk udara di ruang terbatas." },
-          { icon: "💧", title: "Kolam Hias & Air Mancur", desc: "Fitur air yang menenangkan — dari kolam ikan koi hingga waterfall minimalis modern." },
-          { icon: "💡", title: "Lampu Taman & Outdoor Lighting", desc: "Pencahayaan artistik yang memperindah taman di malam hari sekaligus meningkatkan keamanan." },
-          { icon: "🌱", title: "Perawatan Taman Berkala", desc: "Jasa perawatan rutin: pemangkasan, pemupukan, penyiraman, dan penggantian tanaman." },
-        ]
-      },
-      {
-        tag: "Material & Elemen",
-        title: "Elemen Taman Premium",
-        items: [
-          { icon: "🪨", title: "Batu Alam & Kerikil", desc: "Batu andesit, batu candi, kerikil warna — untuk jalur taman, dinding, dan aksen dekoratif." },
-          { icon: "🌳", title: "Tanaman Pilihan", desc: "Seleksi tanaman sesuai iklim lokal — tahan panas, mudah dirawat, dan bernilai estetis tinggi." },
-          { icon: "🏗️", title: "Pergola & Gazebo", desc: "Struktur atap taman dari kayu atau besi untuk area duduk yang nyaman di luar ruangan." },
-        ]
-      }
-    ]}
-  />;
+  useEffect(() => { window.scrollTo(0, 0); }, []);
+
+  const fmt = (n) => "Rp " + n.toLocaleString("id-ID") + ",-";
+
+  return (
+    <div style={{ background: "#FAF7F0", minHeight: "100vh" }}>
+      <style>{`@keyframes lsFade{from{opacity:0;transform:scale(1.03)}to{opacity:1;transform:scale(1)}}`}</style>
+
+      {/* ── HERO ── */}
+      <div style={{ background: "linear-gradient(135deg,#1a472a 0%,#2d6a4f 50%,#40916c 100%)", padding: "72px 5% 64px", textAlign: "center", position: "relative", overflow: "hidden" }}>
+        <div style={{ position: "absolute", inset: 0, opacity: 0.06, backgroundImage: "radial-gradient(circle at 30% 50%, #fff 1px, transparent 1px), radial-gradient(circle at 70% 80%, #fff 1px, transparent 1px)", backgroundSize: "40px 40px" }} />
+        <div style={{ position: "relative", zIndex: 1, maxWidth: 720, margin: "0 auto" }}>
+          <div style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "rgba(255,255,255,.12)", borderRadius: 20, padding: "6px 18px", marginBottom: 20 }}>
+            <span style={{ fontSize: "0.7rem", fontWeight: 700, letterSpacing: ".14em", textTransform: "uppercase", color: "#A8D5B5" }}>VASTURA GROUP</span>
+          </div>
+          <div style={{ fontSize: "clamp(2.5rem,8vw,4rem)", marginBottom: 12 }}>🌳</div>
+          <h1 style={{ fontFamily: "'Playfair Display',serif", fontSize: "clamp(1.75rem,5vw,2.75rem)", fontWeight: 900, color: "#fff", margin: "0 0 16px", lineHeight: 1.2 }}>Landscape & Taman</h1>
+          <p style={{ fontSize: "clamp(0.875rem,2vw,1rem)", color: "rgba(255,255,255,.8)", lineHeight: 1.8, margin: "0 0 28px" }}>
+            Ciptakan taman impian yang asri, hijau, dan menenangkan. Kami menghadirkan desain landscape profesional untuk hunian, perumahan, maupun area komersial.
+          </p>
+          <button onClick={() => onWaOpen && onWaOpen({ key: "konsultasi", vars: {} })}
+            style={{ background: "#C9AA71", color: "#2E3D3F", border: "none", borderRadius: 10, padding: "14px 32px", fontSize: "0.9rem", fontWeight: 800, cursor: "pointer", letterSpacing: ".05em" }}>
+            💬 Konsultasi Gratis
+          </button>
+        </div>
+      </div>
+
+      {/* ── KATEGORI SLIDESHOW ── */}
+      <div style={{ maxWidth: 1280, margin: "0 auto", padding: "64px 5% 40px" }}>
+        {LANDSCAPE_CATEGORIES.map((cat, ci) => (
+          <div key={cat.id} style={{ marginBottom: 80 }}>
+            {/* Section header */}
+            <div style={{ display: "flex", alignItems: "flex-start", gap: 16, marginBottom: 32 }}>
+              <div style={{ width: 52, height: 52, background: "linear-gradient(135deg,#1a472a,#40916c)", borderRadius: 14, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 24, flexShrink: 0 }}>
+                {cat.icon}
+              </div>
+              <div>
+                <div style={{ fontSize: "0.65rem", fontWeight: 800, letterSpacing: ".14em", textTransform: "uppercase", color: "#40916c", marginBottom: 6 }}>Kategori {String(ci + 1).padStart(2, "0")}</div>
+                <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: "clamp(1.25rem,3vw,1.75rem)", fontWeight: 900, color: "#2E3D3F", margin: "0 0 8px", lineHeight: 1.2 }}>{cat.title}</h2>
+                <p style={{ fontSize: "0.875rem", color: "#5A6A6C", lineHeight: 1.7, margin: 0, maxWidth: 600 }}>{cat.desc}</p>
+              </div>
+            </div>
+
+            {/* Grid: slideshow + harga */}
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 340px", gap: 28, alignItems: "start" }}>
+              <LandscapeSlideshow slides={cat.slides} />
+
+              {/* Harga card */}
+              <div style={{ background: "#fff", borderRadius: 16, overflow: "hidden", boxShadow: "0 4px 20px rgba(0,0,0,.08)", border: "1px solid #E8DCC8", position: "sticky", top: 80 }}>
+                <div style={{ background: "linear-gradient(135deg,#1a472a,#2d6a4f)", padding: "20px 22px 18px" }}>
+                  <div style={{ fontSize: "0.65rem", fontWeight: 800, letterSpacing: ".12em", textTransform: "uppercase", color: "#A8D5B5", marginBottom: 6 }}>Harga Mulai Dari</div>
+                  <div style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.6rem", fontWeight: 900, color: "#C9AA71", lineHeight: 1 }}>{fmt(cat.startFrom)}</div>
+                  <div style={{ fontSize: "0.75rem", color: "rgba(255,255,255,.6)", marginTop: 4 }}>/{cat.satuan} · harga dapat bervariasi</div>
+                </div>
+                <div style={{ padding: "20px 22px" }}>
+                  <div style={{ fontSize: "0.8rem", fontWeight: 700, color: "#2E3D3F", marginBottom: 12 }}>Yang kami tawarkan:</div>
+                  {["Konsultasi & survei lokasi gratis", "Desain 3D visualisasi taman", "Material premium pilihan", "Pengerjaan oleh tim profesional", "Garansi pengerjaan & tanaman"].map((p, i) => (
+                    <div key={i} style={{ display: "flex", gap: 8, alignItems: "flex-start", marginBottom: 8 }}>
+                      <span style={{ color: "#40916c", fontWeight: 800, flexShrink: 0, marginTop: 1 }}>✓</span>
+                      <span style={{ fontSize: "0.8rem", color: "#5A6A6C", lineHeight: 1.5 }}>{p}</span>
+                    </div>
+                  ))}
+                  <button onClick={() => onWaOpen && onWaOpen({ key: "layanan", vars: { judul_layanan: cat.title } })}
+                    style={{ width: "100%", background: "linear-gradient(135deg,#1a472a,#40916c)", color: "#fff", border: "none", borderRadius: 10, padding: "13px", fontSize: "0.85rem", fontWeight: 800, cursor: "pointer", marginTop: 16, letterSpacing: ".04em" }}>
+                    🌿 Tanya Harga & Detail
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* ── ELEMEN TAMAN PREMIUM ── */}
+      <div style={{ background: "#fff", padding: "64px 5%", borderTop: "1px solid #E8DCC8", borderBottom: "1px solid #E8DCC8" }}>
+        <div style={{ maxWidth: 1280, margin: "0 auto" }}>
+          <div style={{ textAlign: "center", marginBottom: 48 }}>
+            <div style={{ fontSize: "0.65rem", fontWeight: 800, letterSpacing: ".14em", textTransform: "uppercase", color: "#40916c", marginBottom: 8 }}>Material & Elemen</div>
+            <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: "clamp(1.5rem,4vw,2.25rem)", fontWeight: 900, color: "#2E3D3F", margin: "0 0 14px" }}>Elemen Taman Premium</h2>
+            <p style={{ fontSize: "0.9375rem", color: "#5A6A6C", maxWidth: 520, margin: "0 auto", lineHeight: 1.75 }}>Kami hanya menggunakan material terpilih untuk memastikan taman Anda indah, tahan lama, dan mudah dirawat.</p>
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(280px,1fr))", gap: 24 }}>
+            {ELEMEN_PREMIUM.map((el, i) => (
+              <div key={i} style={{ background: "#FAF7F0", borderRadius: 14, overflow: "hidden", border: "1px solid #E8DCC8", transition: "box-shadow .2s" }}
+                onMouseEnter={e => e.currentTarget.style.boxShadow = "0 8px 28px rgba(0,0,0,.1)"}
+                onMouseLeave={e => e.currentTarget.style.boxShadow = "none"}>
+                <div style={{ height: 160, overflow: "hidden", background: "#E8DCC8" }}>
+                  <img src={el.img} alt={el.title} loading="lazy"
+                    style={{ width: "100%", height: "100%", objectFit: "cover", transition: "transform .4s" }}
+                    onMouseEnter={e => e.target.style.transform = "scale(1.07)"}
+                    onMouseLeave={e => e.target.style.transform = "scale(1)"}
+                    onError={e => { e.target.parentElement.innerHTML = `<div style="height:100%;display:flex;align-items:center;justify-content:center;font-size:2rem">${el.icon}</div>`; }} />
+                </div>
+                <div style={{ padding: "18px 18px 20px" }}>
+                  <div style={{ fontSize: 20, marginBottom: 8 }}>{el.icon}</div>
+                  <h3 style={{ fontSize: "0.9375rem", fontWeight: 800, color: "#2E3D3F", margin: "0 0 8px" }}>{el.title}</h3>
+                  <p style={{ fontSize: "0.8125rem", color: "#5A6A6C", lineHeight: 1.65, margin: 0 }}>{el.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* ── CTA BOTTOM ── */}
+      <div style={{ padding: "60px 5%", textAlign: "center" }}>
+        <div style={{ maxWidth: 600, margin: "0 auto", background: "linear-gradient(135deg,#1a472a 0%,#2d6a4f 100%)", borderRadius: 20, padding: "48px 32px", color: "#fff" }}>
+          <div style={{ fontSize: "0.7rem", letterSpacing: ".14em", textTransform: "uppercase", color: "#A8D5B5", fontWeight: 700, marginBottom: 12 }}>Konsultasi Gratis</div>
+          <h3 style={{ fontFamily: "'Playfair Display',serif", fontSize: "clamp(1.25rem,3vw,1.75rem)", fontWeight: 900, margin: "0 0 12px" }}>Wujudkan Taman Impian Anda</h3>
+          <p style={{ color: "rgba(255,255,255,.75)", fontSize: "0.9rem", margin: "0 0 28px", lineHeight: 1.7 }}>Tim landscape kami siap membantu dari survei, desain, hingga pemasangan dan perawatan berkala.</p>
+          <button onClick={() => onWaOpen && onWaOpen({ key: "konsultasi", vars: {} })}
+            style={{ background: "#C9AA71", color: "#2E3D3F", border: "none", borderRadius: 10, padding: "15px 36px", fontSize: "0.95rem", fontWeight: 800, cursor: "pointer", letterSpacing: ".05em" }}>
+            🌳 Hubungi Tim Landscape Kami
+          </button>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 /* ════════════════════════════════════════════ WA TEMPLATE HELPER ════════════════════════════════════════════ */
@@ -10117,7 +10369,7 @@ function MobileLayananAccordion({ page, navigateTo, setMobileMenu, navDropdownLa
   });
 
   const isLayananActive = [...topPages,
-    "interior/kamar-tidur","interior/kamar-mandi","interior/ruang-keluarga","interior/ruang-tamu","interior/kitchen-set","interior/ruang-kerja",
+    "interior/kamar-tidur","interior/kamar-mandi","interior/ruang-keluarga","interior/ruang-tamu","interior/kitchen-set","interior/ruang-kerja","interior/plafon-modern",
     "eksterior/pagar","eksterior/kanopi","eksterior/aluminium","eksterior/taman-landscape",
   ].some(k=>k===page);
 
@@ -10159,6 +10411,7 @@ function MobileLayananAccordion({ page, navigateTo, setMobileMenu, navDropdownLa
                 {key:"interior/ruang-tamu",     label:"🛋️ Ruang Tamu"},
                 {key:"interior/kitchen-set",    label:"🍳 Kitchen Set"},
                 {key:"interior/ruang-kerja",    label:"💼 Ruang Kerja"},
+                {key:"interior/plafon-modern",  label:"🏛️ Plafon Modern"},
               ].map(sub=>(
                 <button key={sub.key} onClick={()=>{ navigateTo(sub.key); setMobileMenu(false); setOpen(false); setSubOpen(null); }}
                   style={mBtn(page===sub.key, 2)}>
@@ -10197,12 +10450,13 @@ function MobileLayananAccordion({ page, navigateTo, setMobileMenu, navDropdownLa
 /* ═══════════════════════════════════════════════════════════════════
    SUB-PAGE CATALOG COMPONENT — dipakai oleh semua halaman baru
 ═══════════════════════════════════════════════════════════════════ */
-function SubPageCatalog({ heroColor, heroIcon, title, subtitle, breadcrumb, catalogData, onWaOpen, navigateTo }) {
+function SubPageCatalog({ heroColor, heroIcon, title, subtitle, breadcrumb, catalogData, onWaOpen, navigateTo, satuan }) {
   const [hoverId, setHoverId] = useState(null);
 
   const formatHarga = (n) => {
     if (!n || n === 0) return "Hubungi Kami";
-    return "Mulai Rp " + Number(n).toLocaleString("id-ID");
+    const suffix = satuan ? ` / ${satuan}` : "";
+    return "Mulai Rp " + Number(n).toLocaleString("id-ID") + suffix;
   };
 
   return (
@@ -10452,6 +10706,23 @@ const CATALOG_DATA = {
       {id:"tm8", nama:"Lampu Taman & Outdoor", style:"Ambiance", material:"LED Waterproof IP65", desc:"Pencahayaan taman yang dramatis. Uplighting pohon, path light, dan spotlight dekoratif.", harga:2500000, fitur:["Waterproof IP65","LED Hemat","Dramatic Effect"], img:"https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=600&q=80"},
     ]
   },
+  "interior/plafon-modern": {
+    heroColor:"linear-gradient(135deg,#1a1a2e 0%,#16213e 50%,#0f3460 100%)",
+    heroIcon:"🏛️", title:"Plafon Modern", subtitle:"Transformasi langit-langit ruangan menjadi karya seni arsitektur — elegan, modern, dan bernilai premium.",
+    breadcrumb:[{label:"Beranda",page:"home"},{label:"Interior",page:"interior"},{label:"Plafon Modern"}],
+    satuan:"m²",
+    items:[
+      {id:"pl1", nama:"Plafon Minimalis Rata", style:"Clean", material:"Gypsum Board 9mm", desc:"Plafon datar bersih tanpa ornamen. Cocok untuk desain minimalis dan kontemporer — cat putih atau warna netral.", harga:85000, fitur:["Tanpa Ornamen","Cat Custom","Anti Retak"], img:"https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=600&q=80"},
+      {id:"pl2", nama:"Drop Ceiling / Cove Ceiling", style:"Modern Luxury", material:"Gypsum Board + LED Strip", desc:"Plafon bertingkat dengan rongga tersembunyi untuk lampu LED strip. Efek cahaya ambient yang dramatis dan mewah.", harga:185000, fitur:["LED Hidden Light","Bertingkat","Dramatic Effect"], img:"https://images.unsplash.com/photo-1560448204-603b3fc33ddc?w=600&q=80"},
+      {id:"pl3", nama:"Plafon Coffered / Grid Box", style:"Classic Modern", material:"Gypsum + Kayu MDF", desc:"Kotak-kotak simetris bergaya klasik yang timeless. Memberikan kedalaman visual dan kesan ruangan yang tinggi.", harga:220000, fitur:["Simetris Elegan","Timeless","Kesan Tinggi"], img:"https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=600&q=80"},
+      {id:"pl4", nama:"Plafon Tray / Recessed", style:"Elegant", material:"Gypsum Board + Spotlight", desc:"Plafon tengah menjorok ke dalam (tray) dengan pencahayaan tersembunyi di tepinya. Fokus di tengah ruangan.", harga:165000, fitur:["Recessed Light","Focal Point","Elegant"], img:"https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=600&q=80"},
+      {id:"pl5", nama:"Plafon Kayu / Wood Slat", style:"Natural Warm", material:"Kayu Pinus / Jati / SPC", desc:"Bilah kayu horizontal yang hangat dan natural. Memberikan tekstur dan kehangatan pada langit-langit ruangan.", harga:275000, fitur:["Tekstur Natural","Warm Vibes","Sound Absorb"], img:"https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=600&q=80"},
+      {id:"pl6", nama:"Plafon PVC Motif", style:"Budget Friendly", material:"PVC Panel 30cm", desc:"Panel PVC bermotif kayu, marmer, atau polos. Tahan lembab, anti rayap, dan pemasangan cepat.", harga:65000, fitur:["Anti Lembab","Anti Rayap","Cepat Pasang"], img:"https://images.unsplash.com/photo-1600121848594-d8644e57abab?w=600&q=80"},
+      {id:"pl7", nama:"Plafon Ekspos Industrial", style:"Industrial Chic", material:"Beton Ekspos / Cat Gelap", desc:"Langit-langit tanpa penutup — pipa, rangka besi, dan beton dibiarkan terlihat. Bold dan berkarakter kuat.", harga:95000, fitur:["Bold Statement","No Gypsum","Raw Aesthetic"], img:"https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80"},
+      {id:"pl8", nama:"Plafon Stretched Ceiling", style:"Premium Futuristic", material:"PVC Membran Stretch", desc:"Membran PVC elastis yang ditarik sempurna — bisa transparan, mirror, atau dicetak gambar bintang/langit.", harga:320000, fitur:["Motif Custom","Mirror Option","Seamless"], img:"https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?w=600&q=80"},
+      {id:"pl9", nama:"Plafon Gypsum Ornamental", style:"Klasik Mewah", material:"Gypsum + Ornamen Cetak", desc:"Plafon dengan ornamen bunga, roset, dan border ukiran gypsum cetak. Cocok untuk ruang tamu dan ruang makan formal.", harga:195000, fitur:["Ornamen Cetak","Klasik Elegan","Rosette Center"], img:"https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=600&q=80"},
+    ]
+  },
 };
 
 /* ═══════════════════════════════════════════════════
@@ -10466,6 +10737,7 @@ function SubInteriorPage({ pageKey, onWaOpen, navigateTo }) {
     title={config.title} subtitle={config.subtitle}
     breadcrumb={config.breadcrumb}
     catalogData={config.items}
+    satuan={config.satuan || null}
     onWaOpen={onWaOpen} navigateTo={navigateTo}
   />;
 }
@@ -10485,7 +10757,7 @@ function NavDropdownLayanan({ page, navigateTo, navDropdownLayanan }) {
     return () => document.removeEventListener("mousedown", h);
   }, []);
 
-  const subIntPages = ["interior/kamar-tidur","interior/kamar-mandi","interior/ruang-keluarga","interior/ruang-tamu","interior/kitchen-set","interior/ruang-kerja"];
+  const subIntPages = ["interior/kamar-tidur","interior/kamar-mandi","interior/ruang-keluarga","interior/ruang-tamu","interior/kitchen-set","interior/ruang-kerja","interior/plafon-modern"];
   const subExtPages = ["eksterior/pagar","eksterior/kanopi","eksterior/aluminium","eksterior/taman-landscape"];
   const topPages    = ["services","desainrab","temarumah"];
   const isActive    = [...topPages,...subIntPages,...subExtPages,"interior","pagar","kanopi","aluminium","landscape"].some(k => k === page);
@@ -10533,6 +10805,7 @@ function NavDropdownLayanan({ page, navigateTo, navDropdownLayanan }) {
                   {key:"interior/ruang-tamu",     label:"🛋️ Ruang Tamu"},
                   {key:"interior/kitchen-set",    label:"🍳 Kitchen Set"},
                   {key:"interior/ruang-kerja",    label:"💼 Ruang Kerja"},
+                  {key:"interior/plafon-modern",  label:"🏛️ Plafon Modern"},
                 ].map(sub=>(
                   <button key={sub.key} onClick={()=>{ navigateTo(sub.key); setDdOpen(false); setSubOpen(null); }}
                     style={btn(page===sub.key)}
@@ -12387,7 +12660,7 @@ export default function BricksyTravel() {
               {page === "aluminium"   && <AluminiumPage   onWaOpen={openWaPicker} />}
               {page === "landscape"   && <LandscapePage   onWaOpen={openWaPicker} />}
               {/* ── Sub-halaman Interior ── */}
-              {["interior/kamar-tidur","interior/kamar-mandi","interior/ruang-keluarga","interior/ruang-tamu","interior/kitchen-set","interior/ruang-kerja"].includes(page) &&
+              {["interior/kamar-tidur","interior/kamar-mandi","interior/ruang-keluarga","interior/ruang-tamu","interior/kitchen-set","interior/ruang-kerja","interior/plafon-modern"].includes(page) &&
                 <SubInteriorPage pageKey={page} onWaOpen={openWaPicker} navigateTo={navigateTo} />}
               {/* ── Sub-halaman Eksterior ── */}
               {["eksterior/pagar","eksterior/kanopi","eksterior/aluminium","eksterior/taman-landscape"].includes(page) &&
