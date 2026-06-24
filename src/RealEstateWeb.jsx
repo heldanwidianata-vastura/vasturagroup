@@ -698,6 +698,8 @@ const DEFAULT_DATA = {
   messages: [],
   reviews: [],
   reviewTokens: [],
+  landscapeCategories: [],
+  rumahSubsidiPaket: [],
   services: [
     /* ── EVENT PLAN (3 paket) ── */
     {
@@ -10271,17 +10273,21 @@ function LsInfoCard({ cat, fmt, onWaOpen }) {
   );
 }
 
-function LandscapePage({ onWaOpen }) {
+function LandscapePage({ onWaOpen, categories }) {
   useEffect(() => { window.scrollTo(0, 0); }, []);
   const fmt = (n) => "Rp " + n.toLocaleString("id-ID") + ",-";
+  const cats_ = (categories && categories.length) ? categories : LANDSCAPE_CATEGORIES;
 
-  // Susun 6 kategori ke rows berdasar MAG_LAYOUT (desktop)
+  // Susun kategori ke rows berdasar MAG_LAYOUT (desktop), berulang jika >6 kategori
   const rows = [];
   let pos = 0;
-  for (const cols of MAG_LAYOUT) {
-    const slice = LANDSCAPE_CATEGORIES.slice(pos, pos + cols);
+  let layoutI = 0;
+  while (pos < cats_.length) {
+    const cols = MAG_LAYOUT[layoutI % MAG_LAYOUT.length];
+    const slice = cats_.slice(pos, pos + cols);
     if (slice.length > 0) rows.push({ cols: slice.length, cats: slice });
     pos += cols;
+    layoutI++;
   }
 
   // Tinggi slideshow berdasar jumlah kolom di baris tersebut (desktop)
@@ -10361,7 +10367,7 @@ function LandscapePage({ onWaOpen }) {
             Dari taman depan hingga rooftop garden — kami wujudkan setiap sudut hijau impian Anda.
           </p>
           <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
-            {LANDSCAPE_CATEGORIES.map(cat => (
+            {cats_.map(cat => (
               <span key={cat.id} style={{ background: "rgba(255,255,255,.1)", color: "rgba(255,255,255,.85)", fontSize: "0.7rem", fontWeight: 700, padding: "5px 14px", borderRadius: 20, border: "1px solid rgba(255,255,255,.15)" }}>
                 {cat.icon} {cat.title.replace("Contoh Desain ", "")}
               </span>
@@ -10419,7 +10425,7 @@ function LandscapePage({ onWaOpen }) {
           Tersembunyi di desktop via CSS
       ══════════════════════════════════════════════════ */}
       <div className="ls-mobile-list">
-        {LANDSCAPE_CATEGORIES.map((cat) => (
+        {cats_.map((cat) => (
           <div key={cat.id} className="ls-mobile-item ls-wrap">
 
             {/* Foto slideshow — tinggi lebih pendek di mobile */}
@@ -10483,6 +10489,440 @@ function LandscapePage({ onWaOpen }) {
           <button onClick={() => onWaOpen && onWaOpen({ key: "konsultasi", vars: {} })}
             style={{ background: "#C9AA71", color: "#2E3D3F", border: "none", borderRadius: 10, padding: "15px 36px", fontSize: "0.95rem", fontWeight: 800, cursor: "pointer", letterSpacing: ".05em" }}>
             🌳 Hubungi Tim Landscape Kami
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   PROGRAM RENOVASI RUMAH SUBSIDI — Magazine Mixing Grid
+   (1 kolom | 3 kolom | 2 kolom, ulangi per 6 paket)
+═══════════════════════════════════════════════════════════════════ */
+
+/* ── Data Paket Renovasi Rumah Subsidi ── */
+const RS_PAKET_DATA = [
+  {
+    id: "rs-cat-dinding",
+    icon: "🎨",
+    title: "Renovasi Cat & Dinding",
+    desc: "Segarkan tampilan rumah subsidi Anda dengan pengecatan ulang interior & eksterior, perbaikan retak rambut, dan plamir dinding hingga rapi sempurna.",
+    startFrom: 3500000,
+    satuan: "paket",
+    slideDir: "right",
+    includes: [
+      { icon: "📐", item: "Survei & pengukuran luas dinding gratis" },
+      { icon: "🧱", item: "Perbaikan retak rambut & dinding mengelupas" },
+      { icon: "🪣", item: "Plamir dinding hingga permukaan halus" },
+      { icon: "🎨", item: "Cat dasar (primer) anti alkali" },
+      { icon: "🖌️", item: "Cat finishing 2 lapis (interior & eksterior)" },
+      { icon: "🌈", item: "Konsultasi pilihan warna & sample dinding" },
+      { icon: "🧰", item: "Tenaga tukang cat berpengalaman" },
+      { icon: "📋", item: "Garansi pengerjaan 30 hari" },
+    ],
+    slides: [
+      { img: "https://images.unsplash.com/photo-1562259949-e8e7689d7828?w=800&q=80", tema: "Cat Eksterior Segar", desc: "Tampilan fasad rumah subsidi yang baru dicat — bersih, cerah, dan tahan cuaca tropis." },
+      { img: "https://images.unsplash.com/photo-1589939705384-5185137a7f0f?w=800&q=80", tema: "Cat Interior Rapi", desc: "Dinding dalam ruangan dengan finishing rata, tanpa bekas kuas, siap dihuni kembali." },
+      { img: "https://images.unsplash.com/photo-1604709177225-055f99402ea3?w=800&q=80", tema: "Perbaikan Dinding Retak", desc: "Proses pendempulan dan perataan dinding sebelum pengecatan ulang." },
+      { img: "https://images.unsplash.com/photo-1493606371202-6346f1ca5733?w=800&q=80", tema: "Pemilihan Warna", desc: "Konsultasi kombinasi warna cat yang pas dengan gaya rumah subsidi Anda." },
+    ]
+  },
+  {
+    id: "rs-atap-plafon",
+    icon: "🏠",
+    title: "Renovasi Atap & Plafon",
+    desc: "Atasi kebocoran, genteng pecah, dan plafon lembap dengan perbaikan struktur atap menyeluruh agar rumah subsidi Anda kembali kering dan aman.",
+    startFrom: 8500000,
+    satuan: "paket",
+    slideDir: "up",
+    includes: [
+      { icon: "📐", item: "Inspeksi kebocoran & struktur atap gratis" },
+      { icon: "🔧", item: "Perbaikan / ganti rangka kayu & baja ringan" },
+      { icon: "🏠", item: "Ganti genteng pecah & nat bocor" },
+      { icon: "💧", item: "Waterproofing area dak & sambungan atap" },
+      { icon: "⬜", item: "Pemasangan plafon gypsum / GRC baru" },
+      { icon: "🎨", item: "Finishing cat plafon anti lembap" },
+      { icon: "🧰", item: "Pembersihan sisa material pasca renovasi" },
+      { icon: "📋", item: "Garansi anti bocor 6 bulan" },
+    ],
+    slides: [
+      { img: "https://images.unsplash.com/photo-1632759145351-1d592919f522?w=800&q=80", tema: "Perbaikan Rangka Atap", desc: "Penggantian rangka atap yang lapuk dengan baja ringan anti karat." },
+      { img: "https://images.unsplash.com/photo-1601760561442-746f0f0b1e6b?w=800&q=80", tema: "Ganti Genteng", desc: "Pemasangan genteng baru menggantikan genteng pecah dan bocor." },
+      { img: "https://images.unsplash.com/photo-1505691938895-1758d7feb511?w=800&q=80", tema: "Plafon Gypsum Baru", desc: "Plafon gypsum rapi menggantikan plafon lama yang lembap dan menggelembung." },
+      { img: "https://images.unsplash.com/photo-1581094288338-2314dddb7ece?w=800&q=80", tema: "Waterproofing Dak", desc: "Lapisan waterproofing pada area dak beton untuk mencegah rembesan air." },
+    ]
+  },
+  {
+    id: "rs-lantai-keramik",
+    icon: "🧱",
+    title: "Renovasi Lantai & Keramik",
+    desc: "Ganti lantai semen polos atau keramik pecah dengan keramik baru yang rapi, presisi, dan tahan lama untuk seluruh ruangan di rumah subsidi.",
+    startFrom: 6500000,
+    satuan: "paket",
+    slideDir: "left",
+    includes: [
+      { icon: "📐", item: "Survei & pengukuran luas lantai gratis" },
+      { icon: "🔨", item: "Bongkar lantai/keramik lama" },
+      { icon: "🪣", item: "Pengurukan & perataan cor dasar" },
+      { icon: "🧱", item: "Pemasangan keramik baru (pilihan motif)" },
+      { icon: "📏", item: "Nat keramik rapi & presisi" },
+      { icon: "🚪", item: "Pemasangan plint lantai" },
+      { icon: "🧰", item: "Tukang keramik berpengalaman" },
+      { icon: "📋", item: "Garansi pemasangan 30 hari" },
+    ],
+    slides: [
+      { img: "https://images.unsplash.com/photo-1581858726788-75bc0f6a952d?w=800&q=80", tema: "Pemasangan Keramik Baru", desc: "Keramik baru terpasang rapi dengan nat presisi di ruang utama." },
+      { img: "https://images.unsplash.com/photo-1556909190-9b5b97ee1cdd?w=800&q=80", tema: "Bongkar Lantai Lama", desc: "Proses pembongkaran lantai semen lama sebelum pengerjaan ulang." },
+      { img: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&q=80", tema: "Keramik Motif Granit", desc: "Pilihan motif keramik granit untuk tampilan lantai yang lebih elegan." },
+      { img: "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=800&q=80", tema: "Lantai Siap Pakai", desc: "Hasil akhir lantai keramik baru yang bersih, rata, dan siap dihuni." },
+    ]
+  },
+  {
+    id: "rs-dapur-kamar-mandi",
+    icon: "🚿",
+    title: "Renovasi Dapur & Kamar Mandi",
+    desc: "Wujudkan dapur dan kamar mandi rumah subsidi yang lebih fungsional — perbaikan saluran air, keramik dinding baru, hingga pemasangan kitchen set sederhana.",
+    startFrom: 12000000,
+    satuan: "paket",
+    slideDir: "down",
+    includes: [
+      { icon: "📐", item: "Survei instalasi air & sanitasi gratis" },
+      { icon: "🚰", item: "Perbaikan / ganti pipa air bersih & limbah" },
+      { icon: "🧱", item: "Keramik dinding dapur & kamar mandi" },
+      { icon: "🚽", item: "Pemasangan kloset & wastafel baru" },
+      { icon: "🍳", item: "Kitchen set sederhana (kabinet bawah)" },
+      { icon: "💡", item: "Instalasi titik lampu tambahan" },
+      { icon: "🔧", item: "Pengecekan kebocoran pasca pemasangan" },
+      { icon: "📋", item: "Garansi instalasi air 60 hari" },
+    ],
+    slides: [
+      { img: "https://images.unsplash.com/photo-1556911220-bff31c812dba?w=800&q=80", tema: "Dapur Minimalis Baru", desc: "Dapur rumah subsidi dengan kitchen set sederhana dan keramik dinding baru." },
+      { img: "https://images.unsplash.com/photo-1620626011761-996317b8d101?w=800&q=80", tema: "Kamar Mandi Bersih", desc: "Kamar mandi dengan keramik baru, kloset, dan wastafel yang segar." },
+      { img: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=800&q=80", tema: "Instalasi Pipa Air", desc: "Penggantian jalur pipa air bersih dan limbah agar bebas rembesan." },
+      { img: "https://images.unsplash.com/photo-1556909114-44e3e70034e2?w=800&q=80", tema: "Wastafel & Sanitasi", desc: "Pemasangan wastafel dan perlengkapan sanitasi baru yang rapi." },
+      { img: "https://images.unsplash.com/photo-1503174971373-b1f69850bded?w=800&q=80", tema: "Kitchen Set Sederhana", desc: "Kabinet dapur sederhana namun fungsional untuk rumah subsidi." },
+    ]
+  },
+  {
+    id: "rs-tambah-ruang",
+    icon: "📐",
+    title: "Renovasi Tambah Ruang / Sekat",
+    desc: "Tambah luas hunian dengan penambahan ruang baru atau sekat ruangan — solusi tepat untuk keluarga yang membutuhkan kamar tambahan di rumah subsidi.",
+    startFrom: 15000000,
+    satuan: "paket",
+    slideDir: "left",
+    includes: [
+      { icon: "📐", item: "Survei lahan & desain layout gratis" },
+      { icon: "🏗️", item: "Pembangunan dinding sekat / partisi" },
+      { icon: "🧱", item: "Pasangan bata ringan / hebel" },
+      { icon: "🚪", item: "Pemasangan pintu & kusen baru" },
+      { icon: "💡", item: "Instalasi listrik titik tambahan" },
+      { icon: "🎨", item: "Finishing plester & cat ruangan baru" },
+      { icon: "🏠", item: "Penyesuaian atap jika ada perluasan" },
+      { icon: "📋", item: "Garansi struktur 90 hari" },
+    ],
+    slides: [
+      { img: "https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=800&q=80", tema: "Sekat Ruangan Baru", desc: "Pembangunan dinding sekat untuk membagi ruangan menjadi kamar tambahan." },
+      { img: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=800&q=80", tema: "Penambahan Ruang", desc: "Perluasan bangunan rumah subsidi dengan ruang tambahan di sisi belakang." },
+      { img: "https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=800&q=80", tema: "Pasangan Bata Ringan", desc: "Konstruksi dinding baru menggunakan bata ringan yang kuat dan ringan." },
+      { img: "https://images.unsplash.com/photo-1542621334-a254cf47733d?w=800&q=80", tema: "Ruang Baru Siap Pakai", desc: "Hasil akhir kamar tambahan dengan finishing rapi dan siap dihuni." },
+    ]
+  },
+  {
+    id: "rs-total-rumah",
+    icon: "🏗️",
+    title: "Renovasi Total Rumah Subsidi",
+    desc: "Paket renovasi menyeluruh — atap, dinding, lantai, dapur, kamar mandi, hingga instalasi listrik & air — untuk transformasi total rumah subsidi Anda.",
+    startFrom: 25000000,
+    satuan: "unit",
+    slideDir: "down",
+    includes: [
+      { icon: "📐", item: "Survei & RAB renovasi total gratis" },
+      { icon: "🏠", item: "Perbaikan atap, plafon & struktur rumah" },
+      { icon: "🧱", item: "Renovasi dinding, plester & pengecatan" },
+      { icon: "🧱", item: "Penggantian lantai & keramik seluruh ruangan" },
+      { icon: "🚿", item: "Renovasi dapur & kamar mandi lengkap" },
+      { icon: "💡", item: "Pembaruan instalasi listrik & air" },
+      { icon: "🚪", item: "Penggantian pintu & jendela jika diperlukan" },
+      { icon: "📋", item: "Garansi pengerjaan 6 bulan + pendampingan tukang" },
+    ],
+    slides: [
+      { img: "https://images.unsplash.com/photo-1503387837-b154d5074bd2?w=800&q=80", tema: "Sebelum Renovasi", desc: "Kondisi rumah subsidi sebelum renovasi total — siap diubah menjadi hunian layak." },
+      { img: "https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=800&q=80", tema: "Proses Renovasi", desc: "Tim tukang bekerja menyeluruh dari struktur hingga finishing akhir." },
+      { img: "https://images.unsplash.com/photo-1600566752355-35792bedcfea?w=800&q=80", tema: "Rumah Subsidi Baru", desc: "Hasil akhir rumah subsidi setelah renovasi total — rapi dan nyaman dihuni." },
+      { img: "https://images.unsplash.com/photo-1597047084897-51e81819a499?w=800&q=80", tema: "Eksterior Diperbarui", desc: "Tampak luar rumah subsidi dengan cat baru dan atap yang sudah diperbaiki." },
+      { img: "https://images.unsplash.com/photo-1556912167-f556f1f39fdf?w=800&q=80", tema: "Interior Siap Huni", desc: "Ruangan dalam yang sudah dirombak total, bersih, dan fungsional." },
+    ]
+  },
+];
+
+/* ── Pola baris magazine grid: 1 | 3 | 2 (ulangi jika >6 paket) ── */
+const RS_MAG_LAYOUT = [1, 3, 2];
+
+/* ── Mini Slideshow dengan animasi arah berbeda per paket ── */
+function RsMiniSlide({ slides, slideDir = "right", height = "100%" }) {
+  const [idx, setIdx] = useState(0);
+  const [prevIdx, setPrevIdx] = useState(null);
+  const [animating, setAnimating] = useState(false);
+  const timerRef = useRef(null);
+  const clearRef = useRef(null);
+  const idxRef = useRef(0);
+
+  useEffect(() => {
+    timerRef.current = setInterval(() => {
+      const current = idxRef.current;
+      const next = (current + 1) % slides.length;
+      setPrevIdx(current);
+      setIdx(next);
+      idxRef.current = next;
+      setAnimating(true);
+      clearTimeout(clearRef.current);
+      clearRef.current = setTimeout(() => { setAnimating(false); setPrevIdx(null); }, 400);
+    }, 3000);
+    return () => { clearInterval(timerRef.current); clearTimeout(clearRef.current); };
+  }, [slides.length]);
+
+  const dirIn = { right: "rsSlideInRight", up: "rsSlideInUp", left: "rsSlideInLeft", down: "rsSlideInDown" };
+  const dirOut = { right: "rsSlideOutRight", up: "rsSlideOutUp", left: "rsSlideOutLeft", down: "rsSlideOutDown" };
+  const sl = slides[idx];
+
+  return (
+    <div style={{ position: "relative", width: "100%", height, overflow: "hidden", background: "#1a1a1a" }}>
+      {prevIdx !== null && animating && (
+        <img key={`p${prevIdx}`} src={slides[prevIdx].img} alt={slides[prevIdx].tema}
+          className={dirOut[slideDir]}
+          style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }}
+          onError={e => { e.target.style.display = "none"; }} />
+      )}
+      <img key={`c${idx}`} src={sl.img} alt={sl.tema}
+        className={animating ? dirIn[slideDir] : ""}
+        style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }}
+        onError={e => { e.target.style.display = "none"; }} />
+      {/* Gradient overlay + caption */}
+      <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(0,0,0,.75) 0%, rgba(0,0,0,.05) 55%, transparent 100%)", pointerEvents: "none", zIndex: 2 }} />
+      <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, padding: "16px 14px 14px", zIndex: 2 }}>
+        <div style={{ fontSize: "0.6rem", fontWeight: 800, letterSpacing: ".1em", textTransform: "uppercase", color: "#C9AA71", marginBottom: 3 }}>{sl.tema}</div>
+        <p style={{ fontSize: "0.72rem", color: "rgba(255,255,255,.88)", lineHeight: 1.5, margin: 0, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>{sl.desc}</p>
+      </div>
+      {/* Counter */}
+      <div style={{ position: "absolute", top: 10, right: 10, background: "rgba(0,0,0,.45)", backdropFilter: "blur(4px)", color: "#C9AA71", fontSize: "0.58rem", fontWeight: 800, padding: "2px 8px", borderRadius: 20, zIndex: 3 }}>{idx + 1}/{slides.length}</div>
+    </div>
+  );
+}
+
+/* ── Kartu info putih dengan dropdown "Yang Termasuk" — state independen per paket ── */
+function RsInfoCard({ paket, fmt, onWaOpen }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <div className="ls-info-card">
+      <h3 className="ls-card-title">{paket.icon} {paket.title}</h3>
+      <p className="ls-desc">{paket.desc}</p>
+
+      <div className="ls-cta-row">
+        <div className="ls-price-badge">
+          <span className="lb">Mulai dari</span>
+          <span className="vl">{fmt(paket.startFrom)} / {paket.satuan}</span>
+        </div>
+        <button className="ls-cta-btn"
+          onClick={() => onWaOpen && onWaOpen({ key: "layanan", vars: { judul_layanan: paket.title } })}>
+          🏠 Konsultasi Sekarang
+        </button>
+      </div>
+
+      <button className="ls-toggle-btn" onClick={() => setOpen(o => !o)}>
+        {open ? (
+          <><span>▲</span><span>Sembunyikan Detail</span></>
+        ) : (
+          <><span>✅</span><span>Lihat Yang Termasuk ▼</span></>
+        )}
+      </button>
+
+      {open && (
+        <div className="ls-includes-box">
+          <div className="ls-includes-title">✅ Yang Termasuk dalam Paket</div>
+          <div className="ls-includes-grid">
+            {(paket.includes || []).map((inc, idx) => (
+              <div key={idx} className="ls-include-item">
+                <span className="ic">{inc.icon}</span>
+                <span className="tx">{inc.item}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ── Halaman Program Renovasi Rumah Subsidi (Magazine Mixing Grid) ── */
+function RumahSubsidiPage({ onWaOpen, paketData }) {
+  useEffect(() => { window.scrollTo(0, 0); }, []);
+  const fmt = (n) => "Rp " + n.toLocaleString("id-ID") + ",-";
+  const paket_ = (paketData && paketData.length) ? paketData : RS_PAKET_DATA;
+
+  // Susun paket ke rows sesuai RS_MAG_LAYOUT (1 | 3 | 2), berulang jika >6 paket
+  const rows = [];
+  let pos = 0;
+  let layoutIdx = 0;
+  while (pos < paket_.length) {
+    const cols = RS_MAG_LAYOUT[layoutIdx % RS_MAG_LAYOUT.length];
+    const slice = paket_.slice(pos, pos + cols);
+    if (slice.length > 0) rows.push({ cols: slice.length, items: slice });
+    pos += cols;
+    layoutIdx++;
+  }
+  const heightMap = { 1: 480, 2: 400, 3: 340 };
+
+  return (
+    <div className="fade-in" style={{ background: "#FAF7F0", minHeight: "100vh" }}>
+      <style>{`
+        @keyframes rsSlideInRight  { from { transform: translateX(-100%); } to { transform: translateX(0); } }
+        @keyframes rsSlideOutRight { from { transform: translateX(0); } to { transform: translateX(100%); } }
+        @keyframes rsSlideInUp     { from { transform: translateY(100%); } to { transform: translateY(0); } }
+        @keyframes rsSlideOutUp    { from { transform: translateY(0); } to { transform: translateY(-100%); } }
+        @keyframes rsSlideInLeft   { from { transform: translateX(100%); } to { transform: translateX(0); } }
+        @keyframes rsSlideOutLeft  { from { transform: translateX(0); } to { transform: translateX(-100%); } }
+        @keyframes rsSlideInDown   { from { transform: translateY(-100%); } to { transform: translateY(0); } }
+        @keyframes rsSlideOutDown  { from { transform: translateY(0); } to { transform: translateY(100%); } }
+        .rsSlideInRight,.rsSlideOutRight,.rsSlideInUp,.rsSlideOutUp,.rsSlideInLeft,.rsSlideOutLeft,.rsSlideInDown,.rsSlideOutDown {
+          animation-duration: .4s; animation-timing-function: ease; animation-fill-mode: forwards; z-index: 1;
+        }
+        @keyframes lsDropIn { from { opacity:0; transform:translateY(-8px); } to { opacity:1; transform:translateY(0); } }
+
+        .ls-wrap { position:relative; }
+        .ls-img-box { position:relative; overflow:hidden; }
+        .ls-img-box:hover .ls-mag-overlay-btn { opacity:1 !important; }
+
+        .ls-cat-badge { position:absolute; top:14px; left:14px; z-index:4; }
+        .ls-price-pill { position:absolute; top:14px; right:14px; z-index:4; background:rgba(201,170,113,.93); backdrop-filter:blur(6px); color:#1a2a1a; font-size:.62rem; font-weight:900; letter-spacing:.06em; padding:5px 12px; border-radius:20px; white-space:nowrap; }
+        .ls-mag-overlay-btn { opacity:0; transition:opacity .3s; position:absolute; bottom:16px; right:14px; z-index:4; }
+
+        .ls-info-card { background:#fff; padding:20px 18px 22px; }
+        .ls-card-title { font-family:'Playfair Display',serif; font-size:clamp(.88rem,1.8vw,1.05rem); font-weight:900; color:#2E3D3F; margin:0 0 8px; line-height:1.3; }
+        .ls-desc { font-size:.825rem; color:#5A6A6C; line-height:1.7; margin:0 0 14px; }
+
+        .ls-cta-row { display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap; margin-bottom:12px; }
+        .ls-price-badge { background:#f0fdf4; border:1.5px solid #86efac; border-radius:8px; padding:6px 14px; flex-shrink:0; }
+        .ls-price-badge span.lb { display:block; font-size:.56rem; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:#166534; }
+        .ls-price-badge span.vl { display:block; font-size:.8rem; font-weight:900; color:#14532d; white-space:nowrap; }
+        .ls-cta-btn { background:#2E3D3F; color:#fff; border:none; border-radius:8px; padding:9px 16px; font-size:.73rem; font-weight:800; cursor:pointer; white-space:nowrap; transition:background .2s; flex:1; min-width:130px; text-align:center; }
+        .ls-cta-btn:hover { background:#8B6914; }
+
+        .ls-toggle-btn { width:100%; display:flex; align-items:center; justify-content:center; gap:8px; background:#f4faf6; border:1.5px solid #bbf7d0; border-radius:8px; padding:9px 14px; font-size:.75rem; font-weight:800; color:#166534; cursor:pointer; transition:all .2s; }
+        .ls-toggle-btn:hover { background:#dcfce7; border-color:#4ade80; }
+        .ls-toggle-btn span:first-child { font-size:.65rem; }
+
+        .ls-includes-box { margin-top:12px; border-top:2px dashed #bbf7d0; padding-top:14px; animation:lsDropIn .22s ease; }
+        .ls-includes-title { font-size:.6rem; font-weight:900; letter-spacing:.14em; text-transform:uppercase; color:#2d6a4f; margin:0 0 10px; }
+        .ls-includes-grid { display:grid; grid-template-columns:1fr 1fr; gap:6px 12px; }
+        .ls-include-item { display:flex; align-items:flex-start; gap:7px; }
+        .ls-include-item span.ic { font-size:.82rem; flex-shrink:0; margin-top:1px; }
+        .ls-include-item span.tx { font-size:.73rem; color:#2E3D3F; line-height:1.45; }
+
+        @media (max-width: 767px) {
+          .ls-desktop-grid { display:none !important; }
+          .ls-mobile-list { display:flex !important; flex-direction:column; gap:4px; padding:4px 0 0; }
+          .ls-mobile-item { width:100%; }
+          .ls-mobile-slide { height:260px !important; }
+          .ls-includes-grid { grid-template-columns:1fr; }
+          .ls-cta-row { flex-direction:column; align-items:stretch; }
+          .ls-cta-btn { text-align:center; }
+          .ls-price-pill { font-size:.56rem; padding:4px 9px; }
+        }
+        @media (min-width: 768px) {
+          .ls-mobile-list { display:none !important; }
+          .ls-desktop-grid { display:flex !important; }
+        }
+      `}</style>
+
+      {/* HERO */}
+      <div style={{ background: "linear-gradient(135deg,#2E3D3F 0%,#3D5254 60%,#8B6914 100%)", padding: "64px 5% 56px", textAlign: "center", position: "relative", overflow: "hidden" }}>
+        <div style={{ position: "absolute", inset: 0, opacity: 0.07, backgroundImage: "radial-gradient(circle,#fff 1px,transparent 1px)", backgroundSize: "36px 36px", pointerEvents: "none" }} />
+        <div style={{ position: "relative", zIndex: 1, maxWidth: 680, margin: "0 auto" }}>
+          <div style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "rgba(255,255,255,.1)", borderRadius: 20, padding: "5px 16px", marginBottom: 18 }}>
+            <span style={{ fontSize: "0.65rem", fontWeight: 800, letterSpacing: ".16em", textTransform: "uppercase", color: "#C9AA71" }}>VASTURA GROUP · PROGRAM RENOVASI</span>
+          </div>
+          <div style={{ fontSize: "clamp(2rem,7vw,3.5rem)", marginBottom: 10 }}>🏠</div>
+          <h1 style={{ fontFamily: "'Playfair Display',serif", fontSize: "clamp(1.75rem,5vw,2.75rem)", fontWeight: 900, color: "#fff", margin: "0 0 14px", lineHeight: 1.2 }}>Renovasi Rumah Subsidi</h1>
+          <p style={{ fontSize: "clamp(.875rem,2vw,1rem)", color: "rgba(255,255,255,.75)", lineHeight: 1.8, margin: "0 0 26px" }}>
+            Tingkatkan kualitas hunian subsidi Anda — dari perbaikan ringan hingga renovasi total, dikerjakan tukang berpengalaman dengan harga terjangkau.
+          </p>
+          <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
+            {paket_.map(p => (
+              <span key={p.id} style={{ background: "rgba(255,255,255,.1)", color: "rgba(255,255,255,.85)", fontSize: "0.7rem", fontWeight: 700, padding: "5px 14px", borderRadius: 20, border: "1px solid rgba(255,255,255,.15)" }}>
+                {p.icon} {p.title.replace("Renovasi ", "")}
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* DESKTOP: Magazine Mixing Grid */}
+      <div className="ls-desktop-grid" style={{ flexDirection: "column", gap: 4, padding: "4px 0 0" }}>
+        {rows.map((row, ri) => {
+          const h = heightMap[row.cols] || 360;
+          return (
+            <div key={ri} style={{ display: "grid", gridTemplateColumns: `repeat(${row.cols}, 1fr)`, gap: 4, alignItems: "start" }}>
+              {row.items.map((paket) => (
+                <div key={paket.id} className="ls-wrap">
+                  <div className="ls-img-box" style={{ height: h, position: "relative", overflow: "hidden" }}>
+                    <RsMiniSlide slides={paket.slides} slideDir={paket.slideDir} height={`${h}px`} />
+
+                    <div className="ls-cat-badge">
+                      <div style={{ background: "rgba(13,31,24,.78)", backdropFilter: "blur(8px)", color: "#C9AA71", fontSize: "0.62rem", fontWeight: 800, letterSpacing: ".1em", textTransform: "uppercase", padding: "5px 13px", borderRadius: 20, display: "flex", alignItems: "center", gap: 6 }}>
+                        <span>{paket.icon}</span>{paket.title}
+                      </div>
+                    </div>
+
+                    <div className="ls-price-pill">Mulai {fmt(paket.startFrom)} / {paket.satuan}</div>
+
+                    <div className="ls-mag-overlay-btn">
+                      <button onClick={() => onWaOpen && onWaOpen({ key: "layanan", vars: { judul_layanan: paket.title } })}
+                        style={{ background: "#C9AA71", color: "#1a2a1a", border: "none", borderRadius: 8, padding: "9px 18px", fontSize: "0.75rem", fontWeight: 800, cursor: "pointer", whiteSpace: "nowrap", boxShadow: "0 4px 14px rgba(0,0,0,.3)" }}>
+                        🏠 Tanya Harga & Detail
+                      </button>
+                    </div>
+                  </div>
+
+                  <RsInfoCard paket={paket} fmt={fmt} onWaOpen={onWaOpen} />
+                </div>
+              ))}
+            </div>
+          );
+        })}
+      </div>
+
+      {/* MOBILE: 1 Kolom Penuh */}
+      <div className="ls-mobile-list">
+        {paket_.map((paket) => (
+          <div key={paket.id} className="ls-mobile-item ls-wrap">
+            <div className="ls-img-box ls-mobile-slide" style={{ position: "relative", overflow: "hidden", height: 260 }}>
+              <RsMiniSlide slides={paket.slides} slideDir={paket.slideDir} height="260px" />
+
+              <div className="ls-cat-badge">
+                <div style={{ background: "rgba(13,31,24,.82)", backdropFilter: "blur(8px)", color: "#C9AA71", fontSize: "0.6rem", fontWeight: 800, letterSpacing: ".1em", textTransform: "uppercase", padding: "4px 11px", borderRadius: 20, display: "flex", alignItems: "center", gap: 5 }}>
+                  <span>{paket.icon}</span>{paket.title}
+                </div>
+              </div>
+
+              <div className="ls-price-pill">Mulai {fmt(paket.startFrom)} / {paket.satuan}</div>
+            </div>
+
+            <RsInfoCard paket={paket} fmt={fmt} onWaOpen={onWaOpen} />
+          </div>
+        ))}
+      </div>
+
+      {/* CTA BOTTOM */}
+      <div style={{ padding: "60px 5%", textAlign: "center", background: "#FAF7F0" }}>
+        <div style={{ maxWidth: 600, margin: "0 auto", background: "linear-gradient(135deg,#2E3D3F 0%,#8B6914 100%)", borderRadius: 20, padding: "48px 32px", color: "#fff" }}>
+          <div style={{ fontSize: "0.7rem", letterSpacing: ".14em", textTransform: "uppercase", color: "#C9AA71", fontWeight: 700, marginBottom: 12 }}>Konsultasi Gratis</div>
+          <h3 style={{ fontFamily: "'Playfair Display',serif", fontSize: "clamp(1.25rem,3vw,1.75rem)", fontWeight: 900, margin: "0 0 12px" }}>Wujudkan Rumah Subsidi yang Lebih Layak</h3>
+          <p style={{ color: "rgba(255,255,255,.75)", fontSize: "0.9rem", margin: "0 0 28px", lineHeight: 1.7 }}>Tim kami siap survei, menghitung RAB, dan mengerjakan renovasi rumah subsidi Anda dari awal hingga selesai.</p>
+          <button onClick={() => onWaOpen && onWaOpen({ key: "konsultasi", vars: {} })}
+            style={{ background: "#C9AA71", color: "#2E3D3F", border: "none", borderRadius: 10, padding: "15px 36px", fontSize: "0.95rem", fontWeight: 800, cursor: "pointer", letterSpacing: ".05em" }}>
+            🏠 Hubungi Tim Renovasi Kami
           </button>
         </div>
       </div>
@@ -10733,6 +11173,222 @@ function SosmedManager({ content, onSave, notify }) {
 }
 
 /* ─────────────── NAV DROPDOWN: LAYANAN ─────────────── */
+
+/* ═══════════════════════════════════════════════════════════════════
+   PAKET GRID MANAGER — admin editor untuk paket magazine-grid
+   (dipakai untuk "Landscape & Taman" dan "Rumah Subsidi")
+   Bisa edit: icon, judul, deskripsi, harga, satuan, arah animasi slide,
+   daftar "yang termasuk", dan foto slideshow (upload / paste URL).
+═══════════════════════════════════════════════════════════════════ */
+function PaketGridManager({ data, save, notify, storeKey, title, icon, accentColor = "#2E3D3F", defaultItems = [], showSlideDir = false, ctaHint = "" }) {
+  const items = (data[storeKey] && data[storeKey].length) ? data[storeKey] : defaultItems;
+  const [editId, setEditId] = useState(null);
+  const [form, setForm] = useState({});
+
+  const blankItem = () => ({
+    id: `paket-${Date.now()}`,
+    icon: "🏠",
+    title: "",
+    desc: "",
+    startFrom: 0,
+    satuan: "paket",
+    slideDir: "right",
+    includes: [],
+    slides: [],
+  });
+
+  const openNew = () => { setForm(blankItem()); setEditId("new"); };
+  const openEdit = (it) => { setForm({ ...it, includes: [...(it.includes || [])], slides: [...(it.slides || [])] }); setEditId(it.id); };
+  const cancelEdit = () => { setEditId(null); setForm({}); };
+
+  const persist = (updatedList) => save({ ...data, [storeKey]: updatedList });
+
+  const saveItem = () => {
+    if (!form.title?.trim()) return notify("Judul paket wajib diisi.", "error");
+    const idx = items.findIndex(x => x.id === form.id);
+    const updated = idx >= 0 ? items.map((x, i) => i === idx ? form : x) : [...items, form];
+    persist(updated);
+    cancelEdit();
+    notify("✅ Paket berhasil disimpan!");
+  };
+
+  const deleteItem = (id) => {
+    if (!window.confirm("Hapus paket ini? Tindakan ini tidak bisa dibatalkan.")) return;
+    persist(items.filter(x => x.id !== id));
+    notify("Paket dihapus.");
+  };
+
+  // ── Includes helpers ──
+  const addInclude = () => setForm(p => ({ ...p, includes: [...(p.includes || []), { icon: "✅", item: "" }] }));
+  const updateInclude = (i, field, val) => setForm(p => ({ ...p, includes: p.includes.map((inc, idx) => idx === i ? { ...inc, [field]: val } : inc) }));
+  const removeInclude = (i) => setForm(p => ({ ...p, includes: p.includes.filter((_, idx) => idx !== i) }));
+
+  // ── Slides helpers ──
+  const addSlide = () => setForm(p => ({ ...p, slides: [...(p.slides || []), { img: "", tema: "", desc: "" }] }));
+  const updateSlide = (i, field, val) => setForm(p => ({ ...p, slides: p.slides.map((s, idx) => idx === i ? { ...s, [field]: val } : s) }));
+  const removeSlide = (i) => setForm(p => ({ ...p, slides: p.slides.filter((_, idx) => idx !== i) }));
+
+  const fmt = (n) => "Rp " + Number(n || 0).toLocaleString("id-ID") + ",-";
+  const labelStyle = { display: "block", fontSize: 11, fontWeight: 700, color: "#5A6A6C", letterSpacing: "1px", textTransform: "uppercase", marginBottom: 6 };
+  const inputStyle = { width: "100%", padding: "9px 12px", border: "1.5px solid #D4C4A0", borderRadius: 6, fontSize: 13, outline: "none", boxSizing: "border-box" };
+
+  return (
+    <div className="fade-in">
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10, flexWrap: "wrap", gap: 10 }}>
+        <h1 style={{ fontSize: 22, fontWeight: 700, color: "#2E3D3F", display: "flex", alignItems: "center", gap: 8 }}>
+          <span>{icon}</span>{title}
+        </h1>
+        {!editId && (
+          <button onClick={openNew} style={{ padding: "10px 20px", background: `linear-gradient(130deg,${accentColor} 0%,#8B6914 100%)`, color: "#fff", border: "none", borderRadius: 8, fontSize: 13, fontWeight: 700, cursor: "pointer" }}>
+            + Tambah Paket Baru
+          </button>
+        )}
+      </div>
+      {ctaHint && <p style={{ fontSize: 12.5, color: "#5A6A6C", marginBottom: 22, lineHeight: 1.6 }}>{ctaHint}</p>}
+
+      {/* ══ FORM EDIT / TAMBAH ══ */}
+      {editId && (
+        <div style={{ background: "#fff", borderRadius: 12, padding: "26px", boxShadow: "0 4px 20px rgba(0,0,0,.08)", marginBottom: 28, borderTop: `4px solid ${accentColor}` }}>
+          <h2 style={{ fontSize: 16, fontWeight: 700, color: "#2E3D3F", marginBottom: 20 }}>
+            {editId === "new" ? "➕ Tambah Paket Baru" : "✏ Edit Paket"}
+          </h2>
+
+          {/* Icon + Title */}
+          <div style={{ display: "grid", gridTemplateColumns: "90px 1fr", gap: 14, marginBottom: 16 }}>
+            <div>
+              <label style={labelStyle}>Ikon</label>
+              <input value={form.icon || ""} onChange={e => setForm(p => ({ ...p, icon: e.target.value }))}
+                placeholder="🏠" style={{ ...inputStyle, textAlign: "center", fontSize: 20 }} />
+            </div>
+            <div>
+              <label style={labelStyle}>Judul Paket *</label>
+              <input value={form.title || ""} onChange={e => setForm(p => ({ ...p, title: e.target.value }))}
+                placeholder="contoh: Renovasi Cat & Dinding" style={inputStyle} />
+            </div>
+          </div>
+
+          {/* Desc */}
+          <div style={{ marginBottom: 16 }}>
+            <label style={labelStyle}>Deskripsi Singkat</label>
+            <textarea value={form.desc || ""} onChange={e => setForm(p => ({ ...p, desc: e.target.value }))}
+              placeholder="Deskripsi singkat paket ini..." rows={3}
+              style={{ ...inputStyle, resize: "vertical", fontFamily: "inherit" }} />
+          </div>
+
+          {/* Harga + Satuan + slideDir */}
+          <div style={{ display: "grid", gridTemplateColumns: showSlideDir ? "1fr 1fr 1fr" : "1fr 1fr", gap: 14, marginBottom: 22 }}>
+            <div>
+              <label style={labelStyle}>Harga Mulai Dari (Rp)</label>
+              <input type="number" value={form.startFrom || 0} onChange={e => setForm(p => ({ ...p, startFrom: Number(e.target.value) }))}
+                placeholder="3500000" style={inputStyle} />
+              <div style={{ fontSize: 11, color: "#27ae60", marginTop: 4, fontWeight: 600 }}>Preview: {fmt(form.startFrom)}</div>
+            </div>
+            <div>
+              <label style={labelStyle}>Satuan</label>
+              <input value={form.satuan || ""} onChange={e => setForm(p => ({ ...p, satuan: e.target.value }))}
+                placeholder="paket / m² / unit" style={inputStyle} />
+            </div>
+            {showSlideDir && (
+              <div>
+                <label style={labelStyle}>Arah Animasi Slide</label>
+                <select value={form.slideDir || "right"} onChange={e => setForm(p => ({ ...p, slideDir: e.target.value }))} style={inputStyle}>
+                  <option value="right">➡ Kanan (masuk dari kiri)</option>
+                  <option value="up">⬆ Atas (masuk dari bawah)</option>
+                  <option value="left">⬅ Kiri (masuk dari kanan)</option>
+                  <option value="down">⬇ Bawah (masuk dari atas)</option>
+                </select>
+              </div>
+            )}
+          </div>
+
+          {/* ── Yang Termasuk ── */}
+          <div style={{ marginBottom: 24, background: "#f4faf6", borderRadius: 10, padding: "16px 18px", border: "1.5px solid #bbf7d0" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
+              <label style={{ ...labelStyle, marginBottom: 0, color: "#166534" }}>✅ Yang Termasuk dalam Paket</label>
+              <button onClick={addInclude} style={{ padding: "5px 12px", background: "#27ae60", color: "#fff", border: "none", borderRadius: 6, fontSize: 11, fontWeight: 700, cursor: "pointer" }}>+ Tambah Item</button>
+            </div>
+            {(form.includes || []).length === 0 && <p style={{ fontSize: 12, color: "#5A6A6C", margin: 0 }}>Belum ada item. Klik "+ Tambah Item".</p>}
+            <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+              {(form.includes || []).map((inc, i) => (
+                <div key={i} style={{ display: "flex", gap: 8, alignItems: "center" }}>
+                  <input value={inc.icon} onChange={e => updateInclude(i, "icon", e.target.value)}
+                    style={{ ...inputStyle, width: 52, textAlign: "center", flexShrink: 0 }} placeholder="📐" />
+                  <input value={inc.item} onChange={e => updateInclude(i, "item", e.target.value)}
+                    style={{ ...inputStyle, flex: 1 }} placeholder="Deskripsi item yang termasuk..." />
+                  <button onClick={() => removeInclude(i)} style={{ flexShrink: 0, padding: "8px 10px", background: "#fee2e2", color: "#dc2626", border: "none", borderRadius: 6, cursor: "pointer", fontSize: 12 }}>🗑</button>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* ── Slideshow Foto ── */}
+          <div style={{ marginBottom: 24, background: "#FAF7F0", borderRadius: 10, padding: "16px 18px", border: "1.5px solid #E8DCC8" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
+              <label style={{ ...labelStyle, marginBottom: 0, color: "#8B6914" }}>🖼 Foto Slideshow</label>
+              <button onClick={addSlide} style={{ padding: "5px 12px", background: "#8B6914", color: "#fff", border: "none", borderRadius: 6, fontSize: 11, fontWeight: 700, cursor: "pointer" }}>+ Tambah Foto</button>
+            </div>
+            {(form.slides || []).length === 0 && <p style={{ fontSize: 12, color: "#5A6A6C", margin: 0 }}>Belum ada foto. Klik "+ Tambah Foto" (minimal 4 foto direkomendasikan).</p>}
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(230px,1fr))", gap: 14 }}>
+              {(form.slides || []).map((s, i) => (
+                <div key={i} style={{ background: "#fff", borderRadius: 10, padding: 14, border: "1px solid #E8DCC8", position: "relative" }}>
+                  <button onClick={() => removeSlide(i)} style={{ position: "absolute", top: 8, right: 8, background: "#fee2e2", color: "#dc2626", border: "none", borderRadius: 5, width: 22, height: 22, fontSize: 11, cursor: "pointer", zIndex: 2 }}>✕</button>
+                  <div style={{ height: 110, borderRadius: 6, overflow: "hidden", background: "#FAF7F0", marginBottom: 8, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                    {s.img ? <img loading="lazy" src={s.img} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} onError={e => e.target.style.display = "none"} /> : <span style={{ fontSize: 24 }}>🖼️</span>}
+                  </div>
+                  <UploadButton label="📁 Upload Foto"
+                    onDone={urls => { updateSlide(i, "img", urls[0]); notify("Foto berhasil diupload!"); }}
+                    onError={msg => notify(msg, "error")}
+                    style={{ fontSize: 11, padding: "7px 10px" }} />
+                  <input value={s.img || ""} onChange={e => updateSlide(i, "img", e.target.value)}
+                    placeholder="atau paste URL foto..." style={{ ...inputStyle, fontSize: 11, marginTop: 6 }} />
+                  <input value={s.tema || ""} onChange={e => updateSlide(i, "tema", e.target.value)}
+                    placeholder="Nama tema foto" style={{ ...inputStyle, fontSize: 12, marginTop: 6 }} />
+                  <textarea value={s.desc || ""} onChange={e => updateSlide(i, "desc", e.target.value)}
+                    placeholder="Keterangan singkat foto..." rows={2}
+                    style={{ ...inputStyle, fontSize: 12, marginTop: 6, resize: "vertical", fontFamily: "inherit" }} />
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div style={{ display: "flex", gap: 10 }}>
+            <button onClick={saveItem} style={{ padding: "10px 22px", background: `linear-gradient(130deg,${accentColor} 0%,#8B6914 100%)`, color: "#fff", border: "none", borderRadius: 8, fontSize: 13, fontWeight: 700, cursor: "pointer" }}>💾 Simpan Paket</button>
+            <button onClick={cancelEdit} style={{ padding: "10px 18px", background: "#FAF7F0", color: "#5A6A6C", border: "1px solid #D4C4A0", borderRadius: 8, fontSize: 13, cursor: "pointer" }}>Batal</button>
+          </div>
+        </div>
+      )}
+
+      {/* ══ LIST PAKET ══ */}
+      {!editId && (
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(280px,1fr))", gap: 16 }}>
+          {items.map(it => (
+            <div key={it.id} style={{ background: "#fff", borderRadius: 12, padding: "18px", boxShadow: "0 2px 8px rgba(0,0,0,.06)", display: "flex", flexDirection: "column", gap: 10 }}>
+              <div style={{ height: 110, borderRadius: 8, overflow: "hidden", background: "#FAF7F0", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                {it.slides?.[0]?.img ? <img loading="lazy" src={it.slides[0].img} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} onError={e => e.target.style.display = "none"} /> : <span style={{ fontSize: 30 }}>{it.icon}</span>}
+              </div>
+              <div>
+                <div style={{ fontWeight: 700, color: "#2E3D3F", fontSize: 14 }}>{it.icon} {it.title}</div>
+                <div style={{ fontSize: 12, color: "#27ae60", fontWeight: 700, marginTop: 3 }}>{fmt(it.startFrom)} / {it.satuan}</div>
+                <div style={{ fontSize: 11, color: "#5A6A6C", marginTop: 4 }}>{(it.slides || []).length} foto · {(it.includes || []).length} item termasuk</div>
+              </div>
+              <div style={{ display: "flex", gap: 8, marginTop: "auto" }}>
+                <button onClick={() => openEdit(it)} style={{ flex: 1, padding: "7px 0", background: "#FAF7F0", color: "#8B6914", border: "1px solid #E8DCC8", borderRadius: 6, fontSize: 12, fontWeight: 600, cursor: "pointer" }}>✏ Edit</button>
+                <button onClick={() => deleteItem(it.id)} style={{ flex: 1, padding: "7px 0", background: "#fee2e2", color: "#dc2626", border: "1px solid #fecaca", borderRadius: 6, fontSize: 12, fontWeight: 600, cursor: "pointer" }}>🗑 Hapus</button>
+              </div>
+            </div>
+          ))}
+          {items.length === 0 && (
+            <div style={{ gridColumn: "1/-1", textAlign: "center", padding: "60px 0", color: "#5A6A6C" }}>
+              <div style={{ fontSize: 40, marginBottom: 12 }}>{icon}</div>
+              <p>Belum ada paket. Klik "+ Tambah Paket Baru" untuk mulai.</p>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
 /* ─────────────── MOBILE LAYANAN ACCORDION (3-level) ─────────────── */
 function MobileLayananAccordion({ page, navigateTo, setMobileMenu, navDropdownLayanan }) {
   const [open, setOpen]       = useState(false);
@@ -13039,7 +13695,7 @@ export default function BricksyTravel() {
               {page === "pagar"       && <PagarPage       onWaOpen={openWaPicker} />}
               {page === "kanopi"      && <KanopiPage      onWaOpen={openWaPicker} />}
               {page === "aluminium"   && <AluminiumPage   onWaOpen={openWaPicker} />}
-              {page === "landscape"   && <LandscapePage   onWaOpen={openWaPicker} />}
+              {page === "landscape"   && <LandscapePage   onWaOpen={openWaPicker} categories={data.landscapeCategories} />}
               {/* ── Sub-halaman Interior ── */}
               {["interior/kamar-tidur","interior/kamar-mandi","interior/ruang-keluarga","interior/ruang-tamu","interior/kitchen-set","interior/ruang-kerja","interior/plafon-modern"].includes(page) &&
                 <SubInteriorPage pageKey={page} onWaOpen={openWaPicker} navigateTo={navigateTo} />}
@@ -13047,8 +13703,11 @@ export default function BricksyTravel() {
               {["eksterior/pagar","eksterior/kanopi","eksterior/aluminium","eksterior/taman-landscape"].includes(page) &&
                 <SubEksteriorPage pageKey={page} onWaOpen={openWaPicker} navigateTo={navigateTo} />}
 
-              {/* NEWS / SHOP / DESTINATIONS */}
-              {["news", "shop", "destinations"].includes(page) && (
+              {/* PROGRAM RENOVASI RUMAH SUBSIDI — Magazine Mixing Grid */}
+              {page === "shop" && <RumahSubsidiPage onWaOpen={openWaPicker} paketData={data.rumahSubsidiPaket} />}
+
+              {/* NEWS / DESTINATIONS */}
+              {["news", "destinations"].includes(page) && (
                 <SectionPage
                   section={page}
                   posts={data.posts || {}}
@@ -13076,6 +13735,8 @@ export default function BricksyTravel() {
               { id: "set_kanopi", label: "⚙ Setting Kanopi", show: isAdmin },
               { id: "set_aluminium", label: "⚙ Setting Aluminium", show: isAdmin },
               { id: "set_landscape", label: "⚙ Setting Landscape & Taman", show: isAdmin },
+              { id: "paket_landscape", label: "🌳 Paket Landscape & Taman", show: isAdmin },
+              { id: "paket_rumahsubsidi", label: "🏠 Paket Rumah Subsidi", show: isAdmin },
               { id: "team", label: "Susunan Tim", show: isAdmin },
               { id: "messages", label: "Pesan Masuk", show: canCS },
               { id: "users", label: "Users", show: isAdmin },
@@ -13528,6 +14189,38 @@ export default function BricksyTravel() {
                     deskripsi: [item.desc, item.fitur ? item.fitur.join(", ") : ""].filter(Boolean).join(" | "),
                     _img: item.img || "",
                   }))}
+                />
+              )}
+
+              {/* PAKET LANDSCAPE & TAMAN (Magazine Grid) */}
+              {adminTab === "paket_landscape" && isAdmin && (
+                <PaketGridManager
+                  data={data}
+                  save={save}
+                  notify={notify}
+                  storeKey="landscapeCategories"
+                  title="Paket Landscape & Taman (Halaman Mixing Grid)"
+                  icon="🌳"
+                  accentColor="#1a472a"
+                  defaultItems={LANDSCAPE_CATEGORIES}
+                  showSlideDir={false}
+                  ctaHint="Kelola foto, judul, deskripsi, dan harga setiap kategori yang tampil di halaman Landscape & Taman (layout magazine mixing grid 1-3-2 kolom)."
+                />
+              )}
+
+              {/* PAKET RUMAH SUBSIDI (Magazine Grid) */}
+              {adminTab === "paket_rumahsubsidi" && isAdmin && (
+                <PaketGridManager
+                  data={data}
+                  save={save}
+                  notify={notify}
+                  storeKey="rumahSubsidiPaket"
+                  title="Paket Renovasi Rumah Subsidi (Halaman Mixing Grid)"
+                  icon="🏠"
+                  accentColor="#2E3D3F"
+                  defaultItems={RS_PAKET_DATA}
+                  showSlideDir
+                  ctaHint="Kelola foto, judul, deskripsi, harga, dan arah animasi slideshow setiap paket renovasi rumah subsidi (layout magazine mixing grid 1-3-2 kolom)."
                 />
               )}
 
