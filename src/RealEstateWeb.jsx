@@ -11408,6 +11408,7 @@ function MobileLayananAccordion({ page, navigateTo, setMobileMenu, navDropdownLa
   const isLayananActive = [...topPages,
     "interior/kamar-tidur","interior/kamar-mandi","interior/ruang-keluarga","interior/ruang-tamu","interior/kitchen-set","interior/ruang-kerja","interior/plafon-modern",
     "eksterior/pagar","eksterior/kanopi","eksterior/aluminium","eksterior/taman-landscape",
+    "furnitur",
   ].some(k=>k===page);
 
   return (
@@ -11478,6 +11479,231 @@ function MobileLayananAccordion({ page, navigateTo, setMobileMenu, navDropdownLa
               ))}
             </div>
           )}
+
+          {/* Divider Produk Retail */}
+          <div style={{ margin:"6px 16px", borderTop:"1px solid #E8DCC8" }}/>
+          <div style={{ padding:"4px 16px 2px", fontSize:"0.58rem", fontWeight:800, letterSpacing:".14em", textTransform:"uppercase", color:"#8B9A9C" }}>Produk Retail</div>
+
+          {/* Furnitur */}
+          <button onClick={()=>{ navigateTo("furnitur"); setMobileMenu(false); setOpen(false); }}
+            style={mBtn(page==="furnitur", 1)}>
+            🪑 Furnitur
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   FURNITUR PAGE — E-Commerce product listing dengan filter & cart UX
+═══════════════════════════════════════════════════════════════════ */
+function FurniturPage({ data, onWaOpen }) {
+  const products = data.furniturItems || [];
+  const [search, setSearch]   = useState("");
+  const [category, setCategory] = useState("all");
+  const [sortBy, setSortBy]   = useState("default");
+  const [hoverCard, setHoverCard] = useState(null);
+  const [detailItem, setDetailItem] = useState(null);
+
+  const categories = useMemo(() => {
+    const cats = [...new Set(products.map(p => p.kategori).filter(Boolean))];
+    return cats;
+  }, [products]);
+
+  const formatRp = (n) => {
+    if (!n || n === "" || n === "0") return "Hubungi Kami";
+    const num = parseFloat(String(n).replace(/[^0-9.]/g, ""));
+    if (isNaN(num)) return n;
+    return "Rp " + num.toLocaleString("id-ID");
+  };
+
+  const filtered = useMemo(() => {
+    let list = [...products];
+    if (search) list = list.filter(p =>
+      p.nama?.toLowerCase().includes(search.toLowerCase()) ||
+      p.deskripsi?.toLowerCase().includes(search.toLowerCase()) ||
+      p.kategori?.toLowerCase().includes(search.toLowerCase())
+    );
+    if (category !== "all") list = list.filter(p => p.kategori === category);
+    if (sortBy === "harga_asc")  list = list.sort((a,b) => parseFloat(a.harga||0) - parseFloat(b.harga||0));
+    if (sortBy === "harga_desc") list = list.sort((a,b) => parseFloat(b.harga||0) - parseFloat(a.harga||0));
+    if (sortBy === "nama")       list = list.sort((a,b) => (a.nama||"").localeCompare(b.nama||""));
+    return list;
+  }, [products, search, category, sortBy]);
+
+  const accentGold = "#C9AA71";
+  const darkTeal   = "#2E3D3F";
+
+  return (
+    <div style={{ minHeight:"100vh", background:"#FAFAF7", fontFamily:"'Jost',sans-serif" }}>
+      <style>{`
+        .fur-card { transition: transform .22s, box-shadow .22s; }
+        .fur-card:hover { transform: translateY(-4px); box-shadow: 0 12px 36px rgba(0,0,0,.13) !important; }
+        .fur-img-wrap img { transition: transform .4s; }
+        .fur-card:hover .fur-img-wrap img { transform: scale(1.06); }
+        .fur-btn-wa { transition: background .18s, transform .15s; }
+        .fur-btn-wa:hover { transform: scale(1.04); }
+        @media (max-width:700px) {
+          .fur-grid { grid-template-columns: repeat(2,1fr) !important; }
+        }
+        @media (max-width:440px) {
+          .fur-grid { grid-template-columns: 1fr !important; }
+        }
+      `}</style>
+
+      {/* ── Hero ── */}
+      <div style={{ background:`linear-gradient(135deg,${darkTeal} 0%,#3D5254 55%,#8B6914 85%,${accentGold} 100%)`, padding:"64px 5% 52px", textAlign:"center", position:"relative", overflow:"hidden" }}>
+        <div style={{ position:"absolute", inset:0, opacity:.08, backgroundImage:"radial-gradient(circle at 20% 50%,#fff 1px,transparent 1px),radial-gradient(circle at 80% 20%,#fff 1px,transparent 1px),radial-gradient(circle at 60% 80%,#fff 1px,transparent 1px)", backgroundSize:"48px 48px" }} />
+        <div style={{ position:"relative" }}>
+          <div style={{ display:"inline-flex", alignItems:"center", gap:8, background:"rgba(201,170,113,.18)", border:`1px solid rgba(201,170,113,.38)`, borderRadius:20, padding:"5px 16px", marginBottom:16 }}>
+            <span style={{ fontSize:13 }}>🪑</span>
+            <span style={{ fontSize:"0.7rem", letterSpacing:"3px", color:accentGold, fontWeight:700, textTransform:"uppercase" }}>Produk Retail</span>
+          </div>
+          <h1 style={{ fontSize:"clamp(1.8rem,4vw,3rem)", fontWeight:800, color:"#fff", letterSpacing:"-0.02em", margin:"0 0 12px", fontFamily:"'Playfair Display',serif" }}>
+            Koleksi Furnitur
+          </h1>
+          <p style={{ fontSize:"1rem", color:"rgba(255,255,255,.72)", maxWidth:520, margin:"0 auto", lineHeight:1.7 }}>
+            Temukan furnitur berkualitas untuk mempercantik setiap sudut rumah Anda — dari ruang tamu hingga kamar tidur.
+          </p>
+        </div>
+      </div>
+
+      {/* ── Breadcrumb ── */}
+      <div style={{ padding:"14px 5%", borderBottom:"1px solid #eee", background:"#fff" }}>
+        <span style={{ fontSize:"0.78rem", color:"#8B9A9C" }}>Beranda</span>
+        <span style={{ fontSize:"0.78rem", color:"#8B9A9C", margin:"0 8px" }}>›</span>
+        <span style={{ fontSize:"0.78rem", color:"#8B9A9C" }}>Produk Retail</span>
+        <span style={{ fontSize:"0.78rem", color:"#8B9A9C", margin:"0 8px" }}>›</span>
+        <span style={{ fontSize:"0.78rem", color:darkTeal, fontWeight:600 }}>Furnitur</span>
+      </div>
+
+      <div style={{ padding:"32px 5% 60px", maxWidth:1280, margin:"0 auto" }}>
+
+        {/* ── Filter & Search Bar ── */}
+        <div style={{ display:"flex", gap:12, flexWrap:"wrap", alignItems:"center", marginBottom:32, background:"#fff", borderRadius:12, padding:"16px 20px", boxShadow:"0 2px 12px rgba(0,0,0,.06)" }}>
+          {/* Search */}
+          <div style={{ flex:"1 1 220px", position:"relative" }}>
+            <span style={{ position:"absolute", left:12, top:"50%", transform:"translateY(-50%)", fontSize:15, opacity:.5 }}>🔍</span>
+            <input
+              type="text"
+              placeholder="Cari produk furnitur..."
+              value={search}
+              onChange={e=>setSearch(e.target.value)}
+              style={{ width:"100%", paddingLeft:36, paddingRight:12, height:40, border:"1.5px solid #E8DCC8", borderRadius:8, fontSize:"0.85rem", color:darkTeal, outline:"none", boxSizing:"border-box", fontFamily:"'Jost',sans-serif" }}
+            />
+          </div>
+          {/* Category filter */}
+          <div style={{ flex:"0 0 auto", display:"flex", gap:8, flexWrap:"wrap" }}>
+            {["all",...categories].map(cat => (
+              <button key={cat} onClick={()=>setCategory(cat)}
+                style={{ padding:"7px 16px", borderRadius:20, border:`1.5px solid ${category===cat ? accentGold : "#E8DCC8"}`,
+                  background: category===cat ? accentGold : "#fff",
+                  color: category===cat ? "#fff" : darkTeal,
+                  fontSize:"0.78rem", fontWeight:600, cursor:"pointer", transition:"all .15s", fontFamily:"'Jost',sans-serif" }}>
+                {cat === "all" ? "Semua" : cat}
+              </button>
+            ))}
+          </div>
+          {/* Sort */}
+          <select value={sortBy} onChange={e=>setSortBy(e.target.value)}
+            style={{ flex:"0 0 auto", height:40, border:"1.5px solid #E8DCC8", borderRadius:8, padding:"0 12px", fontSize:"0.82rem", color:darkTeal, background:"#fff", fontFamily:"'Jost',sans-serif", cursor:"pointer", outline:"none" }}>
+            <option value="default">Urutan Default</option>
+            <option value="nama">Nama A–Z</option>
+            <option value="harga_asc">Harga: Terendah</option>
+            <option value="harga_desc">Harga: Tertinggi</option>
+          </select>
+          {/* Count */}
+          <span style={{ fontSize:"0.78rem", color:"#8B9A9C", flex:"0 0 auto" }}>{filtered.length} produk</span>
+        </div>
+
+        {/* ── Products Grid ── */}
+        {filtered.length === 0 ? (
+          <div style={{ textAlign:"center", padding:"80px 20px", color:"#8B9A9C" }}>
+            <div style={{ fontSize:48, marginBottom:16 }}>🪑</div>
+            <p style={{ fontSize:"1.05rem", fontWeight:600, color:darkTeal }}>Belum ada produk furnitur.</p>
+            <p style={{ fontSize:"0.875rem", marginTop:8 }}>Produk akan ditampilkan di sini setelah ditambahkan dari Control Panel.</p>
+          </div>
+        ) : (
+          <div className="fur-grid" style={{ display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:24 }}>
+            {filtered.map(prod => (
+              <div key={prod.id} className="fur-card"
+                style={{ background:"#fff", borderRadius:14, overflow:"hidden", boxShadow:"0 2px 14px rgba(0,0,0,.07)", cursor:"pointer", display:"flex", flexDirection:"column" }}
+                onMouseEnter={()=>setHoverCard(prod.id)}
+                onMouseLeave={()=>setHoverCard(null)}
+                onClick={()=>setDetailItem(prod)}>
+                {/* Image */}
+                <div className="fur-img-wrap" style={{ height:220, overflow:"hidden", background:"#F5EDD8", position:"relative" }}>
+                  {prod._img ? (
+                    <img src={prod._img} alt={prod.nama} style={{ width:"100%", height:"100%", objectFit:"cover", display:"block" }} loading="lazy"
+                      onError={e=>{e.target.style.display="none"; e.target.nextSibling.style.display="flex";}} />
+                  ) : null}
+                  <div style={{ display: prod._img ? "none" : "flex", position:"absolute", inset:0, alignItems:"center", justifyContent:"center", fontSize:48, background:"#F5EDD8" }}>🪑</div>
+                  {prod.kategori && (
+                    <span style={{ position:"absolute", top:12, left:12, background:"rgba(46,61,63,.82)", color:"#fff", fontSize:"0.65rem", padding:"3px 10px", borderRadius:12, fontWeight:700, letterSpacing:".08em", textTransform:"uppercase", backdropFilter:"blur(4px)" }}>
+                      {prod.kategori}
+                    </span>
+                  )}
+                </div>
+                {/* Info */}
+                <div style={{ padding:"18px 18px 20px", flex:1, display:"flex", flexDirection:"column" }}>
+                  <h3 style={{ fontSize:"0.9375rem", fontWeight:700, color:darkTeal, marginBottom:6, lineHeight:1.35 }}>{prod.nama}</h3>
+                  {prod.deskripsi && (
+                    <p style={{ fontSize:"0.8rem", color:"#5A6A6C", lineHeight:1.6, flex:1, marginBottom:12, display:"-webkit-box", WebkitLineClamp:2, WebkitBoxOrient:"vertical", overflow:"hidden" }}>
+                      {prod.deskripsi}
+                    </p>
+                  )}
+                  <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", gap:10, marginTop:"auto" }}>
+                    <span style={{ fontSize:"1.05rem", fontWeight:800, color:prod.harga ? "#8B6914" : "#5A6A6C", fontFamily:"'Playfair Display',serif" }}>
+                      {formatRp(prod.harga)}
+                    </span>
+                    <button
+                      className="fur-btn-wa"
+                      onClick={e=>{ e.stopPropagation(); onWaOpen && onWaOpen({ key:"layanan", vars:{ judul_layanan: prod.nama } }); }}
+                      style={{ background:`linear-gradient(135deg,${darkTeal},#3D5254)`, color:"#fff", border:"none", borderRadius:8, padding:"8px 14px", fontSize:"0.75rem", fontWeight:700, cursor:"pointer", whiteSpace:"nowrap", fontFamily:"'Jost',sans-serif" }}>
+                      💬 Tanya
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* ── Detail Modal ── */}
+      {detailItem && (
+        <div style={{ position:"fixed", inset:0, zIndex:9000, display:"flex", alignItems:"center", justifyContent:"center", padding:"20px" }}
+          onClick={()=>setDetailItem(null)}>
+          <div style={{ position:"absolute", inset:0, background:"rgba(0,0,0,.55)", backdropFilter:"blur(4px)" }} />
+          <div style={{ position:"relative", background:"#fff", borderRadius:18, width:"100%", maxWidth:680, maxHeight:"90vh", overflow:"auto", boxShadow:"0 24px 80px rgba(0,0,0,.22)" }}
+            onClick={e=>e.stopPropagation()}>
+            {detailItem._img && (
+              <div style={{ height:300, overflow:"hidden", borderRadius:"18px 18px 0 0" }}>
+                <img src={detailItem._img} alt={detailItem.nama} style={{ width:"100%", height:"100%", objectFit:"cover" }} />
+              </div>
+            )}
+            <div style={{ padding:"28px 32px 32px" }}>
+              {detailItem.kategori && (
+                <span style={{ display:"inline-block", background:"#FAF7F0", color:"#8B6914", fontSize:"0.68rem", padding:"3px 12px", borderRadius:10, fontWeight:700, letterSpacing:".1em", textTransform:"uppercase", marginBottom:12 }}>{detailItem.kategori}</span>
+              )}
+              <h2 style={{ fontSize:"1.6rem", fontWeight:800, color:darkTeal, marginBottom:10, fontFamily:"'Playfair Display',serif", lineHeight:1.25 }}>{detailItem.nama}</h2>
+              <div style={{ fontSize:"1.5rem", fontWeight:800, color:"#8B6914", fontFamily:"'Playfair Display',serif", marginBottom:18 }}>{formatRp(detailItem.harga)}</div>
+              {detailItem.deskripsi && <p style={{ fontSize:"0.9375rem", color:"#5A6A6C", lineHeight:1.8, marginBottom:24 }}>{detailItem.deskripsi}</p>}
+              <div style={{ display:"flex", gap:12, flexWrap:"wrap" }}>
+                <button
+                  className="fur-btn-wa"
+                  onClick={()=>{ onWaOpen && onWaOpen({ key:"layanan", vars:{ judul_layanan: detailItem.nama } }); setDetailItem(null); }}
+                  style={{ flex:"1 1 180px", background:`linear-gradient(135deg,#25D366,#128C7E)`, color:"#fff", border:"none", borderRadius:10, padding:"13px 24px", fontSize:"0.9rem", fontWeight:700, cursor:"pointer", fontFamily:"'Jost',sans-serif" }}>
+                  💬 Chat WhatsApp
+                </button>
+                <button onClick={()=>setDetailItem(null)}
+                  style={{ flex:"0 0 auto", background:"#FAF7F0", color:darkTeal, border:"1.5px solid #E8DCC8", borderRadius:10, padding:"13px 20px", fontSize:"0.85rem", fontWeight:600, cursor:"pointer", fontFamily:"'Jost',sans-serif" }}>
+                  Tutup
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       )}
     </div>
@@ -11797,7 +12023,7 @@ function NavDropdownLayanan({ page, navigateTo, navDropdownLayanan }) {
   const subIntPages = ["interior/kamar-tidur","interior/kamar-mandi","interior/ruang-keluarga","interior/ruang-tamu","interior/kitchen-set","interior/ruang-kerja","interior/plafon-modern"];
   const subExtPages = ["eksterior/pagar","eksterior/kanopi","eksterior/aluminium","eksterior/taman-landscape"];
   const topPages    = ["services","desainrab","temarumah"];
-  const isActive    = [...topPages,...subIntPages,...subExtPages,"interior","pagar","kanopi","aluminium","landscape"].some(k => k === page);
+  const isActive    = [...topPages,...subIntPages,...subExtPages,"interior","pagar","kanopi","aluminium","landscape","furnitur"].some(k => k === page);
 
   const ddBase = { position:"absolute", background:"rgba(255,255,255,.98)", borderRadius:10, boxShadow:"0 8px 32px rgba(0,0,0,.14)", border:"1px solid rgba(158,155,150,.15)", padding:"6px 0", zIndex:300, backdropFilter:"blur(12px)", minWidth:210 };
   const btn = (active) => ({ display:"flex", alignItems:"center", justifyContent:"space-between", width:"100%", textAlign:"left", padding:"9px 18px", fontSize:"0.78rem", fontWeight:active?700:500, color:active?"#2E3D3F":"#3D5254", background:active?"#FAF7F0":"transparent", border:"none", cursor:"pointer", borderLeft:active?"2px solid #8B6914":"2px solid transparent", transition:"all .15s", letterSpacing:".04em" });
@@ -11880,6 +12106,18 @@ function NavDropdownLayanan({ page, navigateTo, navDropdownLayanan }) {
               </div>
             )}
           </div>
+
+          {/* Divider Produk Retail */}
+          <div style={{ margin:"4px 0 2px", borderTop:"1px solid #edf2f4" }}/>
+          <div style={{ padding:"4px 18px 2px", fontSize:"0.63rem", fontWeight:700, color:"#8B9A9C", letterSpacing:".1em", textTransform:"uppercase" }}>Produk Retail</div>
+
+          {/* Furnitur */}
+          <button onClick={()=>{ navigateTo("furnitur"); setDdOpen(false); setSubOpen(null); }}
+            style={btn(page==="furnitur")}
+            onMouseEnter={e=>{e.currentTarget.style.background="#FAF7F0"; e.currentTarget.style.color="#2E3D3F";}}
+            onMouseLeave={e=>{e.currentTarget.style.background=page==="furnitur"?"#FAF7F0":"transparent"; e.currentTarget.style.color=page==="furnitur"?"#2E3D3F":"#3D5254";}}>
+            🪑 Furnitur
+          </button>
         </div>
       )}
     </div>
@@ -12755,6 +12993,7 @@ export default function BricksyTravel() {
     { key: "pagar",     label: data.content.nav10 || "Pagar Rumah" },
     { key: "kanopi",    label: data.content.nav11 || "Kanopi" },
     { key: "aluminium", label: data.content.nav12 || "Aluminium" },
+    { key: "furnitur",  label: "Furnitur" },
   ];
   // Interior & Eksterior sudah digabung ke navDropdownLayanan
   const navDropdownInterior = [];
@@ -13696,6 +13935,7 @@ export default function BricksyTravel() {
               {page === "kanopi"      && <KanopiPage      onWaOpen={openWaPicker} />}
               {page === "aluminium"   && <AluminiumPage   onWaOpen={openWaPicker} />}
               {page === "landscape"   && <LandscapePage   onWaOpen={openWaPicker} categories={data.landscapeCategories} />}
+              {page === "furnitur"    && <FurniturPage    data={data} onWaOpen={openWaPicker} />}
               {/* ── Sub-halaman Interior ── */}
               {["interior/kamar-tidur","interior/kamar-mandi","interior/ruang-keluarga","interior/ruang-tamu","interior/kitchen-set","interior/ruang-kerja","interior/plafon-modern"].includes(page) &&
                 <SubInteriorPage pageKey={page} onWaOpen={openWaPicker} navigateTo={navigateTo} />}
@@ -13735,6 +13975,7 @@ export default function BricksyTravel() {
               { id: "set_kanopi", label: "⚙ Setting Kanopi", show: isAdmin },
               { id: "set_aluminium", label: "⚙ Setting Aluminium", show: isAdmin },
               { id: "set_landscape", label: "⚙ Setting Landscape & Taman", show: isAdmin },
+              { id: "produk_furnitur", label: "🪑 Produk Furnitur", show: isAdmin },
               { id: "paket_landscape", label: "🌳 Paket Landscape & Taman", show: isAdmin },
               { id: "paket_rumahsubsidi", label: "🏠 Paket Rumah Subsidi", show: isAdmin },
               { id: "team", label: "Susunan Tim", show: isAdmin },
@@ -14189,6 +14430,40 @@ export default function BricksyTravel() {
                     deskripsi: [item.desc, item.fitur ? item.fitur.join(", ") : ""].filter(Boolean).join(" | "),
                     _img: item.img || "",
                   }))}
+                />
+              )}
+
+              {/* PRODUK FURNITUR */}
+              {adminTab === "produk_furnitur" && isAdmin && (
+                <SubLayananAdmin
+                  title="Produk Furnitur"
+                  icon="🪑"
+                  accentColor="#C9AA71"
+                  storeKey="furnitur"
+                  data={data}
+                  save={save}
+                  notify={notify}
+                  uploadToCloudinary={uploadToCloudinary}
+                  pageDesc="Kelola katalog produk furnitur — tambah, edit, dan hapus kartu produk yang tampil di halaman Furnitur (e-commerce)."
+                  sections={[]}
+                  imageGroups={[]}
+                  crudKey="furniturItems"
+                  crudLabel="Kartu Produk Furnitur"
+                  crudFields={[
+                    { key: "nama",     label: "Nama Produk",  type: "text",     placeholder: "contoh: Sofa Minimalis 3-Dudukan" },
+                    { key: "kategori", label: "Kategori",     type: "text",     placeholder: "contoh: Sofa, Meja, Kursi, Lemari..." },
+                    { key: "harga",    label: "Harga (Rp)",   type: "text",     placeholder: "contoh: 3500000" },
+                    { key: "deskripsi",label: "Deskripsi",    type: "textarea", placeholder: "Material, dimensi, warna, keunggulan produk..." },
+                  ]}
+                  crudHasImage
+                  defaultItems={[
+                    { id:"fur1", nama:"Sofa Minimalis 3-Dudukan", kategori:"Sofa", harga:"4500000", deskripsi:"Sofa modern berbahan fabric premium tahan lama. Dimensi 210×85×80 cm. Tersedia dalam warna abu-abu dan krem.", _img:"https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&q=80" },
+                    { id:"fur2", nama:"Meja Makan Kayu Solid 6-Kursi", kategori:"Meja", harga:"6800000", deskripsi:"Meja makan dari kayu jati solid dengan finishing natural. Kapasitas 6 kursi, dimensi 180×90×76 cm.", _img:"https://images.unsplash.com/photo-1617806118233-18e1de247200?w=600&q=80" },
+                    { id:"fur3", nama:"Lemari Pakaian Sliding 3-Pintu", kategori:"Lemari", harga:"5200000", deskripsi:"Lemari geser modern dengan cermin full-length di pintu tengah. Material HPL anti-gores, dimensi 180×60×200 cm.", _img:"https://images.unsplash.com/photo-1595428774223-ef52624120d2?w=600&q=80" },
+                    { id:"fur4", nama:"Kursi Kerja Ergonomis", kategori:"Kursi", harga:"2100000", deskripsi:"Kursi ergonomis dengan sandaran punggung adjustable, dudukan memory foam, dan armrest 4D. Cocok untuk WFH.", _img:"https://images.unsplash.com/photo-1580480055273-228ff5388ef8?w=600&q=80" },
+                    { id:"fur5", nama:"Nakas Kayu Minimalis", kategori:"Nakas", harga:"890000", deskripsi:"Nakas samping ranjang dengan laci tersembunyi. Material MDF dengan lapisan veneer kayu oak, dimensi 45×40×55 cm.", _img:"https://images.unsplash.com/photo-1631679706909-1844bbd07221?w=600&q=80" },
+                    { id:"fur6", nama:"Rak Buku Modular 5-Susun", kategori:"Rak", harga:"1750000", deskripsi:"Rak buku modular yang dapat diatur sesuai kebutuhan. Material besi powder coat + kayu pinus, muat 200+ buku.", _img:"https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&q=80" },
+                  ]}
                 />
               )}
 
