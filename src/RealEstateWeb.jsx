@@ -7993,386 +7993,247 @@ function ReviewCard({ review }) {
                  Interior, Pagar, Kanopi, Aluminium, Landscape
    ══════════════════════════════════════════════════════════ */
 function SubLayananAdmin({
-  title, icon, accentColor = "#8B6914",
+  title, icon, accentColor = "#C9AA71",
   storeKey, data, save, notify, uploadToCloudinary,
   pageDesc,
-  sections = [],          // [{key,label,type}]
-  imageGroups = [],       // [{key,label,count,desc}]
-  crudKey,                // key di data untuk array items
-  crudLabel,              // judul tabel CRUD
-  crudFields = [],        // [{key,label,type,placeholder}]
+  sections = [],
+  imageGroups = [],
+  crudKey,
+  crudLabel,
+  crudFields = [],
   crudHasImage = false,
-  defaultItems = null,    // data hardcoded untuk seed ke Firestore
+  defaultItems = null,
 }) {
-  /* ── state teks / konten ── */
-  const initContent = {};
-  sections.forEach(s => { initContent[s.key] = (data.content?.[s.key] || ""); });
-  const [contentForm, setContentForm] = useState(initContent);
-  const [savingContent, setSavingContent] = useState(false);
+  const items     = data[crudKey] || [];
+  const accent    = accentColor;
 
-  /* ── state gambar ── */
-  const [imgUploading, setImgUploading] = useState({});
-  const [imgUrls, setImgUrls] = useState(() => {
-    const o = {};
-    imageGroups.forEach(g => {
-      for (let i = 0; i < g.count; i++) {
-        const k = `${g.key}_${i}`;
-        o[k] = data.content?.[k] || "";
-      }
-    });
-    return o;
-  });
+  /* ── State ── */
+  const emptyForm = () => { const o = {}; crudFields.forEach(f => { o[f.key] = ""; }); if (crudHasImage) o._img = ""; return o; };
+  const [mode, setMode]         = useState("list");   // "list" | "add" | "edit"
+  const [editItem, setEditItem] = useState(null);
+  const [form, setForm]         = useState(emptyForm());
+  const [uploading, setUploading] = useState(false);
+  const [saving, setSaving]     = useState(false);
+  const [delTarget, setDelTarget] = useState(null);
+  const [seeding, setSeeding]   = useState(false);
+  const [seedDone, setSeedDone] = useState(false);
 
-  /* ── state CRUD items ── */
-  const items = data[crudKey] || [];
-  const emptyItem = () => {
-    const o = {};
-    crudFields.forEach(f => { o[f.key] = ""; });
-    if (crudHasImage) o._img = "";
-    return o;
-  };
-  const [editId, setEditId] = useState(null);
-  const [editForm, setEditForm] = useState(emptyItem());
-  const [showAdd, setShowAdd] = useState(false);
-  const [addForm, setAddForm] = useState(emptyItem());
-  const [crudImgUploading, setCrudImgUploading] = useState(false);
-  const [addImgUploading, setAddImgUploading] = useState(false);
-  const [delConfirm, setDelConfirm] = useState(null);
-  const [seeding, setSeeding] = useState(false);
-  const [seedConfirm, setSeedConfirm] = useState(false);
-
-  /* ── seed dari data hardcoded ── */
-  const handleSeedDefault = async () => {
-    if (!defaultItems || defaultItems.length === 0) return;
+  /* ── Seed ── */
+  const handleSeed = async () => {
+    if (!defaultItems || seeding) return;
     setSeeding(true);
     try {
-      // Generic: ambil semua key dari item defaultItems, pastikan ada id
-      const seeded = defaultItems.map((item, i) => ({
-        ...item,
-        id: item.id ? item.id.toString() : (Date.now() + i).toString(),
-      }));
+      const seeded = defaultItems.map((it, i) => ({ ...it, id: it.id || String(Date.now() + i) }));
       await save({ ...data, [crudKey]: seeded });
-      notify("✅ Data hardcoded berhasil dimuat ke Firestore!");
-      setSeedConfirm(false);
-    } catch { notify("❌ Gagal memuat data default."); }
+      notify("✅ Data berhasil dimuat!");
+      setSeedDone(true);
+    } catch { notify("❌ Gagal memuat data."); }
     setSeeding(false);
   };
 
-  /* ── helpers ── */
-  const accent = accentColor;
-  const btnBase = { border: "none", borderRadius: 6, padding: "9px 18px", fontWeight: 700, fontSize: "0.82rem", cursor: "pointer" };
-
-  /* ── save konten teks ── */
-  const handleSaveContent = async () => {
-    setSavingContent(true);
-    try {
-      await save({ ...data, content: { ...(data.content || {}), ...contentForm, ...imgUrls } });
-      notify("✅ Konten teks berhasil disimpan!");
-    } catch { notify("❌ Gagal menyimpan konten."); }
-    setSavingContent(false);
-  };
-
-  /* ── upload gambar section ── */
-  const handleImgUpload = async (groupKey, idx, file) => {
+  /* ── Upload gambar ── */
+  const handleUpload = async (file) => {
     if (!file) return;
-    const k = `${groupKey}_${idx}`;
-    setImgUploading(p => ({ ...p, [k]: true }));
+    setUploading(true);
     try {
       const url = await uploadToCloudinary(file);
-      const newImgUrls = { ...imgUrls, [k]: url };
-      setImgUrls(newImgUrls);
-      await save({ ...data, content: { ...(data.content || {}), ...contentForm, ...newImgUrls } });
-      notify("✅ Gambar berhasil diupload!");
-    } catch { notify("❌ Gagal upload gambar."); }
-    setImgUploading(p => ({ ...p, [k]: false }));
+      setForm(p => ({ ...p, _img: url }));
+      notify("✅ Foto berhasil diupload!");
+    } catch { notify("❌ Gagal upload foto."); }
+    setUploading(false);
   };
 
-  const handleImgUrlChange = (groupKey, idx, val) => {
-    const k = `${groupKey}_${idx}`;
-    setImgUrls(p => ({ ...p, [k]: val }));
-  };
-
-  /* ── CRUD helpers ── */
-  const handleSaveEdit = async () => {
-    const updated = items.map(it => it.id === editId ? { ...it, ...editForm } : it);
+  /* ── Simpan (tambah / edit) ── */
+  const handleSave = async () => {
+    if (!form[crudFields[0]?.key]?.trim()) { notify("⚠️ Nama tidak boleh kosong."); return; }
+    setSaving(true);
     try {
-      await save({ ...data, [crudKey]: updated });
-      notify("✅ Item berhasil diperbarui!");
-      setEditId(null);
+      let next;
+      if (mode === "add") {
+        next = [...items, { ...form, id: Date.now().toString() }];
+      } else {
+        next = items.map(it => it.id === editItem.id ? { ...it, ...form } : it);
+      }
+      await save({ ...data, [crudKey]: next });
+      notify("✅ Tersimpan!");
+      setMode("list"); setForm(emptyForm()); setEditItem(null);
     } catch { notify("❌ Gagal menyimpan."); }
+    setSaving(false);
   };
 
-  const handleAdd = async () => {
-    const newItem = { ...addForm, id: Date.now().toString() };
-    try {
-      await save({ ...data, [crudKey]: [...items, newItem] });
-      notify("✅ Item berhasil ditambahkan!");
-      setAddForm(emptyItem());
-      setShowAdd(false);
-    } catch { notify("❌ Gagal menambahkan item."); }
-  };
-
+  /* ── Hapus ── */
   const handleDelete = async (id) => {
     try {
       await save({ ...data, [crudKey]: items.filter(it => it.id !== id) });
       notify("✅ Item dihapus.");
-      setDelConfirm(null);
+      setDelTarget(null);
     } catch { notify("❌ Gagal menghapus."); }
   };
 
-  const handleCrudImgUpload = async (file, isAdd = false) => {
-    if (!file) return;
-    if (isAdd) setAddImgUploading(true); else setCrudImgUploading(true);
-    try {
-      const url = await uploadToCloudinary(file);
-      if (isAdd) setAddForm(p => ({ ...p, _img: url }));
-      else setEditForm(p => ({ ...p, _img: url }));
-      notify("✅ Gambar item diupload!");
-    } catch { notify("❌ Gagal upload gambar item."); }
-    if (isAdd) setAddImgUploading(false); else setCrudImgUploading(false);
+  /* ── Buka form edit ── */
+  const openEdit = (item) => {
+    const f = emptyForm();
+    crudFields.forEach(fd => { f[fd.key] = item[fd.key] || ""; });
+    if (crudHasImage) f._img = item._img || "";
+    setForm(f); setEditItem(item); setMode("edit");
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  /* ── render field helper ── */
-  const renderField = (f, form, setForm, prefix = "") => (
-    <div key={prefix + f.key} style={{ display: "flex", flexDirection: "column", gap: 5 }}>
-      <label style={{ fontSize: "0.75rem", fontWeight: 700, color: "#5A6A6C", textTransform: "uppercase", letterSpacing: ".06em" }}>{f.label}</label>
-      {f.type === "textarea"
-        ? <textarea value={form[f.key] || ""} onChange={e => setForm(p => ({ ...p, [f.key]: e.target.value }))}
-            placeholder={f.placeholder || ""}
-            rows={3} style={{ padding: "9px 12px", border: "1.5px solid #D5C9B0", borderRadius: 6, fontSize: "0.875rem", color: "#2E3D3F", resize: "vertical", fontFamily: "inherit" }} />
-        : <input type="text" value={form[f.key] || ""} onChange={e => setForm(p => ({ ...p, [f.key]: e.target.value }))}
-            placeholder={f.placeholder || ""}
-            style={{ padding: "9px 12px", border: "1.5px solid #D5C9B0", borderRadius: 6, fontSize: "0.875rem", color: "#2E3D3F" }} />
+  /* ── Buka form tambah ── */
+  const openAdd = () => { setForm(emptyForm()); setEditItem(null); setMode("add"); window.scrollTo({ top: 0, behavior: "smooth" }); };
+
+  /* ── Render field ── */
+  const Field = ({ fd }) => (
+    <div style={{ marginBottom: 14 }}>
+      <div style={{ fontSize: 13, fontWeight: 700, color: "#5A6A6C", marginBottom: 5 }}>{fd.label}</div>
+      {fd.type === "textarea"
+        ? <textarea rows={3} placeholder={fd.placeholder || ""} value={form[fd.key] || ""}
+            onChange={e => setForm(p => ({ ...p, [fd.key]: e.target.value }))}
+            style={{ width: "100%", padding: "10px 12px", border: "1.5px solid #D5C9B0", borderRadius: 8, fontSize: 14, resize: "vertical", fontFamily: "inherit", boxSizing: "border-box" }} />
+        : <input type="text" placeholder={fd.placeholder || ""} value={form[fd.key] || ""}
+            onChange={e => setForm(p => ({ ...p, [fd.key]: e.target.value }))}
+            style={{ width: "100%", padding: "10px 12px", border: "1.5px solid #D5C9B0", borderRadius: 8, fontSize: 14, boxSizing: "border-box" }} />
       }
     </div>
   );
 
-  return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 28, padding: "4px 0" }}>
-      {/* Header */}
-      <div style={{ background: `linear-gradient(120deg, ${accent}18 0%, #ffffff 100%)`, border: `1.5px solid ${accent}30`, borderRadius: 14, padding: "22px 28px", display: "flex", alignItems: "center", gap: 16 }}>
-        <div style={{ width: 52, height: 52, borderRadius: 12, background: accent, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 26, flexShrink: 0 }}>{icon}</div>
+  /* ═══ LIST VIEW ═══ */
+  if (mode === "list") return (
+    <div style={{ maxWidth: 680 }}>
+      {/* Judul halaman */}
+      <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 20 }}>
+        <span style={{ fontSize: 30 }}>{icon}</span>
         <div>
-          <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.35rem", fontWeight: 900, color: "#2E3D3F", margin: 0 }}>{title}</h2>
-          {pageDesc && <p style={{ color: "#5A6A6C", fontSize: "0.85rem", margin: "4px 0 0", lineHeight: 1.5 }}>{pageDesc}</p>}
+          <h2 style={{ fontSize: 20, fontWeight: 800, color: "#2E3D3F", margin: 0 }}>{title}</h2>
+          {pageDesc && <p style={{ fontSize: 13, color: "#8B9A9C", margin: "3px 0 0" }}>{pageDesc}</p>}
         </div>
       </div>
 
-      {/* ── SEKSI 1: Konten Teks ── */}
-      {sections.length > 0 && (
-        <div style={{ background: "#fff", border: "1.5px solid #E8DCC8", borderRadius: 14, padding: "24px 28px" }}>
-          <h3 style={{ fontSize: "0.9rem", fontWeight: 800, color: accent, textTransform: "uppercase", letterSpacing: ".1em", marginBottom: 20, paddingBottom: 12, borderBottom: `2px solid ${accent}25` }}>
-            📝 Konten Teks
-          </h3>
-          <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-            {sections.map(s => renderField(s, contentForm, setContentForm, "ct_"))}
-          </div>
-          <button onClick={handleSaveContent} disabled={savingContent}
-            style={{ ...btnBase, marginTop: 20, background: accent, color: "#fff", opacity: savingContent ? 0.6 : 1 }}>
-            {savingContent ? "Menyimpan…" : "💾 Simpan Konten Teks"}
-          </button>
-        </div>
+      {/* Tombol tambah */}
+      <button onClick={openAdd}
+        style={{ width: "100%", padding: "14px 20px", background: accent, color: "#fff", border: "none", borderRadius: 10, fontSize: 15, fontWeight: 700, cursor: "pointer", marginBottom: 16, display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
+        ＋ Tambah {crudLabel || "Item"} Baru
+      </button>
+
+      {/* Seed data jika masih kosong */}
+      {defaultItems && defaultItems.length > 0 && items.length === 0 && !seedDone && (
+        <button onClick={handleSeed} disabled={seeding}
+          style={{ width: "100%", padding: "12px 20px", background: "#fff", border: `2px dashed ${accent}`, color: "#8B6914", borderRadius: 10, fontSize: 14, fontWeight: 600, cursor: "pointer", marginBottom: 20, opacity: seeding ? 0.6 : 1 }}>
+          {seeding ? "⏳ Memuat..." : "📥 Muat Data Awal (sekali klik)"}
+        </button>
       )}
 
-      {/* ── SEKSI 2: Upload Gambar ── */}
-      {imageGroups.length > 0 && (
-        <div style={{ background: "#fff", border: "1.5px solid #E8DCC8", borderRadius: 14, padding: "24px 28px" }}>
-          <h3 style={{ fontSize: "0.9rem", fontWeight: 800, color: accent, textTransform: "uppercase", letterSpacing: ".1em", marginBottom: 20, paddingBottom: 12, borderBottom: `2px solid ${accent}25` }}>
-            🖼 Upload Gambar
-          </h3>
-          {imageGroups.map(g => (
-            <div key={g.key} style={{ marginBottom: 28 }}>
-              <div style={{ marginBottom: 10 }}>
-                <span style={{ fontWeight: 700, fontSize: "0.875rem", color: "#2E3D3F" }}>{g.label}</span>
-                {g.desc && <span style={{ color: "#5A6A6C", fontSize: "0.8rem", marginLeft: 10 }}>{g.desc}</span>}
+      {/* Daftar item */}
+      {items.length === 0 ? (
+        <div style={{ textAlign: "center", padding: "40px 20px", border: "1.5px dashed #D5C9B0", borderRadius: 12, color: "#A89070", fontSize: 14 }}>
+          Belum ada data. Klik tombol di atas untuk menambahkan.
+        </div>
+      ) : (
+        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+          {items.map((item, idx) => (
+            <div key={item.id || idx} style={{ background: "#fff", border: "1.5px solid #E8DCC8", borderRadius: 12, overflow: "hidden" }}>
+              {/* Row item */}
+              <div style={{ display: "flex", alignItems: "center", gap: 12, padding: "12px 14px" }}>
+                {item._img
+                  ? <img src={item._img} alt="" style={{ width: 54, height: 44, objectFit: "cover", borderRadius: 7, flexShrink: 0 }} />
+                  : <div style={{ width: 54, height: 44, background: "#F5EDD8", borderRadius: 7, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20, flexShrink: 0 }}>{icon}</div>
+                }
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ fontWeight: 700, fontSize: 14, color: "#2E3D3F", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                    {item.nama || item[crudFields[0]?.key] || `Item ${idx + 1}`}
+                  </div>
+                  {item.harga && <div style={{ fontSize: 12, color: "#8B6914", fontWeight: 600 }}>{item.harga}</div>}
+                </div>
+                <div style={{ display: "flex", gap: 6, flexShrink: 0 }}>
+                  <button onClick={() => openEdit(item)}
+                    style={{ background: accent, color: "#fff", border: "none", borderRadius: 7, padding: "7px 14px", fontSize: 13, fontWeight: 700, cursor: "pointer" }}>
+                    ✏️ Edit
+                  </button>
+                  <button onClick={() => setDelTarget(item.id)}
+                    style={{ background: "#fef2f2", color: "#e74c3c", border: "1.5px solid #fca5a5", borderRadius: 7, padding: "7px 14px", fontSize: 13, fontWeight: 700, cursor: "pointer" }}>
+                    🗑
+                  </button>
+                </div>
               </div>
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(180px,1fr))", gap: 14 }}>
-                {Array.from({ length: g.count }).map((_, i) => {
-                  const k = `${g.key}_${i}`;
-                  const isLoading = imgUploading[k];
-                  const url = imgUrls[k];
-                  return (
-                    <div key={k} style={{ border: "1.5px dashed #C9AA71", borderRadius: 10, padding: 10, background: "#FAF7F0", display: "flex", flexDirection: "column", gap: 8, alignItems: "center" }}>
-                      {url
-                        ? <img src={url} alt="" style={{ width: "100%", height: 100, objectFit: "cover", borderRadius: 7, border: "1px solid #E8DCC8" }} />
-                        : <div style={{ width: "100%", height: 100, background: "#E8DCC8", borderRadius: 7, display: "flex", alignItems: "center", justifyContent: "center", color: "#A89070", fontSize: "0.8rem" }}>Belum ada gambar</div>
-                      }
-                      <span style={{ fontSize: "0.7rem", color: "#A89070", fontWeight: 600 }}>Foto {i + 1}</span>
-                      <label style={{ cursor: "pointer", width: "100%" }}>
-                        <div style={{ background: isLoading ? "#ccc" : accent, color: "#fff", borderRadius: 6, padding: "6px 10px", textAlign: "center", fontSize: "0.75rem", fontWeight: 700, pointerEvents: isLoading ? "none" : "auto" }}>
-                          {isLoading ? "⏳ Uploading…" : "📁 Upload"}
-                        </div>
-                        <input type="file" accept="image/*" style={{ display: "none" }} disabled={isLoading}
-                          onChange={e => handleImgUpload(g.key, i, e.target.files?.[0])} />
-                      </label>
-                      <input type="text" placeholder="atau tempel URL…" value={url}
-                        onChange={e => handleImgUrlChange(g.key, i, e.target.value)}
-                        style={{ width: "100%", padding: "5px 8px", border: "1px solid #D5C9B0", borderRadius: 5, fontSize: "0.72rem", color: "#3D5254", boxSizing: "border-box" }} />
-                    </div>
-                  );
-                })}
-              </div>
+
+              {/* Konfirmasi hapus */}
+              {delTarget === item.id && (
+                <div style={{ background: "#fef2f2", borderTop: "1px solid #fca5a5", padding: "10px 14px", display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
+                  <span style={{ fontSize: 13, color: "#b91c1c", fontWeight: 600, flex: 1 }}>⚠️ Yakin ingin menghapus ini?</span>
+                  <button onClick={() => handleDelete(item.id)}
+                    style={{ background: "#e74c3c", color: "#fff", border: "none", borderRadius: 7, padding: "7px 16px", fontSize: 13, fontWeight: 700, cursor: "pointer" }}>
+                    Ya, Hapus
+                  </button>
+                  <button onClick={() => setDelTarget(null)}
+                    style={{ background: "#fff", color: "#5A6A6C", border: "1.5px solid #D5C9B0", borderRadius: 7, padding: "7px 14px", fontSize: 13, cursor: "pointer" }}>
+                    Batal
+                  </button>
+                </div>
+              )}
             </div>
           ))}
-          <button onClick={handleSaveContent} disabled={savingContent}
-            style={{ ...btnBase, background: accent, color: "#fff", opacity: savingContent ? 0.6 : 1 }}>
-            {savingContent ? "Menyimpan…" : "💾 Simpan Semua Gambar"}
-          </button>
         </div>
       )}
+    </div>
+  );
 
-      {/* ── SEKSI 3: CRUD Items (jika ada crudKey) ── */}
-      {crudKey && (
-        <div style={{ background: "#fff", border: "1.5px solid #E8DCC8", borderRadius: 14, padding: "24px 28px" }}>
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 20, paddingBottom: 12, borderBottom: `2px solid ${accent}25`, flexWrap: "wrap", gap: 10 }}>
-            <h3 style={{ fontSize: "0.9rem", fontWeight: 800, color: accent, textTransform: "uppercase", letterSpacing: ".1em", margin: 0 }}>
-              📋 {crudLabel || "Daftar Item"}
-            </h3>
-            <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-              {defaultItems && defaultItems.length > 0 && items.length === 0 && !seedConfirm && (
-                <button onClick={() => setSeedConfirm(true)}
-                  style={{ ...btnBase, background: "#f39c12", color: "#fff", padding: "8px 16px", fontSize: "0.8rem" }}>
-                  📥 Muat Data Hardcoded
-                </button>
-              )}
-              {defaultItems && defaultItems.length > 0 && items.length > 0 && !seedConfirm && (
-                <button onClick={() => setSeedConfirm(true)}
-                  style={{ ...btnBase, background: "#e67e22", color: "#fff", padding: "8px 14px", fontSize: "0.75rem", opacity: 0.85 }}>
-                  🔄 Reset ke Default
-                </button>
-              )}
-              <button onClick={() => { setShowAdd(true); setAddForm(emptyItem()); }}
-                style={{ ...btnBase, background: accent, color: "#fff", padding: "8px 16px", fontSize: "0.8rem" }}>
-                + Tambah Item
-              </button>
-            </div>
-          </div>
+  /* ═══ ADD / EDIT VIEW ═══ */
+  return (
+    <div style={{ maxWidth: 580 }}>
+      {/* Header form */}
+      <button onClick={() => { setMode("list"); setForm(emptyForm()); }}
+        style={{ display: "flex", alignItems: "center", gap: 6, background: "none", border: "none", color: "#5A6A6C", fontSize: 14, cursor: "pointer", marginBottom: 18, padding: 0, fontWeight: 600 }}>
+        ← Kembali ke daftar
+      </button>
+      <h2 style={{ fontSize: 18, fontWeight: 800, color: "#2E3D3F", marginBottom: 20, display: "flex", alignItems: "center", gap: 8 }}>
+        <span>{mode === "add" ? "＋" : "✏️"}</span>
+        {mode === "add" ? `Tambah ${crudLabel || "Item"}` : `Edit: ${editItem?.nama || editItem?.[crudFields[0]?.key] || "Item"}`}
+      </h2>
 
-          {/* Konfirmasi seed */}
-          {seedConfirm && (
-            <div style={{ background: "#fff8e1", border: "1.5px solid #f39c12", borderRadius: 10, padding: "14px 18px", marginBottom: 18, display: "flex", alignItems: "center", gap: 14, flexWrap: "wrap" }}>
-              <span style={{ fontSize: "0.85rem", color: "#8B6914", fontWeight: 600 }}>
-                {items.length > 0
-                  ? "⚠️ Ini akan mengganti semua item saat ini dengan data hardcoded. Lanjutkan?"
-                  : "📥 Muat data hardcoded ke Firestore? Data akan tersimpan dan bisa diedit."}
-              </span>
-              <div style={{ display: "flex", gap: 8 }}>
-                <button onClick={handleSeedDefault} disabled={seeding}
-                  style={{ ...btnBase, background: "#f39c12", color: "#fff", padding: "6px 16px", fontSize: "0.8rem", opacity: seeding ? 0.6 : 1 }}>
-                  {seeding ? "⏳ Memuat…" : "Ya, Muat"}
-                </button>
-                <button onClick={() => setSeedConfirm(false)}
-                  style={{ ...btnBase, background: "#E8DCC8", color: "#5A6A6C", padding: "6px 14px", fontSize: "0.8rem" }}>
-                  Batal
-                </button>
-              </div>
-            </div>
-          )}
-
-          {/* Form Tambah */}
-          {showAdd && (
-            <div style={{ background: `${accent}10`, border: `1.5px solid ${accent}40`, borderRadius: 10, padding: "18px 20px", marginBottom: 20 }}>
-              <h4 style={{ fontSize: "0.85rem", fontWeight: 800, color: accent, marginBottom: 14 }}>➕ Tambah Item Baru</h4>
-              <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-                {crudFields.map(f => renderField(f, addForm, setAddForm, "add_"))}
-                {crudHasImage && (
-                  <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-                    <label style={{ fontSize: "0.75rem", fontWeight: 700, color: "#5A6A6C", textTransform: "uppercase", letterSpacing: ".06em" }}>Gambar Item</label>
-                    <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                      {addForm._img && <img src={addForm._img} alt="" style={{ width: 72, height: 56, objectFit: "cover", borderRadius: 7, border: "1px solid #E8DCC8" }} />}
-                      <label style={{ cursor: "pointer" }}>
-                        <div style={{ background: addImgUploading ? "#ccc" : accent, color: "#fff", borderRadius: 6, padding: "7px 14px", fontSize: "0.78rem", fontWeight: 700 }}>
-                          {addImgUploading ? "⏳ Uploading…" : "📁 Upload Gambar"}
-                        </div>
-                        <input type="file" accept="image/*" style={{ display: "none" }} disabled={addImgUploading}
-                          onChange={e => handleCrudImgUpload(e.target.files?.[0], true)} />
-                      </label>
-                      <input type="text" placeholder="atau URL gambar…" value={addForm._img || ""}
-                        onChange={e => setAddForm(p => ({ ...p, _img: e.target.value }))}
-                        style={{ flex: 1, padding: "7px 10px", border: "1px solid #D5C9B0", borderRadius: 6, fontSize: "0.8rem" }} />
-                    </div>
+      <div style={{ background: "#fff", border: "1.5px solid #E8DCC8", borderRadius: 14, padding: "22px 20px" }}>
+        {/* Upload foto */}
+        {crudHasImage && (
+          <div style={{ marginBottom: 20 }}>
+            <div style={{ fontSize: 13, fontWeight: 700, color: "#5A6A6C", marginBottom: 8 }}>Foto Produk</div>
+            <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+              {form._img
+                ? <img src={form._img} alt="" style={{ width: 90, height: 70, objectFit: "cover", borderRadius: 8, border: "1.5px solid #E8DCC8" }} />
+                : <div style={{ width: 90, height: 70, background: "#F5EDD8", borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 28, border: "1.5px dashed #D5C9B0" }}>{icon}</div>
+              }
+              <div style={{ flex: 1 }}>
+                <label style={{ display: "block", cursor: "pointer" }}>
+                  <div style={{ background: uploading ? "#ccc" : accent, color: "#fff", borderRadius: 8, padding: "10px 0", fontSize: 14, fontWeight: 700, textAlign: "center", pointerEvents: uploading ? "none" : "auto" }}>
+                    {uploading ? "⏳ Uploading..." : "📷 Upload Foto"}
                   </div>
+                  <input type="file" accept="image/*" style={{ display: "none" }} disabled={uploading}
+                    onChange={e => handleUpload(e.target.files?.[0])} />
+                </label>
+                {form._img && (
+                  <button onClick={() => setForm(p => ({ ...p, _img: "" }))}
+                    style={{ marginTop: 6, background: "none", border: "none", color: "#e74c3c", fontSize: 12, cursor: "pointer", padding: 0 }}>
+                    🗑 Hapus foto
+                  </button>
                 )}
               </div>
-              <div style={{ display: "flex", gap: 10, marginTop: 16 }}>
-                <button onClick={handleAdd} style={{ ...btnBase, background: "#27ae60", color: "#fff" }}>✅ Simpan</button>
-                <button onClick={() => setShowAdd(false)} style={{ ...btnBase, background: "#E8DCC8", color: "#5A6A6C" }}>Batal</button>
-              </div>
             </div>
-          )}
+          </div>
+        )}
 
-          {/* Tabel Items */}
-          {items.length === 0 ? (
-            <div style={{ textAlign: "center", padding: "40px 20px", color: "#A89070", fontSize: "0.875rem" }}>
-              {defaultItems && defaultItems.length > 0
-                ? <>Belum ada item. Klik <strong>&#34;📥 Muat Data Hardcoded&#34;</strong> untuk mengimpor data yang sudah ada di halaman, atau klik &#34;+ Tambah Item&#34; untuk menambahkan manual.</>
-                : <>Belum ada item. Klik &#34;+ Tambah Item&#34; untuk menambahkan.</>}
-            </div>
-          ) : (
-            <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-              {items.map((item, idx) => (
-                <div key={item.id || idx} style={{ border: "1.5px solid #E8DCC8", borderRadius: 10, overflow: "hidden" }}>
-                  {/* Item header row */}
-                  <div style={{ background: "#FAF7F0", padding: "12px 16px", display: "flex", alignItems: "center", gap: 12 }}>
-                    {item._img && <img src={item._img} alt="" style={{ width: 52, height: 42, objectFit: "cover", borderRadius: 6, flexShrink: 0 }} />}
-                    <div style={{ flex: 1 }}>
-                      <div style={{ fontWeight: 800, color: "#2E3D3F", fontSize: "0.875rem" }}>{item.nama || item[crudFields[0]?.key] || `Item ${idx + 1}`}</div>
-                      {item.harga && <div style={{ fontSize: "0.78rem", color: "#8B6914", fontWeight: 600 }}>{item.harga}</div>}
-                      {item.tagline && <div style={{ fontSize: "0.78rem", color: "#5A6A6C" }}>{item.tagline}</div>}
-                    </div>
-                    <div style={{ display: "flex", gap: 8, flexShrink: 0 }}>
-                      <button onClick={() => { setEditId(item.id); setEditForm({ ...item }); }}
-                        style={{ ...btnBase, background: accent, color: "#fff", padding: "6px 14px", fontSize: "0.78rem" }}>✏️ Edit</button>
-                      <button onClick={() => setDelConfirm(item.id)}
-                        style={{ ...btnBase, background: "#e74c3c", color: "#fff", padding: "6px 14px", fontSize: "0.78rem" }}>🗑 Hapus</button>
-                    </div>
-                  </div>
+        {/* Fields */}
+        {crudFields.map(fd => <Field key={fd.key} fd={fd} />)}
 
-                  {/* Konfirmasi hapus */}
-                  {delConfirm === item.id && (
-                    <div style={{ background: "#fff5f5", padding: "10px 16px", borderTop: "1px solid #fcc", display: "flex", alignItems: "center", gap: 12 }}>
-                      <span style={{ fontSize: "0.83rem", color: "#c0392b", fontWeight: 600 }}>Yakin hapus item ini?</span>
-                      <button onClick={() => handleDelete(item.id)} style={{ ...btnBase, background: "#e74c3c", color: "#fff", padding: "5px 14px", fontSize: "0.78rem" }}>Ya, Hapus</button>
-                      <button onClick={() => setDelConfirm(null)} style={{ ...btnBase, background: "#E8DCC8", color: "#5A6A6C", padding: "5px 14px", fontSize: "0.78rem" }}>Batal</button>
-                    </div>
-                  )}
-
-                  {/* Form Edit inline */}
-                  {editId === item.id && (
-                    <div style={{ padding: "16px 18px", borderTop: "1.5px solid #E8DCC8", background: "#fff" }}>
-                      <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-                        {crudFields.map(f => renderField(f, editForm, setEditForm, "ed_"))}
-                        {crudHasImage && (
-                          <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-                            <label style={{ fontSize: "0.75rem", fontWeight: 700, color: "#5A6A6C", textTransform: "uppercase", letterSpacing: ".06em" }}>Gambar Item</label>
-                            <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                              {editForm._img && <img src={editForm._img} alt="" style={{ width: 72, height: 56, objectFit: "cover", borderRadius: 7, border: "1px solid #E8DCC8" }} />}
-                              <label style={{ cursor: "pointer" }}>
-                                <div style={{ background: crudImgUploading ? "#ccc" : accent, color: "#fff", borderRadius: 6, padding: "7px 14px", fontSize: "0.78rem", fontWeight: 700 }}>
-                                  {crudImgUploading ? "⏳ Uploading…" : "📁 Ganti Gambar"}
-                                </div>
-                                <input type="file" accept="image/*" style={{ display: "none" }} disabled={crudImgUploading}
-                                  onChange={e => handleCrudImgUpload(e.target.files?.[0], false)} />
-                              </label>
-                              <input type="text" placeholder="atau URL gambar…" value={editForm._img || ""}
-                                onChange={e => setEditForm(p => ({ ...p, _img: e.target.value }))}
-                                style={{ flex: 1, padding: "7px 10px", border: "1px solid #D5C9B0", borderRadius: 6, fontSize: "0.8rem" }} />
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                      <div style={{ display: "flex", gap: 10, marginTop: 16 }}>
-                        <button onClick={handleSaveEdit} style={{ ...btnBase, background: "#27ae60", color: "#fff" }}>✅ Simpan Perubahan</button>
-                        <button onClick={() => setEditId(null)} style={{ ...btnBase, background: "#E8DCC8", color: "#5A6A6C" }}>Batal</button>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
-          )}
+        {/* Tombol simpan */}
+        <div style={{ display: "flex", gap: 10, marginTop: 6 }}>
+          <button onClick={handleSave} disabled={saving}
+            style={{ flex: 1, padding: "13px 0", background: saving ? "#ccc" : "#27ae60", color: "#fff", border: "none", borderRadius: 9, fontSize: 15, fontWeight: 700, cursor: saving ? "default" : "pointer" }}>
+            {saving ? "⏳ Menyimpan..." : "💾 Simpan"}
+          </button>
+          <button onClick={() => { setMode("list"); setForm(emptyForm()); }}
+            style={{ padding: "13px 20px", background: "#F5EDD8", color: "#5A6A6C", border: "none", borderRadius: 9, fontSize: 14, fontWeight: 600, cursor: "pointer" }}>
+            Batal
+          </button>
         </div>
-      )}
+      </div>
     </div>
   );
 }
@@ -11991,15 +11852,47 @@ const CATALOG_DATA = {
 /* ═══════════════════════════════════════════════════
    HALAMAN-HALAMAN SUB-INTERIOR & SUB-EKSTERIOR
 ═══════════════════════════════════════════════════ */
-function SubInteriorPage({ pageKey, onWaOpen, navigateTo }) {
+
+// Mapping pageKey → crudKey di Firestore
+const INT_PAGE_CRUD_KEY = {
+  "interior/kamar-tidur":    "intKamarTidurItems",
+  "interior/kamar-mandi":    "intKamarMandiItems",
+  "interior/ruang-keluarga": "intRuangKeluargaItems",
+  "interior/ruang-tamu":     "intRuangTamuItems",
+  "interior/kitchen-set":    "intKitchenSetItems",
+  "interior/ruang-kerja":    "intRuangKerjaItems",
+  "interior/plafon-modern":  "intPlafonItems",
+};
+
+// Konversi item Firestore (field desc, fitur string) → format SubPageCatalog (field desc, fitur array)
+function normalizeIntItem(item) {
+  return {
+    ...item,
+    img: item._img || item.img || "",
+    harga: item.harga ? parseFloat(String(item.harga).replace(/[^0-9.]/g,"")) || 0 : 0,
+    fitur: typeof item.fitur === "string"
+      ? item.fitur.split(",").map(s=>s.trim()).filter(Boolean)
+      : (item.fitur || []),
+  };
+}
+
+function SubInteriorPage({ pageKey, onWaOpen, navigateTo, data }) {
   useEffect(()=>{ window.scrollTo(0,0); },[pageKey]);
   const config = CATALOG_DATA[pageKey];
   if (!config) return <div style={{padding:80,textAlign:"center"}}>Halaman tidak ditemukan.</div>;
+
+  // Ambil dari Firestore dulu, fallback ke CATALOG_DATA hardcoded
+  const crudKey = INT_PAGE_CRUD_KEY[pageKey];
+  const firestoreItems = data && crudKey && data[crudKey] && data[crudKey].length > 0
+    ? data[crudKey].map(normalizeIntItem)
+    : null;
+  const catalogItems = firestoreItems || config.items;
+
   return <SubPageCatalog
     heroColor={config.heroColor} heroIcon={config.heroIcon}
     title={config.title} subtitle={config.subtitle}
     breadcrumb={config.breadcrumb}
-    catalogData={config.items}
+    catalogData={catalogItems}
     satuan={config.satuan || null}
     onWaOpen={onWaOpen} navigateTo={navigateTo}
   />;
@@ -13938,10 +13831,10 @@ export default function BricksyTravel() {
               {page === "furnitur"    && <FurniturPage    data={data} onWaOpen={openWaPicker} />}
               {/* ── Sub-halaman Interior ── */}
               {["interior/kamar-tidur","interior/kamar-mandi","interior/ruang-keluarga","interior/ruang-tamu","interior/kitchen-set","interior/ruang-kerja","interior/plafon-modern"].includes(page) &&
-                <SubInteriorPage pageKey={page} onWaOpen={openWaPicker} navigateTo={navigateTo} />}
+                <SubInteriorPage pageKey={page} onWaOpen={openWaPicker} navigateTo={navigateTo} data={data} />}
               {/* ── Sub-halaman Eksterior ── */}
               {["eksterior/pagar","eksterior/kanopi","eksterior/aluminium","eksterior/taman-landscape"].includes(page) &&
-                <SubEksteriorPage pageKey={page} onWaOpen={openWaPicker} navigateTo={navigateTo} />}
+                <SubEksteriorPage pageKey={page} onWaOpen={openWaPicker} navigateTo={navigateTo} data={data} />}
 
               {/* PROGRAM RENOVASI RUMAH SUBSIDI — Magazine Mixing Grid */}
               {page === "shop" && <RumahSubsidiPage onWaOpen={openWaPicker} paketData={data.rumahSubsidiPaket} />}
@@ -13961,58 +13854,95 @@ export default function BricksyTravel() {
 
       {/* ADMIN PANEL */}
       {showAdmin && !reviewTokenParam && (
-        <div style={{ minHeight: "100vh", display: "flex", background: "#FDFAF4", paddingTop: 58 }}>
-          <div className={`admin-sidebar${sidebarOpen ? " open" : ""}`}>
-            {[
-              { id: "dashboard", label: "Dashboard", show: true },
-              { id: "content", label: "Konten Website", show: isAdmin },
-              { id: "set_home", label: "⚙ Setting Home", show: isAdmin },
-              { id: "set_layanankami", label: "⚙ Setting Layanan Kami", show: isAdmin },
-              { id: "set_desainrab", label: "⚙ Setting Desain & RAB", show: isAdmin },
-              { id: "set_temarumah", label: "⚙ Setting Tema Rumah", show: isAdmin },
-              { id: "set_interior", label: "⚙ Setting Interior", show: isAdmin },
-              { id: "set_pagar", label: "⚙ Setting Pagar Rumah", show: isAdmin },
-              { id: "set_kanopi", label: "⚙ Setting Kanopi", show: isAdmin },
-              { id: "set_aluminium", label: "⚙ Setting Aluminium", show: isAdmin },
-              { id: "set_landscape", label: "⚙ Setting Landscape & Taman", show: isAdmin },
-              { id: "produk_furnitur", label: "🪑 Produk Furnitur", show: isAdmin },
-              { id: "paket_landscape", label: "🌳 Paket Landscape & Taman", show: isAdmin },
-              { id: "paket_rumahsubsidi", label: "🏠 Paket Rumah Subsidi", show: isAdmin },
-              { id: "team", label: "Susunan Tim", show: isAdmin },
-              { id: "messages", label: "Pesan Masuk", show: canCS },
-              { id: "users", label: "Users", show: isAdmin },
-              { id: "reviews", label: "Reviews", show: isAdmin },
-              { id: "settings", label: "Settings", show: isAdmin },
-              { id: "profil", label: "Profil Akun", show: true },
-            ].filter(item => item.show).map(item => (
-              <button key={item.id} onClick={() => navigateAdminTab(item.id)}
-                style={{
-                  padding: "14px 20px",
-                  textAlign: "left",
-                  border: "none",
-                  background: adminTab === item.id ? "rgba(255,255,255,.16)" : "transparent",
-                  color: "#fff",
-                  cursor: "pointer",
-                  fontSize: 13,
-                  fontWeight: adminTab === item.id ? 700 : 500,
-                  letterSpacing: ".04em"
-                }}>
-                {item.label}
-              </button>
-            ))}
+        <div style={{ minHeight: "100vh", background: "#F7F5F0", paddingTop: 56 }}>
+
+          {/* ── Top bar ── */}
+          <div style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 220, height: 56, background: "#2E3D3F", display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 16px", boxShadow: "0 2px 8px rgba(0,0,0,.18)" }}>
+            <button className="show-sm" onClick={() => setSidebarOpen(p => !p)}
+              style={{ background: "rgba(255,255,255,.12)", border: "none", color: "#fff", borderRadius: 7, width: 36, height: 36, cursor: "pointer", fontSize: 18 }}>☰</button>
+            <span style={{ color: "#C9AA71", fontWeight: 800, fontSize: 15, letterSpacing: ".04em" }}>⚙ Control Panel</span>
+            <button onClick={closeAdmin}
+              style={{ background: "#C9AA71", border: "none", color: "#fff", borderRadius: 7, padding: "7px 14px", fontSize: 13, fontWeight: 700, cursor: "pointer" }}>
+              ✕ Keluar
+            </button>
           </div>
-          <div style={{ flex: 1, minWidth: 0 }}>
-            <div style={{ height: 58, position: "fixed", top: 0, left: 0, right: 0, zIndex: 220, background: "#fff", borderBottom: "1px solid #d6f1f6", display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 20px", boxShadow: "0 2px 12px rgba(0,0,0,.05)" }}>
-              <button className="show-sm" onClick={() => setSidebarOpen(p => !p)}
-                style={{ border: "none", background: "#FAF7F0", color: "#2E3D3F", borderRadius: 6, width: 38, height: 38, cursor: "pointer", fontSize: 18 }}>
-                ☰
-              </button>
-              <strong style={{ color: "#2E3D3F", fontSize: 15 }}>Control Panel</strong>
-              <button onClick={closeAdmin} style={{ border: "none", background: "#2E3D3F", color: "#fff", borderRadius: 6, padding: "8px 14px", cursor: "pointer", fontSize: 12 }}>
-                Kembali
-              </button>
+
+          <div style={{ display: "flex", minHeight: "calc(100vh - 56px)" }}>
+
+            {/* ── Sidebar ── */}
+            <div className={`admin-sidebar${sidebarOpen ? " open" : ""}`} style={{ background: "#2E3D3F", width: 220, flexShrink: 0, overflowY: "auto", padding: "12px 0" }}>
+
+              {/* Kelompok menu */}
+              {[
+                {
+                  group: null,
+                  items: [
+                    { id: "dashboard", label: "🏠 Dashboard",   show: true },
+                    { id: "messages",  label: "✉️ Pesan Masuk",  show: canCS },
+                    { id: "profil",    label: "👤 Profil Akun",  show: true },
+                  ]
+                },
+                {
+                  group: "PRODUK & LAYANAN",
+                  items: [
+                    { id: "int_kamar_tidur",    label: "🛏️ Kamar Tidur",      show: isAdmin },
+                    { id: "int_kamar_mandi",    label: "🚿 Kamar Mandi",      show: isAdmin },
+                    { id: "int_ruang_keluarga", label: "👨‍👩‍👧 Ruang Keluarga",   show: isAdmin },
+                    { id: "int_ruang_tamu",     label: "🪑 Ruang Tamu",       show: isAdmin },
+                    { id: "int_kitchen_set",    label: "🍳 Kitchen Set",      show: isAdmin },
+                    { id: "int_ruang_kerja",    label: "💼 Ruang Kerja",      show: isAdmin },
+                    { id: "int_plafon",         label: "🏛️ Plafon",           show: isAdmin },
+                    { id: "set_pagar",          label: "🔒 Pagar Rumah",      show: isAdmin },
+                    { id: "set_kanopi",         label: "⛺ Kanopi",           show: isAdmin },
+                    { id: "set_aluminium",      label: "🪟 Aluminium",        show: isAdmin },
+                    { id: "set_landscape",      label: "🌳 Landscape & Taman",show: isAdmin },
+                    { id: "produk_furnitur",    label: "🪑 Furnitur",         show: isAdmin },
+                  ]
+                },
+                {
+                  group: "PENGATURAN LAIN",
+                  items: [
+                    { id: "team",              label: "👥 Tim",              show: isAdmin },
+                    { id: "reviews",           label: "⭐ Reviews",          show: isAdmin },
+                    { id: "users",             label: "🔐 Users",            show: isAdmin },
+                    { id: "content",           label: "📝 Konten Website",   show: isAdmin },
+                    { id: "set_home",          label: "Setting Home",        show: isAdmin },
+                    { id: "set_layanankami",   label: "Setting Layanan",     show: isAdmin },
+                    { id: "set_desainrab",     label: "Setting Desain RAB",  show: isAdmin },
+                    { id: "set_temarumah",     label: "Setting Tema Rumah",  show: isAdmin },
+                    { id: "set_interior",      label: "Setting Interior Hub",show: isAdmin },
+                    { id: "paket_landscape",   label: "Paket Landscape",     show: isAdmin },
+                    { id: "paket_rumahsubsidi",label: "Paket Rumah Subsidi", show: isAdmin },
+                    { id: "settings",          label: "⚙️ Pengaturan",       show: isAdmin },
+                  ]
+                },
+              ].map(({ group, items }) => (
+                <div key={group || "_main"}>
+                  {group && (
+                    <div style={{ padding: "14px 16px 4px", fontSize: 9, fontWeight: 800, letterSpacing: ".14em", color: "rgba(201,170,113,.65)", textTransform: "uppercase" }}>
+                      {group}
+                    </div>
+                  )}
+                  {items.filter(it => it.show).map(item => (
+                    <button key={item.id} onClick={() => { navigateAdminTab(item.id); setSidebarOpen(false); }}
+                      style={{
+                        display: "block", width: "100%", textAlign: "left", border: "none", padding: "11px 18px",
+                        background: adminTab === item.id ? "rgba(201,170,113,.22)" : "transparent",
+                        color: adminTab === item.id ? "#C9AA71" : "rgba(255,255,255,.78)",
+                        fontSize: 13, fontWeight: adminTab === item.id ? 700 : 400, cursor: "pointer",
+                        borderLeft: adminTab === item.id ? "3px solid #C9AA71" : "3px solid transparent",
+                        transition: "all .12s",
+                      }}>
+                      {item.label}
+                    </button>
+                  ))}
+                </div>
+              ))}
             </div>
-            <div style={{ padding: "28px", maxWidth: 1180, margin: "0 auto" }}>
+
+            {/* ── Konten ── */}
+            <div style={{ flex: 1, minWidth: 0, padding: "28px 24px", overflowY: "auto" }}>
+
               {adminTab === "dashboard" && (
                 <DashTabs
                   user={user}
@@ -14225,45 +14155,259 @@ export default function BricksyTravel() {
 
               {/* SETTING INTERIOR */}
               {adminTab === "set_interior" && isAdmin && (
+                <div className="fade-in" style={{ padding:"20px 0" }}>
+                  <h1 style={{ fontSize:22, fontWeight:700, color:"#2E3D3F", marginBottom:8 }}>🛋️ Interior — Pilih Ruangan</h1>
+                  <p style={{ fontSize:"0.875rem", color:"#5A6A6C", marginBottom:24 }}>Setiap ruangan dikelola secara terpisah. Pilih tab di sidebar kiri.</p>
+                  <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(200px,1fr))", gap:14 }}>
+                    {[
+                      { id:"int_kamar_tidur",    icon:"🛏️", label:"Kamar Tidur" },
+                      { id:"int_kamar_mandi",    icon:"🚿", label:"Kamar Mandi" },
+                      { id:"int_ruang_keluarga", icon:"👨‍👩‍👧", label:"Ruang Keluarga" },
+                      { id:"int_ruang_tamu",     icon:"🪑", label:"Ruang Tamu" },
+                      { id:"int_kitchen_set",    icon:"🍳", label:"Kitchen Set" },
+                      { id:"int_ruang_kerja",    icon:"💼", label:"Ruang Kerja" },
+                      { id:"int_plafon",         icon:"🏛️", label:"Plafon Modern" },
+                    ].map(r => (
+                      <button key={r.id} onClick={() => navigateAdminTab(r.id)}
+                        style={{ background:"#fff", border:"2px solid #E8DCC8", borderRadius:10, padding:"20px 16px", cursor:"pointer", textAlign:"center", transition:"all .15s", fontFamily:"'Jost',sans-serif" }}
+                        onMouseEnter={e=>{e.currentTarget.style.borderColor="#C9AA71"; e.currentTarget.style.background="#FAF7F0";}}
+                        onMouseLeave={e=>{e.currentTarget.style.borderColor="#E8DCC8"; e.currentTarget.style.background="#fff";}}>
+                        <div style={{ fontSize:32, marginBottom:8 }}>{r.icon}</div>
+                        <div style={{ fontSize:"0.875rem", fontWeight:700, color:"#2E3D3F" }}>{r.label}</div>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* ─── KAMAR TIDUR ─── */}
+              {adminTab === "int_kamar_tidur" && isAdmin && (
                 <SubLayananAdmin
-                  title="Setting Interior"
-                  icon="🛋"
-                  accentColor="#8e44ad"
-                  storeKey="interior"
+                  title="Kamar Tidur"
+                  icon="🛏️"
+                  accentColor="#6a2fa0"
+                  storeKey="int_kamar_tidur"
                   data={data}
                   save={save}
                   notify={notify}
                   uploadToCloudinary={uploadToCloudinary}
-                  pageDesc="Kelola konten halaman Interior — portofolio, layanan, dan galeri interior."
-                  sections={[
-                    { key: "interiorTitle", label: "Judul Halaman Interior", type: "text" },
-                    { key: "interiorSub", label: "Sub-judul / Tagline", type: "textarea" },
-                    { key: "interiorDesc", label: "Deskripsi Layanan Interior", type: "textarea" },
-                    { key: "interiorCta", label: "Label Tombol CTA", type: "text" },
-                  ]}
-                  imageGroups={[
-                    { key: "interiorHero", label: "Gambar Hero Interior", count: 2, desc: "Foto utama halaman Interior." },
-                    { key: "interiorGal", label: "Galeri Portofolio Interior", count: 8, desc: "Foto hasil pekerjaan interior." },
-                  ]}
-                  crudKey="interiorItems"
-                  crudLabel="Paket / Kategori Interior"
+                  pageDesc="Kelola katalog desain kamar tidur — tambah, edit, hapus kartu produk yang tampil di halaman Kamar Tidur."
+                  sections={[]}
+                  imageGroups={[]}
+                  crudKey="intKamarTidurItems"
+                  crudLabel="Desain Kamar Tidur"
                   crudFields={[
-                    { key: "nama", label: "Nama Paket / Kategori", type: "text", placeholder: "contoh: Interior Minimalis" },
-                    { key: "harga", label: "Harga / Keterangan Harga", type: "text", placeholder: "Rp 500rb/m²" },
-                    { key: "deskripsi", label: "Deskripsi", type: "textarea", placeholder: "Deskripsi kategori interior..." },
+                    { key:"nama",     label:"Nama Desain",  type:"text",     placeholder:"contoh: Kamar Minimalis Modern" },
+                    { key:"style",    label:"Style / Tag",  type:"text",     placeholder:"contoh: Best Seller, Premium, Zen..." },
+                    { key:"material", label:"Material",     type:"text",     placeholder:"contoh: Kayu MDF + HPL" },
+                    { key:"harga",    label:"Harga (Rp)",   type:"text",     placeholder:"contoh: 8500000" },
+                    { key:"desc",     label:"Deskripsi",    type:"textarea", placeholder:"Keunggulan dan detail desain..." },
+                    { key:"fitur",    label:"Fitur (pisah koma)", type:"text", placeholder:"contoh: Storage Built-in, Hidden Lamp" },
                   ]}
                   crudHasImage
-                  defaultItems={[
-                    ...Object.entries(CATALOG_DATA)
-                      .filter(([k]) => k.startsWith("interior/"))
-                      .flatMap(([k, v]) => v.items.map(item => ({
-                        id: item.id,
-                        nama: item.nama,
-                        harga: item.harga ? `Rp ${item.harga.toLocaleString("id-ID")}` : (item.style || ""),
-                        deskripsi: [item.desc, item.material ? `Material: ${item.material}` : "", item.fitur ? item.fitur.join(", ") : ""].filter(Boolean).join(" | "),
-                        _img: item.img || "",
-                      })))
+                  defaultItems={CATALOG_DATA["interior/kamar-tidur"].items.map(item => ({
+                    id: item.id, nama: item.nama, style: item.style || "", material: item.material || "",
+                    harga: item.harga ? String(item.harga) : "",
+                    desc: item.desc || "", fitur: (item.fitur||[]).join(", "), _img: item.img || "",
+                  }))}
+                />
+              )}
+
+              {/* ─── KAMAR MANDI ─── */}
+              {adminTab === "int_kamar_mandi" && isAdmin && (
+                <SubLayananAdmin
+                  title="Kamar Mandi"
+                  icon="🚿"
+                  accentColor="#0f3460"
+                  storeKey="int_kamar_mandi"
+                  data={data}
+                  save={save}
+                  notify={notify}
+                  uploadToCloudinary={uploadToCloudinary}
+                  pageDesc="Kelola katalog desain kamar mandi — tambah, edit, hapus kartu produk yang tampil di halaman Kamar Mandi."
+                  sections={[]}
+                  imageGroups={[]}
+                  crudKey="intKamarMandiItems"
+                  crudLabel="Desain Kamar Mandi"
+                  crudFields={[
+                    { key:"nama",     label:"Nama Desain",  type:"text",     placeholder:"contoh: Bathroom Minimalis Modern" },
+                    { key:"style",    label:"Style / Tag",  type:"text",     placeholder:"contoh: Clean, Luxury, Zen..." },
+                    { key:"material", label:"Material",     type:"text",     placeholder:"contoh: Granit + Keramik" },
+                    { key:"harga",    label:"Harga (Rp)",   type:"text",     placeholder:"contoh: 12000000" },
+                    { key:"desc",     label:"Deskripsi",    type:"textarea", placeholder:"Keunggulan dan detail desain..." },
+                    { key:"fitur",    label:"Fitur (pisah koma)", type:"text", placeholder:"contoh: Shower Box, LED Mirror" },
                   ]}
+                  crudHasImage
+                  defaultItems={CATALOG_DATA["interior/kamar-mandi"].items.map(item => ({
+                    id: item.id, nama: item.nama, style: item.style || "", material: item.material || "",
+                    harga: item.harga ? String(item.harga) : "",
+                    desc: item.desc || "", fitur: (item.fitur||[]).join(", "), _img: item.img || "",
+                  }))}
+                />
+              )}
+
+              {/* ─── RUANG KELUARGA ─── */}
+              {adminTab === "int_ruang_keluarga" && isAdmin && (
+                <SubLayananAdmin
+                  title="Ruang Keluarga"
+                  icon="👨‍👩‍👧"
+                  accentColor="#2d6a4f"
+                  storeKey="int_ruang_keluarga"
+                  data={data}
+                  save={save}
+                  notify={notify}
+                  uploadToCloudinary={uploadToCloudinary}
+                  pageDesc="Kelola katalog desain ruang keluarga — tambah, edit, hapus kartu produk."
+                  sections={[]}
+                  imageGroups={[]}
+                  crudKey="intRuangKeluargaItems"
+                  crudLabel="Desain Ruang Keluarga"
+                  crudFields={[
+                    { key:"nama",     label:"Nama Desain",  type:"text",     placeholder:"contoh: Family Room Modern" },
+                    { key:"style",    label:"Style / Tag",  type:"text",     placeholder:"contoh: Cozy, Premium, Hygge..." },
+                    { key:"material", label:"Material",     type:"text",     placeholder:"contoh: Sofa Fabric + Kayu" },
+                    { key:"harga",    label:"Harga (Rp)",   type:"text",     placeholder:"contoh: 18000000" },
+                    { key:"desc",     label:"Deskripsi",    type:"textarea", placeholder:"Keunggulan dan detail desain..." },
+                    { key:"fitur",    label:"Fitur (pisah koma)", type:"text", placeholder:"contoh: Modular Sofa, TV Wall" },
+                  ]}
+                  crudHasImage
+                  defaultItems={CATALOG_DATA["interior/ruang-keluarga"].items.map(item => ({
+                    id: item.id, nama: item.nama, style: item.style || "", material: item.material || "",
+                    harga: item.harga ? String(item.harga) : "",
+                    desc: item.desc || "", fitur: (item.fitur||[]).join(", "), _img: item.img || "",
+                  }))}
+                />
+              )}
+
+              {/* ─── RUANG TAMU ─── */}
+              {adminTab === "int_ruang_tamu" && isAdmin && (
+                <SubLayananAdmin
+                  title="Ruang Tamu"
+                  icon="🪑"
+                  accentColor="#8B4513"
+                  storeKey="int_ruang_tamu"
+                  data={data}
+                  save={save}
+                  notify={notify}
+                  uploadToCloudinary={uploadToCloudinary}
+                  pageDesc="Kelola katalog desain ruang tamu — tambah, edit, hapus kartu produk."
+                  sections={[]}
+                  imageGroups={[]}
+                  crudKey="intRuangTamuItems"
+                  crudLabel="Desain Ruang Tamu"
+                  crudFields={[
+                    { key:"nama",     label:"Nama Desain",  type:"text",     placeholder:"contoh: Ruang Tamu Minimalis" },
+                    { key:"style",    label:"Style / Tag",  type:"text",     placeholder:"contoh: Clean, Timeless, Grand..." },
+                    { key:"material", label:"Material",     type:"text",     placeholder:"contoh: Keramik + Fabric" },
+                    { key:"harga",    label:"Harga (Rp)",   type:"text",     placeholder:"contoh: 10000000" },
+                    { key:"desc",     label:"Deskripsi",    type:"textarea", placeholder:"Keunggulan dan detail desain..." },
+                    { key:"fitur",    label:"Fitur (pisah koma)", type:"text", placeholder:"contoh: Space Efficient, Art Display" },
+                  ]}
+                  crudHasImage
+                  defaultItems={CATALOG_DATA["interior/ruang-tamu"].items.map(item => ({
+                    id: item.id, nama: item.nama, style: item.style || "", material: item.material || "",
+                    harga: item.harga ? String(item.harga) : "",
+                    desc: item.desc || "", fitur: (item.fitur||[]).join(", "), _img: item.img || "",
+                  }))}
+                />
+              )}
+
+              {/* ─── KITCHEN SET ─── */}
+              {adminTab === "int_kitchen_set" && isAdmin && (
+                <SubLayananAdmin
+                  title="Kitchen Set & Dapur"
+                  icon="🍳"
+                  accentColor="#2c5282"
+                  storeKey="int_kitchen_set"
+                  data={data}
+                  save={save}
+                  notify={notify}
+                  uploadToCloudinary={uploadToCloudinary}
+                  pageDesc="Kelola katalog desain kitchen set & dapur — tambah, edit, hapus kartu produk."
+                  sections={[]}
+                  imageGroups={[]}
+                  crudKey="intKitchenSetItems"
+                  crudLabel="Desain Kitchen Set"
+                  crudFields={[
+                    { key:"nama",     label:"Nama Desain",  type:"text",     placeholder:"contoh: Kitchen Set Minimalis" },
+                    { key:"style",    label:"Style / Tag",  type:"text",     placeholder:"contoh: Clean, Luxury, Nordic..." },
+                    { key:"material", label:"Material",     type:"text",     placeholder:"contoh: HPL + Granit" },
+                    { key:"harga",    label:"Harga (Rp)",   type:"text",     placeholder:"contoh: 15000000" },
+                    { key:"desc",     label:"Deskripsi",    type:"textarea", placeholder:"Keunggulan dan detail desain..." },
+                    { key:"fitur",    label:"Fitur (pisah koma)", type:"text", placeholder:"contoh: Soft Close Hinge, Granite Top" },
+                  ]}
+                  crudHasImage
+                  defaultItems={CATALOG_DATA["interior/kitchen-set"].items.map(item => ({
+                    id: item.id, nama: item.nama, style: item.style || "", material: item.material || "",
+                    harga: item.harga ? String(item.harga) : "",
+                    desc: item.desc || "", fitur: (item.fitur||[]).join(", "), _img: item.img || "",
+                  }))}
+                />
+              )}
+
+              {/* ─── RUANG KERJA ─── */}
+              {adminTab === "int_ruang_kerja" && isAdmin && (
+                <SubLayananAdmin
+                  title="Ruang Kerja"
+                  icon="💼"
+                  accentColor="#16213e"
+                  storeKey="int_ruang_kerja"
+                  data={data}
+                  save={save}
+                  notify={notify}
+                  uploadToCloudinary={uploadToCloudinary}
+                  pageDesc="Kelola katalog desain ruang kerja / home office — tambah, edit, hapus kartu produk."
+                  sections={[]}
+                  imageGroups={[]}
+                  crudKey="intRuangKerjaItems"
+                  crudLabel="Desain Ruang Kerja"
+                  crudFields={[
+                    { key:"nama",     label:"Nama Desain",  type:"text",     placeholder:"contoh: Home Office Minimalis" },
+                    { key:"style",    label:"Style / Tag",  type:"text",     placeholder:"contoh: Focus, Professional, Smart..." },
+                    { key:"material", label:"Material",     type:"text",     placeholder:"contoh: Kayu MDF + Metal" },
+                    { key:"harga",    label:"Harga (Rp)",   type:"text",     placeholder:"contoh: 7500000" },
+                    { key:"desc",     label:"Deskripsi",    type:"textarea", placeholder:"Keunggulan dan detail desain..." },
+                    { key:"fitur",    label:"Fitur (pisah koma)", type:"text", placeholder:"contoh: Floating Desk, Task Light" },
+                  ]}
+                  crudHasImage
+                  defaultItems={CATALOG_DATA["interior/ruang-kerja"].items.map(item => ({
+                    id: item.id, nama: item.nama, style: item.style || "", material: item.material || "",
+                    harga: item.harga ? String(item.harga) : "",
+                    desc: item.desc || "", fitur: (item.fitur||[]).join(", "), _img: item.img || "",
+                  }))}
+                />
+              )}
+
+              {/* ─── PLAFON MODERN ─── */}
+              {adminTab === "int_plafon" && isAdmin && (
+                <SubLayananAdmin
+                  title="Plafon Modern"
+                  icon="🏛️"
+                  accentColor="#0f3460"
+                  storeKey="int_plafon"
+                  data={data}
+                  save={save}
+                  notify={notify}
+                  uploadToCloudinary={uploadToCloudinary}
+                  pageDesc="Kelola katalog produk plafon modern — tambah, edit, hapus kartu produk yang tampil di halaman Plafon Modern."
+                  sections={[]}
+                  imageGroups={[]}
+                  crudKey="intPlafonItems"
+                  crudLabel="Produk Plafon Modern"
+                  crudFields={[
+                    { key:"nama",     label:"Nama Produk",  type:"text",     placeholder:"contoh: Drop Ceiling / Cove Ceiling" },
+                    { key:"style",    label:"Style / Tag",  type:"text",     placeholder:"contoh: Modern Luxury, Clean, Elegant..." },
+                    { key:"material", label:"Material",     type:"text",     placeholder:"contoh: Gypsum Board + LED Strip" },
+                    { key:"harga",    label:"Harga per m² (Rp)", type:"text", placeholder:"contoh: 185000" },
+                    { key:"desc",     label:"Deskripsi",    type:"textarea", placeholder:"Keunggulan dan detail produk plafon..." },
+                    { key:"fitur",    label:"Fitur (pisah koma)", type:"text", placeholder:"contoh: LED Hidden Light, Bertingkat" },
+                  ]}
+                  crudHasImage
+                  defaultItems={CATALOG_DATA["interior/plafon-modern"].items.map(item => ({
+                    id: item.id, nama: item.nama, style: item.style || "", material: item.material || "",
+                    harga: item.harga ? String(item.harga) : "",
+                    desc: item.desc || "", fitur: (item.fitur||[]).join(", "), _img: item.img || "",
+                  }))}
                 />
               )}
 
@@ -15515,9 +15659,9 @@ export default function BricksyTravel() {
                 </div>
               )}
 
-            </div>
-          </div>
-        </div>
+            </div>  {/* ─ end konten ─ */}
+          </div>    {/* ─ end flex row ─ */}
+        </div>      {/* ─ end panel wrapper ─ */}
       )}
     </div>
   );
