@@ -1736,6 +1736,13 @@ const GS = () => (
     @keyframes galScroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
     @keyframes navNamePulse{0%,100%{color:#fff}33%{color:#E8C96A}66%{color:#2E3D3F}}
     @keyframes navPulse{0%{color:#fff}30%{color:#fff}33%{color:#E8C96A}63%{color:#E8C96A}66%{color:#2E3D3F}96%{color:#2E3D3F}100%{color:#fff}}
+    @keyframes toastSlideIn{from{opacity:0;transform:translateX(60px) scale(.94)}to{opacity:1;transform:none}}
+    @keyframes toastCountdown{from{transform:scaleX(1)}to{transform:scaleX(0)}}
+    @keyframes popIn{from{opacity:0;transform:scale(.82) translateY(24px)}to{opacity:1;transform:none}}
+    @keyframes floatBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+    @keyframes dotPulse{0%,80%,100%{transform:scale(1);opacity:.5}40%{transform:scale(1.4);opacity:1}}
+    @keyframes savePulse{0%{box-shadow:0 0 0 0 rgba(39,174,96,.5)}70%{box-shadow:0 0 0 10px rgba(39,174,96,0)}100%{box-shadow:0 0 0 0 rgba(39,174,96,0)}}
+    @keyframes checkDraw{from{stroke-dashoffset:30}to{stroke-dashoffset:0}}
 
     /* Gallery ticker — desktop only */
     .gal-ticker{overflow:hidden;margin-bottom:40px;mask-image:linear-gradient(to right,transparent 0%,#000 6%,#000 94%,transparent 100%);-webkit-mask-image:linear-gradient(to right,transparent 0%,#000 6%,#000 94%,transparent 100%)}
@@ -8111,15 +8118,36 @@ function SubLayananAdmin({
 
       {/* Tombol tambah */}
       <button onClick={openAdd}
-        style={{ width: "100%", padding: "14px 20px", background: accent, color: "#fff", border: "none", borderRadius: 10, fontSize: 15, fontWeight: 700, cursor: "pointer", marginBottom: 16, display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
-        ＋ Tambah {crudLabel || "Item"} Baru
+        style={{ width: "100%", padding: "14px 20px", background: accent, color: "#fff", border: "none",
+          borderRadius: 10, fontSize: 15, fontWeight: 700, cursor: "pointer", marginBottom: 16,
+          display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
+          boxShadow: `0 4px 18px ${accent}50`, transition: "transform .15s, box-shadow .15s",
+          position: "relative", overflow: "hidden" }}
+        onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = `0 8px 28px ${accent}60`; }}
+        onMouseLeave={e => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = `0 4px 18px ${accent}50`; }}>
+        <span style={{ fontSize: 20, fontWeight: 900 }}>＋</span>
+        Tambah {crudLabel || "Item"} Baru
       </button>
 
       {/* Seed data jika masih kosong */}
       {defaultItems && defaultItems.length > 0 && items.length === 0 && !seedDone && (
         <button onClick={handleSeed} disabled={seeding}
-          style={{ width: "100%", padding: "12px 20px", background: "#fff", border: `2px dashed ${accent}`, color: "#8B6914", borderRadius: 10, fontSize: 14, fontWeight: 600, cursor: "pointer", marginBottom: 20, opacity: seeding ? 0.6 : 1 }}>
-          {seeding ? "⏳ Memuat..." : "📥 Muat Data Awal (sekali klik)"}
+          style={{ width: "100%", padding: "12px 20px", background: "#fff", border: `2px dashed ${accent}`,
+            color: "#8B6914", borderRadius: 10, fontSize: 14, fontWeight: 600, cursor: seeding ? "default" : "pointer",
+            marginBottom: 20, display: "flex", alignItems: "center", justifyContent: "center", gap: 10,
+            transition: "background .15s", position: "relative", overflow: "hidden",
+            opacity: seeding ? 0.85 : 1 }}
+          onMouseEnter={e => !seeding && (e.currentTarget.style.background = "#FAF7F0")}
+          onMouseLeave={e => (e.currentTarget.style.background = "#fff")}>
+          {seeding ? (
+            <>
+              <span style={{ width: 16, height: 16, border: `2px solid rgba(139,105,20,.3)`, borderTop: `2px solid #8B6914`,
+                borderRadius: "50%", display: "inline-block", animation: "spin .7s linear infinite" }} />
+              Memuat data...
+            </>
+          ) : (
+            <>📥 Muat Data Awal (sekali klik)</>
+          )}
         </button>
       )}
 
@@ -8146,11 +8174,19 @@ function SubLayananAdmin({
                 </div>
                 <div style={{ display: "flex", gap: 6, flexShrink: 0 }}>
                   <button onClick={() => openEdit(item)}
-                    style={{ background: accent, color: "#fff", border: "none", borderRadius: 7, padding: "7px 14px", fontSize: 13, fontWeight: 700, cursor: "pointer" }}>
+                    style={{ background: accent, color: "#fff", border: "none", borderRadius: 7,
+                      padding: "7px 14px", fontSize: 13, fontWeight: 700, cursor: "pointer",
+                      transition: "transform .12s, box-shadow .12s" }}
+                    onMouseEnter={e => { e.currentTarget.style.transform = "scale(1.06)"; e.currentTarget.style.boxShadow = `0 4px 12px ${accent}50`; }}
+                    onMouseLeave={e => { e.currentTarget.style.transform = "scale(1)"; e.currentTarget.style.boxShadow = "none"; }}>
                     ✏️ Edit
                   </button>
                   <button onClick={() => setDelTarget(item.id)}
-                    style={{ background: "#fef2f2", color: "#e74c3c", border: "1.5px solid #fca5a5", borderRadius: 7, padding: "7px 14px", fontSize: 13, fontWeight: 700, cursor: "pointer" }}>
+                    style={{ background: "#fef2f2", color: "#e74c3c", border: "1.5px solid #fca5a5",
+                      borderRadius: 7, padding: "7px 14px", fontSize: 13, fontWeight: 700, cursor: "pointer",
+                      transition: "all .12s" }}
+                    onMouseEnter={e => { e.currentTarget.style.background = "#e74c3c"; e.currentTarget.style.color = "#fff"; }}
+                    onMouseLeave={e => { e.currentTarget.style.background = "#fef2f2"; e.currentTarget.style.color = "#e74c3c"; }}>
                     🗑
                   </button>
                 </div>
@@ -8201,9 +8237,24 @@ function SubLayananAdmin({
                 : <div style={{ width: 90, height: 70, background: "#F5EDD8", borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 28, border: "1.5px dashed #D5C9B0" }}>{icon}</div>
               }
               <div style={{ flex: 1 }}>
-                <label style={{ display: "block", cursor: "pointer" }}>
-                  <div style={{ background: uploading ? "#ccc" : accent, color: "#fff", borderRadius: 8, padding: "10px 0", fontSize: 14, fontWeight: 700, textAlign: "center", pointerEvents: uploading ? "none" : "auto" }}>
-                    {uploading ? "⏳ Uploading..." : "📷 Upload Foto"}
+                <label style={{ display: "block", cursor: uploading ? "default" : "pointer" }}>
+                  <div style={{ borderRadius: 8, padding: "10px 0", fontSize: 14, fontWeight: 700, textAlign: "center",
+                    color: "#fff", position: "relative", overflow: "hidden",
+                    background: uploading ? "linear-gradient(130deg,#2980b9,#3498db)" : accent,
+                    opacity: uploading ? 1 : 1, transition: "background .2s" }}>
+                    {uploading && (
+                      <div style={{ position: "absolute", inset: 0, background: "linear-gradient(90deg,transparent,rgba(255,255,255,.2),transparent)",
+                        animation: "shimmer 1.2s linear infinite", backgroundSize: "200% 100%" }} />
+                    )}
+                    <span style={{ position: "relative", display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
+                      {uploading ? (
+                        <>
+                          <span style={{ width: 15, height: 15, border: "2px solid rgba(255,255,255,.3)", borderTop: "2px solid #fff",
+                            borderRadius: "50%", display: "inline-block", animation: "spin .7s linear infinite" }} />
+                          Mengupload...
+                        </>
+                      ) : "📷 Upload Foto"}
+                    </span>
                   </div>
                   <input type="file" accept="image/*" style={{ display: "none" }} disabled={uploading}
                     onChange={e => handleUpload(e.target.files?.[0])} />
@@ -8225,8 +8276,31 @@ function SubLayananAdmin({
         {/* Tombol simpan */}
         <div style={{ display: "flex", gap: 10, marginTop: 6 }}>
           <button onClick={handleSave} disabled={saving}
-            style={{ flex: 1, padding: "13px 0", background: saving ? "#ccc" : "#27ae60", color: "#fff", border: "none", borderRadius: 9, fontSize: 15, fontWeight: 700, cursor: saving ? "default" : "pointer" }}>
-            {saving ? "⏳ Menyimpan..." : "💾 Simpan"}
+            style={{ flex: 1, padding: "13px 0", color: "#fff", border: "none", borderRadius: 9,
+              fontSize: 15, fontWeight: 700, cursor: saving ? "default" : "pointer",
+              background: saving ? "linear-gradient(130deg,#1a7a40,#27ae60)" : "#27ae60",
+              position: "relative", overflow: "hidden", transition: "all .2s",
+              animation: saving ? "none" : "none",
+              boxShadow: saving ? "0 0 0 4px rgba(39,174,96,.25)" : "none" }}>
+            {/* shimmer sweep on idle */}
+            {!saving && (
+              <span style={{ position: "absolute", inset: 0, background: "linear-gradient(90deg,transparent 0%,rgba(255,255,255,.18) 50%,transparent 100%)",
+                backgroundSize: "200% 100%", animation: "shimmer 2.2s linear infinite" }} />
+            )}
+            {saving ? (
+              <span style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 10 }}>
+                <span style={{ width: 18, height: 18, border: "2.5px solid rgba(255,255,255,.3)", borderTop: "2.5px solid #fff",
+                  borderRadius: "50%", display: "inline-block", animation: "spin .7s linear infinite", flexShrink: 0 }} />
+                Menyimpan...
+              </span>
+            ) : (
+              <span style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="20 6 9 17 4 12" />
+                </svg>
+                Simpan
+              </span>
+            )}
           </button>
           <button onClick={() => { setMode("list"); setForm(emptyForm()); }}
             style={{ padding: "13px 20px", background: "#F5EDD8", color: "#5A6A6C", border: "none", borderRadius: 9, fontSize: 14, fontWeight: 600, cursor: "pointer" }}>
@@ -11849,9 +11923,241 @@ const CATALOG_DATA = {
   },
 };
 
-/* ═══════════════════════════════════════════════════
-   HALAMAN-HALAMAN SUB-INTERIOR & SUB-EKSTERIOR
-═══════════════════════════════════════════════════ */
+/* ═══════════════════════════════════════════════════════════════════
+   VASTURA FOOTER — dipakai di semua halaman non-admin
+═══════════════════════════════════════════════════════════════════ */
+function VasturaFooter({ data, navigateTo, onWaOpen, showDevProfile }) {
+  const c = data?.content || {};
+  const accentGold = "#C9AA71";
+  const darkBg     = "#1A2A2C";
+  const darkCard   = "#213335";
+  const borderCol  = "rgba(201,170,113,.15)";
+
+  const layananLinks = [
+    { label:"Layanan Kami",      page:"services" },
+    { label:"Jasa Desain & RAB", page:"desainrab" },
+    { label:"Tema Rumah",        page:"temarumah" },
+    { label:"Interior",          page:"interior" },
+    { label:"Pagar Rumah",       page:"eksterior/pagar" },
+    { label:"Kanopi",            page:"eksterior/kanopi" },
+    { label:"Aluminium",         page:"eksterior/aluminium" },
+    { label:"Landscape & Taman", page:"eksterior/taman-landscape" },
+    { label:"Furnitur",          page:"furnitur" },
+  ];
+
+  const infoLinks = [
+    { label:"Tentang Kami",  page:"about" },
+    { label:"Proses Kerja",  page:"about" },
+    { label:"Artikel",       page:"news" },
+    { label:"FAQ",           page:"about" },
+    { label:"Karir",         page:"about" },
+    { label:"Kontak",        page:"about" },
+  ];
+
+  const phone   = c.phone   || "0812-3456-7890";
+  const email   = c.email   || "info@vasturagrup.com";
+  const address = c.address || "Jl. Contoh No.123, Kota Anda\nIndonesia 12345";
+  const website = c.website || "www.vasturagrup.com";
+  const igLink  = c.igLink  || "https://instagram.com/vastura_group";
+  const fbLink  = c.fbLink  || "https://facebook.com/vastura_group";
+  const ytLink  = c.ytLink  || "https://youtube.com";
+  const ttLink  = c.ttLink  || "https://tiktok.com";
+
+  const BtnLink = ({ page, children }) => (
+    <button onClick={() => navigateTo(page)}
+      style={{ display:"flex", alignItems:"center", gap:8, background:"none", border:"none",
+        color:"rgba(255,255,255,.72)", fontSize:13, cursor:"pointer", padding:"3px 0",
+        textAlign:"left", fontFamily:"'Jost',sans-serif", transition:"color .15s, gap .15s",
+        lineHeight:1.6 }}
+      onMouseEnter={e => { e.currentTarget.style.color = accentGold; e.currentTarget.style.gap = "12px"; }}
+      onMouseLeave={e => { e.currentTarget.style.color = "rgba(255,255,255,.72)"; e.currentTarget.style.gap = "8px"; }}>
+      <span style={{ color: accentGold, fontSize:11, flexShrink:0 }}>›</span>
+      {children}
+    </button>
+  );
+
+  const SocialBtn = ({ href, label, children }) => (
+    <a href={href} target="_blank" rel="noopener noreferrer" aria-label={label}
+      style={{ width:36, height:36, borderRadius:"50%", border:`1px solid ${borderCol}`,
+        background:"rgba(255,255,255,.06)", display:"flex", alignItems:"center", justifyContent:"center",
+        color:"rgba(255,255,255,.75)", transition:"all .18s", flexShrink:0, textDecoration:"none" }}
+      onMouseEnter={e => { e.currentTarget.style.background = accentGold; e.currentTarget.style.borderColor = accentGold; e.currentTarget.style.color = "#fff"; e.currentTarget.style.transform = "translateY(-3px)"; }}
+      onMouseLeave={e => { e.currentTarget.style.background = "rgba(255,255,255,.06)"; e.currentTarget.style.borderColor = borderCol; e.currentTarget.style.color = "rgba(255,255,255,.75)"; e.currentTarget.style.transform = "translateY(0)"; }}>
+      {children}
+    </a>
+  );
+
+  return (
+    <footer style={{ background: darkBg, fontFamily:"'Jost',sans-serif" }}>
+      <style>{`
+        .vf-col-title { font-size:11px; font-weight:800; letter-spacing:.18em; text-transform:uppercase; color:${accentGold}; margin-bottom:18px; }
+        .vf-divider { height:1px; background:${borderCol}; margin:0; }
+        @media(max-width:900px){.vf-grid{grid-template-columns:1fr 1fr!important;gap:32px!important}}
+        @media(max-width:560px){.vf-grid{grid-template-columns:1fr!important;gap:26px!important}.vf-bottom{flex-direction:column!important;gap:10px!important;text-align:center!important}}
+      `}</style>
+
+      {/* ── Top divider accent ── */}
+      <div style={{ height:3, background:`linear-gradient(90deg, transparent 0%, ${accentGold} 30%, ${accentGold} 70%, transparent 100%)` }} />
+
+      {/* ── Main footer body ── */}
+      <div style={{ maxWidth:1280, margin:"0 auto", padding:"56px 5% 44px" }}>
+        <div className="vf-grid" style={{ display:"grid", gridTemplateColumns:"2fr 1.1fr 1.1fr 1.4fr", gap:"48px" }}>
+
+          {/* ── Col 1: Brand + Logo ── */}
+          <div>
+            {/* Logo — diambil dari link logo yang sama dengan navbar */}
+            <div style={{ marginBottom:20 }}>
+              {c.logoImage ? (
+                <img
+                  src={c.logoImage}
+                  alt={c.logoText?.replace("\n"," ") || "Vastura Grup"}
+                  style={{ height:70, maxWidth:220, objectFit:"contain", display:"block", filter:"brightness(1.05)" }}
+                />
+              ) : (
+                /* Fallback teks jika belum ada logo */
+                <div>
+                  <div style={{ fontSize:26, fontWeight:900, color:"#fff", letterSpacing:".06em", fontFamily:"'Playfair Display',serif", lineHeight:1.1 }}>
+                    <span style={{ color:accentGold }}>V</span> VASTURA
+                  </div>
+                  <div style={{ fontSize:9, fontWeight:800, color:accentGold, letterSpacing:".32em", textTransform:"uppercase", marginTop:3 }}>GRUP</div>
+                </div>
+              )}
+            </div>
+
+            {/* Deskripsi */}
+            <p style={{ fontSize:13, color:"rgba(255,255,255,.58)", lineHeight:1.85, marginBottom:22, maxWidth:280 }}>
+              {c.aboutDesc || "VASTURA GRUP adalah perusahaan yang bergerak di bidang jasa desain arsitektur, interior, konstruksi, dan penataan landscape dengan komitmen pada kualitas, ketepatan waktu dan kepuasan klien."}
+            </p>
+
+            {/* Sosial media */}
+            <div style={{ display:"flex", gap:9, flexWrap:"wrap" }}>
+              {/* Facebook */}
+              <SocialBtn href={fbLink} label="Facebook">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+                </svg>
+              </SocialBtn>
+              {/* Instagram */}
+              <SocialBtn href={igLink} label="Instagram">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+                  <circle cx="12" cy="12" r="4"/>
+                  <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
+                </svg>
+              </SocialBtn>
+              {/* YouTube */}
+              <SocialBtn href={ytLink} label="YouTube">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.95 1.96C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.96A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/>
+                  <polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="#1A2A2C"/>
+                </svg>
+              </SocialBtn>
+              {/* TikTok */}
+              <SocialBtn href={ttLink} label="TikTok">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.29 6.29 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.72a8.18 8.18 0 0 0 4.78 1.52V6.76a4.85 4.85 0 0 1-1.01-.07z"/>
+                </svg>
+              </SocialBtn>
+            </div>
+          </div>
+
+          {/* ── Col 2: Layanan ── */}
+          <div>
+            <div className="vf-col-title">Layanan</div>
+            <div style={{ display:"flex", flexDirection:"column" }}>
+              {layananLinks.map(l => <BtnLink key={l.page} page={l.page}>{l.label}</BtnLink>)}
+            </div>
+          </div>
+
+          {/* ── Col 3: Informasi ── */}
+          <div>
+            <div className="vf-col-title">Informasi</div>
+            <div style={{ display:"flex", flexDirection:"column" }}>
+              {infoLinks.map(l => <BtnLink key={l.label} page={l.page}>{l.label}</BtnLink>)}
+            </div>
+          </div>
+
+          {/* ── Col 4: Kontak Kami ── */}
+          <div>
+            <div className="vf-col-title">Kontak Kami</div>
+            <div style={{ display:"flex", flexDirection:"column", gap:14 }}>
+              {/* Alamat */}
+              <div style={{ display:"flex", gap:10, alignItems:"flex-start" }}>
+                <span style={{ color:accentGold, fontSize:16, flexShrink:0, marginTop:2 }}>📍</span>
+                <span style={{ fontSize:13, color:"rgba(255,255,255,.68)", lineHeight:1.75, whiteSpace:"pre-line" }}>{address}</span>
+              </div>
+              {/* Phone */}
+              <div style={{ display:"flex", gap:10, alignItems:"center" }}>
+                <span style={{ color:accentGold, fontSize:16, flexShrink:0 }}>📞</span>
+                <a href={`tel:${phone.replace(/\s/g,"")}`}
+                  style={{ fontSize:13, color:"rgba(255,255,255,.68)", textDecoration:"none", transition:"color .15s" }}
+                  onMouseEnter={e => e.currentTarget.style.color = accentGold}
+                  onMouseLeave={e => e.currentTarget.style.color = "rgba(255,255,255,.68)"}>
+                  {phone}
+                </a>
+              </div>
+              {/* Email */}
+              <div style={{ display:"flex", gap:10, alignItems:"center" }}>
+                <span style={{ color:accentGold, fontSize:16, flexShrink:0 }}>✉️</span>
+                <a href={`mailto:${email}`}
+                  style={{ fontSize:13, color:"rgba(255,255,255,.68)", textDecoration:"none", transition:"color .15s" }}
+                  onMouseEnter={e => e.currentTarget.style.color = accentGold}
+                  onMouseLeave={e => e.currentTarget.style.color = "rgba(255,255,255,.68)"}>
+                  {email}
+                </a>
+              </div>
+              {/* Website */}
+              <div style={{ display:"flex", gap:10, alignItems:"center" }}>
+                <span style={{ color:accentGold, fontSize:16, flexShrink:0 }}>🌐</span>
+                <span style={{ fontSize:13, color:"rgba(255,255,255,.68)" }}>{website}</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      {/* ── Divider ── */}
+      <div className="vf-divider" />
+
+      {/* ── Bottom bar ── */}
+      <div style={{ maxWidth:1280, margin:"0 auto", padding:"18px 5%" }}>
+        <div className="vf-bottom" style={{ display:"flex", alignItems:"center", justifyContent:"space-between", gap:14, flexWrap:"wrap" }}>
+          <span style={{ fontSize:12, color:"rgba(255,255,255,.35)", letterSpacing:".04em" }}>
+            © {new Date().getFullYear()} VASTURA GRUP. All Rights Reserved.
+          </span>
+          <div style={{ display:"flex", gap:20, alignItems:"center", flexWrap:"wrap" }}>
+            <button onClick={() => {}}
+              style={{ background:"none", border:"none", fontSize:12, color:"rgba(255,255,255,.38)", cursor:"pointer",
+                fontFamily:"'Jost',sans-serif", transition:"color .15s", padding:0 }}
+              onMouseEnter={e => e.currentTarget.style.color = accentGold}
+              onMouseLeave={e => e.currentTarget.style.color = "rgba(255,255,255,.38)"}>
+              Kebijakan Privasi
+            </button>
+            <button onClick={() => {}}
+              style={{ background:"none", border:"none", fontSize:12, color:"rgba(255,255,255,.38)", cursor:"pointer",
+                fontFamily:"'Jost',sans-serif", transition:"color .15s", padding:0 }}
+              onMouseEnter={e => e.currentTarget.style.color = accentGold}
+              onMouseLeave={e => e.currentTarget.style.color = "rgba(255,255,255,.38)"}>
+              Syarat & Ketentuan
+            </button>
+            {showDevProfile && (
+              <button onClick={showDevProfile}
+                style={{ background:"none", border:"none", fontSize:11, color:"rgba(255,255,255,.22)", cursor:"pointer",
+                  fontFamily:"'Jost',sans-serif", transition:"color .15s", padding:0, letterSpacing:".06em" }}
+                onMouseEnter={e => e.currentTarget.style.color = "rgba(255,255,255,.5)"}
+                onMouseLeave={e => e.currentTarget.style.color = "rgba(255,255,255,.22)"}>
+                Power Developer
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
+}
+
+/* ─────────────────────────────────────────────────────────────────────────── */
 
 // Mapping pageKey → crudKey di Firestore
 const INT_PAGE_CRUD_KEY = {
@@ -12081,6 +12387,9 @@ export default function BricksyTravel() {
   const [loginForm, setLoginForm] = useState({ username: "", password: "" });
   const [loginErr, setLoginErr] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [loginLoading, setLoginLoading] = useState(false);
+  const [loginProgress, setLoginProgress] = useState(0);
+  const [comingSoonPopup, setComingSoonPopup] = useState(false);
   // Forgot password flow: null | "input_user" | "input_email" | "input_otp" | "input_newpass"
   const [forgotStep, setForgotStep] = useState(null);
   const [forgotUser, setForgotUser] = useState("");
@@ -12571,24 +12880,56 @@ export default function BricksyTravel() {
   };
 
   const login = async () => {
-    const u = HARDCODED_USERS.find(x => x.username === loginForm.username);
-    if (!u) { setLoginErr("Invalid username or password."); return; }
-    // Check for password override in storage
-    let savedPass = u.password;
-    let profile = { name: u.name, phone: u.phone, email: u.email, desc: u.desc, photo: u.photo };
+    if (loginLoading) return;
+    setLoginErr("");
+    // Mulai animasi loading
+    setLoginLoading(true);
+    setLoginProgress(10);
+    const tick = setInterval(() => setLoginProgress(p => p < 85 ? p + Math.random() * 18 : p), 180);
     try {
-      const r = await fsGet(`profile-${u.username}`);
-      if (r) {
-        if (r._password) savedPass = r._password;
-        profile = { name: r.name ?? profile.name, phone: r.phone ?? profile.phone, email: r.email ?? profile.email, desc: r.desc ?? profile.desc, photo: r.photo ?? profile.photo };
+      await new Promise(r => setTimeout(r, 420)); // natural delay
+      const u = HARDCODED_USERS.find(x => x.username === loginForm.username);
+      setLoginProgress(55);
+      if (!u) {
+        clearInterval(tick);
+        setLoginProgress(100);
+        await new Promise(r => setTimeout(r, 220));
+        setLoginLoading(false); setLoginProgress(0);
+        setLoginErr("Username atau password salah.");
+        return;
       }
-    } catch {}
-    if (loginForm.password !== savedPass) { setLoginErr("Invalid username or password."); return; }
-    const sessionUser = { ...u, ...profile };
-    setUser(sessionUser);
-    sessionSave(sessionUser);
-    setShowLogin(false); setLoginErr(""); setLoginForm({ username: "", password: "" });
-    notify(`Welcome back, ${profile.name || u.username}!`);
+      let savedPass = u.password;
+      let profile = { name: u.name, phone: u.phone, email: u.email, desc: u.desc, photo: u.photo };
+      try {
+        const r = await fsGet(`profile-${u.username}`);
+        if (r) {
+          if (r._password) savedPass = r._password;
+          profile = { name: r.name ?? profile.name, phone: r.phone ?? profile.phone, email: r.email ?? profile.email, desc: r.desc ?? profile.desc, photo: r.photo ?? profile.photo };
+        }
+      } catch {}
+      setLoginProgress(80);
+      if (loginForm.password !== savedPass) {
+        clearInterval(tick);
+        setLoginProgress(100);
+        await new Promise(r => setTimeout(r, 220));
+        setLoginLoading(false); setLoginProgress(0);
+        setLoginErr("Username atau password salah.");
+        return;
+      }
+      clearInterval(tick);
+      setLoginProgress(100);
+      await new Promise(r => setTimeout(r, 340));
+      const sessionUser = { ...u, ...profile };
+      setUser(sessionUser);
+      sessionSave(sessionUser);
+      setShowLogin(false); setLoginErr(""); setLoginForm({ username: "", password: "" });
+      setLoginLoading(false); setLoginProgress(0);
+      notify(`✅ Selamat datang, ${profile.name || u.username}!`);
+    } catch {
+      clearInterval(tick);
+      setLoginLoading(false); setLoginProgress(0);
+      setLoginErr("Terjadi kesalahan. Coba lagi.");
+    }
   };
 
   /* ── Forgot Password: Step 1 — cari username ── */
@@ -12956,10 +13297,72 @@ export default function BricksyTravel() {
 
       {/* NOTIFICATION */}
       {notif && (
-        <div className="toast-notif" style={{ position: "fixed", top: 24, right: 24, zIndex: 9999, padding: "14px 22px",
-          background: notif.type === "error" ? "#e74c3c" : "#27ae60", color: "#fff",
-          borderRadius: 8, fontSize: 14, fontWeight: 500, boxShadow: "0 8px 24px rgba(0,0,0,.2)",
-          animation: "fadeIn .3s ease", maxWidth: 320 }}>{notif.msg}</div>
+        <div className="toast-notif" style={{
+          position: "fixed", top: 24, right: 24, zIndex: 9999,
+          background: notif.type === "error" ? "#e74c3c" : notif.type === "warning" ? "#f39c12" : "#27ae60",
+          color: "#fff", borderRadius: 10, fontSize: 14, fontWeight: 600,
+          boxShadow: "0 8px 32px rgba(0,0,0,.22)", maxWidth: 340, minWidth: 240,
+          animation: "toastSlideIn .3s cubic-bezier(.21,1.02,.73,1) forwards",
+          overflow: "hidden" }}>
+          <div style={{ padding: "14px 20px", display: "flex", alignItems: "center", gap: 10 }}>
+            <span style={{ fontSize: 18, flexShrink: 0 }}>
+              {notif.type === "error" ? "❌" : notif.type === "warning" ? "⚠️" : "✅"}
+            </span>
+            <span>{notif.msg}</span>
+          </div>
+          {/* Progress bar countdown */}
+          <div style={{ height: 3, background: "rgba(255,255,255,.25)", position: "relative", overflow: "hidden" }}>
+            <div style={{ position: "absolute", inset: 0, background: "rgba(255,255,255,.7)",
+              animation: "toastCountdown 3.2s linear forwards", transformOrigin: "left" }} />
+          </div>
+        </div>
+      )}
+
+      {/* ── Coming Soon Popup ── */}
+      {comingSoonPopup && (
+        <div onClick={() => setComingSoonPopup(false)}
+          style={{ position: "fixed", inset: 0, zIndex: 10000, background: "rgba(0,0,0,.55)",
+            backdropFilter: "blur(8px)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <div onClick={e => e.stopPropagation()}
+            style={{ background: "#fff", borderRadius: 20, padding: "44px 40px", maxWidth: 360, width: "90%",
+              boxShadow: "0 24px 80px rgba(0,0,0,.25)", textAlign: "center", position: "relative",
+              animation: "popIn .35s cubic-bezier(.34,1.56,.64,1) forwards" }}>
+            <button onClick={() => setComingSoonPopup(false)}
+              style={{ position: "absolute", top: 14, right: 16, background: "none", border: "none",
+                fontSize: 20, color: "#A89070", cursor: "pointer" }}>✕</button>
+            {/* Rocket icon */}
+            <div style={{ width: 72, height: 72, borderRadius: "50%",
+              background: "linear-gradient(135deg,#2E3D3F,#C9AA71)",
+              display: "flex", alignItems: "center", justifyContent: "center",
+              margin: "0 auto 20px", fontSize: 32, boxShadow: "0 8px 24px rgba(201,170,113,.35)",
+              animation: "floatBob 2.4s ease-in-out infinite" }}>🚀</div>
+            <div style={{ fontSize: 10, letterSpacing: "3px", color: "#C9AA71", textTransform: "uppercase",
+              fontWeight: 800, marginBottom: 10 }}>Segera Hadir</div>
+            <h2 style={{ fontSize: 22, fontWeight: 800, color: "#2E3D3F", marginBottom: 10, lineHeight: 1.25 }}>
+              Coming Soon
+            </h2>
+            <p style={{ fontSize: 14, color: "#5A6A6C", lineHeight: 1.7, marginBottom: 24 }}>
+              Login dengan Google dan Apple ID sedang dalam tahap pengembangan.<br/>
+              Gunakan <strong>username & password</strong> untuk saat ini.
+            </p>
+            {/* Progress dots */}
+            <div style={{ display: "flex", justifyContent: "center", gap: 7, marginBottom: 24 }}>
+              {[0,1,2].map(i => (
+                <div key={i} style={{ width: 8, height: 8, borderRadius: "50%",
+                  background: i === 0 ? "#C9AA71" : "#E8DCC8",
+                  animation: `dotPulse 1.4s ${i * .22}s ease-in-out infinite` }} />
+              ))}
+            </div>
+            <button onClick={() => setComingSoonPopup(false)}
+              style={{ background: "linear-gradient(130deg,#2E3D3F,#C9AA71)", color: "#fff", border: "none",
+                borderRadius: 10, padding: "12px 32px", fontSize: 14, fontWeight: 700, cursor: "pointer",
+                boxShadow: "0 4px 16px rgba(139,105,20,.3)", transition: "transform .15s" }}
+              onMouseEnter={e => e.currentTarget.style.transform = "scale(1.04)"}
+              onMouseLeave={e => e.currentTarget.style.transform = "scale(1)"}>
+              Oke, Mengerti
+            </button>
+          </div>
+        </div>
       )}
 
       {/* DEV PROFILE POPUP */}
@@ -13090,14 +13493,63 @@ export default function BricksyTravel() {
                   </div>
                 </div>
 
-                <button onClick={login}
-                  style={{ width: "100%", marginTop: 20, padding: "12px 0", background: "linear-gradient(130deg,#2E3D3F 0%,#3D5254 45%,#8B6914 78%,#C9AA71 100%)",
-                    color: "#fff", border: "none", borderRadius: 8, fontSize: 14, fontWeight: 700, cursor: "pointer",
-                    transition: "all .2s" }}
-                  onMouseEnter={e => e.currentTarget.style.boxShadow = "0 8px 20px rgba(139,105,20,.35)"}
-                  onMouseLeave={e => e.currentTarget.style.boxShadow = "none"}>
-                  Masuk
+                <button onClick={login} disabled={loginLoading}
+                  style={{ width: "100%", marginTop: 20, padding: "0", background: loginLoading
+                    ? "linear-gradient(130deg,#3D5254 0%,#2E3D3F 100%)"
+                    : "linear-gradient(130deg,#2E3D3F 0%,#3D5254 45%,#8B6914 78%,#C9AA71 100%)",
+                    color: "#fff", border: "none", borderRadius: 8, fontSize: 14, fontWeight: 700,
+                    cursor: loginLoading ? "default" : "pointer", transition: "all .2s",
+                    position: "relative", overflow: "hidden", height: 46 }}
+                  onMouseEnter={e => !loginLoading && (e.currentTarget.style.boxShadow = "0 8px 20px rgba(139,105,20,.35)")}
+                  onMouseLeave={e => (e.currentTarget.style.boxShadow = "none")}>
+                  {/* Progress bar */}
+                  {loginLoading && (
+                    <div style={{ position: "absolute", bottom: 0, left: 0, height: 3, background: "#C9AA71",
+                      width: `${loginProgress}%`, transition: "width .18s ease", borderRadius: "0 2px 2px 0" }} />
+                  )}
+                  {loginLoading ? (
+                    <span style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 10 }}>
+                      <span style={{ display: "inline-block", width: 16, height: 16, border: "2.5px solid rgba(255,255,255,.3)", borderTop: "2.5px solid #fff", borderRadius: "50%", animation: "spin 0.7s linear infinite" }} />
+                      Memverifikasi… {Math.round(loginProgress)}%
+                    </span>
+                  ) : "Masuk"}
                 </button>
+
+                {/* ── Divider ── */}
+                <div style={{ display: "flex", alignItems: "center", gap: 12, margin: "18px 0 14px" }}>
+                  <div style={{ flex: 1, height: 1, background: "#E8DCC8" }} />
+                  <span style={{ fontSize: 11, color: "#A89070", fontWeight: 600, whiteSpace: "nowrap" }}>atau masuk dengan</span>
+                  <div style={{ flex: 1, height: 1, background: "#E8DCC8" }} />
+                </div>
+
+                {/* ── Google & Apple ── */}
+                <div style={{ display: "flex", gap: 10, marginBottom: 4 }}>
+                  <button onClick={() => setComingSoonPopup(true)}
+                    style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 9,
+                      padding: "10px 0", background: "#fff", border: "1.5px solid #E8DCC8", borderRadius: 8,
+                      fontSize: 13, fontWeight: 600, color: "#2E3D3F", cursor: "pointer", transition: "all .18s" }}
+                    onMouseEnter={e => { e.currentTarget.style.background = "#FAFAFA"; e.currentTarget.style.borderColor = "#bbb"; e.currentTarget.style.boxShadow = "0 2px 10px rgba(0,0,0,.08)"; }}
+                    onMouseLeave={e => { e.currentTarget.style.background = "#fff"; e.currentTarget.style.borderColor = "#E8DCC8"; e.currentTarget.style.boxShadow = "none"; }}>
+                    <svg width="18" height="18" viewBox="0 0 48 48">
+                      <path fill="#EA4335" d="M24 9.5c3.2 0 5.6 1.1 7.3 2.8l5.4-5.4C33.5 3.5 29.1 1.5 24 1.5 14.8 1.5 7 7.4 3.8 15.6l6.3 4.9C11.7 14 17.4 9.5 24 9.5z"/>
+                      <path fill="#34A853" d="M46.1 24.6c0-1.7-.1-3-.4-4.4H24v8.3h12.5c-.6 3-2.3 5.5-4.8 7.2l7.3 5.7c4.3-4 6.1-9.8 6.1-16.8z"/>
+                      <path fill="#FBBC05" d="M10.2 28.5A14.4 14.4 0 0 1 9.5 24c0-1.6.3-3.1.7-4.5l-6.3-4.9A22.6 22.6 0 0 0 1.5 24c0 3.7.9 7.2 2.4 10.3l6.3-4.9z"/>
+                      <path fill="#4285F4" d="M24 46.5c5.1 0 9.4-1.7 12.6-4.6l-7.3-5.7c-1.7 1.1-3.9 1.8-5.3 1.8-6.6 0-12.2-4.5-14-10.5l-6.3 4.9C7 40.6 14.8 46.5 24 46.5z"/>
+                    </svg>
+                    Google
+                  </button>
+                  <button onClick={() => setComingSoonPopup(true)}
+                    style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 9,
+                      padding: "10px 0", background: "#000", border: "1.5px solid #000", borderRadius: 8,
+                      fontSize: 13, fontWeight: 600, color: "#fff", cursor: "pointer", transition: "all .18s" }}
+                    onMouseEnter={e => { e.currentTarget.style.background = "#222"; e.currentTarget.style.boxShadow = "0 2px 10px rgba(0,0,0,.15)"; }}
+                    onMouseLeave={e => { e.currentTarget.style.background = "#000"; e.currentTarget.style.boxShadow = "none"; }}>
+                    <svg width="16" height="18" viewBox="0 0 814 1000" fill="#fff">
+                      <path d="M788.1 340.9c-5.8 4.5-108.2 62.2-108.2 190.5 0 148.4 130.3 200.9 134.2 202.2-.6 3.2-20.7 71.9-68.7 141.9-42.8 61.6-87.5 123.1-155.5 123.1s-85.5-39.5-164-39.5c-76 0-103.7 40.8-165.9 40.8s-105-57.8-155.5-127.4C46 376.7 0 248.4 0 124.8c0-63.5 12.7-126.2 38.4-185.2 35.4-81.9 113.8-133.5 181.2-133.5 69.9 0 116.4 46.1 164.3 46.1 47.7 0 78.4-46.1 172.4-46.1 73.2 0 141.5 43.1 177.1 106.7l-55.5 35.3z"/>
+                    </svg>
+                    Apple ID
+                  </button>
+                </div>
 
                 <button onClick={() => { setForgotStep("input_user"); setLoginErr(""); }}
                   style={{ width: "100%", marginTop: 10, padding: "10px 0", background: "transparent", 
@@ -13548,7 +14000,10 @@ export default function BricksyTravel() {
 
           {/* ── ARTICLE DETAIL ── */}
           {readPost && (
-            <ArticleDetail post={readPost} onBack={closeArticle} allPosts={allPosts} onReadPost={(p) => openArticle(p)} />
+            <>
+              <ArticleDetail post={readPost} onBack={closeArticle} allPosts={allPosts} onReadPost={(p) => openArticle(p)} />
+              <VasturaFooter data={data} navigateTo={navigateTo} onWaOpen={openWaPicker} showDevProfile={() => setShowDevProfile(true)} />
+            </>
           )}
 
           {/* ── PAGE CONTENT ── */}
@@ -13800,16 +14255,8 @@ export default function BricksyTravel() {
                     </div>
                   </section>
 
-                  {/* ══ FOOTER BAR ══ */}
-                  <div className="re-footer-bar">
-                    <span>© 2026 VASTURA GROUP. All Rights Reserved</span>
-                    <button onClick={() => setShowDevProfile(true)}
-                      style={{ background:"none",border:"none",cursor:"pointer",color:"rgba(255,255,255,.35)",fontSize:".7rem",letterSpacing:".08em",fontFamily:"'Jost',sans-serif",transition:"color .2s" }}
-                      onMouseEnter={e => e.currentTarget.style.color = "rgba(255,255,255,.65)"}
-                      onMouseLeave={e => e.currentTarget.style.color = "rgba(255,255,255,.35)"}>
-                      Power Developer
-                    </button>
-                  </div>
+                  {/* ══ VASTURA FOOTER ══ */}
+                  <VasturaFooter data={data} navigateTo={navigateTo} onWaOpen={openWaPicker} showDevProfile={() => setShowDevProfile(true)} />
                 </>
               )}
 
@@ -13846,6 +14293,11 @@ export default function BricksyTravel() {
                   posts={data.posts || {}}
                   onReadPost={(post) => openArticle(post)}
                 />
+              )}
+
+              {/* ══ VASTURA FOOTER — muncul di semua halaman kecuali home ══ */}
+              {page !== "home" && !["home"].includes(page) && (
+                <VasturaFooter data={data} navigateTo={navigateTo} onWaOpen={openWaPicker} showDevProfile={() => setShowDevProfile(true)} />
               )}
             </>
           )}
