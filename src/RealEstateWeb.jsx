@@ -340,7 +340,7 @@ function GalleryImageTile({ src, onUrlEdit, onUploaded, onError }) {
           </div>
         )}
       </div>
-      {/* Progress bar — muncul saat upload */}
+      {/* Progress bar -- muncul saat upload */}
       {item && (
         <div style={{ marginTop: 4 }}>
           <div style={{ height: 5, background: "#E8DCC8", borderRadius: 3, overflow: "hidden" }}>
@@ -3017,7 +3017,7 @@ function RichParagraphEditor({ value, onChange, placeholder = "Write your conten
 
   const handlePaste = (e) => {
     e.preventDefault();
-    // Ambil plain text saja — buang semua HTML/formatting dari Word/browser lain
+    // Ambil plain text saja -- buang semua HTML/formatting dari Word/browser lain
     const plain = e.clipboardData.getData("text/plain");
     if (!plain) return;
     // Preserve line breaks sebagai <br>, escape karakter HTML
@@ -3051,7 +3051,7 @@ function RichParagraphEditor({ value, onChange, placeholder = "Write your conten
 
   return (
     <div style={{ border: "1.5px solid #D4C4A0", borderRadius: 8, overflow: "visible", background: "#fff", boxShadow: "0 1px 4px rgba(0,0,0,.04)" }}>
-      {/* ── Toolbar Row 1: Font, Size, Basic Formatting ── */}
+      {/* -- Toolbar Row 1: Font, Size, Basic Formatting -- */}
       <div style={{ background: "#FAF7F0", borderBottom: "1px solid #E8DCC8", padding: "6px 10px", display: "flex", gap: 5, flexWrap: "wrap", alignItems: "center" }}>
         <select onChange={e => exec("fontName", e.target.value)}
           style={{ height: 26, fontSize: 12, padding: "1px 4px", border: "1px solid #D4C4A0", borderRadius: 4, background: "#fff", color: "#2E3D3F", maxWidth: 130, cursor: "pointer" }}>
@@ -3106,7 +3106,7 @@ function RichParagraphEditor({ value, onChange, placeholder = "Write your conten
         <TB cmd="redo" title="Redo (Ctrl+Y)">↷</TB>
       </div>
 
-      {/* ── Toolbar Row 2: Lists, Indent, Paragraph, Alignment ── */}
+      {/* -- Toolbar Row 2: Lists, Indent, Paragraph, Alignment -- */}
       <div style={{ background: "#FAF7F0", borderBottom: "1px solid #E8DCC8", padding: "5px 10px", display: "flex", gap: 5, alignItems: "center", flexWrap: "wrap" }}>
         <TB cmd="insertUnorderedList" title="Daftar Bullet">
           <span style={{display:"flex",flexDirection:"column",gap:2,alignItems:"flex-start"}}>
@@ -3146,7 +3146,7 @@ function RichParagraphEditor({ value, onChange, placeholder = "Write your conten
         <TB cmd="removeFormat" title="Hapus Format" extraStyle={{fontSize:11,color:"#e74c3c"}}>✕</TB>
       </div>
 
-      {/* ── Editor Area ── */}
+      {/* -- Editor Area -- */}
       <div style={{ position: "relative" }}>
         {isEmpty && (
           <div style={{ position:"absolute", top:16, left:18, color:"#b0c4d4", fontSize:14, fontStyle:"italic", pointerEvents:"none", userSelect:"none" }}>
@@ -3340,7 +3340,7 @@ function CMSEditor({ post, onSave, onCancel, section, onSectionChange, user, not
 
   return (
     <div className="fade-in" style={{ background: "#fff", borderRadius: 12, overflow: "visible", boxShadow: "0 4px 24px rgba(0,0,0,.1)" }}>
-      {/* ── Publish Destination Modal ── */}
+      {/* -- Publish Destination Modal -- */}
       {publishModal && (
         <div style={{ position: "fixed", inset: 0, background: "rgba(20,35,55,.55)", zIndex: 9999,
           display: "flex", alignItems: "center", justifyContent: "center", backdropFilter: "blur(4px)" }}>
@@ -3715,7 +3715,7 @@ function CMSEditor({ post, onSave, onCancel, section, onSectionChange, user, not
             </div>
           ))}
 
-          {/* Author — auto dari akun yang login */}
+          {/* Author -- auto dari akun yang login */}
           <div>
             <label style={{ display: "block", fontSize: 10, fontWeight: 600, color: "#5A6A6C", letterSpacing: "1px", textTransform: "uppercase", marginBottom: 4 }}>
               Author <span style={{ fontSize: 10, color: "#27ae60", fontWeight: 500, textTransform: "none", letterSpacing: 0 }}>· otomatis</span>
@@ -3859,7 +3859,7 @@ function ArticleDetail({ post, onBack, allPosts = [], onReadPost }) {
   return (
     <div className="fade-in art-page">
 
-      {/* ══ SHARE BAR (sticky) ══ */}
+      {/* == SHARE BAR (sticky) == */}
       <div className="art-share-bar">
         <button onClick={onBack} style={{ fontSize: 12, color: "#8B6914", fontWeight: 600, background: "none", border: "none", cursor: "pointer", whiteSpace: "nowrap", display: "flex", alignItems: "center", gap: 4 }}>
           ← Kembali
@@ -3879,13 +3879,13 @@ function ArticleDetail({ post, onBack, allPosts = [], onReadPost }) {
         <span style={{ fontSize: 11, color: "#666", fontWeight: 600, letterSpacing: ".5px", whiteSpace: "nowrap" }}>KOMENTAR: 💬</span>
       </div>
 
-      {/* ══ BODY WRAPPER: main + right sidebar ══ */}
+      {/* == BODY WRAPPER: main + right sidebar == */}
       <div className="art-body-wrap">
 
-        {/* ════ MAIN COLUMN ════ */}
+        {/* ==== MAIN COLUMN ==== */}
         <main className="art-main">
 
-          {/* ── Article Card ── */}
+          {/* -- Article Card -- */}
           <div className="art-content-card" style={{ marginBottom: 20 }}>
 
             <div className="art-content-inner">
@@ -3968,7 +3968,7 @@ function ArticleDetail({ post, onBack, allPosts = [], onReadPost }) {
             </div>
           </div>
 
-          {/* ── Artikel Terkait (horizontal scroll) ── */}
+          {/* -- Artikel Terkait (horizontal scroll) -- */}
           {artikelTerkait.length > 0 && (
             <div className="art-content-card" style={{ marginBottom: 20, padding: "20px 24px" }}>
               <h3 style={{ fontSize: 15, fontWeight: 700, color: "#111", marginBottom: 16, paddingBottom: 10, borderBottom: "2px solid #8B6914", display: "inline-block" }}>
@@ -3994,7 +3994,7 @@ function ArticleDetail({ post, onBack, allPosts = [], onReadPost }) {
             </div>
           )}
 
-          {/* ── Pilihan Untukmu (grid) ── */}
+          {/* -- Pilihan Untukmu (grid) -- */}
           {pilihanUntukmu.length > 0 && (
             <div className="art-content-card" style={{ padding: "20px 24px" }}>
               <h3 style={{ fontSize: 15, fontWeight: 700, color: "#111", marginBottom: 16, paddingBottom: 10, borderBottom: "2px solid #f39c12", display: "inline-block" }}>
@@ -4025,10 +4025,10 @@ function ArticleDetail({ post, onBack, allPosts = [], onReadPost }) {
 
         </main>
 
-        {/* ════ RIGHT SIDEBAR ════ */}
+        {/* ==== RIGHT SIDEBAR ==== */}
         <aside className="art-sidebar">
 
-          {/* ── Ad Placeholder ── */}
+          {/* -- Ad Placeholder -- */}
           <div style={{ background: "#fff", borderRadius: 6, border: "1px dashed #ddd", marginBottom: 20, height: 240, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", color: "#bbb", gap: 8 }}>
             <div style={{ fontSize: 28 }}>🏔</div>
             <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: "1px", textTransform: "uppercase" }}>VASTURA GROUP</div>
@@ -4040,7 +4040,7 @@ function ArticleDetail({ post, onBack, allPosts = [], onReadPost }) {
             </a>
           </div>
 
-          {/* ── Berita Populer sidebar cards ── */}
+          {/* -- Berita Populer sidebar cards -- */}
           {sidebarCards.length > 0 && (
             <div style={{ background: "#fff", borderRadius: 6, overflow: "hidden", marginBottom: 20 }}>
               <div style={{ padding: "12px 16px", borderBottom: "2px solid #8B6914" }}>
@@ -4068,7 +4068,7 @@ function ArticleDetail({ post, onBack, allPosts = [], onReadPost }) {
             </div>
           )}
 
-          {/* ── Layanan Unggulan sidebar ── */}
+          {/* -- Layanan Unggulan sidebar -- */}
           <div style={{ background: "linear-gradient(135deg,#2E3D3F 0%,#3D5254 55%,#E8C96A 100%)", borderRadius: 6, padding: "20px 18px", position: "relative", overflow: "hidden" }}>
             <div style={{ position: "absolute", top: -20, right: -20, width: 90, height: 90, borderRadius: "50%", background: "rgba(255,255,255,.08)" }} />
             <div style={{ fontSize: 11, fontWeight: 700, color: "rgba(255,255,255,.7)", textTransform: "uppercase", letterSpacing: "1px", marginBottom: 12 }}>🌟 Layanan Kami</div>
@@ -4095,7 +4095,7 @@ function ArticleDetail({ post, onBack, allPosts = [], onReadPost }) {
             </div>
           </div>
 
-          {/* ── Saran Postingan ── */}
+          {/* -- Saran Postingan -- */}
           {sidebarCards.length > 0 && (
             <div style={{ background: "#fff", borderRadius: 8, overflow: "hidden", marginTop: 20, boxShadow: "0 2px 10px rgba(0,0,0,.06)" }}>
               <div style={{ background: "linear-gradient(130deg,#2E3D3F 0%,#3D5254 60%,#E8C96A 100%)", padding: "12px 16px", display: "flex", alignItems: "center", gap: 7 }}>
@@ -4122,7 +4122,7 @@ function ArticleDetail({ post, onBack, allPosts = [], onReadPost }) {
             </div>
           )}
 
-          {/* ── Topik ── */}
+          {/* -- Topik -- */}
           {(() => {
             const allTags = [];
             others.forEach(p => (p.tags || []).forEach(t => { if (!allTags.includes(t)) allTags.push(t); }));
@@ -4142,7 +4142,7 @@ function ArticleDetail({ post, onBack, allPosts = [], onReadPost }) {
             );
           })()}
 
-          {/* ── Tips Perjalanan ── */}
+          {/* -- Tips Perjalanan -- */}
           <div style={{ background: "linear-gradient(135deg,#0a3d55 0%,#0d5a7a 100%)", borderRadius: 8, overflow: "hidden", marginTop: 16, marginBottom: 4, boxShadow: "0 2px 10px rgba(0,0,0,.1)" }}>
             <div style={{ padding: "12px 16px", borderBottom: "1px solid rgba(255,255,255,.12)", display: "flex", alignItems: "center", gap: 8 }}>
               <span style={{ width: 8, height: 8, borderRadius: "50%", background: "#D4AF37", display: "inline-block", boxShadow: "0 0 6px #D4AF37" }} />
@@ -4486,7 +4486,7 @@ function EventWeddingPackageCard({ svc, onDetail, onWaOpen, isWide, categoryPack
                 </button>
               </div>
             </div>
-            {/* Paket Pills — selalu tampil */}
+            {/* Paket Pills -- selalu tampil */}
             {(svc.paketTypes||[]).length > 0 && (
               <div style={{ background: al, padding: "10px 20px 12px", borderTop: `1px solid ${ac}25` }}>
                 <p style={{ fontSize: "0.5625rem", fontWeight: 700, letterSpacing: ".1em", textTransform: "uppercase", color: ac, marginBottom: 6 }}>Pilihan Paket</p>
@@ -4602,7 +4602,7 @@ function EventWeddingPackageCard({ svc, onDetail, onWaOpen, isWide, categoryPack
         <p style={{ color: "rgba(255,255,255,.45)", fontSize: "0.6rem", marginTop: 4, letterSpacing: ".04em" }}>Nego / Konsultasi dulu</p>
       </div>
 
-      {/* Paket Pills — tampil jika ada paketTypes */}
+      {/* Paket Pills -- tampil jika ada paketTypes */}
       {(svc.paketTypes||[]).length > 0 && (
         <div style={{ background: al, padding: "10px 14px 12px", borderLeft: `1px solid ${ac}25`, borderRight: `1px solid ${ac}25`, borderTop: `1px solid ${ac}20` }}>
           <p style={{ fontSize: "0.5625rem", fontWeight: 700, letterSpacing: ".1em", textTransform: "uppercase", color: ac, marginBottom: 6 }}>Pilihan Paket</p>
@@ -4722,7 +4722,7 @@ function TravelPackageCard({ svc, onDetail, onWaOpen, isWide }) {
     return Number(String(n).replace(/\./g, "")).toLocaleString("id-ID");
   };
 
-  // ── MODE WIDE (1 kolom): layout landscape — gambar kiri full, konten kanan ──
+  // -- MODE WIDE (1 kolom): layout landscape -- gambar kiri full, konten kanan --
   if (isWide) {
     return (
       <div
@@ -4738,7 +4738,7 @@ function TravelPackageCard({ svc, onDetail, onWaOpen, isWide }) {
           minHeight: isMobile ? "auto" : 280,
         }}>
 
-        {/* Gambar kiri — full height */}
+        {/* Gambar kiri -- full height */}
         <div onClick={onDetail} style={{ position: "relative", width: isMobile ? "100%" : "42%", height: isMobile ? 210 : "auto", flexShrink: 0, overflow: "hidden", cursor: "pointer", borderRadius: isMobile ? "14px 14px 0 0" : "0" }}>
           <img loading="lazy" src={svc.images?.[0] || svc.image} alt={svc.title}
             style={{ width: "100%", height: "100%", objectFit: "cover", display: "block",
@@ -4831,7 +4831,7 @@ function TravelPackageCard({ svc, onDetail, onWaOpen, isWide }) {
               </button>
             </div>
           </div>
-          {/* Paket pills — tampil jika ada paketTypes */}
+          {/* Paket pills -- tampil jika ada paketTypes */}
           {(svc.paketTypes || []).length > 0 && (
             <div style={{ background: al, padding: "10px 20px 12px", borderTop: `1px solid ${ac}25` }}>
               <p style={{ fontSize: "0.5625rem", fontWeight: 700, letterSpacing: ".1em", textTransform: "uppercase", color: ac, marginBottom: 6 }}>Pilihan Paket</p>
@@ -4855,7 +4855,7 @@ function TravelPackageCard({ svc, onDetail, onWaOpen, isWide }) {
     );
   }
 
-  // ── MODE NORMAL (2 / 3 kolom): layout vertikal default ──
+  // -- MODE NORMAL (2 / 3 kolom): layout vertikal default --
   return (
     <div
       onMouseEnter={() => setHovered(true)}
@@ -4938,7 +4938,7 @@ function TravelPackageCard({ svc, onDetail, onWaOpen, isWide }) {
         <p style={{ color: "rgba(255,255,255,.45)", fontSize: "0.6rem", marginTop: 4, letterSpacing: ".04em" }}>Nego / Konsultasi dulu</p>
       </div>
 
-      {/* Paket Pills — tampil jika ada paketTypes */}
+      {/* Paket Pills -- tampil jika ada paketTypes */}
       {(svc.paketTypes || []).length > 0 && (
         <div style={{ background: al, padding: "10px 14px 12px", borderLeft: `1px solid ${ac}25`, borderRight: `1px solid ${ac}25` }}>
           <p style={{ fontSize: "0.5625rem", fontWeight: 700, letterSpacing: ".1em", textTransform: "uppercase", color: ac, marginBottom: 6 }}>Pilihan Paket</p>
@@ -5018,7 +5018,7 @@ function TravelPackageDetailModal({ svc, onClose, onWaOpen }) {
         overflow: "hidden",
       }}>
 
-        {/* ── Header with hero image ── */}
+        {/* -- Header with hero image -- */}
         <div style={{ position: "relative", flexShrink: 0 }}>
           <div style={{ height: 200, position: "relative", overflow: "hidden" }}>
             <img loading="lazy" src={svc.images?.[0] || svc.image} alt={svc.title}
@@ -5054,11 +5054,11 @@ function TravelPackageDetailModal({ svc, onClose, onWaOpen }) {
           </div>
         </div>
 
-        {/* ── Scrollable body ── */}
+        {/* -- Scrollable body -- */}
         <div style={{ flex: 1, overflowY: "auto", padding: "26px 24px 40px" }}>
           <p style={{ fontSize: "0.875rem", color: "#2a4a5e", lineHeight: 1.75, marginBottom: 28 }}>{svc.description}</p>
 
-          {/* ─ Destinations ─ */}
+          {/* - Destinations - */}
           {(svc.destinations || []).length > 0 && (
             <section style={{ marginBottom: 30 }}>
               <SectionHead label="Destinasi Wisata" title="Itinerary Perjalanan" />
@@ -5105,7 +5105,7 @@ function TravelPackageDetailModal({ svc, onClose, onWaOpen }) {
             </section>
           )}
 
-          {/* ─ Facilities ─ */}
+          {/* - Facilities - */}
           {(svc.facilities || []).length > 0 && (
             <section style={{ marginBottom: 30 }}>
               <SectionHead label="Yang Sudah Termasuk" title="Fasilitas Paket" />
@@ -5124,7 +5124,7 @@ function TravelPackageDetailModal({ svc, onClose, onWaOpen }) {
             </section>
           )}
 
-          {/* ─ Services ─ */}
+          {/* - Services - */}
           {(svc.services || []).length > 0 && (
             <section style={{ marginBottom: 30 }}>
               <SectionHead label="Sudah Termasuk" title="Layanan Kami" />
@@ -5141,7 +5141,7 @@ function TravelPackageDetailModal({ svc, onClose, onWaOpen }) {
             </section>
           )}
 
-          {/* ─ CTA ─ */}
+          {/* - CTA - */}
           <div style={{ background: `linear-gradient(135deg,#2E3D3F,#3D5254 40%,${ac})`, borderRadius: 14, padding: "22px 24px", textAlign: "center" }}>
             <p style={{ color: "rgba(255,255,255,.8)", fontSize: "0.875rem", marginBottom: 16, lineHeight: 1.65 }}>Tertarik dengan paket ini? Hubungi kami untuk konsultasi gratis dan penawaran terbaik!</p>
             <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
@@ -5602,7 +5602,7 @@ function ServicesPage({ content, services, navigateTo, activePaket, onOpenPaket,
     if (onWaOpen) onWaOpen({ key: "paket", vars: { judul_paket: `${svc.title} — ${svc.price} ${svc.priceNote}${svc._extraMsg || ""}` } });
   };
 
-  // ── State untuk selector paket di sidebar
+  // -- State untuk selector paket di sidebar
   const [selectedPkgId, setSelectedPkgId] = useState(null); // id paket aktif di sidebar
   const [pkgDropOpen, setPkgDropOpen] = useState(false); // dropdown pilih paket di sidebar
 
@@ -5626,7 +5626,7 @@ function ServicesPage({ content, services, navigateTo, activePaket, onOpenPaket,
     const activePt = paketTypes.find(pt => pt.id === resolvedActiveId) || paketTypes[0] || null;
 
     // Harga aktif: dari tipe paket yang dipilih, fallback ke harga global (semua kategori)
-    // sidebarPrices removed — prices migrated to paketTypes
+    // sidebarPrices removed -- prices migrated to paketTypes
 
     const activePrice = activePt?.price || activeSidebarPkg.price || svc.price;
     const activePriceNote = activePt?.priceNote || activeSidebarPkg.priceNote || svc.priceNote;
@@ -5660,10 +5660,10 @@ function ServicesPage({ content, services, navigateTo, activePaket, onOpenPaket,
           }
         `}</style>
 
-        {/* ── Back Bar ── */}
+        {/* -- Back Bar -- */}
         <PaketBackBar svc={svc} onClose={closeDetail} />
 
-        {/* ── MAGAZINE HERO ── */}
+        {/* -- MAGAZINE HERO -- */}
         <div className="mg-fade" style={{ position: "relative", background: "linear-gradient(130deg,#2E3D3F 0%,#3D5254 50%,#8B6914 100%)", overflow: "hidden" }}>
           {/* Deco grid lines */}
           <div style={{ position: "absolute", inset: 0, backgroundImage: "repeating-linear-gradient(90deg, rgba(255,255,255,.025) 0, rgba(255,255,255,.025) 1px, transparent 1px, transparent 80px)", pointerEvents: "none" }} />
@@ -5736,14 +5736,14 @@ function ServicesPage({ content, services, navigateTo, activePaket, onOpenPaket,
           </div>
         </div>
 
-        {/* ── BODY ── */}
+        {/* -- BODY -- */}
         <div style={{ maxWidth: 1200, margin: "0 auto", padding: "clamp(28px,5vw,52px) clamp(16px,5%,60px) clamp(48px,6vw,80px)" }}>
           <div className="mg-body-grid" style={{ display: "grid", gridTemplateColumns: "1fr 340px", gap: 48, alignItems: "start" }}>
 
-            {/* ── LEFT COLUMN ── */}
+            {/* -- LEFT COLUMN -- */}
             <div>
 
-              {/* FACILITY GALLERY — slideshow dari galeri upload paket + destinasi */}
+              {/* FACILITY GALLERY -- slideshow dari galeri upload paket + destinasi */}
               {(() => {
                 // 1. Gambar dari galeri upload Control Panel (svc.images)
                 const uploadedSlides = (svc.images || []).filter(Boolean).map((img, i) => ({
@@ -5758,7 +5758,7 @@ function ServicesPage({ content, services, navigateTo, activePaket, onOpenPaket,
                   .filter(d => d.img)
                   .map(d => ({ img: d.img, name: d.name, no: d.no, title: d.title }));
 
-                // Gabungkan: galeri upload dulu, lalu destinasi — hapus duplikat URL
+                // Gabungkan: galeri upload dulu, lalu destinasi -- hapus duplikat URL
                 const seenUrls = new Set();
                 const slideImgs = [...uploadedSlides, ...destSlides].filter(s => {
                   if (!s.img || seenUrls.has(s.img)) return false;
@@ -5782,17 +5782,17 @@ function ServicesPage({ content, services, navigateTo, activePaket, onOpenPaket,
                 );
               })()}
 
-              {/* FACILITIES — semua kategori, difilter oleh activePt.facilityChecks */}
+              {/* FACILITIES -- semua kategori, difilter oleh activePt.facilityChecks */}
               {(svc.facilities || []).length > 0 && (
                 <FacilitiesSection svc={svc} catInfo={catInfo} activePt={activePt} />
               )}
 
-              {/* DESTINATIONS — semua kategori, difilter oleh activePt.destinationChecks */}
+              {/* DESTINATIONS -- semua kategori, difilter oleh activePt.destinationChecks */}
               {(svc.destinations || []).length > 0 && (
                 <DestinationsSection svc={svc} catInfo={catInfo} activePt={activePt} />
               )}
 
-              {/* FEATURES — 2-col magazine checklist, difilter oleh activePt.featureChecks */}
+              {/* FEATURES -- 2-col magazine checklist, difilter oleh activePt.featureChecks */}
               {(() => {
                 const allFeats = svc.features || [];
                 const fChecks = activePt?.featureChecks || [];
@@ -5827,7 +5827,7 @@ function ServicesPage({ content, services, navigateTo, activePaket, onOpenPaket,
 
             </div>
 
-            {/* ── RIGHT SIDEBAR ── */}
+            {/* -- RIGHT SIDEBAR -- */}
             <div className="mg-pkg-sidebar" style={{ position: "sticky", top: 128 }}>
 
               {/* Price Card */}
@@ -5839,7 +5839,7 @@ function ServicesPage({ content, services, navigateTo, activePaket, onOpenPaket,
                   {/* Header label */}
                   <div style={{ fontSize: "0.5625rem", letterSpacing: "3px", color: "rgba(255,255,255,.35)", textTransform: "uppercase", fontWeight: 700, textAlign: "center", marginBottom: 14 }}>— Penawaran Spesial —</div>
 
-                  {/* ── SELECTOR PAKET (paketTypes A/B/C/D) ── */}
+                  {/* -- SELECTOR PAKET (paketTypes A/B/C/D) -- */}
                   {paketTypes.length > 0 && (() => {
                     const activePt2 = paketTypes.find(pt => pt.id === resolvedActiveId) || paketTypes[0];
                     const isUtamaActive = activePt2?.id === (svc.utamaTipeId || paketTypes[0]?.id);
@@ -5923,7 +5923,7 @@ function ServicesPage({ content, services, navigateTo, activePaket, onOpenPaket,
 
                   <div style={{ height: 1, background: "rgba(255,255,255,.08)", margin: "6px 0 16px" }} />
 
-                  {/* Harga aktif — besar di tengah */}
+                  {/* Harga aktif -- besar di tengah */}
                   <div style={{ textAlign: "center", marginBottom: 14 }}>
                     <div style={{ fontSize: "0.5625rem", letterSpacing: "2.5px", color: "rgba(255,255,255,.38)", fontWeight: 700, textTransform: "uppercase", marginBottom: 6 }}>Harga Mulai</div>
                     <div key={resolvedActiveId} style={{
@@ -5971,7 +5971,7 @@ function ServicesPage({ content, services, navigateTo, activePaket, onOpenPaket,
                 </div>
               </div>
 
-              {/* Why Us — dark card with deco border */}
+              {/* Why Us -- dark card with deco border */}
               <div className="mg-fade-3" style={{ background: "linear-gradient(135deg,#2E3D3F,#3D5254)", borderRadius: 14, padding: "2px", overflow: "hidden", position: "relative" }}>
                 {/* Gradient border effect */}
                 <div style={{ position: "absolute", inset: 0, background: `linear-gradient(145deg, ${catInfo.color || "#8B6914"}44, transparent, rgba(255,255,255,.06))`, borderRadius: 14, pointerEvents: "none" }} />
@@ -6004,7 +6004,7 @@ function ServicesPage({ content, services, navigateTo, activePaket, onOpenPaket,
             </div>
           </div>
 
-          {/* RELATED PACKAGES — selalu di bawah, mobile friendly */}
+          {/* RELATED PACKAGES -- selalu di bawah, mobile friendly */}
           {relatedSvcs.length > 0 && (
             <div className="mg-fade-3" style={{ marginTop: 48 }}>
               <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 18 }}>
@@ -6091,9 +6091,9 @@ function ServicesPage({ content, services, navigateTo, activePaket, onOpenPaket,
         @media(max-width:400px){ .sv-keung-grid { grid-template-columns: 1fr !important; } }
       `}</style>
 
-      {/* ══════════════════════════════════════
-          HERO SECTION — dengan background foto rumah
-      ══════════════════════════════════════ */}
+      {/* ======================================
+          HERO SECTION -- dengan background foto rumah
+      ====================================== */}
       <div style={{ position:"relative", height:"clamp(420px,65vw,640px)", overflow:"hidden", background:"#1a2526" }}>
         {/* Hero BG image */}
         <img
@@ -6140,9 +6140,9 @@ function ServicesPage({ content, services, navigateTo, activePaket, onOpenPaket,
         <button style={{ position:"absolute", right:12, top:"50%", transform:"translateY(-50%)", width:38, height:38, borderRadius:"50%", background:"rgba(255,255,255,.18)", border:"none", color:"#fff", fontSize:"1.1rem", cursor:"pointer", zIndex:3, display:"flex", alignItems:"center", justifyContent:"center" }}>›</button>
       </div>
 
-      {/* ══════════════════════════════════════
+      {/* ======================================
           KEUNGGULAN STRIP (6 kolom ikon)
-      ══════════════════════════════════════ */}
+      ====================================== */}
       <div style={{ background:"#fff", borderBottom:"1px solid #F0EAE0", padding:"clamp(24px,3.5vw,40px) 5%" }}>
         <div style={{ maxWidth:1200, margin:"0 auto" }}>
           <div className="sv-keung-grid" style={{ display:"grid", gridTemplateColumns:"repeat(6,1fr)", gap:8 }}>
@@ -6157,9 +6157,9 @@ function ServicesPage({ content, services, navigateTo, activePaket, onOpenPaket,
         </div>
       </div>
 
-      {/* ══════════════════════════════════════
+      {/* ======================================
           LAYANAN SECTION (6 cards)
-      ══════════════════════════════════════ */}
+      ====================================== */}
       <section style={{ background:"#fff", padding:"clamp(44px,6vw,80px) 5%" }}>
         <div style={{ maxWidth:1200, margin:"0 auto" }}>
           {/* Section header */}
@@ -6210,9 +6210,9 @@ function ServicesPage({ content, services, navigateTo, activePaket, onOpenPaket,
         </div>
       </section>
 
-      {/* ══════════════════════════════════════
+      {/* ======================================
           GALERI PROYEK
-      ══════════════════════════════════════ */}
+      ====================================== */}
       <section style={{ background:"#fff", padding:"0 0 clamp(52px,7vw,88px)" }}>
         <div style={{ maxWidth:1200, margin:"0 auto", padding:"0 5% 20px" }}>
           <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", flexWrap:"wrap", gap:10 }}>
@@ -6227,7 +6227,7 @@ function ServicesPage({ content, services, navigateTo, activePaket, onOpenPaket,
           </div>
         </div>
 
-        {/* ── MARQUEE RUNNER ── */}
+        {/* -- MARQUEE RUNNER -- */}
         <style>{`
           @keyframes svMarquee { from{transform:translateX(0)} to{transform:translateX(-50%)} }
           .sv-marquee-track { display:flex; width:max-content; animation:svMarquee 24s linear infinite; }
@@ -6259,9 +6259,9 @@ function ServicesPage({ content, services, navigateTo, activePaket, onOpenPaket,
         </div>
       </section>
 
-      {/* ══════════════════════════════════════
+      {/* ======================================
           TESTIMONIAL
-      ══════════════════════════════════════ */}
+      ====================================== */}
       <section style={{ background:"#1a2526", padding:"clamp(52px,7vw,88px) 5%", position:"relative", overflow:"hidden" }}>
         {/* deco dots */}
         <div style={{ position:"absolute", inset:0, backgroundImage:"radial-gradient(circle, rgba(255,255,255,.04) 1px, transparent 1px)", backgroundSize:"28px 28px", pointerEvents:"none" }} />
@@ -6308,9 +6308,9 @@ function ServicesPage({ content, services, navigateTo, activePaket, onOpenPaket,
         </div>
       </section>
 
-      {/* ══════════════════════════════════════
-          CTA BANNER — Hunian Impian
-      ══════════════════════════════════════ */}
+      {/* ======================================
+          CTA BANNER -- Hunian Impian
+      ====================================== */}
       <section style={{ position:"relative", overflow:"hidden" }}>
         {/* BG foto */}
         <img
@@ -6391,7 +6391,7 @@ function AboutPage({ content, images, teamMembers, onWaOpen }) {
   return (
     <div className="fade-in" style={{ minHeight: "100vh", background: "#fff" }}>
 
-      {/* ── HERO ── */}
+      {/* -- HERO -- */}
       <div style={{ background: "linear-gradient(130deg,#2E3D3F 0%,#3D5254 45%,#8B6914 78%,#C9AA71 100%)", padding: "80px 5% 90px", overflow: "hidden", position: "relative" }}>
         <div style={{ position: "absolute", top: -60, right: -60, width: 400, height: 400, borderRadius: "50%", background: "rgba(255,255,255,.12)", pointerEvents: "none" }} />
         <div style={{ position: "absolute", bottom: -80, left: "20%", width: 300, height: 300, borderRadius: "50%", background: "rgba(139,105,20,.1)", pointerEvents: "none" }} />
@@ -6433,7 +6433,7 @@ function AboutPage({ content, images, teamMembers, onWaOpen }) {
         </div>
       </div>
 
-      {/* ── STATS STRIP ── */}
+      {/* -- STATS STRIP -- */}
       <div style={{ background: "linear-gradient(130deg,#2E3D3F 0%,#3D5254 45%,#8B6914 78%,#C9AA71 100%)", padding: "36px 5%" }}>
         <div style={{ maxWidth: 1200, margin: "0 auto", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))", gap: 24, textAlign: "center" }}>
           {[
@@ -6450,7 +6450,7 @@ function AboutPage({ content, images, teamMembers, onWaOpen }) {
         </div>
       </div>
 
-      {/* ── VISI MISI ── */}
+      {/* -- VISI MISI -- */}
       <div style={{ padding: "80px 5%", maxWidth: 1200, margin: "0 auto" }}>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 40 }} className="grid-2">
           <div style={{ background: "linear-gradient(135deg, #2E3D3F 0%, #3D5254 100%)", borderRadius: 12, padding: "40px 36px", color: "#fff" }}>
@@ -6475,7 +6475,7 @@ function AboutPage({ content, images, teamMembers, onWaOpen }) {
         </div>
       </div>
 
-      {/* ── WHY CHOOSE US ── */}
+      {/* -- WHY CHOOSE US -- */}
       <div style={{ background: "linear-gradient(130deg,#084060 0%,#0a6ea0 50%,#0cb5cc 100%)", padding: "80px 5%" }}>
         <div style={{ maxWidth: 1200, margin: "0 auto" }}>
           <div style={{ textAlign: "center", marginBottom: 52 }}>
@@ -6494,7 +6494,7 @@ function AboutPage({ content, images, teamMembers, onWaOpen }) {
         </div>
       </div>
 
-      {/* ── SUSUNAN TIM ── */}
+      {/* -- SUSUNAN TIM -- */}
       <div style={{ padding: "80px 5%" }}>
         <div style={{ maxWidth: 1200, margin: "0 auto" }}>
           <div style={{ textAlign: "center", marginBottom: 52 }}>
@@ -6537,7 +6537,7 @@ function AboutPage({ content, images, teamMembers, onWaOpen }) {
         </div>
       </div>
 
-      {/* ── LAYANAN KAMI ── */}
+      {/* -- LAYANAN KAMI -- */}
       <div style={{ padding: "80px 5%", background: "#fff" }}>
         <div style={{ maxWidth: 1200, margin: "0 auto" }}>
           {/* Header */}
@@ -6546,7 +6546,7 @@ function AboutPage({ content, images, teamMembers, onWaOpen }) {
             <h2 className="display" style={{ fontSize: "clamp(1.6rem,3.5vw,2.5rem)", fontWeight: 900, color: "#1a1a1a" }}>Layanan Terbaik Untuk Anda</h2>
           </div>
 
-          {/* Cards Grid — 6 kolom sesuai referensi */}
+          {/* Cards Grid -- 6 kolom sesuai referensi */}
           <div style={{ display: "grid", gridTemplateColumns: "repeat(6, 1fr)", gap: 20 }} className="layanan-grid">
             {[
               {
@@ -6650,7 +6650,7 @@ function AboutPage({ content, images, teamMembers, onWaOpen }) {
         @media (max-width: 480px)  { .layanan-grid { grid-template-columns: 1fr !important; } }
       `}</style>
 
-      {/* ── CONTACT US ── */}
+      {/* -- CONTACT US -- */}
       <div style={{ background: "linear-gradient(130deg,#2E3D3F 0%,#3D5254 45%,#8B6914 78%,#C9AA71 100%)", padding: "80px 5%" }}>
         <div style={{ maxWidth: 1200, margin: "0 auto" }}>
           <div style={{ textAlign: "center", marginBottom: 52 }}>
@@ -6776,7 +6776,7 @@ function AboutPage({ content, images, teamMembers, onWaOpen }) {
         </div>
       </div>
 
-      {/* ── MAP LOKASI ── */}
+      {/* -- MAP LOKASI -- */}
       <div style={{ padding: "0" }}>
         <iframe
           title="Lokasi VASTURA GROUP"
@@ -6900,19 +6900,23 @@ function TeamAdmin({ data, save, notify, uploadToCloudinary }) {
 /* ─────────────── ADV SECTION (puzzle + quote slideshow) ─────────────── */
 function AdvSection({ data, navigateTo }) {
   const [advQ, setAdvQ] = useState(0);
-  const quotes = (data.content.advQuote || "").split(/\n+/).filter(Boolean);
-  const safeQuotes = quotes.length ? quotes : [data.content.advQuote || ""];
+  // useMemo: quotes array stabil, tidak re-create tiap render
+  const safeQuotes = useMemo(() => {
+    const quotes = (data.content.advQuote || "").split(/\n+/).filter(Boolean);
+    return quotes.length ? quotes : [data.content.advQuote || ""];
+  }, [data.content.advQuote]);
   useEffect(() => {
     if (safeQuotes.length < 2) return;
     const t = setInterval(() => setAdvQ(q => (q + 1) % safeQuotes.length), 4000);
     return () => clearInterval(t);
   }, [safeQuotes.length]);
-  const puzzleImgs = [
+  // puzzleImgs stabil (data.images tidak sering berubah, tapi tetap memoize)
+  const puzzleImgs = useMemo(() => [
     data.images.gal[0] || data.images.hero[0],
     data.images.gal[1] || data.images.hero[1],
     data.images.gal[2] || data.images.hero[2],
     data.images.gal[3] || data.images.hero[3],
-  ];
+  ], [data.images.gal, data.images.hero]);
   return (
     <section className="section-md" style={{ background: "linear-gradient(130deg,#2E3D3F 0%,#3D5254 45%,#8B6914 78%,#C9AA71 100%)", position: "relative", overflow: "hidden" }}>
       {/* Flare effects */}
@@ -6994,28 +6998,30 @@ function AdvSection({ data, navigateTo }) {
 
 /* ─────────────── HOME INTRO SLIDESHOW (panel kiri beranda) ─────────────── */
 function HomeIntroSlideshow({ data }) {
-  // Hanya dari Foto Postingan Artikel (news + shop + destinations)
-  const seen = new Set();
-  const allImgs = [];
-  const add = (src, label = "") => {
-    if (src && typeof src === "string" && src.startsWith("http") && !seen.has(src)) {
-      seen.add(src);
-      allImgs.push({ src, label });
-    }
-  };
-
-  // Foto Postingan Artikel — semua seksi
-  ["news", "shop", "destinations"].forEach(sec => {
-    (data.posts?.[sec] || []).forEach(p => {
-      const firstImg = (p.content || []).find(b => b.type === "image" && b.value);
-      add(firstImg?.value || p.coverImage, p.title);
+  // useMemo: allImgs hanya dihitung ulang jika data.posts atau data.images berubah
+  // Tanpa useMemo, array baru dibuat tiap render → useEffect trigger → timer reset → kedip
+  const allImgs = useMemo(() => {
+    const seen = new Set();
+    const imgs = [];
+    const add = (src, label = "") => {
+      if (src && typeof src === "string" && src.startsWith("http") && !seen.has(src)) {
+        seen.add(src);
+        imgs.push({ src, label });
+      }
+    };
+    // Foto Postingan Artikel -- semua seksi
+    ["news", "shop", "destinations"].forEach(sec => {
+      (data.posts?.[sec] || []).forEach(p => {
+        const firstImg = (p.content || []).find(b => b.type === "image" && b.value);
+        add(firstImg?.value || p.coverImage, p.title);
+      });
     });
-  });
-
-  // Fallback ke hero images jika belum ada foto sama sekali
-  if (allImgs.length === 0) {
-    (data.images?.hero || []).forEach(src => add(src, "Hero"));
-  }
+    // Fallback ke hero images jika belum ada foto sama sekali
+    if (imgs.length === 0) {
+      (data.images?.hero || []).forEach(src => add(src, "Hero"));
+    }
+    return imgs;
+  }, [data.posts, data.images]);
 
   const [cur, setCur] = useState(0);
   const timerRef = useRef(null);
@@ -7306,50 +7312,52 @@ function WaterDropsEffect() {
   );
 }
 
+const HERO_TRANSITIONS = ["fade", "slideLeft", "slideUp", "zoomIn", "zoomOut", "flipX"];
+
 function HeroSlideshow({ data, navigateTo }) {
   const heroMode = data.content?.heroMode || "slideshow";
 
-  // ── Compute slides — hanya dari Foto Postingan Artikel ──
-  const slides = [];
-  const seenSrc = new Set();
-  const addSlide = (src, title, section, excerpt) => {
-    if (!src || seenSrc.has(src)) return;
-    seenSrc.add(src);
-    slides.push({ src, title, section, excerpt: excerpt || "" });
-  };
-
-  // Foto Postingan Artikel — semua seksi
-  ["news", "shop", "destinations"].forEach(sec => {
-    (data.posts?.[sec] || []).filter(p => p.status === "published").forEach(p => {
-      const firstImageBlock = (p.content || []).find(b => b.type === "image" && b.value);
-      const src = firstImageBlock?.value || p.coverImage;
-      addSlide(src, p.title, sec, p.excerpt || "");
+  // -- Compute slides -- useMemo agar tidak re-create array tiap render (penyebab kedip) --
+  const slides = useMemo(() => {
+    const result = [];
+    const seenSrc = new Set();
+    const addSlide = (src, title, section, excerpt) => {
+      if (!src || seenSrc.has(src)) return;
+      seenSrc.add(src);
+      result.push({ src, title, section, excerpt: excerpt || "" });
+    };
+    ["news", "shop", "destinations"].forEach(sec => {
+      (data.posts?.[sec] || []).filter(p => p.status === "published").forEach(p => {
+        const firstImageBlock = (p.content || []).find(b => b.type === "image" && b.value);
+        const src = firstImageBlock?.value || p.coverImage;
+        addSlide(src, p.title, sec, p.excerpt || "");
+      });
     });
-  });
+    if (result.length === 0) {
+      (data.images?.hero || []).forEach(src => {
+        addSlide(src, data.content.heroTitle, "home", data.content.heroSub);
+      });
+    }
+    return result;
+  }, [data.posts, data.images, data.content.heroTitle, data.content.heroSub]);
 
-  if (slides.length === 0) {
-    (data.images?.hero || []).forEach(src => {
-      addSlide(src, data.content.heroTitle, "home", data.content.heroSub);
-    });
-  }
-
-  // ── ALL HOOKS must come before any conditional return (Rules of Hooks) ──
-  const TRANSITIONS = ["fade", "slideLeft", "slideUp", "zoomIn", "zoomOut", "flipX"];
+  // -- ALL HOOKS must come before any conditional return (Rules of Hooks) --
   const [current, setCurrent] = useState(0);
   const [prev, setPrev] = useState(null);
   const [anim, setAnim] = useState("fade");
   const animatingRef = useRef(false);
   const timerRef = useRef(null);
   const currentRef = useRef(0);
-  const slidesLenRef = useRef(slides.length);
-  slidesLenRef.current = slides.length;
+  const slidesLen = slides.length;
+  const slidesLenRef = useRef(slidesLen);
+  slidesLenRef.current = slidesLen;
 
   const startTimer = useCallback(() => {
     clearInterval(timerRef.current);
     if (slidesLenRef.current < 2) return;
     timerRef.current = setInterval(() => {
       if (animatingRef.current) return;
-      const randomAnim = TRANSITIONS[Math.floor(Math.random() * TRANSITIONS.length)];
+      const randomAnim = HERO_TRANSITIONS[Math.floor(Math.random() * HERO_TRANSITIONS.length)];
       const nextIdx = (currentRef.current + 1) % slidesLenRef.current;
       setAnim(randomAnim);
       setPrev(currentRef.current);
@@ -7365,7 +7373,7 @@ function HeroSlideshow({ data, navigateTo }) {
 
   const goTo = useCallback((idx) => {
     if (animatingRef.current || slidesLenRef.current < 2) return;
-    const randomAnim = TRANSITIONS[Math.floor(Math.random() * TRANSITIONS.length)];
+    const randomAnim = HERO_TRANSITIONS[Math.floor(Math.random() * HERO_TRANSITIONS.length)];
     setAnim(randomAnim);
     setPrev(currentRef.current);
     animatingRef.current = true;
@@ -7381,9 +7389,9 @@ function HeroSlideshow({ data, navigateTo }) {
   useEffect(() => {
     startTimer();
     return () => clearInterval(timerRef.current);
-  }, [startTimer, slides.length]);
+  }, [startTimer, slidesLen]);
 
-  // ── Conditional renders AFTER all hooks ──
+  // -- Conditional renders AFTER all hooks --
 
   // MODE STATIC: tampilkan satu gambar diam
   if (heroMode === "static") {
@@ -7466,7 +7474,7 @@ function HeroSlideshow({ data, navigateTo }) {
 
   const sl = slides[current];
   const prevSl = prev !== null ? slides[prev] : null;
-  const animating = prev !== null; // derived — true selama transisi berlangsung
+  const animating = prev !== null; // derived -- true selama transisi berlangsung
 
   return (
     <section className="hero-slideshow-section" style={{ position: "relative", width: "100%", height: "clamp(560px,88vh,800px)", overflow: "hidden", background: "#04080f" }}>
@@ -7512,14 +7520,14 @@ function HeroSlideshow({ data, navigateTo }) {
         </div>
       </div>
 
-      {/* CONTENT OVERLAY — rata tengah */}
+      {/* CONTENT OVERLAY -- rata tengah */}
       <div className="hero-slide-content-box" style={{ position: "relative", zIndex: 10, height: "100%", display: "flex", alignItems: "center", justifyContent: "center", padding: "0 6%", textAlign: "center", overflow: "hidden" }}>
         <div style={{ maxWidth: 780, width: "100%", animation: animating ? "none" : "heroTxtIn .6s ease both" }} key={current}>
           {/* Label */}
           <div style={{ display: "inline-block", background: "#e8a020", color: "#fff", fontSize: "0.6875rem", fontWeight: 800, letterSpacing: ".18em", textTransform: "uppercase", padding: "5px 14px", borderRadius: 2, marginBottom: 18 }}>
             {SECTION_LABEL[sl.section] || "VASTURA GROUP"}
           </div>
-          {/* Title — max 2 baris, potong sisanya */}
+          {/* Title -- max 2 baris, potong sisanya */}
           <h1 className="hero-slide-title" style={{
             fontFamily: "'Playfair Display',serif",
             fontSize: "clamp(1.75rem,4.2vw,2.8rem)",
@@ -7551,7 +7559,7 @@ function HeroSlideshow({ data, navigateTo }) {
               {sl.excerpt.length > 160 ? sl.excerpt.slice(0, 160) + "…" : sl.excerpt}
             </p>
           )}
-          {/* CTA Buttons — centered */}
+          {/* CTA Buttons -- centered */}
           <div className="hero-slide-btns" style={{ display: "flex", gap: 12, flexWrap: "wrap", justifyContent: "center" }}>
             <button className="hero-cta-btn" onClick={() => navigateTo("services")}
               style={{ padding: "13px 30px", background: "#e8a020", color: "#fff", border: "none", borderRadius: 3, fontSize: "0.8125rem", fontWeight: 800, letterSpacing: ".1em", textTransform: "uppercase", cursor: "pointer" }}>
@@ -7565,13 +7573,13 @@ function HeroSlideshow({ data, navigateTo }) {
         </div>
       </div>
 
-      {/* ══ LENS FLARE EFFECT ══ */}
+      {/* == LENS FLARE EFFECT == */}
       <LensFlareEffect />
 
-      {/* ══ WATER DROPS EFFECT ══ */}
+      {/* == WATER DROPS EFFECT == */}
       <WaterDropsEffect />
 
-      {/* Side gradient overlays — solid edge, fade to center */}
+      {/* Side gradient overlays -- solid edge, fade to center */}
       <div className="hero-side-grad" style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: "18%", background: "linear-gradient(to right, rgba(4,8,15,.82) 0%, rgba(4,8,15,.45) 50%, rgba(4,8,15,0) 100%)", zIndex: 15, pointerEvents: "none" }} />
       <div className="hero-side-grad" style={{ position: "absolute", right: 0, top: 0, bottom: 0, width: "18%", background: "linear-gradient(to left, rgba(4,8,15,.82) 0%, rgba(4,8,15,.45) 50%, rgba(4,8,15,0) 100%)", zIndex: 15, pointerEvents: "none" }} />
 
@@ -7820,7 +7828,7 @@ function ReviewSlideshow({ reviews }) {
   if (total === 0) return null;
 
   // Build visible indices: 6 cards centered around current
-  // [-2, -1, 0, 1, 2, 3] offsets from current — we show 6 cards
+  // [-2, -1, 0, 1, 2, 3] offsets from current -- we show 6 cards
   // Cards at positions -2 and 3 are faded (gradient edges)
   const getOffset = (offset) => ((current + offset % total + total * 4) % total);
 
@@ -8505,7 +8513,7 @@ function AdminReviews({ data, save, notify }) {
 );
 }
 
-// ─── Session persistence (sessionStorage) ──────────────────────────
+// --- Session persistence (sessionStorage) --------------------------
 // Sesi bertahan saat reload, tapi otomatis bersih saat browser ditutup
 const SESSION_KEY = import.meta.env.VITE_SESSION_KEY || "re_session";
 const sessionSave = (u) => {
@@ -8768,7 +8776,7 @@ function DesainRabPage({ onWaOpen }) {
         @media(max-width:640px){ .dr-paket-grid{grid-template-columns:1fr !important;} .dr-galeri-grid{grid-template-columns:repeat(2,1fr) !important;} .dr-dapatkan-grid{grid-template-columns:1fr !important;} .dr-proses-grid{grid-template-columns:repeat(2,1fr) !important;} .dr-faq-grid{grid-template-columns:1fr !important;} }
       `}</style>
 
-      {/* ══ HERO ══ */}
+      {/* == HERO == */}
       <div style={{ position:"relative", minHeight:"clamp(420px,60vw,620px)", overflow:"hidden", background:"#1a2526" }}>
         <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1400&q=85" alt="Hero" style={{ position:"absolute", inset:0, width:"100%", height:"100%", objectFit:"cover", opacity:.55 }} />
         <div style={{ position:"absolute", inset:0, background:"linear-gradient(to right,rgba(20,30,30,.92) 42%,rgba(10,20,20,.35) 100%)" }} />
@@ -8813,7 +8821,7 @@ function DesainRabPage({ onWaOpen }) {
         </div>
       </div>
 
-      {/* ══ PROSES PENGERJAAN ══ */}
+      {/* == PROSES PENGERJAAN == */}
       <section style={{ background:"#fff", padding:"clamp(48px,7vw,80px) 5%" }}>
         <div style={{ maxWidth:1200, margin:"0 auto" }}>
           <div style={{ textAlign:"center", marginBottom:44 }}>
@@ -8821,7 +8829,7 @@ function DesainRabPage({ onWaOpen }) {
             <h2 style={{ fontSize:"clamp(1.5rem,3.5vw,2.2rem)", fontWeight:800, color:"#1a2526", margin:0 }}>PROSES PENGERJAAN</h2>
             <div style={{ width:48, height:3, background:"#C9AA71", borderRadius:2, margin:"14px auto 0" }} />
           </div>
-          {/* Steps — connected line */}
+          {/* Steps -- connected line */}
           <div style={{ position:"relative" }}>
             {/* Connecting line */}
             <div style={{ position:"absolute", top:38, left:"8.33%", right:"8.33%", height:2, background:"linear-gradient(to right,#C9AA71,#E8D5A3)", borderRadius:2, zIndex:0 }} />
@@ -8841,7 +8849,7 @@ function DesainRabPage({ onWaOpen }) {
         </div>
       </section>
 
-      {/* ══ YANG ANDA DAPATKAN ══ */}
+      {/* == YANG ANDA DAPATKAN == */}
       <section style={{ background:"#FAF7F0", padding:"clamp(48px,7vw,80px) 5%" }}>
         <div style={{ maxWidth:1200, margin:"0 auto" }}>
           <div style={{ textAlign:"center", marginBottom:44 }}>
@@ -8874,7 +8882,7 @@ function DesainRabPage({ onWaOpen }) {
         </div>
       </section>
 
-      {/* ══ CONTOH HASIL DESAIN ══ */}
+      {/* == CONTOH HASIL DESAIN == */}
       <section style={{ background:"#fff", padding:"clamp(48px,7vw,80px) 0" }}>
         <div style={{ maxWidth:1200, margin:"0 auto", padding:"0 5%", marginBottom:36 }}>
           <div style={{ textAlign:"center" }}>
@@ -8884,7 +8892,7 @@ function DesainRabPage({ onWaOpen }) {
           </div>
         </div>
 
-        {/* ── MARQUEE RUNNER ── */}
+        {/* -- MARQUEE RUNNER -- */}
         <style>{`
           @keyframes drMarquee { from{transform:translateX(0)} to{transform:translateX(-50%)} }
           .dr-marquee-track { display:flex; width:max-content; animation:drMarquee 28s linear infinite; }
@@ -8927,7 +8935,7 @@ function DesainRabPage({ onWaOpen }) {
         </div>
       </section>
 
-      {/* ══ PAKET JASA DESAIN & RAB ══ */}
+      {/* == PAKET JASA DESAIN & RAB == */}
       <section style={{ background:"#FAF7F0", padding:"clamp(48px,7vw,80px) 5%" }}>
         <div style={{ maxWidth:1200, margin:"0 auto" }}>
           <div style={{ textAlign:"center", marginBottom:40 }}>
@@ -8977,7 +8985,7 @@ function DesainRabPage({ onWaOpen }) {
         </div>
       </section>
 
-      {/* ══ FAQ ══ */}
+      {/* == FAQ == */}
       <section style={{ background:"#fff", padding:"clamp(48px,7vw,80px) 5%" }}>
         <div style={{ maxWidth:1200, margin:"0 auto" }}>
           <div style={{ textAlign:"center", marginBottom:40 }}>
@@ -9002,7 +9010,7 @@ function DesainRabPage({ onWaOpen }) {
         </div>
       </section>
 
-      {/* ══ CTA BANNER ══ */}
+      {/* == CTA BANNER == */}
       <section style={{ position:"relative", overflow:"hidden" }}>
         <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1400&q=80" alt="CTA" style={{ position:"absolute", inset:0, width:"100%", height:"100%", objectFit:"cover" }} />
         <div style={{ position:"absolute", inset:0, background:"rgba(20,30,30,.85)" }} />
@@ -9408,7 +9416,7 @@ function TemaPhotoSlideshow({ slug, nama }) {
         ))}
       </div>
 
-      {/* Side arrows — appear on hover via CSS */}
+      {/* Side arrows -- appear on hover via CSS */}
       {photos.length > 1 && ["◀","▶"].map((ch, d) => (
         <button key={d}
           onClick={() => goTo((idx + (d === 0 ? -1 : 1) + photos.length) % photos.length)}
@@ -9756,7 +9764,7 @@ function TemaRumahPage({ onWaOpen, temaSlug, setTemaSlug }) {
         </div>
       </div>
 
-      {/* Tema Cards — alternating layout */}
+      {/* Tema Cards -- alternating layout */}
       <div style={{ background: "#fff" }}>
         {TEMA_DATA.map((tema, idx) => {
           const isEven = idx % 2 === 0;
@@ -9965,10 +9973,10 @@ const LANDSCAPE_CATEGORIES = [
     ],
     slides: [
       { img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80", tema: "Minimalis Modern", desc: "Taman depan bersih dengan jalur batu andesit, tanaman hias rendah, dan lampu sorot tersembunyi. Cocok untuk rumah bergaya kontemporer." },
-      { img: "https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=800&q=80", tema: "Tropis Resort", desc: "Nuansa villa tropis di depan rumah — palm mini, heliconia, dan kerikil putih menciptakan ambiance resort yang mewah." },
+      { img: "https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=800&q=80", tema: "Tropis Resort", desc: "Nuansa villa tropis di depan rumah -- palm mini, heliconia, dan kerikil putih menciptakan ambiance resort yang mewah." },
       { img: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&q=80", tema: "Japanese Zen", desc: "Taman gaya Jepang dengan batu stepping, lumut hijau, bambu, dan air mengalir. Tenang dan meditatif setiap hari." },
       { img: "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=800&q=80", tema: "Teras Santai Bohemian", desc: "Area teras dengan pergola rotan, tanaman merambat, dan kursi outdoor. Tempat bersantai paling favorit di sore hari." },
-      { img: "https://images.unsplash.com/photo-1524758631624-e2822e304c36?w=800&q=80", tema: "Klasik Eropa", desc: "Simetri elegan khas taman Eropa — pagar hidup teratur, pot bunga warna-warni, dan jalur batu bata merah yang menawan." },
+      { img: "https://images.unsplash.com/photo-1524758631624-e2822e304c36?w=800&q=80", tema: "Klasik Eropa", desc: "Simetri elegan khas taman Eropa -- pagar hidup teratur, pot bunga warna-warni, dan jalur batu bata merah yang menawan." },
       { img: "https://images.unsplash.com/photo-1563911302283-d2bc129e7570?w=800&q=80", tema: "Modern Industrial", desc: "Konsep industrial dengan raised planter box besi cor, tanaman sukulen, dan pencahayaan warm-white di malam hari." },
     ]
   },
@@ -9991,12 +9999,12 @@ const LANDSCAPE_CATEGORIES = [
       { icon: "📋", item: "Garansi perawatan 60 hari setelah pemasangan" },
     ],
     slides: [
-      { img: "https://images.unsplash.com/photo-1600210492493-0946911123ea?w=800&q=80", tema: "Outdoor Living Room", desc: "Ruang keluarga terbuka di taman belakang — sofa outdoor, pergola kayu, dan area BBQ. Sempurna untuk berkumpul keluarga." },
-      { img: "https://images.unsplash.com/photo-1558905586-b022cc14d2b3?w=800&q=80", tema: "Tropical Oasis", desc: "Lebatnya tanaman tropis menciptakan privasi alami. Kolam mini, deck kayu, dan hammock — liburan tanpa pergi jauh." },
+      { img: "https://images.unsplash.com/photo-1600210492493-0946911123ea?w=800&q=80", tema: "Outdoor Living Room", desc: "Ruang keluarga terbuka di taman belakang -- sofa outdoor, pergola kayu, dan area BBQ. Sempurna untuk berkumpul keluarga." },
+      { img: "https://images.unsplash.com/photo-1558905586-b022cc14d2b3?w=800&q=80", tema: "Tropical Oasis", desc: "Lebatnya tanaman tropis menciptakan privasi alami. Kolam mini, deck kayu, dan hammock -- liburan tanpa pergi jauh." },
       { img: "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=800&q=80", tema: "Minimalis Elegan", desc: "Rumput hijau terawat, border batu, dan stepping stone. Desain simpel yang tidak memerlukan perawatan intensif." },
       { img: "https://images.unsplash.com/photo-1592595896551-12b371d546d5?w=800&q=80", tema: "Taman Bermain Keluarga", desc: "Zona bermain anak yang aman dengan rumput sintetis lembut, ayunan, dan area sandbox. Dikombinasikan taman orang tua." },
-      { img: "https://images.unsplash.com/photo-1523301343968-6a6ebf63c672?w=800&q=80", tema: "Mediterania", desc: "Inspiraasi taman Mediterania — lavender, rosemary, batu koral, dan pergola besi tempa. Romantis dan wangi sepanjang hari." },
-      { img: "https://images.unsplash.com/photo-1585771724684-38269d6639fd?w=800&q=80", tema: "Taman Sayur Organik", desc: "Raised bed box kayu untuk sayur dan herba organik. Estetis sekaligus produktif — petik langsung dari taman rumah." },
+      { img: "https://images.unsplash.com/photo-1523301343968-6a6ebf63c672?w=800&q=80", tema: "Mediterania", desc: "Inspiraasi taman Mediterania -- lavender, rosemary, batu koral, dan pergola besi tempa. Romantis dan wangi sepanjang hari." },
+      { img: "https://images.unsplash.com/photo-1585771724684-38269d6639fd?w=800&q=80", tema: "Taman Sayur Organik", desc: "Raised bed box kayu untuk sayur dan herba organik. Estetis sekaligus produktif -- petik langsung dari taman rumah." },
     ]
   },
   {
@@ -10019,11 +10027,11 @@ const LANDSCAPE_CATEGORIES = [
     ],
     slides: [
       { img: "https://images.unsplash.com/photo-1567016432779-094069958ea5?w=800&q=80", tema: "Sky Lounge Garden", desc: "Lounge eksklusif di atap dengan sofa outdoor premium, tanaman dalam pot besar, dan pencahayaan ambiance malam hari." },
-      { img: "https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=800&q=80", tema: "Minimalis Urban", desc: "Desain bersih untuk rooftop kota — deck composite, tanaman pot rendah, dan railing kaca untuk view kota yang maksimal." },
+      { img: "https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=800&q=80", tema: "Minimalis Urban", desc: "Desain bersih untuk rooftop kota -- deck composite, tanaman pot rendah, dan railing kaca untuk view kota yang maksimal." },
       { img: "https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?w=800&q=80", tema: "Tropical Rooftop", desc: "Suasana resort di atas gedung. Tanaman tropis tinggi sebagai windbreak alami, hammock, dan area santai yang teduh." },
       { img: "https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=800&q=80", tema: "Rooftop Dining", desc: "Area makan outdoor di atap dengan meja kayu solid, lampu gantung vintage, dan taman herba aromatik di sekelilingnya." },
       { img: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&q=80", tema: "Green Roof Modern", desc: "Atap hijau dengan sistem tanam modular ringan. Menurunkan suhu bangunan sekaligus menciptakan estetika hijau dari bawah." },
-      { img: "https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?w=800&q=80", tema: "Zen Rooftop", desc: "Keheningan di atas ketinggian. Kerikil zen, tanaman bonsai, dan bangku meditasi — meditasi pagi yang mewah setiap hari." },
+      { img: "https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?w=800&q=80", tema: "Zen Rooftop", desc: "Keheningan di atas ketinggian. Kerikil zen, tanaman bonsai, dan bangku meditasi -- meditasi pagi yang mewah setiap hari." },
     ]
   },
   {
@@ -10044,12 +10052,12 @@ const LANDSCAPE_CATEGORIES = [
       { icon: "📋", item: "Garansi tumbuh tanaman 30 hari + panduan perawatan" },
     ],
     slides: [
-      { img: "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=800&q=80", tema: "Living Wall Interior", desc: "Dinding hidup di dalam ruangan — sistem irigasi otomatis tersembunyi, media tanam hidroponik, dan pilihan 30+ jenis tanaman hias." },
+      { img: "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=800&q=80", tema: "Living Wall Interior", desc: "Dinding hidup di dalam ruangan -- sistem irigasi otomatis tersembunyi, media tanam hidroponik, dan pilihan 30+ jenis tanaman hias." },
       { img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80", tema: "Facade Vertical Garden", desc: "Tampak depan rumah yang memukau dengan vertical garden fasad. Tanaman tahan UV dan cuaca, perawatan minimal." },
-      { img: "https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=800&q=80", tema: "Herb Wall Kitchen", desc: "Dinding herba aromatik di area dapur — basil, mint, rosemary, thyme. Segar, wangi, dan bisa dipetik kapan saja." },
+      { img: "https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=800&q=80", tema: "Herb Wall Kitchen", desc: "Dinding herba aromatik di area dapur -- basil, mint, rosemary, thyme. Segar, wangi, dan bisa dipetik kapan saja." },
       { img: "https://images.unsplash.com/photo-1524758631624-e2822e304c36?w=800&q=80", tema: "Office Green Wall", desc: "Vertical garden di area kerja atau lobby kantor. Terbukti meningkatkan produktivitas dan mengurangi stres karyawan." },
-      { img: "https://images.unsplash.com/photo-1600210492493-0946911123ea?w=800&q=80", tema: "Tropical Statement Wall", desc: "Komposisi tanaman tropis dramatis — monstera, philodendron, dan pakis raksasa. Bold dan instagrammable." },
-      { img: "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=800&q=80", tema: "Minimalis Moss Wall", desc: "Dinding lumut hijau yang tidak membutuhkan air — ideal untuk indoor tanpa sinar langsung. Estetis dan zero maintenance." },
+      { img: "https://images.unsplash.com/photo-1600210492493-0946911123ea?w=800&q=80", tema: "Tropical Statement Wall", desc: "Komposisi tanaman tropis dramatis -- monstera, philodendron, dan pakis raksasa. Bold dan instagrammable." },
+      { img: "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=800&q=80", tema: "Minimalis Moss Wall", desc: "Dinding lumut hijau yang tidak membutuhkan air -- ideal untuk indoor tanpa sinar langsung. Estetis dan zero maintenance." },
     ]
   },
   {
@@ -10072,10 +10080,10 @@ const LANDSCAPE_CATEGORIES = [
     slides: [
       { img: "https://images.unsplash.com/photo-1523301343968-6a6ebf63c672?w=800&q=80", tema: "Kolam Koi Jepang", desc: "Kolam koi bergaya Jepang lengkap dengan filter biologis, batu suiseki, jembatan mini kayu, dan ikan koi pilihan warna-warni." },
       { img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80", tema: "Waterfall Minimalis", desc: "Air terjun dinding batu alam yang elegan. Suara gemericik konstan menciptakan ambiance premium di halaman rumah Anda." },
-      { img: "https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=800&q=80", tema: "Fountain Klasik", desc: "Air mancur tengah taman bergaya klasik Eropa — patung lion head, mangkuk bertingkat, dan pencahayaan bawah air berwarna." },
-      { img: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&q=80", tema: "Kolam Renang Natural", desc: "Natural pool dengan border batu andesit, filter tanaman, dan waterfall tepi — kolam yang menyatu sempurna dengan taman." },
+      { img: "https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=800&q=80", tema: "Fountain Klasik", desc: "Air mancur tengah taman bergaya klasik Eropa -- patung lion head, mangkuk bertingkat, dan pencahayaan bawah air berwarna." },
+      { img: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&q=80", tema: "Kolam Renang Natural", desc: "Natural pool dengan border batu andesit, filter tanaman, dan waterfall tepi -- kolam yang menyatu sempurna dengan taman." },
       { img: "https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=800&q=80", tema: "Air Mancur Modern", desc: "Instalasi air mancur geometris modern dari stainless steel. Jet air presisi dengan sistem kontrol otomatis dan LED underwater." },
-      { img: "https://images.unsplash.com/photo-1592595896551-12b371d546d5?w=800&q=80", tema: "Kolam Teratai", desc: "Kolam dangkal dengan teratai dan eceng gondok — habitat alami yang juga berfungsi sebagai biofilter alami yang indah." },
+      { img: "https://images.unsplash.com/photo-1592595896551-12b371d546d5?w=800&q=80", tema: "Kolam Teratai", desc: "Kolam dangkal dengan teratai dan eceng gondok -- habitat alami yang juga berfungsi sebagai biofilter alami yang indah." },
     ]
   },
   {
@@ -10096,12 +10104,12 @@ const LANDSCAPE_CATEGORIES = [
       { icon: "📋", item: "Garansi instalasi & produk 1 tahun" },
     ],
     slides: [
-      { img: "https://images.unsplash.com/photo-1558905586-b022cc14d2b3?w=800&q=80", tema: "Fairy Light Garden", desc: "Ribuan lampu kabel tembaga menyelimuti pepohonan dan pergola — menciptakan suasana magis seperti bintang di taman Anda." },
-      { img: "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=800&q=80", tema: "Uplighting Dramatic", desc: "Lampu sorot LED dari bawah yang menyinari pohon dan dinding — efek dramatis yang menonjolkan tekstur dan bentuk tanaman." },
-      { img: "https://images.unsplash.com/photo-1563911302283-d2bc129e7570?w=800&q=80", tema: "Solar Path Lighting", desc: "Lampu jalur solar-powered di sepanjang stepping stone. Otomatis menyala saat gelap — hemat energi dan instalasi mudah." },
+      { img: "https://images.unsplash.com/photo-1558905586-b022cc14d2b3?w=800&q=80", tema: "Fairy Light Garden", desc: "Ribuan lampu kabel tembaga menyelimuti pepohonan dan pergola -- menciptakan suasana magis seperti bintang di taman Anda." },
+      { img: "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=800&q=80", tema: "Uplighting Dramatic", desc: "Lampu sorot LED dari bawah yang menyinari pohon dan dinding -- efek dramatis yang menonjolkan tekstur dan bentuk tanaman." },
+      { img: "https://images.unsplash.com/photo-1563911302283-d2bc129e7570?w=800&q=80", tema: "Solar Path Lighting", desc: "Lampu jalur solar-powered di sepanjang stepping stone. Otomatis menyala saat gelap -- hemat energi dan instalasi mudah." },
       { img: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&q=80", tema: "Lantern Taman Klasik", desc: "Lentera besi tempa bergaya klasik sebagai focal point taman. Tersedia dalam versi gas, listrik, dan solar." },
       { img: "https://images.unsplash.com/photo-1524758631624-e2822e304c36?w=800&q=80", tema: "LED Underwater Kolam", desc: "Pencahayaan dalam air berwarna RGB untuk kolam hias dan air mancur. Efek spektakuler dengan kendali remote atau smartphone." },
-      { img: "https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=800&q=80", tema: "String Light Pergola", desc: "Lampu bohlam vintage di atas pergola outdoor — ambiance bistro Eropa untuk area makan terbuka Anda." },
+      { img: "https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=800&q=80", tema: "String Light Pergola", desc: "Lampu bohlam vintage di atas pergola outdoor -- ambiance bistro Eropa untuk area makan terbuka Anda." },
     ]
   },
 ];
@@ -10169,7 +10177,7 @@ function LsInfoCard({ cat, fmt, onWaOpen }) {
       {/* Judul */}
       <h3 className="ls-card-title">{cat.icon} {cat.title.replace("Contoh Desain ", "")}</h3>
 
-      {/* Deskripsi — selalu tampil */}
+      {/* Deskripsi -- selalu tampil */}
       <p className="ls-desc">{cat.desc}</p>
 
       {/* Harga + CTA row */}
@@ -10190,7 +10198,7 @@ function LsInfoCard({ cat, fmt, onWaOpen }) {
         <span>{open ? "Sembunyikan Detail Paket" : "✅ Lihat Yang Termasuk dalam Paket"}</span>
       </button>
 
-      {/* Dropdown includes — muncul saat open */}
+      {/* Dropdown includes -- muncul saat open */}
       {open && (
         <div className="ls-includes-box">
           <div className="ls-includes-title">✅ Yang Termasuk dalam Paket</div>
@@ -10289,7 +10297,7 @@ function LandscapePage({ onWaOpen, categories }) {
         }
       `}</style>
 
-      {/* ── HERO ── */}
+      {/* -- HERO -- */}
       <div style={{ background: "linear-gradient(135deg,#0d2b1a 0%,#1a472a 60%,#2d6a4f 100%)", padding: "64px 5% 56px", textAlign: "center", position: "relative", overflow: "hidden" }}>
         <div style={{ position: "absolute", inset: 0, opacity: 0.07, backgroundImage: "radial-gradient(circle,#fff 1px,transparent 1px)", backgroundSize: "36px 36px", pointerEvents: "none" }} />
         <div style={{ position: "relative", zIndex: 1, maxWidth: 680, margin: "0 auto" }}>
@@ -10311,10 +10319,10 @@ function LandscapePage({ onWaOpen, categories }) {
         </div>
       </div>
 
-      {/* ══════════════════════════════════════════════════
+      {/* ==================================================
           DESKTOP: Magazine Grid (1 | 3 | 2 kolom)
           Tersembunyi di mobile via CSS
-      ══════════════════════════════════════════════════ */}
+      ================================================== */}
       <div className="ls-desktop-grid" style={{ flexDirection: "column", gap: 4, padding: "4px 0 0" }}>
         {rows.map((row, ri) => {
           const h = heightMap[row.cols] || 360;
@@ -10355,15 +10363,15 @@ function LandscapePage({ onWaOpen, categories }) {
         })}
       </div>
 
-      {/* ══════════════════════════════════════════════════
+      {/* ==================================================
           MOBILE: 1 Kolom Penuh (semua kategori berurutan)
           Tersembunyi di desktop via CSS
-      ══════════════════════════════════════════════════ */}
+      ================================================== */}
       <div className="ls-mobile-list">
         {cats_.map((cat) => (
           <div key={cat.id} className="ls-mobile-item ls-wrap">
 
-            {/* Foto slideshow — tinggi lebih pendek di mobile */}
+            {/* Foto slideshow -- tinggi lebih pendek di mobile */}
             <div className="ls-img-box ls-mobile-slide" style={{ position: "relative", overflow: "hidden", height: 260 }}>
               <LsMiniSlide slides={cat.slides} height="260px" />
 
@@ -10384,7 +10392,7 @@ function LandscapePage({ onWaOpen, categories }) {
         ))}
       </div>
 
-      {/* ── ELEMEN TAMAN PREMIUM ── */}
+      {/* -- ELEMEN TAMAN PREMIUM -- */}
       <div style={{ background: "#fff", padding: "64px 5%", borderTop: "3px solid #1a472a" }}>
         <div style={{ maxWidth: 1280, margin: "0 auto" }}>
           <div style={{ textAlign: "center", marginBottom: 48 }}>
@@ -10415,7 +10423,7 @@ function LandscapePage({ onWaOpen, categories }) {
         </div>
       </div>
 
-      {/* ── CTA BOTTOM ── */}
+      {/* -- CTA BOTTOM -- */}
       <div style={{ padding: "60px 5%", textAlign: "center", background: "#0d1f18" }}>
         <div style={{ maxWidth: 600, margin: "0 auto", background: "linear-gradient(135deg,#1a472a 0%,#2d6a4f 100%)", borderRadius: 20, padding: "48px 32px", color: "#fff" }}>
           <div style={{ fontSize: "0.7rem", letterSpacing: ".14em", textTransform: "uppercase", color: "#A8D5B5", fontWeight: 700, marginBottom: 12 }}>Konsultasi Gratis</div>
@@ -10457,7 +10465,7 @@ const RS_PAKET_DATA = [
       { icon: "📋", item: "Garansi pengerjaan 30 hari" },
     ],
     slides: [
-      { img: "https://images.unsplash.com/photo-1562259949-e8e7689d7828?w=800&q=80", tema: "Cat Eksterior Segar", desc: "Tampilan fasad rumah subsidi yang baru dicat — bersih, cerah, dan tahan cuaca tropis." },
+      { img: "https://images.unsplash.com/photo-1562259949-e8e7689d7828?w=800&q=80", tema: "Cat Eksterior Segar", desc: "Tampilan fasad rumah subsidi yang baru dicat -- bersih, cerah, dan tahan cuaca tropis." },
       { img: "https://images.unsplash.com/photo-1589939705384-5185137a7f0f?w=800&q=80", tema: "Cat Interior Rapi", desc: "Dinding dalam ruangan dengan finishing rata, tanpa bekas kuas, siap dihuni kembali." },
       { img: "https://images.unsplash.com/photo-1604709177225-055f99402ea3?w=800&q=80", tema: "Perbaikan Dinding Retak", desc: "Proses pendempulan dan perataan dinding sebelum pengecatan ulang." },
       { img: "https://images.unsplash.com/photo-1493606371202-6346f1ca5733?w=800&q=80", tema: "Pemilihan Warna", desc: "Konsultasi kombinasi warna cat yang pas dengan gaya rumah subsidi Anda." },
@@ -10583,9 +10591,9 @@ const RS_PAKET_DATA = [
       { icon: "📋", item: "Garansi pengerjaan 6 bulan + pendampingan tukang" },
     ],
     slides: [
-      { img: "https://images.unsplash.com/photo-1503387837-b154d5074bd2?w=800&q=80", tema: "Sebelum Renovasi", desc: "Kondisi rumah subsidi sebelum renovasi total — siap diubah menjadi hunian layak." },
+      { img: "https://images.unsplash.com/photo-1503387837-b154d5074bd2?w=800&q=80", tema: "Sebelum Renovasi", desc: "Kondisi rumah subsidi sebelum renovasi total -- siap diubah menjadi hunian layak." },
       { img: "https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=800&q=80", tema: "Proses Renovasi", desc: "Tim tukang bekerja menyeluruh dari struktur hingga finishing akhir." },
-      { img: "https://images.unsplash.com/photo-1600566752355-35792bedcfea?w=800&q=80", tema: "Rumah Subsidi Baru", desc: "Hasil akhir rumah subsidi setelah renovasi total — rapi dan nyaman dihuni." },
+      { img: "https://images.unsplash.com/photo-1600566752355-35792bedcfea?w=800&q=80", tema: "Rumah Subsidi Baru", desc: "Hasil akhir rumah subsidi setelah renovasi total -- rapi dan nyaman dihuni." },
       { img: "https://images.unsplash.com/photo-1597047084897-51e81819a499?w=800&q=80", tema: "Eksterior Diperbarui", desc: "Tampak luar rumah subsidi dengan cat baru dan atap yang sudah diperbaiki." },
       { img: "https://images.unsplash.com/photo-1556912167-f556f1f39fdf?w=800&q=80", tema: "Interior Siap Huni", desc: "Ruangan dalam yang sudah dirombak total, bersih, dan fungsional." },
     ]
@@ -10899,7 +10907,7 @@ function WaPickerModal({ admins = [], msgText = "", onClose }) {
           style={{ position: "absolute", top: 10, right: 12, background: "none", border: "none",
             fontSize: 20, color: "#2E3D3F", cursor: "pointer", lineHeight: 1, opacity: .5 }}>✕</button>
 
-        {/* Header — Logo + Judul */}
+        {/* Header -- Logo + Judul */}
         <div style={{ textAlign: "center", marginBottom: 12 }}>
           <div style={{ display: "flex", justifyContent: "center", marginBottom: 7 }}>
             <img src={VASTURA_LOGO_URL} alt="Vastura Group"
@@ -10950,7 +10958,7 @@ function WaPickerModal({ admins = [], msgText = "", onClose }) {
                     </div>
                   </div>
 
-                  {/* Tombol WA kanan — kompak vertikal */}
+                  {/* Tombol WA kanan -- kompak vertikal */}
                   <a href={waUrl} target="_blank" rel="noopener noreferrer"
                     style={{
                       display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 4,
@@ -11153,12 +11161,12 @@ function PaketGridManager({ data, save, notify, storeKey, title, icon, accentCol
     notify("Paket dihapus.");
   };
 
-  // ── Includes helpers ──
+  // -- Includes helpers --
   const addInclude = () => setForm(p => ({ ...p, includes: [...(p.includes || []), { icon: "✅", item: "" }] }));
   const updateInclude = (i, field, val) => setForm(p => ({ ...p, includes: p.includes.map((inc, idx) => idx === i ? { ...inc, [field]: val } : inc) }));
   const removeInclude = (i) => setForm(p => ({ ...p, includes: p.includes.filter((_, idx) => idx !== i) }));
 
-  // ── Slides helpers ──
+  // -- Slides helpers --
   const addSlide = () => setForm(p => ({ ...p, slides: [...(p.slides || []), { img: "", tema: "", desc: "" }] }));
   const updateSlide = (i, field, val) => setForm(p => ({ ...p, slides: p.slides.map((s, idx) => idx === i ? { ...s, [field]: val } : s) }));
   const removeSlide = (i) => setForm(p => ({ ...p, slides: p.slides.filter((_, idx) => idx !== i) }));
@@ -11181,7 +11189,7 @@ function PaketGridManager({ data, save, notify, storeKey, title, icon, accentCol
       </div>
       {ctaHint && <p style={{ fontSize: 12.5, color: "#5A6A6C", marginBottom: 22, lineHeight: 1.6 }}>{ctaHint}</p>}
 
-      {/* ══ FORM EDIT / TAMBAH ══ */}
+      {/* == FORM EDIT / TAMBAH == */}
       {editId && (
         <div style={{ background: "#fff", borderRadius: 12, padding: "26px", boxShadow: "0 4px 20px rgba(0,0,0,.08)", marginBottom: 28, borderTop: `4px solid ${accentColor}` }}>
           <h2 style={{ fontSize: 16, fontWeight: 700, color: "#2E3D3F", marginBottom: 20 }}>
@@ -11236,7 +11244,7 @@ function PaketGridManager({ data, save, notify, storeKey, title, icon, accentCol
             )}
           </div>
 
-          {/* ── Yang Termasuk ── */}
+          {/* -- Yang Termasuk -- */}
           <div style={{ marginBottom: 24, background: "#f4faf6", borderRadius: 10, padding: "16px 18px", border: "1.5px solid #bbf7d0" }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
               <label style={{ ...labelStyle, marginBottom: 0, color: "#166534" }}>✅ Yang Termasuk dalam Paket</label>
@@ -11256,7 +11264,7 @@ function PaketGridManager({ data, save, notify, storeKey, title, icon, accentCol
             </div>
           </div>
 
-          {/* ── Slideshow Foto ── */}
+          {/* -- Slideshow Foto -- */}
           <div style={{ marginBottom: 24, background: "#FAF7F0", borderRadius: 10, padding: "16px 18px", border: "1.5px solid #E8DCC8" }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
               <label style={{ ...labelStyle, marginBottom: 0, color: "#8B6914" }}>🖼 Foto Slideshow</label>
@@ -11293,7 +11301,7 @@ function PaketGridManager({ data, save, notify, storeKey, title, icon, accentCol
         </div>
       )}
 
-      {/* ══ LIST PAKET ══ */}
+      {/* == LIST PAKET == */}
       {!editId && (
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(280px,1fr))", gap: 16 }}>
           {items.map(it => (
@@ -11343,7 +11351,6 @@ function MobileLayananAccordion({ page, navigateTo, setMobileMenu, navDropdownLa
   const isLayananActive = [...topPages,
     "interior/kamar-tidur","interior/kamar-mandi","interior/ruang-keluarga","interior/ruang-tamu","interior/kitchen-set","interior/ruang-kerja","interior/plafon-modern",
     "eksterior/pagar","eksterior/kanopi","eksterior/aluminium","eksterior/taman-landscape",
-    "furnitur",
   ].some(k=>k===page);
 
   return (
@@ -11415,15 +11422,6 @@ function MobileLayananAccordion({ page, navigateTo, setMobileMenu, navDropdownLa
             </div>
           )}
 
-          {/* Divider Produk Retail */}
-          <div style={{ margin:"6px 16px", borderTop:"1px solid #E8DCC8" }}/>
-          <div style={{ padding:"4px 16px 2px", fontSize:"0.58rem", fontWeight:800, letterSpacing:".14em", textTransform:"uppercase", color:"#8B9A9C" }}>Produk Retail</div>
-
-          {/* Furnitur */}
-          <button onClick={()=>{ navigateTo("furnitur"); setMobileMenu(false); setOpen(false); }}
-            style={mBtn(page==="furnitur", 1)}>
-            🪑 Furnitur
-          </button>
         </div>
       )}
     </div>
@@ -11487,7 +11485,7 @@ function FurniturPage({ data, onWaOpen }) {
         }
       `}</style>
 
-      {/* ── Hero ── */}
+      {/* -- Hero -- */}
       <div style={{ background:`linear-gradient(135deg,${darkTeal} 0%,#3D5254 55%,#8B6914 85%,${accentGold} 100%)`, padding:"64px 5% 52px", textAlign:"center", position:"relative", overflow:"hidden" }}>
         <div style={{ position:"absolute", inset:0, opacity:.08, backgroundImage:"radial-gradient(circle at 20% 50%,#fff 1px,transparent 1px),radial-gradient(circle at 80% 20%,#fff 1px,transparent 1px),radial-gradient(circle at 60% 80%,#fff 1px,transparent 1px)", backgroundSize:"48px 48px" }} />
         <div style={{ position:"relative" }}>
@@ -11504,7 +11502,7 @@ function FurniturPage({ data, onWaOpen }) {
         </div>
       </div>
 
-      {/* ── Breadcrumb ── */}
+      {/* -- Breadcrumb -- */}
       <div style={{ padding:"14px 5%", borderBottom:"1px solid #eee", background:"#fff" }}>
         <span style={{ fontSize:"0.78rem", color:"#8B9A9C" }}>Beranda</span>
         <span style={{ fontSize:"0.78rem", color:"#8B9A9C", margin:"0 8px" }}>›</span>
@@ -11515,7 +11513,7 @@ function FurniturPage({ data, onWaOpen }) {
 
       <div style={{ padding:"32px 5% 60px", maxWidth:1280, margin:"0 auto" }}>
 
-        {/* ── Filter & Search Bar ── */}
+        {/* -- Filter & Search Bar -- */}
         <div style={{ display:"flex", gap:12, flexWrap:"wrap", alignItems:"center", marginBottom:32, background:"#fff", borderRadius:12, padding:"16px 20px", boxShadow:"0 2px 12px rgba(0,0,0,.06)" }}>
           {/* Search */}
           <div style={{ flex:"1 1 220px", position:"relative" }}>
@@ -11552,7 +11550,7 @@ function FurniturPage({ data, onWaOpen }) {
           <span style={{ fontSize:"0.78rem", color:"#8B9A9C", flex:"0 0 auto" }}>{filtered.length} produk</span>
         </div>
 
-        {/* ── Products Grid ── */}
+        {/* -- Products Grid -- */}
         {filtered.length === 0 ? (
           <div style={{ textAlign:"center", padding:"80px 20px", color:"#8B9A9C" }}>
             <div style={{ fontSize:48, marginBottom:16 }}>🪑</div>
@@ -11606,7 +11604,7 @@ function FurniturPage({ data, onWaOpen }) {
         )}
       </div>
 
-      {/* ── Detail Modal ── */}
+      {/* -- Detail Modal -- */}
       {detailItem && (
         <div style={{ position:"fixed", inset:0, zIndex:9000, display:"flex", alignItems:"center", justifyContent:"center", padding:"20px" }}
           onClick={()=>setDetailItem(null)}>
@@ -11659,7 +11657,7 @@ function SubPageCatalog({ heroColor, heroIcon, title, subtitle, breadcrumb, cata
 
   return (
     <div style={{ minHeight:"100vh", background:"#FAFAF8" }}>
-      {/* ── HERO ── */}
+      {/* -- HERO -- */}
       <div style={{ background: heroColor || "linear-gradient(135deg,#2E3D3F 0%,#8B6914 100%)", padding:"72px 5% 56px", textAlign:"center", position:"relative", overflow:"hidden" }}>
         <div style={{ position:"absolute", inset:0, background:"rgba(0,0,0,.18)" }}/>
         <div style={{ position:"relative", zIndex:1, maxWidth:760, margin:"0 auto" }}>
@@ -11687,7 +11685,7 @@ function SubPageCatalog({ heroColor, heroIcon, title, subtitle, breadcrumb, cata
         </div>
       </div>
 
-      {/* ── CATALOG GRID ── */}
+      {/* -- CATALOG GRID -- */}
       <div style={{ maxWidth:1280, margin:"0 auto", padding:"60px 5% 80px" }}>
         <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(260px,1fr))", gap:28 }}>
           {catalogData.map((item) => (
@@ -11996,16 +11994,16 @@ function VasturaFooter({ data, navigateTo, onWaOpen, showDevProfile }) {
         @media(max-width:560px){.vf-grid{grid-template-columns:1fr!important;gap:26px!important}.vf-bottom{flex-direction:column!important;gap:10px!important;text-align:center!important}}
       `}</style>
 
-      {/* ── Top divider accent ── */}
+      {/* -- Top divider accent -- */}
       <div style={{ height:3, background:`linear-gradient(90deg, transparent 0%, ${accentGold} 30%, ${accentGold} 70%, transparent 100%)` }} />
 
-      {/* ── Main footer body ── */}
+      {/* -- Main footer body -- */}
       <div style={{ maxWidth:1280, margin:"0 auto", padding:"56px 5% 44px" }}>
         <div className="vf-grid" style={{ display:"grid", gridTemplateColumns:"2fr 1.1fr 1.1fr 1.4fr", gap:"48px" }}>
 
-          {/* ── Col 1: Brand + Logo ── */}
+          {/* -- Col 1: Brand + Logo -- */}
           <div>
-            {/* Logo — diambil dari link logo yang sama dengan navbar */}
+            {/* Logo -- diambil dari link logo yang sama dengan navbar */}
             <div style={{ marginBottom:20 }}>
               {c.logoImage ? (
                 <img
@@ -12061,7 +12059,7 @@ function VasturaFooter({ data, navigateTo, onWaOpen, showDevProfile }) {
             </div>
           </div>
 
-          {/* ── Col 2: Layanan ── */}
+          {/* -- Col 2: Layanan -- */}
           <div>
             <div className="vf-col-title">Layanan</div>
             <div style={{ display:"flex", flexDirection:"column" }}>
@@ -12069,7 +12067,7 @@ function VasturaFooter({ data, navigateTo, onWaOpen, showDevProfile }) {
             </div>
           </div>
 
-          {/* ── Col 3: Informasi ── */}
+          {/* -- Col 3: Informasi -- */}
           <div>
             <div className="vf-col-title">Informasi</div>
             <div style={{ display:"flex", flexDirection:"column" }}>
@@ -12077,7 +12075,7 @@ function VasturaFooter({ data, navigateTo, onWaOpen, showDevProfile }) {
             </div>
           </div>
 
-          {/* ── Col 4: Kontak Kami ── */}
+          {/* -- Col 4: Kontak Kami -- */}
           <div>
             <div className="vf-col-title">Kontak Kami</div>
             <div style={{ display:"flex", flexDirection:"column", gap:14 }}>
@@ -12117,10 +12115,10 @@ function VasturaFooter({ data, navigateTo, onWaOpen, showDevProfile }) {
         </div>
       </div>
 
-      {/* ── Divider ── */}
+      {/* -- Divider -- */}
       <div className="vf-divider" />
 
-      {/* ── Bottom bar ── */}
+      {/* -- Bottom bar -- */}
       <div style={{ maxWidth:1280, margin:"0 auto", padding:"18px 5%" }}>
         <div className="vf-bottom" style={{ display:"flex", alignItems:"center", justifyContent:"space-between", gap:14, flexWrap:"wrap" }}>
           <span style={{ fontSize:12, color:"rgba(255,255,255,.35)", letterSpacing:".04em" }}>
@@ -12370,7 +12368,7 @@ export default function BricksyTravel() {
   const [user, setUser] = useState(() => sessionLoad()); // ← restore session saat reload
   // Fix #3: gunakan lazy initializer agar window.location dibaca saat render, bukan module load
   const [page, setPage] = useState(() => getInitialPage()); // home | about | news | shop | destinations | services
-  // ── Native history tracking (tidak pakai custom stack) ──────────────────
+  // -- Native history tracking (tidak pakai custom stack) ------------------
   // spaDepth: seberapa jauh dari entry awal (disimpan di pushState state.depth)
   // spaMaxDepth: titik terjauh yang pernah dicapai → untuk canForward
   const spaDepth    = useRef(0);
@@ -12434,8 +12432,8 @@ export default function BricksyTravel() {
     }
   };
 
-  // ── Scroll Reveal for RE home ──
-  // ── Force autoplay hero video (bypass browser autoplay policy) ──────────
+  // -- Scroll Reveal for RE home --
+  // -- Force autoplay hero video (bypass browser autoplay policy) ----------
   useEffect(() => {
     const vid = heroVideoRef.current;
     if (!vid) return;
@@ -12549,7 +12547,7 @@ export default function BricksyTravel() {
         return;
       }
       setReviewTokenParam("");
-      // /control-panel — restore tab dari state jika ada
+      // /control-panel -- restore tab dari state jika ada
       if (pathname === "/control-panel" || e.state?.admin) {
         // Jika sedang dalam mode edit paket dan user tekan Back → keluar edit dulu
         if (false) {
@@ -12594,7 +12592,7 @@ export default function BricksyTravel() {
         const key = pathname.replace("/","");
         setPage(key); setMobileMenu(false); window.scrollTo(0,0); _syncDepth(e.state?.depth); return;
       }
-      // Normal page — tutup detail paket & artikel
+      // Normal page -- tutup detail paket & artikel
       setActivePaket(null);
       setReadPost(null);
       const p = e.state?.page || PATH_TO_PAGE[pathname] || "home";
@@ -12754,7 +12752,7 @@ export default function BricksyTravel() {
   // Sync adminTabRef dengan adminTab state
   useEffect(() => { adminTabRef.current = adminTab; }, [adminTab]);
 
-  // Force light mode — inject meta color-scheme ke <head> sekali saat mount
+  // Force light mode -- inject meta color-scheme ke <head> sekali saat mount
   useEffect(() => {
     // Meta color-scheme
     let meta = document.querySelector("meta[name='color-scheme']");
@@ -12772,7 +12770,7 @@ export default function BricksyTravel() {
       document.head.appendChild(themeMeta);
     }
     themeMeta.content = "#2E3D3F";
-    // Paksa html & body pakai color-scheme light — kebal dark mode
+    // Paksa html & body pakai color-scheme light -- kebal dark mode
     document.documentElement.style.colorScheme = "only light";
     document.documentElement.style.forcedColorAdjust = "none";
     document.documentElement.style.webkitForcedColorAdjust = "none";
@@ -12783,7 +12781,7 @@ export default function BricksyTravel() {
     document.body.style.filter = "none";
   }, []);
 
-  // ── Static Glitch Pixel Cursor ───────────────────────────────────────────
+  // -- Static Glitch Pixel Cursor -------------------------------------------
   useEffect(() => {
     const S = 2; // ukuran 1 pixel art = 2px
     const size = 64;
@@ -12854,7 +12852,7 @@ export default function BricksyTravel() {
     }
   }, [data.content.logoImage]);
 
-  // Sync browser tab title — selalu satu baris, ikuti logoText
+  // Sync browser tab title -- selalu satu baris, ikuti logoText
   useEffect(() => {
     const raw = data.content.logoText || "VASTURA GROUP";
     const oneLiner = raw.replace(/\n/g, " ").replace(/\s+/g, " ").trim().toUpperCase();
@@ -13101,7 +13099,7 @@ export default function BricksyTravel() {
   const [activePaket, setActivePaket] = useState(() => {
     // Restore dari URL /paket/{category}/{id} saat mount
     const parsed = parsePaketPath(window.location.pathname);
-    return parsed ? parsed : null; // { category, id } — ServicesPage cari svc-nya
+    return parsed ? parsed : null; // { category, id } -- ServicesPage cari svc-nya
   });
 
   const openPaket = (svc) => {
@@ -13133,7 +13131,7 @@ export default function BricksyTravel() {
   // Post operations
   // silent=true → auto-save, tetap di editor, tanpa notif
   const savePost = (post, silent = false) => {
-    // Validasi section — jika tidak valid, fallback ke "news"
+    // Validasi section -- jika tidak valid, fallback ke "news"
     const validSections = ["news", "shop", "destinations"];
     const section = validSections.includes(post.section) ? post.section : "news";
     const postWithSection = { ...post, section };
@@ -13231,7 +13229,7 @@ export default function BricksyTravel() {
   ];
   // Interior & Eksterior sudah digabung ke navDropdownLayanan
   const navDropdownInterior = [];
-  // Dropdown: Program Renovasi — Rumah Subsidi & Landscape & Taman
+  // Dropdown: Program Renovasi -- Rumah Subsidi & Landscape & Taman
   const navDropdownGaleri = [
     { key: "shop",      label: data.content.nav4  || "Rumah Subsidi" },
     { key: "landscape", label: data.content.nav13 || "Landscape & Taman" },
@@ -13256,7 +13254,7 @@ export default function BricksyTravel() {
     <div className="page-wrap" style={{ position: "relative", minHeight: "100vh" }}>
       <GS />
 
-      {/* ── LOADING SKELETON ── */}
+      {/* -- LOADING SKELETON -- */}
       {isLoading && !reviewTokenParam && (
         <div style={{ position: "fixed", inset: 0, zIndex: 9990, background: "#FDFAF4", display: "flex", flexDirection: "column" }}>
           <style>{`
@@ -13318,7 +13316,7 @@ export default function BricksyTravel() {
         </div>
       )}
 
-      {/* ── Coming Soon Popup ── */}
+      {/* -- Coming Soon Popup -- */}
       {comingSoonPopup && (
         <div onClick={() => setComingSoonPopup(false)}
           style={{ position: "fixed", inset: 0, zIndex: 10000, background: "rgba(0,0,0,.55)",
@@ -13420,12 +13418,12 @@ export default function BricksyTravel() {
         </div>
       )}
 
-      {/* ══════ REVIEW FORM (token-based, public) ══════ */}
+      {/* ====== REVIEW FORM (token-based, public) ====== */}
       {reviewTokenParam && (
         <ReviewForm token={reviewTokenParam} data={data} save={save} notify={notify} isLoading={isLoading} />
       )}
 
-      {/* ══════ LOGIN MODAL ══════ */}
+      {/* ====== LOGIN MODAL ====== */}
       {showLogin && (
         <div onClick={() => setShowLogin(false)} 
           style={{ position: "fixed", inset: 0, zIndex: 9998, background: "rgba(10,20,30,.50)",
@@ -13515,14 +13513,14 @@ export default function BricksyTravel() {
                   ) : "Masuk"}
                 </button>
 
-                {/* ── Divider ── */}
+                {/* -- Divider -- */}
                 <div style={{ display: "flex", alignItems: "center", gap: 12, margin: "18px 0 14px" }}>
                   <div style={{ flex: 1, height: 1, background: "#E8DCC8" }} />
                   <span style={{ fontSize: 11, color: "#A89070", fontWeight: 600, whiteSpace: "nowrap" }}>atau masuk dengan</span>
                   <div style={{ flex: 1, height: 1, background: "#E8DCC8" }} />
                 </div>
 
-                {/* ── Google & Apple ── */}
+                {/* -- Google & Apple -- */}
                 <div style={{ display: "flex", gap: 10, marginBottom: 4 }}>
                   <button onClick={() => setComingSoonPopup(true)}
                     style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 9,
@@ -13663,17 +13661,17 @@ export default function BricksyTravel() {
         </div>
       )}
 
-      {/* ══════ PUBLIC WEBSITE ══════ */}
+      {/* ====== PUBLIC WEBSITE ====== */}
       {!showAdmin && !reviewTokenParam && (
         <>
-          {/* NAVBAR — Fixed floating always */}
+          {/* NAVBAR -- Fixed floating always */}
           <nav style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 100,
             background: "rgba(255,255,255,.94)",
             backdropFilter: "blur(18px) saturate(1.2)",
             borderBottom: "1px solid rgba(158,155,150,.18)",
             boxShadow: "0 2px 32px rgba(20,18,16,.08), 0 1px 0 rgba(255,255,255,.9) inset",
             padding: "0 5%", overflow: "visible" }}>
-            {/* ── Smoke & flare layer — white/grey ── */}
+            {/* -- Smoke & flare layer -- white/grey -- */}
             <div aria-hidden="true" style={{ position: "absolute", inset: 0, pointerEvents: "none", overflow: "hidden", zIndex: 0 }}>
               {/* Smoke left */}
               <div style={{ position: "absolute", left: "15%", top: "-30%", width: 180, height: "170%",
@@ -13695,7 +13693,7 @@ export default function BricksyTravel() {
             </div>
             <div style={{ position: "relative", zIndex: 1, display: "flex", alignItems: "center", justifyContent: "space-between", height: 82, maxWidth: 1200, margin: "0 auto", gap: 20 }}>
 
-              {/* ── LOGO ── */}
+              {/* -- LOGO -- */}
               <button onClick={() => navigateTo("home")} style={{ border: "none", background: "none", padding: 0, flexShrink: 0, height: "100%", display: "flex", alignItems: "center", overflow: "visible", minWidth: 0 }}>
                 <span className="hide-sm">
                   <LogoDisplay content={data.content} size="nav" />
@@ -13705,7 +13703,7 @@ export default function BricksyTravel() {
                 </span>
               </button>
 
-              {/* ── DESKTOP NAV with Dropdowns ── */}
+              {/* -- DESKTOP NAV with Dropdowns -- */}
               <div className="hide-sm" style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "flex-end", gap: 6, paddingLeft: 8, flexWrap: "wrap" }}>
                 {/* Flat nav items */}
                 {navItems.map(item => (
@@ -13725,7 +13723,7 @@ export default function BricksyTravel() {
                 <NavDropdownGaleri page={page} navigateTo={navigateTo} navDropdownGaleri={navDropdownGaleri} />
               </div>
 
-              {/* ── LOGIN / USER (desktop) ── */}
+              {/* -- LOGIN / USER (desktop) -- */}
               <div className="hide-sm" style={{ display: "flex", gap: 10, alignItems: "center", flexShrink: 0 }}>
                 {user
                   ? <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
@@ -13837,7 +13835,7 @@ export default function BricksyTravel() {
                 overflowY: "auto",
                 WebkitOverflowScrolling: "touch"
               }}>
-                {/* ── Mobile: main nav items ── */}
+                {/* -- Mobile: main nav items -- */}
                 {navItems.map(item => (
                   <button key={item.key} onClick={() => { navigateTo(item.key); setMobileMenu(false); }}
                     style={{ fontSize:".8rem", letterSpacing:".14em", textTransform:"uppercase", fontFamily:"'Jost',sans-serif",
@@ -13850,10 +13848,10 @@ export default function BricksyTravel() {
                   </button>
                 ))}
 
-                {/* ── Mobile: Layanan Kami (accordion) ── */}
+                {/* -- Mobile: Layanan Kami (accordion) -- */}
                 <MobileLayananAccordion page={page} navigateTo={navigateTo} setMobileMenu={setMobileMenu} navDropdownLayanan={navDropdownLayanan} />
 
-                {/* ── Mobile: Program Renovasi ── */}
+                {/* -- Mobile: Program Renovasi -- */}
                 <div style={{ padding:"10px 18px 4px", fontSize:"0.6rem", fontWeight:800, letterSpacing:".18em", textTransform:"uppercase", color:"#8B6914", opacity:0.8 }}>Program Renovasi</div>
                 {navDropdownGaleri.map(item=>(
                   <button key={item.key} onClick={()=>{ navigateTo(item.key); setMobileMenu(false); }}
@@ -13866,6 +13864,18 @@ export default function BricksyTravel() {
                     {item.label}
                   </button>
                 ))}
+
+                {/* -- Mobile: Produk Retail Furnitur -- */}
+                <div style={{ padding:"10px 18px 4px", fontSize:"0.6rem", fontWeight:800, letterSpacing:".18em", textTransform:"uppercase", color:"#8B6914", opacity:0.8 }}>Produk Retail</div>
+                <button onClick={()=>{ navigateTo("furnitur"); setMobileMenu(false); }}
+                  style={{ fontSize:".8rem", letterSpacing:".12em", textTransform:"uppercase", fontFamily:"'Jost',sans-serif",
+                    color:page==="furnitur"?"var(--re-black)":"var(--re-grey-dk)", fontWeight:page==="furnitur"?700:400,
+                    border:"none", background:"transparent", textAlign:"left", padding:"11px 28px", borderRadius:6, width:"100%",
+                    borderLeft:page==="furnitur"?"2px solid #8B6914":"2px solid transparent", transition:"all .15s", cursor:"pointer" }}
+                  onMouseEnter={e=>{e.currentTarget.style.background="var(--re-grey-lt)";}}
+                  onMouseLeave={e=>{e.currentTarget.style.background="transparent";}}>
+                  🪑 Produk Furnitur
+                </button>
                 {user && (
                   <div style={{ padding: "12px 4px 4px", borderTop: "1px solid var(--re-grey-lt)", marginTop: 8 }}>
                     <div style={{ fontSize: ".8125rem", color: "var(--re-grey-md)", marginBottom: 10, padding: "0 12px" }}>
@@ -13881,7 +13891,7 @@ export default function BricksyTravel() {
                     </button>
                   </div>
                 )}
-                {/* ── Gear icon tersembunyi — hanya untuk admin login, tanpa teks ── */}
+                {/* -- Gear icon tersembunyi -- hanya untuk admin login, tanpa teks -- */}
                 {!user && (
                   <div style={{ display: "flex", justifyContent: "flex-end", padding: "10px 4px 0", borderTop: "1px solid var(--re-grey-lt)", marginTop: 8 }}>
                     <button
@@ -13911,7 +13921,7 @@ export default function BricksyTravel() {
           {/* Spacer to push content below fixed navbar */}
           <div style={{ height: "clamp(60px,10vw,96px)" }} />
 
-          {/* ── NAVIGASI MAJU / MUNDUR ── */}
+          {/* -- NAVIGASI MAJU / MUNDUR -- */}
           {(() => {
             const isMobileNav = window.innerWidth <= 768;
             if (isMobileNav) return null; // hapus floating nav di mobile
@@ -13954,7 +13964,7 @@ export default function BricksyTravel() {
             );
           })()}
 
-          {/* ── WA PICKER MODAL ── */}
+          {/* -- WA PICKER MODAL -- */}
           {waPicker && (
             <WaPickerModal
               admins={content.waAdmins}
@@ -13963,7 +13973,7 @@ export default function BricksyTravel() {
             />
           )}
 
-          {/* ── WHATSAPP FLOATING BUTTON ── */}
+          {/* -- WHATSAPP FLOATING BUTTON -- */}
           <button onClick={() => openWaPicker()}
             title="Hubungi Kami via WhatsApp"
             style={{
@@ -13998,7 +14008,7 @@ export default function BricksyTravel() {
             <div className="wa-float-ring" />
           </button>
 
-          {/* ── ARTICLE DETAIL ── */}
+          {/* -- ARTICLE DETAIL -- */}
           {readPost && (
             <>
               <ArticleDetail post={readPost} onBack={closeArticle} allPosts={allPosts} onReadPost={(p) => openArticle(p)} />
@@ -14006,13 +14016,13 @@ export default function BricksyTravel() {
             </>
           )}
 
-          {/* ── PAGE CONTENT ── */}
+          {/* -- PAGE CONTENT -- */}
           {!readPost && (
             <>
               {/* HOME */}
               {page === "home" && (
                 <>
-                  {/* ══ HERO ══ */}
+                  {/* == HERO == */}
                   <section className="re-hero">
                     {/* Background Video Hero */}
                     <video
@@ -14052,7 +14062,7 @@ export default function BricksyTravel() {
                     </div>
                   </section>
 
-                  {/* ══ RUNNING TEXT / MARQUEE ══ */}
+                  {/* == RUNNING TEXT / MARQUEE == */}
                   <div style={{
                     background: "#cc0000",
                     overflow: "hidden",
@@ -14088,7 +14098,7 @@ export default function BricksyTravel() {
                     </span>
                   </div>
 
-                  {/* ══ ABOUT ══ */}
+                  {/* == ABOUT == */}
                   <section className="re-about">
                     {/* Smoke background orb */}
                     <div className="re-smoke-orb" style={{ width:500,height:500,top:"-100px",right:"-80px",animationDelay:"1s" }} />
@@ -14100,7 +14110,7 @@ export default function BricksyTravel() {
                     <div className="re-sash" style={{ bottom:0,left:"20%",width:"60%",opacity:.5 }} />
                   </section>
 
-                  {/* ══ QUOTE / PARALLAX IMAGE ══ */}
+                  {/* == QUOTE / PARALLAX IMAGE == */}
                   <section className="re-quote-img re-scale-in">
                     <img
                       src="https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?w=1600&q=85&auto=format&fit=crop"
@@ -14116,7 +14126,7 @@ export default function BricksyTravel() {
                     </div>
                   </section>
 
-                  {/* ══ ACTIVE LISTINGS ══ */}
+                  {/* == ACTIVE LISTINGS == */}
                   <section className="re-listings">
                     <div style={{ maxWidth:1200,margin:"0 auto" }}>
                       <p className="re-about-label re-reveal" style={{ marginBottom:48 }}>Listing Aktif Kami</p>
@@ -14166,7 +14176,7 @@ export default function BricksyTravel() {
                     </div>
                   </section>
 
-                  {/* ══ SERVICES ══ */}
+                  {/* == SERVICES == */}
                   <section className="re-services" style={{ position:"relative", overflow:"hidden" }}>
                     {/* Smoke ornament */}
                     <div className="re-smoke-orb" style={{ width:450,height:450,top:"-80px",right:"-60px",animationDelay:"2s" }} />
@@ -14196,7 +14206,7 @@ export default function BricksyTravel() {
                     </div>
                   </section>
 
-                  {/* ══ CONTACT ══ */}
+                  {/* == CONTACT == */}
                   <section className="re-contact" id="re-contact-section">
                     <div className="re-contact-grid">
                       <div className="re-slide-left">
@@ -14239,7 +14249,7 @@ export default function BricksyTravel() {
                     </div>
                   </section>
 
-                  {/* ══ CLOSING HERO ══ */}
+                  {/* == CLOSING HERO == */}
                   <section className="re-closing-hero re-scale-in">
                     <img
                       src="https://images.unsplash.com/photo-1540518614846-7eded433c457?w=1600&q=85&auto=format&fit=crop"
@@ -14255,7 +14265,7 @@ export default function BricksyTravel() {
                     </div>
                   </section>
 
-                  {/* ══ VASTURA FOOTER ══ */}
+                  {/* == VASTURA FOOTER == */}
                   <VasturaFooter data={data} navigateTo={navigateTo} onWaOpen={openWaPicker} showDevProfile={() => setShowDevProfile(true)} />
                 </>
               )}
@@ -14276,14 +14286,14 @@ export default function BricksyTravel() {
               {page === "aluminium"   && <AluminiumPage   onWaOpen={openWaPicker} />}
               {page === "landscape"   && <LandscapePage   onWaOpen={openWaPicker} categories={data.landscapeCategories} />}
               {page === "furnitur"    && <FurniturPage    data={data} onWaOpen={openWaPicker} />}
-              {/* ── Sub-halaman Interior ── */}
+              {/* -- Sub-halaman Interior -- */}
               {["interior/kamar-tidur","interior/kamar-mandi","interior/ruang-keluarga","interior/ruang-tamu","interior/kitchen-set","interior/ruang-kerja","interior/plafon-modern"].includes(page) &&
                 <SubInteriorPage pageKey={page} onWaOpen={openWaPicker} navigateTo={navigateTo} data={data} />}
-              {/* ── Sub-halaman Eksterior ── */}
+              {/* -- Sub-halaman Eksterior -- */}
               {["eksterior/pagar","eksterior/kanopi","eksterior/aluminium","eksterior/taman-landscape"].includes(page) &&
                 <SubEksteriorPage pageKey={page} onWaOpen={openWaPicker} navigateTo={navigateTo} data={data} />}
 
-              {/* PROGRAM RENOVASI RUMAH SUBSIDI — Magazine Mixing Grid */}
+              {/* PROGRAM RENOVASI RUMAH SUBSIDI -- Magazine Mixing Grid */}
               {page === "shop" && <RumahSubsidiPage onWaOpen={openWaPicker} paketData={data.rumahSubsidiPaket} />}
 
               {/* NEWS / DESTINATIONS */}
@@ -14295,7 +14305,7 @@ export default function BricksyTravel() {
                 />
               )}
 
-              {/* ══ VASTURA FOOTER — muncul di semua halaman kecuali home ══ */}
+              {/* == VASTURA FOOTER -- muncul di semua halaman kecuali home == */}
               {page !== "home" && !["home"].includes(page) && (
                 <VasturaFooter data={data} navigateTo={navigateTo} onWaOpen={openWaPicker} showDevProfile={() => setShowDevProfile(true)} />
               )}
@@ -14308,7 +14318,7 @@ export default function BricksyTravel() {
       {showAdmin && !reviewTokenParam && (
         <div style={{ minHeight: "100vh", background: "#F7F5F0", paddingTop: 56 }}>
 
-          {/* ── Top bar ── */}
+          {/* -- Top bar -- */}
           <div style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 220, height: 56, background: "#2E3D3F", display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 16px", boxShadow: "0 2px 8px rgba(0,0,0,.18)" }}>
             <button className="show-sm" onClick={() => setSidebarOpen(p => !p)}
               style={{ background: "rgba(255,255,255,.12)", border: "none", color: "#fff", borderRadius: 7, width: 36, height: 36, cursor: "pointer", fontSize: 18 }}>☰</button>
@@ -14321,51 +14331,59 @@ export default function BricksyTravel() {
 
           <div style={{ display: "flex", minHeight: "calc(100vh - 56px)" }}>
 
-            {/* ── Sidebar ── */}
+            {/* -- Sidebar -- */}
             <div className={`admin-sidebar${sidebarOpen ? " open" : ""}`} style={{ background: "#2E3D3F", width: 220, flexShrink: 0, overflowY: "auto", padding: "12px 0" }}>
 
               {/* Kelompok menu */}
               {[
+                /* ── Navigasi Utama ── */
                 {
                   group: null,
                   items: [
-                    { id: "dashboard", label: "🏠 Dashboard",   show: true },
-                    { id: "messages",  label: "✉️ Pesan Masuk",  show: canCS },
-                    { id: "profil",    label: "👤 Profil Akun",  show: true },
+                    { id: "dashboard", label: "🏠 Dashboard",    show: true },
+                    { id: "messages",  label: "✉️ Pesan Masuk",   show: canCS },
+                    { id: "profil",    label: "👤 Profil Akun",   show: true },
                   ]
                 },
+                /* ── Konten & Setting Website ── */
                 {
-                  group: "PRODUK & LAYANAN",
+                  group: "KONTEN WEBSITE",
                   items: [
-                    { id: "int_kamar_tidur",    label: "🛏️ Kamar Tidur",      show: isAdmin },
-                    { id: "int_kamar_mandi",    label: "🚿 Kamar Mandi",      show: isAdmin },
-                    { id: "int_ruang_keluarga", label: "👨‍👩‍👧 Ruang Keluarga",   show: isAdmin },
-                    { id: "int_ruang_tamu",     label: "🪑 Ruang Tamu",       show: isAdmin },
-                    { id: "int_kitchen_set",    label: "🍳 Kitchen Set",      show: isAdmin },
-                    { id: "int_ruang_kerja",    label: "💼 Ruang Kerja",      show: isAdmin },
-                    { id: "int_plafon",         label: "🏛️ Plafon",           show: isAdmin },
-                    { id: "set_pagar",          label: "🔒 Pagar Rumah",      show: isAdmin },
-                    { id: "set_kanopi",         label: "⛺ Kanopi",           show: isAdmin },
-                    { id: "set_aluminium",      label: "🪟 Aluminium",        show: isAdmin },
-                    { id: "set_landscape",      label: "🌳 Landscape & Taman",show: isAdmin },
-                    { id: "produk_furnitur",    label: "🪑 Furnitur",         show: isAdmin },
+                    { id: "content",         label: "📝 Konten & Nav",      show: isAdmin },
+                    { id: "set_home",        label: "🏠 Gambar Home",        show: isAdmin },
+                    { id: "set_layanankami", label: "⚙️ Teks Layanan Kami",  show: isAdmin },
+                    { id: "settings",        label: "🔧 Pengaturan Sistem",  show: isAdmin },
                   ]
                 },
+                /* ── Katalog Interior (7 ruangan) ── */
                 {
-                  group: "PENGATURAN LAIN",
+                  group: "INTERIOR",
                   items: [
-                    { id: "team",              label: "👥 Tim",              show: isAdmin },
-                    { id: "reviews",           label: "⭐ Reviews",          show: isAdmin },
-                    { id: "users",             label: "🔐 Users",            show: isAdmin },
-                    { id: "content",           label: "📝 Konten Website",   show: isAdmin },
-                    { id: "set_home",          label: "Setting Home",        show: isAdmin },
-                    { id: "set_layanankami",   label: "Setting Layanan",     show: isAdmin },
-                    { id: "set_desainrab",     label: "Setting Desain RAB",  show: isAdmin },
-                    { id: "set_temarumah",     label: "Setting Tema Rumah",  show: isAdmin },
-                    { id: "set_interior",      label: "Setting Interior Hub",show: isAdmin },
-                    { id: "paket_landscape",   label: "Paket Landscape",     show: isAdmin },
-                    { id: "paket_rumahsubsidi",label: "Paket Rumah Subsidi", show: isAdmin },
-                    { id: "settings",          label: "⚙️ Pengaturan",       show: isAdmin },
+                    { id: "int_kamar_tidur",    label: "🛏️ Kamar Tidur",     show: isAdmin },
+                    { id: "int_kamar_mandi",    label: "🚿 Kamar Mandi",     show: isAdmin },
+                    { id: "int_ruang_keluarga", label: "🛋️ Ruang Keluarga",  show: isAdmin },
+                    { id: "int_ruang_tamu",     label: "🪑 Ruang Tamu",      show: isAdmin },
+                    { id: "int_kitchen_set",    label: "🍳 Kitchen Set",     show: isAdmin },
+                    { id: "int_ruang_kerja",    label: "💼 Ruang Kerja",     show: isAdmin },
+                    { id: "int_plafon",         label: "🏛️ Plafon",          show: isAdmin },
+                  ]
+                },
+                /* ── Katalog & Paket (CMS terhubung ke frontend) ── */
+                {
+                  group: "KATALOG & PAKET",
+                  items: [
+                    { id: "produk_furnitur",    label: "🪑 Produk Furnitur",       show: isAdmin },
+                    { id: "paket_landscape",    label: "🌳 Paket Landscape",        show: isAdmin },
+                    { id: "paket_rumahsubsidi", label: "🏡 Paket Rumah Subsidi",    show: isAdmin },
+                  ]
+                },
+                /* ── Manajemen ── */
+                {
+                  group: "MANAJEMEN",
+                  items: [
+                    { id: "team",    label: "👥 Susunan Tim",   show: isAdmin },
+                    { id: "reviews", label: "⭐ Reviews",        show: isAdmin },
+                    { id: "users",   label: "🔐 Users",          show: isAdmin },
                   ]
                 },
               ].map(({ group, items }) => (
@@ -14392,7 +14410,7 @@ export default function BricksyTravel() {
               ))}
             </div>
 
-            {/* ── Konten ── */}
+            {/* -- Konten -- */}
             <div style={{ flex: 1, minWidth: 0, padding: "28px 24px", overflowY: "auto" }}>
 
               {adminTab === "dashboard" && (
@@ -14445,7 +14463,7 @@ export default function BricksyTravel() {
                     </div>
                   ))}
 
-                  {/* ── WA ADMIN MANAGER ── */}
+                  {/* -- WA ADMIN MANAGER -- */}
                   <WaAdminManager
                     admins={data.content.waAdmins}
                     onSave={(list) => {
@@ -14486,9 +14504,8 @@ export default function BricksyTravel() {
                     { key: "homeCtaLabel2", label: "Label Tombol CTA 2 Home", type: "text" },
                   ]}
                   imageGroups={[
-                    { key: "hero", label: "Hero Slideshow", count: 4, desc: "Gambar slideshow utama di bagian atas Home." },
-                    { key: "adv", label: "Banner Advertorial", count: 2, desc: "Gambar banner di tengah halaman Home." },
-                    { key: "gal", label: "Galeri Home", count: 6, desc: "Grid galeri di bagian bawah Home." },
+                    { key: "hero", label: "Hero Slideshow", count: 4, desc: "Gambar slideshow utama di bagian atas Home. Juga tampil sebagai grid di halaman About." },
+                    { key: "gal", label: "Galeri Home", count: 6, desc: "Grid galeri di bagian bawah Home (puzzle Advertorial 4 foto)." },
                   ]}
                 />
               )}
@@ -14504,135 +14521,19 @@ export default function BricksyTravel() {
                   save={save}
                   notify={notify}
                   uploadToCloudinary={uploadToCloudinary}
-                  pageDesc="Kelola teks & gambar halaman Layanan Kami — daftar layanan utama yang ditampilkan kepada pengunjung."
+                  pageDesc="Kelola teks halaman Layanan Kami. Kartu layanan (6 layanan utama) diatur langsung melalui kode LAYANAN_LIST -- hubungi developer untuk mengubah nama/icon/deskripsi kartu layanan."
                   sections={[
                     { key: "layananKamiTitle", label: "Judul Halaman Layanan Kami", type: "text" },
                     { key: "layananKamiSub", label: "Sub-judul / Deskripsi Layanan Kami", type: "textarea" },
                     { key: "layananKamiCta", label: "Label Tombol CTA", type: "text" },
                   ]}
-                  imageGroups={[
-                    { key: "layananKamiHero", label: "Gambar Hero Layanan Kami", count: 2, desc: "Gambar banner di halaman Layanan Kami." },
-                    { key: "layananKamiGal", label: "Gambar Galeri Layanan", count: 4, desc: "Gambar pendukung tampilan layanan." },
-                  ]}
-                  crudKey="layananKamiItems"
-                  crudLabel="Daftar Item Layanan"
-                  crudFields={[
-                    { key: "nama", label: "Nama Layanan", type: "text", placeholder: "contoh: Jasa Bangun Rumah" },
-                    { key: "deskripsi", label: "Deskripsi Layanan", type: "textarea", placeholder: "Deskripsi singkat layanan..." },
-                    { key: "icon", label: "Icon / Emoji", type: "text", placeholder: "🏠" },
-                  ]}
-                  crudHasImage
-                  defaultItems={LAYANAN_LIST.map((l, i) => ({
-                    id: l.key || String(i + 1),
-                    nama: l.label,
-                    deskripsi: l.desc || "",
-                    icon: l.icon || "",
-                    _img: l.img || "",
-                  }))}
                 />
               )}
 
-              {/* SETTING DESAIN & RAB */}
-              {adminTab === "set_desainrab" && isAdmin && (
-                <SubLayananAdmin
-                  title="Setting Desain & RAB"
-                  icon="📐"
-                  accentColor="#2980b9"
-                  storeKey="desainRab"
-                  data={data}
-                  save={save}
-                  notify={notify}
-                  uploadToCloudinary={uploadToCloudinary}
-                  pageDesc="Kelola konten halaman Jasa Desain & RAB (Rencana Anggaran Biaya)."
-                  sections={[
-                    { key: "desainRabTitle", label: "Judul Halaman Desain & RAB", type: "text" },
-                    { key: "desainRabSub", label: "Sub-judul / Tagline", type: "textarea" },
-                    { key: "desainRabDesc", label: "Deskripsi Lengkap Layanan", type: "textarea" },
-                    { key: "desainRabCta", label: "Label Tombol CTA", type: "text" },
-                  ]}
-                  imageGroups={[
-                    { key: "desainRabHero", label: "Gambar Hero", count: 2, desc: "Foto utama halaman Desain & RAB." },
-                    { key: "desainRabGal", label: "Galeri Portofolio Desain", count: 6, desc: "Foto hasil desain dan RAB." },
-                  ]}
-                  crudKey="desainRabItems"
-                  crudLabel="Paket / Layanan RAB"
-                  crudFields={[
-                    { key: "nama", label: "Nama Paket", type: "text", placeholder: "contoh: Paket Desain Basic" },
-                    { key: "harga", label: "Harga / Keterangan Harga", type: "text", placeholder: "Rp 2.500.000" },
-                    { key: "deskripsi", label: "Deskripsi Paket", type: "textarea", placeholder: "Termasuk: ..." },
-                  ]}
-                  crudHasImage
-                  defaultItems={DESAIN_RAB_PAKET.map((p, i) => ({
-                    id: p.key || String(i + 1),
-                    nama: p.label,
-                    harga: `Rp ${p.harga}${p.satuan || ""}`,
-                    deskripsi: [p.sub || "", ...(p.fitur || [])].filter(Boolean).join(" | "),
-                    _img: "",
-                  }))}
-                />
-              )}
 
-              {/* SETTING TEMA RUMAH */}
-              {adminTab === "set_temarumah" && isAdmin && (
-                <SubLayananAdmin
-                  title="Setting Tema Rumah"
-                  icon="🏡"
-                  accentColor="#27ae60"
-                  storeKey="temaRumah"
-                  data={data}
-                  save={save}
-                  notify={notify}
-                  uploadToCloudinary={uploadToCloudinary}
-                  pageDesc="Kelola konten halaman Tema Rumah — tambah, edit, atau hapus tema-tema rumah yang tersedia."
-                  sections={[
-                    { key: "temaRumahTitle", label: "Judul Halaman Tema Rumah", type: "text" },
-                    { key: "temaRumahSub", label: "Sub-judul / Deskripsi", type: "textarea" },
-                    { key: "temaRumahCta", label: "Label Tombol CTA", type: "text" },
-                  ]}
-                  imageGroups={[
-                    { key: "temaRumahHero", label: "Gambar Hero Tema Rumah", count: 2, desc: "Foto banner halaman Tema Rumah." },
-                  ]}
-                  crudKey="temaRumahItems"
-                  crudLabel="Daftar Tema Rumah"
-                  crudFields={[
-                    { key: "nama", label: "Nama Tema", type: "text", placeholder: "contoh: Modern Minimalis" },
-                    { key: "tagline", label: "Tagline / Keterangan Singkat", type: "text", placeholder: "Elegan, bersih, fungsional" },
-                    { key: "deskripsi", label: "Deskripsi Tema", type: "textarea", placeholder: "Detail karakteristik tema..." },
-                    { key: "warna", label: "Warna Aksen (HEX)", type: "text", placeholder: "#2E3D3F" },
-                  ]}
-                  crudHasImage
-                  defaultItems={TEMA_DATA}
-                />
-              )}
 
-              {/* SETTING INTERIOR */}
-              {adminTab === "set_interior" && isAdmin && (
-                <div className="fade-in" style={{ padding:"20px 0" }}>
-                  <h1 style={{ fontSize:22, fontWeight:700, color:"#2E3D3F", marginBottom:8 }}>🛋️ Interior — Pilih Ruangan</h1>
-                  <p style={{ fontSize:"0.875rem", color:"#5A6A6C", marginBottom:24 }}>Setiap ruangan dikelola secara terpisah. Pilih tab di sidebar kiri.</p>
-                  <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(200px,1fr))", gap:14 }}>
-                    {[
-                      { id:"int_kamar_tidur",    icon:"🛏️", label:"Kamar Tidur" },
-                      { id:"int_kamar_mandi",    icon:"🚿", label:"Kamar Mandi" },
-                      { id:"int_ruang_keluarga", icon:"👨‍👩‍👧", label:"Ruang Keluarga" },
-                      { id:"int_ruang_tamu",     icon:"🪑", label:"Ruang Tamu" },
-                      { id:"int_kitchen_set",    icon:"🍳", label:"Kitchen Set" },
-                      { id:"int_ruang_kerja",    icon:"💼", label:"Ruang Kerja" },
-                      { id:"int_plafon",         icon:"🏛️", label:"Plafon Modern" },
-                    ].map(r => (
-                      <button key={r.id} onClick={() => navigateAdminTab(r.id)}
-                        style={{ background:"#fff", border:"2px solid #E8DCC8", borderRadius:10, padding:"20px 16px", cursor:"pointer", textAlign:"center", transition:"all .15s", fontFamily:"'Jost',sans-serif" }}
-                        onMouseEnter={e=>{e.currentTarget.style.borderColor="#C9AA71"; e.currentTarget.style.background="#FAF7F0";}}
-                        onMouseLeave={e=>{e.currentTarget.style.borderColor="#E8DCC8"; e.currentTarget.style.background="#fff";}}>
-                        <div style={{ fontSize:32, marginBottom:8 }}>{r.icon}</div>
-                        <div style={{ fontSize:"0.875rem", fontWeight:700, color:"#2E3D3F" }}>{r.label}</div>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              )}
 
-              {/* ─── KAMAR TIDUR ─── */}
+              {/* --- KAMAR TIDUR --- */}
               {adminTab === "int_kamar_tidur" && isAdmin && (
                 <SubLayananAdmin
                   title="Kamar Tidur"
@@ -14665,7 +14566,7 @@ export default function BricksyTravel() {
                 />
               )}
 
-              {/* ─── KAMAR MANDI ─── */}
+              {/* --- KAMAR MANDI --- */}
               {adminTab === "int_kamar_mandi" && isAdmin && (
                 <SubLayananAdmin
                   title="Kamar Mandi"
@@ -14698,7 +14599,7 @@ export default function BricksyTravel() {
                 />
               )}
 
-              {/* ─── RUANG KELUARGA ─── */}
+              {/* --- RUANG KELUARGA --- */}
               {adminTab === "int_ruang_keluarga" && isAdmin && (
                 <SubLayananAdmin
                   title="Ruang Keluarga"
@@ -14731,7 +14632,7 @@ export default function BricksyTravel() {
                 />
               )}
 
-              {/* ─── RUANG TAMU ─── */}
+              {/* --- RUANG TAMU --- */}
               {adminTab === "int_ruang_tamu" && isAdmin && (
                 <SubLayananAdmin
                   title="Ruang Tamu"
@@ -14764,7 +14665,7 @@ export default function BricksyTravel() {
                 />
               )}
 
-              {/* ─── KITCHEN SET ─── */}
+              {/* --- KITCHEN SET --- */}
               {adminTab === "int_kitchen_set" && isAdmin && (
                 <SubLayananAdmin
                   title="Kitchen Set & Dapur"
@@ -14797,7 +14698,7 @@ export default function BricksyTravel() {
                 />
               )}
 
-              {/* ─── RUANG KERJA ─── */}
+              {/* --- RUANG KERJA --- */}
               {adminTab === "int_ruang_kerja" && isAdmin && (
                 <SubLayananAdmin
                   title="Ruang Kerja"
@@ -14830,7 +14731,7 @@ export default function BricksyTravel() {
                 />
               )}
 
-              {/* ─── PLAFON MODERN ─── */}
+              {/* --- PLAFON MODERN --- */}
               {adminTab === "int_plafon" && isAdmin && (
                 <SubLayananAdmin
                   title="Plafon Modern"
@@ -14864,170 +14765,13 @@ export default function BricksyTravel() {
               )}
 
               {/* SETTING PAGAR RUMAH */}
-              {adminTab === "set_pagar" && isAdmin && (
-                <SubLayananAdmin
-                  title="Setting Pagar Rumah"
-                  icon="🚧"
-                  accentColor="#c0392b"
-                  storeKey="pagarRumah"
-                  data={data}
-                  save={save}
-                  notify={notify}
-                  uploadToCloudinary={uploadToCloudinary}
-                  pageDesc="Kelola konten halaman Pagar Rumah — jenis, harga, dan galeri pagar."
-                  sections={[
-                    { key: "pagarTitle", label: "Judul Halaman Pagar Rumah", type: "text" },
-                    { key: "pagarSub", label: "Sub-judul / Tagline", type: "textarea" },
-                    { key: "pagarDesc", label: "Deskripsi Layanan Pagar", type: "textarea" },
-                    { key: "pagarCta", label: "Label Tombol CTA", type: "text" },
-                  ]}
-                  imageGroups={[
-                    { key: "pagarHero", label: "Gambar Hero Pagar", count: 2, desc: "Foto banner halaman Pagar Rumah." },
-                    { key: "pagarGal", label: "Galeri Pagar", count: 6, desc: "Foto contoh pagar yang tersedia." },
-                  ]}
-                  crudKey="pagarItems"
-                  crudLabel="Jenis / Model Pagar"
-                  crudFields={[
-                    { key: "nama", label: "Nama Model Pagar", type: "text", placeholder: "contoh: Pagar Hollow Minimalis" },
-                    { key: "material", label: "Material", type: "text", placeholder: "contoh: Besi Hollow" },
-                    { key: "harga", label: "Harga / Keterangan", type: "text", placeholder: "Rp 800rb/m" },
-                    { key: "deskripsi", label: "Deskripsi", type: "textarea", placeholder: "Keunggulan dan detail..." },
-                  ]}
-                  crudHasImage
-                  defaultItems={CATALOG_DATA["eksterior/pagar"].items.map(item => ({
-                    id: item.id,
-                    nama: item.nama,
-                    material: item.material || "",
-                    harga: item.harga ? `Rp ${item.harga.toLocaleString("id-ID")}/m` : "",
-                    deskripsi: [item.desc, item.fitur ? item.fitur.join(", ") : ""].filter(Boolean).join(" | "),
-                    _img: item.img || "",
-                  }))}
-                />
-              )}
 
-              {/* SETTING KANOPI */}
-              {adminTab === "set_kanopi" && isAdmin && (
-                <SubLayananAdmin
-                  title="Setting Kanopi"
-                  icon="⛺"
-                  accentColor="#e67e22"
-                  storeKey="kanopi"
-                  data={data}
-                  save={save}
-                  notify={notify}
-                  uploadToCloudinary={uploadToCloudinary}
-                  pageDesc="Kelola konten halaman Kanopi — jenis, spesifikasi, dan galeri kanopi."
-                  sections={[
-                    { key: "kanopiTitle", label: "Judul Halaman Kanopi", type: "text" },
-                    { key: "kanopiSub", label: "Sub-judul / Tagline", type: "textarea" },
-                    { key: "kanopiDesc", label: "Deskripsi Layanan Kanopi", type: "textarea" },
-                    { key: "kanopiCta", label: "Label Tombol CTA", type: "text" },
-                  ]}
-                  imageGroups={[
-                    { key: "kanopiHero", label: "Gambar Hero Kanopi", count: 2, desc: "Foto banner halaman Kanopi." },
-                    { key: "kanopiGal", label: "Galeri Kanopi", count: 6, desc: "Foto contoh kanopi." },
-                  ]}
-                  crudKey="kanopiItems"
-                  crudLabel="Jenis / Model Kanopi"
-                  crudFields={[
-                    { key: "nama", label: "Nama Model Kanopi", type: "text", placeholder: "contoh: Kanopi Polycarbonate" },
-                    { key: "material", label: "Material", type: "text", placeholder: "contoh: Baja Ringan + Polycarbonate" },
-                    { key: "harga", label: "Harga / Keterangan", type: "text", placeholder: "Rp 250rb/m²" },
-                    { key: "deskripsi", label: "Deskripsi", type: "textarea", placeholder: "Keunggulan dan detail..." },
-                  ]}
-                  crudHasImage
-                  defaultItems={CATALOG_DATA["eksterior/kanopi"].items.map(item => ({
-                    id: item.id,
-                    nama: item.nama,
-                    material: item.material || "",
-                    harga: item.harga ? `Rp ${item.harga.toLocaleString("id-ID")}/m²` : "",
-                    deskripsi: [item.desc, item.fitur ? item.fitur.join(", ") : ""].filter(Boolean).join(" | "),
-                    _img: item.img || "",
-                  }))}
-                />
-              )}
 
-              {/* SETTING ALUMINIUM */}
-              {adminTab === "set_aluminium" && isAdmin && (
-                <SubLayananAdmin
-                  title="Setting Aluminium"
-                  icon="🪟"
-                  accentColor="#7f8c8d"
-                  storeKey="aluminium"
-                  data={data}
-                  save={save}
-                  notify={notify}
-                  uploadToCloudinary={uploadToCloudinary}
-                  pageDesc="Kelola konten halaman Aluminium — kusen, pintu, jendela, dan partisi aluminium."
-                  sections={[
-                    { key: "aluminiumTitle", label: "Judul Halaman Aluminium", type: "text" },
-                    { key: "aluminiumSub", label: "Sub-judul / Tagline", type: "textarea" },
-                    { key: "aluminiumDesc", label: "Deskripsi Layanan Aluminium", type: "textarea" },
-                    { key: "aluminiumCta", label: "Label Tombol CTA", type: "text" },
-                  ]}
-                  imageGroups={[
-                    { key: "aluminiumHero", label: "Gambar Hero Aluminium", count: 2, desc: "Foto banner halaman Aluminium." },
-                    { key: "aluminiumGal", label: "Galeri Aluminium", count: 6, desc: "Foto produk aluminium." },
-                  ]}
-                  crudKey="aluminiumItems"
-                  crudLabel="Produk / Jenis Aluminium"
-                  crudFields={[
-                    { key: "nama", label: "Nama Produk", type: "text", placeholder: "contoh: Kusen Aluminium 4\" " },
-                    { key: "spek", label: "Spesifikasi", type: "text", placeholder: "contoh: Tebal 4\", profil Australia" },
-                    { key: "harga", label: "Harga / Keterangan", type: "text", placeholder: "Rp 350rb/m" },
-                    { key: "deskripsi", label: "Deskripsi", type: "textarea", placeholder: "Keunggulan dan detail..." },
-                  ]}
-                  crudHasImage
-                  defaultItems={CATALOG_DATA["eksterior/aluminium"].items.map(item => ({
-                    id: item.id,
-                    nama: item.nama,
-                    spek: item.material || "",
-                    harga: item.harga ? `Rp ${item.harga.toLocaleString("id-ID")}/m` : "",
-                    deskripsi: [item.desc, item.fitur ? item.fitur.join(", ") : ""].filter(Boolean).join(" | "),
-                    _img: item.img || "",
-                  }))}
-                />
-              )}
 
-              {/* SETTING LANDSCAPE & TAMAN */}
-              {adminTab === "set_landscape" && isAdmin && (
-                <SubLayananAdmin
-                  title="Setting Landscape & Taman"
-                  icon="🌿"
-                  accentColor="#16a085"
-                  storeKey="landscape"
-                  data={data}
-                  save={save}
-                  notify={notify}
-                  uploadToCloudinary={uploadToCloudinary}
-                  pageDesc="Kelola konten halaman Landscape & Taman — desain taman, penataan landscape, dan portofolio."
-                  sections={[
-                    { key: "landscapeTitle", label: "Judul Halaman Landscape & Taman", type: "text" },
-                    { key: "landscapeSub", label: "Sub-judul / Tagline", type: "textarea" },
-                    { key: "landscapeDesc", label: "Deskripsi Layanan Landscape", type: "textarea" },
-                    { key: "landscapeCta", label: "Label Tombol CTA", type: "text" },
-                  ]}
-                  imageGroups={[
-                    { key: "landscapeHero", label: "Gambar Hero Landscape", count: 2, desc: "Foto banner halaman Landscape." },
-                    { key: "landscapeGal", label: "Galeri Portofolio Taman", count: 8, desc: "Foto hasil penataan taman." },
-                  ]}
-                  crudKey="landscapeItems"
-                  crudLabel="Layanan / Paket Landscape"
-                  crudFields={[
-                    { key: "nama", label: "Nama Layanan", type: "text", placeholder: "contoh: Taman Tropis Modern" },
-                    { key: "harga", label: "Harga / Keterangan", type: "text", placeholder: "Mulai Rp 3.000.000" },
-                    { key: "deskripsi", label: "Deskripsi", type: "textarea", placeholder: "Detail layanan landscape..." },
-                  ]}
-                  crudHasImage
-                  defaultItems={CATALOG_DATA["eksterior/taman-landscape"].items.map(item => ({
-                    id: item.id,
-                    nama: item.nama,
-                    harga: item.harga ? `Rp ${item.harga.toLocaleString("id-ID")}` : "",
-                    deskripsi: [item.desc, item.fitur ? item.fitur.join(", ") : ""].filter(Boolean).join(" | "),
-                    _img: item.img || "",
-                  }))}
-                />
-              )}
+
+
+
+
 
               {/* PRODUK FURNITUR */}
               {adminTab === "produk_furnitur" && isAdmin && (
@@ -15385,7 +15129,7 @@ export default function BricksyTravel() {
                               </td>
                             </tr>
 
-                            {/* ── INLINE EDIT ROW ── */}
+                            {/* -- INLINE EDIT ROW -- */}
                             {editUserId === u.id && (
                               <tr style={{ borderBottom: "1px solid #F5EDD8", background: "#fffbea" }}>
                                 <td colSpan={6} style={{ padding: "0" }}>
@@ -15601,12 +15345,12 @@ export default function BricksyTravel() {
                 <div className="fade-in">
                   <h1 style={{ fontSize: 24, fontWeight: 500, color: "#2E3D3F", marginBottom: 28 }}>Settings</h1>
 
-                  {/* ═══════════════════════════════════════════════════════ */}
+                  {/* ======================================================= */}
                   {/* SECTION: LOGO */}
-                  {/* ═══════════════════════════════════════════════════════ */}
+                  {/* ======================================================= */}
                   <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20, marginBottom: 24 }}>
 
-                    {/* ── Logo Navbar / Header ── */}
+                    {/* -- Logo Navbar / Header -- */}
                     <div style={{ background: "#fff", borderRadius: 8, padding: "22px 24px", boxShadow: "0 2px 8px rgba(0,0,0,.06)", borderTop: "4px solid #C9AA71" }}>
                       <h3 style={{ fontSize: 15, fontWeight: 700, color: "#2E3D3F", marginBottom: 4 }}>🔝 Logo Navbar / Header</h3>
                       <p style={{ fontSize: 12, color: "#5A6A6C", marginBottom: 14, lineHeight: 1.6 }}>
@@ -15642,7 +15386,7 @@ export default function BricksyTravel() {
                       </div>
                     </div>
 
-                    {/* ── Logo Footer ── */}
+                    {/* -- Logo Footer -- */}
                     <div style={{ background: "#fff", borderRadius: 8, padding: "22px 24px", boxShadow: "0 2px 8px rgba(0,0,0,.06)", borderTop: "4px solid #3D5254" }}>
                       <h3 style={{ fontSize: 15, fontWeight: 700, color: "#2E3D3F", marginBottom: 4 }}>🔻 Logo Footer</h3>
                       <p style={{ fontSize: 12, color: "#5A6A6C", marginBottom: 14, lineHeight: 1.6 }}>
@@ -15680,13 +15424,13 @@ export default function BricksyTravel() {
 
                   </div>
 
-                  {/* ═══════════════════════════════════════════════════════ */}
+                  {/* ======================================================= */}
                   {/* SECTION: GAMBAR HALAMAN HOME */}
-                  {/* ═══════════════════════════════════════════════════════ */}
+                  {/* ======================================================= */}
                   <div style={{ background: "#fff", borderRadius: 8, padding: "22px 24px", marginBottom: 24, boxShadow: "0 2px 8px rgba(0,0,0,.06)", borderTop: "4px solid #3498db" }}>
                     <h3 style={{ fontSize: 16, fontWeight: 700, color: "#2E3D3F", marginBottom: 4 }}>🏠 Gambar Halaman Home</h3>
                     <p style={{ fontSize: 12, color: "#5A6A6C", marginBottom: 20, lineHeight: 1.6 }}>
-                      Atur semua gambar yang tampil di halaman utama website — Hero Slideshow, Banner Advertorial, dan Galeri.
+                      Atur semua gambar yang tampil di halaman utama website — Hero Slideshow (4 foto) dan Galeri Home (6 foto).
                     </p>
 
                     {/* Hero Images */}
@@ -15737,46 +15481,6 @@ export default function BricksyTravel() {
                       </div>
                     </div>
 
-                    {/* Adv/Banner Images */}
-                    <div style={{ marginBottom: 24, paddingTop: 20, borderTop: "1px solid #F0E8D5" }}>
-                      <h4 style={{ fontSize: 13, fontWeight: 700, color: "#2E3D3F", marginBottom: 4 }}>🎯 Gambar Banner Advertorial (2 Gambar)</h4>
-                      <p style={{ fontSize: 11, color: "#5A6A6C", marginBottom: 12, lineHeight: 1.6 }}>Gambar di bagian banner/advertorial di tengah halaman Home.</p>
-                      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: 14 }}>
-                        {(data.images?.adv || ["",""]).map((img, idx) => (
-                          <div key={idx} style={{ background: "#FAF7F0", borderRadius: 8, padding: 12, border: "1px solid #E8DCC8" }}>
-                            <div style={{ fontSize: 11, fontWeight: 700, color: "#5A6A6C", marginBottom: 8, textTransform: "uppercase", letterSpacing: "0.5px" }}>Banner {idx + 1}</div>
-                            {img ? (
-                              <img src={img} alt={`Adv ${idx+1}`} style={{ width: "100%", height: 110, objectFit: "cover", borderRadius: 6, marginBottom: 8, border: "1px solid #D4C4A0" }}
-                                onError={e => e.target.style.display = "none"} />
-                            ) : (
-                              <div style={{ width: "100%", height: 110, background: "#E8DCC8", borderRadius: 6, marginBottom: 8, display: "flex", alignItems: "center", justifyContent: "center", color: "#5A6A6C", fontSize: 11 }}>Belum ada gambar</div>
-                            )}
-                            <UploadButton label="📁 Upload"
-                              style={{ fontSize: 11, padding: "6px 10px", marginBottom: 6, width: "100%", justifyContent: "center" }}
-                              onDone={urls => {
-                                const newAdv = [...(data.images?.adv || ["",""])];
-                                newAdv[idx] = urls[0];
-                                save({ ...data, images: { ...data.images, adv: newAdv } });
-                                notify(`✅ Banner ${idx+1} diperbarui!`);
-                              }}
-                              onError={() => notify("Gagal upload.", "error")} />
-                            <div style={{ display: "flex", gap: 6 }}>
-                              <input id={`adv-img-${idx}`} defaultValue={img} placeholder="atau URL..."
-                                style={{ flex: 1, padding: "6px 8px", border: "1px solid #D4C4A0", borderRadius: 5, fontSize: 11, outline: "none" }} />
-                              <button onClick={() => {
-                                const url = document.getElementById(`adv-img-${idx}`)?.value?.trim();
-                                if (!url) return notify("Masukkan URL.", "error");
-                                const newAdv = [...(data.images?.adv || ["",""])];
-                                newAdv[idx] = url;
-                                save({ ...data, images: { ...data.images, adv: newAdv } });
-                                notify(`✅ Banner ${idx+1} disimpan!`);
-                              }} style={{ padding: "6px 10px", background: "#3498db", color: "#fff", borderRadius: 5, fontSize: 11, border: "none", cursor: "pointer", whiteSpace: "nowrap" }}>OK</button>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-
                     {/* Gallery Images */}
                     <div style={{ paddingTop: 20, borderTop: "1px solid #F0E8D5" }}>
                       <h4 style={{ fontSize: 13, fontWeight: 700, color: "#2E3D3F", marginBottom: 4 }}>🖼 Galeri Home (6 Gambar)</h4>
@@ -15818,9 +15522,9 @@ export default function BricksyTravel() {
                     </div>
                   </div>
 
-                  {/* ═══════════════════════════════════════════════════════ */}
+                  {/* ======================================================= */}
                   {/* SECTION: KONTEN TEKS HALAMAN HOME */}
-                  {/* ═══════════════════════════════════════════════════════ */}
+                  {/* ======================================================= */}
                   <div style={{ background: "#fff", borderRadius: 8, padding: "22px 24px", marginBottom: 24, boxShadow: "0 2px 8px rgba(0,0,0,.06)", borderTop: "4px solid #27ae60" }}>
                     <h3 style={{ fontSize: 16, fontWeight: 700, color: "#2E3D3F", marginBottom: 4 }}>✏️ Konten Teks Halaman Home</h3>
                     <p style={{ fontSize: 12, color: "#5A6A6C", marginBottom: 20, lineHeight: 1.6 }}>
@@ -15862,9 +15566,9 @@ export default function BricksyTravel() {
                     })}
                   </div>
 
-                  {/* ═══════════════════════════════════════════════════════ */}
+                  {/* ======================================================= */}
                   {/* SECTION: KONTEN ABOUT & CONTACT */}
-                  {/* ═══════════════════════════════════════════════════════ */}
+                  {/* ======================================================= */}
                   <div style={{ background: "#fff", borderRadius: 8, padding: "22px 24px", marginBottom: 24, boxShadow: "0 2px 8px rgba(0,0,0,.06)", borderTop: "4px solid #e67e22" }}>
                     <h3 style={{ fontSize: 16, fontWeight: 700, color: "#2E3D3F", marginBottom: 4 }}>📋 Konten Halaman About & Kontak</h3>
                     <p style={{ fontSize: 12, color: "#5A6A6C", marginBottom: 20, lineHeight: 1.6 }}>
@@ -15908,9 +15612,9 @@ export default function BricksyTravel() {
                     })}
                   </div>
 
-                  {/* ═══════════════════════════════════════════════════════ */}
+                  {/* ======================================================= */}
                   {/* SECTION: TEMPLATE WHATSAPP */}
-                  {/* ═══════════════════════════════════════════════════════ */}
+                  {/* ======================================================= */}
                   <div style={{ background: "#fff", borderRadius: 8, padding: "22px 24px", marginBottom: 24, boxShadow: "0 2px 8px rgba(0,0,0,.06)", borderTop: "4px solid #25d366" }}>
                     <h3 style={{ fontSize: 15, fontWeight: 700, color: "#2E3D3F", marginBottom: 4 }}>💬 Template Pesan WhatsApp</h3>
                     <p style={{ fontSize: 12, color: "#5A6A6C", marginBottom: 6, lineHeight: 1.6 }}>
@@ -16035,7 +15739,7 @@ export default function BricksyTravel() {
                       })}
                     </div>
 
-                    {/* Static image setting — hanya tampil kalau mode static */}
+                    {/* Static image setting -- hanya tampil kalau mode static */}
                     {(data.content.heroMode || "slideshow") === "static" && (
                       <div style={{ background: "#f5eeff", borderRadius: 8, padding: "16px 18px", border: "1px solid #d8b4fe" }}>
                         <label style={{ fontSize: 11, fontWeight: 600, color: "#5A6A6C", letterSpacing: "1px", textTransform: "uppercase", display: "block", marginBottom: 8 }}>URL Gambar Statis Hero</label>
@@ -16111,9 +15815,9 @@ export default function BricksyTravel() {
                 </div>
               )}
 
-            </div>  {/* ─ end konten ─ */}
-          </div>    {/* ─ end flex row ─ */}
-        </div>      {/* ─ end panel wrapper ─ */}
+            </div>  {/* - end konten - */}
+          </div>    {/* - end flex row - */}
+        </div>      {/* - end panel wrapper - */}
       )}
     </div>
   );
