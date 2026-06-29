@@ -240,7 +240,13 @@ async function fsGet(docId) {
   } catch { return null; }
 }
 async function fsSet(docId, payload) {
-  try { await setDoc(doc(_db, FS_COLLECTION, docId), payload); } catch {}
+  const timeout = new Promise((_, reject) =>
+    setTimeout(() => reject(new Error("Firestore timeout – koneksi lambat atau offline")), 12000)
+  );
+  await Promise.race([
+    setDoc(doc(_db, FS_COLLECTION, docId), payload),
+    timeout,
+  ]);
 }
 
 /* ─── Cloudinary Config ─── */
@@ -8093,8 +8099,8 @@ function SubLayananAdmin({
       await save({ ...data, [crudKey]: next });
       notify("✅ Tersimpan!");
       setMode("list"); setForm(emptyForm()); setEditItem(null);
-    } catch { notify("❌ Gagal menyimpan."); }
-    setSaving(false);
+    } catch (err) { notify("❌ Gagal menyimpan: " + (err?.message || "Periksa koneksi.")); }
+    finally { setSaving(false); }
   };
 
   /* ── Hapus ── */
@@ -8103,7 +8109,7 @@ function SubLayananAdmin({
       await save({ ...data, [crudKey]: items.filter(it => it.id !== id) });
       notify("✅ Item dihapus.");
       setDelTarget(null);
-    } catch { notify("❌ Gagal menghapus."); }
+    } catch (err) { notify("❌ Gagal menghapus: " + (err?.message || "Periksa koneksi.")); }
   };
 
   /* ── Buka form edit ── */
@@ -12507,6 +12513,18 @@ function TemaEditForm({ temaOrig, editIdx, activeTemas, data, save, notify, onBa
   const [saving, setSaving] = useState(false);
   const [uploadingImg, setUploadingImg] = useState(false);
 
+  /* ── Multi-foto slideshow state ── */
+  const initImgs = () => {
+    const slug = temaOrig.slug;
+    const fromOverride = data?.temaPhotosOverride?.[slug];
+    if (fromOverride && fromOverride.length > 0) return fromOverride;
+    if (temaOrig.imgs && temaOrig.imgs.length > 0) return temaOrig.imgs;
+    if (temaOrig.img) return [{ img: temaOrig.img, label: temaOrig.nama || "" }];
+    return [];
+  };
+  const [slideshowImgs, setSlideshowImgs] = useState(initImgs);
+  const [slideshowPrev, setSlideshowPrev] = useState(0);
+
   const upd = (path, val) => {
     setDraft(prev => {
       const next = JSON.parse(JSON.stringify(prev));
@@ -12516,6 +12534,49 @@ function TemaEditForm({ temaOrig, editIdx, activeTemas, data, save, notify, onBa
       cur[keys[keys.length - 1]] = val;
       return next;
     });
+  };
+
+  const handleSlideUpload = async (f) => {
+    if (!f) return;
+    if (slideshowImgs.length >= 8) { notify("⚠️ Maksimal 8 foto per tema."); return; }
+    setUploadingImg(true);
+    try {
+      const u = await uploadToCloudinary(f);
+      setSlideshowImgs(prev => [...prev, { img: u, label: f.name.replace(/\.[^.]+$/, "") }]);
+      notify("✅ Foto ditambahkan!");
+    } catch { notify("❌ Gagal upload foto."); }
+    setUploadingImg(false);
+  };
+
+  const removeSlide = (i) => {
+    setSlideshowImgs(prev => {
+      const next = prev.filter((_, j) => j !== i);
+      setSlideshowPrev(p => Math.min(p, Math.max(0, next.length - 1)));
+      return next;
+    });
+  };
+
+  const updateSlideLabel = (i, lbl) =>
+    setSlideshowImgs(prev => prev.map((ph, j) => j === i ? { ...ph, label: lbl } : ph));
+
+  const moveSlide = (i, dir) => {
+    setSlideshowImgs(prev => {
+      const next = [...prev];
+      const j = i + dir;
+      if (j < 0 || j >= next.length) return prev;
+      [next[i], next[j]] = [next[j], next[i]];
+      return next;
+    });
+  };
+
+  // Upload foto via URL paste
+  const [pasteUrl, setPasteUrl] = useState("");
+  const addByUrl = () => {
+    if (!pasteUrl.trim()) return;
+    if (slideshowImgs.length >= 8) { notify("⚠️ Maksimal 8 foto."); return; }
+    setSlideshowImgs(prev => [...prev, { img: pasteUrl.trim(), label: "" }]);
+    setPasteUrl("");
+    notify("✅ Foto ditambahkan dari URL!");
   };
 
   const handleImgUpload = async (f) => {
@@ -12529,12 +12590,20 @@ function TemaEditForm({ temaOrig, editIdx, activeTemas, data, save, notify, onBa
   const saveTema = async () => {
     setSaving(true);
     try {
-      const nextTemas = activeTemas.map((t, i) => i === editIdx ? draft : t);
-      await save({ ...data, temaData: nextTemas });
+      /* Simpan imgs[] dan img (foto pertama sebagai fallback) ke dalam draft */
+      const imgFirst = slideshowImgs[0]?.img || draft.img || "";
+      const finalDraft = { ...draft, imgs: slideshowImgs, img: imgFirst };
+      const nextTemas = activeTemas.map((t, i) => i === editIdx ? finalDraft : t);
+      /* Juga update temaPhotosOverride agar slideshow kartu ikut berubah */
+      const nextOverride = { ...(data.temaPhotosOverride || {}), [draft.slug]: slideshowImgs };
+      await save({ ...data, temaData: nextTemas, temaPhotosOverride: nextOverride });
       notify("✅ Tema berhasil disimpan!");
       onBack();
-    } catch { notify("❌ Gagal menyimpan."); }
-    setSaving(false);
+    } catch (err) {
+      notify("❌ Gagal menyimpan: " + (err?.message || "Periksa koneksi internet Anda."));
+    } finally {
+      setSaving(false);
+    }
   };
 
   const inp = (label, path, multiline = false, placeholder = "") => (
@@ -12591,22 +12660,92 @@ function TemaEditForm({ temaOrig, editIdx, activeTemas, data, save, notify, onBa
           </div>
         </div>
         <div style={{ marginBottom: 14 }}>
-          <div style={{ fontSize: 11, fontWeight: 700, color: "#5A6A6C", marginBottom: 5, textTransform: "uppercase", letterSpacing: ".04em" }}>Foto Utama</div>
-          {draft.img && <img src={draft.img} alt="" style={{ width: "100%", maxHeight: 140, objectFit: "cover", borderRadius: 8, marginBottom: 8 }} onError={e => e.target.style.display = "none"} />}
-          <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 8 }}>
-            <label style={{ padding: "9px 16px", background: "#3498db", color: "#fff", borderRadius: 8, fontSize: 13, fontWeight: 700, cursor: uploadingImg ? "default" : "pointer" }}>
-              {uploadingImg ? "⏳ Mengupload..." : draft.img ? "🔄 Ganti Foto" : "📷 Upload Foto"}
-              <input type="file" accept="image/*" style={{ display: "none" }} disabled={uploadingImg} onChange={e => handleImgUpload(e.target.files?.[0])} />
-            </label>
-            {draft.img && (
-              <button onClick={() => upd("img", "")}
-                style={{ padding: "9px 16px", background: "#fee2e2", color: "#dc2626", border: "none", borderRadius: 8, fontSize: 13, fontWeight: 700, cursor: "pointer" }}>
-                🗑️ Hapus Foto
-              </button>
-            )}
+          <div style={{ fontSize: 11, fontWeight: 700, color: "#5A6A6C", marginBottom: 6, textTransform: "uppercase", letterSpacing: ".04em" }}>
+            📸 Foto Slideshow ({slideshowImgs.length}/8)
           </div>
-          <input type="text" value={draft.img || ""} onChange={e => upd("img", e.target.value)} placeholder="https://images.unsplash.com/..."
-            style={{ width: "100%", padding: "9px 12px", border: "1.5px solid #D5C9B0", borderRadius: 8, fontSize: 13, boxSizing: "border-box" }} />
+
+          {/* Preview slideshow */}
+          {slideshowImgs.length > 0 && (
+            <div style={{ position: "relative", width: "100%", height: 160, borderRadius: 10, overflow: "hidden", marginBottom: 10, background: "#E8DCC8" }}>
+              <img
+                key={slideshowPrev}
+                src={slideshowImgs[slideshowPrev]?.img}
+                alt=""
+                style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+                onError={e => e.target.style.display = "none"}
+              />
+              <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(0,0,0,.45) 0%, transparent 60%)", pointerEvents: "none" }} />
+              <div style={{ position: "absolute", bottom: 8, left: 10, fontSize: 11, color: "#fff", fontWeight: 700, textShadow: "0 1px 4px rgba(0,0,0,.7)" }}>
+                {slideshowImgs[slideshowPrev]?.label || `Foto ${slideshowPrev + 1}`}
+              </div>
+              <div style={{ position: "absolute", top: 8, right: 10, background: "rgba(0,0,0,.45)", color: "#C9AA71", fontSize: 10, fontWeight: 800, padding: "2px 8px", borderRadius: 12 }}>
+                {slideshowPrev + 1}/{slideshowImgs.length}
+              </div>
+              {slideshowImgs.length > 1 && (
+                <>
+                  <button onClick={() => setSlideshowPrev(p => (p - 1 + slideshowImgs.length) % slideshowImgs.length)}
+                    style={{ position: "absolute", left: 6, top: "50%", transform: "translateY(-50%)", background: "rgba(0,0,0,.4)", border: "none", color: "#fff", borderRadius: "50%", width: 26, height: 26, cursor: "pointer", fontSize: 12, display: "flex", alignItems: "center", justifyContent: "center" }}>◀</button>
+                  <button onClick={() => setSlideshowPrev(p => (p + 1) % slideshowImgs.length)}
+                    style={{ position: "absolute", right: 6, top: "50%", transform: "translateY(-50%)", background: "rgba(0,0,0,.4)", border: "none", color: "#fff", borderRadius: "50%", width: 26, height: 26, cursor: "pointer", fontSize: 12, display: "flex", alignItems: "center", justifyContent: "center" }}>▶</button>
+                </>
+              )}
+            </div>
+          )}
+
+          {/* Thumbnail grid */}
+          {slideshowImgs.length > 0 && (
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(100px,1fr))", gap: 8, marginBottom: 10 }}>
+              {slideshowImgs.map((ph, i) => (
+                <div key={i} style={{ position: "relative", borderRadius: 8, overflow: "hidden", border: slideshowPrev === i ? "2.5px solid #C9AA71" : "1.5px solid #E8DCC8", cursor: "pointer" }}
+                  onClick={() => setSlideshowPrev(i)}>
+                  <img src={ph.img} alt={ph.label} style={{ width: "100%", height: 70, objectFit: "cover", display: "block" }} onError={e => e.target.style.display = "none"} />
+                  <div style={{ padding: "4px 6px 3px" }}>
+                    <input type="text" value={ph.label || ""} onClick={e => e.stopPropagation()} onChange={e => updateSlideLabel(i, e.target.value)}
+                      placeholder={`Foto ${i + 1}`}
+                      style={{ width: "100%", fontSize: 10, padding: "2px 5px", border: "1px solid #D5C9B0", borderRadius: 4, boxSizing: "border-box" }} />
+                  </div>
+                  {/* Tombol urutan & hapus */}
+                  <div style={{ display: "flex", justifyContent: "center", gap: 3, padding: "0 4px 4px" }}>
+                    <button onClick={e => { e.stopPropagation(); moveSlide(i, -1); }}
+                      style={{ flex: 1, fontSize: 10, background: "#F5EDD8", border: "none", borderRadius: 4, cursor: "pointer", padding: "2px 0", color: "#5A6A6C", fontWeight: 700 }}>←</button>
+                    <button onClick={e => { e.stopPropagation(); moveSlide(i, 1); }}
+                      style={{ flex: 1, fontSize: 10, background: "#F5EDD8", border: "none", borderRadius: 4, cursor: "pointer", padding: "2px 0", color: "#5A6A6C", fontWeight: 700 }}>→</button>
+                    <button onClick={e => { e.stopPropagation(); removeSlide(i); }}
+                      style={{ flex: 1, fontSize: 10, background: "#fee2e2", border: "none", borderRadius: 4, cursor: "pointer", padding: "2px 0", color: "#dc2626", fontWeight: 700 }}>✕</button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {slideshowImgs.length === 0 && (
+            <div style={{ textAlign: "center", padding: "20px", border: "1.5px dashed #D5C9B0", borderRadius: 8, color: "#A89070", fontSize: 13, marginBottom: 10 }}>
+              Belum ada foto. Upload foto atau paste URL di bawah.
+            </div>
+          )}
+
+          {/* Tombol upload */}
+          <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 8 }}>
+            <label style={{ padding: "9px 16px", background: slideshowImgs.length >= 8 ? "#ccc" : "#3498db", color: "#fff", borderRadius: 8, fontSize: 13, fontWeight: 700, cursor: slideshowImgs.length >= 8 ? "default" : "pointer" }}>
+              {uploadingImg ? "⏳ Mengupload..." : "📷 Upload Foto"}
+              <input type="file" accept="image/*" style={{ display: "none" }} disabled={uploadingImg || slideshowImgs.length >= 8} onChange={e => handleSlideUpload(e.target.files?.[0])} />
+            </label>
+          </div>
+
+          {/* Paste URL */}
+          <div style={{ display: "flex", gap: 8 }}>
+            <input type="text" value={pasteUrl} onChange={e => setPasteUrl(e.target.value)}
+              onKeyDown={e => e.key === "Enter" && addByUrl()}
+              placeholder="https://... paste URL foto lalu tekan Enter atau Tambah"
+              style={{ flex: 1, padding: "9px 12px", border: "1.5px solid #D5C9B0", borderRadius: 8, fontSize: 12, boxSizing: "border-box" }} />
+            <button onClick={addByUrl} disabled={!pasteUrl.trim() || slideshowImgs.length >= 8}
+              style={{ padding: "9px 14px", background: "#C9AA71", color: "#fff", border: "none", borderRadius: 8, fontSize: 12, fontWeight: 700, cursor: "pointer", whiteSpace: "nowrap" }}>
+              + Tambah
+            </button>
+          </div>
+          <div style={{ fontSize: 11, color: "#8B9A9C", marginTop: 6 }}>
+            {slideshowImgs.length}/8 foto · Foto pertama jadi thumbnail kartu. Klik thumbnail untuk preview. ← → untuk urutan.
+          </div>
         </div>
       </div>
 
@@ -15448,8 +15587,8 @@ export default function BricksyTravel() {
                         const override = { ...(data.temaPhotosOverride || {}), [slug]: photos };
                         await save({ ...data, temaPhotosOverride: override });
                         notify("✅ Foto tema tersimpan!");
-                      } catch { notify("❌ Gagal simpan."); }
-                      setSav(false);
+                      } catch (err) { notify("❌ Gagal simpan: " + (err?.message || "Periksa koneksi.")); }
+                      finally { setSav(false); }
                     };
                     const removePhoto = (i) => setPhotos(p => p.filter((_,j) => j !== i));
                     const updateLabel = (i, lbl) => setPhotos(p => p.map((ph,j) => j===i ? {...ph,label:lbl} : ph));
