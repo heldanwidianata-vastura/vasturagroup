@@ -241,7 +241,7 @@ async function fsGet(docId) {
 }
 async function fsSet(docId, payload) {
   const timeout = new Promise((_, reject) =>
-    setTimeout(() => reject(new Error("Firestore timeout – koneksi lambat atau offline")), 12000)
+    setTimeout(() => reject(new Error("Firestore timeout – koneksi lambat atau offline")), 30000)
   );
   await Promise.race([
     setDoc(doc(_db, FS_COLLECTION, docId), payload),
@@ -1744,6 +1744,11 @@ const GS = () => (
     @keyframes navNamePulse{0%,100%{color:#fff}33%{color:#E8C96A}66%{color:#2E3D3F}}
     @keyframes navPulse{0%{color:#fff}30%{color:#fff}33%{color:#E8C96A}63%{color:#E8C96A}66%{color:#2E3D3F}96%{color:#2E3D3F}100%{color:#fff}}
     @keyframes toastSlideIn{from{opacity:0;transform:translateX(60px) scale(.94)}to{opacity:1;transform:none}}
+    @keyframes saveBarIn{from{opacity:0;transform:translateY(80px) scale(.97)}to{opacity:1;transform:none}}
+    @keyframes saveBarOut{from{opacity:1;transform:none}to{opacity:0;transform:translateY(80px) scale(.97)}}
+    @keyframes saveFill{0%{width:0%}100%{width:100%}}
+    @keyframes saveCheckPop{0%{transform:scale(0) rotate(-15deg);opacity:0}70%{transform:scale(1.25) rotate(4deg)}100%{transform:scale(1) rotate(0deg);opacity:1}}
+    @keyframes saveErrShake{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-5px)}40%,80%{transform:translateX(5px)}}
     @keyframes toastCountdown{from{transform:scaleX(1)}to{transform:scaleX(0)}}
     @keyframes popIn{from{opacity:0;transform:scale(.82) translateY(24px)}to{opacity:1;transform:none}}
     @keyframes floatBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
@@ -13022,6 +13027,7 @@ export default function BricksyTravel() {
   const [forgotNewPass, setForgotNewPass] = useState({ val: "", confirm: "" });
   const [forgotErr, setForgotErr] = useState("");
   const [notif, setNotif] = useState(null);
+  const [saveProgress, setSaveProgress] = useState(null); // null | { pct, label, status: "saving"|"success"|"error", msg? }
   const [mobileMenu, setMobileMenu] = useState(false);
   const [editImg, setEditImg] = useState({ group: null, idx: null, url: "" });
   const [editContent, setEditContent] = useState({});
@@ -13484,16 +13490,37 @@ export default function BricksyTravel() {
   }); // tanpa dependency array → jalan setiap render, selalu up-to-date
 
   const save = async (d) => {
-    // Selalu merge dengan DEFAULT_DATA sebelum simpan:
-    // field baru yang ditambahkan di kode (lewat git push) tidak akan hilang
+    // Tampilkan progress bar
+    setSaveProgress({ pct: 5, label: "Menyiapkan data...", status: "saving" });
+    await new Promise(r => setTimeout(r, 80));
+
+    // Selalu merge dengan DEFAULT_DATA sebelum simpan
     const safeData = mergeWithDefaults(d, DEFAULT_DATA);
     setData(safeData);
-    dataRef.current = safeData; // sync ref agar popstate closure selalu punya data terbaru
+    dataRef.current = safeData;
     const payload = JSON.stringify(safeData);
-    // Simpan ke Firestore (cloud) + window.storage (lokal backup)
-    await fsSet("main", { payload, updatedAt: Date.now() });
-    try { await window.storage?.set("bricksy-v2", payload); } catch {}
+
+    setSaveProgress({ pct: 30, label: "Menyimpan ke lokal...", status: "saving" });
+    await new Promise(r => setTimeout(r, 80));
+
+    // 1. Simpan lokal dulu (cepat)
     try { localStorage.setItem("realestate-cache-v2", payload); } catch {}
+    try { await window.storage?.set("bricksy-v2", payload); } catch {}
+
+    setSaveProgress({ pct: 60, label: "Sinkronisasi ke cloud...", status: "saving" });
+
+    // 2. Firestore cloud sync
+    let fsOk = false;
+    try {
+      await fsSet("main", { payload, updatedAt: Date.now() });
+      fsOk = true;
+    } catch (err) {
+      console.warn("[Firestore] Sync gagal:", err?.message || err);
+    }
+
+    setSaveProgress({ pct: 100, label: fsOk ? "Tersimpan!" : "Lokal OK, cloud tertunda", status: fsOk ? "success" : "warning" });
+    await new Promise(r => setTimeout(r, 1800));
+    setSaveProgress(null);
   };
 
   const notify = (msg, type = "success") => {
@@ -13936,6 +13963,138 @@ export default function BricksyTravel() {
           <div style={{ height: 3, background: "rgba(255,255,255,.25)", position: "relative", overflow: "hidden" }}>
             <div style={{ position: "absolute", inset: 0, background: "rgba(255,255,255,.7)",
               animation: "toastCountdown 3.2s linear forwards", transformOrigin: "left" }} />
+          </div>
+        </div>
+      )}
+
+      {/* ── SAVE PROGRESS OVERLAY ── */}
+      {saveProgress && (
+        <div style={{
+          position: "fixed", bottom: 28, right: 28, zIndex: 10001,
+          width: 300, background: "#fff", borderRadius: 14,
+          boxShadow: "0 12px 48px rgba(0,0,0,.18), 0 2px 8px rgba(0,0,0,.08)",
+          overflow: "hidden",
+          animation: "saveBarIn .35s cubic-bezier(.21,1.02,.73,1) forwards",
+          border: saveProgress.status === "success" ? "1.5px solid #27ae60"
+                : saveProgress.status === "warning"  ? "1.5px solid #f39c12"
+                : saveProgress.status === "error"    ? "1.5px solid #e74c3c"
+                : "1.5px solid #E8DCC8",
+        }}>
+          {/* Header */}
+          <div style={{
+            padding: "13px 16px 10px",
+            display: "flex", alignItems: "center", gap: 10,
+            background: saveProgress.status === "success" ? "#f0fff6"
+                      : saveProgress.status === "warning"  ? "#fffbf0"
+                      : saveProgress.status === "error"    ? "#fff5f5"
+                      : "#FDFAF4",
+          }}>
+            {/* Icon */}
+            <div style={{
+              width: 34, height: 34, borderRadius: "50%", flexShrink: 0,
+              display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18,
+              background: saveProgress.status === "success" ? "#27ae60"
+                        : saveProgress.status === "warning"  ? "#f39c12"
+                        : saveProgress.status === "error"    ? "#e74c3c"
+                        : "#2E3D3F",
+              animation: saveProgress.status === "success" ? "saveCheckPop .45s cubic-bezier(.34,1.56,.64,1) forwards"
+                       : saveProgress.status === "error"   ? "saveErrShake .4s ease forwards"
+                       : "none",
+            }}>
+              {saveProgress.status === "success" ? "✓"
+               : saveProgress.status === "warning" ? "⚠"
+               : saveProgress.status === "error"   ? "✕"
+               : <span style={{ display:"inline-block", animation:"spin .7s linear infinite", fontSize:15 }}>⟳</span>}
+            </div>
+            <div style={{ flex: 1 }}>
+              <div style={{
+                fontSize: 13, fontWeight: 700,
+                color: saveProgress.status === "success" ? "#27ae60"
+                     : saveProgress.status === "warning"  ? "#b7770d"
+                     : saveProgress.status === "error"    ? "#e74c3c"
+                     : "#2E3D3F",
+              }}>
+                {saveProgress.status === "success" ? "Berhasil Disimpan"
+                 : saveProgress.status === "warning" ? "Tersimpan (Lokal)"
+                 : saveProgress.status === "error"   ? "Gagal Menyimpan"
+                 : "Menyimpan..."}
+              </div>
+              <div style={{ fontSize: 11, color: "#5A6A6C", marginTop: 1 }}>
+                {saveProgress.label}
+              </div>
+            </div>
+            {/* Persentase */}
+            <div style={{
+              fontSize: 15, fontWeight: 900, minWidth: 40, textAlign: "right",
+              color: saveProgress.status === "success" ? "#27ae60"
+                   : saveProgress.status === "warning"  ? "#f39c12"
+                   : saveProgress.status === "error"    ? "#e74c3c"
+                   : "#8B6914",
+              fontFamily: "'Playfair Display', serif",
+            }}>
+              {saveProgress.pct}%
+            </div>
+          </div>
+
+          {/* Progress bar */}
+          <div style={{ height: 5, background: "#F5EDD8", position: "relative" }}>
+            <div style={{
+              position: "absolute", left: 0, top: 0, bottom: 0,
+              width: `${saveProgress.pct}%`,
+              background: saveProgress.status === "success"
+                ? "linear-gradient(90deg,#27ae60,#2ecc71)"
+                : saveProgress.status === "warning"
+                ? "linear-gradient(90deg,#f39c12,#f1c40f)"
+                : saveProgress.status === "error"
+                ? "linear-gradient(90deg,#e74c3c,#c0392b)"
+                : "linear-gradient(90deg,#2E3D3F,#8B6914,#C9AA71)",
+              transition: "width .45s cubic-bezier(.4,0,.2,1)",
+              borderRadius: "0 3px 3px 0",
+            }} />
+            {/* Shimmer saat loading */}
+            {saveProgress.status === "saving" && (
+              <div style={{
+                position: "absolute", top: 0, bottom: 0, left: 0,
+                width: `${saveProgress.pct}%`,
+                background: "linear-gradient(90deg,transparent 30%,rgba(255,255,255,.45) 60%,transparent 90%)",
+                backgroundSize: "200% 100%",
+                animation: "galScroll 1.2s linear infinite",
+                borderRadius: "0 3px 3px 0",
+              }} />
+            )}
+          </div>
+
+          {/* Steps indicator */}
+          <div style={{ padding: "8px 16px 11px", display: "flex", gap: 6, alignItems: "center" }}>
+            {[
+              { pct: 30,  label: "Lokal",  icon: "💾" },
+              { pct: 60,  label: "Cloud",  icon: "☁️" },
+              { pct: 100, label: "Selesai",icon: "✅" },
+            ].map((step, i) => {
+              const done = saveProgress.pct >= step.pct;
+              const active = saveProgress.pct >= (i === 0 ? 5 : i === 1 ? 30 : 60) && !done;
+              return (
+                <React.Fragment key={step.label}>
+                  <div style={{ display:"flex", flexDirection:"column", alignItems:"center", gap:2, flex:1 }}>
+                    <div style={{
+                      width: 22, height: 22, borderRadius: "50%",
+                      display:"flex", alignItems:"center", justifyContent:"center",
+                      fontSize: 11,
+                      background: done
+                        ? (saveProgress.status === "error" && i === 2 ? "#e74c3c" : saveProgress.status === "warning" && i === 2 ? "#f39c12" : "#27ae60")
+                        : active ? "#F5EDD8" : "#F0EBE0",
+                      border: done ? "none" : active ? "1.5px solid #C9AA71" : "1.5px solid #E8DCC8",
+                      transition: "all .3s",
+                      fontWeight: 700, color: done ? "#fff" : "#5A6A6C",
+                    }}>
+                      {done ? (i === 2 && saveProgress.status === "error" ? "✕" : i === 2 && saveProgress.status === "warning" ? "!" : "✓") : (active ? <span style={{ animation:"spin .7s linear infinite", display:"inline-block", fontSize:10 }}>⟳</span> : i+1)}
+                    </div>
+                    <span style={{ fontSize: 9, color: done ? "#27ae60" : "#A89070", fontWeight: done ? 700 : 500 }}>{step.label}</span>
+                  </div>
+                  {i < 2 && <div style={{ flex:2, height:1.5, background: saveProgress.pct > (i===0?30:60) ? "#27ae60" : "#E8DCC8", transition:"background .4s", marginBottom:12 }} />}
+                </React.Fragment>
+              );
+            })}
           </div>
         </div>
       )}
