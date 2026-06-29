@@ -15916,9 +15916,9 @@ export default function BricksyTravel() {
                 </div>
               )}
 
-            </div>  {/* - end konten - */}
-          </div>    {/* - end flex row - */}
-        </div>      {/* - end panel wrapper - */}
+            </div> {/* - end konten - */}
+          </div> {/* - end flex row - */}
+        </div> {/* - end panel wrapper - */}
       )}
     </div>
   );
