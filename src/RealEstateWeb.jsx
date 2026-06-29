@@ -12502,9 +12502,10 @@ function TemaHeroImgRow({ data, save, notify, uploadToCloudinary }) {
 }
 
 /* ── 3. Form edit satu tema ── */
-function TemaEditForm({ temaOrig, editIdx, activeTemas, data, save, notify, onBack }) {
+function TemaEditForm({ temaOrig, editIdx, activeTemas, data, save, notify, onBack, uploadToCloudinary }) {
   const [draft, setDraft] = useState(() => JSON.parse(JSON.stringify(temaOrig)));
   const [saving, setSaving] = useState(false);
+  const [uploadingImg, setUploadingImg] = useState(false);
 
   const upd = (path, val) => {
     setDraft(prev => {
@@ -12515,6 +12516,14 @@ function TemaEditForm({ temaOrig, editIdx, activeTemas, data, save, notify, onBa
       cur[keys[keys.length - 1]] = val;
       return next;
     });
+  };
+
+  const handleImgUpload = async (f) => {
+    if (!f) return;
+    setUploadingImg(true);
+    try { upd("img", await uploadToCloudinary(f)); notify("✅ Foto diupload!"); }
+    catch { notify("❌ Gagal upload foto."); }
+    setUploadingImg(false);
   };
 
   const saveTema = async () => {
@@ -12581,8 +12590,24 @@ function TemaEditForm({ temaOrig, editIdx, activeTemas, data, save, notify, onBa
               style={{ flex: 1, padding: "9px 12px", border: "1.5px solid #D5C9B0", borderRadius: 8, fontSize: 13 }} />
           </div>
         </div>
-        {inp("URL Foto Utama (img)", "img", false, "https://images.unsplash.com/...")}
-        {draft.img && <img src={draft.img} alt="" style={{ width: "100%", maxHeight: 140, objectFit: "cover", borderRadius: 8, marginTop: 6 }} onError={e => e.target.style.display = "none"} />}
+        <div style={{ marginBottom: 14 }}>
+          <div style={{ fontSize: 11, fontWeight: 700, color: "#5A6A6C", marginBottom: 5, textTransform: "uppercase", letterSpacing: ".04em" }}>Foto Utama</div>
+          {draft.img && <img src={draft.img} alt="" style={{ width: "100%", maxHeight: 140, objectFit: "cover", borderRadius: 8, marginBottom: 8 }} onError={e => e.target.style.display = "none"} />}
+          <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 8 }}>
+            <label style={{ padding: "9px 16px", background: "#3498db", color: "#fff", borderRadius: 8, fontSize: 13, fontWeight: 700, cursor: uploadingImg ? "default" : "pointer" }}>
+              {uploadingImg ? "⏳ Mengupload..." : draft.img ? "🔄 Ganti Foto" : "📷 Upload Foto"}
+              <input type="file" accept="image/*" style={{ display: "none" }} disabled={uploadingImg} onChange={e => handleImgUpload(e.target.files?.[0])} />
+            </label>
+            {draft.img && (
+              <button onClick={() => upd("img", "")}
+                style={{ padding: "9px 16px", background: "#fee2e2", color: "#dc2626", border: "none", borderRadius: 8, fontSize: 13, fontWeight: 700, cursor: "pointer" }}>
+                🗑️ Hapus Foto
+              </button>
+            )}
+          </div>
+          <input type="text" value={draft.img || ""} onChange={e => upd("img", e.target.value)} placeholder="https://images.unsplash.com/..."
+            style={{ width: "100%", padding: "9px 12px", border: "1.5px solid #D5C9B0", borderRadius: 8, fontSize: 13, boxSizing: "border-box" }} />
+        </div>
       </div>
 
       {/* Fitur */}
@@ -12811,6 +12836,7 @@ function TemaRumahAdminPanel({ data, save, notify, uploadToCloudinary }) {
               data={data}
               save={save}
               notify={notify}
+              uploadToCloudinary={uploadToCloudinary}
               onBack={() => setEditIdx(null)}
             />
           )}
