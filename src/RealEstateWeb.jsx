@@ -12433,6 +12433,393 @@ function NavDropdownGaleri({ page, navigateTo, navDropdownGaleri }) {
   );
 }
 
+/* ══════════════════════════════════════════════════════════════
+   TEMA RUMAH ADMIN — proper components (no IIFE, Rules of Hooks safe)
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── 1. Per-field row di Hero tab ── */
+function TemaHeroFieldRow({ fieldKey, label, placeholder, data, save, notify }) {
+  const [val, setVal] = useState(data[fieldKey] || "");
+  const [saving, setSaving] = useState(false);
+  const doSave = async () => {
+    setSaving(true);
+    try { await save({ ...data, [fieldKey]: val }); notify("✅ Tersimpan!"); }
+    catch { notify("❌ Gagal menyimpan."); }
+    setSaving(false);
+  };
+  return (
+    <div style={{ background:"#fff", border:"1.5px solid #E8DCC8", borderRadius:10, padding:"16px 18px", marginBottom:12 }}>
+      <div style={{ fontSize:12, fontWeight:700, color:"#5A6A6C", marginBottom:6 }}>{label}</div>
+      <div style={{ display:"flex", gap:10 }}>
+        <input type="text" value={val} placeholder={placeholder} onChange={e => setVal(e.target.value)}
+          style={{ flex:1, padding:"9px 12px", border:"1.5px solid #D5C9B0", borderRadius:8, fontSize:14, boxSizing:"border-box" }} />
+        <button onClick={doSave} disabled={saving}
+          style={{ padding:"9px 18px", background:"#C9AA71", color:"#fff", border:"none", borderRadius:8, fontSize:13, fontWeight:700, cursor:"pointer", whiteSpace:"nowrap" }}>
+          {saving ? "..." : "Simpan"}
+        </button>
+      </div>
+      {data[fieldKey] && <div style={{ fontSize:11, color:"#8B9A9C", marginTop:4 }}>Tersimpan: <em>{data[fieldKey]}</em></div>}
+    </div>
+  );
+}
+
+/* ── 2. Upload foto hero ── */
+function TemaHeroImgRow({ data, save, notify, uploadToCloudinary }) {
+  const [url, setUrl] = useState(data.temaHeroImg || "");
+  const [upl, setUpl] = useState(false);
+  const [sav, setSav] = useState(false);
+  const doUpload = async (f) => {
+    if (!f) return; setUpl(true);
+    try { const u = await uploadToCloudinary(f); setUrl(u); notify("✅ Foto diupload!"); }
+    catch { notify("❌ Gagal upload."); }
+    setUpl(false);
+  };
+  const doSave = async () => {
+    setSav(true);
+    try { await save({ ...data, temaHeroImg: url }); notify("✅ Foto hero tersimpan!"); }
+    catch { notify("❌ Gagal simpan."); }
+    setSav(false);
+  };
+  return (
+    <div style={{ marginTop:24, background:"#fff", border:"1.5px solid #E8DCC8", borderRadius:10, padding:"16px 18px" }}>
+      <div style={{ fontSize:13, fontWeight:700, color:"#5A6A6C", marginBottom:8 }}>Foto Background Hero Tema Rumah</div>
+      {url && <img src={url} alt="" style={{ width:"100%", maxHeight:160, objectFit:"cover", borderRadius:8, marginBottom:10 }} />}
+      <div style={{ display:"flex", gap:10, flexWrap:"wrap" }}>
+        <label style={{ padding:"9px 18px", background:"#3498db", color:"#fff", borderRadius:8, fontSize:13, fontWeight:700, cursor:"pointer" }}>
+          {upl ? "⏳ Upload..." : "📷 Upload Foto"}
+          <input type="file" accept="image/*" style={{ display:"none" }} onChange={e => doUpload(e.target.files[0])} />
+        </label>
+        <button onClick={doSave} disabled={sav}
+          style={{ padding:"9px 18px", background:"#C9AA71", color:"#fff", border:"none", borderRadius:8, fontSize:13, fontWeight:700, cursor:"pointer" }}>
+          {sav ? "..." : "💾 Simpan URL"}
+        </button>
+      </div>
+      <input type="text" value={url} onChange={e => setUrl(e.target.value)}
+        placeholder="https://... atau paste URL foto"
+        style={{ width:"100%", padding:"9px 12px", border:"1.5px solid #D5C9B0", borderRadius:8, fontSize:13, marginTop:8, boxSizing:"border-box" }} />
+    </div>
+  );
+}
+
+/* ── 3. Form edit satu tema ── */
+function TemaEditForm({ temaOrig, editIdx, activeTemas, data, save, notify, onBack }) {
+  const [draft, setDraft] = useState(() => JSON.parse(JSON.stringify(temaOrig)));
+  const [saving, setSaving] = useState(false);
+
+  const upd = (path, val) => {
+    setDraft(prev => {
+      const next = JSON.parse(JSON.stringify(prev));
+      const keys = path.split(".");
+      let cur = next;
+      for (let i = 0; i < keys.length - 1; i++) cur = cur[keys[i]];
+      cur[keys[keys.length - 1]] = val;
+      return next;
+    });
+  };
+
+  const saveTema = async () => {
+    setSaving(true);
+    try {
+      const nextTemas = activeTemas.map((t, i) => i === editIdx ? draft : t);
+      await save({ ...data, temaData: nextTemas });
+      notify("✅ Tema berhasil disimpan!");
+      onBack();
+    } catch { notify("❌ Gagal menyimpan."); }
+    setSaving(false);
+  };
+
+  const inp = (label, path, multiline = false, placeholder = "") => (
+    <div style={{ marginBottom: 14 }}>
+      <div style={{ fontSize: 11, fontWeight: 700, color: "#5A6A6C", marginBottom: 5, textTransform: "uppercase", letterSpacing: ".04em" }}>{label}</div>
+      {multiline
+        ? <textarea value={path.split(".").reduce((o, k) => o?.[k], draft) || ""} onChange={e => upd(path, e.target.value)} placeholder={placeholder} rows={3}
+            style={{ width: "100%", padding: "9px 12px", border: "1.5px solid #D5C9B0", borderRadius: 8, fontSize: 13, boxSizing: "border-box", resize: "vertical", fontFamily: "inherit" }} />
+        : <input type="text" value={path.split(".").reduce((o, k) => o?.[k], draft) || ""} onChange={e => upd(path, e.target.value)} placeholder={placeholder}
+            style={{ width: "100%", padding: "9px 12px", border: "1.5px solid #D5C9B0", borderRadius: 8, fontSize: 13, boxSizing: "border-box" }} />
+      }
+    </div>
+  );
+
+  const SS = { background: "#fff", border: "1.5px solid #E8DCC8", borderRadius: 12, padding: "18px 20px", marginBottom: 16 };
+  const ST = (icon, title) => (
+    <div style={{ fontSize: 14, fontWeight: 800, color: "#2E3D3F", marginBottom: 14, display: "flex", alignItems: "center", gap: 8 }}>
+      <span>{icon}</span> {title}
+    </div>
+  );
+
+  return (
+    <div>
+      {/* Header */}
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 18, flexWrap: "wrap", gap: 10 }}>
+        <button onClick={onBack}
+          style={{ padding: "8px 16px", background: "#F5EDD8", color: "#5A6A6C", border: "none", borderRadius: 8, fontSize: 13, fontWeight: 700, cursor: "pointer" }}>
+          ← Kembali
+        </button>
+        <div style={{ fontWeight: 800, fontSize: 16, color: "#2E3D3F" }}>Edit: {draft.no} · {draft.nama}</div>
+        <button onClick={saveTema} disabled={saving}
+          style={{ padding: "8px 20px", background: "#C9AA71", color: "#fff", border: "none", borderRadius: 8, fontSize: 13, fontWeight: 700, cursor: "pointer" }}>
+          {saving ? "⏳ Menyimpan..." : "💾 Simpan Tema"}
+        </button>
+      </div>
+
+      {/* Identitas */}
+      <div style={SS}>
+        {ST("🏷️", "Identitas Tema")}
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
+          <div>{inp("No. Urut", "no", false, "01")}</div>
+          <div>{inp("Slug (URL key)", "slug", false, "modern-minimalis")}</div>
+        </div>
+        {inp("Nama Tema", "nama", false, "Modern Minimalis")}
+        {inp("Tagline (1 kalimat singkat)", "tagline", false, "Desain simpel, elegan...")}
+        {inp("Deskripsi panjang (hero detail)", "deskripsi", true)}
+        <div style={{ marginBottom: 14 }}>
+          <div style={{ fontSize: 11, fontWeight: 700, color: "#5A6A6C", marginBottom: 5, textTransform: "uppercase", letterSpacing: ".04em" }}>Warna Aksen (hex)</div>
+          <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
+            <input type="color" value={draft.warna || "#C9AA71"} onChange={e => upd("warna", e.target.value)}
+              style={{ width: 40, height: 36, border: "1.5px solid #D5C9B0", borderRadius: 6, cursor: "pointer", padding: 2 }} />
+            <input type="text" value={draft.warna || ""} onChange={e => upd("warna", e.target.value)}
+              style={{ flex: 1, padding: "9px 12px", border: "1.5px solid #D5C9B0", borderRadius: 8, fontSize: 13 }} />
+          </div>
+        </div>
+        {inp("URL Foto Utama (img)", "img", false, "https://images.unsplash.com/...")}
+        {draft.img && <img src={draft.img} alt="" style={{ width: "100%", maxHeight: 140, objectFit: "cover", borderRadius: 8, marginTop: 6 }} onError={e => e.target.style.display = "none"} />}
+      </div>
+
+      {/* Fitur */}
+      <div style={SS}>
+        {ST("✨", "Fitur (badge kartu)")}
+        {(draft.fitur || []).map((f, fi) => (
+          <div key={fi} style={{ display: "flex", gap: 8, marginBottom: 8, alignItems: "center" }}>
+            <input type="text" value={f.icon || ""} onChange={e => { const a = [...draft.fitur]; a[fi] = { ...a[fi], icon: e.target.value }; upd("fitur", a); }}
+              placeholder="🏠" style={{ width: 50, padding: "8px", border: "1.5px solid #D5C9B0", borderRadius: 8, fontSize: 16, textAlign: "center" }} />
+            <input type="text" value={f.label || ""} onChange={e => { const a = [...draft.fitur]; a[fi] = { ...a[fi], label: e.target.value }; upd("fitur", a); }}
+              placeholder="Label fitur" style={{ flex: 1, padding: "8px 12px", border: "1.5px solid #D5C9B0", borderRadius: 8, fontSize: 13 }} />
+            <button onClick={() => { const a = draft.fitur.filter((_, j) => j !== fi); upd("fitur", a); }}
+              style={{ padding: "8px 10px", background: "#fee2e2", color: "#dc2626", border: "none", borderRadius: 8, cursor: "pointer", fontWeight: 700, fontSize: 12 }}>✕</button>
+          </div>
+        ))}
+        <button onClick={() => upd("fitur", [...(draft.fitur || []), { icon: "⭐", label: "" }])}
+          style={{ padding: "7px 16px", background: "#F5EDD8", color: "#5A6A6C", border: "1.5px dashed #D5C9B0", borderRadius: 8, fontSize: 13, fontWeight: 700, cursor: "pointer" }}>+ Tambah Fitur</button>
+      </div>
+
+      {/* Eksterior */}
+      <div style={SS}>
+        {ST("🏗️", "Eksterior")}
+        {inp("Deskripsi eksterior", "detail.exterior.desc", true)}
+        <div style={{ fontSize: 11, fontWeight: 700, color: "#5A6A6C", marginBottom: 8, textTransform: "uppercase", letterSpacing: ".04em" }}>Poin Eksterior</div>
+        {(draft.detail?.exterior?.poin || []).map((p, pi) => (
+          <div key={pi} style={{ display: "flex", gap: 8, marginBottom: 6 }}>
+            <input type="text" value={p} onChange={e => { const a = [...draft.detail.exterior.poin]; a[pi] = e.target.value; upd("detail.exterior.poin", a); }}
+              style={{ flex: 1, padding: "7px 12px", border: "1.5px solid #D5C9B0", borderRadius: 8, fontSize: 13 }} />
+            <button onClick={() => upd("detail.exterior.poin", draft.detail.exterior.poin.filter((_, j) => j !== pi))}
+              style={{ padding: "7px 10px", background: "#fee2e2", color: "#dc2626", border: "none", borderRadius: 8, cursor: "pointer", fontWeight: 700 }}>✕</button>
+          </div>
+        ))}
+        <button onClick={() => upd("detail.exterior.poin", [...(draft.detail?.exterior?.poin || []), ""])}
+          style={{ padding: "6px 14px", background: "#F5EDD8", border: "1.5px dashed #D5C9B0", color: "#5A6A6C", borderRadius: 8, fontSize: 12, fontWeight: 700, cursor: "pointer" }}>+ Poin</button>
+      </div>
+
+      {/* Interior */}
+      <div style={SS}>
+        {ST("🛋️", "Interior")}
+        {inp("Deskripsi interior", "detail.interior.desc", true)}
+        <div style={{ fontSize: 11, fontWeight: 700, color: "#5A6A6C", marginBottom: 8, textTransform: "uppercase", letterSpacing: ".04em" }}>Poin Interior</div>
+        {(draft.detail?.interior?.poin || []).map((p, pi) => (
+          <div key={pi} style={{ display: "flex", gap: 8, marginBottom: 6 }}>
+            <input type="text" value={p} onChange={e => { const a = [...draft.detail.interior.poin]; a[pi] = e.target.value; upd("detail.interior.poin", a); }}
+              style={{ flex: 1, padding: "7px 12px", border: "1.5px solid #D5C9B0", borderRadius: 8, fontSize: 13 }} />
+            <button onClick={() => upd("detail.interior.poin", draft.detail.interior.poin.filter((_, j) => j !== pi))}
+              style={{ padding: "7px 10px", background: "#fee2e2", color: "#dc2626", border: "none", borderRadius: 8, cursor: "pointer", fontWeight: 700 }}>✕</button>
+          </div>
+        ))}
+        <button onClick={() => upd("detail.interior.poin", [...(draft.detail?.interior?.poin || []), ""])}
+          style={{ padding: "6px 14px", background: "#F5EDD8", border: "1.5px dashed #D5C9B0", color: "#5A6A6C", borderRadius: 8, fontSize: 12, fontWeight: 700, cursor: "pointer" }}>+ Poin</button>
+      </div>
+
+      {/* Denah */}
+      <div style={SS}>
+        {ST("📐", "Denah Ruang")}
+        {inp("Deskripsi denah", "detail.denah.desc", true)}
+        <div style={{ fontSize: 11, fontWeight: 700, color: "#5A6A6C", marginBottom: 8, textTransform: "uppercase", letterSpacing: ".04em" }}>Daftar Ruangan</div>
+        {(draft.detail?.denah?.ruangan || []).map((r, ri) => (
+          <div key={ri} style={{ display: "flex", gap: 8, marginBottom: 8, alignItems: "center" }}>
+            <input type="text" value={r.ikon || ""} onChange={e => { const a = [...draft.detail.denah.ruangan]; a[ri] = { ...a[ri], ikon: e.target.value }; upd("detail.denah.ruangan", a); }}
+              placeholder="🛋️" style={{ width: 50, padding: "8px", border: "1.5px solid #D5C9B0", borderRadius: 8, fontSize: 16, textAlign: "center" }} />
+            <input type="text" value={r.nama || ""} onChange={e => { const a = [...draft.detail.denah.ruangan]; a[ri] = { ...a[ri], nama: e.target.value }; upd("detail.denah.ruangan", a); }}
+              placeholder="Nama ruangan" style={{ flex: 2, padding: "8px 12px", border: "1.5px solid #D5C9B0", borderRadius: 8, fontSize: 13 }} />
+            <input type="text" value={r.ukuran || ""} onChange={e => { const a = [...draft.detail.denah.ruangan]; a[ri] = { ...a[ri], ukuran: e.target.value }; upd("detail.denah.ruangan", a); }}
+              placeholder="5 × 6 m" style={{ flex: 1, padding: "8px 12px", border: "1.5px solid #D5C9B0", borderRadius: 8, fontSize: 13 }} />
+            <button onClick={() => upd("detail.denah.ruangan", draft.detail.denah.ruangan.filter((_, j) => j !== ri))}
+              style={{ padding: "8px 10px", background: "#fee2e2", color: "#dc2626", border: "none", borderRadius: 8, cursor: "pointer", fontWeight: 700 }}>✕</button>
+          </div>
+        ))}
+        <button onClick={() => upd("detail.denah.ruangan", [...(draft.detail?.denah?.ruangan || []), { ikon: "🏠", nama: "", ukuran: "" }])}
+          style={{ padding: "6px 14px", background: "#F5EDD8", border: "1.5px dashed #D5C9B0", color: "#5A6A6C", borderRadius: 8, fontSize: 12, fontWeight: 700, cursor: "pointer" }}>+ Ruangan</button>
+      </div>
+
+      {/* Harga */}
+      <div style={SS}>
+        {ST("💰", "Paket Harga")}
+        {(draft.detail?.harga?.paket || []).map((p, pi) => (
+          <div key={pi} style={{ background: "#FAF7F0", border: "1.5px solid #E8DCC8", borderRadius: 10, padding: "14px 16px", marginBottom: 12 }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
+              <div style={{ fontWeight: 700, fontSize: 13, color: "#2E3D3F" }}>Paket {pi + 1}</div>
+              <button onClick={() => upd("detail.harga.paket", draft.detail.harga.paket.filter((_, j) => j !== pi))}
+                style={{ padding: "4px 10px", background: "#fee2e2", color: "#dc2626", border: "none", borderRadius: 8, cursor: "pointer", fontWeight: 700, fontSize: 12 }}>Hapus</button>
+            </div>
+            <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr 1fr", gap: 8, marginBottom: 8 }}>
+              <input type="text" value={p.nama || ""} onChange={e => { const a = [...draft.detail.harga.paket]; a[pi] = { ...a[pi], nama: e.target.value }; upd("detail.harga.paket", a); }}
+                placeholder="Nama paket" style={{ padding: "8px 12px", border: "1.5px solid #D5C9B0", borderRadius: 8, fontSize: 13 }} />
+              <input type="text" value={p.luas || ""} onChange={e => { const a = [...draft.detail.harga.paket]; a[pi] = { ...a[pi], luas: e.target.value }; upd("detail.harga.paket", a); }}
+                placeholder="60–80 m²" style={{ padding: "8px 12px", border: "1.5px solid #D5C9B0", borderRadius: 8, fontSize: 13 }} />
+              <input type="number" value={p.harga || 0} onChange={e => { const a = [...draft.detail.harga.paket]; a[pi] = { ...a[pi], harga: +e.target.value }; upd("detail.harga.paket", a); }}
+                placeholder="Harga/m²" style={{ padding: "8px 12px", border: "1.5px solid #D5C9B0", borderRadius: 8, fontSize: 13 }} />
+            </div>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#5A6A6C", marginBottom: 6 }}>SUDAH TERMASUK:</div>
+            {(p.termasuk || []).map((t, ti) => (
+              <div key={ti} style={{ display: "flex", gap: 6, marginBottom: 5 }}>
+                <input type="text" value={t} onChange={e => { const a = [...draft.detail.harga.paket]; const tr = [...a[pi].termasuk]; tr[ti] = e.target.value; a[pi] = { ...a[pi], termasuk: tr }; upd("detail.harga.paket", a); }}
+                  style={{ flex: 1, padding: "6px 10px", border: "1.5px solid #D5C9B0", borderRadius: 8, fontSize: 12 }} />
+                <button onClick={() => { const a = [...draft.detail.harga.paket]; const tr = a[pi].termasuk.filter((_, j) => j !== ti); a[pi] = { ...a[pi], termasuk: tr }; upd("detail.harga.paket", a); }}
+                  style={{ padding: "6px 8px", background: "#fee2e2", color: "#dc2626", border: "none", borderRadius: 6, cursor: "pointer", fontWeight: 700 }}>✕</button>
+              </div>
+            ))}
+            <button onClick={() => { const a = [...draft.detail.harga.paket]; a[pi] = { ...a[pi], termasuk: [...(a[pi].termasuk || []), ""] }; upd("detail.harga.paket", a); }}
+              style={{ padding: "5px 12px", background: "#F5EDD8", border: "1.5px dashed #D5C9B0", color: "#5A6A6C", borderRadius: 6, fontSize: 11, fontWeight: 700, cursor: "pointer", marginTop: 2 }}>+ Item</button>
+          </div>
+        ))}
+        <button onClick={() => upd("detail.harga.paket", [...(draft.detail?.harga?.paket || []), { nama: "Paket Baru", luas: "", harga: 0, termasuk: [] }])}
+          style={{ padding: "7px 16px", background: "#F5EDD8", border: "1.5px dashed #D5C9B0", color: "#5A6A6C", borderRadius: 8, fontSize: 13, fontWeight: 700, cursor: "pointer" }}>+ Paket Harga</button>
+      </div>
+
+      {/* Save bawah */}
+      <div style={{ display: "flex", gap: 12, justifyContent: "flex-end", marginTop: 8 }}>
+        <button onClick={onBack}
+          style={{ padding: "10px 20px", background: "#F5EDD8", color: "#5A6A6C", border: "none", borderRadius: 8, fontSize: 14, fontWeight: 700, cursor: "pointer" }}>Batal</button>
+        <button onClick={saveTema} disabled={saving}
+          style={{ padding: "10px 24px", background: "linear-gradient(130deg,#2E3D3F 0%,#3D5254 50%,#C9AA71 100%)", color: "#fff", border: "none", borderRadius: 8, fontSize: 14, fontWeight: 700, cursor: "pointer" }}>
+          {saving ? "⏳ Menyimpan..." : "💾 Simpan Tema"}
+        </button>
+      </div>
+    </div>
+  );
+}
+
+/* ── 4. Panel utama admin tema rumah ── */
+function TemaRumahAdminPanel({ data, save, notify, uploadToCloudinary }) {
+  const [temaTab, setTemaTab] = useState("hero");
+  const [editIdx, setEditIdx] = useState(null);
+  const [loadingDefault, setLoadingDefault] = useState(false);
+
+  const activeTemas = (data.temaData && data.temaData.length > 0) ? data.temaData : TEMA_DATA;
+
+  const handleLoadDefault = async () => {
+    if (!window.confirm("Load semua data default dari kode ke database? Data yang ada di DB akan ditimpa.")) return;
+    setLoadingDefault(true);
+    try {
+      await save({ ...data, temaData: TEMA_DATA });
+      notify("✅ Data default berhasil dimuat ke database!");
+      setEditIdx(null);
+    } catch { notify("❌ Gagal load data default."); }
+    setLoadingDefault(false);
+  };
+
+  const HERO_FIELDS = [
+    { key: "temaHeroLabel",     label: "Label di atas judul (uppercase kecil)", placeholder: "TEMA RUMAH" },
+    { key: "temaHeroTitle1",    label: "Judul baris 1 (warna putih)",           placeholder: "PILIH TEMA RUMAH" },
+    { key: "temaHeroTitle2",    label: "Judul baris 2 (warna emas)",            placeholder: "SESUAI KARAKTER ANDA" },
+    { key: "temaHeroDesc",      label: "Deskripsi hero",                        placeholder: "Berbagai pilihan tema rumah yang dirancang..." },
+    { key: "temaBtnKonsultasi", label: "Label tombol CTA",                      placeholder: "KONSULTASI GRATIS" },
+    { key: "temaCtaTitle",      label: "Teks CTA bawah (judul)",                placeholder: "Wujudkan Rumah Impian Anda Bersama VASTURA GROUP" },
+    { key: "temaCtaDesc",       label: "Teks CTA bawah (deskripsi)",            placeholder: "Konsultasikan kebutuhan desain rumah Anda dengan tim profesional kami." },
+  ];
+
+  return (
+    <div className="fade-in">
+      {/* Header */}
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, marginBottom: 16, flexWrap: "wrap" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+          <span style={{ fontSize: 30 }}>🏠</span>
+          <div>
+            <h2 style={{ fontSize: 20, fontWeight: 800, color: "#2E3D3F", margin: 0 }}>Setting Halaman Tema Rumah</h2>
+            <p style={{ fontSize: 13, color: "#8B9A9C", margin: "3px 0 0" }}>Kelola hero, konten, dan data tiap tema rumah.</p>
+          </div>
+        </div>
+        <button onClick={handleLoadDefault} disabled={loadingDefault}
+          style={{ padding: "9px 16px", background: data.temaData?.length > 0 ? "#6c757d" : "#2ecc71", color: "#fff", border: "none", borderRadius: 8, fontSize: 13, fontWeight: 700, cursor: "pointer" }}>
+          {loadingDefault ? "⏳ Loading..." : data.temaData?.length > 0 ? "🔄 Reload Default" : "📥 Load Data Default"}
+        </button>
+      </div>
+
+      {/* Sub-tabs */}
+      <div style={{ display: "flex", gap: 6, marginBottom: 20, flexWrap: "wrap" }}>
+        {[{ id: "hero", label: "🖼️ Hero & CTA" }, { id: "temas", label: "🏠 Kelola Tema" }].map(t => (
+          <button key={t.id} onClick={() => { setTemaTab(t.id); setEditIdx(null); }}
+            style={{ padding: "8px 18px", borderRadius: 20, border: "none", fontWeight: 700, fontSize: 13, cursor: "pointer",
+              background: temaTab === t.id ? "#2E3D3F" : "#F5EDD8", color: temaTab === t.id ? "#fff" : "#5A6A6C" }}>
+            {t.label}
+          </button>
+        ))}
+      </div>
+
+      {/* Hero tab */}
+      {temaTab === "hero" && (
+        <div>
+          {HERO_FIELDS.map(f => (
+            <TemaHeroFieldRow key={f.key} fieldKey={f.key} label={f.label} placeholder={f.placeholder} data={data} save={save} notify={notify} />
+          ))}
+          <TemaHeroImgRow data={data} save={save} notify={notify} uploadToCloudinary={uploadToCloudinary} />
+        </div>
+      )}
+
+      {/* Temas tab */}
+      {temaTab === "temas" && (
+        <div>
+          <div style={{ background: data.temaData?.length > 0 ? "#e8f8ef" : "#fff8e1", border: `1.5px solid ${data.temaData?.length > 0 ? "#27ae60" : "#f39c12"}`, borderRadius: 10, padding: "12px 16px", marginBottom: 16, fontSize: 13 }}>
+            {data.temaData?.length > 0
+              ? `✅ ${data.temaData.length} tema tersimpan di database. Halaman menggunakan data dari DB.`
+              : "⚠️ Data tema belum dimuat ke database. Halaman masih menggunakan data hardcoded. Klik \"📥 Load Data Default\" di atas untuk memuat."
+            }
+          </div>
+
+          {editIdx === null ? (
+            <div>
+              {activeTemas.map((tema, i) => (
+                <div key={tema.slug} style={{ background: "#fff", border: "1.5px solid #E8DCC8", borderRadius: 12, padding: "16px 18px", marginBottom: 12, display: "flex", alignItems: "center", gap: 14 }}>
+                  <img src={tema.img} alt={tema.nama} style={{ width: 70, height: 52, objectFit: "cover", borderRadius: 8, flexShrink: 0 }} onError={e => e.target.style.display = "none"} />
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ fontWeight: 800, fontSize: 15, color: "#2E3D3F" }}>{tema.no} · {tema.nama}</div>
+                    <div style={{ fontSize: 12, color: "#5A6A6C", marginTop: 3, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{tema.tagline}</div>
+                    <div style={{ display: "flex", gap: 6, marginTop: 6, flexWrap: "wrap" }}>
+                      {(tema.fitur || []).map((f, fi) => (
+                        <span key={fi} style={{ fontSize: 10, background: "#FAF7F0", border: "1px solid #E8DCC8", borderRadius: 20, padding: "2px 8px", color: "#5A6A6C" }}>{f.icon} {f.label}</span>
+                      ))}
+                    </div>
+                  </div>
+                  <button onClick={() => setEditIdx(i)}
+                    style={{ padding: "8px 16px", background: "#C9AA71", color: "#fff", border: "none", borderRadius: 8, fontSize: 13, fontWeight: 700, cursor: "pointer", flexShrink: 0 }}>
+                    ✏️ Edit
+                  </button>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <TemaEditForm
+              temaOrig={activeTemas[editIdx]}
+              editIdx={editIdx}
+              activeTemas={activeTemas}
+              data={data}
+              save={save}
+              notify={notify}
+              onBack={() => setEditIdx(null)}
+            />
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function BricksyTravel() {
   const [data, setData] = useState(DEFAULT_DATA);
   const dataRef = useRef(DEFAULT_DATA); // selalu up-to-date, aman dipakai di closure stale (popstate)
@@ -14989,379 +15376,10 @@ export default function BricksyTravel() {
               )}
 
               {/* ══ TEMA RUMAH — Setting teks & foto hero + CRUD konten tema ══ */}
-              {adminTab === "set_temarumah" && isAdmin && (() => {
-                /* ── local state untuk admin ini ── */
-                const [temaTab, setTemaTab] = React.useState("hero");
-                const [editIdx, setEditIdx] = React.useState(null); // index tema yang sedang diedit
-                const [loadingDefault, setLoadingDefault] = React.useState(false);
+              {adminTab === "set_temarumah" && isAdmin && (
+                <TemaRumahAdminPanel data={data} save={save} notify={notify} uploadToCloudinary={uploadToCloudinary} />
+              )}
 
-                /* aktif temaData: dari DB atau hardcoded */
-                const activeTemas = (data.temaData && data.temaData.length > 0) ? data.temaData : TEMA_DATA;
-
-                /* Load default data ke DB */
-                const handleLoadDefault = async () => {
-                  if (!window.confirm("Load semua data default dari kode ke database? Data yang ada di DB akan ditimpa.")) return;
-                  setLoadingDefault(true);
-                  try {
-                    await save({ ...data, temaData: TEMA_DATA });
-                    notify("✅ Data default berhasil dimuat ke database!");
-                    setEditIdx(null);
-                  } catch { notify("❌ Gagal load data default."); }
-                  setLoadingDefault(false);
-                };
-
-                return (
-                  <div className="fade-in">
-                    <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", gap:12, marginBottom:16, flexWrap:"wrap" }}>
-                      <div style={{ display:"flex", alignItems:"center", gap:12 }}>
-                        <span style={{ fontSize:30 }}>🏠</span>
-                        <div>
-                          <h2 style={{ fontSize:20, fontWeight:800, color:"#2E3D3F", margin:0 }}>Setting Halaman Tema Rumah</h2>
-                          <p style={{ fontSize:13, color:"#8B9A9C", margin:"3px 0 0" }}>Kelola hero, konten, dan data tiap tema rumah.</p>
-                        </div>
-                      </div>
-                      <button onClick={handleLoadDefault} disabled={loadingDefault}
-                        style={{ padding:"9px 16px", background: data.temaData?.length > 0 ? "#6c757d" : "#2ecc71", color:"#fff", border:"none", borderRadius:8, fontSize:13, fontWeight:700, cursor:"pointer" }}>
-                        {loadingDefault ? "⏳ Loading..." : data.temaData?.length > 0 ? "🔄 Reload Default" : "📥 Load Data Default"}
-                      </button>
-                    </div>
-
-                    {/* Sub-tabs */}
-                    <div style={{ display:"flex", gap:6, marginBottom:20, flexWrap:"wrap" }}>
-                      {[
-                        { id:"hero", label:"🖼️ Hero & CTA" },
-                        { id:"temas", label:"🏠 Kelola Tema" },
-                      ].map(t => (
-                        <button key={t.id} onClick={() => { setTemaTab(t.id); setEditIdx(null); }}
-                          style={{ padding:"8px 18px", borderRadius:20, border:"none", fontWeight:700, fontSize:13, cursor:"pointer",
-                            background: temaTab===t.id ? "#2E3D3F" : "#F5EDD8", color: temaTab===t.id ? "#fff" : "#5A6A6C" }}>
-                          {t.label}
-                        </button>
-                      ))}
-                    </div>
-
-                    {/* ─── TAB: HERO & CTA ─── */}
-                    {temaTab === "hero" && (
-                      <div>
-                        {[
-                          { key:"temaHeroLabel",     label:"Label di atas judul (uppercase kecil)", placeholder:"TEMA RUMAH" },
-                          { key:"temaHeroTitle1",    label:"Judul baris 1 (warna putih)",           placeholder:"PILIH TEMA RUMAH" },
-                          { key:"temaHeroTitle2",    label:"Judul baris 2 (warna emas)",            placeholder:"SESUAI KARAKTER ANDA" },
-                          { key:"temaHeroDesc",      label:"Deskripsi hero",                        placeholder:"Berbagai pilihan tema rumah yang dirancang..." },
-                          { key:"temaBtnKonsultasi", label:"Label tombol CTA",                      placeholder:"KONSULTASI GRATIS" },
-                          { key:"temaCtaTitle",      label:"Teks CTA bawah (judul)",                placeholder:"Wujudkan Rumah Impian Anda Bersama VASTURA GROUP" },
-                          { key:"temaCtaDesc",       label:"Teks CTA bawah (deskripsi)",            placeholder:"Konsultasikan kebutuhan desain rumah Anda dengan tim profesional kami." },
-                        ].map(({ key, label, placeholder }) => {
-                          const [val, setVal] = React.useState(data[key] || "");
-                          const [saving, setSaving] = React.useState(false);
-                          const save_ = async () => {
-                            setSaving(true);
-                            try { await save({ ...data, [key]: val }); notify("✅ Tersimpan!"); }
-                            catch { notify("❌ Gagal menyimpan."); }
-                            setSaving(false);
-                          };
-                          return (
-                            <div key={key} style={{ background:"#fff", border:"1.5px solid #E8DCC8", borderRadius:10, padding:"16px 18px", marginBottom:12 }}>
-                              <div style={{ fontSize:12, fontWeight:700, color:"#5A6A6C", marginBottom:6 }}>{label}</div>
-                              <div style={{ display:"flex", gap:10 }}>
-                                <input type="text" value={val} placeholder={placeholder}
-                                  onChange={e => setVal(e.target.value)}
-                                  style={{ flex:1, padding:"9px 12px", border:"1.5px solid #D5C9B0", borderRadius:8, fontSize:14, boxSizing:"border-box" }} />
-                                <button onClick={save_} disabled={saving}
-                                  style={{ padding:"9px 18px", background:"#C9AA71", color:"#fff", border:"none", borderRadius:8,
-                                    fontSize:13, fontWeight:700, cursor:"pointer", whiteSpace:"nowrap" }}>
-                                  {saving ? "..." : "Simpan"}
-                                </button>
-                              </div>
-                              {data[key] && <div style={{ fontSize:11, color:"#8B9A9C", marginTop:4 }}>Tersimpan: <em>{data[key]}</em></div>}
-                            </div>
-                          );
-                        })}
-                        {/* Foto Hero */}
-                        <div style={{ marginTop:24, background:"#fff", border:"1.5px solid #E8DCC8", borderRadius:10, padding:"16px 18px" }}>
-                          <div style={{ fontSize:13, fontWeight:700, color:"#5A6A6C", marginBottom:8 }}>Foto Background Hero Tema Rumah</div>
-                          {(() => {
-                            const [url, setUrl] = React.useState(data.temaHeroImg || "");
-                            const [upl, setUpl] = React.useState(false);
-                            const [sav, setSav] = React.useState(false);
-                            const doUpload = async (f) => {
-                              if (!f) return; setUpl(true);
-                              try { const u = await uploadToCloudinary(f); setUrl(u); notify("✅ Foto diupload!"); }
-                              catch { notify("❌ Gagal upload."); }
-                              setUpl(false);
-                            };
-                            const doSave = async () => {
-                              setSav(true);
-                              try { await save({ ...data, temaHeroImg: url }); notify("✅ Foto hero tersimpan!"); }
-                              catch { notify("❌ Gagal simpan."); }
-                              setSav(false);
-                            };
-                            return (
-                              <div>
-                                {url && <img src={url} alt="" style={{ width:"100%", maxHeight:160, objectFit:"cover", borderRadius:8, marginBottom:10 }} />}
-                                <div style={{ display:"flex", gap:10, flexWrap:"wrap" }}>
-                                  <label style={{ padding:"9px 18px", background:"#3498db", color:"#fff", borderRadius:8, fontSize:13, fontWeight:700, cursor:"pointer" }}>
-                                    {upl ? "⏳ Upload..." : "📷 Upload Foto"}
-                                    <input type="file" accept="image/*" style={{ display:"none" }} onChange={e => doUpload(e.target.files[0])} />
-                                  </label>
-                                  <button onClick={doSave} disabled={sav}
-                                    style={{ padding:"9px 18px", background:"#C9AA71", color:"#fff", border:"none", borderRadius:8,
-                                      fontSize:13, fontWeight:700, cursor:"pointer" }}>
-                                    {sav ? "..." : "💾 Simpan URL"}
-                                  </button>
-                                </div>
-                                <input type="text" value={url} onChange={e => setUrl(e.target.value)}
-                                  placeholder="https://... atau paste URL foto"
-                                  style={{ width:"100%", padding:"9px 12px", border:"1.5px solid #D5C9B0", borderRadius:8, fontSize:13, marginTop:8, boxSizing:"border-box" }} />
-                              </div>
-                            );
-                          })()}
-                        </div>
-                      </div>
-                    )}
-
-                    {/* ─── TAB: KELOLA TEMA ─── */}
-                    {temaTab === "temas" && (
-                      <div>
-                        {/* Status info */}
-                        <div style={{ background: data.temaData?.length > 0 ? "#e8f8ef" : "#fff8e1", border:`1.5px solid ${data.temaData?.length > 0 ? "#27ae60" : "#f39c12"}`, borderRadius:10, padding:"12px 16px", marginBottom:16, fontSize:13 }}>
-                          {data.temaData?.length > 0
-                            ? `✅ ${data.temaData.length} tema tersimpan di database. Halaman menggunakan data dari DB.`
-                            : "⚠️ Data tema belum dimuat ke database. Halaman masih menggunakan data hardcoded. Klik \"📥 Load Data Default\" di atas untuk memuat."
-                          }
-                        </div>
-
-                        {/* Daftar tema — list atau form edit */}
-                        {editIdx === null ? (
-                          <div>
-                            {activeTemas.map((tema, i) => (
-                              <div key={tema.slug} style={{ background:"#fff", border:"1.5px solid #E8DCC8", borderRadius:12, padding:"16px 18px", marginBottom:12, display:"flex", alignItems:"center", gap:14 }}>
-                                <img src={tema.img} alt={tema.nama} style={{ width:70, height:52, objectFit:"cover", borderRadius:8, flexShrink:0 }} onError={e=>e.target.style.display="none"} />
-                                <div style={{ flex:1, minWidth:0 }}>
-                                  <div style={{ fontWeight:800, fontSize:15, color:"#2E3D3F" }}>{tema.no} · {tema.nama}</div>
-                                  <div style={{ fontSize:12, color:"#5A6A6C", marginTop:3, whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis" }}>{tema.tagline}</div>
-                                  <div style={{ display:"flex", gap:6, marginTop:6, flexWrap:"wrap" }}>
-                                    {(tema.fitur||[]).map((f,fi) => (
-                                      <span key={fi} style={{ fontSize:10, background:"#FAF7F0", border:"1px solid #E8DCC8", borderRadius:20, padding:"2px 8px", color:"#5A6A6C" }}>{f.icon} {f.label}</span>
-                                    ))}
-                                  </div>
-                                </div>
-                                <button onClick={() => setEditIdx(i)}
-                                  style={{ padding:"8px 16px", background:"#C9AA71", color:"#fff", border:"none", borderRadius:8, fontSize:13, fontWeight:700, cursor:"pointer", flexShrink:0 }}>
-                                  ✏️ Edit
-                                </button>
-                              </div>
-                            ))}
-                          </div>
-                        ) : (() => {
-                          /* ─── Form Edit Tema ─── */
-                          const tOrig = activeTemas[editIdx];
-                          const [draft, setDraft] = React.useState(JSON.parse(JSON.stringify(tOrig)));
-                          const [saving, setSaving] = React.useState(false);
-
-                          const upd = (path, val) => {
-                            setDraft(prev => {
-                              const next = JSON.parse(JSON.stringify(prev));
-                              const keys = path.split(".");
-                              let cur = next;
-                              for (let i = 0; i < keys.length - 1; i++) cur = cur[keys[i]];
-                              cur[keys[keys.length-1]] = val;
-                              return next;
-                            });
-                          };
-
-                          const saveTema = async () => {
-                            setSaving(true);
-                            try {
-                              const nextTemas = activeTemas.map((t, i) => i === editIdx ? draft : t);
-                              await save({ ...data, temaData: nextTemas });
-                              notify("✅ Tema berhasil disimpan!");
-                              setEditIdx(null);
-                            } catch { notify("❌ Gagal menyimpan."); }
-                            setSaving(false);
-                          };
-
-                          const inp = (label, path, multiline=false, placeholder="") => (
-                            <div style={{ marginBottom:14 }}>
-                              <div style={{ fontSize:11, fontWeight:700, color:"#5A6A6C", marginBottom:5, textTransform:"uppercase", letterSpacing:".04em" }}>{label}</div>
-                              {multiline
-                                ? <textarea value={path.split(".").reduce((o,k)=>o?.[k], draft)||""} onChange={e=>upd(path,e.target.value)} placeholder={placeholder} rows={3}
-                                    style={{ width:"100%", padding:"9px 12px", border:"1.5px solid #D5C9B0", borderRadius:8, fontSize:13, boxSizing:"border-box", resize:"vertical", fontFamily:"inherit" }} />
-                                : <input type="text" value={path.split(".").reduce((o,k)=>o?.[k], draft)||""} onChange={e=>upd(path,e.target.value)} placeholder={placeholder}
-                                    style={{ width:"100%", padding:"9px 12px", border:"1.5px solid #D5C9B0", borderRadius:8, fontSize:13, boxSizing:"border-box" }} />
-                              }
-                            </div>
-                          );
-
-                          const sectionStyle = { background:"#fff", border:"1.5px solid #E8DCC8", borderRadius:12, padding:"18px 20px", marginBottom:16 };
-                          const sectionTitle = (icon, title) => (
-                            <div style={{ fontSize:14, fontWeight:800, color:"#2E3D3F", marginBottom:14, display:"flex", alignItems:"center", gap:8 }}>
-                              <span>{icon}</span> {title}
-                            </div>
-                          );
-
-                          return (
-                            <div>
-                              {/* Header */}
-                              <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:18, flexWrap:"wrap", gap:10 }}>
-                                <button onClick={() => setEditIdx(null)}
-                                  style={{ padding:"8px 16px", background:"#F5EDD8", color:"#5A6A6C", border:"none", borderRadius:8, fontSize:13, fontWeight:700, cursor:"pointer" }}>
-                                  ← Kembali
-                                </button>
-                                <div style={{ fontWeight:800, fontSize:16, color:"#2E3D3F" }}>Edit: {draft.no} · {draft.nama}</div>
-                                <button onClick={saveTema} disabled={saving}
-                                  style={{ padding:"8px 20px", background:"#C9AA71", color:"#fff", border:"none", borderRadius:8, fontSize:13, fontWeight:700, cursor:"pointer" }}>
-                                  {saving ? "⏳ Menyimpan..." : "💾 Simpan Tema"}
-                                </button>
-                              </div>
-
-                              {/* ── Identitas ── */}
-                              <div style={sectionStyle}>
-                                {sectionTitle("🏷️", "Identitas Tema")}
-                                <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:14 }}>
-                                  <div>{inp("No. Urut", "no", false, "01")}</div>
-                                  <div>{inp("Slug (URL key)", "slug", false, "modern-minimalis")}</div>
-                                </div>
-                                {inp("Nama Tema", "nama", false, "Modern Minimalis")}
-                                {inp("Tagline (1 kalimat singkat)", "tagline", false, "Desain simpel, elegan, dan fungsional...")}
-                                {inp("Deskripsi panjang (hero detail)", "deskripsi", true)}
-                                <div style={{ marginBottom:14 }}>
-                                  <div style={{ fontSize:11, fontWeight:700, color:"#5A6A6C", marginBottom:5, textTransform:"uppercase", letterSpacing:".04em" }}>Warna Aksen (hex)</div>
-                                  <div style={{ display:"flex", gap:10, alignItems:"center" }}>
-                                    <input type="color" value={draft.warna||"#C9AA71"} onChange={e=>upd("warna",e.target.value)}
-                                      style={{ width:40, height:36, border:"1.5px solid #D5C9B0", borderRadius:6, cursor:"pointer", padding:2 }} />
-                                    <input type="text" value={draft.warna||""} onChange={e=>upd("warna",e.target.value)}
-                                      style={{ flex:1, padding:"9px 12px", border:"1.5px solid #D5C9B0", borderRadius:8, fontSize:13 }} />
-                                  </div>
-                                </div>
-                                {inp("URL Foto Utama (img)", "img", false, "https://images.unsplash.com/...")}
-                                {draft.img && <img src={draft.img} alt="" style={{ width:"100%", maxHeight:140, objectFit:"cover", borderRadius:8, marginTop:6 }} onError={e=>e.target.style.display="none"} />}
-                              </div>
-
-                              {/* ── Fitur ── */}
-                              <div style={sectionStyle}>
-                                {sectionTitle("✨", "Fitur (badge kartu)")}
-                                {(draft.fitur||[]).map((f, fi) => (
-                                  <div key={fi} style={{ display:"flex", gap:8, marginBottom:8, alignItems:"center" }}>
-                                    <input type="text" value={f.icon||""} onChange={e=>{const a=[...draft.fitur];a[fi]={...a[fi],icon:e.target.value};upd("fitur",a);}}
-                                      placeholder="🏠" style={{ width:50, padding:"8px", border:"1.5px solid #D5C9B0", borderRadius:8, fontSize:16, textAlign:"center" }} />
-                                    <input type="text" value={f.label||""} onChange={e=>{const a=[...draft.fitur];a[fi]={...a[fi],label:e.target.value};upd("fitur",a);}}
-                                      placeholder="Label fitur" style={{ flex:1, padding:"8px 12px", border:"1.5px solid #D5C9B0", borderRadius:8, fontSize:13 }} />
-                                    <button onClick={()=>{const a=draft.fitur.filter((_,j)=>j!==fi);upd("fitur",a);}}
-                                      style={{ padding:"8px 10px", background:"#fee2e2", color:"#dc2626", border:"none", borderRadius:8, cursor:"pointer", fontWeight:700, fontSize:12 }}>✕</button>
-                                  </div>
-                                ))}
-                                <button onClick={()=>upd("fitur",[...(draft.fitur||[]),{icon:"⭐",label:""}])}
-                                  style={{ padding:"7px 16px", background:"#F5EDD8", color:"#5A6A6C", border:"1.5px dashed #D5C9B0", borderRadius:8, fontSize:13, fontWeight:700, cursor:"pointer" }}>+ Tambah Fitur</button>
-                              </div>
-
-                              {/* ── Eksterior ── */}
-                              <div style={sectionStyle}>
-                                {sectionTitle("🏗️", "Eksterior")}
-                                {inp("Deskripsi eksterior", "detail.exterior.desc", true)}
-                                <div style={{ fontSize:11, fontWeight:700, color:"#5A6A6C", marginBottom:8, textTransform:"uppercase", letterSpacing:".04em" }}>Poin Eksterior</div>
-                                {(draft.detail?.exterior?.poin||[]).map((p,pi)=>(
-                                  <div key={pi} style={{ display:"flex", gap:8, marginBottom:6 }}>
-                                    <input type="text" value={p} onChange={e=>{const a=[...draft.detail.exterior.poin];a[pi]=e.target.value;upd("detail.exterior.poin",a);}}
-                                      style={{ flex:1, padding:"7px 12px", border:"1.5px solid #D5C9B0", borderRadius:8, fontSize:13 }} />
-                                    <button onClick={()=>upd("detail.exterior.poin",draft.detail.exterior.poin.filter((_,j)=>j!==pi))}
-                                      style={{ padding:"7px 10px", background:"#fee2e2", color:"#dc2626", border:"none", borderRadius:8, cursor:"pointer", fontWeight:700 }}>✕</button>
-                                  </div>
-                                ))}
-                                <button onClick={()=>upd("detail.exterior.poin",[...(draft.detail?.exterior?.poin||[]),""])}
-                                  style={{ padding:"6px 14px", background:"#F5EDD8", border:"1.5px dashed #D5C9B0", color:"#5A6A6C", borderRadius:8, fontSize:12, fontWeight:700, cursor:"pointer" }}>+ Poin</button>
-                              </div>
-
-                              {/* ── Interior ── */}
-                              <div style={sectionStyle}>
-                                {sectionTitle("🛋️", "Interior")}
-                                {inp("Deskripsi interior", "detail.interior.desc", true)}
-                                <div style={{ fontSize:11, fontWeight:700, color:"#5A6A6C", marginBottom:8, textTransform:"uppercase", letterSpacing:".04em" }}>Poin Interior</div>
-                                {(draft.detail?.interior?.poin||[]).map((p,pi)=>(
-                                  <div key={pi} style={{ display:"flex", gap:8, marginBottom:6 }}>
-                                    <input type="text" value={p} onChange={e=>{const a=[...draft.detail.interior.poin];a[pi]=e.target.value;upd("detail.interior.poin",a);}}
-                                      style={{ flex:1, padding:"7px 12px", border:"1.5px solid #D5C9B0", borderRadius:8, fontSize:13 }} />
-                                    <button onClick={()=>upd("detail.interior.poin",draft.detail.interior.poin.filter((_,j)=>j!==pi))}
-                                      style={{ padding:"7px 10px", background:"#fee2e2", color:"#dc2626", border:"none", borderRadius:8, cursor:"pointer", fontWeight:700 }}>✕</button>
-                                  </div>
-                                ))}
-                                <button onClick={()=>upd("detail.interior.poin",[...(draft.detail?.interior?.poin||[]),""])}
-                                  style={{ padding:"6px 14px", background:"#F5EDD8", border:"1.5px dashed #D5C9B0", color:"#5A6A6C", borderRadius:8, fontSize:12, fontWeight:700, cursor:"pointer" }}>+ Poin</button>
-                              </div>
-
-                              {/* ── Denah ── */}
-                              <div style={sectionStyle}>
-                                {sectionTitle("📐", "Denah Ruang")}
-                                {inp("Deskripsi denah", "detail.denah.desc", true)}
-                                <div style={{ fontSize:11, fontWeight:700, color:"#5A6A6C", marginBottom:8, textTransform:"uppercase", letterSpacing:".04em" }}>Daftar Ruangan</div>
-                                {(draft.detail?.denah?.ruangan||[]).map((r,ri)=>(
-                                  <div key={ri} style={{ display:"flex", gap:8, marginBottom:8, alignItems:"center" }}>
-                                    <input type="text" value={r.ikon||""} onChange={e=>{const a=[...draft.detail.denah.ruangan];a[ri]={...a[ri],ikon:e.target.value};upd("detail.denah.ruangan",a);}}
-                                      placeholder="🛋️" style={{ width:50, padding:"8px", border:"1.5px solid #D5C9B0", borderRadius:8, fontSize:16, textAlign:"center" }} />
-                                    <input type="text" value={r.nama||""} onChange={e=>{const a=[...draft.detail.denah.ruangan];a[ri]={...a[ri],nama:e.target.value};upd("detail.denah.ruangan",a);}}
-                                      placeholder="Nama ruangan" style={{ flex:2, padding:"8px 12px", border:"1.5px solid #D5C9B0", borderRadius:8, fontSize:13 }} />
-                                    <input type="text" value={r.ukuran||""} onChange={e=>{const a=[...draft.detail.denah.ruangan];a[ri]={...a[ri],ukuran:e.target.value};upd("detail.denah.ruangan",a);}}
-                                      placeholder="5 × 6 m" style={{ flex:1, padding:"8px 12px", border:"1.5px solid #D5C9B0", borderRadius:8, fontSize:13 }} />
-                                    <button onClick={()=>upd("detail.denah.ruangan",draft.detail.denah.ruangan.filter((_,j)=>j!==ri))}
-                                      style={{ padding:"8px 10px", background:"#fee2e2", color:"#dc2626", border:"none", borderRadius:8, cursor:"pointer", fontWeight:700 }}>✕</button>
-                                  </div>
-                                ))}
-                                <button onClick={()=>upd("detail.denah.ruangan",[...(draft.detail?.denah?.ruangan||[]),{ikon:"🏠",nama:"",ukuran:""}])}
-                                  style={{ padding:"6px 14px", background:"#F5EDD8", border:"1.5px dashed #D5C9B0", color:"#5A6A6C", borderRadius:8, fontSize:12, fontWeight:700, cursor:"pointer" }}>+ Ruangan</button>
-                              </div>
-
-                              {/* ── Harga Paket ── */}
-                              <div style={sectionStyle}>
-                                {sectionTitle("💰", "Paket Harga")}
-                                {(draft.detail?.harga?.paket||[]).map((p,pi)=>(
-                                  <div key={pi} style={{ background:"#FAF7F0", border:"1.5px solid #E8DCC8", borderRadius:10, padding:"14px 16px", marginBottom:12 }}>
-                                    <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:10 }}>
-                                      <div style={{ fontWeight:700, fontSize:13, color:"#2E3D3F" }}>Paket {pi+1}</div>
-                                      <button onClick={()=>upd("detail.harga.paket",draft.detail.harga.paket.filter((_,j)=>j!==pi))}
-                                        style={{ padding:"4px 10px", background:"#fee2e2", color:"#dc2626", border:"none", borderRadius:8, cursor:"pointer", fontWeight:700, fontSize:12 }}>Hapus</button>
-                                    </div>
-                                    <div style={{ display:"grid", gridTemplateColumns:"2fr 1fr 1fr", gap:8, marginBottom:8 }}>
-                                      <input type="text" value={p.nama||""} onChange={e=>{const a=[...draft.detail.harga.paket];a[pi]={...a[pi],nama:e.target.value};upd("detail.harga.paket",a);}}
-                                        placeholder="Nama paket" style={{ padding:"8px 12px", border:"1.5px solid #D5C9B0", borderRadius:8, fontSize:13 }} />
-                                      <input type="text" value={p.luas||""} onChange={e=>{const a=[...draft.detail.harga.paket];a[pi]={...a[pi],luas:e.target.value};upd("detail.harga.paket",a);}}
-                                        placeholder="60–80 m²" style={{ padding:"8px 12px", border:"1.5px solid #D5C9B0", borderRadius:8, fontSize:13 }} />
-                                      <input type="number" value={p.harga||0} onChange={e=>{const a=[...draft.detail.harga.paket];a[pi]={...a[pi],harga:+e.target.value};upd("detail.harga.paket",a);}}
-                                        placeholder="Harga/m²" style={{ padding:"8px 12px", border:"1.5px solid #D5C9B0", borderRadius:8, fontSize:13 }} />
-                                    </div>
-                                    <div style={{ fontSize:11, fontWeight:700, color:"#5A6A6C", marginBottom:6 }}>SUDAH TERMASUK:</div>
-                                    {(p.termasuk||[]).map((t,ti)=>(
-                                      <div key={ti} style={{ display:"flex", gap:6, marginBottom:5 }}>
-                                        <input type="text" value={t} onChange={e=>{const a=[...draft.detail.harga.paket];const tr=[...a[pi].termasuk];tr[ti]=e.target.value;a[pi]={...a[pi],termasuk:tr};upd("detail.harga.paket",a);}}
-                                          style={{ flex:1, padding:"6px 10px", border:"1.5px solid #D5C9B0", borderRadius:8, fontSize:12 }} />
-                                        <button onClick={()=>{const a=[...draft.detail.harga.paket];const tr=a[pi].termasuk.filter((_,j)=>j!==ti);a[pi]={...a[pi],termasuk:tr};upd("detail.harga.paket",a);}}
-                                          style={{ padding:"6px 8px", background:"#fee2e2", color:"#dc2626", border:"none", borderRadius:6, cursor:"pointer", fontWeight:700 }}>✕</button>
-                                      </div>
-                                    ))}
-                                    <button onClick={()=>{const a=[...draft.detail.harga.paket];a[pi]={...a[pi],termasuk:[...(a[pi].termasuk||[]),""]};upd("detail.harga.paket",a);}}
-                                      style={{ padding:"5px 12px", background:"#F5EDD8", border:"1.5px dashed #D5C9B0", color:"#5A6A6C", borderRadius:6, fontSize:11, fontWeight:700, cursor:"pointer", marginTop:2 }}>+ Item</button>
-                                  </div>
-                                ))}
-                                <button onClick={()=>upd("detail.harga.paket",[...(draft.detail?.harga?.paket||[]),{nama:"Paket Baru",luas:"",harga:0,termasuk:[]}])}
-                                  style={{ padding:"7px 16px", background:"#F5EDD8", border:"1.5px dashed #D5C9B0", color:"#5A6A6C", borderRadius:8, fontSize:13, fontWeight:700, cursor:"pointer" }}>+ Paket Harga</button>
-                              </div>
-
-                              {/* Save bawah */}
-                              <div style={{ display:"flex", gap:12, justifyContent:"flex-end", marginTop:8 }}>
-                                <button onClick={() => setEditIdx(null)}
-                                  style={{ padding:"10px 20px", background:"#F5EDD8", color:"#5A6A6C", border:"none", borderRadius:8, fontSize:14, fontWeight:700, cursor:"pointer" }}>Batal</button>
-                                <button onClick={saveTema} disabled={saving}
-                                  style={{ padding:"10px 24px", background:"linear-gradient(130deg,#2E3D3F 0%,#3D5254 50%,#C9AA71 100%)", color:"#fff", border:"none", borderRadius:8, fontSize:14, fontWeight:700, cursor:"pointer" }}>
-                                  {saving ? "⏳ Menyimpan..." : "💾 Simpan Tema"}
-                                </button>
-                              </div>
-                            </div>
-                          );
-                        })()}
-                      </div>
-                    )}
-                  </div>
-                );
-              })()}
 
               {/* ══ TEMA RUMAH — Kelola foto slideshow per tema ══ */}
               {adminTab === "set_tema_photos" && isAdmin && (
