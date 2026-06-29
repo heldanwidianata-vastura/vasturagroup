@@ -9503,7 +9503,6 @@ function TemaCardContent({ tema, setTemaSlug }) {
 function TemaDetailPage({ slug, onWaOpen, onBack, temaList }) {
   const resolvedList = (temaList && temaList.length > 0) ? temaList : TEMA_DATA;
   const tema = resolvedList.find(t => t.slug === slug);
-  const [activeTab, setActiveTab] = useState("denah");
 
   useEffect(() => { window.scrollTo(0, 0); }, [slug]);
 
@@ -9515,19 +9514,15 @@ function TemaDetailPage({ slug, onWaOpen, onBack, temaList }) {
     </div>
   );
 
-  const tabs = [
-    { id: "denah", label: "📐 Denah Ruang" },
-    { id: "exterior", label: "🏠 Eksterior" },
-    { id: "interior", label: "🛋️ Interior" },
-    { id: "harga", label: "💰 Harga & RAB" },
-    { id: "kalkulator", label: "🧮 Kalkulator" },
-  ];
-
   const PoinItem = ({ text }) => (
     <div style={{ display: "flex", alignItems: "center", gap: 11, padding: "11px 14px", background: "#FDFAF4", borderRadius: 9, border: "1px solid #F5EDD8" }}>
       <span style={{ width: 22, height: 22, borderRadius: "50%", background: tema.warna + "22", color: tema.warna, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "0.7rem", fontWeight: 900, flexShrink: 0 }}>✓</span>
       <span style={{ fontSize: "0.83rem", color: "#2E3D3F", fontWeight: 500 }}>{text}</span>
     </div>
+  );
+
+  const SectionLabel = ({ icon, text }) => (
+    <div style={{ fontSize: "0.65rem", letterSpacing: ".12em", textTransform: "uppercase", color: tema.warna, fontWeight: 800, marginBottom: 7 }}>{icon} {text}</div>
   );
 
   return (
@@ -9556,166 +9551,150 @@ function TemaDetailPage({ slug, onWaOpen, onBack, temaList }) {
         </div>
       </div>
 
-      {/* Tab Bar */}
-      <div style={{ background: "#fff", borderBottom: "2px solid #F5EDD8", position: "sticky", top: 46, zIndex: 80, overflowX: "auto" }}>
-        <div style={{ display: "flex", padding: "0 4%", minWidth: "max-content" }}>
-          {tabs.map(t => (
-            <button key={t.id} onClick={() => setActiveTab(t.id)} style={{
-              padding: "13px 18px", border: "none", borderBottom: activeTab === t.id ? `3px solid #2E3D3F` : "3px solid transparent",
-              background: activeTab === t.id ? "#fff" : "#FDFAF4", color: activeTab === t.id ? "#2E3D3F" : "#5A6A6C",
-              fontWeight: activeTab === t.id ? 800 : 500, fontSize: "0.78rem", cursor: "pointer", transition: "all .15s", whiteSpace: "nowrap",
-            }}>{t.label}</button>
-          ))}
+      {/* ════════ SECTION: EKSTERIOR ════════ */}
+      <div style={{ padding: "48px 5% 56px", maxWidth: 1060, margin: "0 auto" }}>
+        <SectionLabel icon="🏠" text="EKSTERIOR" />
+        <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.7rem", fontWeight: 800, color: "#2E3D3F", margin: "0 0 14px" }}>Tampak Luar {tema.nama}</h2>
+        <p style={{ color: "#5A6A6C", lineHeight: 1.75, marginBottom: 28, fontSize: "0.88rem", maxWidth: 720 }}>{tema.detail.exterior.desc}</p>
+
+        {(() => {
+          const photos = (tema.imgs && tema.imgs.length > 0) ? tema.imgs : (tema.img ? [{ img: tema.img, label: tema.nama }] : []);
+          if (photos.length === 0) {
+            return (
+              <div style={{ textAlign: "center", padding: "50px 20px", background: "#FDFAF4", borderRadius: 14, border: "1px solid #F5EDD8", color: "#A89070", fontSize: "0.85rem" }}>
+                🏠 Foto eksterior belum tersedia untuk tema ini.
+              </div>
+            );
+          }
+          return (
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(300px,1fr))", gridAutoFlow: "dense", gap: 18 }}>
+              {photos.map((p, i) => (
+                <div key={i} style={{
+                  position: "relative", borderRadius: 16, overflow: "hidden", cursor: "pointer",
+                  boxShadow: "0 8px 28px rgba(0,0,0,.14)",
+                  gridColumn: i % 5 === 0 ? "span 2" : "span 1",
+                  gridRow: i % 5 === 0 ? "span 2" : "span 1",
+                  aspectRatio: i % 5 === 0 ? "16/13" : "4/3",
+                }}>
+                  <img src={p.img} alt={p.label || tema.nama}
+                    style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", transition: "transform .45s ease" }}
+                    onError={e => e.target.parentElement.style.display = "none"}
+                    onMouseEnter={e => { e.currentTarget.style.transform = "scale(1.12)"; }}
+                    onMouseLeave={e => { e.currentTarget.style.transform = "scale(1)"; }}
+                  />
+                  {p.label && (
+                    <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, padding: "20px 14px 10px", background: "linear-gradient(to top, rgba(0,0,0,.65), transparent)", color: "#fff", fontSize: "0.78rem", fontWeight: 700, pointerEvents: "none" }}>
+                      {p.label}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          );
+        })()}
+
+        <div style={{ marginTop: 26, display: "flex", flexDirection: "column", gap: 9, maxWidth: 560 }}>
+          {tema.detail.exterior.poin.map((p, i) => <PoinItem key={i} text={p} />)}
         </div>
       </div>
 
-      {/* Tab Content */}
-      <div style={{ padding: "44px 5% 56px", maxWidth: 1060, margin: "0 auto" }}>
+      {/* ════════ SECTION: DENAH RUANG ════════ */}
+      <div style={{ background: "#FDFAF4", padding: "48px 5% 56px" }}>
+        <div style={{ maxWidth: 1060, margin: "0 auto" }}>
+          <SectionLabel icon="📐" text="DENAH RUANG" />
+          <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.7rem", fontWeight: 800, color: "#2E3D3F", margin: "0 0 12px" }}>Tata Ruang {tema.nama}</h2>
+          <p style={{ color: "#5A6A6C", lineHeight: 1.7, maxWidth: 660, marginBottom: 28, fontSize: "0.88rem" }}>{tema.detail.denah.desc}</p>
 
-        {activeTab === "denah" && (
-          <div>
-            <div style={{ fontSize: "0.65rem", letterSpacing: ".12em", textTransform: "uppercase", color: tema.warna, fontWeight: 800, marginBottom: 7 }}>DENAH RUANG</div>
-            <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.7rem", fontWeight: 800, color: "#2E3D3F", margin: "0 0 12px" }}>Tata Ruang {tema.nama}</h2>
-            <p style={{ color: "#5A6A6C", lineHeight: 1.7, maxWidth: 660, marginBottom: 28, fontSize: "0.88rem" }}>{tema.detail.denah.desc}</p>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(180px,1fr))", gap: 14 }}>
-              {tema.detail.denah.ruangan.map((r, i) => (
-                <div key={i} style={{ background: "#fff", borderRadius: 12, padding: "18px", boxShadow: "0 2px 10px rgba(0,0,0,.07)", border: "1px solid #F5EDD8", transition: "all .2s" }}
-                  onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = "0 6px 20px rgba(0,0,0,.11)"; }}
-                  onMouseLeave={e => { e.currentTarget.style.transform = ""; e.currentTarget.style.boxShadow = "0 2px 10px rgba(0,0,0,.07)"; }}>
-                  <div style={{ fontSize: "1.6rem", marginBottom: 9 }}>{r.ikon}</div>
-                  <div style={{ fontSize: "0.88rem", fontWeight: 700, color: "#2E3D3F", marginBottom: 5 }}>{r.nama}</div>
-                  <span style={{ display: "inline-block", fontSize: "0.7rem", fontWeight: 700, color: tema.warna, background: tema.warna + "18", borderRadius: 20, padding: "2px 10px" }}>{r.ukuran}</span>
-                </div>
-              ))}
-            </div>
-            <div style={{ marginTop: 30, background: "#FDFAF4", borderRadius: 14, padding: "22px 26px", border: "1px solid #F5EDD8" }}>
-              <div style={{ fontSize: "0.65rem", letterSpacing: ".1em", textTransform: "uppercase", color: "#5A6A6C", fontWeight: 700, marginBottom: 14 }}>Ilustrasi Denah (Skematik)</div>
-              <div style={{ display: "grid", gridTemplateColumns: "3fr 2fr", gap: 4, maxWidth: 480 }}>
-                {tema.detail.denah.ruangan.slice(0, 6).map((r, i) => (
-                  <div key={i} style={{ background: i === 0 ? tema.warna + "20" : "#fff", border: `1.5px solid ${i === 0 ? tema.warna : "#E8DCC8"}`, borderRadius: 6, padding: "9px 12px", gridColumn: i === 0 ? "1 / -1" : undefined }}>
-                    <div style={{ fontSize: "0.7rem", fontWeight: 700, color: "#2E3D3F" }}>{r.nama}</div>
-                    <div style={{ fontSize: "0.62rem", color: "#5A6A6C" }}>{r.ukuran}</div>
+          {(tema.detail.denah.lantai || []).filter(l => l.imgs && l.imgs.length > 0).length > 0 ? (
+            (tema.detail.denah.lantai || []).map((lantai, li) => (
+              lantai.imgs && lantai.imgs.length > 0 && (
+                <div key={li} style={{ marginBottom: 32 }}>
+                  <div style={{ fontSize: "0.95rem", fontWeight: 800, color: "#2E3D3F", marginBottom: 12, display: "flex", alignItems: "center", gap: 8 }}>
+                    <span style={{ width: 26, height: 26, borderRadius: "50%", background: tema.warna + "22", color: tema.warna, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "0.8rem" }}>🏢</span>
+                    {lantai.label}
                   </div>
-                ))}
-              </div>
-              <p style={{ fontSize: "0.62rem", color: "#aaa", marginTop: 10 }}>* Denah skematik ilustrasi. Denah aktual disesuaikan kebutuhan & lahan.</p>
-            </div>
-          </div>
-        )}
-
-        {activeTab === "exterior" && (
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 40, alignItems: "start" }}>
-            <div>
-              <div style={{ fontSize: "0.65rem", letterSpacing: ".12em", textTransform: "uppercase", color: tema.warna, fontWeight: 800, marginBottom: 7 }}>EKSTERIOR</div>
-              <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.7rem", fontWeight: 800, color: "#2E3D3F", margin: "0 0 14px" }}>Tampak Luar {tema.nama}</h2>
-              <p style={{ color: "#5A6A6C", lineHeight: 1.75, marginBottom: 22, fontSize: "0.88rem" }}>{tema.detail.exterior.desc}</p>
-              <div style={{ display: "flex", flexDirection: "column", gap: 9 }}>
-                {tema.detail.exterior.poin.map((p, i) => <PoinItem key={i} text={p} />)}
-              </div>
-            </div>
-            <div>
-              <img src={tema.img} alt={tema.nama + " eksterior"} style={{ width: "100%", height: 320, objectFit: "cover", borderRadius: 14, boxShadow: "0 8px 28px rgba(0,0,0,.14)" }} onError={e => e.target.style.display = "none"} />
-              <div style={{ marginTop: 14, background: "#FDFAF4", borderRadius: 11, padding: "14px 18px", border: `1px solid ${tema.warna}30` }}>
-                <div style={{ fontSize: "0.65rem", fontWeight: 700, letterSpacing: ".1em", textTransform: "uppercase", color: tema.warna, marginBottom: 8 }}>Warna Dominan</div>
-                <div style={{ display: "flex", gap: 8 }}>
-                  {[tema.warna, "#2E3D3F", "#F5EDD8", "#FDFAF4"].map((c, i) => (
-                    <div key={i} style={{ width: 34, height: 34, borderRadius: 8, background: c, border: "2px solid rgba(0,0,0,.08)" }} />
-                  ))}
+                  <div style={{ display: "grid", gridTemplateColumns: lantai.imgs.length === 1 ? "1fr" : "repeat(auto-fit,minmax(320px,1fr))", gap: 16 }}>
+                    {lantai.imgs.map((img, ii) => (
+                      <div key={ii} style={{ borderRadius: 14, overflow: "hidden", boxShadow: "0 8px 28px rgba(0,0,0,.12)", border: "1px solid #F5EDD8" }}>
+                        <img src={img} alt={`${lantai.label} - foto ${ii + 1}`} style={{ width: "100%", height: "auto", display: "block", objectFit: "contain", background: "#fff" }} onError={e => e.target.style.display = "none"} />
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              )
+            ))
+          ) : (
+            <div style={{ textAlign: "center", padding: "50px 20px", background: "#fff", borderRadius: 14, border: "1px solid #F5EDD8", color: "#A89070", fontSize: "0.85rem" }}>
+              📐 Foto denah belum tersedia untuk tema ini.
             </div>
-          </div>
-        )}
+          )}
+        </div>
+      </div>
 
-        {activeTab === "interior" && (
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 40, alignItems: "start" }}>
-            <div>
-              <img src={tema.img} alt={tema.nama + " interior"} style={{ width: "100%", height: 320, objectFit: "cover", borderRadius: 14, boxShadow: "0 8px 28px rgba(0,0,0,.14)", filter: "brightness(.9) saturate(1.1)" }} onError={e => e.target.style.display = "none"} />
-              <div style={{ marginTop: 14, background: "#FDFAF4", borderRadius: 11, padding: "14px 18px", border: "1px solid #F5EDD8" }}>
-                <div style={{ fontSize: "0.65rem", fontWeight: 700, letterSpacing: ".1em", textTransform: "uppercase", color: "#5A6A6C", marginBottom: 9 }}>Ruangan Unggulan</div>
-                <div style={{ display: "flex", gap: 7, flexWrap: "wrap" }}>
-                  {tema.detail.denah.ruangan.slice(0, 4).map((r, i) => (
-                    <span key={i} style={{ fontSize: "0.74rem", padding: "4px 12px", borderRadius: 20, background: tema.warna + "18", color: "#2E3D3F", fontWeight: 600 }}>{r.ikon} {r.nama}</span>
-                  ))}
-                </div>
-              </div>
-            </div>
-            <div>
-              <div style={{ fontSize: "0.65rem", letterSpacing: ".12em", textTransform: "uppercase", color: tema.warna, fontWeight: 800, marginBottom: 7 }}>INTERIOR</div>
-              <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.7rem", fontWeight: 800, color: "#2E3D3F", margin: "0 0 14px" }}>Dalam Rumah {tema.nama}</h2>
-              <p style={{ color: "#5A6A6C", lineHeight: 1.75, marginBottom: 22, fontSize: "0.88rem" }}>{tema.detail.interior.desc}</p>
-              <div style={{ display: "flex", flexDirection: "column", gap: 9 }}>
-                {tema.detail.interior.poin.map((p, i) => <PoinItem key={i} text={p} />)}
-              </div>
-            </div>
-          </div>
-        )}
-
-        {activeTab === "harga" && (
-          <div>
-            <div style={{ fontSize: "0.65rem", letterSpacing: ".12em", textTransform: "uppercase", color: tema.warna, fontWeight: 800, marginBottom: 7 }}>PAKET HARGA</div>
-            <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.7rem", fontWeight: 800, color: "#2E3D3F", margin: "0 0 12px" }}>Harga & RAB {tema.nama}</h2>
-            <p style={{ color: "#5A6A6C", lineHeight: 1.7, maxWidth: 580, marginBottom: 28, fontSize: "0.88rem" }}>Pilih paket yang sesuai kebutuhan dan budget Anda.</p>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(260px,1fr))", gap: 18, marginBottom: 36 }}>
-              {tema.detail.harga.paket.map((p, i) => (
-                <div key={i} style={{ background: "#fff", borderRadius: 14, border: `2px solid ${i === 1 ? tema.warna : "#F5EDD8"}`, overflow: "hidden", boxShadow: i === 1 ? `0 8px 28px ${tema.warna}20` : "0 2px 10px rgba(0,0,0,.06)", transition: "all .25s" }}
-                  onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-3px)"; e.currentTarget.style.boxShadow = `0 12px 32px rgba(0,0,0,.1)`; }}
-                  onMouseLeave={e => { e.currentTarget.style.transform = ""; e.currentTarget.style.boxShadow = i === 1 ? `0 8px 28px ${tema.warna}20` : "0 2px 10px rgba(0,0,0,.06)"; }}>
-                  {i === 1 && <div style={{ background: tema.warna, color: "#fff", fontSize: "0.62rem", fontWeight: 800, letterSpacing: ".1em", textTransform: "uppercase", textAlign: "center", padding: "5px" }}>⭐ PALING POPULER</div>}
-                  <div style={{ padding: "22px" }}>
-                    <div style={{ fontSize: "0.65rem", fontWeight: 700, letterSpacing: ".1em", textTransform: "uppercase", color: tema.warna, marginBottom: 7 }}>PAKET {i === 0 ? "STANDAR" : i === 1 ? "PREMIUM" : "LUXURY"}</div>
-                    <h3 style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.05rem", fontWeight: 800, color: "#2E3D3F", margin: "0 0 5px" }}>{p.nama}</h3>
-                    <div style={{ fontSize: "0.78rem", color: "#5A6A6C", marginBottom: 18 }}>Luas bangunan: {p.luas}</div>
-                    {p.harga === 0
-                      ? <div style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.35rem", fontWeight: 900, color: "#2E3D3F", marginBottom: 14 }}>Hubungi Kami</div>
-                      : <><div style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.45rem", fontWeight: 900, color: tema.warna, lineHeight: 1 }}>Rp {p.harga.toLocaleString("id-ID")}</div>
-                        <div style={{ fontSize: "0.72rem", color: "#5A6A6C", marginTop: 2, marginBottom: 14 }}>per meter persegi</div></>
-                    }
-                    <div style={{ borderTop: "1px solid #F5EDD8", paddingTop: 14, display: "flex", flexDirection: "column", gap: 7, marginBottom: 16 }}>
-                      {p.termasuk.map((item, j) => (
-                        <div key={j} style={{ display: "flex", gap: 7, alignItems: "flex-start" }}>
-                          <span style={{ color: tema.warna, fontWeight: 700, fontSize: "0.8rem", flexShrink: 0 }}>✓</span>
-                          <span style={{ fontSize: "0.78rem", color: "#3D5254", lineHeight: 1.4 }}>{item}</span>
-                        </div>
-                      ))}
+      {/* ════════ SECTION: HARGA & RAB ════════ */}
+      <div style={{ padding: "48px 5% 56px", maxWidth: 1060, margin: "0 auto" }}>
+        <SectionLabel icon="💰" text="PAKET HARGA" />
+        <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.7rem", fontWeight: 800, color: "#2E3D3F", margin: "0 0 12px" }}>Harga & RAB {tema.nama}</h2>
+        <p style={{ color: "#5A6A6C", lineHeight: 1.7, maxWidth: 580, marginBottom: 28, fontSize: "0.88rem" }}>Pilih paket yang sesuai kebutuhan dan budget Anda.</p>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(260px,1fr))", gap: 18, marginBottom: 36 }}>
+          {tema.detail.harga.paket.map((p, i) => (
+            <div key={i} style={{ background: "#fff", borderRadius: 14, border: `2px solid ${i === 1 ? tema.warna : "#F5EDD8"}`, overflow: "hidden", boxShadow: i === 1 ? `0 8px 28px ${tema.warna}20` : "0 2px 10px rgba(0,0,0,.06)", transition: "all .25s" }}
+              onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-3px)"; e.currentTarget.style.boxShadow = `0 12px 32px rgba(0,0,0,.1)`; }}
+              onMouseLeave={e => { e.currentTarget.style.transform = ""; e.currentTarget.style.boxShadow = i === 1 ? `0 8px 28px ${tema.warna}20` : "0 2px 10px rgba(0,0,0,.06)"; }}>
+              {i === 1 && <div style={{ background: tema.warna, color: "#fff", fontSize: "0.62rem", fontWeight: 800, letterSpacing: ".1em", textTransform: "uppercase", textAlign: "center", padding: "5px" }}>⭐ PALING POPULER</div>}
+              <div style={{ padding: "22px" }}>
+                <div style={{ fontSize: "0.65rem", fontWeight: 700, letterSpacing: ".1em", textTransform: "uppercase", color: tema.warna, marginBottom: 7 }}>PAKET {i === 0 ? "STANDAR" : i === 1 ? "PREMIUM" : "LUXURY"}</div>
+                <h3 style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.05rem", fontWeight: 800, color: "#2E3D3F", margin: "0 0 5px" }}>{p.nama}</h3>
+                <div style={{ fontSize: "0.78rem", color: "#5A6A6C", marginBottom: 18 }}>Luas bangunan: {p.luas}</div>
+                {p.harga === 0
+                  ? <div style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.35rem", fontWeight: 900, color: "#2E3D3F", marginBottom: 14 }}>Hubungi Kami</div>
+                  : <><div style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.45rem", fontWeight: 900, color: tema.warna, lineHeight: 1 }}>Rp {p.harga.toLocaleString("id-ID")}</div>
+                    <div style={{ fontSize: "0.72rem", color: "#5A6A6C", marginTop: 2, marginBottom: 14 }}>per meter persegi</div></>
+                }
+                <div style={{ borderTop: "1px solid #F5EDD8", paddingTop: 14, display: "flex", flexDirection: "column", gap: 7, marginBottom: 16 }}>
+                  {p.termasuk.map((item, j) => (
+                    <div key={j} style={{ display: "flex", gap: 7, alignItems: "flex-start" }}>
+                      <span style={{ color: tema.warna, fontWeight: 700, fontSize: "0.8rem", flexShrink: 0 }}>✓</span>
+                      <span style={{ fontSize: "0.78rem", color: "#3D5254", lineHeight: 1.4 }}>{item}</span>
                     </div>
-                    <button onClick={onWaOpen} style={{ width: "100%", padding: "10px", borderRadius: 7, border: "none", background: i === 1 ? tema.warna : "linear-gradient(90deg,#2E3D3F,#3D5254)", color: "#fff", fontWeight: 700, fontSize: "0.82rem", cursor: "pointer" }}>
-                      💬 Konsultasi Paket Ini
-                    </button>
-                  </div>
+                  ))}
                 </div>
-              ))}
-            </div>
-            <div style={{ background: "#FDFAF4", borderRadius: 12, padding: "22px 26px", border: "1px solid #F5EDD8" }}>
-              <div style={{ fontWeight: 800, color: "#2E3D3F", marginBottom: 12, fontSize: "0.9rem" }}>📋 Catatan RAB & Harga</div>
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
-                {["Harga belum termasuk biaya IMB/PBG", "Harga belum termasuk biaya utilitas (air, listrik)", "Bahan material dapat diganti sesuai budget", "Harga valid per tahun berjalan, hubungi untuk update", "Pembayaran bertahap sesuai progress pekerjaan", "Garansi pekerjaan 6–12 bulan sesuai kontrak"].map((c, i) => (
-                  <div key={i} style={{ display: "flex", gap: 7, alignItems: "flex-start" }}>
-                    <span style={{ color: "#C9AA71", fontWeight: 700 }}>·</span>
-                    <span style={{ fontSize: "0.78rem", color: "#5A6A6C", lineHeight: 1.5 }}>{c}</span>
-                  </div>
-                ))}
+                <button onClick={onWaOpen} style={{ width: "100%", padding: "10px", borderRadius: 7, border: "none", background: i === 1 ? tema.warna : "linear-gradient(90deg,#2E3D3F,#3D5254)", color: "#fff", fontWeight: 700, fontSize: "0.82rem", cursor: "pointer" }}>
+                  💬 Konsultasi Paket Ini
+                </button>
               </div>
             </div>
+          ))}
+        </div>
+        <div style={{ background: "#FDFAF4", borderRadius: 12, padding: "22px 26px", border: "1px solid #F5EDD8" }}>
+          <div style={{ fontWeight: 800, color: "#2E3D3F", marginBottom: 12, fontSize: "0.9rem" }}>📋 Catatan RAB & Harga</div>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
+            {["Harga belum termasuk biaya IMB/PBG", "Harga belum termasuk biaya utilitas (air, listrik)", "Bahan material dapat diganti sesuai budget", "Harga valid per tahun berjalan, hubungi untuk update", "Pembayaran bertahap sesuai progress pekerjaan", "Garansi pekerjaan 6–12 bulan sesuai kontrak"].map((c, i) => (
+              <div key={i} style={{ display: "flex", gap: 7, alignItems: "flex-start" }}>
+                <span style={{ color: "#C9AA71", fontWeight: 700 }}>·</span>
+                <span style={{ fontSize: "0.78rem", color: "#5A6A6C", lineHeight: 1.5 }}>{c}</span>
+              </div>
+            ))}
           </div>
-        )}
+        </div>
+      </div>
 
-        {activeTab === "kalkulator" && (
-          <div style={{ maxWidth: 540, margin: "0 auto" }}>
-            <div style={{ marginBottom: 28, textAlign: "center" }}>
-              <div style={{ fontSize: "0.65rem", letterSpacing: ".12em", textTransform: "uppercase", color: tema.warna, fontWeight: 800, marginBottom: 7 }}>ESTIMASI BIAYA</div>
-              <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.7rem", fontWeight: 800, color: "#2E3D3F", margin: "0 0 12px" }}>Kalkulator Lahan</h2>
-              <p style={{ color: "#5A6A6C", lineHeight: 1.7, fontSize: "0.88rem" }}>Masukkan luas bangunan Anda untuk estimasi biaya paket {tema.nama}.</p>
-            </div>
-            <KalkulatorLuas tema={tema} />
-            <div style={{ marginTop: 22, textAlign: "center" }}>
-              <button onClick={onWaOpen} style={{ padding: "14px 32px", background: `linear-gradient(135deg,${tema.warna},#C9AA71)`, color: "#fff", border: "none", borderRadius: 8, fontWeight: 800, fontSize: "0.88rem", cursor: "pointer", letterSpacing: ".06em" }}>
-                💬 KONSULTASI GRATIS →
-              </button>
-              <p style={{ fontSize: "0.72rem", color: "#5A6A6C", marginTop: 10 }}>Gratis konsultasi · Respon cepat · Solusi tepat</p>
-            </div>
+      {/* ════════ SECTION: KALKULATOR (paling bawah, sebelum footer) ════════ */}
+      <div style={{ background: "#FDFAF4", padding: "48px 5% 56px" }}>
+        <div style={{ maxWidth: 540, margin: "0 auto" }}>
+          <div style={{ marginBottom: 28, textAlign: "center" }}>
+            <SectionLabel icon="🧮" text="ESTIMASI BIAYA" />
+            <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.7rem", fontWeight: 800, color: "#2E3D3F", margin: "0 0 12px" }}>Kalkulator Lahan</h2>
+            <p style={{ color: "#5A6A6C", lineHeight: 1.7, fontSize: "0.88rem" }}>Masukkan luas bangunan Anda untuk estimasi biaya paket {tema.nama}.</p>
           </div>
-        )}
+          <KalkulatorLuas tema={tema} />
+          <div style={{ marginTop: 22, textAlign: "center" }}>
+            <button onClick={onWaOpen} style={{ padding: "14px 32px", background: `linear-gradient(135deg,${tema.warna},#C9AA71)`, color: "#fff", border: "none", borderRadius: 8, fontWeight: 800, fontSize: "0.88rem", cursor: "pointer", letterSpacing: ".06em" }}>
+              💬 KONSULTASI GRATIS →
+            </button>
+            <p style={{ fontSize: "0.72rem", color: "#5A6A6C", marginTop: 10 }}>Gratis konsultasi · Respon cepat · Solusi tepat</p>
+          </div>
+        </div>
       </div>
 
       {/* CTA Footer */}
@@ -12530,6 +12509,39 @@ function TemaEditForm({ temaOrig, editIdx, activeTemas, data, save, notify, onBa
   const [slideshowImgs, setSlideshowImgs] = useState(initImgs);
   const [slideshowPrev, setSlideshowPrev] = useState(0);
 
+  /* ── Multi-lantai foto denah state ── */
+  const initLantai = () => {
+    const existing = temaOrig?.detail?.denah?.lantai;
+    if (existing && existing.length > 0) return existing;
+    return [{ label: "Lantai 1", imgs: [] }];
+  };
+  const [denahLantai, setDenahLantai] = useState(initLantai);
+  const [uploadingDenah, setUploadingDenah] = useState(null); // index lantai yg sedang upload
+
+  const addLantai = () => {
+    setDenahLantai(prev => [...prev, { label: `Lantai ${prev.length + 1}`, imgs: [] }]);
+  };
+  const removeLantai = (li) => {
+    if (!window.confirm("Hapus lantai ini beserta semua fotonya?")) return;
+    setDenahLantai(prev => prev.filter((_, j) => j !== li));
+  };
+  const updateLantaiLabel = (li, lbl) => {
+    setDenahLantai(prev => prev.map((l, j) => j === li ? { ...l, label: lbl } : l));
+  };
+  const handleDenahUpload = async (li, f) => {
+    if (!f) return;
+    setUploadingDenah(li);
+    try {
+      const u = await uploadToCloudinary(f);
+      setDenahLantai(prev => prev.map((l, j) => j === li ? { ...l, imgs: [...l.imgs, u] } : l));
+      notify("✅ Foto denah ditambahkan!");
+    } catch { notify("❌ Gagal upload foto denah."); }
+    setUploadingDenah(null);
+  };
+  const removeDenahImg = (li, ii) => {
+    setDenahLantai(prev => prev.map((l, j) => j === li ? { ...l, imgs: l.imgs.filter((_, k) => k !== ii) } : l));
+  };
+
   const upd = (path, val) => {
     setDraft(prev => {
       const next = JSON.parse(JSON.stringify(prev));
@@ -12597,7 +12609,10 @@ function TemaEditForm({ temaOrig, editIdx, activeTemas, data, save, notify, onBa
     try {
       /* Simpan imgs[] dan img (foto pertama sebagai fallback) ke dalam draft */
       const imgFirst = slideshowImgs[0]?.img || draft.img || "";
-      const finalDraft = { ...draft, imgs: slideshowImgs, img: imgFirst };
+      const finalDraft = {
+        ...draft, imgs: slideshowImgs, img: imgFirst,
+        detail: { ...draft.detail, denah: { ...draft.detail.denah, lantai: denahLantai } },
+      };
       const nextTemas = activeTemas.map((t, i) => i === editIdx ? finalDraft : t);
       /* Juga update temaPhotosOverride agar slideshow kartu ikut berubah */
       const nextOverride = { ...(data.temaPhotosOverride || {}), [draft.slug]: slideshowImgs };
@@ -12809,7 +12824,55 @@ function TemaEditForm({ temaOrig, editIdx, activeTemas, data, save, notify, onBa
       <div style={SS}>
         {ST("📐", "Denah Ruang")}
         {inp("Deskripsi denah", "detail.denah.desc", true)}
-        <div style={{ fontSize: 11, fontWeight: 700, color: "#5A6A6C", marginBottom: 8, textTransform: "uppercase", letterSpacing: ".04em" }}>Daftar Ruangan</div>
+
+        {/* Upload Foto Denah per Lantai */}
+        <div style={{ fontSize: 11, fontWeight: 700, color: "#5A6A6C", margin: "4px 0 8px", textTransform: "uppercase", letterSpacing: ".04em" }}>
+          🏢 Foto Denah per Lantai
+        </div>
+        {denahLantai.map((lantai, li) => (
+          <div key={li} style={{ background: "#FAF7F0", border: "1.5px solid #E8DCC8", borderRadius: 10, padding: "14px 16px", marginBottom: 12 }}>
+            <div style={{ display: "flex", gap: 8, alignItems: "center", marginBottom: 10 }}>
+              <input type="text" value={lantai.label} onChange={e => updateLantaiLabel(li, e.target.value)}
+                placeholder="Lantai 1" style={{ flex: 1, padding: "8px 12px", border: "1.5px solid #D5C9B0", borderRadius: 8, fontSize: 13, fontWeight: 700 }} />
+              {denahLantai.length > 1 && (
+                <button onClick={() => removeLantai(li)}
+                  style={{ padding: "8px 12px", background: "#fee2e2", color: "#dc2626", border: "none", borderRadius: 8, cursor: "pointer", fontWeight: 700, fontSize: 12, whiteSpace: "nowrap" }}>🗑️ Hapus Lantai</button>
+              )}
+            </div>
+
+            {/* Thumbnail foto lantai ini */}
+            {lantai.imgs.length > 0 && (
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(90px,1fr))", gap: 8, marginBottom: 10 }}>
+                {lantai.imgs.map((img, ii) => (
+                  <div key={ii} style={{ position: "relative", borderRadius: 8, overflow: "hidden", border: "1.5px solid #E8DCC8" }}>
+                    <img src={img} alt={`${lantai.label} ${ii + 1}`} style={{ width: "100%", height: 70, objectFit: "cover", display: "block" }} onError={e => e.target.style.display = "none"} />
+                    <button onClick={() => removeDenahImg(li, ii)}
+                      style={{ position: "absolute", top: 3, right: 3, width: 20, height: 20, background: "rgba(220,38,38,.85)", color: "#fff", border: "none", borderRadius: "50%", cursor: "pointer", fontSize: 11, fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✕</button>
+                  </div>
+                ))}
+              </div>
+            )}
+            {lantai.imgs.length === 0 && (
+              <div style={{ textAlign: "center", padding: "14px", border: "1.5px dashed #D5C9B0", borderRadius: 8, color: "#A89070", fontSize: 12, marginBottom: 10 }}>
+                Belum ada foto denah untuk {lantai.label || "lantai ini"}.
+              </div>
+            )}
+
+            <label style={{ display: "inline-block", padding: "8px 14px", background: uploadingDenah === li ? "#ccc" : "#3498db", color: "#fff", borderRadius: 8, fontSize: 12, fontWeight: 700, cursor: uploadingDenah === li ? "default" : "pointer" }}>
+              {uploadingDenah === li ? "⏳ Mengupload..." : "📷 Upload Foto Denah"}
+              <input type="file" accept="image/*" style={{ display: "none" }} disabled={uploadingDenah === li} onChange={e => handleDenahUpload(li, e.target.files?.[0])} />
+            </label>
+          </div>
+        ))}
+        <button onClick={addLantai}
+          style={{ padding: "7px 16px", background: "#F5EDD8", color: "#5A6A6C", border: "1.5px dashed #D5C9B0", borderRadius: 8, fontSize: 13, fontWeight: 700, cursor: "pointer", marginBottom: 18 }}>
+          + Tambah Lantai
+        </button>
+        <div style={{ fontSize: 11, color: "#8B9A9C", marginBottom: 18, marginTop: -10 }}>
+          Bisa 1 lantai, 2 lantai, atau lebih. Foto ini yang ditampilkan di tab "Denah Ruang" halaman publik (tanpa rincian ukuran).
+        </div>
+
+        <div style={{ fontSize: 11, fontWeight: 700, color: "#5A6A6C", marginBottom: 8, textTransform: "uppercase", letterSpacing: ".04em" }}>Daftar Ruangan (data internal, tidak tampil di publik)</div>
         {(draft.detail?.denah?.ruangan || []).map((r, ri) => (
           <div key={ri} style={{ display: "flex", gap: 8, marginBottom: 8, alignItems: "center" }}>
             <input type="text" value={r.ikon || ""} onChange={e => { const a = [...draft.detail.denah.ruangan]; a[ri] = { ...a[ri], ikon: e.target.value }; upd("detail.denah.ruangan", a); }}
