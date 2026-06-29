@@ -11478,9 +11478,6 @@ function FurniturPage({ data, onWaOpen }) {
         .fur-btn-wa { transition: background .18s, transform .15s; }
         .fur-btn-wa:hover { transform: scale(1.04); }
         @media (max-width:700px) {
-          .fur-grid { grid-template-columns: repeat(2,1fr) !important; }
-        }
-        @media (max-width:440px) {
           .fur-grid { grid-template-columns: 1fr !important; }
         }
       `}</style>
@@ -11557,51 +11554,86 @@ function FurniturPage({ data, onWaOpen }) {
             <p style={{ fontSize:"1.05rem", fontWeight:600, color:darkTeal }}>Belum ada produk furnitur.</p>
             <p style={{ fontSize:"0.875rem", marginTop:8 }}>Produk akan ditampilkan di sini setelah ditambahkan dari Control Panel.</p>
           </div>
-        ) : (
-          <div className="fur-grid" style={{ display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:24 }}>
-            {filtered.map(prod => (
-              <div key={prod.id} className="fur-card"
-                style={{ background:"#fff", borderRadius:14, overflow:"hidden", boxShadow:"0 2px 14px rgba(0,0,0,.07)", cursor:"pointer", display:"flex", flexDirection:"column" }}
-                onMouseEnter={()=>setHoverCard(prod.id)}
-                onMouseLeave={()=>setHoverCard(null)}
-                onClick={()=>setDetailItem(prod)}>
-                {/* Image */}
-                <div className="fur-img-wrap" style={{ height:220, overflow:"hidden", background:"#F5EDD8", position:"relative" }}>
-                  {prod._img ? (
-                    <img src={prod._img} alt={prod.nama} style={{ width:"100%", height:"100%", objectFit:"cover", display:"block" }} loading="lazy"
-                      onError={e=>{e.target.style.display="none"; e.target.nextSibling.style.display="flex";}} />
-                  ) : null}
-                  <div style={{ display: prod._img ? "none" : "flex", position:"absolute", inset:0, alignItems:"center", justifyContent:"center", fontSize:48, background:"#F5EDD8" }}>🪑</div>
-                  {prod.kategori && (
-                    <span style={{ position:"absolute", top:12, left:12, background:"rgba(46,61,63,.82)", color:"#fff", fontSize:"0.65rem", padding:"3px 10px", borderRadius:12, fontWeight:700, letterSpacing:".08em", textTransform:"uppercase", backdropFilter:"blur(4px)" }}>
-                      {prod.kategori}
-                    </span>
-                  )}
-                </div>
-                {/* Info */}
-                <div style={{ padding:"18px 18px 20px", flex:1, display:"flex", flexDirection:"column" }}>
-                  <h3 style={{ fontSize:"0.9375rem", fontWeight:700, color:darkTeal, marginBottom:6, lineHeight:1.35 }}>{prod.nama}</h3>
-                  {prod.deskripsi && (
-                    <p style={{ fontSize:"0.8rem", color:"#5A6A6C", lineHeight:1.6, flex:1, marginBottom:12, display:"-webkit-box", WebkitLineClamp:2, WebkitBoxOrient:"vertical", overflow:"hidden" }}>
-                      {prod.deskripsi}
-                    </p>
-                  )}
-                  <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", gap:10, marginTop:"auto" }}>
-                    <span style={{ fontSize:"1.05rem", fontWeight:800, color:prod.harga ? "#8B6914" : "#5A6A6C", fontFamily:"'Playfair Display',serif" }}>
-                      {formatRp(prod.harga)}
-                    </span>
-                    <button
-                      className="fur-btn-wa"
-                      onClick={e=>{ e.stopPropagation(); onWaOpen && onWaOpen({ key:"layanan", vars:{ judul_layanan: prod.nama } }); }}
-                      style={{ background:`linear-gradient(135deg,${darkTeal},#3D5254)`, color:"#fff", border:"none", borderRadius:8, padding:"8px 14px", fontSize:"0.75rem", fontWeight:700, cursor:"pointer", whiteSpace:"nowrap", fontFamily:"'Jost',sans-serif" }}>
-                      💬 Tanya
-                    </button>
-                  </div>
+        ) : (() => {
+          /* Kelompokkan produk per kategori untuk divider */
+          const groups = [];
+          if (category !== "all") {
+            /* Filter aktif: satu grup tanpa divider header */
+            groups.push({ label: null, items: filtered });
+          } else {
+            /* Semua: kelompokkan per kategori, urutan kemunculan pertama */
+            const seen = {};
+            filtered.forEach(prod => {
+              const key = prod.kategori || "Lainnya";
+              if (!seen[key]) { seen[key] = []; groups.push({ label: key, items: seen[key] }); }
+              seen[key].push(prod);
+            });
+          }
+          const renderCard = (prod) => (
+            <div key={prod.id} className="fur-card"
+              style={{ background:"#fff", borderRadius:14, overflow:"hidden", boxShadow:"0 2px 14px rgba(0,0,0,.07)", cursor:"pointer", display:"flex", flexDirection:"column" }}
+              onMouseEnter={()=>setHoverCard(prod.id)}
+              onMouseLeave={()=>setHoverCard(null)}
+              onClick={()=>setDetailItem(prod)}>
+              {/* Image */}
+              <div className="fur-img-wrap" style={{ height:220, overflow:"hidden", background:"#F5EDD8", position:"relative" }}>
+                {prod._img ? (
+                  <img src={prod._img} alt={prod.nama} style={{ width:"100%", height:"100%", objectFit:"cover", display:"block" }} loading="lazy"
+                    onError={e=>{e.target.style.display="none"; e.target.nextSibling.style.display="flex";}} />
+                ) : null}
+                <div style={{ display: prod._img ? "none" : "flex", position:"absolute", inset:0, alignItems:"center", justifyContent:"center", fontSize:48, background:"#F5EDD8" }}>🪑</div>
+                {prod.kategori && (
+                  <span style={{ position:"absolute", top:12, left:12, background:"rgba(46,61,63,.82)", color:"#fff", fontSize:"0.65rem", padding:"3px 10px", borderRadius:12, fontWeight:700, letterSpacing:".08em", textTransform:"uppercase", backdropFilter:"blur(4px)" }}>
+                    {prod.kategori}
+                  </span>
+                )}
+              </div>
+              {/* Info */}
+              <div style={{ padding:"18px 18px 20px", flex:1, display:"flex", flexDirection:"column" }}>
+                <h3 style={{ fontSize:"0.9375rem", fontWeight:700, color:darkTeal, marginBottom:6, lineHeight:1.35 }}>{prod.nama}</h3>
+                {prod.deskripsi && (
+                  <p style={{ fontSize:"0.8rem", color:"#5A6A6C", lineHeight:1.6, flex:1, marginBottom:12, display:"-webkit-box", WebkitLineClamp:2, WebkitBoxOrient:"vertical", overflow:"hidden" }}>
+                    {prod.deskripsi}
+                  </p>
+                )}
+                <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", gap:10, marginTop:"auto" }}>
+                  <span style={{ fontSize:"1.05rem", fontWeight:800, color:prod.harga ? "#8B6914" : "#5A6A6C", fontFamily:"'Playfair Display',serif" }}>
+                    {formatRp(prod.harga)}
+                  </span>
+                  <button
+                    className="fur-btn-wa"
+                    onClick={e=>{ e.stopPropagation(); onWaOpen && onWaOpen({ key:"layanan", vars:{ judul_layanan: prod.nama } }); }}
+                    style={{ background:`linear-gradient(135deg,${darkTeal},#3D5254)`, color:"#fff", border:"none", borderRadius:8, padding:"8px 14px", fontSize:"0.75rem", fontWeight:700, cursor:"pointer", whiteSpace:"nowrap", fontFamily:"'Jost',sans-serif" }}>
+                    💬 Tanya
+                  </button>
                 </div>
               </div>
-            ))}
-          </div>
-        )}
+            </div>
+          );
+          return (
+            <div>
+              {groups.map((group, gi) => (
+                <div key={group.label || "all"}>
+                  {/* Garis pembatas kategori */}
+                  {group.label && (
+                    <div style={{ display:"flex", alignItems:"center", gap:14, margin: gi === 0 ? "0 0 24px" : "40px 0 24px" }}>
+                      <div style={{ flex:1, height:1, background:"linear-gradient(to right,#E8DCC8,transparent)" }} />
+                      <div style={{ display:"flex", alignItems:"center", gap:8, background:"#FAF7F0", border:"1px solid #E8DCC8", borderRadius:20, padding:"5px 16px", flexShrink:0 }}>
+                        <span style={{ fontSize:"0.68rem", fontWeight:800, letterSpacing:".12em", textTransform:"uppercase", color:accentGold }}>🪑</span>
+                        <span style={{ fontSize:"0.78rem", fontWeight:700, color:darkTeal, letterSpacing:".04em" }}>{group.label}</span>
+                        <span style={{ fontSize:"0.68rem", color:"#8B9A9C", fontWeight:500 }}>({group.items.length})</span>
+                      </div>
+                      <div style={{ flex:1, height:1, background:"linear-gradient(to left,#E8DCC8,transparent)" }} />
+                    </div>
+                  )}
+                  <div className="fur-grid" style={{ display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:24 }}>
+                    {group.items.map(prod => renderCard(prod))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          );
+        })()}
       </div>
 
       {/* -- Detail Modal -- */}
@@ -14098,16 +14130,85 @@ export default function BricksyTravel() {
                     </span>
                   </div>
 
-                  {/* == ABOUT == */}
-                  <section className="re-about">
-                    {/* Smoke background orb */}
-                    <div className="re-smoke-orb" style={{ width:500,height:500,top:"-100px",right:"-80px",animationDelay:"1s" }} />
-                    <div className="re-smoke-orb" style={{ width:340,height:340,bottom:"-60px",left:"-60px",animationDelay:"4s" }} />
-                    <p className="re-about-label re-reveal">Tentang Kami</p>
-                    <h2 className="re-about-h2 re-reveal delay-1">
-                      Selama 20 tahun lebih, VASTURA GROUP telah melakukan jual-beli properti. Kami bangga menjadi salah satu perusahaan properti terkemuka di kota.
-                    </h2>
-                    <div className="re-sash" style={{ bottom:0,left:"20%",width:"60%",opacity:.5 }} />
+                  {/* == RUNNING PHOTO STRIP == */}
+                  <section style={{ background:"#F8F5EE", padding:"56px 0 52px", overflow:"hidden" }}>
+                    {/* Label */}
+                    <div style={{ textAlign:"center", marginBottom:32 }}>
+                      <p style={{ fontSize:"0.7rem", letterSpacing:"3px", color:"#8B6914", fontWeight:700, textTransform:"uppercase", fontFamily:"'Jost',sans-serif", marginBottom:10 }}>Koleksi Kami</p>
+                      <h2 style={{ fontFamily:"'Playfair Display',serif", fontSize:"clamp(1.4rem,3vw,2rem)", fontWeight:800, color:"#2E3D3F", margin:0, letterSpacing:"-0.01em" }}>
+                        Tema Rumah · Interior · Eksterior
+                      </h2>
+                    </div>
+                    <style>{`
+                      @keyframes scrollRight { from { transform:translateX(0) } to { transform:translateX(-50%) } }
+                      @keyframes scrollLeft  { from { transform:translateX(-50%) } to { transform:translateX(0) } }
+                      .photo-strip-right { display:flex; gap:14px; width:max-content; animation:scrollRight 38s linear infinite; }
+                      .photo-strip-left  { display:flex; gap:14px; width:max-content; animation:scrollLeft  38s linear infinite; }
+                      .photo-strip-right:hover, .photo-strip-left:hover { animation-play-state:paused; }
+                      .photo-strip-img { width:280px; height:180px; border-radius:12px; object-fit:cover; flex-shrink:0; display:block; }
+                    `}</style>
+
+                    {/* Baris 1 — bergerak ke kanan */}
+                    <div style={{ overflow:"hidden", marginBottom:14 }}>
+                      <div className="photo-strip-right">
+                        {[
+                          { src:"https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&q=80", label:"Tema Minimalis" },
+                          { src:"https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=600&q=80", label:"Tema Modern" },
+                          { src:"https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=600&q=80", label:"Tema Klasik" },
+                          { src:"https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?w=600&q=80", label:"Tema Tropis" },
+                          { src:"https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=600&q=80", label:"Interior Kamar" },
+                          { src:"https://images.unsplash.com/photo-1560448204-603b3fc33ddc?w=600&q=80", label:"Interior Luxury" },
+                          { src:"https://images.unsplash.com/photo-1567016432779-094069958ea5?w=600&q=80", label:"Ruang Keluarga" },
+                          { src:"https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=600&q=80", label:"Dapur Modern" },
+                        ].concat([
+                          { src:"https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&q=80", label:"Tema Minimalis" },
+                          { src:"https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=600&q=80", label:"Tema Modern" },
+                          { src:"https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=600&q=80", label:"Tema Klasik" },
+                          { src:"https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?w=600&q=80", label:"Tema Tropis" },
+                          { src:"https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=600&q=80", label:"Interior Kamar" },
+                          { src:"https://images.unsplash.com/photo-1560448204-603b3fc33ddc?w=600&q=80", label:"Interior Luxury" },
+                          { src:"https://images.unsplash.com/photo-1567016432779-094069958ea5?w=600&q=80", label:"Ruang Keluarga" },
+                          { src:"https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=600&q=80", label:"Dapur Modern" },
+                        ]).map((item, i) => (
+                          <div key={i} style={{ position:"relative", flexShrink:0 }}>
+                            <img src={item.src} alt={item.label} className="photo-strip-img"
+                              onError={e=>{ e.target.style.background="#E8DCC8"; e.target.style.display="none"; }} />
+                            <div style={{ position:"absolute", bottom:10, left:10, background:"rgba(46,61,63,.75)", backdropFilter:"blur(4px)", color:"#fff", fontSize:"0.65rem", fontWeight:700, letterSpacing:".06em", textTransform:"uppercase", padding:"3px 10px", borderRadius:10 }}>{item.label}</div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Baris 2 — bergerak ke kiri */}
+                    <div style={{ overflow:"hidden" }}>
+                      <div className="photo-strip-left">
+                        {[
+                          { src:"https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=600&q=80", label:"Taman Tropis" },
+                          { src:"https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=600&q=80", label:"Fasad ACP" },
+                          { src:"https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=600&q=80", label:"Eksterior Modern" },
+                          { src:"https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=600&q=80", label:"Ruang Tamu" },
+                          { src:"https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=600&q=80", label:"Kamar Mandi" },
+                          { src:"https://images.unsplash.com/photo-1575429198097-0414ec08e8cd?w=600&q=80", label:"Kolam Renang" },
+                          { src:"https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=600&q=80", label:"Living Room" },
+                          { src:"https://images.unsplash.com/photo-1556909172-89cf0b8d8a5b?w=600&q=80", label:"Dapur Terbuka" },
+                        ].concat([
+                          { src:"https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=600&q=80", label:"Taman Tropis" },
+                          { src:"https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=600&q=80", label:"Fasad ACP" },
+                          { src:"https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=600&q=80", label:"Eksterior Modern" },
+                          { src:"https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=600&q=80", label:"Ruang Tamu" },
+                          { src:"https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=600&q=80", label:"Kamar Mandi" },
+                          { src:"https://images.unsplash.com/photo-1575429198097-0414ec08e8cd?w=600&q=80", label:"Kolam Renang" },
+                          { src:"https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=600&q=80", label:"Living Room" },
+                          { src:"https://images.unsplash.com/photo-1556909172-89cf0b8d8a5b?w=600&q=80", label:"Dapur Terbuka" },
+                        ]).map((item, i) => (
+                          <div key={i} style={{ position:"relative", flexShrink:0 }}>
+                            <img src={item.src} alt={item.label} className="photo-strip-img"
+                              onError={e=>{ e.target.style.background="#E8DCC8"; e.target.style.display="none"; }} />
+                            <div style={{ position:"absolute", bottom:10, left:10, background:"rgba(139,105,20,.8)", backdropFilter:"blur(4px)", color:"#fff", fontSize:"0.65rem", fontWeight:700, letterSpacing:".06em", textTransform:"uppercase", padding:"3px 10px", borderRadius:10 }}>{item.label}</div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
                   </section>
 
                   {/* == QUOTE / PARALLAX IMAGE == */}
