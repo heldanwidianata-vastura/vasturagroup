@@ -642,6 +642,7 @@ const DEFAULT_DATA = {
       "",
       "",
     ],
+    running: [],
   },
   content: {
     heroTitle: "Developer Perumahan & Jasa Desain",
@@ -707,6 +708,7 @@ const DEFAULT_DATA = {
   landscapeCategories: [],
   rumahSubsidiPaket: [],
   temaData: [],
+  homeServices: [],
   services: [
     /* ── EVENT PLAN (3 paket) ── */
     {
@@ -10676,6 +10678,16 @@ function LandscapePage({ onWaOpen, categories }) {
   );
 }
 
+/* ── Data default Layanan Section Home (bisa dioverride via CMS: data.homeServices) ── */
+const HOME_SERVICES_DEFAULT = [
+  { num:"01", title:"Membangun Rumah", desc:"Ingin membangun rumah baru? Kami bisa membantu mewujudkannya.", img:"https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=600&q=80&auto=format&fit=crop" },
+  { num:"02", title:"Renovasi Rumah", desc:"Rumah Anda butuh renovasi? Biarkan kami membantu Anda.", img:"https://images.unsplash.com/photo-1502005229762-cf1b2da7c5d6?w=600&q=80&auto=format&fit=crop" },
+  { num:"03", title:"Custom Properti", desc:"Ingin properti sesuai kebutuhan khusus? Kami dapat membantu.", img:"https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=600&q=80&auto=format&fit=crop" },
+  { num:"04", title:"Manajemen Properti", desc:"Kesulitan mengatur properti sewaan Anda? Kami siap bantu.", img:"https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=600&q=80&auto=format&fit=crop" },
+  { num:"05", title:"Penataan & Gaya Rumah", desc:"Ingin listing Anda lebih menarik? Biarkan kami memandu Anda.", img:"https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&q=80&auto=format&fit=crop" },
+  { num:"06", title:"Konsultasi Investasi", desc:"Ingin kembangkan portofolio Anda? Tim kami siap bantu.", img:"https://images.unsplash.com/photo-1560520653-9e0e4c89eb11?w=600&q=80&auto=format&fit=crop" },
+];
+
 /* ═══════════════════════════════════════════════════════════════════
    PROGRAM RENOVASI RUMAH SUBSIDI — Magazine Mixing Grid
    (1 kolom | 3 kolom | 2 kolom, ulangi per 6 paket)
@@ -12706,6 +12718,90 @@ function SubInteriorPage({ pageKey, onWaOpen, navigateTo, data }) {
 
 /* ── Router: Eksterior sub-pages juga pakai component yang sama ── */
 const SubEksteriorPage = SubInteriorPage;
+
+/* ── Ambil otomatis kumpulan foto Interior + Eksterior + Furnitur ──
+   Dipakai untuk "Foto Berjalan (Running) Home": campuran upload manual + asset otomatis. */
+function getAutoHomeRunningImages(data) {
+  const pool = [];
+  Object.keys(INT_PAGE_CRUD_KEY).forEach(pageKey => {
+    const crudKey = INT_PAGE_CRUD_KEY[pageKey];
+    const items = (data && data[crudKey] && data[crudKey].length > 0)
+      ? data[crudKey]
+      : (CATALOG_DATA[pageKey]?.items || []);
+    items.forEach(it => { const src = it._img || it.img; if (src) pool.push(src); });
+  });
+  (data?.furniturItems || []).forEach(p => { if (p._img) pool.push(p._img); });
+  return [...new Set(pool)];
+}
+
+/* Selang-seling 2 array agar tampil campuran rapi (bukan numpuk per kelompok) */
+function interleaveArrays(a, b) {
+  const out = [];
+  const len = Math.max(a.length, b.length);
+  for (let i = 0; i < len; i++) {
+    if (i < a.length) out.push(a[i]);
+    if (i < b.length) out.push(b[i]);
+  }
+  return out;
+}
+
+/* ── Editor 1 kartu Layanan Section Home (foto + judul + deskripsi) ── */
+function HomeServiceCardEditor({ index, svc, data, save, notify }) {
+  const [title, setTitle] = useState(svc.title || "");
+  const [desc, setDesc]   = useState(svc.desc || "");
+  const [saving, setSaving] = useState(false);
+
+  const getList = () => (data.homeServices && data.homeServices.length > 0)
+    ? data.homeServices.map(x => ({ ...x }))
+    : HOME_SERVICES_DEFAULT.map(x => ({ ...x }));
+
+  const patchAndSave = async (patch) => {
+    const list = getList();
+    list[index] = { ...list[index], ...patch };
+    await save({ ...data, homeServices: list });
+  };
+
+  const doSaveText = async () => {
+    setSaving(true);
+    try { await patchAndSave({ title, desc }); notify("✅ Layanan diperbarui!"); }
+    catch { notify("❌ Gagal menyimpan.", "error"); }
+    setSaving(false);
+  };
+
+  const doRemove = async () => {
+    const list = getList().filter((_, i) => i !== index);
+    await save({ ...data, homeServices: list });
+    notify("Layanan dihapus.");
+  };
+
+  return (
+    <div style={{ background: "#FAF7F0", borderRadius: 8, padding: 12, border: "1px solid #E8DCC8" }}>
+      {svc.img ? (
+        <img src={svc.img} alt={svc.title} style={{ width: "100%", height: 120, objectFit: "cover", borderRadius: 6, marginBottom: 8, border: "1px solid #D4C4A0" }}
+          onError={e => e.target.style.display = "none"} />
+      ) : (
+        <div style={{ width: "100%", height: 120, background: "#E8DCC8", borderRadius: 6, marginBottom: 8, display: "flex", alignItems: "center", justifyContent: "center", color: "#5A6A6C", fontSize: 11 }}>Belum ada foto</div>
+      )}
+      <UploadButton label="📁 Ganti Foto"
+        style={{ fontSize: 11, padding: "6px 10px", marginBottom: 8, width: "100%", justifyContent: "center" }}
+        onDone={urls => { patchAndSave({ img: urls[0] }); notify("✅ Foto layanan diperbarui!"); }}
+        onError={() => notify("Gagal upload.", "error")} />
+      <input value={title} onChange={e => setTitle(e.target.value)} placeholder="Judul layanan"
+        style={{ width: "100%", padding: "7px 9px", border: "1px solid #D4C4A0", borderRadius: 5, fontSize: 12, marginBottom: 6, boxSizing: "border-box", fontWeight: 700 }} />
+      <textarea value={desc} onChange={e => setDesc(e.target.value)} placeholder="Deskripsi singkat" rows={2}
+        style={{ width: "100%", padding: "7px 9px", border: "1px solid #D4C4A0", borderRadius: 5, fontSize: 11, marginBottom: 8, boxSizing: "border-box", resize: "vertical", fontFamily: "inherit" }} />
+      <div style={{ display: "flex", gap: 6 }}>
+        <button onClick={doSaveText} disabled={saving}
+          style={{ flex: 1, padding: "6px", background: "#3498db", color: "#fff", border: "none", borderRadius: 5, fontSize: 11, fontWeight: 700, cursor: "pointer" }}>
+          {saving ? "..." : "💾 Simpan Teks"}
+        </button>
+        <button onClick={doRemove}
+          style={{ padding: "6px 10px", background: "none", color: "#e74c3c", border: "1px solid #e74c3c", borderRadius: 5, fontSize: 11, cursor: "pointer" }}>🗑</button>
+      </div>
+    </div>
+  );
+}
+
 
 /* ─────────────── NAV DROPDOWN: LAYANAN KAMI (3-level nested) ─────────────── */
 function NavDropdownLayanan({ page, navigateTo, navDropdownLayanan }) {
@@ -15481,7 +15577,7 @@ export default function BricksyTravel() {
                     <div style={{ textAlign:"center", marginBottom:32 }}>
                       <p style={{ fontSize:"0.7rem", letterSpacing:"3px", color:"#8B6914", fontWeight:700, textTransform:"uppercase", fontFamily:"'Jost',sans-serif", marginBottom:10 }}>Koleksi Kami</p>
                       <h2 style={{ fontFamily:"'Playfair Display',serif", fontSize:"clamp(1.4rem,3vw,2rem)", fontWeight:800, color:"#2E3D3F", margin:0, letterSpacing:"-0.01em" }}>
-                        Tema Rumah · Interior · Eksterior
+                        Tema Rumah · Interior · Eksterior · Furnitur
                       </h2>
                     </div>
                     <style>{`
@@ -15493,67 +15589,56 @@ export default function BricksyTravel() {
                       .photo-strip-img { width:280px; height:180px; border-radius:12px; object-fit:cover; flex-shrink:0; display:block; }
                     `}</style>
 
-                    {/* Baris 1 — bergerak ke kanan */}
-                    <div style={{ overflow:"hidden", marginBottom:14 }}>
-                      <div className="photo-strip-right">
-                        {[
-                          { src:"https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&q=80", label:"Tema Minimalis" },
-                          { src:"https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=600&q=80", label:"Tema Modern" },
-                          { src:"https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=600&q=80", label:"Tema Klasik" },
-                          { src:"https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?w=600&q=80", label:"Tema Tropis" },
-                          { src:"https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=600&q=80", label:"Interior Kamar" },
-                          { src:"https://images.unsplash.com/photo-1560448204-603b3fc33ddc?w=600&q=80", label:"Interior Luxury" },
-                          { src:"https://images.unsplash.com/photo-1567016432779-094069958ea5?w=600&q=80", label:"Ruang Keluarga" },
-                          { src:"https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=600&q=80", label:"Dapur Modern" },
-                        ].concat([
-                          { src:"https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&q=80", label:"Tema Minimalis" },
-                          { src:"https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=600&q=80", label:"Tema Modern" },
-                          { src:"https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=600&q=80", label:"Tema Klasik" },
-                          { src:"https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?w=600&q=80", label:"Tema Tropis" },
-                          { src:"https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=600&q=80", label:"Interior Kamar" },
-                          { src:"https://images.unsplash.com/photo-1560448204-603b3fc33ddc?w=600&q=80", label:"Interior Luxury" },
-                          { src:"https://images.unsplash.com/photo-1567016432779-094069958ea5?w=600&q=80", label:"Ruang Keluarga" },
-                          { src:"https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=600&q=80", label:"Dapur Modern" },
-                        ]).map((item, i) => (
-                          <div key={i} style={{ position:"relative", flexShrink:0 }}>
-                            <img src={item.src} alt={item.label} className="photo-strip-img"
-                              onError={e=>{ e.target.style.background="#E8DCC8"; e.target.style.display="none"; }} />
-                            <div style={{ position:"absolute", bottom:10, left:10, background:"rgba(46,61,63,.75)", backdropFilter:"blur(4px)", color:"#fff", fontSize:"0.65rem", fontWeight:700, letterSpacing:".06em", textTransform:"uppercase", padding:"3px 10px", borderRadius:10 }}>{item.label}</div>
+                    {(() => {
+                      const DEFAULT_RUNNING = [
+                        "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&q=80",
+                        "https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=600&q=80",
+                        "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=600&q=80",
+                        "https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?w=600&q=80",
+                        "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=600&q=80",
+                        "https://images.unsplash.com/photo-1560448204-603b3fc33ddc?w=600&q=80",
+                        "https://images.unsplash.com/photo-1567016432779-094069958ea5?w=600&q=80",
+                        "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=600&q=80",
+                        "https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=600&q=80",
+                        "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=600&q=80",
+                        "https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=600&q=80",
+                        "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=600&q=80",
+                        "https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=600&q=80",
+                        "https://images.unsplash.com/photo-1575429198097-0414ec08e8cd?w=600&q=80",
+                        "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=600&q=80",
+                        "https://images.unsplash.com/photo-1556909172-89cf0b8d8a5b?w=600&q=80",
+                      ];
+                      const manual = data.images?.running || [];
+                      const auto = getAutoHomeRunningImages(data).slice(0, 24);
+                      const combined = interleaveArrays(manual, auto);
+                      const running = combined.length > 0 ? combined : DEFAULT_RUNNING;
+                      const mid = Math.max(1, Math.ceil(running.length / 2));
+                      const row1 = running.slice(0, mid);
+                      const row2 = running.length > mid ? running.slice(mid) : row1;
+                      return (
+                        <>
+                          {/* Baris 1 — bergerak ke kanan */}
+                          <div style={{ overflow:"hidden", marginBottom:14 }}>
+                            <div className="photo-strip-right">
+                              {row1.concat(row1).map((src, i) => (
+                                <img key={i} src={src} alt={`Foto ${i+1}`} className="photo-strip-img"
+                                  onError={e=>{ e.target.style.display="none"; }} />
+                              ))}
+                            </div>
                           </div>
-                        ))}
-                      </div>
-                    </div>
 
-                    {/* Baris 2 — bergerak ke kiri */}
-                    <div style={{ overflow:"hidden" }}>
-                      <div className="photo-strip-left">
-                        {[
-                          { src:"https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=600&q=80", label:"Taman Tropis" },
-                          { src:"https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=600&q=80", label:"Fasad ACP" },
-                          { src:"https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=600&q=80", label:"Eksterior Modern" },
-                          { src:"https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=600&q=80", label:"Ruang Tamu" },
-                          { src:"https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=600&q=80", label:"Kamar Mandi" },
-                          { src:"https://images.unsplash.com/photo-1575429198097-0414ec08e8cd?w=600&q=80", label:"Kolam Renang" },
-                          { src:"https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=600&q=80", label:"Living Room" },
-                          { src:"https://images.unsplash.com/photo-1556909172-89cf0b8d8a5b?w=600&q=80", label:"Dapur Terbuka" },
-                        ].concat([
-                          { src:"https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=600&q=80", label:"Taman Tropis" },
-                          { src:"https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=600&q=80", label:"Fasad ACP" },
-                          { src:"https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=600&q=80", label:"Eksterior Modern" },
-                          { src:"https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=600&q=80", label:"Ruang Tamu" },
-                          { src:"https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=600&q=80", label:"Kamar Mandi" },
-                          { src:"https://images.unsplash.com/photo-1575429198097-0414ec08e8cd?w=600&q=80", label:"Kolam Renang" },
-                          { src:"https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=600&q=80", label:"Living Room" },
-                          { src:"https://images.unsplash.com/photo-1556909172-89cf0b8d8a5b?w=600&q=80", label:"Dapur Terbuka" },
-                        ]).map((item, i) => (
-                          <div key={i} style={{ position:"relative", flexShrink:0 }}>
-                            <img src={item.src} alt={item.label} className="photo-strip-img"
-                              onError={e=>{ e.target.style.background="#E8DCC8"; e.target.style.display="none"; }} />
-                            <div style={{ position:"absolute", bottom:10, left:10, background:"rgba(139,105,20,.8)", backdropFilter:"blur(4px)", color:"#fff", fontSize:"0.65rem", fontWeight:700, letterSpacing:".06em", textTransform:"uppercase", padding:"3px 10px", borderRadius:10 }}>{item.label}</div>
+                          {/* Baris 2 — bergerak ke kiri */}
+                          <div style={{ overflow:"hidden" }}>
+                            <div className="photo-strip-left">
+                              {row2.concat(row2).map((src, i) => (
+                                <img key={i} src={src} alt={`Foto ${i+1}`} className="photo-strip-img"
+                                  onError={e=>{ e.target.style.display="none"; }} />
+                              ))}
+                            </div>
                           </div>
-                        ))}
-                      </div>
-                    </div>
+                        </>
+                      );
+                    })()}
                   </section>
 
                   {/* == QUOTE / PARALLAX IMAGE == */}
@@ -15607,20 +15692,13 @@ export default function BricksyTravel() {
                     <div style={{ maxWidth:1200,margin:"0 auto",position:"relative",zIndex:1 }}>
                       <h2 className="re-services-h2 re-reveal">Layanan VASTURA GROUP Kami</h2>
                       <div className="re-services-grid">
-                        {[
-                          { num:"01", title:"Beli Rumah", desc:"Sedang cari rumah? Kami bisa membantu menemukannya.", img:"https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=600&q=80&auto=format&fit=crop" },
-                          { num:"02", title:"Jual Rumah", desc:"Anda ingin jual rumah? Biarkan kami membantu Anda.", img:"https://images.unsplash.com/photo-1502005229762-cf1b2da7c5d6?w=600&q=80&auto=format&fit=crop" },
-                          { num:"03", title:"Pindah Rumah", desc:"Pindah rumah karena pekerjaan baru? Kami dapat membantu.", img:"https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=600&q=80&auto=format&fit=crop" },
-                          { num:"04", title:"Manajemen Properti", desc:"Kesulitan mengatur properti sewaan Anda? Kami siap bantu.", img:"https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=600&q=80&auto=format&fit=crop" },
-                          { num:"05", title:"Penataan & Gaya Rumah", desc:"Ingin listing Anda lebih menarik? Biarkan kami memandu Anda.", img:"https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&q=80&auto=format&fit=crop" },
-                          { num:"06", title:"Konsultasi Investasi", desc:"Ingin kembangkan portofolio Anda? Tim kami siap bantu.", img:"https://images.unsplash.com/photo-1560520653-9e0e4c89eb11?w=600&q=80&auto=format&fit=crop" },
-                        ].map((svc, i) => (
+                        {((data.homeServices && data.homeServices.length > 0) ? data.homeServices : HOME_SERVICES_DEFAULT).map((svc, i) => (
                           <div key={i} className={`re-service-card ${i%2===0 ? "re-slide-left" : "re-slide-right"} delay-${(i%5)+1}`}>
                             <div className="re-service-card-img">
                               <img src={svc.img} alt={svc.title} />
                             </div>
                             <div className="re-service-card-body">
-                              <div className="re-service-num">{svc.num}</div>
+                              <div className="re-service-num">{svc.num || String(i+1).padStart(2,"0")}</div>
                               <div className="re-service-title">{svc.title}</div>
                               <div className="re-service-desc">{svc.desc}</div>
                             </div>
@@ -16974,100 +17052,88 @@ export default function BricksyTravel() {
                   </div>
 
                   {/* ======================================================= */}
-                  {/* SECTION: GAMBAR HALAMAN HOME */}
+                  {/* SECTION: FOTO BERJALAN (RUNNING) HOME */}
                   {/* ======================================================= */}
                   <div style={{ background: "#fff", borderRadius: 8, padding: "22px 24px", marginBottom: 24, boxShadow: "0 2px 8px rgba(0,0,0,.06)", borderTop: "4px solid #3498db" }}>
-                    <h3 style={{ fontSize: 16, fontWeight: 700, color: "#2E3D3F", marginBottom: 4 }}>🏠 Gambar Halaman Home</h3>
+                    <h3 style={{ fontSize: 16, fontWeight: 700, color: "#2E3D3F", marginBottom: 4 }}>🏠 Foto Berjalan (Running) Home</h3>
                     <p style={{ fontSize: 12, color: "#5A6A6C", marginBottom: 20, lineHeight: 1.6 }}>
-                      Atur semua gambar yang tampil di halaman utama website — Hero Slideshow (4 foto) dan Galeri Home (6 foto).
+                      Foto yang berjalan otomatis (scroll) di halaman Home, section "Koleksi Kami". Tampilan adalah <strong>campuran</strong> foto yang Anda upload manual di sini <strong>+</strong> foto yang diambil otomatis dari katalog Interior, Eksterior, dan Furnitur. Upload manual jumlahnya bebas / tidak terbatas.
                     </p>
 
-                    {/* Hero Images */}
-                    <div style={{ marginBottom: 24 }}>
-                      <h4 style={{ fontSize: 13, fontWeight: 700, color: "#2E3D3F", marginBottom: 4 }}>🖼 Hero Slideshow (4 Gambar)</h4>
-                      <p style={{ fontSize: 11, color: "#5A6A6C", marginBottom: 12, lineHeight: 1.6 }}>Gambar utama di bagian paling atas halaman. Tampil bergantian saat mode slideshow aktif.</p>
-                      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: 14 }}>
-                        {(data.images?.hero || ["","","",""]).map((img, idx) => (
-                          <div key={idx} style={{ background: "#FAF7F0", borderRadius: 8, padding: 12, border: "1px solid #E8DCC8" }}>
-                            <div style={{ fontSize: 11, fontWeight: 700, color: "#5A6A6C", marginBottom: 8, textTransform: "uppercase", letterSpacing: "0.5px" }}>Hero {idx + 1}</div>
-                            {img ? (
-                              <img src={img} alt={`Hero ${idx+1}`} style={{ width: "100%", height: 110, objectFit: "cover", borderRadius: 6, marginBottom: 8, border: "1px solid #D4C4A0" }}
-                                onError={e => e.target.style.display = "none"} />
-                            ) : (
-                              <div style={{ width: "100%", height: 110, background: "#E8DCC8", borderRadius: 6, marginBottom: 8, display: "flex", alignItems: "center", justifyContent: "center", color: "#5A6A6C", fontSize: 11 }}>Belum ada gambar</div>
-                            )}
-                            <UploadButton label="📁 Upload"
-                              style={{ fontSize: 11, padding: "6px 10px", marginBottom: 6, width: "100%", justifyContent: "center" }}
-                              onDone={urls => {
-                                const newHero = [...(data.images?.hero || ["","","",""])];
-                                newHero[idx] = urls[0];
-                                save({ ...data, images: { ...data.images, hero: newHero } });
-                                notify(`✅ Hero ${idx+1} diperbarui!`);
-                              }}
-                              onError={() => notify("Gagal upload.", "error")} />
-                            <div style={{ display: "flex", gap: 6 }}>
-                              <input id={`hero-img-${idx}`} defaultValue={img} placeholder="atau URL..."
-                                style={{ flex: 1, padding: "6px 8px", border: "1px solid #D4C4A0", borderRadius: 5, fontSize: 11, outline: "none" }} />
-                              <button onClick={() => {
-                                const url = document.getElementById(`hero-img-${idx}`)?.value?.trim();
-                                if (!url) return notify("Masukkan URL.", "error");
-                                const newHero = [...(data.images?.hero || ["","","",""])];
-                                newHero[idx] = url;
-                                save({ ...data, images: { ...data.images, hero: newHero } });
-                                notify(`✅ Hero ${idx+1} disimpan!`);
-                              }} style={{ padding: "6px 10px", background: "#3498db", color: "#fff", borderRadius: 5, fontSize: 11, border: "none", cursor: "pointer", whiteSpace: "nowrap" }}>OK</button>
-                            </div>
-                            {img && (
-                              <button onClick={() => {
-                                const newHero = [...(data.images?.hero || ["","","",""])];
-                                newHero[idx] = "";
-                                save({ ...data, images: { ...data.images, hero: newHero } });
-                                notify(`Hero ${idx+1} dihapus.`);
-                              }} style={{ marginTop: 6, width: "100%", padding: "5px", background: "none", color: "#e74c3c", border: "1px solid #e74c3c", borderRadius: 5, fontSize: 10, cursor: "pointer" }}>🗑 Hapus</button>
-                            )}
-                          </div>
-                        ))}
+                    {/* Upload baru */}
+                    <div style={{ display: "flex", flexWrap: "wrap", gap: 10, alignItems: "center", marginBottom: 18 }}>
+                      <UploadButton label="📁 Upload Foto (bisa banyak sekaligus)" multiple={true}
+                        style={{ fontSize: 12, padding: "9px 16px" }}
+                        onDone={urls => {
+                          const next = [...(data.images?.running || []), ...urls];
+                          save({ ...data, images: { ...data.images, running: next } });
+                          notify(`✅ ${urls.length} foto running ditambahkan!`);
+                        }}
+                        onError={() => notify("Sebagian foto gagal diupload.", "error")} />
+                      <div style={{ display: "flex", gap: 6 }}>
+                        <input id="running-img-url" placeholder="atau tempel URL gambar..."
+                          style={{ padding: "8px 10px", border: "1px solid #D4C4A0", borderRadius: 6, fontSize: 12, outline: "none", minWidth: 240 }} />
+                        <button onClick={() => {
+                          const inputEl = document.getElementById("running-img-url");
+                          const url = inputEl?.value?.trim();
+                          if (!url) return notify("Masukkan URL.", "error");
+                          const next = [...(data.images?.running || []), url];
+                          save({ ...data, images: { ...data.images, running: next } });
+                          if (inputEl) inputEl.value = "";
+                          notify("✅ Foto running ditambahkan!");
+                        }} style={{ padding: "8px 14px", background: "#3498db", color: "#fff", borderRadius: 6, fontSize: 12, border: "none", cursor: "pointer", fontWeight: 600 }}>Tambah</button>
                       </div>
                     </div>
 
-                    {/* Gallery Images */}
-                    <div style={{ paddingTop: 20, borderTop: "1px solid #F0E8D5" }}>
-                      <h4 style={{ fontSize: 13, fontWeight: 700, color: "#2E3D3F", marginBottom: 4 }}>🖼 Galeri Home (6 Gambar)</h4>
-                      <p style={{ fontSize: 11, color: "#5A6A6C", marginBottom: 12, lineHeight: 1.6 }}>Gambar grid galeri di bagian bawah halaman Home.</p>
-                      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))", gap: 12 }}>
-                        {(data.images?.gal || ["","","","","",""]).map((img, idx) => (
-                          <div key={idx} style={{ background: "#FAF7F0", borderRadius: 8, padding: 10, border: "1px solid #E8DCC8" }}>
-                            <div style={{ fontSize: 11, fontWeight: 700, color: "#5A6A6C", marginBottom: 6, textTransform: "uppercase", letterSpacing: "0.5px" }}>Galeri {idx + 1}</div>
-                            {img ? (
-                              <img src={img} alt={`Gal ${idx+1}`} style={{ width: "100%", height: 90, objectFit: "cover", borderRadius: 5, marginBottom: 6, border: "1px solid #D4C4A0" }}
-                                onError={e => e.target.style.display = "none"} />
-                            ) : (
-                              <div style={{ width: "100%", height: 90, background: "#E8DCC8", borderRadius: 5, marginBottom: 6, display: "flex", alignItems: "center", justifyContent: "center", color: "#5A6A6C", fontSize: 11 }}>Kosong</div>
-                            )}
-                            <UploadButton label="📁 Upload"
-                              style={{ fontSize: 10, padding: "5px 8px", marginBottom: 5, width: "100%", justifyContent: "center" }}
-                              onDone={urls => {
-                                const newGal = [...(data.images?.gal || ["","","","","",""])];
-                                newGal[idx] = urls[0];
-                                save({ ...data, images: { ...data.images, gal: newGal } });
-                                notify(`✅ Galeri ${idx+1} diperbarui!`);
-                              }}
-                              onError={() => notify("Gagal upload.", "error")} />
-                            <div style={{ display: "flex", gap: 5 }}>
-                              <input id={`gal-img-${idx}`} defaultValue={img} placeholder="URL..."
-                                style={{ flex: 1, padding: "5px 7px", border: "1px solid #D4C4A0", borderRadius: 5, fontSize: 10, outline: "none" }} />
-                              <button onClick={() => {
-                                const url = document.getElementById(`gal-img-${idx}`)?.value?.trim();
-                                if (!url) return notify("Masukkan URL.", "error");
-                                const newGal = [...(data.images?.gal || ["","","","","",""])];
-                                newGal[idx] = url;
-                                save({ ...data, images: { ...data.images, gal: newGal } });
-                                notify(`✅ Galeri ${idx+1} disimpan!`);
-                              }} style={{ padding: "5px 9px", background: "#3498db", color: "#fff", borderRadius: 5, fontSize: 10, border: "none", cursor: "pointer" }}>OK</button>
-                            </div>
+                    {/* Daftar foto manual */}
+                    <div style={{ fontSize: 11, fontWeight: 700, color: "#5A6A6C", marginBottom: 10, textTransform: "uppercase", letterSpacing: "0.5px" }}>
+                      {(data.images?.running?.length || 0)} Foto Manual Tersimpan
+                    </div>
+                    {(!data.images?.running || data.images.running.length === 0) ? (
+                      <div style={{ padding: "20px", background: "#FAF7F0", border: "1px dashed #D4C4A0", borderRadius: 8, textAlign: "center", color: "#5A6A6C", fontSize: 12 }}>
+                        Belum ada foto manual. Section ini tetap tampil terisi karena otomatis mengambil foto dari katalog Interior, Eksterior, dan Furnitur.
+                      </div>
+                    ) : (
+                      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(160px, 1fr))", gap: 12 }}>
+                        {data.images.running.map((img, idx) => (
+                          <div key={idx} style={{ background: "#FAF7F0", borderRadius: 8, padding: 8, border: "1px solid #E8DCC8" }}>
+                            <img src={img} alt={`Running ${idx+1}`} style={{ width: "100%", height: 90, objectFit: "cover", borderRadius: 5, marginBottom: 6, border: "1px solid #D4C4A0" }}
+                              onError={e => e.target.style.display = "none"} />
+                            <button onClick={() => {
+                              const next = data.images.running.filter((_, i) => i !== idx);
+                              save({ ...data, images: { ...data.images, running: next } });
+                              notify("Foto dihapus.");
+                            }} style={{ width: "100%", padding: "5px", background: "none", color: "#e74c3c", border: "1px solid #e74c3c", borderRadius: 5, fontSize: 10, cursor: "pointer" }}>🗑 Hapus</button>
                           </div>
                         ))}
                       </div>
+                    )}
+                  </div>
+
+                  {/* ======================================================= */}
+                  {/* SECTION: LAYANAN SECTION HOME */}
+                  {/* ======================================================= */}
+                  <div style={{ background: "#fff", borderRadius: 8, padding: "22px 24px", marginBottom: 24, boxShadow: "0 2px 8px rgba(0,0,0,.06)", borderTop: "4px solid #8B6914" }}>
+                    <h3 style={{ fontSize: 16, fontWeight: 700, color: "#2E3D3F", marginBottom: 4 }}>🛠 Layanan Section Home</h3>
+                    <p style={{ fontSize: 12, color: "#5A6A6C", marginBottom: 20, lineHeight: 1.6 }}>
+                      Atur foto & teks kartu pada section "Layanan VASTURA GROUP Kami" di halaman Home.
+                    </p>
+                    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: 14, marginBottom: 16 }}>
+                      {((data.homeServices && data.homeServices.length > 0) ? data.homeServices : HOME_SERVICES_DEFAULT).map((svc, idx) => (
+                        <HomeServiceCardEditor key={idx} index={idx} svc={svc} data={data} save={save} notify={notify} />
+                      ))}
+                    </div>
+                    <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+                      <button onClick={() => {
+                        const list = (data.homeServices && data.homeServices.length > 0) ? [...data.homeServices] : HOME_SERVICES_DEFAULT.map(x => ({ ...x }));
+                        list.push({ num: String(list.length + 1).padStart(2, "0"), title: "Layanan Baru", desc: "Deskripsi singkat layanan.", img: "" });
+                        save({ ...data, homeServices: list });
+                        notify("✅ Layanan baru ditambahkan!");
+                      }} style={{ padding: "9px 16px", background: "#2ecc71", color: "#fff", border: "none", borderRadius: 6, fontSize: 12, fontWeight: 700, cursor: "pointer" }}>+ Tambah Layanan</button>
+                      <button onClick={() => {
+                        save({ ...data, homeServices: [] });
+                        notify("🔄 Direset ke teks & foto default.");
+                      }} style={{ padding: "9px 16px", background: "#6c757d", color: "#fff", border: "none", borderRadius: 6, fontSize: 12, fontWeight: 700, cursor: "pointer" }}>🔄 Reset ke Default</button>
                     </div>
                   </div>
 
