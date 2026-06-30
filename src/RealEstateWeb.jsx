@@ -3885,7 +3885,7 @@ const PostCard = React.memo(function PostCard({ post, onClick, view = "grid" }) 
       </div>
     </article>
   );
-}
+});
 
 /* ─────────────── ARTICLE DETAIL VIEW ─────────────── */
 function ArticleDetail({ post, onBack, allPosts = [], onReadPost }) {
@@ -6414,7 +6414,7 @@ const ServicesPage = React.memo(function ServicesPage({ content, services, navig
 
     </div>
   );
-}
+});
 
 
 /* ─────────────── ABOUT PAGE — Data Default (dipakai bila admin belum mengisi via Control Panel) ─────────────── */
@@ -6842,7 +6842,7 @@ const AboutPage = React.memo(function AboutPage({ content, images, teamMembers, 
 
     </div>
   );
-}
+});
 
 /* ═══════════════════════════════════════════════
    MAIN COMPONENT
@@ -7660,7 +7660,7 @@ const HeroSlideshow = React.memo(function HeroSlideshow({ data, navigateTo }) {
       </div>
     </section>
   );
-}
+});
 
 /* ─────────────── REVIEW FORM (Public, One-Time Token) ─────────────── */
 function ReviewForm({ token, onSubmitDone, data, save, notify, isLoading }) {
@@ -8052,7 +8052,7 @@ const ReviewCard = React.memo(function ReviewCard({ review }) {
       </div>
     </div>
   );
-}
+});
 
 
 /* Format teks harga jadi Rupiah, aman untuk berbagai format input
@@ -10407,7 +10407,7 @@ const TemaRumahPage = React.memo(function TemaRumahPage({ onWaOpen, temaSlug, se
       </div>
     </div>
   );
-}
+});
 
 /* ── Page: Interior ── */
 function InteriorPage({ onWaOpen }) {
@@ -11036,7 +11036,7 @@ const LandscapePage = React.memo(function LandscapePage({ onWaOpen, categories }
       </div>
     </div>
   );
-}
+});
 
 /* ── Data default Layanan Section Home (bisa dioverride via CMS: data.homeServices) ── */
 const HOME_SERVICES_DEFAULT = [
@@ -12253,7 +12253,7 @@ const FurniturPage = React.memo(function FurniturPage({ data, onWaOpen }) {
       {/* -- Detail Modal -- */}
     </div>
   );
-}
+});
 
 /* ═══════════════════════════════════════════════════════════════════
    FURNITUR — Halaman Detail Produk (full page, galeri foto + request custom)
@@ -13024,7 +13024,7 @@ const VasturaFooter = React.memo(function VasturaFooter({ data, navigateTo, onWa
       </div>
     </footer>
   );
-}
+});
 
 /* ─────────────────────────────────────────────────────────────────────────── */
 
