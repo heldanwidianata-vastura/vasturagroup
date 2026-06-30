@@ -3,6 +3,13 @@ import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore";
 
+/* ── Auto-grow helper: textarea otomatis memanjang sesuai isi teks, tanpa terpotong/scroll ── */
+function autoGrowTextarea(el) {
+  if (!el) return;
+  el.style.height = "auto";
+  el.style.height = el.scrollHeight + "px";
+}
+
 /* ─────────────── DASHBOARD TABS SUB-COMPONENT ─────────────── */
 function DashTabs({ user, allPosts, publishedCount, draftCount, data, canEdit, canCS, isAdmin, setAdminTab, setCmsEditPost, SECTION_LABELS, SECTIONS, formatDate }) {
   // setAdminTab is navigateAdminTab from parent; alias it so inline references resolve
@@ -2982,8 +2989,9 @@ function CEF({ val, multiline, onChange, onSave }) {
   return (
     <div style={{ display: "flex", gap: 8, alignItems: "flex-start", width: "100%" }}>
       {multiline
-        ? <textarea value={val} onChange={onChange}
-            style={{ flex: 1, padding: "8px 10px", border: "1px solid #A89070", borderRadius: 6, fontSize: 14, resize: "vertical", minHeight: 80 }} />
+        ? <textarea value={val} onChange={onChange} ref={autoGrowTextarea}
+            onInput={e => autoGrowTextarea(e.target)}
+            style={{ flex: 1, padding: "8px 10px", border: "1px solid #A89070", borderRadius: 6, fontSize: 14, resize: "none", overflow: "hidden", minHeight: 80 }} />
         : <input value={val} onChange={onChange}
             style={{ flex: 1, padding: "8px 10px", border: "1px solid #A89070", borderRadius: 6, fontSize: 14 }} />
       }
@@ -3526,19 +3534,22 @@ function CMSEditor({ post, onSave, onCancel, section, onSectionChange, user, not
           <textarea value={form.title} onChange={e => setForm(p => ({ ...p, title: e.target.value }))}
             placeholder="Masukkan judul artikel di sini..."
             rows={2}
+            ref={autoGrowTextarea}
             style={{ width: "100%", fontSize: 28, fontFamily: "'Cormorant Garamond',serif", fontWeight: 600,
               color: "#2E3D3F", border: "none", outline: "none", borderBottom: "2px solid #F5EDD8",
               paddingBottom: 14, marginBottom: 24, background: "transparent",
               resize: "none", overflow: "hidden", lineHeight: 1.3, boxSizing: "border-box",
               fontStyle: "normal" }}
-            onInput={e => { e.target.style.height = "auto"; e.target.style.height = e.target.scrollHeight + "px"; }} />
+            onInput={e => autoGrowTextarea(e.target)} />
 
           {/* Excerpt */}
           <textarea value={form.excerpt} onChange={e => setForm(p => ({ ...p, excerpt: e.target.value }))}
             placeholder="Ringkasan singkat artikel..."
             rows={3}
+            ref={autoGrowTextarea}
+            onInput={e => autoGrowTextarea(e.target)}
             style={{ width: "100%", fontSize: 14, color: "#5A6A6C", border: "1px solid #F5EDD8",
-              borderRadius: 6, padding: "12px 14px", outline: "none", resize: "vertical",
+              borderRadius: 6, padding: "12px 14px", outline: "none", resize: "none", overflow: "hidden",
               marginBottom: 28, lineHeight: 1.65, background: "#FDFAF4" }} />
 
           {/* Blocks */}
@@ -3680,8 +3691,10 @@ function CMSEditor({ post, onSave, onCancel, section, onSectionChange, user, not
                   <textarea value={addVal} onChange={e => setAddVal(e.target.value)}
                     placeholder="Teks kutipan..."
                     rows={4}
+                    ref={autoGrowTextarea}
+                    onInput={e => autoGrowTextarea(e.target)}
                     style={{ width: "100%", padding: "10px 12px", border: "1px solid #D4C4A0",
-                      borderRadius: 6, fontSize: 13, outline: "none", resize: "vertical", marginBottom: 8, lineHeight: 1.6 }} />
+                      borderRadius: 6, fontSize: 13, outline: "none", resize: "none", overflow: "hidden", marginBottom: 8, lineHeight: 1.6 }} />
                 ) : (
                   <input value={addVal} onChange={e => setAddVal(e.target.value)}
                     placeholder={
@@ -6834,7 +6847,9 @@ function AboutPage({ content, images, teamMembers, aboutStats, aboutMisiList, ab
                     <textarea value={contactForm.message} onChange={e => setContactForm(p => ({ ...p, message: e.target.value }))}
                       placeholder="Ceritakan kebutuhan Anda..."
                       rows={4}
-                      style={{ width: "100%", padding: "11px 14px", border: "1.5px solid #D4C4A0", borderRadius: 8, fontSize: "0.9rem", outline: "none", resize: "vertical", lineHeight: 1.65, transition: "border .2s" }}
+                      ref={autoGrowTextarea}
+                      style={{ width: "100%", padding: "11px 14px", border: "1.5px solid #D4C4A0", borderRadius: 8, fontSize: "0.9rem", outline: "none", resize: "none", overflow: "hidden", lineHeight: 1.65, transition: "border .2s" }}
+                      onInput={e => autoGrowTextarea(e.target)}
                       onFocus={e => e.target.style.borderColor = "#8B6914"}
                       onBlur={e => e.target.style.borderColor = "#D4C4A0"} />
                   </div>
@@ -7870,7 +7885,9 @@ function ReviewForm({ token, onSubmitDone, data, save, notify, isLoading }) {
             <textarea value={form.content} onChange={e => { setForm(p => ({ ...p, content: e.target.value })); setErr(""); }}
               placeholder="Ceritakan pengalaman Anda bersama kami..."
               rows={5}
-              style={{ width: "100%", padding: "12px 14px", border: "1.5px solid #D4C4A0", borderRadius: 8, fontSize: "0.9375rem", outline: "none", resize: "vertical", lineHeight: 1.7, transition: "border-color .2s" }}
+              ref={autoGrowTextarea}
+              style={{ width: "100%", padding: "12px 14px", border: "1.5px solid #D4C4A0", borderRadius: 8, fontSize: "0.9375rem", outline: "none", resize: "none", overflow: "hidden", lineHeight: 1.7, transition: "border-color .2s" }}
+              onInput={e => autoGrowTextarea(e.target)}
               onFocus={e => e.target.style.borderColor = "#8B6914"} onBlur={e => e.target.style.borderColor = "#D4C4A0"} />
           </div>
 
@@ -8122,7 +8139,9 @@ function AboutTextField({ data, save, notify, label, fieldKey, multiline, placeh
       <label style={{ fontSize: 11, fontWeight: 700, color: "#5A6A6C", letterSpacing: "0.8px", textTransform: "uppercase", display: "block", marginBottom: 6 }}>{label}</label>
       {multiline ? (
         <textarea id={fieldId} defaultValue={data.content[fieldKey] || ""} placeholder={placeholder} rows={3}
-          style={{ width: "100%", padding: "9px 12px", border: "1px solid #D4C4A0", borderRadius: 6, fontSize: 13, outline: "none", resize: "vertical", fontFamily: "inherit", lineHeight: 1.6, boxSizing: "border-box" }} />
+          ref={autoGrowTextarea}
+          onInput={e => autoGrowTextarea(e.target)}
+          style={{ width: "100%", padding: "9px 12px", border: "1px solid #D4C4A0", borderRadius: 6, fontSize: 13, outline: "none", resize: "none", overflow: "hidden", fontFamily: "inherit", lineHeight: 1.6, boxSizing: "border-box" }} />
       ) : (
         <input id={fieldId} defaultValue={data.content[fieldKey] || ""} placeholder={placeholder}
           style={{ width: "100%", padding: "9px 12px", border: "1px solid #D4C4A0", borderRadius: 6, fontSize: 13, outline: "none", boxSizing: "border-box" }} />
@@ -8221,7 +8240,9 @@ function AboutWhyUsEditor({ data, save, notify }) {
             <input defaultValue={v.title} onBlur={e => patch(idx, "title", e.target.value)} placeholder="Judul keunggulan"
               style={{ width: "100%", padding: "6px 8px", border: "1px solid #D4C4A0", borderRadius: 5, fontSize: 12, fontWeight: 700, marginBottom: 6, boxSizing: "border-box" }} />
             <textarea defaultValue={v.desc} onBlur={e => patch(idx, "desc", e.target.value)} placeholder="Deskripsi singkat" rows={2}
-              style={{ width: "100%", padding: "6px 8px", border: "1px solid #D4C4A0", borderRadius: 5, fontSize: 11, marginBottom: 6, boxSizing: "border-box", resize: "vertical", fontFamily: "inherit" }} />
+              ref={autoGrowTextarea}
+              onInput={e => autoGrowTextarea(e.target)}
+              style={{ width: "100%", padding: "6px 8px", border: "1px solid #D4C4A0", borderRadius: 5, fontSize: 11, marginBottom: 6, boxSizing: "border-box", resize: "none", overflow: "hidden", fontFamily: "inherit" }} />
             <button onClick={() => removeItem(idx)}
               style={{ width: "100%", padding: "5px", background: "none", color: "#e74c3c", border: "1px solid #e74c3c", borderRadius: 5, fontSize: 10, cursor: "pointer" }}>🗑 Hapus</button>
           </div>
@@ -8278,7 +8299,9 @@ function AboutLayananCardEditor({ index, item, data, save, notify, uploadToCloud
       <input value={title} onChange={e => setTitle(e.target.value)} placeholder="Judul layanan"
         style={{ width: "100%", padding: "7px 9px", border: "1px solid #D4C4A0", borderRadius: 5, fontSize: 12, marginBottom: 6, boxSizing: "border-box", fontWeight: 700 }} />
       <textarea value={desc} onChange={e => setDesc(e.target.value)} placeholder="Deskripsi singkat" rows={2}
-        style={{ width: "100%", padding: "7px 9px", border: "1px solid #D4C4A0", borderRadius: 5, fontSize: 11, marginBottom: 8, boxSizing: "border-box", resize: "vertical", fontFamily: "inherit" }} />
+        ref={autoGrowTextarea}
+        onInput={e => autoGrowTextarea(e.target)}
+        style={{ width: "100%", padding: "7px 9px", border: "1px solid #D4C4A0", borderRadius: 5, fontSize: 11, marginBottom: 8, boxSizing: "border-box", resize: "none", overflow: "hidden", fontFamily: "inherit" }} />
       <div style={{ display: "flex", gap: 6 }}>
         <button onClick={doSaveText} disabled={saving}
           style={{ flex: 1, padding: "6px", background: "#C9AA71", color: "#fff", border: "none", borderRadius: 5, fontSize: 11, fontWeight: 700, cursor: "pointer" }}>
@@ -8548,8 +8571,10 @@ function SubLayananAdmin({
       <div style={{ fontSize: 13, fontWeight: 700, color: "#5A6A6C", marginBottom: 5 }}>{fd.label}</div>
       {fd.type === "textarea"
         ? <textarea rows={3} placeholder={fd.placeholder || ""} value={form[fd.key] || ""}
+            ref={autoGrowTextarea}
+            onInput={e => autoGrowTextarea(e.target)}
             onChange={e => setForm(p => ({ ...p, [fd.key]: e.target.value }))}
-            style={{ width: "100%", padding: "10px 12px", border: "1.5px solid #D5C9B0", borderRadius: 8, fontSize: 14, resize: "vertical", fontFamily: "inherit", boxSizing: "border-box" }} />
+            style={{ width: "100%", padding: "10px 12px", border: "1.5px solid #D5C9B0", borderRadius: 8, fontSize: 14, resize: "none", overflow: "hidden", fontFamily: "inherit", boxSizing: "border-box" }} />
         : <input type="text" placeholder={fd.placeholder || ""} value={form[fd.key] || ""}
             onChange={e => setForm(p => ({ ...p, [fd.key]: e.target.value }))}
             style={{ width: "100%", padding: "10px 12px", border: "1.5px solid #D5C9B0", borderRadius: 8, fontSize: 14, boxSizing: "border-box" }} />
@@ -8953,7 +8978,9 @@ function AdminReviews({ data, save, notify }) {
                         ))}
                       </div>
                       <textarea value={editReviewForm.content} onChange={e => setEditReviewForm(p => ({ ...p, content: e.target.value }))}
-                        rows={3} style={{ padding: "7px 10px", border: "1px solid #D4C4A0", borderRadius: 5, fontSize: 13, resize: "vertical" }} />
+                        ref={autoGrowTextarea}
+                        onInput={e => autoGrowTextarea(e.target)}
+                        rows={3} style={{ padding: "7px 10px", border: "1px solid #D4C4A0", borderRadius: 5, fontSize: 13, resize: "none", overflow: "hidden" }} />
                       <div style={{ display: "flex", gap: 8 }}>
                         <button onClick={saveEditReview} style={{ padding: "6px 16px", background: "#27ae60", color: "#fff", borderRadius: 5, fontSize: 12, border: "none" }}>Simpan</button>
                         <button onClick={() => setEditReviewId(null)} style={{ padding: "6px 14px", background: "#FAF7F0", color: "#5A6A6C", borderRadius: 5, fontSize: 12, border: "1px solid #D4C4A0" }}>Batal</button>
@@ -11842,7 +11869,9 @@ function PaketGridManager({ data, save, notify, storeKey, title, icon, accentCol
             <label style={labelStyle}>Deskripsi Singkat</label>
             <textarea value={form.desc || ""} onChange={e => setForm(p => ({ ...p, desc: e.target.value }))}
               placeholder="Deskripsi singkat paket ini..." rows={3}
-              style={{ ...inputStyle, resize: "vertical", fontFamily: "inherit" }} />
+              ref={autoGrowTextarea}
+              onInput={e => autoGrowTextarea(e.target)}
+              style={{ ...inputStyle, resize: "none", overflow: "hidden", fontFamily: "inherit" }} />
           </div>
 
           {/* Harga + Satuan + slideDir */}
@@ -11915,7 +11944,9 @@ function PaketGridManager({ data, save, notify, storeKey, title, icon, accentCol
                     placeholder="Nama tema foto" style={{ ...inputStyle, fontSize: 12, marginTop: 6 }} />
                   <textarea value={s.desc || ""} onChange={e => updateSlide(i, "desc", e.target.value)}
                     placeholder="Keterangan singkat foto..." rows={2}
-                    style={{ ...inputStyle, fontSize: 12, marginTop: 6, resize: "vertical", fontFamily: "inherit" }} />
+                    ref={autoGrowTextarea}
+                    onInput={e => autoGrowTextarea(e.target)}
+                    style={{ ...inputStyle, fontSize: 12, marginTop: 6, resize: "none", overflow: "hidden", fontFamily: "inherit" }} />
                 </div>
               ))}
             </div>
@@ -13167,7 +13198,9 @@ function HomeServiceCardEditor({ index, svc, data, save, notify }) {
       <input value={title} onChange={e => setTitle(e.target.value)} placeholder="Judul layanan"
         style={{ width: "100%", padding: "7px 9px", border: "1px solid #D4C4A0", borderRadius: 5, fontSize: 12, marginBottom: 6, boxSizing: "border-box", fontWeight: 700 }} />
       <textarea value={desc} onChange={e => setDesc(e.target.value)} placeholder="Deskripsi singkat" rows={2}
-        style={{ width: "100%", padding: "7px 9px", border: "1px solid #D4C4A0", borderRadius: 5, fontSize: 11, marginBottom: 8, boxSizing: "border-box", resize: "vertical", fontFamily: "inherit" }} />
+        ref={autoGrowTextarea}
+        onInput={e => autoGrowTextarea(e.target)}
+        style={{ width: "100%", padding: "7px 9px", border: "1px solid #D4C4A0", borderRadius: 5, fontSize: 11, marginBottom: 8, boxSizing: "border-box", resize: "none", overflow: "hidden", fontFamily: "inherit" }} />
       <div style={{ display: "flex", gap: 6 }}>
         <button onClick={doSaveText} disabled={saving}
           style={{ flex: 1, padding: "6px", background: "#3498db", color: "#fff", border: "none", borderRadius: 5, fontSize: 11, fontWeight: 700, cursor: "pointer" }}>
@@ -13559,7 +13592,9 @@ function TemaEditForm({ temaOrig, editIdx, activeTemas, data, save, notify, onBa
       <div style={{ fontSize: 11, fontWeight: 700, color: "#5A6A6C", marginBottom: 5, textTransform: "uppercase", letterSpacing: ".04em" }}>{label}</div>
       {multiline
         ? <textarea value={path.split(".").reduce((o, k) => o?.[k], draft) || ""} onChange={e => upd(path, e.target.value)} placeholder={placeholder} rows={3}
-            style={{ width: "100%", padding: "9px 12px", border: "1.5px solid #D5C9B0", borderRadius: 8, fontSize: 13, boxSizing: "border-box", resize: "vertical", fontFamily: "inherit" }} />
+            ref={autoGrowTextarea}
+            onInput={e => autoGrowTextarea(e.target)}
+            style={{ width: "100%", padding: "9px 12px", border: "1.5px solid #D5C9B0", borderRadius: 8, fontSize: 13, boxSizing: "border-box", resize: "none", overflow: "hidden", fontFamily: "inherit" }} />
         : <input type="text" value={path.split(".").reduce((o, k) => o?.[k], draft) || ""} onChange={e => upd(path, e.target.value)} placeholder={placeholder}
             style={{ width: "100%", padding: "9px 12px", border: "1.5px solid #D5C9B0", borderRadius: 8, fontSize: 13, boxSizing: "border-box" }} />
       }
@@ -16932,7 +16967,9 @@ export default function BricksyTravel() {
                               <textarea value={replyText} onChange={e => setReplyText(e.target.value)}
                                 placeholder="Tulis balasan..."
                                 rows={3}
-                                style={{ flex: 1, padding: "10px 12px", border: "1.5px solid #C9AA71", borderRadius: 6, fontSize: 13, outline: "none", resize: "vertical" }} />
+                                ref={autoGrowTextarea}
+                                onInput={e => autoGrowTextarea(e.target)}
+                                style={{ flex: 1, padding: "10px 12px", border: "1.5px solid #C9AA71", borderRadius: 6, fontSize: 13, outline: "none", resize: "none", overflow: "hidden" }} />
                               <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
                                 <button onClick={() => replyMsg(m.id)}
                                   style={{ padding: "9px 18px", background: "#27ae60", color: "#fff", borderRadius: 6, fontSize: 12, border: "none", fontWeight: 600, cursor: "pointer" }}>Kirim</button>
@@ -17293,8 +17330,10 @@ export default function BricksyTravel() {
                             <div style={{ marginBottom: 16 }}>
                               <label style={{ display: "block", fontSize: 11, fontWeight: 700, color: "#5A6A6C", textTransform: "uppercase", letterSpacing: ".06em", marginBottom: 6 }}>Deskripsi</label>
                               <textarea value={profileEdit.desc ?? ""} rows={3} placeholder="Deskripsi singkat..."
+                                ref={autoGrowTextarea}
+                                onInput={e => autoGrowTextarea(e.target)}
                                 onChange={e => setProfileEdit(p => ({ ...p, desc: e.target.value }))}
-                                style={{ width: "100%", padding: "10px 14px", border: "1.5px solid #E8DCC8", borderRadius: 8, fontSize: 14, outline: "none", resize: "vertical", boxSizing: "border-box" }} />
+                                style={{ width: "100%", padding: "10px 14px", border: "1.5px solid #E8DCC8", borderRadius: 8, fontSize: 14, outline: "none", resize: "none", overflow: "hidden", boxSizing: "border-box" }} />
                             </div>
 
                             {/* Ganti Password */}
@@ -17525,7 +17564,9 @@ export default function BricksyTravel() {
                           <label style={{ fontSize: 11, fontWeight: 700, color: "#5A6A6C", letterSpacing: "0.8px", textTransform: "uppercase", display: "block", marginBottom: 6 }}>{field.label}</label>
                           {field.multiline ? (
                             <textarea id={fieldId} defaultValue={data.content[field.key] || ""} placeholder={field.placeholder} rows={3}
-                              style={{ width: "100%", padding: "9px 12px", border: "1px solid #D4C4A0", borderRadius: 6, fontSize: 13, outline: "none", resize: "vertical", fontFamily: "inherit", lineHeight: 1.6, boxSizing: "border-box" }} />
+                              ref={autoGrowTextarea}
+                              onInput={e => autoGrowTextarea(e.target)}
+                              style={{ width: "100%", padding: "9px 12px", border: "1px solid #D4C4A0", borderRadius: 6, fontSize: 13, outline: "none", resize: "none", overflow: "hidden", fontFamily: "inherit", lineHeight: 1.6, boxSizing: "border-box" }} />
                           ) : (
                             <input id={fieldId} defaultValue={data.content[field.key] || ""} placeholder={field.placeholder}
                               style={{ width: "100%", padding: "9px 12px", border: "1px solid #D4C4A0", borderRadius: 6, fontSize: 13, outline: "none", boxSizing: "border-box" }} />
@@ -17567,7 +17608,9 @@ export default function BricksyTravel() {
                           <label style={{ fontSize: 11, fontWeight: 700, color: "#5A6A6C", letterSpacing: "0.8px", textTransform: "uppercase", display: "block", marginBottom: 6 }}>{field.label}</label>
                           {field.multiline ? (
                             <textarea id={fieldId} defaultValue={data.content[field.key] || ""} rows={3}
-                              style={{ width: "100%", padding: "9px 12px", border: "1px solid #D4C4A0", borderRadius: 6, fontSize: 13, outline: "none", resize: "vertical", fontFamily: "inherit", lineHeight: 1.6, boxSizing: "border-box" }} />
+                              ref={autoGrowTextarea}
+                              onInput={e => autoGrowTextarea(e.target)}
+                              style={{ width: "100%", padding: "9px 12px", border: "1px solid #D4C4A0", borderRadius: 6, fontSize: 13, outline: "none", resize: "none", overflow: "hidden", fontFamily: "inherit", lineHeight: 1.6, boxSizing: "border-box" }} />
                           ) : (
                             <input id={fieldId} defaultValue={data.content[field.key] || ""}
                               style={{ width: "100%", padding: "9px 12px", border: "1px solid #D4C4A0", borderRadius: 6, fontSize: 13, outline: "none", boxSizing: "border-box" }} />
@@ -17615,7 +17658,9 @@ export default function BricksyTravel() {
                             rows={5}
                             id={`wa-tpl-${key}`}
                             defaultValue={val}
-                            style={{ width: "100%", padding: "10px 12px", border: "1.5px solid #D4C4A0", borderRadius: 8, fontSize: 12, fontFamily: "monospace", resize: "vertical", outline: "none", boxSizing: "border-box", lineHeight: 1.7 }}
+                            ref={autoGrowTextarea}
+                            style={{ width: "100%", padding: "10px 12px", border: "1.5px solid #D4C4A0", borderRadius: 8, fontSize: 12, fontFamily: "monospace", resize: "none", overflow: "hidden", outline: "none", boxSizing: "border-box", lineHeight: 1.7 }}
+                            onInput={e => autoGrowTextarea(e.target)}
                             onFocus={e => e.target.style.borderColor = "#25d366"}
                             onBlur={e => e.target.style.borderColor = "#D4C4A0"}
                           />
