@@ -255,59 +255,9 @@ const CLOUDINARY = {
   uploadPreset: "vastura_clouds",
 };
 
-/**
- * Kompres & resize gambar di browser sebelum upload, supaya ukuran file kecil
- * dan upload jadi cepat (tidak tergantung kecepatan internet untuk file besar).
- * - Resize: sisi terpanjang dibatasi maxDim px (default 1920px, cukup untuk web)
- * - Compress: dikonversi ke JPEG dengan quality tertentu
- * - File non-gambar (misal video) atau yang sudah kecil/gagal diproses → dikembalikan apa adanya
- */
-function compressImage(file, { maxDim = 1920, quality = 0.82 } = {}) {
-  return new Promise((resolve) => {
-    // Hanya proses tipe gambar yang didukung canvas; selain itu skip (mis. video, gif animasi)
-    if (!file || !file.type || !file.type.startsWith("image/") || file.type === "image/gif") {
-      resolve(file);
-      return;
-    }
-    const img = new Image();
-    const objectUrl = URL.createObjectURL(file);
-    img.onload = () => {
-      try {
-        let { width, height } = img;
-        if (width > maxDim || height > maxDim) {
-          if (width > height) { height = Math.round(height * (maxDim / width)); width = maxDim; }
-          else { width = Math.round(width * (maxDim / height)); height = maxDim; }
-        }
-        const canvas = document.createElement("canvas");
-        canvas.width = width; canvas.height = height;
-        const ctx = canvas.getContext("2d");
-        ctx.drawImage(img, 0, 0, width, height);
-        canvas.toBlob((blob) => {
-          URL.revokeObjectURL(objectUrl);
-          if (!blob) { resolve(file); return; }
-          // Kalau hasil kompresi malah lebih besar dari aslinya (jarang), pakai file asli
-          if (blob.size >= file.size) { resolve(file); return; }
-          const compressedFile = new File(
-            [blob],
-            file.name.replace(/\.[^.]+$/, "") + ".jpg",
-            { type: "image/jpeg" }
-          );
-          resolve(compressedFile);
-        }, "image/jpeg", quality);
-      } catch {
-        URL.revokeObjectURL(objectUrl);
-        resolve(file);
-      }
-    };
-    img.onerror = () => { URL.revokeObjectURL(objectUrl); resolve(file); };
-    img.src = objectUrl;
-  });
-}
-
 async function uploadToCloudinary(file) {
-  const compressed = await compressImage(file);
   const fd = new FormData();
-  fd.append("file", compressed);
+  fd.append("file", file);
   fd.append("upload_preset", CLOUDINARY.uploadPreset);
   const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY.cloudName}/image/upload`, {
     method: "POST", body: fd,
@@ -339,13 +289,10 @@ function formatRp(val) {
  * @param {(pct: number) => void} onProgress  — dipanggil 0–100
  * @returns {Promise<string>} secure_url
  */
-async function uploadWithProgress(file, onProgress) {
-  // Kompres dulu sebelum upload — bagian ini cepat (di browser, bukan network)
-  // jadi progress bar nanti murni mencerminkan waktu upload file yang sudah kecil.
-  const compressed = await compressImage(file);
+function uploadWithProgress(file, onProgress) {
   return new Promise((resolve, reject) => {
     const fd = new FormData();
-    fd.append("file", compressed);
+    fd.append("file", file);
     fd.append("upload_preset", CLOUDINARY.uploadPreset);
     const xhr = new XMLHttpRequest();
     xhr.open("POST", `https://api.cloudinary.com/v1_1/${CLOUDINARY.cloudName}/image/upload`);
@@ -3826,7 +3773,7 @@ function CMSEditor({ post, onSave, onCancel, section, onSectionChange, user, not
 }
 
 /* ─────────────── POST CARD ─────────────── */
-const PostCard = React.memo(function PostCard({ post, onClick, view = "grid" }) {
+function PostCard({ post, onClick, view = "grid" }) {
   const firstImg = (post.content || []).find(b => b.type === "image")?.value;
 
   if (view === "list") return (
@@ -3885,7 +3832,7 @@ const PostCard = React.memo(function PostCard({ post, onClick, view = "grid" }) 
       </div>
     </article>
   );
-});
+}
 
 /* ─────────────── ARTICLE DETAIL VIEW ─────────────── */
 function ArticleDetail({ post, onBack, allPosts = [], onReadPost }) {
@@ -5624,7 +5571,7 @@ const LAYANAN_LIST = [
   { key: "kanopi", icon: "🏗️", label: "Kanopi", desc: "Kanopi kuat, modern dan tahan segala cuaca.", color: "#8B6914", category: "event", img: "https://images.unsplash.com/photo-1600566752355-35792bedcfea?w=600&q=80" },
 ];
 
-const ServicesPage = React.memo(function ServicesPage({ content, services, navigateTo, activePaket, onOpenPaket, onClosePaket, onWaOpen }) {
+function ServicesPage({ content, services, navigateTo, activePaket, onOpenPaket, onClosePaket, onWaOpen }) {
   const [selectedService, setSelectedService] = useState(null);
   const [hoveredCard, setHoveredCard] = useState(null);
   const [activeImg, setActiveImg] = useState(0);
@@ -6414,7 +6361,7 @@ const ServicesPage = React.memo(function ServicesPage({ content, services, navig
 
     </div>
   );
-});
+}
 
 
 /* ─────────────── ABOUT PAGE — Data Default (dipakai bila admin belum mengisi via Control Panel) ─────────────── */
@@ -6451,7 +6398,7 @@ const ABOUT_LAYANAN_DEFAULT = [
 ];
 
 /* ─────────────── ABOUT PAGE ─────────────── */
-const AboutPage = React.memo(function AboutPage({ content, images, teamMembers, aboutStats, aboutMisiList, aboutWhyList, aboutLayananList, navigateTo, onWaOpen }) {
+function AboutPage({ content, images, teamMembers, aboutStats, aboutMisiList, aboutWhyList, aboutLayananList, navigateTo, onWaOpen }) {
   const [contactForm, setContactForm] = useState({ name: "", email: "", phone: "", subject: "", message: "" });
   const [contactSent, setContactSent] = useState(false);
 
@@ -6842,7 +6789,7 @@ const AboutPage = React.memo(function AboutPage({ content, images, teamMembers, 
 
     </div>
   );
-});
+}
 
 /* ═══════════════════════════════════════════════
    MAIN COMPONENT
@@ -7367,8 +7314,8 @@ function WaterDropsEffect() {
 
 const HERO_TRANSITIONS = ["fade", "slideLeft", "slideUp", "zoomIn", "zoomOut", "flipX"];
 
-const HeroSlideshow = React.memo(function HeroSlideshow({ data, navigateTo }) {
-  const heroMode = data.content?.heroMode || "slideshow";
+function HeroSlideshow({ data, navigateTo }) {
+  const heroMode = data.content?.heroMode || "video";
 
   // -- Compute slides -- useMemo agar tidak re-create array tiap render (penyebab kedip) --
   const slides = useMemo(() => {
@@ -7660,7 +7607,7 @@ const HeroSlideshow = React.memo(function HeroSlideshow({ data, navigateTo }) {
       </div>
     </section>
   );
-});
+}
 
 /* ─────────────── REVIEW FORM (Public, One-Time Token) ─────────────── */
 function ReviewForm({ token, onSubmitDone, data, save, notify, isLoading }) {
@@ -8020,7 +7967,7 @@ function ReviewSlideshow({ reviews }) {
   );
 }
 
-const ReviewCard = React.memo(function ReviewCard({ review }) {
+function ReviewCard({ review }) {
   const stars = review.stars || 5;
   return (
     <div style={{ background: "#fff", borderRadius: 16, padding: "28px 24px", boxShadow: "0 4px 24px rgba(13,59,102,.08)", border: "1px solid #F5EDD8", height: "100%", display: "flex", flexDirection: "column", gap: 16 }}>
@@ -8052,7 +7999,7 @@ const ReviewCard = React.memo(function ReviewCard({ review }) {
       </div>
     </div>
   );
-});
+}
 
 
 /* Format teks harga jadi Rupiah, aman untuk berbagai format input
@@ -8404,7 +8351,6 @@ function SubLayananAdmin({
   crudHasImage = false,
   crudHasGallery = false,
   defaultItems = null,
-  firestoreReady = false,
 }) {
   const items     = data[crudKey] || [];
   const accent    = accentColor;
@@ -8421,13 +8367,8 @@ function SubLayananAdmin({
   const [seeding, setSeeding]   = useState(false);
   const [seedDone, setSeedDone] = useState(false);
 
-  /* ── Auto-seed: langsung muat data hardcoded saat mount jika list masih kosong ──
-     PENTING: hanya boleh jalan setelah firestoreReady === true, supaya kita yakin
-     "list kosong" itu memang kosong beneran di Firestore — bukan karena datanya
-     belum selesai dimuat (race condition yang dulu menyebabkan data asli tertimpa
-     default setiap kali halaman/redeploy baru dibuka). */
+  /* ── Auto-seed: langsung muat data hardcoded saat mount jika list masih kosong ── */
   useEffect(() => {
-    if (!firestoreReady) return;             // tunggu Firestore selesai dimuat dulu
     if (!defaultItems || defaultItems.length === 0) return;
     if (items.length > 0) return;          // sudah ada data, skip
     if (seedDone || seeding) return;
@@ -8444,7 +8385,7 @@ function SubLayananAdmin({
     };
     run();
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [firestoreReady]);   // jalan ulang begitu firestoreReady berubah jadi true
+  }, []);   // hanya saat mount
 
   /* ── Seed manual (tetap tersedia lewat tombol di bawah list jika diperlukan) ── */
   const handleSeed = async () => {
@@ -10284,7 +10225,7 @@ function TemaDetailPage({ slug, onWaOpen, onBack, temaList }) {
 }
 
 /* ── Page: Tema Rumah (Landing + Sub-page router) ── */
-const TemaRumahPage = React.memo(function TemaRumahPage({ onWaOpen, temaSlug, setTemaSlug, cmsData }) {
+function TemaRumahPage({ onWaOpen, temaSlug, setTemaSlug, cmsData }) {
   useEffect(() => { window.scrollTo(0, 0); }, []);
   const cms = cmsData || {};
 
@@ -10407,7 +10348,7 @@ const TemaRumahPage = React.memo(function TemaRumahPage({ onWaOpen, temaSlug, se
       </div>
     </div>
   );
-});
+}
 
 /* ── Page: Interior ── */
 function InteriorPage({ onWaOpen }) {
@@ -10815,7 +10756,7 @@ function LsInfoCard({ cat, fmt, onWaOpen }) {
   );
 }
 
-const LandscapePage = React.memo(function LandscapePage({ onWaOpen, categories }) {
+function LandscapePage({ onWaOpen, categories }) {
   useEffect(() => { window.scrollTo(0, 0); }, []);
   const fmt = (n) => "Rp " + n.toLocaleString("id-ID") + ",-";
   const cats_ = (categories && categories.length) ? categories : LANDSCAPE_CATEGORIES;
@@ -11036,7 +10977,7 @@ const LandscapePage = React.memo(function LandscapePage({ onWaOpen, categories }
       </div>
     </div>
   );
-});
+}
 
 /* ── Data default Layanan Section Home (bisa dioverride via CMS: data.homeServices) ── */
 const HOME_SERVICES_DEFAULT = [
@@ -12040,7 +11981,7 @@ function MobileLayananAccordion({ page, navigateTo, setMobileMenu, navDropdownLa
 /* ═══════════════════════════════════════════════════════════════════
    FURNITUR PAGE — E-Commerce product listing dengan filter & cart UX
 ═══════════════════════════════════════════════════════════════════ */
-const FurniturPage = React.memo(function FurniturPage({ data, onWaOpen }) {
+function FurniturPage({ data, onWaOpen }) {
   const products = data.furniturItems || [];
   const [search, setSearch]   = useState("");
   const [category, setCategory] = useState("all");
@@ -12253,7 +12194,7 @@ const FurniturPage = React.memo(function FurniturPage({ data, onWaOpen }) {
       {/* -- Detail Modal -- */}
     </div>
   );
-});
+}
 
 /* ═══════════════════════════════════════════════════════════════════
    FURNITUR — Halaman Detail Produk (full page, galeri foto + request custom)
@@ -12805,7 +12746,7 @@ const CATALOG_DATA = {
 /* ═══════════════════════════════════════════════════════════════════
    VASTURA FOOTER — dipakai di semua halaman non-admin
 ═══════════════════════════════════════════════════════════════════ */
-const VasturaFooter = React.memo(function VasturaFooter({ data, navigateTo, onWaOpen, showDevProfile }) {
+function VasturaFooter({ data, navigateTo, onWaOpen, showDevProfile }) {
   const c = data?.content || {};
   const accentGold = "#C9AA71";
   const darkBg     = "#1A2A2C";
@@ -13024,7 +12965,7 @@ const VasturaFooter = React.memo(function VasturaFooter({ data, navigateTo, onWa
       </div>
     </footer>
   );
-});
+}
 
 /* ─────────────────────────────────────────────────────────────────────────── */
 
@@ -14048,11 +13989,6 @@ export default function BricksyTravel() {
   const [data, setData] = useState(DEFAULT_DATA);
   const dataRef = useRef(DEFAULT_DATA); // selalu up-to-date, aman dipakai di closure stale (popstate)
   const [isLoading, setIsLoading] = useState(true);
-  // firestoreReady: true HANYA setelah fetch Firestore beneran selesai (sukses/gagal).
-  // Beda dengan isLoading yang sengaja di-set false lebih awal agar halaman cepat tampil.
-  // Dipakai untuk mencegah panel admin (auto-seed) menulis data default sebelum
-  // data asli dari Firestore selesai dimuat — mencegah data asli tertimpa.
-  const [firestoreReady, setFirestoreReady] = useState(false);
   const [user, setUser] = useState(() => sessionLoad()); // ← restore session saat reload
   // Fix #3: gunakan lazy initializer agar window.location dibaca saat render, bukan module load
   const [page, setPage] = useState(() => getInitialPage()); // home | about | news | shop | destinations | services
@@ -14405,10 +14341,6 @@ export default function BricksyTravel() {
         }
       } catch (e) {
         console.warn("[RealEstate] Gagal load data, pakai default.", e);
-      } finally {
-        // Apapun hasilnya (sukses/gagal), Firestore sudah selesai dicoba dimuat.
-        // Baru dari titik ini aman bagi panel admin untuk menyimpulkan "data kosong = perlu seed".
-        setFirestoreReady(true);
       }
     })();
   }, []);
@@ -14551,6 +14483,7 @@ export default function BricksyTravel() {
   const save = async (d) => {
     // Tampilkan progress bar
     setSaveProgress({ pct: 5, label: "Menyiapkan data...", status: "saving" });
+    await new Promise(r => setTimeout(r, 80));
 
     // Selalu merge dengan DEFAULT_DATA sebelum simpan
     const safeData = mergeWithDefaults(d, DEFAULT_DATA);
@@ -14559,6 +14492,7 @@ export default function BricksyTravel() {
     const payload = JSON.stringify(safeData);
 
     setSaveProgress({ pct: 30, label: "Menyimpan ke lokal...", status: "saving" });
+    await new Promise(r => setTimeout(r, 80));
 
     // 1. Simpan lokal dulu (cepat)
     try { localStorage.setItem("realestate-cache-v2", payload); } catch {}
@@ -14576,14 +14510,14 @@ export default function BricksyTravel() {
     }
 
     setSaveProgress({ pct: 100, label: fsOk ? "Tersimpan!" : "Lokal OK, cloud tertunda", status: fsOk ? "success" : "warning" });
-    await new Promise(r => setTimeout(r, 600)); // jeda singkat agar centang sukses sempat terlihat
+    await new Promise(r => setTimeout(r, 1800));
     setSaveProgress(null);
   };
 
-  const notify = useCallback((msg, type = "success") => {
+  const notify = (msg, type = "success") => {
     setNotif({ msg, type });
     setTimeout(() => setNotif(null), 3200);
-  }, []);
+  };
 
   const login = async () => {
     if (loginLoading) return;
@@ -14593,13 +14527,13 @@ export default function BricksyTravel() {
     setLoginProgress(10);
     const tick = setInterval(() => setLoginProgress(p => p < 85 ? p + Math.random() * 18 : p), 180);
     try {
-      await new Promise(r => setTimeout(r, 120)); // jeda singkat agar progress bar tidak loncat instan
+      await new Promise(r => setTimeout(r, 420)); // natural delay
       const u = HARDCODED_USERS.find(x => x.username === loginForm.username);
       setLoginProgress(55);
       if (!u) {
         clearInterval(tick);
         setLoginProgress(100);
-        await new Promise(r => setTimeout(r, 120));
+        await new Promise(r => setTimeout(r, 220));
         setLoginLoading(false); setLoginProgress(0);
         setLoginErr("Username atau password salah.");
         return;
@@ -14617,14 +14551,14 @@ export default function BricksyTravel() {
       if (loginForm.password !== savedPass) {
         clearInterval(tick);
         setLoginProgress(100);
-        await new Promise(r => setTimeout(r, 120));
+        await new Promise(r => setTimeout(r, 220));
         setLoginLoading(false); setLoginProgress(0);
         setLoginErr("Username atau password salah.");
         return;
       }
       clearInterval(tick);
       setLoginProgress(100);
-      await new Promise(r => setTimeout(r, 150));
+      await new Promise(r => setTimeout(r, 340));
       const sessionUser = { ...u, ...profile };
       setUser(sessionUser);
       sessionSave(sessionUser);
@@ -14738,7 +14672,7 @@ export default function BricksyTravel() {
   const canEdit = user?.role === "admin" || user?.role === "content_writer";
   const canCS   = user?.role === "admin" || user?.role === "customer_services";
 
-  const navigateTo = useCallback((p) => {
+  const navigateTo = (p) => {
     /* Cari path dari PAGE_TO_PATH, fallback ke "/" + p untuk sub-routes */
     const navPath = PAGE_TO_PATH[p] || ("/" + p);
     const newDepth = spaDepth.current + 1;
@@ -14749,10 +14683,10 @@ export default function BricksyTravel() {
     setCanFwd(false);
     setPage(p); setReadPost(null); setActivePaket(null); setTemaSlug(null); setMobileMenu(false);
     window.scrollTo(0, 0);
-  }, []);
+  };
 
   /** Buka artikel: push URL /artikel/{section}/{slug}-{id} + set state */
-  const openArticle = useCallback((post) => {
+  const openArticle = (post) => {
     const url = articleUrl(post);
     const newDepth = spaDepth.current + 1;
     window.history.pushState({ artikelId: post.id, section: post.section, depth: newDepth }, "", url);
@@ -14763,7 +14697,7 @@ export default function BricksyTravel() {
     setReadPost(post);
     setMobileMenu(false);
     window.scrollTo(0, 0);
-  }, []);
+  };
 
   /** Tutup artikel: native back — biar onPopState yang atur state */
   const closeArticle = () => {
@@ -14771,7 +14705,7 @@ export default function BricksyTravel() {
   };
 
   /** Buka admin panel: set state + sync URL ke /control-panel */
-  const openAdmin = useCallback(() => {
+  const openAdmin = () => {
     const newDepth = spaDepth.current + 1;
     window.history.pushState({ admin: true, adminTab: "dashboard", depth: newDepth }, "", "/control-panel");
     spaDepth.current = newDepth;
@@ -14780,17 +14714,17 @@ export default function BricksyTravel() {
     setCanFwd(false);
     setShowAdmin(true);
     setAdminTab("dashboard");
-  }, []);
+  };
 
   /** Tutup admin panel: native back */
-  const closeAdmin = useCallback(() => {
+  const closeAdmin = () => {
     window.history.pushState({}, "", "/");
     setShowAdmin(false);
     window.scrollTo(0, 0);
-  }, []);
+  };
 
   /** Navigasi antar tab admin — push ke browser history agar tombol ← browser bisa step-back */
-  const navigateAdminTab = useCallback((tab, extra = {}) => {
+  const navigateAdminTab = (tab, extra = {}) => {
     const newDepth = spaDepth.current + 1;
     window.history.pushState({ admin: true, adminTab: tab, depth: newDepth, ...extra }, "", "/control-panel");
     spaDepth.current = newDepth;
@@ -14800,7 +14734,7 @@ export default function BricksyTravel() {
     setAdminTab(tab);
     setCmsEditPost(null);
     setSidebarOpen(false);
-  }, []);
+  };
 
   /** openPaket / closePaket — URL sync untuk halaman detail paket */
   // State ini dioper ke ServicesPage sebagai prop
@@ -14810,7 +14744,7 @@ export default function BricksyTravel() {
     return parsed ? parsed : null; // { category, id } -- ServicesPage cari svc-nya
   });
 
-  const openPaket = useCallback((svc) => {
+  const openPaket = (svc) => {
     const url = paketUrl(svc);
     const newDepth = spaDepth.current + 1;
     window.history.pushState({ paketId: svc.id, category: svc.category, depth: newDepth }, "", url);
@@ -14820,11 +14754,11 @@ export default function BricksyTravel() {
     setCanFwd(false);
     setActivePaket({ id: svc.id, category: svc.category });
     window.scrollTo(0, 0);
-  }, []);
+  };
 
-  const closePaket = useCallback(() => {
+  const closePaket = () => {
     window.history.back();
-  }, []);
+  };
 
   const adminTabRef = useRef("dashboard"); // selalu sync dengan adminTab untuk akses di popstate
 
@@ -14871,9 +14805,9 @@ export default function BricksyTravel() {
     notify("Post deleted.");
   };
 
-  const allPosts       = useMemo(() => Object.values(data.posts || {}).flat(), [data.posts]);
-  const publishedCount = useMemo(() => allPosts.filter(p => p.status === "published").length, [allPosts]);
-  const draftCount     = useMemo(() => allPosts.filter(p => p.status === "draft").length, [allPosts]);
+  const allPosts       = Object.values(data.posts || {}).flat();
+  const publishedCount = allPosts.filter(p => p.status === "published").length;
+  const draftCount     = allPosts.filter(p => p.status === "draft").length;
 
   // Contacts
   const submitMsg = () => {
@@ -14919,14 +14853,12 @@ export default function BricksyTravel() {
 
   const getCEFVal = (cKey) => editContent[cKey] !== undefined ? editContent[cKey] : data.content[cKey];
 
-  // Memoize semua nav arrays — hanya recalculate ketika data.content berubah
-  const navItems = useMemo(() => [
+  const navItems = [
     { key: "home",  label: data.content.nav1 || "Home" },
     { key: "about", label: data.content.nav2 || "About" },
-  ], [data.content.nav1, data.content.nav2]);
-
+  ];
   // Dropdown: Layanan Developer (termasuk Interior & Eksterior)
-  const navDropdownLayanan = useMemo(() => [
+  const navDropdownLayanan = [
     { key: "services",  label: data.content.nav6  || "Layanan Kami" },
     { key: "desainrab", label: data.content.nav7  || "Jasa Desain & RAB" },
     { key: "temarumah", label: data.content.nav8  || "Tema Rumah" },
@@ -14936,31 +14868,28 @@ export default function BricksyTravel() {
     { key: "kanopi",    label: data.content.nav11 || "Kanopi" },
     { key: "aluminium", label: data.content.nav12 || "Aluminium" },
     { key: "furnitur",  label: "Furnitur" },
-  ], [data.content.nav6, data.content.nav7, data.content.nav8, data.content.nav9, data.content.nav10, data.content.nav11, data.content.nav12]);
-
+  ];
   // Interior & Eksterior sudah digabung ke navDropdownLayanan
   const navDropdownInterior = [];
   // Dropdown: Program Renovasi -- Rumah Subsidi & Landscape & Taman
-  const navDropdownGaleri = useMemo(() => [
+  const navDropdownGaleri = [
     { key: "shop",      label: data.content.nav4  || "Rumah Subsidi" },
     { key: "landscape", label: data.content.nav13 || "Landscape & Taman" },
-  ], [data.content.nav4, data.content.nav13]);
-
+  ];
   // All keys that are "active" as pages for highlight purposes
-  const allNavKeys = useMemo(() => [
+  const allNavKeys = [
     ...navItems.map(i=>i.key),
     ...navDropdownLayanan.map(i=>i.key),
     ...navDropdownInterior.map(i=>i.key),
     ...navDropdownGaleri.map(i=>i.key),
-  ], [navItems, navDropdownLayanan, navDropdownGaleri]);
-
+  ];
   // Legacy flat list for mobile menu
-  const allNavItemsFlat = useMemo(() => [
+  const allNavItemsFlat = [
     ...navItems,
     ...navDropdownLayanan,
     ...navDropdownInterior,
     ...navDropdownGaleri,
-  ], [navItems, navDropdownLayanan, navDropdownGaleri]);
+  ];
 
   /* ─── RENDER ─── */
   return (
@@ -15869,20 +15798,35 @@ export default function BricksyTravel() {
                 <>
                   {/* == HERO == */}
                   <section className="re-hero">
-                    {/* Background Video Hero */}
-                    <video
-                      ref={heroVideoRef}
-                      className="re-hero-img"
-                      autoPlay
-                      muted
-                      loop
-                      playsInline
-                      preload="auto"
-                      style={{ objectFit:"cover", objectPosition:"center center" }}
-                    >
-                      <source src="https://res.cloudinary.com/dum9j7yn1/video/upload/q_auto,vc_auto/v1782135360/Backgroud_Video_Hero_nfxtof.mp4" type="video/mp4" />
-                      <source src="https://res.cloudinary.com/dum9j7yn1/video/upload/v1782135360/Backgroud_Video_Hero_nfxtof.mov" type="video/quicktime" />
-                    </video>
+                    {/* Background: Video (default) atau Gambar Statis tergantung heroMode */}
+                    {(data.content?.heroMode === "video" || !data.content?.heroMode || data.content?.heroMode === "slideshow") ? (
+                      <video
+                        ref={heroVideoRef}
+                        className="re-hero-img"
+                        autoPlay
+                        muted
+                        loop
+                        playsInline
+                        preload="auto"
+                        style={{ objectFit:"cover", objectPosition:"center center" }}
+                      >
+                        {data.content?.heroVideoUrl ? (
+                          <source src={data.content.heroVideoUrl} type="video/mp4" />
+                        ) : (
+                          <>
+                            <source src="https://res.cloudinary.com/dum9j7yn1/video/upload/q_auto,vc_auto/v1782135360/Backgroud_Video_Hero_nfxtof.mp4" type="video/mp4" />
+                            <source src="https://res.cloudinary.com/dum9j7yn1/video/upload/v1782135360/Backgroud_Video_Hero_nfxtof.mov" type="video/quicktime" />
+                          </>
+                        )}
+                      </video>
+                    ) : data.content?.heroMode === "static" ? (
+                      <img
+                        className="re-hero-img"
+                        src={data.content?.heroStaticImage || ""}
+                        alt="Hero Background"
+                        style={{ objectFit:"cover", objectPosition:"center center" }}
+                      />
+                    ) : null}
                     <div className="re-hero-overlay" />
                     {/* Smoke ornaments */}
                     <div style={{ position:"absolute",inset:0,pointerEvents:"none",zIndex:1,overflow:"hidden" }}>
@@ -16232,7 +16176,6 @@ export default function BricksyTravel() {
                   group: "KONTEN WEBSITE",
                   items: [
                     { id: "content",         label: "📝 Konten & Nav",      show: isAdmin },
-                    { id: "set_home",        label: "🏠 Gambar Home",        show: isAdmin },
                     { id: "set_layanankami", label: "📄 Setting Halaman About", show: isAdmin },
                     { id: "settings",        label: "🔧 Pengaturan Sistem",  show: isAdmin },
                   ]
@@ -16381,33 +16324,6 @@ export default function BricksyTravel() {
               )}
 
               {/* SETTING HOME */}
-              {adminTab === "set_home" && isAdmin && (
-                <SubLayananAdmin
-                  firestoreReady={firestoreReady}
-                  title="Setting Home"
-                  icon="🏠"
-                  accentColor="#3498db"
-                  storeKey="homeContent"
-                  data={data}
-                  save={save}
-                  notify={notify}
-                  uploadToCloudinary={uploadToCloudinary}
-                  pageDesc="Kelola konten teks dan gambar yang tampil di halaman utama (Home) website."
-                  sections={[
-                    { key: "heroTitle", label: "Judul Hero / Tagline Utama", type: "text" },
-                    { key: "heroSub", label: "Sub-teks Hero (deskripsi singkat)", type: "textarea" },
-                    { key: "homeSectionTitle", label: "Judul Seksi Utama Home", type: "text" },
-                    { key: "homeSectionDesc", label: "Deskripsi Seksi Home", type: "textarea" },
-                    { key: "homeCtaLabel", label: "Label Tombol CTA Home", type: "text" },
-                    { key: "homeCtaLabel2", label: "Label Tombol CTA 2 Home", type: "text" },
-                  ]}
-                  imageGroups={[
-                    { key: "hero", label: "Hero Slideshow", count: 4, desc: "Gambar slideshow utama di bagian atas Home. Juga tampil sebagai grid di halaman About." },
-                    { key: "gal", label: "Galeri Home", count: 6, desc: "Grid galeri di bagian bawah Home (puzzle Advertorial 4 foto)." },
-                  ]}
-                />
-              )}
-
               {/* SETTING HALAMAN ABOUT */}
               {adminTab === "set_layanankami" && isAdmin && (
                 <AboutPageAdmin data={data} save={save} notify={notify} uploadToCloudinary={uploadToCloudinary} />
@@ -16419,7 +16335,6 @@ export default function BricksyTravel() {
               {/* --- KAMAR TIDUR --- */}
               {adminTab === "int_kamar_tidur" && isAdmin && (
                 <SubLayananAdmin
-                  firestoreReady={firestoreReady}
                   title="Kamar Tidur"
                   icon="🛏️"
                   accentColor="#6a2fa0"
@@ -16454,7 +16369,6 @@ export default function BricksyTravel() {
               {/* --- KAMAR MANDI --- */}
               {adminTab === "int_kamar_mandi" && isAdmin && (
                 <SubLayananAdmin
-                  firestoreReady={firestoreReady}
                   title="Kamar Mandi"
                   icon="🚿"
                   accentColor="#0f3460"
@@ -16489,7 +16403,6 @@ export default function BricksyTravel() {
               {/* --- RUANG KELUARGA --- */}
               {adminTab === "int_ruang_keluarga" && isAdmin && (
                 <SubLayananAdmin
-                  firestoreReady={firestoreReady}
                   title="Ruang Keluarga"
                   icon="👨‍👩‍👧"
                   accentColor="#2d6a4f"
@@ -16524,7 +16437,6 @@ export default function BricksyTravel() {
               {/* --- RUANG TAMU --- */}
               {adminTab === "int_ruang_tamu" && isAdmin && (
                 <SubLayananAdmin
-                  firestoreReady={firestoreReady}
                   title="Ruang Tamu"
                   icon="🪑"
                   accentColor="#8B4513"
@@ -16559,7 +16471,6 @@ export default function BricksyTravel() {
               {/* --- KITCHEN SET --- */}
               {adminTab === "int_kitchen_set" && isAdmin && (
                 <SubLayananAdmin
-                  firestoreReady={firestoreReady}
                   title="Kitchen Set & Dapur"
                   icon="🍳"
                   accentColor="#2c5282"
@@ -16594,7 +16505,6 @@ export default function BricksyTravel() {
               {/* --- RUANG KERJA --- */}
               {adminTab === "int_ruang_kerja" && isAdmin && (
                 <SubLayananAdmin
-                  firestoreReady={firestoreReady}
                   title="Ruang Kerja"
                   icon="💼"
                   accentColor="#16213e"
@@ -16629,7 +16539,6 @@ export default function BricksyTravel() {
               {/* --- PLAFON MODERN --- */}
               {adminTab === "int_plafon" && isAdmin && (
                 <SubLayananAdmin
-                  firestoreReady={firestoreReady}
                   title="Plafon Modern"
                   icon="🏛️"
                   accentColor="#0f3460"
@@ -16664,7 +16573,6 @@ export default function BricksyTravel() {
               {/* SETTING PAGAR RUMAH */}
               {adminTab === "ext_pagar" && isAdmin && (
                 <SubLayananAdmin
-                  firestoreReady={firestoreReady}
                   title="Pagar Rumah"
                   icon="🔒"
                   accentColor="#0f3460"
@@ -16699,7 +16607,6 @@ export default function BricksyTravel() {
               {/* SETTING KANOPI */}
               {adminTab === "ext_kanopi" && isAdmin && (
                 <SubLayananAdmin
-                  firestoreReady={firestoreReady}
                   title="Kanopi"
                   icon="🏗️"
                   accentColor="#2d6a4f"
@@ -16734,7 +16641,6 @@ export default function BricksyTravel() {
               {/* SETTING ALUMINIUM */}
               {adminTab === "ext_aluminium" && isAdmin && (
                 <SubLayananAdmin
-                  firestoreReady={firestoreReady}
                   title="Aluminium"
                   icon="🪟"
                   accentColor="#555b6e"
@@ -16776,7 +16682,6 @@ export default function BricksyTravel() {
               {/* PRODUK FURNITUR */}
               {adminTab === "produk_furnitur" && isAdmin && (
                 <SubLayananAdmin
-                  firestoreReady={firestoreReady}
                   title="Produk Furnitur"
                   icon="🪑"
                   accentColor="#C9AA71"
@@ -17703,24 +17608,25 @@ export default function BricksyTravel() {
                   <div style={{ background: "#fff", borderRadius: 8, padding: "22px 24px", marginBottom: 24, boxShadow: "0 2px 8px rgba(0,0,0,.06)", borderTop: "4px solid #8e44ad" }}>
                     <h3 style={{ fontSize: 15, fontWeight: 500, color: "#2E3D3F", marginBottom: 6 }}>🖥 Mode Tampilan Hero Beranda</h3>
                     <p style={{ fontSize: 12, color: "#5A6A6C", marginBottom: 20, lineHeight: 1.6 }}>
-                      Pilih apakah bagian hero di halaman utama ditampilkan sebagai <strong>slideshow otomatis</strong> (berganti-ganti gambar dari artikel) atau <strong>gambar statis diam</strong> dari satu URL yang ditentukan.
+                      Pilih mode tampilan bagian hero halaman utama: <strong>Video Background</strong> (video looping), <strong>Gambar Statis</strong> (satu foto diam), atau <strong>Slideshow Otomatis</strong> (berganti dari artikel).
                     </p>
-                    {/* Toggle Pill */}
+                    {/* Toggle Pill — 3 opsi */}
                     <div style={{ display: "flex", gap: 10, marginBottom: 20, flexWrap: "wrap" }}>
                       {[
-                        { val: "slideshow", icon: "▶", label: "Slideshow Otomatis", desc: "Gambar berganti dari artikel published" },
-                        { val: "static",    icon: "🖼", label: "Gambar Statis",     desc: "Satu gambar diam yang bisa diatur" },
+                        { val: "video",     icon: "🎬", label: "Video Background", desc: "Video looping sebagai latar hero" },
+                        { val: "static",    icon: "🖼",  label: "Gambar Statis",    desc: "Satu gambar diam yang bisa diatur" },
+                        { val: "slideshow", icon: "▶",  label: "Slideshow Otomatis", desc: "Gambar berganti dari artikel published" },
                       ].map(opt => {
-                        const active = (data.content.heroMode || "slideshow") === opt.val;
+                        const active = (data.content.heroMode || "video") === opt.val;
                         return (
                           <div key={opt.val} onClick={() => { save({ ...data, content: { ...data.content, heroMode: opt.val } }); notify(`✅ Mode hero diubah ke: ${opt.label}`); }}
-                            style={{ flex: 1, minWidth: 200, padding: "16px 20px", borderRadius: 10, cursor: "pointer",
+                            style={{ flex: 1, minWidth: 180, padding: "14px 18px", borderRadius: 10, cursor: "pointer",
                               border: active ? "2px solid #8e44ad" : "2px solid #F5EDD8",
                               background: active ? "#f5eeff" : "#FDFAF4",
                               transition: "all .18s" }}>
-                            <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 6 }}>
-                              <span style={{ fontSize: 22 }}>{opt.icon}</span>
-                              <span style={{ fontWeight: 700, fontSize: 14, color: active ? "#8e44ad" : "#2E3D3F" }}>{opt.label}</span>
+                            <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 5 }}>
+                              <span style={{ fontSize: 20 }}>{opt.icon}</span>
+                              <span style={{ fontWeight: 700, fontSize: 13, color: active ? "#8e44ad" : "#2E3D3F" }}>{opt.label}</span>
                               {active && <span style={{ marginLeft: "auto", fontSize: 10, background: "#8e44ad", color: "#fff", borderRadius: 8, padding: "2px 8px", fontWeight: 700 }}>AKTIF</span>}
                             </div>
                             <div style={{ fontSize: 12, color: "#5A6A6C", lineHeight: 1.5 }}>{opt.desc}</div>
@@ -17729,41 +17635,86 @@ export default function BricksyTravel() {
                       })}
                     </div>
 
-                    {/* Static image setting -- hanya tampil kalau mode static */}
-                    {(data.content.heroMode || "slideshow") === "static" && (
-                      <div style={{ background: "#f5eeff", borderRadius: 8, padding: "16px 18px", border: "1px solid #d8b4fe" }}>
-                        <label style={{ fontSize: 11, fontWeight: 600, color: "#5A6A6C", letterSpacing: "1px", textTransform: "uppercase", display: "block", marginBottom: 8 }}>URL Gambar Statis Hero</label>
-                        <div style={{ display: "flex", gap: 8, marginBottom: 10 }}>
-                          <input id="hero-static-url" defaultValue={data.content.heroStaticImage || ""}
-                            placeholder="https://..."
-                            style={{ flex: 1, padding: "9px 12px", border: "1px solid #d8b4fe", borderRadius: 6, fontSize: 13, outline: "none", background: "#fff" }} />
-                          <button onClick={() => {
-                            const url = document.getElementById("hero-static-url")?.value?.trim();
-                            if (!url) return notify("Masukkan URL gambar.", "error");
-                            save({ ...data, content: { ...data.content, heroStaticImage: url } });
-                            notify("✅ Gambar statis hero disimpan!");
-                          }} style={{ padding: "9px 16px", background: "#8e44ad", color: "#fff", borderRadius: 6, fontSize: 12, border: "none", fontWeight: 600, whiteSpace: "nowrap" }}>
-                            Simpan
-                          </button>
+                    {/* ── Panel Video Background ── */}
+                    {(data.content.heroMode === "video" || !data.content.heroMode) && (() => {
+                      const [videoUrl, setVideoUrl] = React.useState(data.content.heroVideoUrl || "");
+                      return (
+                        <div style={{ background: "#f5eeff", borderRadius: 8, padding: "16px 18px", border: "1px solid #d8b4fe" }}>
+                          <label style={{ fontSize: 11, fontWeight: 700, color: "#8e44ad", letterSpacing: "1px", textTransform: "uppercase", display: "block", marginBottom: 10 }}>🎬 URL Video Background Hero</label>
+                          <p style={{ fontSize: 12, color: "#5A6A6C", marginBottom: 12, lineHeight: 1.5 }}>
+                            Masukkan link URL video (format MP4 direkomendasikan). Video akan diputar otomatis, senyap, dan berulang sebagai latar hero.
+                          </p>
+                          <div style={{ display: "flex", gap: 8, marginBottom: 12 }}>
+                            <input
+                              value={videoUrl}
+                              onChange={e => setVideoUrl(e.target.value)}
+                              placeholder="https://res.cloudinary.com/.../video.mp4"
+                              style={{ flex: 1, padding: "9px 12px", border: "1px solid #d8b4fe", borderRadius: 6, fontSize: 13, outline: "none", background: "#fff" }}
+                            />
+                            <button onClick={() => {
+                              const url = videoUrl.trim();
+                              if (!url) return notify("Masukkan URL video.", "error");
+                              save({ ...data, content: { ...data.content, heroVideoUrl: url } });
+                              notify("✅ URL video background disimpan!");
+                            }} style={{ padding: "9px 16px", background: "#8e44ad", color: "#fff", borderRadius: 6, fontSize: 12, border: "none", fontWeight: 700, whiteSpace: "nowrap", cursor: "pointer" }}>
+                              Simpan
+                            </button>
+                          </div>
+                          {data.content.heroVideoUrl && (
+                            <div style={{ fontSize: 11, color: "#5A6A6C", background: "#fff", borderRadius: 6, padding: "8px 12px", border: "1px solid #e8d4fe", wordBreak: "break-all" }}>
+                              <strong>URL Aktif:</strong> {data.content.heroVideoUrl}
+                            </div>
+                          )}
+                          {!data.content.heroVideoUrl && (
+                            <div style={{ fontSize: 11, color: "#8e44ad", background: "#fff", borderRadius: 6, padding: "8px 12px", border: "1px dashed #d8b4fe" }}>
+                              ℹ️ Belum ada URL disimpan — menggunakan video bawaan Vastura Group.
+                            </div>
+                          )}
                         </div>
-                        {/* Upload file */}
-                        <label style={{ fontSize: 11, fontWeight: 600, color: "#5A6A6C", letterSpacing: "1px", textTransform: "uppercase", display: "block", marginBottom: 6 }}>Atau Upload Gambar</label>
-                        <UploadButton label="📁 Pilih Gambar Hero"
-                          style={{ border: "1.5px dashed #8e44ad", color: "#8e44ad", background: "#fff" }}
-                          onDone={urls => {
-                            save({ ...data, content: { ...data.content, heroStaticImage: urls[0] } });
-                            notify("✅ Gambar hero statis diupload!");
-                          }}
-                          onError={() => notify("Gagal upload. Coba lagi.", "error")} />
-                        {/* Preview */}
-                        {data.content.heroStaticImage && (
-                          <img src={data.content.heroStaticImage} alt="Hero Preview"
-                            style={{ width: "100%", maxHeight: 180, objectFit: "cover", borderRadius: 8, border: "1px solid #d8b4fe" }}
-                            onError={e => e.target.style.display = "none"} />
-                        )}
-                      </div>
-                    )}
-                  </div>
+                      );
+                    })()}
+
+                    {/* ── Panel Gambar Statis ── */}
+                    {data.content.heroMode === "static" && (() => {
+                      const [imgUrl, setImgUrl] = React.useState(data.content.heroStaticImage || "");
+                      return (
+                        <div style={{ background: "#f5eeff", borderRadius: 8, padding: "16px 18px", border: "1px solid #d8b4fe" }}>
+                          <label style={{ fontSize: 11, fontWeight: 700, color: "#8e44ad", letterSpacing: "1px", textTransform: "uppercase", display: "block", marginBottom: 10 }}>🖼 URL Gambar Statis Hero</label>
+                          <div style={{ display: "flex", gap: 8, marginBottom: 12 }}>
+                            <input
+                              value={imgUrl}
+                              onChange={e => setImgUrl(e.target.value)}
+                              placeholder="https://..."
+                              style={{ flex: 1, padding: "9px 12px", border: "1px solid #d8b4fe", borderRadius: 6, fontSize: 13, outline: "none", background: "#fff" }}
+                            />
+                            <button onClick={() => {
+                              const url = imgUrl.trim();
+                              if (!url) return notify("Masukkan URL gambar.", "error");
+                              save({ ...data, content: { ...data.content, heroStaticImage: url } });
+                              notify("✅ Gambar statis hero disimpan!");
+                            }} style={{ padding: "9px 16px", background: "#8e44ad", color: "#fff", borderRadius: 6, fontSize: 12, border: "none", fontWeight: 700, whiteSpace: "nowrap", cursor: "pointer" }}>
+                              Simpan
+                            </button>
+                          </div>
+                          <label style={{ fontSize: 11, fontWeight: 600, color: "#5A6A6C", letterSpacing: "1px", textTransform: "uppercase", display: "block", marginBottom: 6 }}>Atau Upload Gambar</label>
+                          <UploadButton label="📁 Pilih Gambar Hero"
+                            style={{ border: "1.5px dashed #8e44ad", color: "#8e44ad", background: "#fff" }}
+                            onDone={urls => {
+                              setImgUrl(urls[0]);
+                              save({ ...data, content: { ...data.content, heroStaticImage: urls[0] } });
+                              notify("✅ Gambar hero statis diupload!");
+                            }}
+                            onError={() => notify("Gagal upload. Coba lagi.", "error")} />
+                          {data.content.heroStaticImage && (
+                            <img src={data.content.heroStaticImage} alt="Hero Preview"
+                              style={{ width: "100%", maxHeight: 180, objectFit: "cover", borderRadius: 8, border: "1px solid #d8b4fe", marginTop: 10 }}
+                              onError={e => e.target.style.display = "none"} />
+                          )}
+                        </div>
+                      );
+                    })()}
+
+                  </div>{/* end hero mode card */}
 
                   <div className="settings-grid">
                     {[
