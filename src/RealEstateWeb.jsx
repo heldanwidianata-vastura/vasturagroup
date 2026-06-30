@@ -8014,6 +8014,23 @@ function ReviewCard({ review }) {
 }
 
 
+/* Format teks harga jadi Rupiah, aman untuk berbagai format input
+   (angka murni "4500000", sudah ada "Rp", desimal, atau teks bebas seperti "Mulai dari 500rb/m²") */
+function formatHargaRp(raw) {
+  if (raw === null || raw === undefined) return "";
+  const str = String(raw).trim();
+  if (str === "") return "";
+  // Ambil hanya digit (dan titik desimal) dari string
+  const numMatch = str.replace(/\./g, "").match(/-?\d+(?:,\d+)?/);
+  if (!numMatch) return str; // bukan angka sama sekali → tampilkan apa adanya
+  const num = parseFloat(numMatch[0].replace(",", "."));
+  if (isNaN(num)) return str;
+  const formatted = "Rp " + Math.round(num).toLocaleString("id-ID");
+  // Jika string asli punya teks tambahan di luar angka (mis. "500000 / m²"), pertahankan suffix-nya
+  const suffix = str.replace(numMatch[0], "").replace(/^Rp\.?\s*/i, "").trim();
+  return suffix ? `${formatted} ${suffix}` : formatted;
+}
+
 /* ══════════════════════════════════════════════════════════
    SUB LAYANAN ADMIN — Universal CRUD + Gambar + Teks Setting
    Dipakai oleh: Home, LayananKami, DesainRab, TemaRumah,
@@ -8029,17 +8046,19 @@ function SubLayananAdmin({
   crudLabel,
   crudFields = [],
   crudHasImage = false,
+  crudHasGallery = false,
   defaultItems = null,
 }) {
   const items     = data[crudKey] || [];
   const accent    = accentColor;
 
   /* ── State ── */
-  const emptyForm = () => { const o = {}; crudFields.forEach(f => { o[f.key] = ""; }); if (crudHasImage) o._img = ""; return o; };
+  const emptyForm = () => { const o = {}; crudFields.forEach(f => { o[f.key] = ""; }); if (crudHasImage) o._img = ""; if (crudHasGallery) o.imgs = []; return o; };
   const [mode, setMode]         = useState("list");   // "list" | "add" | "edit"
   const [editItem, setEditItem] = useState(null);
   const [form, setForm]         = useState(emptyForm());
   const [uploading, setUploading] = useState(false);
+  const [uploadingGallery, setUploadingGallery] = useState(false);
   const [saving, setSaving]     = useState(false);
   const [delTarget, setDelTarget] = useState(null);
   const [seeding, setSeeding]   = useState(false);
@@ -8090,6 +8109,19 @@ function SubLayananAdmin({
     setUploading(false);
   };
 
+  /* ── Upload galeri multi-foto (opsional, lewat crudHasGallery) ── */
+  const handleGalleryUpload = async (file) => {
+    if (!file) return;
+    setUploadingGallery(true);
+    try {
+      const url = await uploadToCloudinary(file);
+      setForm(p => ({ ...p, imgs: [...(p.imgs || []), { img: url, label: "" }] }));
+      notify("✅ Foto galeri ditambahkan!");
+    } catch { notify("❌ Gagal upload foto galeri."); }
+    setUploadingGallery(false);
+  };
+  const removeGalleryImg = (i) => setForm(p => ({ ...p, imgs: (p.imgs || []).filter((_, j) => j !== i) }));
+
   /* ── Simpan (tambah / edit) ── */
   const handleSave = async () => {
     if (!form[crudFields[0]?.key]?.trim()) { notify("⚠️ Nama tidak boleh kosong."); return; }
@@ -8122,6 +8154,7 @@ function SubLayananAdmin({
     const f = emptyForm();
     crudFields.forEach(fd => { f[fd.key] = item[fd.key] || ""; });
     if (crudHasImage) f._img = item._img || "";
+    if (crudHasGallery) f.imgs = item.imgs || [];
     setForm(f); setEditItem(item); setMode("edit");
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -8212,7 +8245,7 @@ function SubLayananAdmin({
                   <div style={{ fontWeight: 700, fontSize: 14, color: "#2E3D3F", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                     {item.nama || item[crudFields[0]?.key] || `Item ${idx + 1}`}
                   </div>
-                  {item.harga && <div style={{ fontSize: 12, color: "#8B6914", fontWeight: 600 }}>{item.harga}</div>}
+                  {item.harga && <div style={{ fontSize: 12, color: "#8B6914", fontWeight: 600 }}>{formatHargaRp(item.harga)}</div>}
                 </div>
                 <div style={{ display: "flex", gap: 6, flexShrink: 0 }}>
                   <button onClick={() => openEdit(item)}
@@ -8308,6 +8341,31 @@ function SubLayananAdmin({
                   </button>
                 )}
               </div>
+            </div>
+          </div>
+        )}
+
+        {/* Galeri multi-foto (opsional, mis. produk furnitur) */}
+        {crudHasGallery && (
+          <div style={{ marginBottom: 20 }}>
+            <div style={{ fontSize: 13, fontWeight: 700, color: "#5A6A6C", marginBottom: 8 }}>Galeri Foto Produk (untuk halaman detail)</div>
+            {(form.imgs || []).length > 0 && (
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(80px,1fr))", gap: 8, marginBottom: 10 }}>
+                {(form.imgs || []).map((g, i) => (
+                  <div key={i} style={{ position: "relative", borderRadius: 8, overflow: "hidden", border: "1.5px solid #E8DCC8" }}>
+                    <img src={g.img} alt="" style={{ width: "100%", height: 64, objectFit: "cover", display: "block" }} onError={e => e.target.style.display = "none"} />
+                    <button onClick={() => removeGalleryImg(i)}
+                      style={{ position: "absolute", top: 3, right: 3, width: 18, height: 18, background: "rgba(220,38,38,.85)", color: "#fff", border: "none", borderRadius: "50%", cursor: "pointer", fontSize: 10, fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✕</button>
+                  </div>
+                ))}
+              </div>
+            )}
+            <label style={{ display: "inline-block", padding: "8px 14px", background: uploadingGallery ? "#ccc" : "#3498db", color: "#fff", borderRadius: 8, fontSize: 12, fontWeight: 700, cursor: uploadingGallery ? "default" : "pointer" }}>
+              {uploadingGallery ? "⏳ Mengupload..." : "📷 Tambah Foto Galeri"}
+              <input type="file" accept="image/*" style={{ display: "none" }} disabled={uploadingGallery} onChange={e => handleGalleryUpload(e.target.files?.[0])} />
+            </label>
+            <div style={{ fontSize: 11, color: "#8B9A9C", marginTop: 6 }}>
+              Bisa upload beberapa foto. Foto ini tampil sebagai galeri di halaman detail produk.
             </div>
           </div>
         )}
@@ -9768,6 +9826,15 @@ function TemaDetailPage({ slug, onWaOpen, onBack, temaList }) {
               📐 Foto denah belum tersedia untuk tema ini.
             </div>
           )}
+
+          {/* Disclaimer */}
+          <div style={{ marginTop: 24, display: "flex", alignItems: "flex-start", gap: 10, padding: "14px 18px", background: "#fff", borderRadius: 10, border: "1px solid #E8DCC8" }}>
+            <span style={{ fontSize: "1rem", flexShrink: 0, marginTop: 1 }}>ℹ️</span>
+            <p style={{ margin: 0, fontSize: "0.78rem", color: "#7A8A8C", lineHeight: 1.65 }}>
+              <strong style={{ color: "#5A6A6C", fontWeight: 700 }}>Disclaimer: </strong>
+              Denah hanya ilustrasi dan bisa berubah sesuai permintaan customer.
+            </p>
+          </div>
         </div>
       </div>
 
@@ -11638,6 +11705,11 @@ function FurniturPage({ data, onWaOpen }) {
   const accentGold = "#C9AA71";
   const darkTeal   = "#2E3D3F";
 
+  /* Jika item dipilih → tampilkan halaman detail penuh, ganti seluruh konten grid */
+  if (detailItem) {
+    return <FurniturDetailPage product={detailItem} onBack={() => setDetailItem(null)} onWaOpen={onWaOpen} formatRp={formatRp} />;
+  }
+
   return (
     <div style={{ minHeight:"100vh", background:"#FAFAF7", fontFamily:"'Jost',sans-serif" }}>
       <style>{`
@@ -11807,47 +11879,131 @@ function FurniturPage({ data, onWaOpen }) {
       </div>
 
       {/* -- Detail Modal -- */}
-      {detailItem && (
-        <div style={{ position:"fixed", inset:0, zIndex:9000, display:"flex", alignItems:"center", justifyContent:"center", padding:"20px" }}
-          onClick={()=>setDetailItem(null)}>
-          <div style={{ position:"absolute", inset:0, background:"rgba(0,0,0,.55)", backdropFilter:"blur(4px)" }} />
-          <div style={{ position:"relative", background:"#fff", borderRadius:18, width:"100%", maxWidth:680, maxHeight:"90vh", overflow:"auto", boxShadow:"0 24px 80px rgba(0,0,0,.22)" }}
-            onClick={e=>e.stopPropagation()}>
-            {detailItem._img && (
-              <div style={{ height:300, overflow:"hidden", borderRadius:"18px 18px 0 0" }}>
-                <img src={detailItem._img} alt={detailItem.nama} style={{ width:"100%", height:"100%", objectFit:"cover" }} />
-              </div>
-            )}
-            <div style={{ padding:"28px 32px 32px" }}>
-              {detailItem.kategori && (
-                <span style={{ display:"inline-block", background:"#FAF7F0", color:"#8B6914", fontSize:"0.68rem", padding:"3px 12px", borderRadius:10, fontWeight:700, letterSpacing:".1em", textTransform:"uppercase", marginBottom:12 }}>{detailItem.kategori}</span>
-              )}
-              <h2 style={{ fontSize:"1.6rem", fontWeight:800, color:darkTeal, marginBottom:10, fontFamily:"'Playfair Display',serif", lineHeight:1.25 }}>{detailItem.nama}</h2>
-              <div style={{ fontSize:"1.5rem", fontWeight:800, color:"#8B6914", fontFamily:"'Playfair Display',serif", marginBottom:18 }}>{formatRp(detailItem.harga)}</div>
-              {detailItem.deskripsi && <p style={{ fontSize:"0.9375rem", color:"#5A6A6C", lineHeight:1.8, marginBottom:24 }}>{detailItem.deskripsi}</p>}
-              <div style={{ display:"flex", gap:12, flexWrap:"wrap" }}>
-                <button
-                  className="fur-btn-wa"
-                  onClick={()=>{ onWaOpen && onWaOpen({ key:"layanan", vars:{ judul_layanan: detailItem.nama } }); setDetailItem(null); }}
-                  style={{ flex:"1 1 180px", background:`linear-gradient(135deg,#25D366,#128C7E)`, color:"#fff", border:"none", borderRadius:10, padding:"13px 24px", fontSize:"0.9rem", fontWeight:700, cursor:"pointer", fontFamily:"'Jost',sans-serif" }}>
-                  💬 Chat WhatsApp
-                </button>
-                <button onClick={()=>setDetailItem(null)}
-                  style={{ flex:"0 0 auto", background:"#FAF7F0", color:darkTeal, border:"1.5px solid #E8DCC8", borderRadius:10, padding:"13px 20px", fontSize:"0.85rem", fontWeight:600, cursor:"pointer", fontFamily:"'Jost',sans-serif" }}>
-                  Tutup
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
 
 /* ═══════════════════════════════════════════════════════════════════
-   SUB-PAGE CATALOG COMPONENT — dipakai oleh semua halaman baru
+   FURNITUR — Halaman Detail Produk (full page, galeri foto + request custom)
 ═══════════════════════════════════════════════════════════════════ */
+function FurniturDetailPage({ product, onBack, onWaOpen, formatRp }) {
+  const accentGold = "#C9AA71";
+  const darkTeal   = "#2E3D3F";
+
+  useEffect(() => { window.scrollTo(0, 0); }, [product?.id]);
+
+  /* Galeri: pakai imgs[] kalau ada (multi-foto), fallback ke _img tunggal */
+  const gallery = (product.imgs && product.imgs.length > 0)
+    ? product.imgs
+    : (product._img ? [{ img: product._img, label: product.nama }] : []);
+
+  const [activeImg, setActiveImg] = useState(0);
+  const mainImg = gallery[activeImg]?.img || gallery[0]?.img || "";
+
+  const handleRequestCustom = () => {
+    onWaOpen && onWaOpen({ key: "layanan", vars: { judul_layanan: `Request Custom — ${product.nama}` } });
+  };
+
+  return (
+    <div style={{ minHeight: "100vh", background: "#FAFAF7", fontFamily: "'Jost',sans-serif" }}>
+      {/* Back bar */}
+      <div style={{ background: `linear-gradient(90deg,${darkTeal},#3D5254)`, padding: "0 5%", position: "sticky", top: 0, zIndex: 50, borderBottom: `3px solid ${accentGold}` }}>
+        <button onClick={onBack} style={{ display: "flex", alignItems: "center", gap: 8, background: "none", border: "none", color: accentGold, fontWeight: 700, fontSize: "0.78rem", cursor: "pointer", padding: "13px 0", letterSpacing: ".06em", textTransform: "uppercase" }}>
+          <span style={{ fontSize: 18 }}>←</span> Kembali ke Furnitur
+        </button>
+      </div>
+
+      {/* Breadcrumb */}
+      <div style={{ padding: "14px 5%", borderBottom: "1px solid #eee", background: "#fff" }}>
+        <span style={{ fontSize: "0.78rem", color: "#8B9A9C" }}>Beranda</span>
+        <span style={{ fontSize: "0.78rem", color: "#8B9A9C", margin: "0 8px" }}>›</span>
+        <span style={{ fontSize: "0.78rem", color: "#8B9A9C" }}>Furnitur</span>
+        <span style={{ fontSize: "0.78rem", color: "#8B9A9C", margin: "0 8px" }}>›</span>
+        <span style={{ fontSize: "0.78rem", color: darkTeal, fontWeight: 600 }}>{product.nama}</span>
+      </div>
+
+      <div style={{ padding: "36px 5% 64px", maxWidth: 1100, margin: "0 auto" }}>
+        <div className="fur-detail-grid" style={{ display: "grid", gridTemplateColumns: "1.1fr 1fr", gap: 44, alignItems: "start" }}>
+
+          {/* ── Galeri Foto ── */}
+          <div>
+            <div style={{ borderRadius: 16, overflow: "hidden", boxShadow: "0 10px 32px rgba(0,0,0,.12)", background: "#F5EDD8", aspectRatio: "4/3" }}>
+              {mainImg ? (
+                <img src={mainImg} alt={product.nama} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} onError={e => e.target.style.display = "none"} />
+              ) : (
+                <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 64 }}>🪑</div>
+              )}
+            </div>
+
+            {gallery.length > 1 && (
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(72px,1fr))", gap: 10, marginTop: 12 }}>
+                {gallery.map((g, i) => (
+                  <button key={i} onClick={() => setActiveImg(i)}
+                    style={{ padding: 0, border: i === activeImg ? `2.5px solid ${accentGold}` : "2.5px solid transparent", borderRadius: 9, overflow: "hidden", cursor: "pointer", background: "none", aspectRatio: "1/1" }}>
+                    <img src={g.img} alt={g.label || `Foto ${i + 1}`} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} onError={e => e.target.parentElement.style.display = "none"} />
+                  </button>
+                ))}
+              </div>
+            )}
+            {gallery.length === 0 && (
+              <p style={{ fontSize: "0.78rem", color: "#A89070", marginTop: 10, textAlign: "center" }}>Belum ada foto untuk produk ini.</p>
+            )}
+          </div>
+
+          {/* ── Info & Request Custom ── */}
+          <div>
+            {product.kategori && (
+              <span style={{ display: "inline-block", background: "#FAF7F0", color: "#8B6914", fontSize: "0.68rem", padding: "4px 13px", borderRadius: 10, fontWeight: 700, letterSpacing: ".1em", textTransform: "uppercase", marginBottom: 14, border: "1px solid #E8DCC8" }}>
+                {product.kategori}
+              </span>
+            )}
+            <h1 style={{ fontSize: "1.85rem", fontWeight: 800, color: darkTeal, margin: "0 0 12px", fontFamily: "'Playfair Display',serif", lineHeight: 1.25 }}>
+              {product.nama}
+            </h1>
+            <div style={{ fontSize: "1.55rem", fontWeight: 800, color: "#8B6914", fontFamily: "'Playfair Display',serif", marginBottom: 22 }}>
+              {formatRp(product.harga)}
+            </div>
+
+            {product.deskripsi && (
+              <div style={{ marginBottom: 26 }}>
+                <div style={{ fontSize: "0.65rem", letterSpacing: ".1em", textTransform: "uppercase", color: accentGold, fontWeight: 800, marginBottom: 8 }}>Deskripsi Produk</div>
+                <p style={{ fontSize: "0.92rem", color: "#5A6A6C", lineHeight: 1.85, whiteSpace: "pre-line" }}>{product.deskripsi}</p>
+              </div>
+            )}
+
+            {/* ── Form Request Custom ── */}
+            <div style={{ background: "#fff", border: `1.5px solid #E8DCC8`, borderRadius: 14, padding: "22px 24px", marginTop: 8 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
+                <span style={{ fontSize: 18 }}>🎨</span>
+                <div style={{ fontWeight: 800, fontSize: "0.95rem", color: darkTeal }}>Request Custom</div>
+              </div>
+              <p style={{ fontSize: "0.8rem", color: "#5A6A6C", lineHeight: 1.65, marginBottom: 16 }}>
+                Ingin ukuran, warna, atau material berbeda dari produk ini? Kirim permintaan custom langsung ke tim kami via WhatsApp.
+              </p>
+              <button onClick={handleRequestCustom}
+                style={{ width: "100%", background: "linear-gradient(135deg,#25D366,#128C7E)", color: "#fff", border: "none", borderRadius: 10, padding: "14px 24px", fontSize: "0.92rem", fontWeight: 700, cursor: "pointer", fontFamily: "'Jost',sans-serif", display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
+                💬 Request Custom via WhatsApp
+              </button>
+            </div>
+
+            <button onClick={() => onWaOpen && onWaOpen({ key: "layanan", vars: { judul_layanan: product.nama } })}
+              style={{ width: "100%", marginTop: 10, background: "#FAF7F0", color: darkTeal, border: "1.5px solid #E8DCC8", borderRadius: 10, padding: "12px 20px", fontSize: "0.85rem", fontWeight: 600, cursor: "pointer", fontFamily: "'Jost',sans-serif" }}>
+              💬 Tanya Produk Ini (Sesuai Spesifikasi)
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <style>{`
+        @media (max-width: 760px) {
+          .fur-detail-grid { grid-template-columns: 1fr !important; }
+        }
+      `}</style>
+    </div>
+  );
+}
+
+
 function SubPageCatalog({ heroColor, heroIcon, title, subtitle, breadcrumb, catalogData, onWaOpen, navigateTo, satuan }) {
   const [hoverId, setHoverId] = useState(null);
 
@@ -12682,6 +12838,16 @@ function TemaEditForm({ temaOrig, editIdx, activeTemas, data, save, notify, onBa
     setDenahLantai(prev => prev.map((l, j) => j === li ? { ...l, imgs: l.imgs.filter((_, k) => k !== ii) } : l));
   };
 
+  /* Upload foto denah via paste URL (per lantai) */
+  const [pasteUrlDenah, setPasteUrlDenah] = useState({}); // { [lantaiIndex]: "url string" }
+  const addDenahByUrl = (li) => {
+    const url = (pasteUrlDenah[li] || "").trim();
+    if (!url) return;
+    setDenahLantai(prev => prev.map((l, j) => j === li ? { ...l, imgs: [...l.imgs, url] } : l));
+    setPasteUrlDenah(prev => ({ ...prev, [li]: "" }));
+    notify("✅ Foto denah ditambahkan dari URL!");
+  };
+
   const upd = (path, val) => {
     setDraft(prev => {
       const next = JSON.parse(JSON.stringify(prev));
@@ -12745,6 +12911,10 @@ function TemaEditForm({ temaOrig, editIdx, activeTemas, data, save, notify, onBa
   };
 
   const saveTema = async () => {
+    if (!draft.nama?.trim()) { notify("⚠️ Nama tema wajib diisi."); return; }
+    if (!draft.slug?.trim()) { notify("⚠️ Slug (URL key) wajib diisi."); return; }
+    const slugClash = activeTemas.some((t, i) => i !== editIdx && t.slug === draft.slug.trim());
+    if (slugClash) { notify("⚠️ Slug sudah dipakai tema lain, gunakan slug unik."); return; }
     setSaving(true);
     try {
       /* Simpan imgs[] dan img (foto pertama sebagai fallback) ke dalam draft */
@@ -12907,6 +13077,69 @@ function TemaEditForm({ temaOrig, editIdx, activeTemas, data, save, notify, onBa
             {slideshowImgs.length}/8 foto · Foto pertama jadi thumbnail kartu. Klik thumbnail untuk preview. ← → untuk urutan.
           </div>
         </div>
+
+        {/* ── Foto Denah per Lantai ── */}
+        <div style={{ marginBottom: 14 }}>
+          <div style={{ fontSize: 11, fontWeight: 700, color: "#5A6A6C", margin: "0 0 10px", textTransform: "uppercase", letterSpacing: ".04em", display: "flex", alignItems: "center", gap: 6 }}>
+            📐 Foto Denah per Lantai
+            <span style={{ fontWeight: 400, fontSize: 10, color: "#A89070", textTransform: "none", letterSpacing: 0 }}>— tampil di halaman publik</span>
+          </div>
+
+          {denahLantai.map((lantai, li) => (
+            <div key={li} style={{ background: "#FAF7F0", border: "1.5px solid #E8DCC8", borderRadius: 10, padding: "14px 16px", marginBottom: 10 }}>
+              <div style={{ display: "flex", gap: 8, alignItems: "center", marginBottom: 10 }}>
+                <input type="text" value={lantai.label} onChange={e => updateLantaiLabel(li, e.target.value)}
+                  placeholder="Lantai 1" style={{ flex: 1, padding: "8px 12px", border: "1.5px solid #D5C9B0", borderRadius: 8, fontSize: 13, fontWeight: 700 }} />
+                {denahLantai.length > 1 && (
+                  <button onClick={() => removeLantai(li)}
+                    style={{ padding: "7px 11px", background: "#fee2e2", color: "#dc2626", border: "none", borderRadius: 8, cursor: "pointer", fontWeight: 700, fontSize: 12, whiteSpace: "nowrap" }}>🗑️ Hapus</button>
+                )}
+              </div>
+
+              {lantai.imgs.length > 0 && (
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(90px,1fr))", gap: 8, marginBottom: 10 }}>
+                  {lantai.imgs.map((img, ii) => (
+                    <div key={ii} style={{ position: "relative", borderRadius: 8, overflow: "hidden", border: "1.5px solid #E8DCC8" }}>
+                      <img src={img} alt={`${lantai.label} ${ii + 1}`} style={{ width: "100%", height: 70, objectFit: "cover", display: "block" }} onError={e => e.target.style.display = "none"} />
+                      <button onClick={() => removeDenahImg(li, ii)}
+                        style={{ position: "absolute", top: 3, right: 3, width: 20, height: 20, background: "rgba(220,38,38,.85)", color: "#fff", border: "none", borderRadius: "50%", cursor: "pointer", fontSize: 11, fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✕</button>
+                    </div>
+                  ))}
+                </div>
+              )}
+              {lantai.imgs.length === 0 && (
+                <div style={{ textAlign: "center", padding: "12px", border: "1.5px dashed #D5C9B0", borderRadius: 8, color: "#A89070", fontSize: 12, marginBottom: 10 }}>
+                  Belum ada foto denah untuk {lantai.label || "lantai ini"}.
+                </div>
+              )}
+
+              <label style={{ display: "inline-block", padding: "8px 14px", background: uploadingDenah === li ? "#ccc" : "#3498db", color: "#fff", borderRadius: 8, fontSize: 12, fontWeight: 700, cursor: uploadingDenah === li ? "default" : "pointer", marginBottom: 8 }}>
+                {uploadingDenah === li ? "⏳ Mengupload..." : "📷 Upload Foto Denah"}
+                <input type="file" accept="image/*" style={{ display: "none" }} disabled={uploadingDenah === li} onChange={e => handleDenahUpload(li, e.target.files?.[0])} />
+              </label>
+
+              {/* Paste URL foto denah */}
+              <div style={{ display: "flex", gap: 8 }}>
+                <input type="text" value={pasteUrlDenah[li] || ""} onChange={e => setPasteUrlDenah(prev => ({ ...prev, [li]: e.target.value }))}
+                  onKeyDown={e => e.key === "Enter" && addDenahByUrl(li)}
+                  placeholder="https://... paste URL foto denah lalu tekan Enter atau Tambah"
+                  style={{ flex: 1, padding: "8px 12px", border: "1.5px solid #D5C9B0", borderRadius: 8, fontSize: 12, boxSizing: "border-box" }} />
+                <button onClick={() => addDenahByUrl(li)} disabled={!(pasteUrlDenah[li] || "").trim()}
+                  style={{ padding: "8px 14px", background: "#C9AA71", color: "#fff", border: "none", borderRadius: 8, fontSize: 12, fontWeight: 700, cursor: "pointer", whiteSpace: "nowrap" }}>
+                  + Tambah
+                </button>
+              </div>
+            </div>
+          ))}
+
+          <button onClick={addLantai}
+            style={{ padding: "7px 16px", background: "#F5EDD8", color: "#5A6A6C", border: "1.5px dashed #D5C9B0", borderRadius: 8, fontSize: 13, fontWeight: 700, cursor: "pointer", marginBottom: 6 }}>
+            + Tambah Lantai
+          </button>
+          <div style={{ fontSize: 11, color: "#8B9A9C", marginTop: 4 }}>
+            Bisa 1 lantai, 2 lantai, atau lebih. Foto ini tampil di section "Denah Ruang" halaman publik.
+          </div>
+        </div>
       </div>
 
       {/* Fitur */}
@@ -12964,53 +13197,6 @@ function TemaEditForm({ temaOrig, editIdx, activeTemas, data, save, notify, onBa
       <div style={SS}>
         {ST("📐", "Denah Ruang")}
         {inp("Deskripsi denah", "detail.denah.desc", true)}
-
-        {/* Upload Foto Denah per Lantai */}
-        <div style={{ fontSize: 11, fontWeight: 700, color: "#5A6A6C", margin: "4px 0 8px", textTransform: "uppercase", letterSpacing: ".04em" }}>
-          🏢 Foto Denah per Lantai
-        </div>
-        {denahLantai.map((lantai, li) => (
-          <div key={li} style={{ background: "#FAF7F0", border: "1.5px solid #E8DCC8", borderRadius: 10, padding: "14px 16px", marginBottom: 12 }}>
-            <div style={{ display: "flex", gap: 8, alignItems: "center", marginBottom: 10 }}>
-              <input type="text" value={lantai.label} onChange={e => updateLantaiLabel(li, e.target.value)}
-                placeholder="Lantai 1" style={{ flex: 1, padding: "8px 12px", border: "1.5px solid #D5C9B0", borderRadius: 8, fontSize: 13, fontWeight: 700 }} />
-              {denahLantai.length > 1 && (
-                <button onClick={() => removeLantai(li)}
-                  style={{ padding: "8px 12px", background: "#fee2e2", color: "#dc2626", border: "none", borderRadius: 8, cursor: "pointer", fontWeight: 700, fontSize: 12, whiteSpace: "nowrap" }}>🗑️ Hapus Lantai</button>
-              )}
-            </div>
-
-            {/* Thumbnail foto lantai ini */}
-            {lantai.imgs.length > 0 && (
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(90px,1fr))", gap: 8, marginBottom: 10 }}>
-                {lantai.imgs.map((img, ii) => (
-                  <div key={ii} style={{ position: "relative", borderRadius: 8, overflow: "hidden", border: "1.5px solid #E8DCC8" }}>
-                    <img src={img} alt={`${lantai.label} ${ii + 1}`} style={{ width: "100%", height: 70, objectFit: "cover", display: "block" }} onError={e => e.target.style.display = "none"} />
-                    <button onClick={() => removeDenahImg(li, ii)}
-                      style={{ position: "absolute", top: 3, right: 3, width: 20, height: 20, background: "rgba(220,38,38,.85)", color: "#fff", border: "none", borderRadius: "50%", cursor: "pointer", fontSize: 11, fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✕</button>
-                  </div>
-                ))}
-              </div>
-            )}
-            {lantai.imgs.length === 0 && (
-              <div style={{ textAlign: "center", padding: "14px", border: "1.5px dashed #D5C9B0", borderRadius: 8, color: "#A89070", fontSize: 12, marginBottom: 10 }}>
-                Belum ada foto denah untuk {lantai.label || "lantai ini"}.
-              </div>
-            )}
-
-            <label style={{ display: "inline-block", padding: "8px 14px", background: uploadingDenah === li ? "#ccc" : "#3498db", color: "#fff", borderRadius: 8, fontSize: 12, fontWeight: 700, cursor: uploadingDenah === li ? "default" : "pointer" }}>
-              {uploadingDenah === li ? "⏳ Mengupload..." : "📷 Upload Foto Denah"}
-              <input type="file" accept="image/*" style={{ display: "none" }} disabled={uploadingDenah === li} onChange={e => handleDenahUpload(li, e.target.files?.[0])} />
-            </label>
-          </div>
-        ))}
-        <button onClick={addLantai}
-          style={{ padding: "7px 16px", background: "#F5EDD8", color: "#5A6A6C", border: "1.5px dashed #D5C9B0", borderRadius: 8, fontSize: 13, fontWeight: 700, cursor: "pointer", marginBottom: 18 }}>
-          + Tambah Lantai
-        </button>
-        <div style={{ fontSize: 11, color: "#8B9A9C", marginBottom: 18, marginTop: -10 }}>
-          Bisa 1 lantai, 2 lantai, atau lebih. Foto ini yang ditampilkan di tab "Denah Ruang" halaman publik (tanpa rincian ukuran).
-        </div>
 
         <div style={{ fontSize: 11, fontWeight: 700, color: "#5A6A6C", marginBottom: 8, textTransform: "uppercase", letterSpacing: ".04em" }}>Daftar Ruangan (data internal, tidak tampil di publik)</div>
         {(draft.detail?.denah?.ruangan || []).map((r, ri) => (
@@ -13085,6 +13271,63 @@ function TemaRumahAdminPanel({ data, save, notify, uploadToCloudinary }) {
 
   const activeTemas = (data.temaData && data.temaData.length > 0) ? data.temaData : TEMA_DATA;
 
+  /* Template kosong untuk tema baru — struktur lengkap & konsisten dengan tema yang sudah ada,
+     supaya otomatis kompatibel dengan halaman publik (single-scroll), eksterior grid, denah multi-lantai, dst. */
+  const buildBlankTema = () => {
+    const nextNo = String(activeTemas.length + 1).padStart(2, "0");
+    return {
+      id: Date.now(),
+      slug: "",
+      no: nextNo,
+      nama: "Tema Baru",
+      tagline: "",
+      fitur: [
+        { icon: "🏠", label: "Fitur 1" }, { icon: "✨", label: "Fitur 2" },
+        { icon: "🔧", label: "Fitur 3" }, { icon: "💰", label: "Fitur 4" },
+      ],
+      img: "",
+      imgs: [],
+      warna: "#C9AA71",
+      deskripsi: "",
+      detail: {
+        exterior: { desc: "", poin: [] },
+        interior: { desc: "", poin: [] },
+        denah: { desc: "", ruangan: [], lantai: [{ label: "Lantai 1", imgs: [] }] },
+        harga: {
+          paket: [
+            { nama: "Paket Standar", luas: "60–80 m²", harga: 0, termasuk: [] },
+            { nama: "Paket Premium", luas: "80–120 m²", harga: 0, termasuk: [] },
+            { nama: "Paket Luxury", luas: "120 m² ke atas", harga: 0, termasuk: [] },
+          ],
+        },
+      },
+    };
+  };
+
+  const handleAddNewTema = async () => {
+    const blank = buildBlankTema();
+    const nextTemas = [...activeTemas, blank];
+    try {
+      await save({ ...data, temaData: nextTemas });
+      notify("✅ Tema baru ditambahkan. Lengkapi datanya sekarang.");
+      setEditIdx(nextTemas.length - 1);
+    } catch {
+      notify("❌ Gagal menambah tema baru.");
+    }
+  };
+
+  const handleDeleteTema = async (i) => {
+    const t = activeTemas[i];
+    if (!window.confirm(`Hapus tema "${t.nama || "(tanpa nama)"}" secara permanen? Tindakan ini tidak bisa dibatalkan.`)) return;
+    const nextTemas = activeTemas.filter((_, j) => j !== i);
+    try {
+      await save({ ...data, temaData: nextTemas });
+      notify("🗑️ Tema dihapus.");
+    } catch {
+      notify("❌ Gagal menghapus tema.");
+    }
+  };
+
   const handleLoadDefault = async () => {
     if (!window.confirm("Load semua data default dari kode ke database? Data yang ada di DB akan ditimpa.")) return;
     setLoadingDefault(true);
@@ -13156,6 +13399,10 @@ function TemaRumahAdminPanel({ data, save, notify, uploadToCloudinary }) {
 
           {editIdx === null ? (
             <div>
+              <button onClick={handleAddNewTema}
+                style={{ display: "flex", alignItems: "center", gap: 8, padding: "11px 18px", background: "#2ecc71", color: "#fff", border: "none", borderRadius: 10, fontSize: 14, fontWeight: 800, cursor: "pointer", marginBottom: 16 }}>
+                ➕ Tambah Tema Baru
+              </button>
               {activeTemas.map((tema, i) => (
                 <div key={tema.slug} style={{ background: "#fff", border: "1.5px solid #E8DCC8", borderRadius: 12, padding: "16px 18px", marginBottom: 12, display: "flex", alignItems: "center", gap: 14 }}>
                   <img src={tema.img} alt={tema.nama} style={{ width: 70, height: 52, objectFit: "cover", borderRadius: 8, flexShrink: 0 }} onError={e => e.target.style.display = "none"} />
@@ -13171,6 +13418,10 @@ function TemaRumahAdminPanel({ data, save, notify, uploadToCloudinary }) {
                   <button onClick={() => setEditIdx(i)}
                     style={{ padding: "8px 16px", background: "#C9AA71", color: "#fff", border: "none", borderRadius: 8, fontSize: 13, fontWeight: 700, cursor: "pointer", flexShrink: 0 }}>
                     ✏️ Edit
+                  </button>
+                  <button onClick={() => handleDeleteTema(i)}
+                    style={{ padding: "8px 12px", background: "#fee2e2", color: "#dc2626", border: "none", borderRadius: 8, fontSize: 13, fontWeight: 700, cursor: "pointer", flexShrink: 0 }}>
+                    🗑️
                   </button>
                 </div>
               ))}
@@ -15437,7 +15688,6 @@ export default function BricksyTravel() {
                   group: "TEMA RUMAH",
                   items: [
                     { id: "set_temarumah",    label: "🏠 Setting Tema Rumah", show: isAdmin },
-                    { id: "set_tema_photos",  label: "📷 Foto per Tema",       show: isAdmin },
                   ]
                 },
                 /* ── Manajemen ── */
@@ -15852,6 +16102,7 @@ export default function BricksyTravel() {
                   imageGroups={[]}
                   crudKey="furniturItems"
                   crudLabel="Kartu Produk Furnitur"
+                  crudHasGallery={true}
                   crudFields={[
                     { key: "nama",     label: "Nama Produk",  type: "text",     placeholder: "contoh: Sofa Minimalis 3-Dudukan" },
                     { key: "kategori", label: "Kategori",     type: "text",     placeholder: "contoh: Sofa, Meja, Kursi, Lemari..." },
@@ -15905,101 +16156,6 @@ export default function BricksyTravel() {
               {/* ══ TEMA RUMAH — Setting teks & foto hero + CRUD konten tema ══ */}
               {adminTab === "set_temarumah" && isAdmin && (
                 <TemaRumahAdminPanel data={data} save={save} notify={notify} uploadToCloudinary={uploadToCloudinary} />
-              )}
-
-
-              {/* ══ TEMA RUMAH — Kelola foto slideshow per tema ══ */}
-              {adminTab === "set_tema_photos" && isAdmin && (
-                <div className="fade-in">
-                  <div style={{ display:"flex", alignItems:"center", gap:12, marginBottom:20 }}>
-                    <span style={{ fontSize:30 }}>📷</span>
-                    <div>
-                      <h2 style={{ fontSize:20, fontWeight:800, color:"#2E3D3F", margin:0 }}>Foto Slideshow per Tema Rumah</h2>
-                      <p style={{ fontSize:13, color:"#8B9A9C", margin:"3px 0 0" }}>Kelola foto-foto yang tampil di slideshow setiap kartu tema rumah (max 6 foto per tema).</p>
-                    </div>
-                  </div>
-                  {(data.temaPhotosOverride
-                    ? Object.entries(data.temaPhotosOverride)
-                    : Object.entries({
-                        "modern-minimalis": "Modern Minimalis",
-                        "skandinavian": "Skandinavian",
-                        "industrial": "Industrial",
-                        "tropical-modern": "Tropical Modern",
-                        "klasik-mediterania": "Klasik Mediterania",
-                      })
-                  ).map(([slug, labelOrArr]) => {
-                    const label = typeof labelOrArr === "string" ? labelOrArr : slug;
-                    const savedPhotos = (data.temaPhotosOverride?.[slug]) || [];
-                    const [photos, setPhotos] = React.useState(savedPhotos.length > 0 ? savedPhotos : []);
-                    const [upl, setUpl] = React.useState(false);
-                    const [sav, setSav] = React.useState(false);
-                    const doUpload = async (f) => {
-                      if (!f) return; setUpl(true);
-                      try {
-                        const u = await uploadToCloudinary(f);
-                        const next = [...photos, { img: u, label: f.name.replace(/\.[^.]+$/, "") }];
-                        setPhotos(next);
-                        notify("✅ Foto ditambahkan!");
-                      } catch { notify("❌ Gagal upload."); }
-                      setUpl(false);
-                    };
-                    const doSave = async () => {
-                      setSav(true);
-                      try {
-                        const override = { ...(data.temaPhotosOverride || {}), [slug]: photos };
-                        await save({ ...data, temaPhotosOverride: override });
-                        notify("✅ Foto tema tersimpan!");
-                      } catch (err) { notify("❌ Gagal simpan: " + (err?.message || "Periksa koneksi.")); }
-                      finally { setSav(false); }
-                    };
-                    const removePhoto = (i) => setPhotos(p => p.filter((_,j) => j !== i));
-                    const updateLabel = (i, lbl) => setPhotos(p => p.map((ph,j) => j===i ? {...ph,label:lbl} : ph));
-                    return (
-                      <div key={slug} style={{ background:"#fff", border:"1.5px solid #E8DCC8", borderRadius:12, padding:"16px 18px", marginBottom:16 }}>
-                        <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:12 }}>
-                          <div style={{ fontWeight:700, fontSize:15, color:"#2E3D3F" }}>🏠 {label}</div>
-                          <div style={{ display:"flex", gap:8 }}>
-                            <label style={{ padding:"7px 14px", background:"#3498db", color:"#fff", borderRadius:8, fontSize:12, fontWeight:700, cursor:"pointer" }}>
-                              {upl ? "⏳" : "＋ Foto"}
-                              <input type="file" accept="image/*" style={{ display:"none" }} onChange={e => doUpload(e.target.files[0])} />
-                            </label>
-                            <button onClick={doSave} disabled={sav}
-                              style={{ padding:"7px 14px", background:"#C9AA71", color:"#fff", border:"none", borderRadius:8,
-                                fontSize:12, fontWeight:700, cursor:"pointer" }}>
-                              {sav ? "..." : "💾 Simpan"}
-                            </button>
-                          </div>
-                        </div>
-                        {photos.length === 0 ? (
-                          <div style={{ textAlign:"center", padding:"20px", border:"1.5px dashed #D5C9B0", borderRadius:8, color:"#A89070", fontSize:13 }}>
-                            Belum ada foto. Upload foto untuk tema ini.
-                          </div>
-                        ) : (
-                          <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(120px,1fr))", gap:10 }}>
-                            {photos.map((ph, i) => (
-                              <div key={i} style={{ position:"relative", borderRadius:8, overflow:"hidden", border:"1.5px solid #E8DCC8" }}>
-                                <img src={ph.img} alt={ph.label} style={{ width:"100%", height:80, objectFit:"cover", display:"block" }} />
-                                <div style={{ padding:"6px 6px 4px" }}>
-                                  <input type="text" value={ph.label || ""} onChange={e => updateLabel(i, e.target.value)}
-                                    placeholder="Label foto"
-                                    style={{ width:"100%", fontSize:10, padding:"3px 6px", border:"1px solid #D5C9B0", borderRadius:4, boxSizing:"border-box" }} />
-                                </div>
-                                <button onClick={() => removePhoto(i)}
-                                  style={{ position:"absolute", top:4, right:4, width:20, height:20, background:"rgba(231,76,60,.9)", color:"#fff",
-                                    border:"none", borderRadius:"50%", fontSize:11, cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center" }}>
-                                  ×
-                                </button>
-                              </div>
-                            ))}
-                          </div>
-                        )}
-                        <div style={{ fontSize:11, color:"#8B9A9C", marginTop:8 }}>
-                          {photos.length}/6 foto · Simpan setelah mengedit.
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
               )}
 
               {/* SUSUNAN TIM */}
