@@ -255,9 +255,59 @@ const CLOUDINARY = {
   uploadPreset: "vastura_clouds",
 };
 
+/**
+ * Kompres & resize gambar di browser sebelum upload, supaya ukuran file kecil
+ * dan upload jadi cepat (tidak tergantung kecepatan internet untuk file besar).
+ * - Resize: sisi terpanjang dibatasi maxDim px (default 1920px, cukup untuk web)
+ * - Compress: dikonversi ke JPEG dengan quality tertentu
+ * - File non-gambar (misal video) atau yang sudah kecil/gagal diproses → dikembalikan apa adanya
+ */
+function compressImage(file, { maxDim = 1920, quality = 0.82 } = {}) {
+  return new Promise((resolve) => {
+    // Hanya proses tipe gambar yang didukung canvas; selain itu skip (mis. video, gif animasi)
+    if (!file || !file.type || !file.type.startsWith("image/") || file.type === "image/gif") {
+      resolve(file);
+      return;
+    }
+    const img = new Image();
+    const objectUrl = URL.createObjectURL(file);
+    img.onload = () => {
+      try {
+        let { width, height } = img;
+        if (width > maxDim || height > maxDim) {
+          if (width > height) { height = Math.round(height * (maxDim / width)); width = maxDim; }
+          else { width = Math.round(width * (maxDim / height)); height = maxDim; }
+        }
+        const canvas = document.createElement("canvas");
+        canvas.width = width; canvas.height = height;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, width, height);
+        canvas.toBlob((blob) => {
+          URL.revokeObjectURL(objectUrl);
+          if (!blob) { resolve(file); return; }
+          // Kalau hasil kompresi malah lebih besar dari aslinya (jarang), pakai file asli
+          if (blob.size >= file.size) { resolve(file); return; }
+          const compressedFile = new File(
+            [blob],
+            file.name.replace(/\.[^.]+$/, "") + ".jpg",
+            { type: "image/jpeg" }
+          );
+          resolve(compressedFile);
+        }, "image/jpeg", quality);
+      } catch {
+        URL.revokeObjectURL(objectUrl);
+        resolve(file);
+      }
+    };
+    img.onerror = () => { URL.revokeObjectURL(objectUrl); resolve(file); };
+    img.src = objectUrl;
+  });
+}
+
 async function uploadToCloudinary(file) {
+  const compressed = await compressImage(file);
   const fd = new FormData();
-  fd.append("file", file);
+  fd.append("file", compressed);
   fd.append("upload_preset", CLOUDINARY.uploadPreset);
   const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY.cloudName}/image/upload`, {
     method: "POST", body: fd,
@@ -289,10 +339,13 @@ function formatRp(val) {
  * @param {(pct: number) => void} onProgress  — dipanggil 0–100
  * @returns {Promise<string>} secure_url
  */
-function uploadWithProgress(file, onProgress) {
+async function uploadWithProgress(file, onProgress) {
+  // Kompres dulu sebelum upload — bagian ini cepat (di browser, bukan network)
+  // jadi progress bar nanti murni mencerminkan waktu upload file yang sudah kecil.
+  const compressed = await compressImage(file);
   return new Promise((resolve, reject) => {
     const fd = new FormData();
-    fd.append("file", file);
+    fd.append("file", compressed);
     fd.append("upload_preset", CLOUDINARY.uploadPreset);
     const xhr = new XMLHttpRequest();
     xhr.open("POST", `https://api.cloudinary.com/v1_1/${CLOUDINARY.cloudName}/image/upload`);
@@ -3773,7 +3826,7 @@ function CMSEditor({ post, onSave, onCancel, section, onSectionChange, user, not
 }
 
 /* ─────────────── POST CARD ─────────────── */
-function PostCard({ post, onClick, view = "grid" }) {
+const PostCard = React.memo(function PostCard({ post, onClick, view = "grid" }) {
   const firstImg = (post.content || []).find(b => b.type === "image")?.value;
 
   if (view === "list") return (
@@ -5571,7 +5624,7 @@ const LAYANAN_LIST = [
   { key: "kanopi", icon: "🏗️", label: "Kanopi", desc: "Kanopi kuat, modern dan tahan segala cuaca.", color: "#8B6914", category: "event", img: "https://images.unsplash.com/photo-1600566752355-35792bedcfea?w=600&q=80" },
 ];
 
-function ServicesPage({ content, services, navigateTo, activePaket, onOpenPaket, onClosePaket, onWaOpen }) {
+const ServicesPage = React.memo(function ServicesPage({ content, services, navigateTo, activePaket, onOpenPaket, onClosePaket, onWaOpen }) {
   const [selectedService, setSelectedService] = useState(null);
   const [hoveredCard, setHoveredCard] = useState(null);
   const [activeImg, setActiveImg] = useState(0);
@@ -6398,7 +6451,7 @@ const ABOUT_LAYANAN_DEFAULT = [
 ];
 
 /* ─────────────── ABOUT PAGE ─────────────── */
-function AboutPage({ content, images, teamMembers, aboutStats, aboutMisiList, aboutWhyList, aboutLayananList, navigateTo, onWaOpen }) {
+const AboutPage = React.memo(function AboutPage({ content, images, teamMembers, aboutStats, aboutMisiList, aboutWhyList, aboutLayananList, navigateTo, onWaOpen }) {
   const [contactForm, setContactForm] = useState({ name: "", email: "", phone: "", subject: "", message: "" });
   const [contactSent, setContactSent] = useState(false);
 
@@ -7314,7 +7367,7 @@ function WaterDropsEffect() {
 
 const HERO_TRANSITIONS = ["fade", "slideLeft", "slideUp", "zoomIn", "zoomOut", "flipX"];
 
-function HeroSlideshow({ data, navigateTo }) {
+const HeroSlideshow = React.memo(function HeroSlideshow({ data, navigateTo }) {
   const heroMode = data.content?.heroMode || "slideshow";
 
   // -- Compute slides -- useMemo agar tidak re-create array tiap render (penyebab kedip) --
@@ -7967,7 +8020,7 @@ function ReviewSlideshow({ reviews }) {
   );
 }
 
-function ReviewCard({ review }) {
+const ReviewCard = React.memo(function ReviewCard({ review }) {
   const stars = review.stars || 5;
   return (
     <div style={{ background: "#fff", borderRadius: 16, padding: "28px 24px", boxShadow: "0 4px 24px rgba(13,59,102,.08)", border: "1px solid #F5EDD8", height: "100%", display: "flex", flexDirection: "column", gap: 16 }}>
@@ -8351,6 +8404,7 @@ function SubLayananAdmin({
   crudHasImage = false,
   crudHasGallery = false,
   defaultItems = null,
+  firestoreReady = false,
 }) {
   const items     = data[crudKey] || [];
   const accent    = accentColor;
@@ -8367,8 +8421,13 @@ function SubLayananAdmin({
   const [seeding, setSeeding]   = useState(false);
   const [seedDone, setSeedDone] = useState(false);
 
-  /* ── Auto-seed: langsung muat data hardcoded saat mount jika list masih kosong ── */
+  /* ── Auto-seed: langsung muat data hardcoded saat mount jika list masih kosong ──
+     PENTING: hanya boleh jalan setelah firestoreReady === true, supaya kita yakin
+     "list kosong" itu memang kosong beneran di Firestore — bukan karena datanya
+     belum selesai dimuat (race condition yang dulu menyebabkan data asli tertimpa
+     default setiap kali halaman/redeploy baru dibuka). */
   useEffect(() => {
+    if (!firestoreReady) return;             // tunggu Firestore selesai dimuat dulu
     if (!defaultItems || defaultItems.length === 0) return;
     if (items.length > 0) return;          // sudah ada data, skip
     if (seedDone || seeding) return;
@@ -8385,7 +8444,7 @@ function SubLayananAdmin({
     };
     run();
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);   // hanya saat mount
+  }, [firestoreReady]);   // jalan ulang begitu firestoreReady berubah jadi true
 
   /* ── Seed manual (tetap tersedia lewat tombol di bawah list jika diperlukan) ── */
   const handleSeed = async () => {
@@ -10225,7 +10284,7 @@ function TemaDetailPage({ slug, onWaOpen, onBack, temaList }) {
 }
 
 /* ── Page: Tema Rumah (Landing + Sub-page router) ── */
-function TemaRumahPage({ onWaOpen, temaSlug, setTemaSlug, cmsData }) {
+const TemaRumahPage = React.memo(function TemaRumahPage({ onWaOpen, temaSlug, setTemaSlug, cmsData }) {
   useEffect(() => { window.scrollTo(0, 0); }, []);
   const cms = cmsData || {};
 
@@ -10756,7 +10815,7 @@ function LsInfoCard({ cat, fmt, onWaOpen }) {
   );
 }
 
-function LandscapePage({ onWaOpen, categories }) {
+const LandscapePage = React.memo(function LandscapePage({ onWaOpen, categories }) {
   useEffect(() => { window.scrollTo(0, 0); }, []);
   const fmt = (n) => "Rp " + n.toLocaleString("id-ID") + ",-";
   const cats_ = (categories && categories.length) ? categories : LANDSCAPE_CATEGORIES;
@@ -11981,7 +12040,7 @@ function MobileLayananAccordion({ page, navigateTo, setMobileMenu, navDropdownLa
 /* ═══════════════════════════════════════════════════════════════════
    FURNITUR PAGE — E-Commerce product listing dengan filter & cart UX
 ═══════════════════════════════════════════════════════════════════ */
-function FurniturPage({ data, onWaOpen }) {
+const FurniturPage = React.memo(function FurniturPage({ data, onWaOpen }) {
   const products = data.furniturItems || [];
   const [search, setSearch]   = useState("");
   const [category, setCategory] = useState("all");
@@ -12746,7 +12805,7 @@ const CATALOG_DATA = {
 /* ═══════════════════════════════════════════════════════════════════
    VASTURA FOOTER — dipakai di semua halaman non-admin
 ═══════════════════════════════════════════════════════════════════ */
-function VasturaFooter({ data, navigateTo, onWaOpen, showDevProfile }) {
+const VasturaFooter = React.memo(function VasturaFooter({ data, navigateTo, onWaOpen, showDevProfile }) {
   const c = data?.content || {};
   const accentGold = "#C9AA71";
   const darkBg     = "#1A2A2C";
@@ -13989,6 +14048,11 @@ export default function BricksyTravel() {
   const [data, setData] = useState(DEFAULT_DATA);
   const dataRef = useRef(DEFAULT_DATA); // selalu up-to-date, aman dipakai di closure stale (popstate)
   const [isLoading, setIsLoading] = useState(true);
+  // firestoreReady: true HANYA setelah fetch Firestore beneran selesai (sukses/gagal).
+  // Beda dengan isLoading yang sengaja di-set false lebih awal agar halaman cepat tampil.
+  // Dipakai untuk mencegah panel admin (auto-seed) menulis data default sebelum
+  // data asli dari Firestore selesai dimuat — mencegah data asli tertimpa.
+  const [firestoreReady, setFirestoreReady] = useState(false);
   const [user, setUser] = useState(() => sessionLoad()); // ← restore session saat reload
   // Fix #3: gunakan lazy initializer agar window.location dibaca saat render, bukan module load
   const [page, setPage] = useState(() => getInitialPage()); // home | about | news | shop | destinations | services
@@ -14341,6 +14405,10 @@ export default function BricksyTravel() {
         }
       } catch (e) {
         console.warn("[RealEstate] Gagal load data, pakai default.", e);
+      } finally {
+        // Apapun hasilnya (sukses/gagal), Firestore sudah selesai dicoba dimuat.
+        // Baru dari titik ini aman bagi panel admin untuk menyimpulkan "data kosong = perlu seed".
+        setFirestoreReady(true);
       }
     })();
   }, []);
@@ -14483,7 +14551,6 @@ export default function BricksyTravel() {
   const save = async (d) => {
     // Tampilkan progress bar
     setSaveProgress({ pct: 5, label: "Menyiapkan data...", status: "saving" });
-    await new Promise(r => setTimeout(r, 80));
 
     // Selalu merge dengan DEFAULT_DATA sebelum simpan
     const safeData = mergeWithDefaults(d, DEFAULT_DATA);
@@ -14492,7 +14559,6 @@ export default function BricksyTravel() {
     const payload = JSON.stringify(safeData);
 
     setSaveProgress({ pct: 30, label: "Menyimpan ke lokal...", status: "saving" });
-    await new Promise(r => setTimeout(r, 80));
 
     // 1. Simpan lokal dulu (cepat)
     try { localStorage.setItem("realestate-cache-v2", payload); } catch {}
@@ -14510,14 +14576,14 @@ export default function BricksyTravel() {
     }
 
     setSaveProgress({ pct: 100, label: fsOk ? "Tersimpan!" : "Lokal OK, cloud tertunda", status: fsOk ? "success" : "warning" });
-    await new Promise(r => setTimeout(r, 1800));
+    await new Promise(r => setTimeout(r, 600)); // jeda singkat agar centang sukses sempat terlihat
     setSaveProgress(null);
   };
 
-  const notify = (msg, type = "success") => {
+  const notify = useCallback((msg, type = "success") => {
     setNotif({ msg, type });
     setTimeout(() => setNotif(null), 3200);
-  };
+  }, []);
 
   const login = async () => {
     if (loginLoading) return;
@@ -14527,13 +14593,13 @@ export default function BricksyTravel() {
     setLoginProgress(10);
     const tick = setInterval(() => setLoginProgress(p => p < 85 ? p + Math.random() * 18 : p), 180);
     try {
-      await new Promise(r => setTimeout(r, 420)); // natural delay
+      await new Promise(r => setTimeout(r, 120)); // jeda singkat agar progress bar tidak loncat instan
       const u = HARDCODED_USERS.find(x => x.username === loginForm.username);
       setLoginProgress(55);
       if (!u) {
         clearInterval(tick);
         setLoginProgress(100);
-        await new Promise(r => setTimeout(r, 220));
+        await new Promise(r => setTimeout(r, 120));
         setLoginLoading(false); setLoginProgress(0);
         setLoginErr("Username atau password salah.");
         return;
@@ -14551,14 +14617,14 @@ export default function BricksyTravel() {
       if (loginForm.password !== savedPass) {
         clearInterval(tick);
         setLoginProgress(100);
-        await new Promise(r => setTimeout(r, 220));
+        await new Promise(r => setTimeout(r, 120));
         setLoginLoading(false); setLoginProgress(0);
         setLoginErr("Username atau password salah.");
         return;
       }
       clearInterval(tick);
       setLoginProgress(100);
-      await new Promise(r => setTimeout(r, 340));
+      await new Promise(r => setTimeout(r, 150));
       const sessionUser = { ...u, ...profile };
       setUser(sessionUser);
       sessionSave(sessionUser);
@@ -14672,7 +14738,7 @@ export default function BricksyTravel() {
   const canEdit = user?.role === "admin" || user?.role === "content_writer";
   const canCS   = user?.role === "admin" || user?.role === "customer_services";
 
-  const navigateTo = (p) => {
+  const navigateTo = useCallback((p) => {
     /* Cari path dari PAGE_TO_PATH, fallback ke "/" + p untuk sub-routes */
     const navPath = PAGE_TO_PATH[p] || ("/" + p);
     const newDepth = spaDepth.current + 1;
@@ -14683,10 +14749,10 @@ export default function BricksyTravel() {
     setCanFwd(false);
     setPage(p); setReadPost(null); setActivePaket(null); setTemaSlug(null); setMobileMenu(false);
     window.scrollTo(0, 0);
-  };
+  }, []);
 
   /** Buka artikel: push URL /artikel/{section}/{slug}-{id} + set state */
-  const openArticle = (post) => {
+  const openArticle = useCallback((post) => {
     const url = articleUrl(post);
     const newDepth = spaDepth.current + 1;
     window.history.pushState({ artikelId: post.id, section: post.section, depth: newDepth }, "", url);
@@ -14697,7 +14763,7 @@ export default function BricksyTravel() {
     setReadPost(post);
     setMobileMenu(false);
     window.scrollTo(0, 0);
-  };
+  }, []);
 
   /** Tutup artikel: native back — biar onPopState yang atur state */
   const closeArticle = () => {
@@ -14705,7 +14771,7 @@ export default function BricksyTravel() {
   };
 
   /** Buka admin panel: set state + sync URL ke /control-panel */
-  const openAdmin = () => {
+  const openAdmin = useCallback(() => {
     const newDepth = spaDepth.current + 1;
     window.history.pushState({ admin: true, adminTab: "dashboard", depth: newDepth }, "", "/control-panel");
     spaDepth.current = newDepth;
@@ -14714,17 +14780,17 @@ export default function BricksyTravel() {
     setCanFwd(false);
     setShowAdmin(true);
     setAdminTab("dashboard");
-  };
+  }, []);
 
   /** Tutup admin panel: native back */
-  const closeAdmin = () => {
+  const closeAdmin = useCallback(() => {
     window.history.pushState({}, "", "/");
     setShowAdmin(false);
     window.scrollTo(0, 0);
-  };
+  }, []);
 
   /** Navigasi antar tab admin — push ke browser history agar tombol ← browser bisa step-back */
-  const navigateAdminTab = (tab, extra = {}) => {
+  const navigateAdminTab = useCallback((tab, extra = {}) => {
     const newDepth = spaDepth.current + 1;
     window.history.pushState({ admin: true, adminTab: tab, depth: newDepth, ...extra }, "", "/control-panel");
     spaDepth.current = newDepth;
@@ -14734,7 +14800,7 @@ export default function BricksyTravel() {
     setAdminTab(tab);
     setCmsEditPost(null);
     setSidebarOpen(false);
-  };
+  }, []);
 
   /** openPaket / closePaket — URL sync untuk halaman detail paket */
   // State ini dioper ke ServicesPage sebagai prop
@@ -14744,7 +14810,7 @@ export default function BricksyTravel() {
     return parsed ? parsed : null; // { category, id } -- ServicesPage cari svc-nya
   });
 
-  const openPaket = (svc) => {
+  const openPaket = useCallback((svc) => {
     const url = paketUrl(svc);
     const newDepth = spaDepth.current + 1;
     window.history.pushState({ paketId: svc.id, category: svc.category, depth: newDepth }, "", url);
@@ -14754,11 +14820,11 @@ export default function BricksyTravel() {
     setCanFwd(false);
     setActivePaket({ id: svc.id, category: svc.category });
     window.scrollTo(0, 0);
-  };
+  }, []);
 
-  const closePaket = () => {
+  const closePaket = useCallback(() => {
     window.history.back();
-  };
+  }, []);
 
   const adminTabRef = useRef("dashboard"); // selalu sync dengan adminTab untuk akses di popstate
 
@@ -14805,9 +14871,9 @@ export default function BricksyTravel() {
     notify("Post deleted.");
   };
 
-  const allPosts       = Object.values(data.posts || {}).flat();
-  const publishedCount = allPosts.filter(p => p.status === "published").length;
-  const draftCount     = allPosts.filter(p => p.status === "draft").length;
+  const allPosts       = useMemo(() => Object.values(data.posts || {}).flat(), [data.posts]);
+  const publishedCount = useMemo(() => allPosts.filter(p => p.status === "published").length, [allPosts]);
+  const draftCount     = useMemo(() => allPosts.filter(p => p.status === "draft").length, [allPosts]);
 
   // Contacts
   const submitMsg = () => {
@@ -14853,12 +14919,14 @@ export default function BricksyTravel() {
 
   const getCEFVal = (cKey) => editContent[cKey] !== undefined ? editContent[cKey] : data.content[cKey];
 
-  const navItems = [
+  // Memoize semua nav arrays — hanya recalculate ketika data.content berubah
+  const navItems = useMemo(() => [
     { key: "home",  label: data.content.nav1 || "Home" },
     { key: "about", label: data.content.nav2 || "About" },
-  ];
+  ], [data.content.nav1, data.content.nav2]);
+
   // Dropdown: Layanan Developer (termasuk Interior & Eksterior)
-  const navDropdownLayanan = [
+  const navDropdownLayanan = useMemo(() => [
     { key: "services",  label: data.content.nav6  || "Layanan Kami" },
     { key: "desainrab", label: data.content.nav7  || "Jasa Desain & RAB" },
     { key: "temarumah", label: data.content.nav8  || "Tema Rumah" },
@@ -14868,28 +14936,31 @@ export default function BricksyTravel() {
     { key: "kanopi",    label: data.content.nav11 || "Kanopi" },
     { key: "aluminium", label: data.content.nav12 || "Aluminium" },
     { key: "furnitur",  label: "Furnitur" },
-  ];
+  ], [data.content.nav6, data.content.nav7, data.content.nav8, data.content.nav9, data.content.nav10, data.content.nav11, data.content.nav12]);
+
   // Interior & Eksterior sudah digabung ke navDropdownLayanan
   const navDropdownInterior = [];
   // Dropdown: Program Renovasi -- Rumah Subsidi & Landscape & Taman
-  const navDropdownGaleri = [
+  const navDropdownGaleri = useMemo(() => [
     { key: "shop",      label: data.content.nav4  || "Rumah Subsidi" },
     { key: "landscape", label: data.content.nav13 || "Landscape & Taman" },
-  ];
+  ], [data.content.nav4, data.content.nav13]);
+
   // All keys that are "active" as pages for highlight purposes
-  const allNavKeys = [
+  const allNavKeys = useMemo(() => [
     ...navItems.map(i=>i.key),
     ...navDropdownLayanan.map(i=>i.key),
     ...navDropdownInterior.map(i=>i.key),
     ...navDropdownGaleri.map(i=>i.key),
-  ];
+  ], [navItems, navDropdownLayanan, navDropdownGaleri]);
+
   // Legacy flat list for mobile menu
-  const allNavItemsFlat = [
+  const allNavItemsFlat = useMemo(() => [
     ...navItems,
     ...navDropdownLayanan,
     ...navDropdownInterior,
     ...navDropdownGaleri,
-  ];
+  ], [navItems, navDropdownLayanan, navDropdownGaleri]);
 
   /* ─── RENDER ─── */
   return (
@@ -16312,6 +16383,7 @@ export default function BricksyTravel() {
               {/* SETTING HOME */}
               {adminTab === "set_home" && isAdmin && (
                 <SubLayananAdmin
+                  firestoreReady={firestoreReady}
                   title="Setting Home"
                   icon="🏠"
                   accentColor="#3498db"
@@ -16347,6 +16419,7 @@ export default function BricksyTravel() {
               {/* --- KAMAR TIDUR --- */}
               {adminTab === "int_kamar_tidur" && isAdmin && (
                 <SubLayananAdmin
+                  firestoreReady={firestoreReady}
                   title="Kamar Tidur"
                   icon="🛏️"
                   accentColor="#6a2fa0"
@@ -16381,6 +16454,7 @@ export default function BricksyTravel() {
               {/* --- KAMAR MANDI --- */}
               {adminTab === "int_kamar_mandi" && isAdmin && (
                 <SubLayananAdmin
+                  firestoreReady={firestoreReady}
                   title="Kamar Mandi"
                   icon="🚿"
                   accentColor="#0f3460"
@@ -16415,6 +16489,7 @@ export default function BricksyTravel() {
               {/* --- RUANG KELUARGA --- */}
               {adminTab === "int_ruang_keluarga" && isAdmin && (
                 <SubLayananAdmin
+                  firestoreReady={firestoreReady}
                   title="Ruang Keluarga"
                   icon="👨‍👩‍👧"
                   accentColor="#2d6a4f"
@@ -16449,6 +16524,7 @@ export default function BricksyTravel() {
               {/* --- RUANG TAMU --- */}
               {adminTab === "int_ruang_tamu" && isAdmin && (
                 <SubLayananAdmin
+                  firestoreReady={firestoreReady}
                   title="Ruang Tamu"
                   icon="🪑"
                   accentColor="#8B4513"
@@ -16483,6 +16559,7 @@ export default function BricksyTravel() {
               {/* --- KITCHEN SET --- */}
               {adminTab === "int_kitchen_set" && isAdmin && (
                 <SubLayananAdmin
+                  firestoreReady={firestoreReady}
                   title="Kitchen Set & Dapur"
                   icon="🍳"
                   accentColor="#2c5282"
@@ -16517,6 +16594,7 @@ export default function BricksyTravel() {
               {/* --- RUANG KERJA --- */}
               {adminTab === "int_ruang_kerja" && isAdmin && (
                 <SubLayananAdmin
+                  firestoreReady={firestoreReady}
                   title="Ruang Kerja"
                   icon="💼"
                   accentColor="#16213e"
@@ -16551,6 +16629,7 @@ export default function BricksyTravel() {
               {/* --- PLAFON MODERN --- */}
               {adminTab === "int_plafon" && isAdmin && (
                 <SubLayananAdmin
+                  firestoreReady={firestoreReady}
                   title="Plafon Modern"
                   icon="🏛️"
                   accentColor="#0f3460"
@@ -16585,6 +16664,7 @@ export default function BricksyTravel() {
               {/* SETTING PAGAR RUMAH */}
               {adminTab === "ext_pagar" && isAdmin && (
                 <SubLayananAdmin
+                  firestoreReady={firestoreReady}
                   title="Pagar Rumah"
                   icon="🔒"
                   accentColor="#0f3460"
@@ -16619,6 +16699,7 @@ export default function BricksyTravel() {
               {/* SETTING KANOPI */}
               {adminTab === "ext_kanopi" && isAdmin && (
                 <SubLayananAdmin
+                  firestoreReady={firestoreReady}
                   title="Kanopi"
                   icon="🏗️"
                   accentColor="#2d6a4f"
@@ -16653,6 +16734,7 @@ export default function BricksyTravel() {
               {/* SETTING ALUMINIUM */}
               {adminTab === "ext_aluminium" && isAdmin && (
                 <SubLayananAdmin
+                  firestoreReady={firestoreReady}
                   title="Aluminium"
                   icon="🪟"
                   accentColor="#555b6e"
@@ -16694,6 +16776,7 @@ export default function BricksyTravel() {
               {/* PRODUK FURNITUR */}
               {adminTab === "produk_furnitur" && isAdmin && (
                 <SubLayananAdmin
+                  firestoreReady={firestoreReady}
                   title="Produk Furnitur"
                   icon="🪑"
                   accentColor="#C9AA71"
