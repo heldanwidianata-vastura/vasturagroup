@@ -662,6 +662,12 @@ const DEFAULT_DATA = {
     aboutHeroTitle: "Membangun Hunian, Mewujudkan Impian",
     aboutHeroSub: "VASTURA GROUP adalah developer perumahan dan jasa desain terpercaya. Kami berkomitmen menghadirkan hunian berkualitas dengan layanan lengkap dari desain hingga finishing.",
     aboutWhyTitle: "Why Choose Us",
+    aboutWhyLabel: "Keunggulan Kami",
+    aboutVisiText: "Menjadi perusahaan developer perumahan dan jasa desain terkemuka di Indonesia yang dikenal atas pelayanan profesional, kualitas konstruksi, dan kemampuan mewujudkan hunian impian bagi setiap klien.",
+    aboutTeamLabel: "Orang-Orang di Balik Layanan",
+    aboutTeamTitle: "Susunan Tim Kami",
+    aboutLayananLabel: "LAYANAN KAMI",
+    aboutLayananTitle: "Layanan Terbaik Untuk Anda",
     aboutV1Icon: "🏠", aboutV1Title: "Desain Profesional", aboutV1Desc: "Tim arsitek & desainer interior berpengalaman untuk setiap proyek.",
     aboutV2Icon: "🛡",  aboutV2Title: "Terpercaya & Legal", aboutV2Desc: "Semua proyek dilaksanakan sesuai perizinan dan standar konstruksi yang berlaku.",
     aboutV3Icon: "⚡", aboutV3Title: "Tepat Waktu",        aboutV3Desc: "Komitmen penyelesaian proyek sesuai timeline yang disepakati.",
@@ -709,6 +715,10 @@ const DEFAULT_DATA = {
   rumahSubsidiPaket: [],
   temaData: [],
   homeServices: [],
+  aboutStats: [],
+  aboutMisiList: [],
+  aboutWhyList: [],
+  aboutLayananList: [],
   services: [
     /* ── EVENT PLAN (3 paket) ── */
     {
@@ -6354,8 +6364,41 @@ function ServicesPage({ content, services, navigateTo, activePaket, onOpenPaket,
 }
 
 
+/* ─────────────── ABOUT PAGE — Data Default (dipakai bila admin belum mengisi via Control Panel) ─────────────── */
+const ABOUT_STATS_DEFAULT = [
+  { num: "500+", label: "Klien Puas" },
+  { num: "7+",   label: "Tahun Pengalaman" },
+  { num: "100+", label: "Event Sukses" },
+  { num: "24/7", label: "Layanan Support" },
+];
+
+const ABOUT_MISI_DEFAULT = [
+  "Memberikan layanan terbaik dengan standar profesional tinggi",
+  "Memastikan kepuasan klien di setiap momen yang kami tangani",
+  "Berinovasi dalam layanan travel & event secara berkelanjutan",
+  "Membangun kepercayaan jangka panjang bersama klien dan mitra",
+];
+
+const ABOUT_WHY_DEFAULT = [
+  { icon: "✈️", title: "Expert Travel Planning", desc: "Kami merencanakan setiap detail perjalanan Anda — dari tiket, akomodasi, hingga tur lokal — agar Anda bisa menikmati tanpa khawatir." },
+  { icon: "🛋️", title: "Interior", desc: "Transformasi ruang hidup Anda dengan desain interior profesional — dari konsep, pemilihan material, hingga pemasangan." },
+  { icon: "🔧", title: "Exterior", desc: "Pagar, kanopi, aluminium, dan landscape yang mempercantik fasad dan halaman rumah Anda secara menyeluruh." },
+  { icon: "🛡️", title: "Terpercaya & Aman", desc: "Kepercayaan klien adalah prioritas kami. Setiap layanan dirancang dengan standar keamanan dan profesionalisme tinggi." },
+  { icon: "🌟", title: "Pengalaman Bertahun-tahun", desc: "Didukung tim berpengalaman yang telah melayani ratusan klien puas di seluruh Indonesia." },
+  { icon: "💬", title: "Layanan 24/7", desc: "Tim customer service kami siap membantu kapan saja, memastikan setiap pertanyaan dan kebutuhan Anda terpenuhi." },
+];
+
+const ABOUT_LAYANAN_DEFAULT = [
+  { icon: "🛋️", title: "Interior",     desc: "Desain interior modern, nyaman dan fungsional sesuai kebutuhan Anda.", img: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=600&q=80", slug: "interior" },
+  { icon: "🏠", title: "Eksterior",    desc: "Desain eksterior menarik, kokoh dan estetis.",                          img: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&q=80", slug: "eksterior" },
+  { icon: "📐", title: "Desain & RAB", desc: "Desain arsitektur lengkap dengan RAB yang akurat.",                     img: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=600&q=80", slug: "desain-rab" },
+  { icon: "🌿", title: "Landscape",    desc: "Taman indah dan asri yang menyatu dengan hunian Anda.",                 img: "https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=600&q=80", slug: "landscape" },
+  { icon: "🪟", title: "Aluminium",    desc: "Kusen, pintu & jendela aluminium berkualitas tinggi.",                  img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80", slug: "aluminium" },
+  { icon: "🏗️", title: "Kanopi",       desc: "Kanopi kuat, modern dan tahan segala cuaca.",                           img: "https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?w=600&q=80", slug: "kanopi" },
+];
+
 /* ─────────────── ABOUT PAGE ─────────────── */
-function AboutPage({ content, images, teamMembers, onWaOpen }) {
+function AboutPage({ content, images, teamMembers, aboutStats, aboutMisiList, aboutWhyList, aboutLayananList, navigateTo, onWaOpen }) {
   const [contactForm, setContactForm] = useState({ name: "", email: "", phone: "", subject: "", message: "" });
   const [contactSent, setContactSent] = useState(false);
 
@@ -6378,29 +6421,17 @@ function AboutPage({ content, images, teamMembers, onWaOpen }) {
     setTimeout(() => { setContactSent(false); setContactForm({ name: "", email: "", phone: "", subject: "", message: "" }); }, 4000);
   };
 
-  const values = [
-    { icon: "✈️", title: "Expert Travel Planning", desc: "Kami merencanakan setiap detail perjalanan Anda — dari tiket, akomodasi, hingga tur lokal — agar Anda bisa menikmati tanpa khawatir." },
-    { icon: "🛋️", title: "Interior", desc: "Transformasi ruang hidup Anda dengan desain interior profesional — dari konsep, pemilihan material, hingga pemasangan." },
-    { icon: "🔧", title: "Exterior", desc: "Pagar, kanopi, aluminium, dan landscape yang mempercantik fasad dan halaman rumah Anda secara menyeluruh." },
-    { icon: "🛡️", title: "Terpercaya & Aman", desc: "Kepercayaan klien adalah prioritas kami. Setiap layanan dirancang dengan standar keamanan dan profesionalisme tinggi." },
-    { icon: "🌟", title: "Pengalaman Bertahun-tahun", desc: "Didukung tim berpengalaman yang telah melayani ratusan klien puas di seluruh Indonesia." },
-    { icon: "💬", title: "Layanan 24/7", desc: "Tim customer service kami siap membantu kapan saja, memastikan setiap pertanyaan dan kebutuhan Anda terpenuhi." },
-  ];
+  // Semua section di bawah ini diatur lewat Control Panel → Setting Halaman About.
+  // Selama admin belum mengisi data CRUD, halaman tetap tampil dengan teks & foto contoh (default).
+  const stats   = (aboutStats   && aboutStats.length   > 0) ? aboutStats   : ABOUT_STATS_DEFAULT;
+  const misi    = (aboutMisiList&& aboutMisiList.length> 0) ? aboutMisiList: ABOUT_MISI_DEFAULT;
+  const values  = (aboutWhyList && aboutWhyList.length > 0) ? aboutWhyList : ABOUT_WHY_DEFAULT;
+  const layananCards = (aboutLayananList && aboutLayananList.length > 0) ? aboutLayananList : ABOUT_LAYANAN_DEFAULT;
 
-  const timeline = [
-    { year: "2018", title: "VASTURA GROUP Berdiri", desc: "Didirikan dengan visi memberikan layanan travel & event berkualitas di Malang." },
-    { year: "2019", title: "Ekspansi Interior & Exterior", desc: "Membuka divisi Interior dan Exterior yang langsung mendapat respons positif dari pasar." },
-    { year: "2021", title: "100+ Klien", desc: "Mencapai 100+ klien puas meskipun pandemi, dengan inovasi layanan virtual event." },
-    { year: "2023", title: "Platform Digital", desc: "Meluncurkan platform digital untuk memudahkan pemesanan dan komunikasi dengan klien." },
-    { year: "2025", title: "Berkembang Pesat", desc: "Hadir di berbagai kota besar Indonesia dengan jaringan mitra lokal yang kuat." },
-  ];
-
-  const team = [
-    { name: "Tim Kreatif", role: "Event & Dekorasi", icon: "🎨" },
-    { name: "Tim Konstruksi", role: "Gedung & Rumah", icon: "🏗️" },
-    { name: "Tim Wedding", role: "Koordinator Pernikahan", icon: "💐" },
-    { name: "Tim CS", role: "Layanan Pelanggan", icon: "🤝" },
-  ];
+  const goToLayanan = (slug) => {
+    if (typeof navigateTo !== "function") return;
+    navigateTo("services");
+  };
 
   return (
     <div className="fade-in" style={{ minHeight: "100vh", background: "#fff" }}>
@@ -6412,7 +6443,7 @@ function AboutPage({ content, images, teamMembers, onWaOpen }) {
         <div style={{ maxWidth: 1200, margin: "0 auto" }} className="about-hero-grid">
           <div style={{ position: "relative", zIndex: 1 }}>
             <div style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "rgba(8,145,178,.15)", border: "1px solid rgba(8,145,178,.3)", borderRadius: 20, padding: "5px 16px", marginBottom: 24 }}>
-              <span style={{ fontSize: 10, letterSpacing: "2px", color: "rgba(255,255,255,.80)", textTransform: "uppercase", fontWeight: 700 }}>Tentang Kami</span>
+              <span style={{ fontSize: 10, letterSpacing: "2px", color: "rgba(255,255,255,.80)", textTransform: "uppercase", fontWeight: 700 }}>{content.aboutHeroLabel || "Tentang Kami"}</span>
             </div>
             <h1 className="display" style={{ fontSize: "clamp(2.25rem,5vw,3.75rem)", fontWeight: 900, lineHeight: 1.06, color: "#fff", marginBottom: 24 }}>
               {content.aboutHeroTitle || "VASTURA GROUP"}
@@ -6450,12 +6481,7 @@ function AboutPage({ content, images, teamMembers, onWaOpen }) {
       {/* -- STATS STRIP -- */}
       <div style={{ background: "linear-gradient(130deg,#2E3D3F 0%,#3D5254 45%,#8B6914 78%,#C9AA71 100%)", padding: "36px 5%" }}>
         <div style={{ maxWidth: 1200, margin: "0 auto", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))", gap: 24, textAlign: "center" }}>
-          {[
-            { num: "500+", label: "Klien Puas" },
-            { num: "7+", label: "Tahun Pengalaman" },
-            { num: "100+", label: "Event Sukses" },
-            { num: "24/7", label: "Layanan Support" },
-          ].map(s => (
+          {stats.map(s => (
             <div key={s.label}>
               <div style={{ fontSize: "clamp(1.75rem,4vw,2.5rem)", fontWeight: 900, color: "#D4AF37", fontFamily: "'Playfair Display',serif", lineHeight: 1 }}>{s.num}</div>
               <div style={{ fontSize: "0.8125rem", color: "rgba(255,255,255,.65)", marginTop: 6, fontWeight: 500, letterSpacing: ".04em" }}>{s.label}</div>
@@ -6470,16 +6496,16 @@ function AboutPage({ content, images, teamMembers, onWaOpen }) {
           <div style={{ background: "linear-gradient(135deg, #2E3D3F 0%, #3D5254 100%)", borderRadius: 12, padding: "40px 36px", color: "#fff" }}>
             <div style={{ fontSize: 36, marginBottom: 20 }}>🎯</div>
             <h3 style={{ fontSize: "1.5rem", fontFamily: "'Playfair Display',serif", fontWeight: 800, marginBottom: 16, color: "#fff" }}>Visi Kami</h3>
-            <p style={{ fontSize: "0.9375rem", lineHeight: 1.85, color: "rgba(255,255,255,.8)" }}>
-              Menjadi perusahaan travel dan organizer terkemuka di Indonesia yang dikenal atas pelayanan profesional, kreativitas, dan kemampuan mewujudkan momen-momen tak terlupakan bagi setiap klien.
+            <p style={{ fontSize: "0.9375rem", lineHeight: 1.85, color: "rgba(255,255,255,.8)", whiteSpace: "pre-line" }}>
+              {content.aboutVisiText || "Menjadi perusahaan developer perumahan dan jasa desain terkemuka di Indonesia yang dikenal atas pelayanan profesional, kualitas konstruksi, dan kemampuan mewujudkan hunian impian bagi setiap klien."}
             </p>
           </div>
           <div style={{ background: "#FAF7F0", borderRadius: 12, padding: "40px 36px", borderLeft: "4px solid #8B6914" }}>
             <div style={{ fontSize: 36, marginBottom: 20 }}>🚀</div>
             <h3 style={{ fontSize: "1.5rem", fontFamily: "'Playfair Display',serif", fontWeight: 800, marginBottom: 16, color: "#2E3D3F" }}>Misi Kami</h3>
             <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: 12 }}>
-              {["Memberikan layanan terbaik dengan standar profesional tinggi", "Memastikan kepuasan klien di setiap momen yang kami tangani", "Berinovasi dalam layanan travel & event secara berkelanjutan", "Membangun kepercayaan jangka panjang bersama klien dan mitra"].map(m => (
-                <li key={m} style={{ display: "flex", gap: 10, fontSize: "0.9rem", color: "#3D5254", lineHeight: 1.6 }}>
+              {misi.map((m, i) => (
+                <li key={i} style={{ display: "flex", gap: 10, fontSize: "0.9rem", color: "#3D5254", lineHeight: 1.6 }}>
                   <span style={{ color: "#8B6914", fontWeight: 700, flexShrink: 0 }}>✓</span>
                   {m}
                 </li>
@@ -6493,12 +6519,12 @@ function AboutPage({ content, images, teamMembers, onWaOpen }) {
       <div style={{ background: "linear-gradient(130deg,#084060 0%,#0a6ea0 50%,#0cb5cc 100%)", padding: "80px 5%" }}>
         <div style={{ maxWidth: 1200, margin: "0 auto" }}>
           <div style={{ textAlign: "center", marginBottom: 52 }}>
-            <div style={{ fontSize: "0.6875rem", letterSpacing: "2px", color: "rgba(255,255,255,.75)", textTransform: "uppercase", fontWeight: 700, marginBottom: 12 }}>Keunggulan Kami</div>
+            <div style={{ fontSize: "0.6875rem", letterSpacing: "2px", color: "rgba(255,255,255,.75)", textTransform: "uppercase", fontWeight: 700, marginBottom: 12 }}>{content.aboutWhyLabel || "Keunggulan Kami"}</div>
             <h2 className="display" style={{ fontSize: "clamp(1.75rem,4vw,2.75rem)", fontWeight: 900, color: "#fff" }}>{content.aboutWhyTitle || "Mengapa Memilih VASTURA GROUP?"}</h2>
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 24 }}>
             {values.map((v, i) => (
-              <div key={v.title} className="hover-lift" style={{ background: "#fff", borderRadius: 12, padding: "32px 28px", boxShadow: "0 2px 12px rgba(46,61,63,.06)", borderTop: "3px solid #8B6914", transition: "all .3s" }}>
+              <div key={v.id || i} className="hover-lift" style={{ background: "#fff", borderRadius: 12, padding: "32px 28px", boxShadow: "0 2px 12px rgba(46,61,63,.06)", borderTop: "3px solid #8B6914", transition: "all .3s" }}>
                 <div style={{ fontSize: 36, marginBottom: 16 }}>{v.icon}</div>
                 <h3 style={{ fontSize: "1.05rem", fontFamily: "'Playfair Display',serif", fontWeight: 700, color: "#2E3D3F", marginBottom: 10 }}>{v.title}</h3>
                 <p style={{ fontSize: "0.9rem", color: "#3D5254", lineHeight: 1.75, whiteSpace: "pre-line" }}>{v.desc}</p>
@@ -6512,8 +6538,8 @@ function AboutPage({ content, images, teamMembers, onWaOpen }) {
       <div style={{ padding: "80px 5%" }}>
         <div style={{ maxWidth: 1200, margin: "0 auto" }}>
           <div style={{ textAlign: "center", marginBottom: 52 }}>
-            <div style={{ fontSize: "0.6875rem", letterSpacing: "2px", color: "#8B6914", textTransform: "uppercase", fontWeight: 700, marginBottom: 12 }}>Orang-Orang di Balik Layanan</div>
-            <h2 className="display" style={{ fontSize: "clamp(1.75rem,4vw,2.75rem)", fontWeight: 900, color: "#2E3D3F" }}>Susunan Tim Kami</h2>
+            <div style={{ fontSize: "0.6875rem", letterSpacing: "2px", color: "#8B6914", textTransform: "uppercase", fontWeight: 700, marginBottom: 12 }}>{content.aboutTeamLabel || "Orang-Orang di Balik Layanan"}</div>
+            <h2 className="display" style={{ fontSize: "clamp(1.75rem,4vw,2.75rem)", fontWeight: 900, color: "#2E3D3F" }}>{content.aboutTeamTitle || "Susunan Tim Kami"}</h2>
           </div>
           {(!teamMembers || teamMembers.length === 0) ? (
             <div style={{ textAlign: "center", padding: "40px 0", color: "#5A6A6C" }}>Susunan tim belum diisi. Hubungi administrator.</div>
@@ -6556,72 +6582,31 @@ function AboutPage({ content, images, teamMembers, onWaOpen }) {
         <div style={{ maxWidth: 1200, margin: "0 auto" }}>
           {/* Header */}
           <div style={{ textAlign: "center", marginBottom: 48 }}>
-            <div style={{ fontSize: "0.6875rem", letterSpacing: "3px", color: "#C9AA71", textTransform: "uppercase", fontWeight: 700, marginBottom: 10 }}>LAYANAN KAMI</div>
-            <h2 className="display" style={{ fontSize: "clamp(1.6rem,3.5vw,2.5rem)", fontWeight: 900, color: "#1a1a1a" }}>Layanan Terbaik Untuk Anda</h2>
+            <div style={{ fontSize: "0.6875rem", letterSpacing: "3px", color: "#C9AA71", textTransform: "uppercase", fontWeight: 700, marginBottom: 10 }}>{content.aboutLayananLabel || "LAYANAN KAMI"}</div>
+            <h2 className="display" style={{ fontSize: "clamp(1.6rem,3.5vw,2.5rem)", fontWeight: 900, color: "#1a1a1a" }}>{content.aboutLayananTitle || "Layanan Terbaik Untuk Anda"}</h2>
           </div>
 
-          {/* Cards Grid -- 6 kolom sesuai referensi */}
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(6, 1fr)", gap: 20 }} className="layanan-grid">
-            {[
-              {
-                icon: "🛋️",
-                title: "Interior",
-                desc: "Desain interior modern, nyaman dan fungsional sesuai kebutuhan Anda.",
-                img: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=600&q=80",
-                slug: "interior"
-              },
-              {
-                icon: "🏠",
-                title: "Eksterior",
-                desc: "Desain eksterior menarik, kokoh dan estetis.",
-                img: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&q=80",
-                slug: "eksterior"
-              },
-              {
-                icon: "📐",
-                title: "Desain & RAB",
-                desc: "Desain arsitektur lengkap dengan RAB yang akurat.",
-                img: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=600&q=80",
-                slug: "desain-rab"
-              },
-              {
-                icon: "🌿",
-                title: "Landscape",
-                desc: "Taman indah dan asri yang menyatu dengan hunian Anda.",
-                img: "https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=600&q=80",
-                slug: "landscape"
-              },
-              {
-                icon: "🪟",
-                title: "Aluminium",
-                desc: "Kusen, pintu & jendela aluminium berkualitas tinggi.",
-                img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80",
-                slug: "aluminium"
-              },
-              {
-                icon: "🏗️",
-                title: "Kanopi",
-                desc: "Kanopi kuat, modern dan tahan segala cuaca.",
-                img: "https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?w=600&q=80",
-                slug: "kanopi"
-              },
-            ].map(s => (
-              <div key={s.title}
+          {/* Cards Grid -- otomatis menyesuaikan jumlah item dari Control Panel */}
+          <div style={{ display: "grid", gridTemplateColumns: `repeat(${Math.min(layananCards.length, 6) || 1}, 1fr)`, gap: 20 }} className="layanan-grid">
+            {layananCards.map((s, i) => (
+              <div key={s.id || i}
                 style={{ borderRadius: 12, overflow: "hidden", boxShadow: "0 4px 18px rgba(0,0,0,.10)", background: "#fff", display: "flex", flexDirection: "column", transition: "transform .22s, box-shadow .22s", cursor: "pointer" }}
                 onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-6px)"; e.currentTarget.style.boxShadow = "0 12px 36px rgba(0,0,0,.16)"; }}
                 onMouseLeave={e => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "0 4px 18px rgba(0,0,0,.10)"; }}>
 
                 {/* Image area */}
-                <div style={{ position: "relative", height: 170, overflow: "hidden", flexShrink: 0 }}>
-                  <img
-                    src={s.img}
-                    alt={s.title}
-                    loading="lazy"
-                    style={{ width: "100%", height: "100%", objectFit: "cover", transition: "transform .4s" }}
-                    onMouseEnter={e => e.target.style.transform = "scale(1.06)"}
-                    onMouseLeave={e => e.target.style.transform = "scale(1)"}
-                    onError={e => { e.target.parentElement.style.background = "#E8DCC8"; e.target.style.display = "none"; }}
-                  />
+                <div style={{ position: "relative", height: 170, overflow: "hidden", flexShrink: 0, background: "#E8DCC8" }}>
+                  {s.img && (
+                    <img
+                      src={s.img}
+                      alt={s.title}
+                      loading="lazy"
+                      style={{ width: "100%", height: "100%", objectFit: "cover", transition: "transform .4s" }}
+                      onMouseEnter={e => e.target.style.transform = "scale(1.06)"}
+                      onMouseLeave={e => e.target.style.transform = "scale(1)"}
+                      onError={e => { e.target.parentElement.style.background = "#E8DCC8"; e.target.style.display = "none"; }}
+                    />
+                  )}
                   {/* Icon circle overlapping bottom of image */}
                   <div style={{
                     position: "absolute", bottom: -22, left: "50%", transform: "translateX(-50%)",
@@ -6639,7 +6624,7 @@ function AboutPage({ content, images, teamMembers, onWaOpen }) {
                   <h3 style={{ fontSize: "1rem", fontWeight: 800, color: "#1a1a1a", marginBottom: 8 }}>{s.title}</h3>
                   <p style={{ fontSize: "0.82rem", color: "#5A6A6C", lineHeight: 1.6, marginBottom: 16, flex: 1 }}>{s.desc}</p>
                   <button
-                    onClick={() => navigateTo("services")}
+                    onClick={() => goToLayanan(s.slug)}
                     style={{
                       background: "none", border: "none", cursor: "pointer",
                       fontSize: "0.8125rem", fontWeight: 700, color: "#C9AA71",
@@ -6810,7 +6795,7 @@ function AboutPage({ content, images, teamMembers, onWaOpen }) {
    MAIN COMPONENT
 ═══════════════════════════════════════════════ */
 /* ─────────────── TEAM ADMIN ─────────────── */
-function TeamAdmin({ data, save, notify, uploadToCloudinary }) {
+function TeamAdmin({ data, save, notify, uploadToCloudinary, embedded = false }) {
   const [editId, setEditId] = useState(null);
   const [form, setForm] = useState({});
   const members = data.teamMembers || [];
@@ -6835,9 +6820,10 @@ function TeamAdmin({ data, save, notify, uploadToCloudinary }) {
   };
 
   return (
-    <div className="fade-in">
+    <div className={embedded ? "" : "fade-in"}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24 }}>
-        <h1 style={{ fontSize: 24, fontWeight: 500, color: "#2E3D3F" }}>👥 Susunan Tim</h1>
+        {!embedded && <h1 style={{ fontSize: 24, fontWeight: 500, color: "#2E3D3F" }}>👥 Susunan Tim</h1>}
+        {embedded && <div style={{ fontSize: 12, color: "#8B9A9C" }}>{members.length} anggota tim ditampilkan di halaman About.</div>}
         {!editId && <button onClick={openNew} style={{ padding: "10px 20px", background: "linear-gradient(130deg,#2E3D3F 0%,#3D5254 45%,#8B6914 78%,#C9AA71 100%)", color: "#fff", border: "none", borderRadius: 8, fontSize: 13, fontWeight: 700, cursor: "pointer" }}>+ Tambah Anggota</button>}
       </div>
 
@@ -8034,11 +8020,326 @@ function formatHargaRp(raw) {
 }
 
 /* ══════════════════════════════════════════════════════════
+   ABOUT PAGE ADMIN — Setting Halaman About (CRUD penuh)
+   Mengatur SEMUA konten yang tampil di vastura.com/about:
+   Hero & Background, Statistik, Visi Misi, Mengapa Memilih Kami,
+   Susunan Tim (embed TeamAdmin), dan Layanan Kami.
+   ══════════════════════════════════════════════════════════ */
+
+/* ── Wrapper kartu section ── */
+function AboutAdminSection({ title, accent = "#8B6914", desc, children }) {
+  return (
+    <div style={{ background: "#fff", borderRadius: 8, padding: "22px 24px", marginBottom: 24, boxShadow: "0 2px 8px rgba(0,0,0,.06)", borderTop: `4px solid ${accent}` }}>
+      <h3 style={{ fontSize: 16, fontWeight: 700, color: "#2E3D3F", marginBottom: 4 }}>{title}</h3>
+      {desc && <p style={{ fontSize: 12, color: "#5A6A6C", marginBottom: 20, lineHeight: 1.6 }}>{desc}</p>}
+      {children}
+    </div>
+  );
+}
+
+/* ── Field teks uncontrolled + tombol simpan (konsisten dengan section lain) ── */
+function AboutTextField({ data, save, notify, label, fieldKey, multiline, placeholder, accent = "#8B6914" }) {
+  const fieldId = `aboutadmin-${fieldKey}`;
+  return (
+    <div style={{ marginBottom: 16 }}>
+      <label style={{ fontSize: 11, fontWeight: 700, color: "#5A6A6C", letterSpacing: "0.8px", textTransform: "uppercase", display: "block", marginBottom: 6 }}>{label}</label>
+      {multiline ? (
+        <textarea id={fieldId} defaultValue={data.content[fieldKey] || ""} placeholder={placeholder} rows={3}
+          style={{ width: "100%", padding: "9px 12px", border: "1px solid #D4C4A0", borderRadius: 6, fontSize: 13, outline: "none", resize: "vertical", fontFamily: "inherit", lineHeight: 1.6, boxSizing: "border-box" }} />
+      ) : (
+        <input id={fieldId} defaultValue={data.content[fieldKey] || ""} placeholder={placeholder}
+          style={{ width: "100%", padding: "9px 12px", border: "1px solid #D4C4A0", borderRadius: 6, fontSize: 13, outline: "none", boxSizing: "border-box" }} />
+      )}
+      <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 6 }}>
+        <button onClick={() => {
+          const val = document.getElementById(fieldId)?.value ?? "";
+          save({ ...data, content: { ...data.content, [fieldKey]: val.trim() } });
+          notify(`✅ ${label} disimpan!`);
+        }} style={{ padding: "7px 18px", background: accent, color: "#fff", borderRadius: 6, fontSize: 12, border: "none", fontWeight: 600, cursor: "pointer" }}>Simpan</button>
+      </div>
+    </div>
+  );
+}
+
+/* ── Statistik (Stats Strip): num + label, CRUD ── */
+function AboutStatsEditor({ data, save, notify }) {
+  const list = (data.aboutStats && data.aboutStats.length > 0) ? data.aboutStats : ABOUT_STATS_DEFAULT;
+
+  const patch = (idx, field, val) => {
+    const next = list.map(x => ({ ...x }));
+    next[idx][field] = val;
+    save({ ...data, aboutStats: next });
+  };
+  const addItem = () => save({ ...data, aboutStats: [...list, { num: "0", label: "Statistik Baru" }] });
+  const removeItem = (idx) => save({ ...data, aboutStats: list.filter((_, i) => i !== idx) });
+
+  return (
+    <div>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(180px,1fr))", gap: 10, marginBottom: 12 }}>
+        {list.map((s, idx) => (
+          <div key={idx} style={{ background: "#FAF7F0", borderRadius: 8, padding: 10, border: "1px solid #E8DCC8" }}>
+            <input defaultValue={s.num} onBlur={e => patch(idx, "num", e.target.value)} placeholder="500+"
+              style={{ width: "100%", padding: "6px 8px", border: "1px solid #D4C4A0", borderRadius: 5, fontSize: 13, fontWeight: 700, marginBottom: 6, boxSizing: "border-box" }} />
+            <input defaultValue={s.label} onBlur={e => patch(idx, "label", e.target.value)} placeholder="Klien Puas"
+              style={{ width: "100%", padding: "6px 8px", border: "1px solid #D4C4A0", borderRadius: 5, fontSize: 12, marginBottom: 6, boxSizing: "border-box" }} />
+            <button onClick={() => removeItem(idx)}
+              style={{ width: "100%", padding: "5px", background: "none", color: "#e74c3c", border: "1px solid #e74c3c", borderRadius: 5, fontSize: 10, cursor: "pointer" }}>🗑 Hapus</button>
+          </div>
+        ))}
+      </div>
+      <button onClick={addItem} style={{ padding: "8px 16px", background: "#3D5254", color: "#fff", border: "none", borderRadius: 6, fontSize: 12, fontWeight: 700, cursor: "pointer" }}>+ Tambah Statistik</button>
+      <span style={{ fontSize: 11, color: "#8B9A9C", marginLeft: 10 }}>Klik di luar kotak teks (blur) untuk menyimpan otomatis.</span>
+    </div>
+  );
+}
+
+/* ── Misi Kami: daftar poin teks, CRUD ── */
+function AboutMisiEditor({ data, save, notify }) {
+  const list = (data.aboutMisiList && data.aboutMisiList.length > 0) ? data.aboutMisiList : ABOUT_MISI_DEFAULT;
+
+  const patch = (idx, val) => {
+    const next = [...list];
+    next[idx] = val;
+    save({ ...data, aboutMisiList: next });
+  };
+  const addItem = () => save({ ...data, aboutMisiList: [...list, "Poin misi baru"] });
+  const removeItem = (idx) => save({ ...data, aboutMisiList: list.filter((_, i) => i !== idx) });
+
+  return (
+    <div>
+      {list.map((m, idx) => (
+        <div key={idx} style={{ display: "flex", gap: 8, marginBottom: 8, alignItems: "center" }}>
+          <span style={{ color: "#8B6914", fontWeight: 700, flexShrink: 0 }}>✓</span>
+          <input defaultValue={m} onBlur={e => patch(idx, e.target.value)}
+            style={{ flex: 1, padding: "8px 10px", border: "1px solid #D4C4A0", borderRadius: 6, fontSize: 13, boxSizing: "border-box" }} />
+          <button onClick={() => removeItem(idx)}
+            style={{ padding: "7px 10px", background: "none", color: "#e74c3c", border: "1px solid #e74c3c", borderRadius: 5, fontSize: 11, cursor: "pointer", flexShrink: 0 }}>🗑</button>
+        </div>
+      ))}
+      <button onClick={addItem} style={{ padding: "8px 16px", background: "#8B6914", color: "#fff", border: "none", borderRadius: 6, fontSize: 12, fontWeight: 700, cursor: "pointer", marginTop: 6 }}>+ Tambah Poin Misi</button>
+      <span style={{ fontSize: 11, color: "#8B9A9C", marginLeft: 10 }}>Klik di luar kotak teks (blur) untuk menyimpan otomatis.</span>
+    </div>
+  );
+}
+
+/* ── Mengapa Memilih Kami: kartu icon + judul + deskripsi, CRUD ── */
+function AboutWhyUsEditor({ data, save, notify }) {
+  const list = (data.aboutWhyList && data.aboutWhyList.length > 0) ? data.aboutWhyList : ABOUT_WHY_DEFAULT;
+
+  const patch = (idx, field, val) => {
+    const next = list.map(x => ({ ...x }));
+    next[idx][field] = val;
+    save({ ...data, aboutWhyList: next });
+  };
+  const addItem = () => save({ ...data, aboutWhyList: [...list, { icon: "⭐", title: "Keunggulan Baru", desc: "Deskripsi singkat keunggulan." }] });
+  const removeItem = (idx) => save({ ...data, aboutWhyList: list.filter((_, i) => i !== idx) });
+
+  return (
+    <div>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(220px,1fr))", gap: 10, marginBottom: 12 }}>
+        {list.map((v, idx) => (
+          <div key={idx} style={{ background: "#FAF7F0", borderRadius: 8, padding: 10, border: "1px solid #E8DCC8" }}>
+            <input defaultValue={v.icon} onBlur={e => patch(idx, "icon", e.target.value)} placeholder="🌟"
+              style={{ width: "100%", padding: "6px 8px", border: "1px solid #D4C4A0", borderRadius: 5, fontSize: 18, marginBottom: 6, boxSizing: "border-box", textAlign: "center" }} />
+            <input defaultValue={v.title} onBlur={e => patch(idx, "title", e.target.value)} placeholder="Judul keunggulan"
+              style={{ width: "100%", padding: "6px 8px", border: "1px solid #D4C4A0", borderRadius: 5, fontSize: 12, fontWeight: 700, marginBottom: 6, boxSizing: "border-box" }} />
+            <textarea defaultValue={v.desc} onBlur={e => patch(idx, "desc", e.target.value)} placeholder="Deskripsi singkat" rows={2}
+              style={{ width: "100%", padding: "6px 8px", border: "1px solid #D4C4A0", borderRadius: 5, fontSize: 11, marginBottom: 6, boxSizing: "border-box", resize: "vertical", fontFamily: "inherit" }} />
+            <button onClick={() => removeItem(idx)}
+              style={{ width: "100%", padding: "5px", background: "none", color: "#e74c3c", border: "1px solid #e74c3c", borderRadius: 5, fontSize: 10, cursor: "pointer" }}>🗑 Hapus</button>
+          </div>
+        ))}
+      </div>
+      <button onClick={addItem} style={{ padding: "8px 16px", background: "#0a6ea0", color: "#fff", border: "none", borderRadius: 6, fontSize: 12, fontWeight: 700, cursor: "pointer" }}>+ Tambah Kartu Keunggulan</button>
+      <span style={{ fontSize: 11, color: "#8B9A9C", marginLeft: 10 }}>Klik di luar kotak teks (blur) untuk menyimpan otomatis.</span>
+    </div>
+  );
+}
+
+/* ── Layanan Kami (kartu About): icon + judul + deskripsi + foto, CRUD ── */
+function AboutLayananCardEditor({ index, item, data, save, notify, uploadToCloudinary }) {
+  const [title, setTitle] = useState(item.title || "");
+  const [desc, setDesc]   = useState(item.desc || "");
+  const [icon, setIcon]   = useState(item.icon || "");
+  const [saving, setSaving] = useState(false);
+
+  const getList = () => ((data.aboutLayananList && data.aboutLayananList.length > 0) ? data.aboutLayananList : ABOUT_LAYANAN_DEFAULT).map(x => ({ ...x }));
+
+  const patchAndSave = async (patch) => {
+    const list = getList();
+    list[index] = { ...list[index], ...patch };
+    await save({ ...data, aboutLayananList: list });
+  };
+
+  const doSaveText = async () => {
+    setSaving(true);
+    try { await patchAndSave({ title, desc, icon }); notify("✅ Kartu layanan diperbarui!"); }
+    catch { notify("❌ Gagal menyimpan.", "error"); }
+    setSaving(false);
+  };
+
+  const doRemove = async () => {
+    const list = getList().filter((_, i) => i !== index);
+    await save({ ...data, aboutLayananList: list });
+    notify("Kartu layanan dihapus.");
+  };
+
+  return (
+    <div style={{ background: "#FAF7F0", borderRadius: 8, padding: 12, border: "1px solid #E8DCC8" }}>
+      {item.img ? (
+        <img src={item.img} alt={item.title} style={{ width: "100%", height: 110, objectFit: "cover", borderRadius: 6, marginBottom: 8, border: "1px solid #D4C4A0" }}
+          onError={e => e.target.style.display = "none"} />
+      ) : (
+        <div style={{ width: "100%", height: 110, background: "#E8DCC8", borderRadius: 6, marginBottom: 8, display: "flex", alignItems: "center", justifyContent: "center", color: "#5A6A6C", fontSize: 11 }}>Belum ada foto</div>
+      )}
+      <UploadButton label="📁 Ganti Foto"
+        style={{ fontSize: 11, padding: "6px 10px", marginBottom: 8, width: "100%", justifyContent: "center" }}
+        onDone={urls => { patchAndSave({ img: urls[0] }); notify("✅ Foto kartu layanan diperbarui!"); }}
+        onError={() => notify("Gagal upload.", "error")} />
+      <input value={icon} onChange={e => setIcon(e.target.value)} placeholder="Icon (mis. 🛋️)"
+        style={{ width: "100%", padding: "7px 9px", border: "1px solid #D4C4A0", borderRadius: 5, fontSize: 16, marginBottom: 6, boxSizing: "border-box", textAlign: "center" }} />
+      <input value={title} onChange={e => setTitle(e.target.value)} placeholder="Judul layanan"
+        style={{ width: "100%", padding: "7px 9px", border: "1px solid #D4C4A0", borderRadius: 5, fontSize: 12, marginBottom: 6, boxSizing: "border-box", fontWeight: 700 }} />
+      <textarea value={desc} onChange={e => setDesc(e.target.value)} placeholder="Deskripsi singkat" rows={2}
+        style={{ width: "100%", padding: "7px 9px", border: "1px solid #D4C4A0", borderRadius: 5, fontSize: 11, marginBottom: 8, boxSizing: "border-box", resize: "vertical", fontFamily: "inherit" }} />
+      <div style={{ display: "flex", gap: 6 }}>
+        <button onClick={doSaveText} disabled={saving}
+          style={{ flex: 1, padding: "6px", background: "#C9AA71", color: "#fff", border: "none", borderRadius: 5, fontSize: 11, fontWeight: 700, cursor: "pointer" }}>
+          {saving ? "..." : "💾 Simpan Teks"}
+        </button>
+        <button onClick={doRemove}
+          style={{ padding: "6px 10px", background: "none", color: "#e74c3c", border: "1px solid #e74c3c", borderRadius: 5, fontSize: 11, cursor: "pointer" }}>🗑</button>
+      </div>
+    </div>
+  );
+}
+
+function AboutLayananListEditor({ data, save, notify, uploadToCloudinary }) {
+  const list = (data.aboutLayananList && data.aboutLayananList.length > 0) ? data.aboutLayananList : ABOUT_LAYANAN_DEFAULT;
+
+  const addItem = () => {
+    const next = list.map(x => ({ ...x }));
+    next.push({ icon: "🛠", title: "Layanan Baru", desc: "Deskripsi singkat layanan.", img: "", slug: "" });
+    save({ ...data, aboutLayananList: next });
+    notify("✅ Kartu layanan baru ditambahkan!");
+  };
+  const resetDefault = () => { save({ ...data, aboutLayananList: [] }); notify("🔄 Direset ke kartu layanan default."); };
+
+  return (
+    <div>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 14, marginBottom: 16 }}>
+        {list.map((item, idx) => (
+          <AboutLayananCardEditor key={idx} index={idx} item={item} data={data} save={save} notify={notify} uploadToCloudinary={uploadToCloudinary} />
+        ))}
+      </div>
+      <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+        <button onClick={addItem} style={{ padding: "9px 16px", background: "#2ecc71", color: "#fff", border: "none", borderRadius: 6, fontSize: 12, fontWeight: 700, cursor: "pointer" }}>+ Tambah Kartu Layanan</button>
+        <button onClick={resetDefault} style={{ padding: "9px 16px", background: "#6c757d", color: "#fff", border: "none", borderRadius: 6, fontSize: 12, fontWeight: 700, cursor: "pointer" }}>🔄 Reset ke Default</button>
+      </div>
+    </div>
+  );
+}
+
+/* ── Background Hero: 4 foto grid (sama dengan Hero Slideshow Home) ── */
+function AboutHeroBgEditor({ data, save, notify }) {
+  const heroImgs = (data.images && data.images.hero) || ["", "", "", ""];
+  const handleUpload = (idx, urls) => {
+    const next = [heroImgs[0] || "", heroImgs[1] || "", heroImgs[2] || "", heroImgs[3] || ""];
+    next[idx] = urls[0];
+    save({ ...data, images: { ...data.images, hero: next } });
+    notify("✅ Foto Background Hero diperbarui!");
+  };
+  return (
+    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(130px,1fr))", gap: 10 }}>
+      {[0, 1, 2, 3].map(idx => (
+        <div key={idx} style={{ background: "#FAF7F0", borderRadius: 8, padding: 8, border: "1px solid #E8DCC8" }}>
+          {heroImgs[idx] ? (
+            <img src={heroImgs[idx]} alt="" style={{ width: "100%", height: 78, objectFit: "cover", borderRadius: 5, marginBottom: 6 }} onError={e => e.target.style.display = "none"} />
+          ) : (
+            <div style={{ width: "100%", height: 78, background: "#E8DCC8", borderRadius: 5, marginBottom: 6, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, color: "#8B9A9C" }}>Foto {idx + 1}</div>
+          )}
+          <UploadButton label="📁 Ganti"
+            style={{ fontSize: 10, padding: "5px 8px", width: "100%", justifyContent: "center" }}
+            onDone={urls => handleUpload(idx, urls)} onError={() => notify("Gagal upload.", "error")} />
+        </div>
+      ))}
+    </div>
+  );
+}
+
+/* ── Komponen utama: Setting Halaman About ── */
+function AboutPageAdmin({ data, save, notify, uploadToCloudinary }) {
+  return (
+    <div className="fade-in" style={{ maxWidth: 860 }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 24 }}>
+        <span style={{ fontSize: 30 }}>📄</span>
+        <div>
+          <h1 style={{ fontSize: 22, fontWeight: 800, color: "#2E3D3F", margin: 0 }}>Setting Halaman About</h1>
+          <p style={{ fontSize: 13, color: "#8B9A9C", margin: "3px 0 0" }}>
+            Kelola semua konten yang tampil di vastura.com/about — Hero & Background, Statistik, Visi Misi, Mengapa Memilih Kami, Susunan Tim, dan Layanan Kami. Semua teks, gambar, dan kartu di bawah ini bisa ditambah, diedit, dihapus, dan diganti fotonya.
+          </p>
+        </div>
+      </div>
+
+      <AboutAdminSection title="🖼 Hero & Background" accent="#8B6914"
+        desc="Label kecil, judul besar, dan deskripsi yang tampil di bagian paling atas halaman About. Background Hero adalah 4 foto grid yang juga dipakai sebagai Hero Slideshow di halaman Home.">
+        <AboutTextField data={data} save={save} notify={notify} label="Hero — Label Kecil" fieldKey="aboutHeroLabel" placeholder="Tentang Kami" />
+        <AboutTextField data={data} save={save} notify={notify} label="Hero — Judul Utama" fieldKey="aboutHeroTitle" placeholder="Membangun Hunian, Mewujudkan Impian" />
+        <AboutTextField data={data} save={save} notify={notify} label="Hero — Sub / Deskripsi" fieldKey="aboutHeroSub" multiline placeholder="VASTURA GROUP adalah developer perumahan dan jasa desain terpercaya..." />
+        <AboutTextField data={data} save={save} notify={notify} label="Teks Deskripsi Cadangan (fallback bila Hero Sub kosong)" fieldKey="aboutText" multiline />
+        <div style={{ marginTop: 10 }}>
+          <div style={{ fontSize: 11, fontWeight: 700, color: "#5A6A6C", letterSpacing: "0.8px", textTransform: "uppercase", marginBottom: 8 }}>Background Hero (4 Foto Grid)</div>
+          <AboutHeroBgEditor data={data} save={save} notify={notify} />
+        </div>
+      </AboutAdminSection>
+
+      <AboutAdminSection title="📊 Statistik (Stats Strip)" accent="#3D5254"
+        desc='Angka pencapaian yang tampil sebagai strip di bawah Hero, misalnya "500+ Klien Puas".'>
+        <AboutStatsEditor data={data} save={save} notify={notify} />
+      </AboutAdminSection>
+
+      <AboutAdminSection title="🎯 Visi & Misi" accent="#2E3D3F" desc="Teks Visi perusahaan dan daftar poin Misi.">
+        <AboutTextField data={data} save={save} notify={notify} label="Visi Kami" fieldKey="aboutVisiText" multiline accent="#2E3D3F" />
+        <div style={{ marginTop: 14 }}>
+          <div style={{ fontSize: 11, fontWeight: 700, color: "#5A6A6C", letterSpacing: "0.8px", textTransform: "uppercase", marginBottom: 8 }}>Misi Kami (Daftar Poin)</div>
+          <AboutMisiEditor data={data} save={save} notify={notify} />
+        </div>
+      </AboutAdminSection>
+
+      <AboutAdminSection title="⭐ Mengapa Memilih Kami" accent="#0a6ea0" desc="Label, judul section, dan kartu-kartu keunggulan (icon, judul, deskripsi).">
+        <AboutTextField data={data} save={save} notify={notify} label="Label Kecil" fieldKey="aboutWhyLabel" placeholder="Keunggulan Kami" accent="#0a6ea0" />
+        <AboutTextField data={data} save={save} notify={notify} label="Judul Section" fieldKey="aboutWhyTitle" placeholder="Mengapa Memilih VASTURA GROUP?" accent="#0a6ea0" />
+        <div style={{ marginTop: 14 }}>
+          <AboutWhyUsEditor data={data} save={save} notify={notify} />
+        </div>
+      </AboutAdminSection>
+
+      <AboutAdminSection title="👥 Susunan Tim" accent="#8B6914" desc="Label, judul, dan daftar anggota tim (foto, nama, jabatan, kutipan) yang tampil di halaman About.">
+        <AboutTextField data={data} save={save} notify={notify} label="Label Kecil" fieldKey="aboutTeamLabel" placeholder="Orang-Orang di Balik Layanan" />
+        <AboutTextField data={data} save={save} notify={notify} label="Judul Section" fieldKey="aboutTeamTitle" placeholder="Susunan Tim Kami" />
+        <div style={{ marginTop: 14, background: "#FAF7F0", borderRadius: 10, padding: 16, border: "1px dashed #D5C9B0" }}>
+          <TeamAdmin data={data} save={save} notify={notify} uploadToCloudinary={uploadToCloudinary} embedded />
+        </div>
+      </AboutAdminSection>
+
+      <AboutAdminSection title="🛠 Layanan Kami (Kartu di Halaman About)" accent="#C9AA71" desc="Label, judul, dan kartu-kartu layanan (icon, judul, deskripsi, foto) yang tampil di bagian bawah halaman About.">
+        <AboutTextField data={data} save={save} notify={notify} label="Label Kecil" fieldKey="aboutLayananLabel" placeholder="LAYANAN KAMI" />
+        <AboutTextField data={data} save={save} notify={notify} label="Judul Section" fieldKey="aboutLayananTitle" placeholder="Layanan Terbaik Untuk Anda" />
+        <div style={{ marginTop: 14 }}>
+          <AboutLayananListEditor data={data} save={save} notify={notify} uploadToCloudinary={uploadToCloudinary} />
+        </div>
+      </AboutAdminSection>
+    </div>
+  );
+}
+
+/* ══════════════════════════════════════════════════════════
    SUB LAYANAN ADMIN — Universal CRUD + Gambar + Teks Setting
    Dipakai oleh: Home, LayananKami, DesainRab, TemaRumah,
                  Interior, Pagar, Kanopi, Aluminium, Landscape
    ══════════════════════════════════════════════════════════ */
 function SubLayananAdmin({
+
   title, icon, accentColor = "#C9AA71",
   storeKey, data, save, notify, uploadToCloudinary,
   pageDesc,
@@ -15770,7 +16071,19 @@ export default function BricksyTravel() {
 
 
               {/* ABOUT PAGE */}
-              {page === "about" && <AboutPage content={data.content} images={data.images} teamMembers={data.teamMembers || []} onWaOpen={openWaPicker} />}
+              {page === "about" && (
+                <AboutPage
+                  content={data.content}
+                  images={data.images}
+                  teamMembers={data.teamMembers || []}
+                  aboutStats={data.aboutStats || []}
+                  aboutMisiList={data.aboutMisiList || []}
+                  aboutWhyList={data.aboutWhyList || []}
+                  aboutLayananList={data.aboutLayananList || []}
+                  navigateTo={navigateTo}
+                  onWaOpen={openWaPicker}
+                />
+              )}
 
               {/* SERVICES PAGE */}
               {(page === "services" || activePaket) && <ServicesPage content={data.content} services={data.services || []} navigateTo={navigateTo} activePaket={activePaket} onOpenPaket={openPaket} onClosePaket={closePaket} onWaOpen={openWaPicker} />}
@@ -15849,7 +16162,7 @@ export default function BricksyTravel() {
                   items: [
                     { id: "content",         label: "📝 Konten & Nav",      show: isAdmin },
                     { id: "set_home",        label: "🏠 Gambar Home",        show: isAdmin },
-                    { id: "set_layanankami", label: "⚙️ Teks Layanan Kami",  show: isAdmin },
+                    { id: "set_layanankami", label: "📄 Setting Halaman About", show: isAdmin },
                     { id: "settings",        label: "🔧 Pengaturan Sistem",  show: isAdmin },
                   ]
                 },
@@ -15895,7 +16208,6 @@ export default function BricksyTravel() {
                 {
                   group: "MANAJEMEN",
                   items: [
-                    { id: "team",    label: "👥 Susunan Tim",   show: isAdmin },
                     { id: "reviews", label: "⭐ Reviews",        show: isAdmin },
                     { id: "users",   label: "🔐 Users",          show: isAdmin },
                   ]
@@ -16024,24 +16336,9 @@ export default function BricksyTravel() {
                 />
               )}
 
-              {/* SETTING LAYANAN KAMI */}
+              {/* SETTING HALAMAN ABOUT */}
               {adminTab === "set_layanankami" && isAdmin && (
-                <SubLayananAdmin
-                  title="Setting Layanan Kami"
-                  icon="🛠"
-                  accentColor="#8B6914"
-                  storeKey="layananKami"
-                  data={data}
-                  save={save}
-                  notify={notify}
-                  uploadToCloudinary={uploadToCloudinary}
-                  pageDesc="Kelola teks halaman Layanan Kami. Kartu layanan (6 layanan utama) diatur langsung melalui kode LAYANAN_LIST -- hubungi developer untuk mengubah nama/icon/deskripsi kartu layanan."
-                  sections={[
-                    { key: "layananKamiTitle", label: "Judul Halaman Layanan Kami", type: "text" },
-                    { key: "layananKamiSub", label: "Sub-judul / Deskripsi Layanan Kami", type: "textarea" },
-                    { key: "layananKamiCta", label: "Label Tombol CTA", type: "text" },
-                  ]}
-                />
+                <AboutPageAdmin data={data} save={save} notify={notify} uploadToCloudinary={uploadToCloudinary} />
               )}
 
 
@@ -17185,16 +17482,11 @@ export default function BricksyTravel() {
                   {/* SECTION: KONTEN ABOUT & CONTACT */}
                   {/* ======================================================= */}
                   <div style={{ background: "#fff", borderRadius: 8, padding: "22px 24px", marginBottom: 24, boxShadow: "0 2px 8px rgba(0,0,0,.06)", borderTop: "4px solid #e67e22" }}>
-                    <h3 style={{ fontSize: 16, fontWeight: 700, color: "#2E3D3F", marginBottom: 4 }}>📋 Konten Halaman About & Kontak</h3>
+                    <h3 style={{ fontSize: 16, fontWeight: 700, color: "#2E3D3F", marginBottom: 4 }}>📋 Konten Kontak</h3>
                     <p style={{ fontSize: 12, color: "#5A6A6C", marginBottom: 20, lineHeight: 1.6 }}>
-                      Edit teks halaman About Us, informasi kontak, jam operasional, dan link media sosial.
+                      Edit informasi kontak, jam operasional, dan link media sosial. Untuk teks halaman About Us (Hero, Visi Misi, Susunan Tim, Layanan), buka menu <strong>⚙️ Setting Halaman About</strong>.
                     </p>
                     {[
-                      { label: "About — Teks Deskripsi Perusahaan", key: "aboutText", multiline: true },
-                      { label: "About — Hero Label", key: "aboutHeroLabel", multiline: false },
-                      { label: "About — Hero Judul", key: "aboutHeroTitle", multiline: false },
-                      { label: "About — Hero Sub", key: "aboutHeroSub", multiline: true },
-                      { label: "About — Judul 'Why Us'", key: "aboutWhyTitle", multiline: false },
                       { label: "Kontak — Teks", key: "contactText", multiline: true },
                       { label: "Kontak — Email", key: "email", multiline: false },
                       { label: "Kontak — Telepon / WA", key: "phone", multiline: false },
