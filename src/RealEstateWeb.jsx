@@ -391,6 +391,83 @@ function GalleryImageTile({ src, onUrlEdit, onUploaded, onError }) {
  *   style         object   (override style tombol/label)
  *   dropZone      bool     (tampilkan sebagai drop zone besar)
  */
+function HeroVideoPanel({ data, save, notify }) {
+  const [videoUrl, setVideoUrl] = React.useState(data.content.heroVideoUrl || "");
+  return (
+    <div style={{ background: "#f5eeff", borderRadius: 8, padding: "16px 18px", border: "1px solid #d8b4fe" }}>
+      <label style={{ fontSize: 11, fontWeight: 700, color: "#8e44ad", letterSpacing: "1px", textTransform: "uppercase", display: "block", marginBottom: 10 }}>🎬 URL Video Background Hero</label>
+      <p style={{ fontSize: 12, color: "#5A6A6C", marginBottom: 12, lineHeight: 1.5 }}>
+        Masukkan link URL video (format MP4 direkomendasikan). Video akan diputar otomatis, senyap, dan berulang sebagai latar hero.
+      </p>
+      <div style={{ display: "flex", gap: 8, marginBottom: 12 }}>
+        <input
+          value={videoUrl}
+          onChange={e => setVideoUrl(e.target.value)}
+          placeholder="https://res.cloudinary.com/.../video.mp4"
+          style={{ flex: 1, padding: "9px 12px", border: "1px solid #d8b4fe", borderRadius: 6, fontSize: 13, outline: "none", background: "#fff" }}
+        />
+        <button onClick={() => {
+          const url = videoUrl.trim();
+          if (!url) return notify("Masukkan URL video.", "error");
+          save({ ...data, content: { ...data.content, heroVideoUrl: url } });
+          notify("✅ URL video background disimpan!");
+        }} style={{ padding: "9px 16px", background: "#8e44ad", color: "#fff", borderRadius: 6, fontSize: 12, border: "none", fontWeight: 700, whiteSpace: "nowrap", cursor: "pointer" }}>
+          Simpan
+        </button>
+      </div>
+      {data.content.heroVideoUrl && (
+        <div style={{ fontSize: 11, color: "#5A6A6C", background: "#fff", borderRadius: 6, padding: "8px 12px", border: "1px solid #e8d4fe", wordBreak: "break-all" }}>
+          <strong>URL Aktif:</strong> {data.content.heroVideoUrl}
+        </div>
+      )}
+      {!data.content.heroVideoUrl && (
+        <div style={{ fontSize: 11, color: "#8e44ad", background: "#fff", borderRadius: 6, padding: "8px 12px", border: "1px dashed #d8b4fe" }}>
+          ℹ️ Belum ada URL disimpan — menggunakan video bawaan Vastura Group.
+        </div>
+      )}
+    </div>
+  );
+}
+
+function HeroStaticImagePanel({ data, save, notify }) {
+  const [imgUrl, setImgUrl] = React.useState(data.content.heroStaticImage || "");
+  return (
+    <div style={{ background: "#f5eeff", borderRadius: 8, padding: "16px 18px", border: "1px solid #d8b4fe" }}>
+      <label style={{ fontSize: 11, fontWeight: 700, color: "#8e44ad", letterSpacing: "1px", textTransform: "uppercase", display: "block", marginBottom: 10 }}>🖼 URL Gambar Statis Hero</label>
+      <div style={{ display: "flex", gap: 8, marginBottom: 12 }}>
+        <input
+          value={imgUrl}
+          onChange={e => setImgUrl(e.target.value)}
+          placeholder="https://..."
+          style={{ flex: 1, padding: "9px 12px", border: "1px solid #d8b4fe", borderRadius: 6, fontSize: 13, outline: "none", background: "#fff" }}
+        />
+        <button onClick={() => {
+          const url = imgUrl.trim();
+          if (!url) return notify("Masukkan URL gambar.", "error");
+          save({ ...data, content: { ...data.content, heroStaticImage: url } });
+          notify("✅ Gambar statis hero disimpan!");
+        }} style={{ padding: "9px 16px", background: "#8e44ad", color: "#fff", borderRadius: 6, fontSize: 12, border: "none", fontWeight: 700, whiteSpace: "nowrap", cursor: "pointer" }}>
+          Simpan
+        </button>
+      </div>
+      <label style={{ fontSize: 11, fontWeight: 600, color: "#5A6A6C", letterSpacing: "1px", textTransform: "uppercase", display: "block", marginBottom: 6 }}>Atau Upload Gambar</label>
+      <UploadButton label="📁 Pilih Gambar Hero"
+        style={{ border: "1.5px dashed #8e44ad", color: "#8e44ad", background: "#fff" }}
+        onDone={urls => {
+          setImgUrl(urls[0]);
+          save({ ...data, content: { ...data.content, heroStaticImage: urls[0] } });
+          notify("✅ Gambar hero statis diupload!");
+        }}
+        onError={() => notify("Gagal upload. Coba lagi.", "error")} />
+      {data.content.heroStaticImage && (
+        <img src={data.content.heroStaticImage} alt="Hero Preview"
+          style={{ width: "100%", maxHeight: 180, objectFit: "cover", borderRadius: 8, border: "1px solid #d8b4fe", marginTop: 10 }}
+          onError={e => e.target.style.display = "none"} />
+      )}
+    </div>
+  );
+}
+
 function UploadButton({ accept = "image/*", multiple = false, label = "📁 Upload Gambar", onDone, onError, style: styleProp = {}, dropZone = false }) {
   const [items, setItems] = useState([]); // [{name, pct, done, error}]
   const inputRef = useRef();
@@ -17636,83 +17713,14 @@ export default function BricksyTravel() {
                     </div>
 
                     {/* ── Panel Video Background ── */}
-                    {(data.content.heroMode === "video" || !data.content.heroMode) && (() => {
-                      const [videoUrl, setVideoUrl] = React.useState(data.content.heroVideoUrl || "");
-                      return (
-                        <div style={{ background: "#f5eeff", borderRadius: 8, padding: "16px 18px", border: "1px solid #d8b4fe" }}>
-                          <label style={{ fontSize: 11, fontWeight: 700, color: "#8e44ad", letterSpacing: "1px", textTransform: "uppercase", display: "block", marginBottom: 10 }}>🎬 URL Video Background Hero</label>
-                          <p style={{ fontSize: 12, color: "#5A6A6C", marginBottom: 12, lineHeight: 1.5 }}>
-                            Masukkan link URL video (format MP4 direkomendasikan). Video akan diputar otomatis, senyap, dan berulang sebagai latar hero.
-                          </p>
-                          <div style={{ display: "flex", gap: 8, marginBottom: 12 }}>
-                            <input
-                              value={videoUrl}
-                              onChange={e => setVideoUrl(e.target.value)}
-                              placeholder="https://res.cloudinary.com/.../video.mp4"
-                              style={{ flex: 1, padding: "9px 12px", border: "1px solid #d8b4fe", borderRadius: 6, fontSize: 13, outline: "none", background: "#fff" }}
-                            />
-                            <button onClick={() => {
-                              const url = videoUrl.trim();
-                              if (!url) return notify("Masukkan URL video.", "error");
-                              save({ ...data, content: { ...data.content, heroVideoUrl: url } });
-                              notify("✅ URL video background disimpan!");
-                            }} style={{ padding: "9px 16px", background: "#8e44ad", color: "#fff", borderRadius: 6, fontSize: 12, border: "none", fontWeight: 700, whiteSpace: "nowrap", cursor: "pointer" }}>
-                              Simpan
-                            </button>
-                          </div>
-                          {data.content.heroVideoUrl && (
-                            <div style={{ fontSize: 11, color: "#5A6A6C", background: "#fff", borderRadius: 6, padding: "8px 12px", border: "1px solid #e8d4fe", wordBreak: "break-all" }}>
-                              <strong>URL Aktif:</strong> {data.content.heroVideoUrl}
-                            </div>
-                          )}
-                          {!data.content.heroVideoUrl && (
-                            <div style={{ fontSize: 11, color: "#8e44ad", background: "#fff", borderRadius: 6, padding: "8px 12px", border: "1px dashed #d8b4fe" }}>
-                              ℹ️ Belum ada URL disimpan — menggunakan video bawaan Vastura Group.
-                            </div>
-                          )}
-                        </div>
-                      );
-                    })()}
+                    {(data.content.heroMode === "video" || !data.content.heroMode) && (
+                      <HeroVideoPanel data={data} save={save} notify={notify} />
+                    )}
 
                     {/* ── Panel Gambar Statis ── */}
-                    {data.content.heroMode === "static" && (() => {
-                      const [imgUrl, setImgUrl] = React.useState(data.content.heroStaticImage || "");
-                      return (
-                        <div style={{ background: "#f5eeff", borderRadius: 8, padding: "16px 18px", border: "1px solid #d8b4fe" }}>
-                          <label style={{ fontSize: 11, fontWeight: 700, color: "#8e44ad", letterSpacing: "1px", textTransform: "uppercase", display: "block", marginBottom: 10 }}>🖼 URL Gambar Statis Hero</label>
-                          <div style={{ display: "flex", gap: 8, marginBottom: 12 }}>
-                            <input
-                              value={imgUrl}
-                              onChange={e => setImgUrl(e.target.value)}
-                              placeholder="https://..."
-                              style={{ flex: 1, padding: "9px 12px", border: "1px solid #d8b4fe", borderRadius: 6, fontSize: 13, outline: "none", background: "#fff" }}
-                            />
-                            <button onClick={() => {
-                              const url = imgUrl.trim();
-                              if (!url) return notify("Masukkan URL gambar.", "error");
-                              save({ ...data, content: { ...data.content, heroStaticImage: url } });
-                              notify("✅ Gambar statis hero disimpan!");
-                            }} style={{ padding: "9px 16px", background: "#8e44ad", color: "#fff", borderRadius: 6, fontSize: 12, border: "none", fontWeight: 700, whiteSpace: "nowrap", cursor: "pointer" }}>
-                              Simpan
-                            </button>
-                          </div>
-                          <label style={{ fontSize: 11, fontWeight: 600, color: "#5A6A6C", letterSpacing: "1px", textTransform: "uppercase", display: "block", marginBottom: 6 }}>Atau Upload Gambar</label>
-                          <UploadButton label="📁 Pilih Gambar Hero"
-                            style={{ border: "1.5px dashed #8e44ad", color: "#8e44ad", background: "#fff" }}
-                            onDone={urls => {
-                              setImgUrl(urls[0]);
-                              save({ ...data, content: { ...data.content, heroStaticImage: urls[0] } });
-                              notify("✅ Gambar hero statis diupload!");
-                            }}
-                            onError={() => notify("Gagal upload. Coba lagi.", "error")} />
-                          {data.content.heroStaticImage && (
-                            <img src={data.content.heroStaticImage} alt="Hero Preview"
-                              style={{ width: "100%", maxHeight: 180, objectFit: "cover", borderRadius: 8, border: "1px solid #d8b4fe", marginTop: 10 }}
-                              onError={e => e.target.style.display = "none"} />
-                          )}
-                        </div>
-                      );
-                    })()}
+                    {data.content.heroMode === "static" && (
+                      <HeroStaticImagePanel data={data} save={save} notify={notify} />
+                    )}
 
                   </div>{/* end hero mode card */}
 
