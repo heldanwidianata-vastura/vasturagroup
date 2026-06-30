@@ -9261,15 +9261,54 @@ const TEMA_DATA = [
 
 /* ── Kalkulator Luas Lahan ── */
 function KalkulatorLuas({ tema }) {
-  const [luas, setLuas] = useState(100);
   const [paketIdx, setPaketIdx] = useState(1);
+
+  /* ── Input mode: "dimensi" = P×L, "luas" = langsung luas ── */
+  const [panjang, setPanjang] = useState("");
+  const [lebar, setLebar]   = useState("");
+  const [luasManual, setLuasManual] = useState("");
+
+  /* Hitung luas efektif:
+     - Jika P & L terisi → luas = P × L (dimensi mode)
+     - Jika tidak, pakai luasManual
+     - Fallback ke 0 agar tombol konsultasi tetap bisa muncul */
+  const pNum = parseFloat(panjang) || 0;
+  const lNum = parseFloat(lebar)   || 0;
+  const fromDimensi = pNum > 0 && lNum > 0;
+  const luasDariDimensi = fromDimensi ? pNum * lNum : 0;
+  const luasEfektif = fromDimensi
+    ? luasDariDimensi
+    : (parseFloat(luasManual) || 0);
+
+  /* Validasi: wajib salah satu */
+  const adaDimensi   = pNum > 0 && lNum > 0;
+  const adaLuasLangsung = (parseFloat(luasManual) || 0) > 0;
+  const valid = adaDimensi || adaLuasLangsung;
+
+  /* Jika dimensi diisi → auto-isi luasManual (read-only display) */
+  const luasDisplay = fromDimensi ? luasDariDimensi.toFixed(2).replace(/\.00$/, "") : luasManual;
+
   const paket = tema.detail.harga.paket[paketIdx];
   const isCustom = paket.harga === 0;
-  const totalHarga = isCustom ? null : luas * paket.harga;
-  const fmtRp = (n) => "Rp " + n.toLocaleString("id-ID");
+  const totalHarga = (valid && !isCustom) ? luasEfektif * paket.harga : null;
+  const fmtRp = (n) => "Rp " + Math.round(n).toLocaleString("id-ID");
+
+  /* Warna input border berdasarkan state */
+  const borderDimensi = adaDimensi ? `1.5px solid ${tema.warna}` : "1.5px solid rgba(255,255,255,.22)";
+  const borderLuas    = (!adaDimensi && adaLuasLangsung) ? `1.5px solid ${tema.warna}` : "1.5px solid rgba(255,255,255,.22)";
+
+  const inputStyle = (active) => ({
+    flex: 1, padding: "9px 12px", borderRadius: 8,
+    border: active ? `1.5px solid ${tema.warna}` : "1.5px solid rgba(255,255,255,.22)",
+    background: active ? tema.warna + "22" : "rgba(255,255,255,.08)",
+    color: "#fff", fontSize: "0.9rem", outline: "none", width: "100%", boxSizing: "border-box",
+    transition: "border .2s, background .2s",
+  });
 
   return (
     <div style={{ background: "linear-gradient(135deg,#1a2a2a 0%,#2E3D3F 60%,#3D5254 100%)", borderRadius: 16, padding: "32px", color: "#fff" }}>
+
+      {/* Header */}
       <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 24 }}>
         <span style={{ fontSize: 24 }}>🧮</span>
         <div>
@@ -9277,8 +9316,9 @@ function KalkulatorLuas({ tema }) {
           <h3 style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.1rem", fontWeight: 800, margin: 0, color: "#fff" }}>Kalkulator Luas Lahan</h3>
         </div>
       </div>
+
       {/* Pilih Paket */}
-      <div style={{ marginBottom: 20 }}>
+      <div style={{ marginBottom: 22 }}>
         <label style={{ display: "block", fontSize: "0.65rem", letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(255,255,255,.5)", marginBottom: 8, fontWeight: 700 }}>Pilih Paket</label>
         <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
           {tema.detail.harga.paket.map((p, i) => (
@@ -9294,30 +9334,124 @@ function KalkulatorLuas({ tema }) {
           ))}
         </div>
       </div>
-      {/* Slider */}
-      <div style={{ marginBottom: 20 }}>
-        <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 8 }}>
-          <label style={{ fontSize: "0.65rem", letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(255,255,255,.5)", fontWeight: 700 }}>Luas Bangunan</label>
-          <span style={{ fontSize: "0.95rem", fontWeight: 800, color: tema.warna }}>{luas} m²</span>
+
+      {/* ── INPUT PANJANG × LEBAR ── */}
+      <div style={{ marginBottom: 6 }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 8 }}>
+          <label style={{ fontSize: "0.65rem", letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(255,255,255,.5)", fontWeight: 700 }}>
+            Panjang × Lebar
+          </label>
+          <span style={{ fontSize: "0.62rem", color: "rgba(255,255,255,.35)", fontStyle: "italic" }}>Opsional jika isi Luas</span>
         </div>
-        <input type="range" min={40} max={500} step={5} value={luas} onChange={e => setLuas(+e.target.value)}
-          style={{ width: "100%", accentColor: tema.warna, cursor: "pointer" }} />
-        <div style={{ display: "flex", justifyContent: "space-between", marginTop: 4, fontSize: "0.62rem", color: "rgba(255,255,255,.38)" }}>
-          <span>40 m²</span><span>500 m²</span>
-        </div>
-      </div>
-      {/* Input Manual */}
-      <div style={{ marginBottom: 24 }}>
-        <label style={{ display: "block", fontSize: "0.65rem", letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(255,255,255,.5)", marginBottom: 6, fontWeight: 700 }}>Atau Masukkan Manual</label>
         <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
-          <input type="number" min={40} max={5000} value={luas} onChange={e => setLuas(Math.max(40, +e.target.value))}
-            style={{ flex: 1, padding: "9px 12px", borderRadius: 8, border: "1.5px solid rgba(255,255,255,.2)", background: "rgba(255,255,255,.08)", color: "#fff", fontSize: "0.9rem", outline: "none" }} />
+          <div style={{ flex: 1 }}>
+            <input
+              type="number" min={1} placeholder="Panjang"
+              value={panjang}
+              onChange={e => {
+                setPanjang(e.target.value);
+                // Jika dimensi diisi, kosongkan luasManual supaya tidak bentrok
+                if (e.target.value) setLuasManual("");
+              }}
+              style={inputStyle(adaDimensi)}
+            />
+          </div>
+          <span style={{ color: "rgba(255,255,255,.55)", fontWeight: 800, fontSize: "1rem", flexShrink: 0 }}>×</span>
+          <div style={{ flex: 1 }}>
+            <input
+              type="number" min={1} placeholder="Lebar"
+              value={lebar}
+              onChange={e => {
+                setLebar(e.target.value);
+                if (e.target.value) setLuasManual("");
+              }}
+              style={inputStyle(adaDimensi)}
+            />
+          </div>
+          <span style={{ color: "rgba(255,255,255,.5)", fontSize: "0.82rem", fontWeight: 600, flexShrink: 0 }}>m</span>
+        </div>
+        {adaDimensi && (
+          <div style={{ marginTop: 6, fontSize: "0.72rem", color: tema.warna, fontWeight: 700 }}>
+            ✓ {panjang} m × {lebar} m = <strong>{luasDariDimensi.toFixed(2).replace(/\.00$/, "")} m²</strong>
+          </div>
+        )}
+      </div>
+
+      {/* Divider "ATAU" */}
+      <div style={{ display: "flex", alignItems: "center", gap: 10, margin: "14px 0" }}>
+        <div style={{ flex: 1, height: 1, background: "rgba(255,255,255,.12)" }} />
+        <span style={{ fontSize: "0.65rem", fontWeight: 800, letterSpacing: ".1em", color: "rgba(255,255,255,.35)", textTransform: "uppercase" }}>atau</span>
+        <div style={{ flex: 1, height: 1, background: "rgba(255,255,255,.12)" }} />
+      </div>
+
+      {/* ── INPUT LUAS LANGSUNG ── */}
+      <div style={{ marginBottom: 22 }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 8 }}>
+          <label style={{ fontSize: "0.65rem", letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(255,255,255,.5)", fontWeight: 700 }}>
+            Luas Bangunan
+          </label>
+          {fromDimensi
+            ? <span style={{ fontSize: "0.62rem", color: tema.warna, fontWeight: 700 }}>Otomatis dari P × L</span>
+            : <span style={{ fontSize: "0.62rem", color: "rgba(255,255,255,.35)", fontStyle: "italic" }}>Opsional jika isi P × L</span>
+          }
+        </div>
+        <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+          <input
+            type="number" min={1} placeholder="Contoh: 100"
+            value={fromDimensi ? luasDisplay : luasManual}
+            readOnly={fromDimensi}
+            onChange={e => {
+              if (fromDimensi) return;
+              setLuasManual(e.target.value);
+            }}
+            style={{
+              ...inputStyle(!fromDimensi && adaLuasLangsung),
+              flex: 1,
+              opacity: fromDimensi ? 0.6 : 1,
+              cursor: fromDimensi ? "not-allowed" : "text",
+              color: fromDimensi ? tema.warna : "#fff",
+              fontWeight: fromDimensi ? 800 : 400,
+            }}
+          />
           <span style={{ color: "rgba(255,255,255,.6)", fontSize: "0.85rem", fontWeight: 600 }}>m²</span>
         </div>
+        {!fromDimensi && !adaLuasLangsung && !adaDimensi && (
+          <div style={{ marginTop: 5, fontSize: "0.68rem", color: "#f87171" }}>
+            ⚠ Isi Panjang × Lebar atau Luas untuk melihat estimasi
+          </div>
+        )}
       </div>
-      {/* Hasil */}
-      <div style={{ background: isCustom ? "rgba(255,255,255,.08)" : `rgba(${parseInt(tema.warna.slice(1,3),16)},${parseInt(tema.warna.slice(3,5),16)},${parseInt(tema.warna.slice(5,7),16)},.15)`, border: `1.5px solid ${tema.warna}55`, borderRadius: 12, padding: "20px 22px" }}>
-        {isCustom ? (
+
+      {/* Slider (muncul hanya jika ada nilai luas) */}
+      {valid && luasEfektif > 0 && (
+        <div style={{ marginBottom: 22 }}>
+          <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 6 }}>
+            <label style={{ fontSize: "0.65rem", letterSpacing: "0.1em", textTransform: "uppercase", color: "rgba(255,255,255,.5)", fontWeight: 700 }}>Geser untuk adjust</label>
+            <span style={{ fontSize: "0.95rem", fontWeight: 800, color: tema.warna }}>{Math.round(luasEfektif)} m²</span>
+          </div>
+          <input type="range" min={10} max={1000} step={5}
+            value={Math.min(1000, Math.round(luasEfektif))}
+            onChange={e => {
+              const v = +e.target.value;
+              setPanjang(""); setLebar("");
+              setLuasManual(String(v));
+            }}
+            style={{ width: "100%", accentColor: tema.warna, cursor: "pointer" }}
+          />
+          <div style={{ display: "flex", justifyContent: "space-between", marginTop: 4, fontSize: "0.62rem", color: "rgba(255,255,255,.38)" }}>
+            <span>10 m²</span><span>1000 m²</span>
+          </div>
+        </div>
+      )}
+
+      {/* Hasil Estimasi */}
+      <div style={{ background: isCustom ? "rgba(255,255,255,.08)" : `rgba(${parseInt(tema.warna.slice(1,3),16)},${parseInt(tema.warna.slice(3,5),16)},${parseInt(tema.warna.slice(5,7),16)},.15)`, border: `1.5px solid ${valid ? tema.warna + "88" : "rgba(255,255,255,.15)"}`, borderRadius: 12, padding: "20px 22px" }}>
+        {!valid ? (
+          <div style={{ textAlign: "center", padding: "8px 0" }}>
+            <div style={{ fontSize: "1.6rem", marginBottom: 6 }}>📐</div>
+            <div style={{ fontSize: "0.82rem", color: "rgba(255,255,255,.45)" }}>Isi dimensi atau luas untuk melihat estimasi harga</div>
+          </div>
+        ) : isCustom ? (
           <div style={{ textAlign: "center" }}>
             <div style={{ fontSize: "1.5rem", marginBottom: 8 }}>👑</div>
             <div style={{ fontSize: "0.95rem", fontWeight: 700, color: "#fff" }}>Harga Konsultasi Eksklusif</div>
@@ -9332,7 +9466,12 @@ function KalkulatorLuas({ tema }) {
               </div>
               <div style={{ textAlign: "right" }}>
                 <div style={{ fontSize: "0.62rem", textTransform: "uppercase", letterSpacing: "0.1em", color: "rgba(255,255,255,.5)", fontWeight: 700, marginBottom: 4 }}>Rincian</div>
-                <div style={{ fontSize: "0.78rem", color: "rgba(255,255,255,.68)" }}>{luas} m² × {fmtRp(paket.harga)}</div>
+                <div style={{ fontSize: "0.78rem", color: "rgba(255,255,255,.68)" }}>
+                  {fromDimensi
+                    ? <>{panjang}m × {lebar}m = {luasDariDimensi.toFixed(2).replace(/\.00$/,"")} m²</>
+                    : <>{luasEfektif} m²</>
+                  } × {fmtRp(paket.harga)}
+                </div>
               </div>
             </div>
             <div style={{ borderTop: "1px solid rgba(255,255,255,.1)", paddingTop: 12 }}>
@@ -9346,6 +9485,7 @@ function KalkulatorLuas({ tema }) {
           </>
         )}
       </div>
+
       <p style={{ fontSize: "0.62rem", color: "rgba(255,255,255,.32)", marginTop: 12, lineHeight: 1.5, textAlign: "center" }}>
         * Estimasi kasar. Harga final sesuai survei lapangan, spesifikasi material, dan kondisi lahan.
       </p>
