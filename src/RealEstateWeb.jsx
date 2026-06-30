@@ -12514,21 +12514,11 @@ function VasturaFooter({ data, navigateTo, onWaOpen, showDevProfile }) {
           <div>
             {/* Logo -- diambil dari link logo yang sama dengan navbar */}
             <div style={{ marginBottom:20 }}>
-              {c.logoImage ? (
-                <img
-                  src={c.logoImage}
-                  alt={c.logoText?.replace("\n"," ") || "Vastura Grup"}
-                  style={{ height:70, maxWidth:220, objectFit:"contain", display:"block", filter:"brightness(1.05)" }}
-                />
-              ) : (
-                /* Fallback teks jika belum ada logo */
-                <div>
-                  <div style={{ fontSize:26, fontWeight:900, color:"#fff", letterSpacing:".06em", fontFamily:"'Playfair Display',serif", lineHeight:1.1 }}>
-                    <span style={{ color:accentGold }}>V</span> VASTURA
-                  </div>
-                  <div style={{ fontSize:9, fontWeight:800, color:accentGold, letterSpacing:".32em", textTransform:"uppercase", marginTop:3 }}>GRUP</div>
-                </div>
-              )}
+              <img
+                src={c.footerLogoImage || c.logoImage || VASTURA_LOGO_URL}
+                alt={c.logoText?.replace("\n"," ") || "Vastura Grup"}
+                style={{ height:70, maxWidth:220, objectFit:"contain", display:"block", filter:"brightness(1.05)" }}
+              />
             </div>
 
             {/* Deskripsi */}
@@ -14082,12 +14072,8 @@ export default function BricksyTravel() {
     const favicon = document.querySelector("link[rel='icon']") || (() => {
       const l = document.createElement("link"); l.rel = "icon"; document.head.appendChild(l); return l;
     })();
-    if (data.content.logoImage) {
-      favicon.href = data.content.logoImage;
-      favicon.type = "image/png";
-    } else {
-      favicon.href = "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✈</text></svg>";
-    }
+    favicon.href = data.content.logoImage || VASTURA_LOGO_URL;
+    favicon.type = "image/png";
   }, [data.content.logoImage]);
 
   // Sync browser tab title -- selalu satu baris, ikuti logoText
@@ -15648,15 +15634,11 @@ export default function BricksyTravel() {
                   <section className="re-contact" id="re-contact-section">
                     <div className="re-contact-grid">
                       <div className="re-slide-left">
-                        {(data.content.footerLogoImage || data.content.logoImage) ? (
-                          <img
-                            src={data.content.footerLogoImage || data.content.logoImage}
-                            alt={data.content.logoText?.replace("\n"," ") || "VASTURA GROUP"}
-                            style={{ height: 72, maxWidth: 200, objectFit: "contain", display: "block", marginBottom: 16 }}
-                          />
-                        ) : (
-                          <div className="re-contact-logo">VASTURA<br />GROUP</div>
-                        )}
+                        <img
+                          src={data.content.footerLogoImage || data.content.logoImage || VASTURA_LOGO_URL}
+                          alt={data.content.logoText?.replace("\n"," ") || "VASTURA GROUP"}
+                          style={{ height: 72, maxWidth: 200, objectFit: "contain", display: "block", marginBottom: 16 }}
+                        />
                         <p style={{ fontFamily:"'Jost',sans-serif", fontSize:".85rem", color:"var(--re-grey-md)", lineHeight:1.8, marginBottom:14 }}>
                           {data.content.email || "halo@vastura.co.id"}
                         </p>
