@@ -15591,39 +15591,16 @@ export default function BricksyTravel() {
                     <div style={{ maxWidth:1200,margin:"0 auto" }}>
                       <p className="re-about-label re-reveal" style={{ marginBottom:48 }}>Listing Aktif Kami</p>
 
-                      {[
-                        {
-                          title:"Properti Multifungsi 2.500 m² di Kota Mewah",
-                          desc:"Properti premium dengan luas bangunan 2.500 m², cocok sebagai hunian dan tempat usaha. Dilengkapi fasilitas modern dan lokasi strategis di jantung kota.",
-                          img:"https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=900&q=80&auto=format&fit=crop",
-                          imgRight:false,
-                        },
-                        {
-                          title:"Rumah Suburban Klasik 3 KT dengan Garasi dan Teras Belakang",
-                          desc:"Rumah keluarga dengan tiga kamar tidur, garasi luas, dan teras belakang asri. Lingkungan tenang dengan akses mudah ke pusat kota.",
-                          img:"https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=900&q=80&auto=format&fit=crop",
-                          imgRight:true,
-                        },
-                        {
-                          title:"Apartemen 2 KT di Pusat Kota Taman Hijau",
-                          desc:"Unit apartemen modern dua kamar tidur dengan pemandangan taman kota. Interior bergaya kontemporer, fasilitas kolam renang dan gym tersedia.",
-                          img:"https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=900&q=80&auto=format&fit=crop",
-                          imgRight:false,
-                        },
-                        {
-                          title:"Apartemen Studio di Kompleks Modern",
-                          desc:"Unit studio eksklusif di kompleks residensial terpadu. Desain minimalis fungsional dengan pencahayaan alami maksimal dan konektivitas akses transportasi.",
-                          img:"https://images.unsplash.com/photo-1536376072261-38c75010e6c9?w=900&q=80&auto=format&fit=crop",
-                          imgRight:true,
-                        },
-                      ].map((prop, i) => (
-                        <div key={i} className="re-listing-item" style={{ direction: prop.imgRight ? "rtl" : "ltr" }}>
-                          <div className={`re-listing-img-wrap ${prop.imgRight ? "re-slide-right" : "re-slide-left"} delay-${(i%3)+1}`} style={{ direction:"ltr" }}>
-                            <img src={prop.img} alt={prop.title} />
+                      {((data.temaData && data.temaData.length > 0) ? data.temaData : TEMA_DATA).map((tema, i) => {
+                        const imgRight = i % 2 === 1;
+                        return (
+                        <div key={tema.slug || tema.id || i} className="re-listing-item" style={{ direction: imgRight ? "rtl" : "ltr" }}>
+                          <div className={`re-listing-img-wrap ${imgRight ? "re-slide-right" : "re-slide-left"} delay-${(i%3)+1}`} style={{ direction:"ltr" }}>
+                            <img src={tema.img} alt={tema.nama} />
                           </div>
                           <div className={`re-listing-info re-reveal delay-${(i%3)+2}`} style={{ direction:"ltr" }}>
-                            <h3 className="re-listing-title">{prop.title}</h3>
-                            <p className="re-listing-desc">{prop.desc}</p>
+                            <h3 className="re-listing-title">{tema.nama}</h3>
+                            <p className="re-listing-desc">{tema.deskripsi}</p>
                             <button
                               className="re-btn re-btn-outline"
                               onClick={() => document.getElementById("re-contact-section")?.scrollIntoView({ behavior:"smooth" })}
@@ -15632,7 +15609,8 @@ export default function BricksyTravel() {
                             </button>
                           </div>
                         </div>
-                      ))}
+                        );
+                      })}
                     </div>
                   </section>
 
