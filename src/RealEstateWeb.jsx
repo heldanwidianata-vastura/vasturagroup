@@ -12006,12 +12006,18 @@ function FurniturDetailPage({ product, onBack, onWaOpen, formatRp }) {
 
 function SubPageCatalog({ heroColor, heroIcon, title, subtitle, breadcrumb, catalogData, onWaOpen, navigateTo, satuan }) {
   const [hoverId, setHoverId] = useState(null);
+  const [detailItem, setDetailItem] = useState(null);
 
   const formatHarga = (n) => {
     if (!n || n === 0) return "Hubungi Kami";
     const suffix = satuan ? ` / ${satuan}` : "";
     return "Mulai Rp " + Number(n).toLocaleString("id-ID") + suffix;
   };
+
+  /* Jika item dipilih → tampilkan halaman detail penuh, ganti seluruh konten grid */
+  if (detailItem) {
+    return <SubPageCatalogDetailPage item={detailItem} onBack={() => setDetailItem(null)} onWaOpen={onWaOpen} formatHarga={formatHarga} breadcrumb={breadcrumb} navigateTo={navigateTo} />;
+  }
 
   return (
     <div style={{ minHeight:"100vh", background:"#FAFAF8" }}>
@@ -12050,7 +12056,8 @@ function SubPageCatalog({ heroColor, heroIcon, title, subtitle, breadcrumb, cata
             <div key={item.id}
               style={{ background:"#fff", borderRadius:16, overflow:"hidden", boxShadow:hoverId===item.id?"0 16px 48px rgba(0,0,0,.14)":"0 4px 16px rgba(0,0,0,.07)", transition:"all .3s cubic-bezier(.4,0,.2,1)", transform:hoverId===item.id?"translateY(-6px)":"translateY(0)", cursor:"pointer", border:"1px solid #F0EDE8" }}
               onMouseEnter={()=>setHoverId(item.id)}
-              onMouseLeave={()=>setHoverId(null)}>
+              onMouseLeave={()=>setHoverId(null)}
+              onClick={()=>setDetailItem(item)}>
 
               {/* Foto */}
               <div style={{ position:"relative", height:200, overflow:"hidden", background:"#E8DCC8" }}>
@@ -12095,7 +12102,7 @@ function SubPageCatalog({ heroColor, heroIcon, title, subtitle, breadcrumb, cata
                     <div style={{ fontSize:"0.65rem", color:"#8B9A9C", letterSpacing:".06em", textTransform:"uppercase", marginBottom:2 }}>Harga</div>
                     <div style={{ fontSize:"0.9rem", fontWeight:800, color:"#8B6914" }}>{formatHarga(item.harga)}</div>
                   </div>
-                  <button onClick={()=>onWaOpen && onWaOpen({ key: "layanan", vars: { judul_layanan: item.nama } })}
+                  <button onClick={(e)=>{ e.stopPropagation(); onWaOpen && onWaOpen({ key: "layanan", vars: { judul_layanan: item.nama } }); }}
                     style={{ background:"linear-gradient(135deg,#2E3D3F,#8B6914)", color:"#fff", border:"none", borderRadius:8, padding:"9px 16px", fontSize:"0.75rem", fontWeight:700, cursor:"pointer", letterSpacing:".04em" }}>
                     Konsultasi
                   </button>
@@ -12116,6 +12123,150 @@ function SubPageCatalog({ heroColor, heroIcon, title, subtitle, breadcrumb, cata
           </button>
         </div>
       </div>
+    </div>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   SUB PAGE CATALOG — Halaman Detail Item (full page, galeri foto + request custom)
+   Dipakai oleh semua sub-halaman Interior & Eksterior (Kamar Tidur, Kamar Mandi,
+   Ruang Keluarga, Ruang Tamu, Kitchen Set, Ruang Kerja, Plafon, Pagar, Kanopi, Aluminium, dst.)
+═══════════════════════════════════════════════════════════════════ */
+function SubPageCatalogDetailPage({ item, onBack, onWaOpen, formatHarga, breadcrumb, navigateTo }) {
+  const accentGold = "#C9AA71";
+  const darkTeal   = "#2E3D3F";
+
+  useEffect(() => { window.scrollTo(0, 0); }, [item?.id]);
+
+  /* Galeri: pakai imgs[] kalau ada (multi-foto), fallback ke img tunggal */
+  const gallery = (item.imgs && item.imgs.length > 0)
+    ? item.imgs
+    : (item.img ? [{ img: item.img, label: item.nama }] : []);
+
+  const [activeImg, setActiveImg] = useState(0);
+  const mainImg = gallery[activeImg]?.img || gallery[0]?.img || "";
+
+  const handleRequestCustom = () => {
+    onWaOpen && onWaOpen({ key: "layanan", vars: { judul_layanan: `Request Custom — ${item.nama}` } });
+  };
+
+  return (
+    <div style={{ minHeight: "100vh", background: "#FAFAF7", fontFamily: "'Jost',sans-serif" }}>
+      {/* Back bar */}
+      <div style={{ background: `linear-gradient(90deg,${darkTeal},#3D5254)`, padding: "0 5%", position: "sticky", top: 0, zIndex: 50, borderBottom: `3px solid ${accentGold}` }}>
+        <button onClick={onBack} style={{ display: "flex", alignItems: "center", gap: 8, background: "none", border: "none", color: accentGold, fontWeight: 700, fontSize: "0.78rem", cursor: "pointer", padding: "13px 0", letterSpacing: ".06em", textTransform: "uppercase" }}>
+          <span style={{ fontSize: 18 }}>←</span> Kembali ke Katalog
+        </button>
+      </div>
+
+      {/* Breadcrumb */}
+      {breadcrumb && (
+        <div style={{ padding: "14px 5%", borderBottom: "1px solid #eee", background: "#fff" }}>
+          {breadcrumb.map((b, i) => (
+            <span key={i}>
+              {i > 0 && <span style={{ fontSize: "0.78rem", color: "#8B9A9C", margin: "0 8px" }}>›</span>}
+              {b.page ? (
+                <button onClick={() => navigateTo && navigateTo(b.page)} style={{ background: "none", border: "none", padding: 0, fontSize: "0.78rem", color: "#8B9A9C", cursor: "pointer" }}>{b.label}</button>
+              ) : (
+                <span style={{ fontSize: "0.78rem", color: "#8B9A9C" }}>{b.label}</span>
+              )}
+            </span>
+          ))}
+          <span style={{ fontSize: "0.78rem", color: "#8B9A9C", margin: "0 8px" }}>›</span>
+          <span style={{ fontSize: "0.78rem", color: darkTeal, fontWeight: 600 }}>{item.nama}</span>
+        </div>
+      )}
+
+      <div style={{ padding: "36px 5% 64px", maxWidth: 1100, margin: "0 auto" }}>
+        <div className="catalog-detail-grid" style={{ display: "grid", gridTemplateColumns: "1.1fr 1fr", gap: 44, alignItems: "start" }}>
+
+          {/* ── Galeri Foto ── */}
+          <div>
+            <div style={{ borderRadius: 16, overflow: "hidden", boxShadow: "0 10px 32px rgba(0,0,0,.12)", background: "#F5EDD8", aspectRatio: "4/3", position: "relative" }}>
+              {mainImg ? (
+                <img src={mainImg} alt={item.nama} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} onError={e => e.target.style.display = "none"} />
+              ) : (
+                <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 64 }}>{item.icon || "🏠"}</div>
+              )}
+              {item.style && (
+                <div style={{ position: "absolute", top: 14, left: 14, background: "rgba(46,61,63,.85)", backdropFilter: "blur(8px)", color: accentGold, fontSize: "0.65rem", fontWeight: 800, letterSpacing: ".1em", textTransform: "uppercase", padding: "4px 12px", borderRadius: 20 }}>
+                  {item.style}
+                </div>
+              )}
+            </div>
+
+            {gallery.length > 1 && (
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(72px,1fr))", gap: 10, marginTop: 12 }}>
+                {gallery.map((g, i) => (
+                  <button key={i} onClick={() => setActiveImg(i)}
+                    style={{ padding: 0, border: i === activeImg ? `2.5px solid ${accentGold}` : "2.5px solid transparent", borderRadius: 9, overflow: "hidden", cursor: "pointer", background: "none", aspectRatio: "1/1" }}>
+                    <img src={g.img} alt={g.label || `Foto ${i + 1}`} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} onError={e => e.target.parentElement.style.display = "none"} />
+                  </button>
+                ))}
+              </div>
+            )}
+            {gallery.length === 0 && (
+              <p style={{ fontSize: "0.78rem", color: "#A89070", marginTop: 10, textAlign: "center" }}>Belum ada foto untuk item ini.</p>
+            )}
+          </div>
+
+          {/* ── Info & Request Custom ── */}
+          <div>
+            <h1 style={{ fontSize: "1.85rem", fontWeight: 800, color: darkTeal, margin: "0 0 8px", fontFamily: "'Playfair Display',serif", lineHeight: 1.25 }}>
+              {item.nama}
+            </h1>
+            {item.material && (
+              <div style={{ fontSize: "0.82rem", color: "#8B9A9C", marginBottom: 10, display: "flex", alignItems: "center", gap: 6 }}>
+                <span style={{ color: accentGold }}>◆</span> {item.material}
+              </div>
+            )}
+            <div style={{ fontSize: "1.4rem", fontWeight: 800, color: "#8B6914", fontFamily: "'Playfair Display',serif", marginBottom: 18 }}>
+              {formatHarga(item.harga)}
+            </div>
+
+            {item.fitur && item.fitur.length > 0 && (
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 7, marginBottom: 20 }}>
+                {item.fitur.map((f, i) => (
+                  <span key={i} style={{ background: "#FAF7F0", border: "1px solid #E8DCC8", color: "#5A6A6C", fontSize: "0.74rem", padding: "4px 11px", borderRadius: 20 }}>{f}</span>
+                ))}
+              </div>
+            )}
+
+            {(item.desc || item.deskripsi) && (
+              <div style={{ marginBottom: 26 }}>
+                <div style={{ fontSize: "0.65rem", letterSpacing: ".1em", textTransform: "uppercase", color: accentGold, fontWeight: 800, marginBottom: 8 }}>Deskripsi</div>
+                <p style={{ fontSize: "0.92rem", color: "#5A6A6C", lineHeight: 1.85, whiteSpace: "pre-line" }}>{item.desc || item.deskripsi}</p>
+              </div>
+            )}
+
+            {/* ── Form Request Custom ── */}
+            <div style={{ background: "#fff", border: `1.5px solid #E8DCC8`, borderRadius: 14, padding: "22px 24px", marginTop: 8 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
+                <span style={{ fontSize: 18 }}>🎨</span>
+                <div style={{ fontWeight: 800, fontSize: "0.95rem", color: darkTeal }}>Request Custom</div>
+              </div>
+              <p style={{ fontSize: "0.8rem", color: "#5A6A6C", lineHeight: 1.65, marginBottom: 16 }}>
+                Ingin ukuran, material, atau desain berbeda dari contoh ini? Kirim permintaan custom langsung ke tim kami via WhatsApp.
+              </p>
+              <button onClick={handleRequestCustom}
+                style={{ width: "100%", background: "linear-gradient(135deg,#25D366,#128C7E)", color: "#fff", border: "none", borderRadius: 10, padding: "14px 24px", fontSize: "0.92rem", fontWeight: 700, cursor: "pointer", fontFamily: "'Jost',sans-serif", display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
+                💬 Request Custom via WhatsApp
+              </button>
+            </div>
+
+            <button onClick={() => onWaOpen && onWaOpen({ key: "layanan", vars: { judul_layanan: item.nama } })}
+              style={{ width: "100%", marginTop: 10, background: "#FAF7F0", color: darkTeal, border: "1.5px solid #E8DCC8", borderRadius: 10, padding: "12px 20px", fontSize: "0.85rem", fontWeight: 600, cursor: "pointer", fontFamily: "'Jost',sans-serif" }}>
+              💬 Konsultasi Item Ini
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <style>{`
+        @media (max-width: 760px) {
+          .catalog-detail-grid { grid-template-columns: 1fr !important; }
+        }
+      `}</style>
     </div>
   );
 }
@@ -12524,6 +12675,9 @@ const INT_PAGE_CRUD_KEY = {
   "interior/kitchen-set":    "intKitchenSetItems",
   "interior/ruang-kerja":    "intRuangKerjaItems",
   "interior/plafon-modern":  "intPlafonItems",
+  "eksterior/pagar":         "extPagarItems",
+  "eksterior/kanopi":        "extKanopiItems",
+  "eksterior/aluminium":     "extAluminiumItems",
 };
 
 // Konversi item Firestore (field desc, fitur string) → format SubPageCatalog (field desc, fitur array)
@@ -15674,6 +15828,15 @@ export default function BricksyTravel() {
                     { id: "int_plafon",         label: "🏛️ Plafon",          show: isAdmin },
                   ]
                 },
+                /* ── Katalog Eksterior (Pagar, Kanopi, Aluminium) ── */
+                {
+                  group: "EKSTERIOR",
+                  items: [
+                    { id: "ext_pagar",     label: "🔒 Pagar",     show: isAdmin },
+                    { id: "ext_kanopi",    label: "🏗️ Kanopi",    show: isAdmin },
+                    { id: "ext_aluminium", label: "🪟 Aluminium", show: isAdmin },
+                  ]
+                },
                 /* ── Katalog & Paket (CMS terhubung ke frontend) ── */
                 {
                   group: "KATALOG & PAKET",
@@ -15871,6 +16034,7 @@ export default function BricksyTravel() {
                     { key:"fitur",    label:"Fitur (pisah koma)", type:"text", placeholder:"contoh: Storage Built-in, Hidden Lamp" },
                   ]}
                   crudHasImage
+                  crudHasGallery={true}
                   defaultItems={CATALOG_DATA["interior/kamar-tidur"].items.map(item => ({
                     id: item.id, nama: item.nama, style: item.style || "", material: item.material || "",
                     harga: item.harga ? String(item.harga) : "",
@@ -15904,6 +16068,7 @@ export default function BricksyTravel() {
                     { key:"fitur",    label:"Fitur (pisah koma)", type:"text", placeholder:"contoh: Shower Box, LED Mirror" },
                   ]}
                   crudHasImage
+                  crudHasGallery={true}
                   defaultItems={CATALOG_DATA["interior/kamar-mandi"].items.map(item => ({
                     id: item.id, nama: item.nama, style: item.style || "", material: item.material || "",
                     harga: item.harga ? String(item.harga) : "",
@@ -15937,6 +16102,7 @@ export default function BricksyTravel() {
                     { key:"fitur",    label:"Fitur (pisah koma)", type:"text", placeholder:"contoh: Modular Sofa, TV Wall" },
                   ]}
                   crudHasImage
+                  crudHasGallery={true}
                   defaultItems={CATALOG_DATA["interior/ruang-keluarga"].items.map(item => ({
                     id: item.id, nama: item.nama, style: item.style || "", material: item.material || "",
                     harga: item.harga ? String(item.harga) : "",
@@ -15970,6 +16136,7 @@ export default function BricksyTravel() {
                     { key:"fitur",    label:"Fitur (pisah koma)", type:"text", placeholder:"contoh: Space Efficient, Art Display" },
                   ]}
                   crudHasImage
+                  crudHasGallery={true}
                   defaultItems={CATALOG_DATA["interior/ruang-tamu"].items.map(item => ({
                     id: item.id, nama: item.nama, style: item.style || "", material: item.material || "",
                     harga: item.harga ? String(item.harga) : "",
@@ -16003,6 +16170,7 @@ export default function BricksyTravel() {
                     { key:"fitur",    label:"Fitur (pisah koma)", type:"text", placeholder:"contoh: Soft Close Hinge, Granite Top" },
                   ]}
                   crudHasImage
+                  crudHasGallery={true}
                   defaultItems={CATALOG_DATA["interior/kitchen-set"].items.map(item => ({
                     id: item.id, nama: item.nama, style: item.style || "", material: item.material || "",
                     harga: item.harga ? String(item.harga) : "",
@@ -16036,6 +16204,7 @@ export default function BricksyTravel() {
                     { key:"fitur",    label:"Fitur (pisah koma)", type:"text", placeholder:"contoh: Floating Desk, Task Light" },
                   ]}
                   crudHasImage
+                  crudHasGallery={true}
                   defaultItems={CATALOG_DATA["interior/ruang-kerja"].items.map(item => ({
                     id: item.id, nama: item.nama, style: item.style || "", material: item.material || "",
                     harga: item.harga ? String(item.harga) : "",
@@ -16069,6 +16238,7 @@ export default function BricksyTravel() {
                     { key:"fitur",    label:"Fitur (pisah koma)", type:"text", placeholder:"contoh: LED Hidden Light, Bertingkat" },
                   ]}
                   crudHasImage
+                  crudHasGallery={true}
                   defaultItems={CATALOG_DATA["interior/plafon-modern"].items.map(item => ({
                     id: item.id, nama: item.nama, style: item.style || "", material: item.material || "",
                     harga: item.harga ? String(item.harga) : "",
@@ -16078,6 +16248,106 @@ export default function BricksyTravel() {
               )}
 
               {/* SETTING PAGAR RUMAH */}
+              {adminTab === "ext_pagar" && isAdmin && (
+                <SubLayananAdmin
+                  title="Pagar Rumah"
+                  icon="🔒"
+                  accentColor="#0f3460"
+                  storeKey="ext_pagar"
+                  data={data}
+                  save={save}
+                  notify={notify}
+                  uploadToCloudinary={uploadToCloudinary}
+                  pageDesc="Kelola katalog desain pagar rumah — tambah, edit, hapus kartu produk yang tampil di halaman Pagar."
+                  sections={[]}
+                  imageGroups={[]}
+                  crudKey="extPagarItems"
+                  crudLabel="Desain Pagar"
+                  crudFields={[
+                    { key:"nama",     label:"Nama Desain",  type:"text",     placeholder:"contoh: Pagar Hollow Minimalis" },
+                    { key:"style",    label:"Style / Tag",  type:"text",     placeholder:"contoh: Modern, Classic, Premium..." },
+                    { key:"material", label:"Material",     type:"text",     placeholder:"contoh: Besi Hollow 4x4cm" },
+                    { key:"harga",    label:"Harga (Rp)",   type:"text",     placeholder:"contoh: 850000" },
+                    { key:"desc",     label:"Deskripsi",    type:"textarea", placeholder:"Keunggulan dan detail desain pagar..." },
+                    { key:"fitur",    label:"Fitur (pisah koma)", type:"text", placeholder:"contoh: Anti Karat, Custom Warna" },
+                  ]}
+                  crudHasImage
+                  crudHasGallery={true}
+                  defaultItems={CATALOG_DATA["eksterior/pagar"].items.map(item => ({
+                    id: item.id, nama: item.nama, style: item.style || "", material: item.material || "",
+                    harga: item.harga ? String(item.harga) : "",
+                    desc: item.desc || "", fitur: (item.fitur||[]).join(", "), _img: item.img || "",
+                  }))}
+                />
+              )}
+
+              {/* SETTING KANOPI */}
+              {adminTab === "ext_kanopi" && isAdmin && (
+                <SubLayananAdmin
+                  title="Kanopi"
+                  icon="🏗️"
+                  accentColor="#2d6a4f"
+                  storeKey="ext_kanopi"
+                  data={data}
+                  save={save}
+                  notify={notify}
+                  uploadToCloudinary={uploadToCloudinary}
+                  pageDesc="Kelola katalog desain kanopi — tambah, edit, hapus kartu produk yang tampil di halaman Kanopi."
+                  sections={[]}
+                  imageGroups={[]}
+                  crudKey="extKanopiItems"
+                  crudLabel="Desain Kanopi"
+                  crudFields={[
+                    { key:"nama",     label:"Nama Desain",  type:"text",     placeholder:"contoh: Kanopi Polycarbonate" },
+                    { key:"style",    label:"Style / Tag",  type:"text",     placeholder:"contoh: Popular, Premium, Luxury..." },
+                    { key:"material", label:"Material",     type:"text",     placeholder:"contoh: Baja Ringan + Polycarbonate" },
+                    { key:"harga",    label:"Harga (Rp)",   type:"text",     placeholder:"contoh: 280000" },
+                    { key:"desc",     label:"Deskripsi",    type:"textarea", placeholder:"Keunggulan dan detail desain kanopi..." },
+                    { key:"fitur",    label:"Fitur (pisah koma)", type:"text", placeholder:"contoh: Tembus Cahaya, UV Protection" },
+                  ]}
+                  crudHasImage
+                  crudHasGallery={true}
+                  defaultItems={CATALOG_DATA["eksterior/kanopi"].items.map(item => ({
+                    id: item.id, nama: item.nama, style: item.style || "", material: item.material || "",
+                    harga: item.harga ? String(item.harga) : "",
+                    desc: item.desc || "", fitur: (item.fitur||[]).join(", "), _img: item.img || "",
+                  }))}
+                />
+              )}
+
+              {/* SETTING ALUMINIUM */}
+              {adminTab === "ext_aluminium" && isAdmin && (
+                <SubLayananAdmin
+                  title="Aluminium"
+                  icon="🪟"
+                  accentColor="#555b6e"
+                  storeKey="ext_aluminium"
+                  data={data}
+                  save={save}
+                  notify={notify}
+                  uploadToCloudinary={uploadToCloudinary}
+                  pageDesc="Kelola katalog produk aluminium — tambah, edit, hapus kartu produk yang tampil di halaman Aluminium."
+                  sections={[]}
+                  imageGroups={[]}
+                  crudKey="extAluminiumItems"
+                  crudLabel="Produk Aluminium"
+                  crudFields={[
+                    { key:"nama",     label:"Nama Produk",  type:"text",     placeholder:"contoh: Kusen Jendela Casement" },
+                    { key:"style",    label:"Style / Tag",  type:"text",     placeholder:"contoh: Classic, Modern, Office..." },
+                    { key:"material", label:"Material",     type:"text",     placeholder:"contoh: Aluminium 4 inch" },
+                    { key:"harga",    label:"Harga (Rp)",   type:"text",     placeholder:"contoh: 450000" },
+                    { key:"desc",     label:"Deskripsi",    type:"textarea", placeholder:"Keunggulan dan detail produk aluminium..." },
+                    { key:"fitur",    label:"Fitur (pisah koma)", type:"text", placeholder:"contoh: Rapat Udara, Easy Clean" },
+                  ]}
+                  crudHasImage
+                  crudHasGallery={true}
+                  defaultItems={CATALOG_DATA["eksterior/aluminium"].items.map(item => ({
+                    id: item.id, nama: item.nama, style: item.style || "", material: item.material || "",
+                    harga: item.harga ? String(item.harga) : "",
+                    desc: item.desc || "", fitur: (item.fitur||[]).join(", "), _img: item.img || "",
+                  }))}
+                />
+              )}
 
 
 
