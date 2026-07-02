@@ -93,7 +93,7 @@ function DashTabs({ user, allPosts, publishedCount, draftCount, data, canEdit, c
                   { label: "Pesan Masuk", value: data.messages.length, icon: "✉️", color: "#8e44ad" },
                 ].map(s => (
                   <div key={s.label} style={{ background: "rgba(255,255,255,.1)", borderRadius: 10, padding: "16px 18px", backdropFilter: "blur(6px)", borderLeft: `3px solid ${s.color}` }}>
-                    <div style={{ fontSize: "1.5rem", fontWeight: 900, color: s.color, fontFamily: "'Playfair Display',serif" }}>{s.value}</div>
+                    <div style={{ fontSize: "1.5rem", fontWeight: 900, color: s.color, fontFamily: "'Playfair Display','Noto Emoji',serif" }}>{s.value}</div>
                     <div style={{ fontSize: "0.8125rem", color: "#5A6A6C", marginTop: 2 }}>{s.icon} {s.label}</div>
                   </div>
                 ))}
@@ -144,7 +144,7 @@ function DashTabs({ user, allPosts, publishedCount, draftCount, data, canEdit, c
         {/* Top Kontributor */}
         <div style={{ background: "#fff", borderRadius: 10, overflow: "hidden", boxShadow: "0 2px 10px rgba(0,0,0,.06)" }}>
           <div style={{ padding: "16px 20px", borderBottom: "1px solid #FAF7F0", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-            <span style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.125rem", fontWeight: 800, color: "#2E3D3F" }}>Top Kontributor</span>
+            <span style={{ fontFamily: "'Playfair Display','Noto Emoji',serif", fontSize: "1.125rem", fontWeight: 800, color: "#2E3D3F" }}>Top Kontributor</span>
             <span style={{ fontSize: "0.6875rem", color: "#5A6A6C" }}>Artikel tayang</span>
           </div>
           <div style={{ padding: "8px 0" }}>
@@ -184,7 +184,7 @@ function DashTabs({ user, allPosts, publishedCount, draftCount, data, canEdit, c
         {/* Akses Cepat */}
         <div style={{ background: "#fff", borderRadius: 10, overflow: "hidden", boxShadow: "0 2px 10px rgba(0,0,0,.06)" }}>
           <div style={{ padding: "16px 20px", borderBottom: "1px solid #FAF7F0" }}>
-            <span style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.125rem", fontWeight: 800, color: "#2E3D3F" }}>Akses Cepat</span>
+            <span style={{ fontFamily: "'Playfair Display','Noto Emoji',serif", fontSize: "1.125rem", fontWeight: 800, color: "#2E3D3F" }}>Akses Cepat</span>
           </div>
           <div style={{ padding: "12px 16px", display: "flex", flexDirection: "column", gap: 8 }}>
             {[
@@ -777,7 +777,7 @@ const DEFAULT_DATA = {
     logoColor: "#111111",
     logoShadow: "0 1px 6px rgba(0,0,0,.35), 0 2px 14px rgba(0,0,0,.18)",
     loginBtnText: "LOGIN",
-    nav1: "Home", nav2: "About", nav3: "Program Affiliate", nav4: "Rumah Subsidi", nav5: "Interior", nav6: "Layanan Kami",
+    nav1: "Home", nav2: "About", nav3: "Program Affiliate", nav4: "Paket Rumah Subsidi", nav5: "Interior", nav6: "Layanan Kami",
     nav7: "Jasa Desain & RAB", nav8: "Tema Rumah",
     nav9: "Interior", nav10: "Pagar Rumah", nav11: "Kanopi", nav12: "Aluminium", nav13: "Landscape & Taman",
     servicesPageTitle: "Paket Layanan Kami",
@@ -1767,6 +1767,8 @@ const DEFAULT_DATA = {
 const GS = () => (
   <style>{`
     @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;0,900;1,700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Cinzel:wght@700;900&family=Montserrat:wght@700;800;900&family=Raleway:wght@700;800;900&family=Oswald:wght@600;700&family=Bebas+Neue&family=Lora:wght@700&family=Josefin+Sans:wght@700&family=Inter:wght@700;800;900&display=swap');
+    /* Noto Emoji: font emoji monokrom (hitam-putih) -- menggantikan seluruh emoji berwarna di seluruh halaman */
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Emoji:wght@400..700&display=swap');
 
     /* ── FORCE LIGHT MODE — kebal dark mode OS/browser (semua platform) ── */
     :root {
@@ -1824,15 +1826,15 @@ const GS = () => (
 
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
     html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
-    body{font-family:'DM Sans',sans-serif;background:#FAF7F0;color:#111111;line-height:1.6;font-size:16px}
+    body{font-family:'DM Sans','Noto Emoji',sans-serif;background:#FAF7F0;color:#111111;line-height:1.6;font-size:16px}
     ::-webkit-scrollbar{width:5px}::-webkit-scrollbar-thumb{background:rgba(201,170,113,.5);border-radius:10px}
     a{text-decoration:none;color:inherit}
     a:focus-visible,button:focus-visible{outline:2px solid #C9AA71;outline-offset:3px;border-radius:3px}
     img{max-width:100%;display:block;object-fit:cover}
-    input,textarea,select,button{font-family:'DM Sans',sans-serif}
+    input,textarea,select,button{font-family:'DM Sans','Noto Emoji',sans-serif}
     button{cursor:pointer;border:none;background:none}
-    .serif{font-family:'Cormorant Garamond',serif}
-    .display{font-family:'Playfair Display',serif}
+    .serif{font-family:'Cormorant Garamond','Noto Emoji',serif}
+    .display{font-family:'Playfair Display','Noto Emoji',serif}
     .fade-in{animation:fadeIn .4s ease}
     @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
     @keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
@@ -1865,14 +1867,14 @@ const GS = () => (
       .gal-ticker-item{width:calc(50% - 6px);height:120px}
     }
 
-    h1,h2,h3,h4,h5{font-family:'Playfair Display',serif;color:#fff;line-height:1.15;font-weight:800;letter-spacing:-.01em}
+    h1,h2,h3,h4,h5{font-family:'Playfair Display','Noto Emoji',serif;color:#fff;line-height:1.15;font-weight:800;letter-spacing:-.01em}
     h1{font-size:clamp(2rem,5vw,3.5rem)}
     h2{font-size:clamp(1.6rem,3.5vw,2.6rem)}
     h3{font-size:clamp(1.2rem,2.5vw,1.6rem)}
     p{font-size:1rem;line-height:1.75;color:rgba(255,255,255,.8)}
     small{font-size:.875rem;line-height:1.5}
 
-    .nav-link{position:relative;padding-bottom:3px;font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;font-weight:600;color:var(--re-grey-dk);transition:color .2s;font-family:'Jost',sans-serif}
+    .nav-link{position:relative;padding-bottom:3px;font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;font-weight:600;color:var(--re-grey-dk);transition:color .2s;font-family:'Jost','Noto Emoji',sans-serif}
     .nav-dropdown-panel{animation:fadeIn .18s ease}
     .nav-link::after{content:'';position:absolute;bottom:0;left:0;width:0;height:1.5px;background:#C9AA71;transition:width .3s;border-radius:2px}
     .nav-link:hover{color:var(--re-black)}
@@ -1911,11 +1913,11 @@ const GS = () => (
       *{cursor:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M5.5 3.21V20.8c0 .45.54.67.85.35l4.86-4.86a.5.5 0 0 1 .35-.15h6.87c.45 0 .67-.54.35-.85L6.35 2.85a.5.5 0 0 0-.85.36z' fill='%230891b2' stroke='%23fff' stroke-width='1'/%3E%3C/svg%3E") 5 3, auto}
     }
 
-    .logo-brand{font-family:'Playfair Display',serif;font-weight:900;font-size:1.3rem;line-height:1.1;letter-spacing:.06em;text-transform:uppercase;color:#111;text-shadow:0 1px 6px rgba(0,0,0,.35),0 2px 14px rgba(0,0,0,.18)}
-    .logo-brand-footer{font-family:'Playfair Display',serif;font-weight:900;font-size:1.15rem;line-height:1.15;letter-spacing:.06em;text-transform:uppercase;color:#111;text-shadow:0 1px 3px rgba(0,0,0,.12)}
-    .logo-brand-admin{font-family:'Playfair Display',serif;font-weight:800;font-size:.9rem;line-height:1.1;letter-spacing:.06em;text-transform:uppercase;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,.3)}
+    .logo-brand{font-family:'Playfair Display','Noto Emoji',serif;font-weight:900;font-size:1.3rem;line-height:1.1;letter-spacing:.06em;text-transform:uppercase;color:#111;text-shadow:0 1px 6px rgba(0,0,0,.35),0 2px 14px rgba(0,0,0,.18)}
+    .logo-brand-footer{font-family:'Playfair Display','Noto Emoji',serif;font-weight:900;font-size:1.15rem;line-height:1.15;letter-spacing:.06em;text-transform:uppercase;color:#111;text-shadow:0 1px 3px rgba(0,0,0,.12)}
+    .logo-brand-admin{font-family:'Playfair Display','Noto Emoji',serif;font-weight:800;font-size:.9rem;line-height:1.1;letter-spacing:.06em;text-transform:uppercase;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,.3)}
     .label-xs{font-size:.6875rem;letter-spacing:.1em;text-transform:uppercase;font-weight:600;color:rgba(255,255,255,.65)}
-    .card-title{font-family:'Playfair Display',serif;font-weight:700;font-size:1.15rem;line-height:1.3;color:#2E3D3F}
+    .card-title{font-family:'Playfair Display','Noto Emoji',serif;font-weight:700;font-size:1.15rem;line-height:1.3;color:#2E3D3F}
 
     /* ── Visibility helpers ── */
     @media(max-width:900px){.hide-md{display:none!important}}
@@ -1959,7 +1961,7 @@ const GS = () => (
     .mag-img-sm1:hover img{transform:scale(1.04)}
     .mag-card-text{grid-column:2;grid-row:2;background:linear-gradient(135deg,#2E3D3F,#3D5254);border-radius:6px;padding:16px 18px;display:flex;flex-direction:column;justify-content:space-between;min-height:155px}
     .adv-stats-row{display:flex;gap:32px;margin-bottom:28px;padding-bottom:28px;border-bottom:1px solid #eef3f7}
-    .adv-stat .num{font-family:'Playfair Display',serif;font-size:1.75rem;font-weight:900;color:#C9AA71;line-height:1;margin-bottom:3px}
+    .adv-stat .num{font-family:'Playfair Display','Noto Emoji',serif;font-size:1.75rem;font-weight:900;color:#C9AA71;line-height:1;margin-bottom:3px}
     .adv-stat .lbl{font-size:.6875rem;letter-spacing:.1em;text-transform:uppercase;color:#9A8A5A;font-weight:600}
     .adv-eyebrow{display:flex;align-items:center;gap:14px;margin-bottom:22px}
     .adv-eyebrow .ey-line{width:36px;height:1.5px;background:#C9AA71;flex-shrink:0}
@@ -2442,14 +2444,14 @@ const GS = () => (
     .art-content-inner{ padding:24px 28px 32px; }
     .art-breadcrumb{ font-size:11px; color:#888; margin-bottom:10px; }
     .art-breadcrumb span{ color:#8B6914; }
-    .art-h1{ font-size:clamp(1.25rem,2vw,1.6rem); font-weight:700; color:#111; line-height:1.35; margin-bottom:16px; font-family:'Playfair Display',serif; }
+    .art-h1{ font-size:clamp(1.25rem,2vw,1.6rem); font-weight:700; color:#111; line-height:1.35; margin-bottom:16px; font-family:'Playfair Display','Noto Emoji',serif; }
     .art-meta-row{ display:flex; align-items:center; justify-content:space-between; margin-bottom:18px; padding-bottom:16px; border-bottom:1px solid #eee; flex-wrap:wrap; gap:10px; }
     .art-author{ display:flex; align-items:center; gap:10px; }
     .art-avatar{ width:38px; height:38px; border-radius:50%; background:linear-gradient(135deg,#3D5254,#E8C96A); display:flex; align-items:center; justify-content:center; color:#fff; font-size:13px; font-weight:700; flex-shrink:0; }
     .art-actions{ display:flex; gap:6px; }
     .art-action-btn{ width:32px; height:32px; border-radius:50%; border:1px solid #ddd; background:#fff; display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:14px; transition:background .15s; }
     .art-action-btn:hover{ background:#f0f0f0; }
-    .art-excerpt{ font-size:1.0625rem; color:#333; line-height:1.85; margin-bottom:24px; font-style:italic; font-family:'Cormorant Garamond',serif; padding:14px 18px; background:#f8fafc; border-left:3px solid #8B6914; border-radius:0 6px 6px 0; }
+    .art-excerpt{ font-size:1.0625rem; color:#333; line-height:1.85; margin-bottom:24px; font-style:italic; font-family:'Cormorant Garamond','Noto Emoji',serif; padding:14px 18px; background:#f8fafc; border-left:3px solid #8B6914; border-radius:0 6px 6px 0; }
     .art-divider{ border:none; border-top:1px solid #eee; margin:28px 0; }
 
     /* Artikel Terkait */
@@ -2620,7 +2622,7 @@ const GS = () => (
     /* ── Hover float for all buttons ── */
     .re-btn {
       display:inline-flex; align-items:center; justify-content:center;
-      padding:13px 32px; font-family:'Jost',sans-serif; font-size:.8rem;
+      padding:13px 32px; font-family:'Jost','Noto Emoji',sans-serif; font-size:.8rem;
       letter-spacing:.2em; text-transform:uppercase; font-weight:600;
       border:none; cursor:pointer;
       transition:transform .25s cubic-bezier(.34,1.56,.64,1), box-shadow .25s ease, background .2s;
@@ -2716,7 +2718,7 @@ const GS = () => (
       overflow:hidden;
     }
     .re-hero-eyebrow {
-      font-family:'Jost',sans-serif; font-size:.65rem; letter-spacing:.28em;
+      font-family:'Jost','Noto Emoji',sans-serif; font-size:.65rem; letter-spacing:.28em;
       text-transform:uppercase; color:rgba(255,255,255,.7); margin-bottom:18px;
       display:flex; align-items:center; gap:14px;
     }
@@ -2725,7 +2727,7 @@ const GS = () => (
       background:linear-gradient(90deg,rgba(255,255,255,.6),transparent);
     }
     .re-hero-h1 {
-      font-family:'Cormorant Upright',serif; font-size:clamp(2.8rem,6.5vw,5rem);
+      font-family:'Cormorant Upright','Noto Emoji',serif; font-size:clamp(2.8rem,6.5vw,5rem);
       font-weight:300; color:#fff; line-height:1.08; letter-spacing:-.01em;
       margin-bottom:28px;
     }
@@ -2733,11 +2735,11 @@ const GS = () => (
     /* ── About Section ── */
     .re-about { background:var(--re-white); padding:100px 6%; text-align:center; position:relative; overflow:hidden; }
     .re-about-label {
-      font-family:'Jost',sans-serif; font-size:.65rem; letter-spacing:.28em;
+      font-family:'Jost','Noto Emoji',sans-serif; font-size:.65rem; letter-spacing:.28em;
       text-transform:uppercase; color:var(--re-grey-md); margin-bottom:24px;
     }
     .re-about-h2 {
-      font-family:'Cormorant Upright',serif; font-size:clamp(1.5rem,3.5vw,2.5rem);
+      font-family:'Cormorant Upright','Noto Emoji',serif; font-size:clamp(1.5rem,3.5vw,2.5rem);
       font-weight:500; color:var(--re-black); line-height:1.35; max-width:680px;
       margin:0 auto 20px;
     }
@@ -2756,7 +2758,7 @@ const GS = () => (
       text-align:center; padding:0 8%;
     }
     .re-quote-text {
-      font-family:'Cormorant Upright',serif; font-size:clamp(1.4rem,3.2vw,2.2rem);
+      font-family:'Cormorant Upright','Noto Emoji',serif; font-size:clamp(1.4rem,3.2vw,2.2rem);
       font-weight:300; color:#fff; line-height:1.55; max-width:680px;
     }
 
@@ -2776,15 +2778,15 @@ const GS = () => (
       background:var(--re-white);
     }
     .re-listing-title {
-      font-family:'Cormorant Upright',serif; font-size:clamp(1.2rem,2.5vw,1.9rem);
+      font-family:'Cormorant Upright','Noto Emoji',serif; font-size:clamp(1.2rem,2.5vw,1.9rem);
       font-weight:600; color:var(--re-black); line-height:1.25; margin-bottom:14px;
     }
-    .re-listing-desc { font-family:'Jost',sans-serif; font-size:.875rem; color:var(--re-grey-md); line-height:1.8; margin-bottom:28px; }
+    .re-listing-desc { font-family:'Jost','Noto Emoji',sans-serif; font-size:.875rem; color:var(--re-grey-md); line-height:1.8; margin-bottom:28px; }
 
     /* ── Services ── */
     .re-services { background:var(--re-white); padding:80px 6%; }
     .re-services-h2 {
-      font-family:'Cormorant Upright',serif; font-size:clamp(1.5rem,3vw,2.25rem);
+      font-family:'Cormorant Upright','Noto Emoji',serif; font-size:clamp(1.5rem,3vw,2.25rem);
       font-weight:600; text-align:center; color:var(--re-black); margin-bottom:56px;
     }
     .re-services-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:24px; }
@@ -2796,24 +2798,24 @@ const GS = () => (
       background:var(--re-white); padding:20px 22px;
       border:1px solid var(--re-grey-lt); border-top:none;
     }
-    .re-service-num { font-family:'Jost',sans-serif; font-size:.65rem; letter-spacing:.18em; color:var(--re-grey-md); margin-bottom:6px; }
-    .re-service-title { font-family:'Jost',sans-serif; font-size:.875rem; font-weight:700; color:var(--re-black); text-transform:uppercase; letter-spacing:.1em; margin-bottom:8px; }
-    .re-service-desc { font-family:'Jost',sans-serif; font-size:.8rem; color:var(--re-grey-md); line-height:1.7; }
+    .re-service-num { font-family:'Jost','Noto Emoji',sans-serif; font-size:.65rem; letter-spacing:.18em; color:var(--re-grey-md); margin-bottom:6px; }
+    .re-service-title { font-family:'Jost','Noto Emoji',sans-serif; font-size:.875rem; font-weight:700; color:var(--re-black); text-transform:uppercase; letter-spacing:.1em; margin-bottom:8px; }
+    .re-service-desc { font-family:'Jost','Noto Emoji',sans-serif; font-size:.8rem; color:var(--re-grey-md); line-height:1.7; }
 
     /* ── Contact/Footer ── */
     .re-contact { background:var(--re-white); padding:80px 6%; }
     .re-contact-grid { max-width:1100px; margin:0 auto; display:grid; grid-template-columns:1fr 1.2fr; gap:80px; align-items:start; }
-    .re-contact-logo { font-family:'Cormorant Upright',serif; font-size:clamp(2rem,4vw,3rem); font-weight:300; color:var(--re-black); line-height:1.1; margin-bottom:28px; }
-    .re-contact-label { font-family:'Jost',sans-serif; font-size:.6rem; letter-spacing:.22em; text-transform:uppercase; color:var(--re-grey-md); margin-bottom:8px; }
-    .re-contact-val { font-family:'Jost',sans-serif; font-size:.9rem; color:var(--re-grey-dk); line-height:1.8; margin-bottom:18px; }
-    .re-contact-note { font-family:'Jost',sans-serif; font-size:.8rem; color:var(--re-grey-md); font-style:italic; }
+    .re-contact-logo { font-family:'Cormorant Upright','Noto Emoji',serif; font-size:clamp(2rem,4vw,3rem); font-weight:300; color:var(--re-black); line-height:1.1; margin-bottom:28px; }
+    .re-contact-label { font-family:'Jost','Noto Emoji',sans-serif; font-size:.6rem; letter-spacing:.22em; text-transform:uppercase; color:var(--re-grey-md); margin-bottom:8px; }
+    .re-contact-val { font-family:'Jost','Noto Emoji',sans-serif; font-size:.9rem; color:var(--re-grey-dk); line-height:1.8; margin-bottom:18px; }
+    .re-contact-note { font-family:'Jost','Noto Emoji',sans-serif; font-size:.8rem; color:var(--re-grey-md); font-style:italic; }
     .re-closing-hero { position:relative; height:460px; overflow:hidden; }
     .re-closing-hero img { width:100%; height:100%; object-fit:cover; }
     .re-closing-hero-overlay { position:absolute; inset:0; background:rgba(14,12,10,.5); }
     .re-closing-content { position:absolute; inset:0; display:flex; flex-direction:column; justify-content:flex-end; padding:48px 6%; }
-    .re-closing-label { font-family:'Jost',sans-serif; font-size:.65rem; letter-spacing:.22em; text-transform:uppercase; color:rgba(255,255,255,.6); margin-bottom:12px; }
-    .re-closing-h2 { font-family:'Cormorant Upright',serif; font-size:clamp(2rem,5vw,3.5rem); font-weight:300; color:#fff; line-height:1.1; }
-    .re-footer-bar { background:var(--re-black); padding:20px 6%; display:flex; justify-content:space-between; align-items:center; font-family:'Jost',sans-serif; font-size:.75rem; color:rgba(255,255,255,.45); letter-spacing:.05em; }
+    .re-closing-label { font-family:'Jost','Noto Emoji',sans-serif; font-size:.65rem; letter-spacing:.22em; text-transform:uppercase; color:rgba(255,255,255,.6); margin-bottom:12px; }
+    .re-closing-h2 { font-family:'Cormorant Upright','Noto Emoji',serif; font-size:clamp(2rem,5vw,3.5rem); font-weight:300; color:#fff; line-height:1.1; }
+    .re-footer-bar { background:var(--re-black); padding:20px 6%; display:flex; justify-content:space-between; align-items:center; font-family:'Jost','Noto Emoji',sans-serif; font-size:.75rem; color:rgba(255,255,255,.45); letter-spacing:.05em; }
 
     /* ── Responsive ── */
     @media(max-width:900px) {
@@ -3048,7 +3050,7 @@ function RichRenderer({ blocks }) {
         );
         if (b.type === "quote") return (
           <blockquote key={i} style={{ borderLeft: "3px solid #8B6914", paddingLeft: 22, margin: "10px 0" }}>
-            <p style={{ fontSize: "1.125rem", fontStyle: "italic", color: "#2E3D3F", lineHeight: 1.75, fontFamily: "'Cormorant Garamond',serif" }}>{b.value}</p>
+            <p style={{ fontSize: "1.125rem", fontStyle: "italic", color: "#2E3D3F", lineHeight: 1.75, fontFamily: "'Cormorant Garamond','Noto Emoji',serif" }}>{b.value}</p>
           </blockquote>
         );
         if (b.type === "embed_instagram") return (
@@ -3274,7 +3276,7 @@ function RichParagraphEditor({ value, onChange, placeholder = "Write your conten
           style={{
             minHeight: 220, padding: "16px 18px", fontSize: 14, color: "#2E3D3F",
             lineHeight: 1.85, outline: "none", background: "#fff",
-            fontFamily: "'Calibri', Arial, sans-serif",
+            fontFamily: "'Calibri', Arial,'Noto Emoji', sans-serif",
             borderRadius: "0 0 6px 6px",
           }}
         />
@@ -3458,7 +3460,7 @@ function CMSEditor({ post, onSave, onCancel, section, onSectionChange, user, not
             <div style={{ textAlign: "center", marginBottom: 8 }}>
               <span style={{ fontSize: 32 }}>🚀</span>
             </div>
-            <h2 style={{ fontSize: 20, fontWeight: 800, color: "#2E3D3F", textAlign: "center", marginBottom: 6, fontFamily: "'Playfair Display',serif" }}>
+            <h2 style={{ fontSize: 20, fontWeight: 800, color: "#2E3D3F", textAlign: "center", marginBottom: 6, fontFamily: "'Playfair Display','Noto Emoji',serif" }}>
               Pilih Tujuan Publish
             </h2>
             <p style={{ fontSize: 13, color: "#5A6A6C", textAlign: "center", marginBottom: 24, lineHeight: 1.6 }}>
@@ -3535,7 +3537,7 @@ function CMSEditor({ post, onSave, onCancel, section, onSectionChange, user, not
             placeholder="Masukkan judul artikel di sini..."
             rows={2}
             ref={autoGrowTextarea}
-            style={{ width: "100%", fontSize: 28, fontFamily: "'Cormorant Garamond',serif", fontWeight: 600,
+            style={{ width: "100%", fontSize: 28, fontFamily: "'Cormorant Garamond','Noto Emoji',serif", fontWeight: 600,
               color: "#2E3D3F", border: "none", outline: "none", borderBottom: "2px solid #F5EDD8",
               paddingBottom: 14, marginBottom: 24, background: "transparent",
               resize: "none", overflow: "hidden", lineHeight: 1.3, boxSizing: "border-box",
@@ -3878,7 +3880,7 @@ function PostCard({ post, onClick, view = "grid" }) {
       )}
       <div style={{ padding: "14px 16px 14px 0", flex: 1 }}>
         {post.category && <span className="label-xs" style={{ color: "#8B6914" }}>{post.category}</span>}
-        <h3 className="post-card-title" style={{ fontFamily: "'Playfair Display',serif", fontWeight: 700,
+        <h3 className="post-card-title" style={{ fontFamily: "'Playfair Display','Noto Emoji',serif", fontWeight: 700,
           fontSize: "1.1rem", color: "#2E3D3F", margin: "6px 0 8px", lineHeight: 1.35, transition: "color .2s",
           display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>{post.title}</h3>
         <p style={{ fontSize: "0.875rem", color: "#3D5254", lineHeight: 1.65, marginBottom: 10 }}>
@@ -3905,7 +3907,7 @@ function PostCard({ post, onClick, view = "grid" }) {
           {post.badge && <span style={{ fontSize: "0.6875rem", background: "#fff3cd", color: "#7a5c00", padding: "2px 9px", borderRadius: 10, fontWeight: 600, letterSpacing: ".03em" }}>{post.badge}</span>}
           <span style={{ fontSize: "0.75rem", color: "#5A6A6C" }}>{formatDate(post.date)}</span>
         </div>
-        <h3 className="post-card-title" style={{ fontFamily: "'Playfair Display',serif", fontWeight: 700,
+        <h3 className="post-card-title" style={{ fontFamily: "'Playfair Display','Noto Emoji',serif", fontWeight: 700,
           fontSize: "1.15rem", color: "#2E3D3F", marginBottom: 10, lineHeight: 1.35, transition: "color .2s",
           display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>{post.title}</h3>
         <p style={{ fontSize: "0.875rem", color: "#3D5254", lineHeight: 1.7 }}>
@@ -4201,7 +4203,7 @@ function ArticleDetail({ post, onBack, allPosts = [], onReadPost }) {
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
                 {[{ v: "200+", l: "Destinasi" }, { v: "5★", l: "Rating" }, { v: "1000+", l: "Klien" }, { v: "10+", l: "Tahun" }].map(s => (
                   <div key={s.l} style={{ textAlign: "center" }}>
-                    <div style={{ fontSize: 16, fontWeight: 900, color: "#fff", fontFamily: "'Playfair Display',serif" }}>{s.v}</div>
+                    <div style={{ fontSize: 16, fontWeight: 900, color: "#fff", fontFamily: "'Playfair Display','Noto Emoji',serif" }}>{s.v}</div>
                     <div style={{ fontSize: 10, color: "rgba(255,255,255,.65)" }}>{s.l}</div>
                   </div>
                 ))}
@@ -4371,7 +4373,7 @@ function SectionPage({ section, posts, onReadPost }) {
                     style={{ display: "flex", gap: 12, padding: "10px 20px", cursor: "pointer", borderBottom: "1px solid #FAF7F0", transition: "background .15s" }}
                     onMouseEnter={e => e.currentTarget.style.background = "#FAF7F0"}
                     onMouseLeave={e => e.currentTarget.style.background = "transparent"}>
-                    <span style={{ fontSize: 22, fontWeight: 700, color: i < 3 ? "#e74c3c" : "#A89070", fontFamily: "'Cormorant Garamond',serif", lineHeight: 1, minWidth: 24 }}>{i + 1}</span>
+                    <span style={{ fontSize: 22, fontWeight: 700, color: i < 3 ? "#e74c3c" : "#A89070", fontFamily: "'Cormorant Garamond','Noto Emoji',serif", lineHeight: 1, minWidth: 24 }}>{i + 1}</span>
                     <span style={{ fontSize: 13, color: "#2E3D3F", lineHeight: 1.5, fontWeight: 400 }}>{p.title}</span>
                   </div>
                 ))}
@@ -4441,7 +4443,7 @@ function EventWeddingCustomCardWide({ svc, onDetail, onWaOpen }) {
         background: gradientBg,
         display: "flex", flexDirection: isMobile ? "column" : "row",
         minHeight: isMobile ? "auto" : 280,
-        fontFamily: "'DM Sans',sans-serif", position: "relative", overflow: "visible",
+        fontFamily: "'DM Sans','Noto Emoji',sans-serif", position: "relative", overflow: "visible",
       }}>
       <div style={{ position: "absolute", right: -60, top: -60, width: 240, height: 240, borderRadius: "50%", background: "rgba(255,255,255,.06)", pointerEvents: "none" }} />
       <div style={{ position: "absolute", right: 100, bottom: -80, width: 180, height: 180, borderRadius: "50%", background: "rgba(255,255,255,.04)", pointerEvents: "none" }} />
@@ -4456,7 +4458,7 @@ function EventWeddingCustomCardWide({ svc, onDetail, onWaOpen }) {
       {/* Content */}
       <div style={{ flex: 1, padding: isMobile ? "22px 20px 24px" : "32px 40px", display: "flex", flexDirection: "column", justifyContent: "center", position: "relative", zIndex: 1 }}>
         <div style={{ fontSize: "2rem", marginBottom: 8 }}>{icon}</div>
-        <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: isMobile ? "1.4rem" : "clamp(1.4rem,2.5vw,2rem)", fontWeight: 900, color: "#fff", lineHeight: 1.1, marginBottom: 6 }}>{svc.title}</h2>
+        <h2 style={{ fontFamily: "'Playfair Display','Noto Emoji',serif", fontSize: isMobile ? "1.4rem" : "clamp(1.4rem,2.5vw,2rem)", fontWeight: 900, color: "#fff", lineHeight: 1.1, marginBottom: 6 }}>{svc.title}</h2>
         {svc.tagline && <div style={{ fontSize: "0.8125rem", color: "rgba(255,255,255,.65)", fontWeight: 600, letterSpacing: ".04em", marginBottom: 14, fontStyle: "italic" }}>{svc.tagline}</div>}
         <p style={{ fontSize: "0.9375rem", color: "rgba(255,255,255,.80)", lineHeight: 1.75, marginBottom: 20 }}>{svc.description}</p>
         <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 24 }}>
@@ -4470,7 +4472,7 @@ function EventWeddingCustomCardWide({ svc, onDetail, onWaOpen }) {
         <div style={{ display: "flex", alignItems: isMobile ? "stretch" : "center", gap: 12, flexDirection: isMobile ? "column" : "row", flexWrap: "wrap" }}>
           <div style={{ marginBottom: isMobile ? 4 : 0 }}>
             <div style={{ fontSize: "0.625rem", color: "rgba(255,255,255,.55)", fontWeight: 700, textTransform: "uppercase", letterSpacing: ".1em", marginBottom: 2 }}>Harga</div>
-            <div style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.5rem", fontWeight: 900, color: "#fff" }}>{(()=>{ const uPt=(svc.paketTypes||[]).find(pt=>pt.id===(svc.utamaTipeId||svc.paketTypes?.[0]?.id)); const rp=uPt?.price||svc.price; return formatRp(rp)||rp; })()}</div>
+            <div style={{ fontFamily: "'Playfair Display','Noto Emoji',serif", fontSize: "1.5rem", fontWeight: 900, color: "#fff" }}>{(()=>{ const uPt=(svc.paketTypes||[]).find(pt=>pt.id===(svc.utamaTipeId||svc.paketTypes?.[0]?.id)); const rp=uPt?.price||svc.price; return formatRp(rp)||rp; })()}</div>
             <div style={{ fontSize: "0.6875rem", color: "rgba(255,255,255,.6)", fontStyle: "italic" }}>{svc.priceNote}</div>
           </div>
           <button onClick={onDetail}
@@ -4523,7 +4525,7 @@ function EventWeddingPackageCard({ svc, onDetail, onWaOpen, isWide, categoryPack
           background: "#fff", borderRadius: 16, overflow: "visible",
           boxShadow: hovered ? "0 20px 56px rgba(13,59,102,.2)" : "0 4px 24px rgba(13,59,102,.1)",
           border: `2px solid ${hovered ? ac : svc.highlight ? ac + "80" : "#e8f4f8"}`,
-          fontFamily: "'DM Sans',sans-serif", transition: "all .3s cubic-bezier(.22,1,.36,1)",
+          fontFamily: "'DM Sans','Noto Emoji',sans-serif", transition: "all .3s cubic-bezier(.22,1,.36,1)",
           transform: hovered ? "translateY(-4px)" : "none",
           display: "flex", flexDirection: isMobile ? "column" : "row",
           minHeight: isMobile ? "auto" : 260,
@@ -4551,7 +4553,7 @@ function EventWeddingPackageCard({ svc, onDetail, onWaOpen, isWide, categoryPack
             </div>
           )}
           <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, padding: "28px 16px 14px", background: "linear-gradient(to top, rgba(0,0,0,.7) 0%, transparent 100%)" }}>
-            <h3 style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.2rem", fontWeight: 700, color: "#fff", lineHeight: 1.2, textShadow: "0 2px 12px rgba(0,0,0,.8)" }}>{svc.title}</h3>
+            <h3 style={{ fontFamily: "'Playfair Display','Noto Emoji',serif", fontSize: "1.2rem", fontWeight: 700, color: "#fff", lineHeight: 1.2, textShadow: "0 2px 12px rgba(0,0,0,.8)" }}>{svc.title}</h3>
           </div>
         </div>
         {/* Konten kanan */}
@@ -4583,7 +4585,7 @@ function EventWeddingPackageCard({ svc, onDetail, onWaOpen, isWide, categoryPack
               <div>
                 <p style={{ color: "rgba(255,255,255,.65)", fontSize: "0.5625rem", fontWeight: 700, letterSpacing: ".12em", textTransform: "uppercase", marginBottom: 3 }}>Harga Mulai Dari</p>
                 <div style={{ display: "flex", alignItems: "baseline", gap: 4 }}>
-                  <span style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.75rem", fontWeight: 900, color: "#fff", textShadow: "0 2px 8px rgba(0,0,0,.3)" }}>{(()=>{ const uPt=(svc.paketTypes||[]).find(pt=>pt.id===(svc.utamaTipeId||svc.paketTypes?.[0]?.id)); const rp=uPt?.price||svc.price; return formatRp(rp)||rp; })()}</span>
+                  <span style={{ fontFamily: "'Playfair Display','Noto Emoji',serif", fontSize: "1.75rem", fontWeight: 900, color: "#fff", textShadow: "0 2px 8px rgba(0,0,0,.3)" }}>{(()=>{ const uPt=(svc.paketTypes||[]).find(pt=>pt.id===(svc.utamaTipeId||svc.paketTypes?.[0]?.id)); const rp=uPt?.price||svc.price; return formatRp(rp)||rp; })()}</span>
                   <span style={{ color: "rgba(255,255,255,.65)", fontSize: "0.75rem" }}>{svc.priceNote}</span>
                 </div>
               </div>
@@ -4612,7 +4614,7 @@ function EventWeddingPackageCard({ svc, onDetail, onWaOpen, isWide, categoryPack
                       <span key={pt.id} style={{ display: "flex", alignItems: "center", gap: 4, padding: "5px 9px", borderRadius: 20, boxSizing: "border-box", border: `1.5px solid ${isUtama ? ac : ac + "40"}`, background: isUtama ? `${ac}12` : "#fff", fontSize: "0.6875rem", fontWeight: 600, color: "#2E3D3F", minWidth: 0, maxWidth: "100%", flexShrink: 1 }}>
                         {isUtama && <span style={{ fontSize: "0.4rem", fontWeight: 800, letterSpacing: ".05em", textTransform: "uppercase", padding: "1px 5px", borderRadius: 8, background: "#E8C96A", color: "#2E3D3F", flexShrink: 0 }}>UTAMA</span>}
                         <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{pt.name}</span>
-                        {pt.price && <span style={{ fontFamily: "'Playfair Display',serif", fontSize: "0.625rem", fontWeight: 700, color: ac, flexShrink: 0 }}>{isContact ? "Konsultasi" : formatRp(pt.price) || pt.price}</span>}
+                        {pt.price && <span style={{ fontFamily: "'Playfair Display','Noto Emoji',serif", fontSize: "0.625rem", fontWeight: 700, color: ac, flexShrink: 0 }}>{isContact ? "Konsultasi" : formatRp(pt.price) || pt.price}</span>}
                       </span>
                     );
                   })}
@@ -4632,7 +4634,7 @@ function EventWeddingPackageCard({ svc, onDetail, onWaOpen, isWide, categoryPack
       style={{ background: "#fff", borderRadius: 16, overflow: "visible",
         boxShadow: hovered ? "0 16px 48px rgba(46,61,63,.18)" : "0 4px 20px rgba(13,59,102,.09)",
         border: `2px solid ${hovered ? ac : svc.highlight ? ac + "80" : "transparent"}`,
-        fontFamily: "'DM Sans',sans-serif", transition: "all .3s cubic-bezier(.22,1,.36,1)",
+        fontFamily: "'DM Sans','Noto Emoji',sans-serif", transition: "all .3s cubic-bezier(.22,1,.36,1)",
         transform: hovered ? "translateY(-5px)" : "none", position: "relative" }}>
 
       {/* Hero image with overlay title */}
@@ -4659,7 +4661,7 @@ function EventWeddingPackageCard({ svc, onDetail, onWaOpen, isWide, categoryPack
           </div>
         )}
         <div style={{ position: "absolute", bottom: 12, left: 14, right: 14 }}>
-          <h3 style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.0625rem", fontWeight: 700, color: "#fff", lineHeight: 1.2, marginBottom: 2, textShadow: "0 2px 12px rgba(0,0,0,.8), 0 1px 4px rgba(0,0,0,.6)" }}>{svc.title}</h3>
+          <h3 style={{ fontFamily: "'Playfair Display','Noto Emoji',serif", fontSize: "1.0625rem", fontWeight: 700, color: "#fff", lineHeight: 1.2, marginBottom: 2, textShadow: "0 2px 12px rgba(0,0,0,.8), 0 1px 4px rgba(0,0,0,.6)" }}>{svc.title}</h3>
         </div>
       </div>
 
@@ -4705,9 +4707,9 @@ function EventWeddingPackageCard({ svc, onDetail, onWaOpen, isWide, categoryPack
               const utamaPt = (svc.paketTypes||[]).find(pt => pt.id === (svc.utamaTipeId || svc.paketTypes?.[0]?.id)); const rawPrice = utamaPt?.price || svc.price;
               const isContact = String(rawPrice || "").toLowerCase().includes("hubungi");
               return isContact ? (
-                <span style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.2rem", fontWeight: 700, color: "#fff" }}>Hubungi Kami</span>
+                <span style={{ fontFamily: "'Playfair Display','Noto Emoji',serif", fontSize: "1.2rem", fontWeight: 700, color: "#fff" }}>Hubungi Kami</span>
               ) : (
-                <span style={{ fontFamily: "'Playfair Display',serif", fontSize: "clamp(1.1rem,4vw,1.5rem)", fontWeight: 900, color: "#fff", lineHeight: 1, textShadow: "0 2px 8px rgba(0,0,0,.3)" }}>{formatRp(rawPrice) || rawPrice}</span>
+                <span style={{ fontFamily: "'Playfair Display','Noto Emoji',serif", fontSize: "clamp(1.1rem,4vw,1.5rem)", fontWeight: 900, color: "#fff", lineHeight: 1, textShadow: "0 2px 8px rgba(0,0,0,.3)" }}>{formatRp(rawPrice) || rawPrice}</span>
               );
             })()}
             <span style={{ color: "rgba(255,255,255,.65)", fontSize: "0.75rem" }}>{svc.priceNote}</span>
@@ -4728,7 +4730,7 @@ function EventWeddingPackageCard({ svc, onDetail, onWaOpen, isWide, categoryPack
                 <span key={pt.id} style={{ display: "flex", alignItems: "center", gap: 4, padding: "5px 9px", borderRadius: 20, boxSizing: "border-box", border: `1.5px solid ${isUtama ? ac : ac + "40"}`, background: isUtama ? `${ac}12` : "#fff", fontSize: "0.6875rem", fontWeight: 600, color: "#2E3D3F", minWidth: 0, maxWidth: "100%", flexShrink: 1 }}>
                   {isUtama && <span style={{ fontSize: "0.4rem", fontWeight: 800, letterSpacing: ".05em", textTransform: "uppercase", padding: "1px 5px", borderRadius: 8, background: "#E8C96A", color: "#2E3D3F", flexShrink: 0 }}>UTAMA</span>}
                   <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{pt.name}</span>
-                  {pt.price && <span style={{ fontFamily: "'Playfair Display',serif", fontSize: "0.625rem", fontWeight: 700, color: ac, flexShrink: 0 }}>{isContact ? "Konsultasi" : formatRp(pt.price) || pt.price}</span>}
+                  {pt.price && <span style={{ fontFamily: "'Playfair Display','Noto Emoji',serif", fontSize: "0.625rem", fontWeight: 700, color: ac, flexShrink: 0 }}>{isContact ? "Konsultasi" : formatRp(pt.price) || pt.price}</span>}
                 </span>
               );
             })}
@@ -4771,7 +4773,7 @@ function TravelPackageCardWide({ svc, onDetail, onWaOpen }) {
         transform: hovered ? "translateY(-4px)" : "none",
         display: "flex", flexDirection: isMobile ? "column" : "row",
         minHeight: isMobile ? "auto" : 260,
-        fontFamily: "'DM Sans',sans-serif",
+        fontFamily: "'DM Sans','Noto Emoji',sans-serif",
       }}>
       {/* Image */}
       <div onClick={onDetail} style={{ position: "relative", width: isMobile ? "100%" : 340, height: isMobile ? 210 : "auto", flexShrink: 0, overflow: "hidden", cursor: "pointer" }}>
@@ -4788,7 +4790,7 @@ function TravelPackageCardWide({ svc, onDetail, onWaOpen }) {
       {/* Content */}
       <div style={{ flex: 1, padding: isMobile ? "20px 18px 24px" : "28px 36px", display: "flex", flexDirection: "column", justifyContent: "center", gap: 0 }}>
         <div style={{ display: "flex", alignItems: isMobile ? "flex-start" : "center", flexDirection: isMobile ? "column" : "row", gap: isMobile ? 6 : 14, marginBottom: 10 }}>
-          <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: isMobile ? "1.4rem" : "1.75rem", fontWeight: 900, color: "#2E3D3F", lineHeight: 1.1, margin: 0 }}>{svc.title}</h2>
+          <h2 style={{ fontFamily: "'Playfair Display','Noto Emoji',serif", fontSize: isMobile ? "1.4rem" : "1.75rem", fontWeight: 900, color: "#2E3D3F", lineHeight: 1.1, margin: 0 }}>{svc.title}</h2>
           <span style={{ fontSize: "0.75rem", background: ac + "18", color: ac, borderRadius: 20, padding: "4px 14px", fontWeight: 700, letterSpacing: ".05em" }}>{svc.tagline}</span>
         </div>
         <p style={{ fontSize: "0.9375rem", color: "#5A6A6C", lineHeight: 1.75, marginBottom: 18 }}>{svc.description}</p>
@@ -4803,7 +4805,7 @@ function TravelPackageCardWide({ svc, onDetail, onWaOpen }) {
         <div style={{ display: "flex", alignItems: isMobile ? "stretch" : "center", flexDirection: isMobile ? "column" : "row", gap: 12, flexWrap: "wrap" }}>
           <div style={{ marginBottom: isMobile ? 4 : 0 }}>
             <div style={{ fontSize: "0.625rem", color: "#5A6A6C", fontWeight: 700, textTransform: "uppercase", letterSpacing: ".08em", marginBottom: 2 }}>Harga</div>
-            <div style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.5rem", fontWeight: 900, color: "#2E3D3F" }}>{(()=>{ const uPt=(svc.paketTypes||[]).find(pt=>pt.id===(svc.utamaTipeId||svc.paketTypes?.[0]?.id)); const rp=uPt?.price||svc.price; return formatRp(rp)||rp; })()}</div>
+            <div style={{ fontFamily: "'Playfair Display','Noto Emoji',serif", fontSize: "1.5rem", fontWeight: 900, color: "#2E3D3F" }}>{(()=>{ const uPt=(svc.paketTypes||[]).find(pt=>pt.id===(svc.utamaTipeId||svc.paketTypes?.[0]?.id)); const rp=uPt?.price||svc.price; return formatRp(rp)||rp; })()}</div>
             <div style={{ fontSize: "0.6875rem", color: "#5A6A6C", fontStyle: "italic" }}>{svc.priceNote}</div>
           </div>
           <button onClick={onDetail}
@@ -4846,7 +4848,7 @@ function TravelPackageCard({ svc, onDetail, onWaOpen, isWide }) {
           background: "#fff", borderRadius: 16, overflow: "visible",
           boxShadow: hovered ? "0 20px 56px rgba(13,59,102,.2)" : "0 4px 24px rgba(13,59,102,.1)",
           border: `2px solid ${hovered ? ac : svc.highlight ? ac + "80" : "#e8f4f8"}`,
-          fontFamily: "'DM Sans',sans-serif", transition: "all .3s cubic-bezier(.22,1,.36,1)",
+          fontFamily: "'DM Sans','Noto Emoji',sans-serif", transition: "all .3s cubic-bezier(.22,1,.36,1)",
           transform: hovered ? "translateY(-4px)" : "none",
           display: "flex", flexDirection: isMobile ? "column" : "row",
           minHeight: isMobile ? "auto" : 280,
@@ -4871,7 +4873,7 @@ function TravelPackageCard({ svc, onDetail, onWaOpen, isWide }) {
           )}
           {/* Judul di atas gambar bawah kiri */}
           <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, padding: "32px 16px 16px", background: "linear-gradient(to top, rgba(0,0,0,.72) 0%, transparent 100%)" }}>
-            <h3 style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.25rem", fontWeight: 700, color: "#fff", lineHeight: 1.2, marginBottom: 3, textShadow: "0 2px 12px rgba(0,0,0,.8)" }}>{svc.title}</h3>
+            <h3 style={{ fontFamily: "'Playfair Display','Noto Emoji',serif", fontSize: "1.25rem", fontWeight: 700, color: "#fff", lineHeight: 1.2, marginBottom: 3, textShadow: "0 2px 12px rgba(0,0,0,.8)" }}>{svc.title}</h3>
             {svc.tagline && <p style={{ fontSize: "0.75rem", color: "rgba(255,255,255,.85)", lineHeight: 1.4, textShadow: "0 1px 8px rgba(0,0,0,.7)" }}>{svc.tagline}</p>}
           </div>
         </div>
@@ -4918,15 +4920,15 @@ function TravelPackageCard({ svc, onDetail, onWaOpen, isWide }) {
                   const isContact = String(rawPrice || "").toLowerCase().includes("hubungi");
                   const numericPrice = !isContact && rawPrice ? Number(String(rawPrice).replace(/[^0-9]/g, "")) : 0;
                   return isContact ? (
-                    <span style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.2rem", fontWeight: 700, color: "#fff" }}>Hubungi Kami</span>
+                    <span style={{ fontFamily: "'Playfair Display','Noto Emoji',serif", fontSize: "1.2rem", fontWeight: 700, color: "#fff" }}>Hubungi Kami</span>
                   ) : numericPrice > 0 ? (
                     <>
-                      <span style={{ fontFamily: "'Playfair Display',serif", fontSize: "0.8125rem", color: "rgba(255,255,255,.7)" }}>Rp</span>
-                      <span style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.75rem", fontWeight: 700, color: "#fff", textShadow: "0 2px 8px rgba(0,0,0,.3)" }}>{fmt(rawPrice)}</span>
+                      <span style={{ fontFamily: "'Playfair Display','Noto Emoji',serif", fontSize: "0.8125rem", color: "rgba(255,255,255,.7)" }}>Rp</span>
+                      <span style={{ fontFamily: "'Playfair Display','Noto Emoji',serif", fontSize: "1.75rem", fontWeight: 700, color: "#fff", textShadow: "0 2px 8px rgba(0,0,0,.3)" }}>{fmt(rawPrice)}</span>
                       <span style={{ color: "rgba(255,255,255,.65)", fontSize: "0.75rem" }}>{svc.priceNote}</span>
                     </>
                   ) : (
-                    <span style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.2rem", fontWeight: 700, color: "rgba(255,255,255,.6)" }}>Hubungi Kami</span>
+                    <span style={{ fontFamily: "'Playfair Display','Noto Emoji',serif", fontSize: "1.2rem", fontWeight: 700, color: "rgba(255,255,255,.6)" }}>Hubungi Kami</span>
                   );
                 })()}
               </div>
@@ -4957,7 +4959,7 @@ function TravelPackageCard({ svc, onDetail, onWaOpen, isWide }) {
                     <span key={pt.id} style={{ display: "flex", alignItems: "center", gap: 4, padding: "5px 9px", borderRadius: 20, boxSizing: "border-box", border: `1.5px solid ${isUtama ? ac : ac + "40"}`, background: isUtama ? `${ac}12` : "#fff", fontSize: "0.6875rem", fontWeight: 600, color: "#2E3D3F", minWidth: 0, maxWidth: "100%", flexShrink: 1 }}>
                       {isUtama && <span style={{ fontSize: "0.4rem", fontWeight: 800, letterSpacing: ".05em", textTransform: "uppercase", padding: "1px 5px", borderRadius: 8, background: "#E8C96A", color: "#2E3D3F", flexShrink: 0 }}>UTAMA</span>}
                       <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{pt.name}</span>
-                      {pt.price && <span style={{ fontFamily: "'Playfair Display',serif", fontSize: "0.625rem", fontWeight: 700, color: ac, flexShrink: 0 }}>{isContact ? "Konsultasi" : formatRp(pt.price) || pt.price}</span>}
+                      {pt.price && <span style={{ fontFamily: "'Playfair Display','Noto Emoji',serif", fontSize: "0.625rem", fontWeight: 700, color: ac, flexShrink: 0 }}>{isContact ? "Konsultasi" : formatRp(pt.price) || pt.price}</span>}
                     </span>
                   );
                 })}
@@ -4974,7 +4976,7 @@ function TravelPackageCard({ svc, onDetail, onWaOpen, isWide }) {
     <div
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      style={{ background: "#fff", borderRadius: 16, overflow: "visible", boxShadow: hovered ? "0 16px 48px rgba(46,61,63,.18)" : "0 4px 20px rgba(13,59,102,.09)", border: `2px solid ${hovered ? ac : svc.highlight ? ac + "80" : "transparent"}`, fontFamily: "'DM Sans',sans-serif", transition: "all .3s cubic-bezier(.22,1,.36,1)", transform: hovered ? "translateY(-5px)" : "none", position: "relative" }}>
+      style={{ background: "#fff", borderRadius: 16, overflow: "visible", boxShadow: hovered ? "0 16px 48px rgba(46,61,63,.18)" : "0 4px 20px rgba(13,59,102,.09)", border: `2px solid ${hovered ? ac : svc.highlight ? ac + "80" : "transparent"}`, fontFamily: "'DM Sans','Noto Emoji',sans-serif", transition: "all .3s cubic-bezier(.22,1,.36,1)", transform: hovered ? "translateY(-5px)" : "none", position: "relative" }}>
 
       {/* Hero image */}
       <div onClick={onDetail} style={{ position: "relative", height: 180, overflow: "hidden", borderRadius: "14px 14px 0 0", cursor: "pointer" }}>
@@ -4991,7 +4993,7 @@ function TravelPackageCard({ svc, onDetail, onWaOpen, isWide }) {
           <div style={{ position: "absolute", top: 12, right: 12, background: "linear-gradient(130deg,#2E3D3F,#8B6914)", color: "#fff", borderRadius: 20, padding: "3px 10px", fontSize: "0.625rem", fontWeight: 700 }}>⭐ Pilihan Utama</div>
         )}
         <div style={{ position: "absolute", bottom: 12, left: 14, right: 14 }}>
-          <h3 style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.125rem", fontWeight: 700, color: "#fff", lineHeight: 1.2, marginBottom: 2, textShadow: "0 2px 12px rgba(0,0,0,.8), 0 1px 4px rgba(0,0,0,.6)" }}>{svc.title}</h3>
+          <h3 style={{ fontFamily: "'Playfair Display','Noto Emoji',serif", fontSize: "1.125rem", fontWeight: 700, color: "#fff", lineHeight: 1.2, marginBottom: 2, textShadow: "0 2px 12px rgba(0,0,0,.8), 0 1px 4px rgba(0,0,0,.6)" }}>{svc.title}</h3>
           {svc.tagline && <p style={{ fontSize: "0.75rem", color: "rgba(255,255,255,.9)", lineHeight: 1.4, textShadow: "0 1px 8px rgba(0,0,0,.75)" }}>{svc.tagline}</p>}
         </div>
       </div>
@@ -5037,15 +5039,15 @@ function TravelPackageCard({ svc, onDetail, onWaOpen, isWide }) {
             const isContact = String(rawPrice || "").toLowerCase().includes("hubungi");
             const numericPrice = !isContact && rawPrice ? Number(String(rawPrice).replace(/[^0-9]/g, "")) : 0;
             return isContact ? (
-              <span style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.35rem", fontWeight: 700, color: "#fff", lineHeight: 1 }}>Hubungi Kami</span>
+              <span style={{ fontFamily: "'Playfair Display','Noto Emoji',serif", fontSize: "1.35rem", fontWeight: 700, color: "#fff", lineHeight: 1 }}>Hubungi Kami</span>
             ) : numericPrice > 0 ? (
               <>
-                <span style={{ fontFamily: "'Playfair Display',serif", fontSize: "0.8125rem", color: "rgba(255,255,255,.7)" }}>Rp</span>
-                <span style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.75rem", fontWeight: 700, color: "#fff", lineHeight: 1, textShadow: "0 2px 8px rgba(0,0,0,.3)" }}>{fmt(rawPrice)}</span>
+                <span style={{ fontFamily: "'Playfair Display','Noto Emoji',serif", fontSize: "0.8125rem", color: "rgba(255,255,255,.7)" }}>Rp</span>
+                <span style={{ fontFamily: "'Playfair Display','Noto Emoji',serif", fontSize: "1.75rem", fontWeight: 700, color: "#fff", lineHeight: 1, textShadow: "0 2px 8px rgba(0,0,0,.3)" }}>{fmt(rawPrice)}</span>
                 <span style={{ color: "rgba(255,255,255,.65)", fontSize: "0.75rem" }}>{svc.priceNote}</span>
               </>
             ) : (
-              <span style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.35rem", fontWeight: 700, color: "rgba(255,255,255,.6)", lineHeight: 1 }}>Hubungi Kami</span>
+              <span style={{ fontFamily: "'Playfair Display','Noto Emoji',serif", fontSize: "1.35rem", fontWeight: 700, color: "rgba(255,255,255,.6)", lineHeight: 1 }}>Hubungi Kami</span>
             );
           })()}
         </div>
@@ -5064,7 +5066,7 @@ function TravelPackageCard({ svc, onDetail, onWaOpen, isWide }) {
                 <span key={pt.id} style={{ display: "flex", alignItems: "center", gap: 4, padding: "5px 9px", borderRadius: 20, boxSizing: "border-box", border: `1.5px solid ${isUtama ? ac : ac + "40"}`, background: isUtama ? `${ac}12` : "#fff", fontSize: "0.6875rem", fontWeight: 600, color: "#2E3D3F", minWidth: 0, maxWidth: "100%", flexShrink: 1 }}>
                   {isUtama && <span style={{ fontSize: "0.4rem", fontWeight: 800, letterSpacing: ".05em", textTransform: "uppercase", padding: "1px 5px", borderRadius: 8, background: "#E8C96A", color: "#2E3D3F", flexShrink: 0 }}>UTAMA</span>}
                   <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{pt.name}</span>
-                  {pt.price && <span style={{ fontFamily: "'Playfair Display',serif", fontSize: "0.625rem", fontWeight: 700, color: ac, flexShrink: 0 }}>{isContact ? "Konsultasi" : formatRp(pt.price) || pt.price}</span>}
+                  {pt.price && <span style={{ fontFamily: "'Playfair Display','Noto Emoji',serif", fontSize: "0.625rem", fontWeight: 700, color: ac, flexShrink: 0 }}>{isContact ? "Konsultasi" : formatRp(pt.price) || pt.price}</span>}
                 </span>
               );
             })}
@@ -5111,7 +5113,7 @@ function TravelPackageDetailModal({ svc, onClose, onWaOpen }) {
       <div style={{ width: 4, height: 26, background: `linear-gradient(to bottom,${ac},transparent)`, borderRadius: 2, flexShrink: 0 }} />
       <div>
         <div style={{ fontSize: "0.5625rem", letterSpacing: "3px", color: ac, fontWeight: 700, textTransform: "uppercase", marginBottom: 1 }}>{label}</div>
-        <div style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.0625rem", fontWeight: 800, color: "#2E3D3F" }}>{title}</div>
+        <div style={{ fontFamily: "'Playfair Display','Noto Emoji',serif", fontSize: "1.0625rem", fontWeight: 800, color: "#2E3D3F" }}>{title}</div>
       </div>
     </div>
   );
@@ -5158,7 +5160,7 @@ function TravelPackageDetailModal({ svc, onClose, onWaOpen }) {
 
             <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, padding: "16px 24px 18px" }}>
               {svc.tagline && <div style={{ fontSize: "0.5625rem", color: "rgba(255,255,255,.72)", fontWeight: 700, letterSpacing: ".12em", textTransform: "uppercase", marginBottom: 4 }}>{svc.tagline}</div>}
-              <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: "clamp(1.3rem,3vw,1.875rem)", fontWeight: 900, color: "#fff", marginBottom: 8, lineHeight: 1.1 }}>{svc.title}</h2>
+              <h2 style={{ fontFamily: "'Playfair Display','Noto Emoji',serif", fontSize: "clamp(1.3rem,3vw,1.875rem)", fontWeight: 900, color: "#fff", marginBottom: 8, lineHeight: 1.1 }}>{svc.title}</h2>
               <div style={{ display: "flex", gap: 18, flexWrap: "wrap" }}>
                 {[`⏱ ${svc.duration}`, `👥 Min. ${svc.minPeserta} peserta`, svc.destinations?.length && `🗺 ${svc.destinations.length} Destinasi`, `💰 Mulai ${svc.price}`].filter(Boolean).map(m => (
                   <span key={m} style={{ fontSize: "0.6875rem", color: "rgba(255,255,255,.85)", fontWeight: 500 }}>{m}</span>
@@ -5181,7 +5183,7 @@ function TravelPackageDetailModal({ svc, onClose, onWaOpen }) {
                 <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 14 }}>
                   {svc.destinations.map((d, i) => (
                     <button key={i} onClick={() => setDestIdx(i)}
-                      style={{ padding: "6px 14px", borderRadius: 20, border: `1.5px solid ${i === destIdx ? ac : ac + "30"}`, background: i === destIdx ? ac : "#fff", color: i === destIdx ? "#fff" : ac, fontSize: "0.6875rem", fontWeight: 600, cursor: "pointer", transition: "all .2s", fontFamily: "'DM Sans',sans-serif" }}>
+                      style={{ padding: "6px 14px", borderRadius: 20, border: `1.5px solid ${i === destIdx ? ac : ac + "30"}`, background: i === destIdx ? ac : "#fff", color: i === destIdx ? "#fff" : ac, fontSize: "0.6875rem", fontWeight: 600, cursor: "pointer", transition: "all .2s", fontFamily: "'DM Sans','Noto Emoji',sans-serif" }}>
                       {d.no}. {d.name}
                     </button>
                   ))}
@@ -5201,7 +5203,7 @@ function TravelPackageDetailModal({ svc, onClose, onWaOpen }) {
                     </div>
                     <div style={{ flex: 1, padding: "16px 18px", minWidth: 180 }}>
                       <div style={{ fontSize: "0.5625rem", color: ac, fontWeight: 800, letterSpacing: ".1em", textTransform: "uppercase", marginBottom: 3 }}>{dest.tag}</div>
-                      <h3 style={{ fontFamily: "'Playfair Display',serif", fontSize: "0.9375rem", fontWeight: 800, color: "#2E3D3F", marginBottom: 4, lineHeight: 1.3 }}>{dest.title}</h3>
+                      <h3 style={{ fontFamily: "'Playfair Display','Noto Emoji',serif", fontSize: "0.9375rem", fontWeight: 800, color: "#2E3D3F", marginBottom: 4, lineHeight: 1.3 }}>{dest.title}</h3>
                       <div style={{ fontSize: "0.6875rem", color: "#5A6A6C", marginBottom: 7 }}>📍 {dest.sub} &nbsp;·&nbsp; ⏱ {dest.duration}</div>
                       <p style={{ fontSize: "0.78125rem", color: "#3a5266", lineHeight: 1.65, marginBottom: 9 }}>{dest.desc}</p>
                       <div style={{ display: "flex", flexWrap: "wrap", gap: "4px 12px" }}>
@@ -5299,7 +5301,7 @@ function DestinationsSection({ svc, catInfo, activePt }) {
         <div style={{ width: 4, height: 30, background: `linear-gradient(to bottom, ${ac}, transparent)`, borderRadius: 2, flexShrink: 0 }} />
         <div>
           <div style={{ fontSize: "0.5625rem", letterSpacing: "3px", color: ac, fontWeight: 700, textTransform: "uppercase", marginBottom: 2 }}>Itinerary</div>
-          <div style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.2rem", fontWeight: 800, color: "#2E3D3F", lineHeight: 1.1 }}>Pilihan Destinasi yang tersedia</div>
+          <div style={{ fontFamily: "'Playfair Display','Noto Emoji',serif", fontSize: "1.2rem", fontWeight: 800, color: "#2E3D3F", lineHeight: 1.1 }}>Pilihan Destinasi yang tersedia</div>
           <div style={{ fontSize: "0.75rem", color: "#5A6A6C", fontWeight: 400, marginTop: 3 }}>pilih sesuai kesepakatan harga</div>
         </div>
         <div style={{ flex: 1, height: 1, background: "linear-gradient(to right, #E8DCC8, transparent)" }} />
@@ -5324,7 +5326,7 @@ function DestinationsSection({ svc, catInfo, activePt }) {
                   fontWeight: 800,
                   cursor: "pointer",
                   transition: "all .2s",
-                  fontFamily: "'DM Sans',sans-serif",
+                  fontFamily: "'DM Sans','Noto Emoji',sans-serif",
                   letterSpacing: ".01em",
                   boxShadow: isActive
                     ? `0 4px 16px ${ac}50`
@@ -5366,7 +5368,7 @@ function DestinationsSection({ svc, catInfo, activePt }) {
           </div>
           <div style={{ padding: "20px 24px 24px" }}>
             <div style={{ fontSize: "0.5625rem", color: ac, fontWeight: 800, letterSpacing: ".1em", textTransform: "uppercase", marginBottom: 6 }}>{dest.tag}</div>
-            <h3 style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.125rem", fontWeight: 800, color: "#2E3D3F", marginBottom: 6, lineHeight: 1.3 }}>{dest.title}</h3>
+            <h3 style={{ fontFamily: "'Playfair Display','Noto Emoji',serif", fontSize: "1.125rem", fontWeight: 800, color: "#2E3D3F", marginBottom: 6, lineHeight: 1.3 }}>{dest.title}</h3>
             <div style={{ fontSize: "0.75rem", color: "#5A6A6C", marginBottom: 12 }}>📍 {dest.sub} &nbsp;·&nbsp; ⏱ {dest.duration}</div>
             <p style={{ fontSize: "0.875rem", color: "#3a5266", lineHeight: 1.75, marginBottom: 14 }}>{dest.desc}</p>
             <div style={{ display: "flex", flexWrap: "wrap", gap: "6px 20px" }}>
@@ -5401,7 +5403,7 @@ function FacilitiesSection({ svc, catInfo, activePt }) {
         <div style={{ width: 4, height: 30, background: `linear-gradient(to bottom, ${ac}, transparent)`, borderRadius: 2, flexShrink: 0 }} />
         <div>
           <div style={{ fontSize: "0.5625rem", letterSpacing: "3px", color: ac, fontWeight: 700, textTransform: "uppercase", marginBottom: 2 }}>Yang Sudah Termasuk</div>
-          <div style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.2rem", fontWeight: 800, color: "#2E3D3F", lineHeight: 1.1 }}>Fasilitas Perjalanan</div>
+          <div style={{ fontFamily: "'Playfair Display','Noto Emoji',serif", fontSize: "1.2rem", fontWeight: 800, color: "#2E3D3F", lineHeight: 1.1 }}>Fasilitas Perjalanan</div>
         </div>
         <div style={{ flex: 1, height: 1, background: "linear-gradient(to right, #E8DCC8, transparent)" }} />
       </div>
@@ -5546,7 +5548,7 @@ function DestGallerySlideshow({ slides, catColor, svcTitle }) {
         <div style={{ width: 4, height: 30, background: `linear-gradient(to bottom, ${catColor}, transparent)`, borderRadius: 2, flexShrink: 0 }} />
         <div>
           <div style={{ fontSize: "0.5625rem", letterSpacing: "3px", color: "#7ab5cc", fontWeight: 700, textTransform: "uppercase", marginBottom: 2 }}>Dokumentasi</div>
-          <div style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.2rem", fontWeight: 800, color: "#2E3D3F", lineHeight: 1.1 }}>Fasilitas &amp; Suasana</div>
+          <div style={{ fontFamily: "'Playfair Display','Noto Emoji',serif", fontSize: "1.2rem", fontWeight: 800, color: "#2E3D3F", lineHeight: 1.1 }}>Fasilitas &amp; Suasana</div>
         </div>
         <div style={{ flex: 1, height: 1, background: "linear-gradient(to right, #E8DCC8, transparent)" }} />
         <div style={{ display: "flex", gap: 4, flexShrink: 0 }}>
@@ -5579,7 +5581,7 @@ function DestGallerySlideshow({ slides, catColor, svcTitle }) {
               <div style={{ fontSize: "0.5625rem", color: "rgba(255,255,255,.55)", letterSpacing: "2.5px", textTransform: "uppercase", marginBottom: 4 }}>
                 Destinasi {slide.no} / {String(slides.length).padStart(2,"0")}
               </div>
-              <div style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.2rem", fontWeight: 800, color: "#fff", textShadow: "0 2px 10px rgba(0,0,0,.5)", lineHeight: 1.2 }}>{slide.title || slide.name}</div>
+              <div style={{ fontFamily: "'Playfair Display','Noto Emoji',serif", fontSize: "1.2rem", fontWeight: 800, color: "#fff", textShadow: "0 2px 10px rgba(0,0,0,.5)", lineHeight: 1.2 }}>{slide.title || slide.name}</div>
               {slide.name && slide.title && slide.name !== slide.title && (
                 <div style={{ fontSize: "0.75rem", color: "rgba(255,255,255,.6)", marginTop: 3 }}>📍 {slide.name}</div>
               )}
@@ -5747,7 +5749,7 @@ function ServicesPage({ content, services, navigateTo, activePaket, onOpenPaket,
     const activeMinPeserta = activePt?.minPeserta || svc.minPeserta;
 
     return (
-      <div style={{ minHeight: "100vh", background: "linear-gradient(160deg,#e8f7fc 0%,#f0fbfd 100%)", fontFamily: "'DM Sans', sans-serif" }}>
+      <div style={{ minHeight: "100vh", background: "linear-gradient(160deg,#e8f7fc 0%,#f0fbfd 100%)", fontFamily: "'DM Sans','Noto Emoji', sans-serif" }}>
         <style>{`
           @keyframes mgFadeUp { from { opacity:0; transform:translateY(28px);} to { opacity:1; transform:none;} }
           .mg-fade { animation: mgFadeUp .55s cubic-bezier(.22,1,.36,1) both; }
@@ -5803,7 +5805,7 @@ function ServicesPage({ content, services, navigateTo, activePaket, onOpenPaket,
                   </div>
                 )}
                 {/* Title */}
-                <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: "clamp(1.8rem,4vw,3rem)", fontWeight: 900, color: "#fff", lineHeight: 1.1, marginBottom: 22, letterSpacing: "-.01em" }}>{svc.title}</h1>
+                <h1 style={{ fontFamily: "'Playfair Display','Noto Emoji', serif", fontSize: "clamp(1.8rem,4vw,3rem)", fontWeight: 900, color: "#fff", lineHeight: 1.1, marginBottom: 22, letterSpacing: "-.01em" }}>{svc.title}</h1>
                 {/* Ornamental divider */}
                 <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 22 }}>
                   <div style={{ height: 1, width: 40, background: catInfo.color || "#D4AF37", opacity: .8 }} />
@@ -5819,7 +5821,7 @@ function ServicesPage({ content, services, navigateTo, activePaket, onOpenPaket,
                   <div>
                     <div style={{ fontSize: "0.5625rem", letterSpacing: "2.5px", color: "rgba(255,255,255,.65)", fontWeight: 700, textTransform: "uppercase", marginBottom: 5 }}>Harga Mulai</div>
                     <div style={{ display: "flex", alignItems: "baseline", gap: 6 }}>
-                      <span style={{ fontFamily: "'Playfair Display',serif", fontSize: "clamp(1.6rem,5vw,2.4rem)", fontWeight: 900, color: "#fff", lineHeight: 1 }}>
+                      <span style={{ fontFamily: "'Playfair Display','Noto Emoji',serif", fontSize: "clamp(1.6rem,5vw,2.4rem)", fontWeight: 900, color: "#fff", lineHeight: 1 }}>
                         {(() => { const raw = activePrice; const isC = String(raw||"").toLowerCase().includes("hubungi"); return isC ? "Hubungi Kami" : (formatRp(raw)||raw); })()}
                       </span>
                       <span style={{ fontSize: "0.875rem", color: "rgba(255,255,255,.68)", fontWeight: 500 }}>{activePriceNote}</span>
@@ -5920,7 +5922,7 @@ function ServicesPage({ content, services, navigateTo, activePaket, onOpenPaket,
                       <div style={{ width: 4, height: 30, background: `linear-gradient(to bottom, ${catInfo.color || "#8B6914"}, transparent)`, borderRadius: 2, flexShrink: 0 }} />
                       <div>
                         <div style={{ fontSize: "0.5625rem", letterSpacing: "3px", color: "#7ab5cc", fontWeight: 700, textTransform: "uppercase", marginBottom: 2 }}>Sudah Termasuk</div>
-                        <div style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.2rem", fontWeight: 800, color: "#2E3D3F", lineHeight: 1.1 }}>Yang Anda Dapatkan</div>
+                        <div style={{ fontFamily: "'Playfair Display','Noto Emoji',serif", fontSize: "1.2rem", fontWeight: 800, color: "#2E3D3F", lineHeight: 1.1 }}>Yang Anda Dapatkan</div>
                       </div>
                       <div style={{ flex: 1, height: 1, background: "linear-gradient(to right, #E8DCC8, transparent)" }} />
                     </div>
@@ -5980,7 +5982,7 @@ function ServicesPage({ content, services, navigateTo, activePaket, onOpenPaket,
                               <span style={{ fontSize: "0.8rem", fontWeight: 700, color: "#fff", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{activePt2?.name}</span>
                             </div>
                             {activePt2?.price && (
-                              <span style={{ fontSize: "0.75rem", fontWeight: 700, color: "rgba(255,255,255,.75)", fontFamily: "'Playfair Display',serif", flexShrink: 0 }}>{formatRp(activePt2.price) || activePt2.price}</span>
+                              <span style={{ fontSize: "0.75rem", fontWeight: 700, color: "rgba(255,255,255,.75)", fontFamily: "'Playfair Display','Noto Emoji',serif", flexShrink: 0 }}>{formatRp(activePt2.price) || activePt2.price}</span>
                             )}
                           </div>
                           <span style={{ color: "rgba(255,255,255,.55)", fontSize: "0.75rem", flexShrink: 0, marginLeft: 6, display: "inline-block", transform: pkgDropOpen ? "rotate(180deg)" : "rotate(0deg)", transition: "transform .2s" }}>▾</span>
@@ -6023,7 +6025,7 @@ function ServicesPage({ content, services, navigateTo, activePaket, onOpenPaket,
                                       <span style={{ fontSize: "0.8rem", fontWeight: isActive ? 700 : 500, color: isActive ? "#fff" : "rgba(255,255,255,.75)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", maxWidth: 130 }}>{pt.name}</span>
                                     </div>
                                   </div>
-                                  <span style={{ fontFamily: "'Playfair Display',serif", fontSize: "0.875rem", fontWeight: 800, color: isActive ? "#fff" : "rgba(255,255,255,.55)", flexShrink: 0, marginLeft: 8 }}>
+                                  <span style={{ fontFamily: "'Playfair Display','Noto Emoji',serif", fontSize: "0.875rem", fontWeight: 800, color: isActive ? "#fff" : "rgba(255,255,255,.55)", flexShrink: 0, marginLeft: 8 }}>
                                     {isContact ? "Konsultasi" : (formatRp(ptRawPrice) || ptRawPrice || "")}
                                   </span>
                                 </button>
@@ -6041,7 +6043,7 @@ function ServicesPage({ content, services, navigateTo, activePaket, onOpenPaket,
                   <div style={{ textAlign: "center", marginBottom: 14 }}>
                     <div style={{ fontSize: "0.5625rem", letterSpacing: "2.5px", color: "rgba(255,255,255,.38)", fontWeight: 700, textTransform: "uppercase", marginBottom: 6 }}>Harga Mulai</div>
                     <div key={resolvedActiveId} style={{
-                      fontFamily: "'Playfair Display',serif",
+                      fontFamily: "'Playfair Display','Noto Emoji',serif",
                       fontSize: "clamp(1.8rem,5vw,2.6rem)", fontWeight: 900, color: "#fff",
                       lineHeight: 1, marginBottom: 4,
                       animation: "mgFadeUp .3s cubic-bezier(.22,1,.36,1) both",
@@ -6125,7 +6127,7 @@ function ServicesPage({ content, services, navigateTo, activePaket, onOpenPaket,
                 <div style={{ width: 4, height: 30, background: "linear-gradient(to bottom, #7ab5cc, transparent)", borderRadius: 2, flexShrink: 0 }} />
                 <div>
                   <div style={{ fontSize: "0.5625rem", letterSpacing: "3px", color: "#7ab5cc", fontWeight: 700, textTransform: "uppercase", marginBottom: 2 }}>Lihat Juga</div>
-                  <div style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.2rem", fontWeight: 800, color: "#2E3D3F", lineHeight: 1.1 }}>Paket Serupa</div>
+                  <div style={{ fontFamily: "'Playfair Display','Noto Emoji',serif", fontSize: "1.2rem", fontWeight: 800, color: "#2E3D3F", lineHeight: 1.1 }}>Paket Serupa</div>
                 </div>
               </div>
               <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 10 }}>
@@ -6177,7 +6179,7 @@ function ServicesPage({ content, services, navigateTo, activePaket, onOpenPaket,
   const [testiIdx, setTestiIdx] = useState(0);
 
   return (
-    <div className="fade-in" style={{ minHeight: "100vh", background: "#fff", fontFamily: "'Sora', 'DM Sans', sans-serif" }}>
+    <div className="fade-in" style={{ minHeight: "100vh", background: "#fff", fontFamily: "'Sora', 'DM Sans','Noto Emoji', sans-serif" }}>
       <style>{`
         @keyframes svFadeUp { from { opacity:0; transform:translateY(24px);} to { opacity:1; transform:none;} }
         .sv-card { transition: transform .25s ease, box-shadow .25s ease; cursor: pointer; }
@@ -6391,7 +6393,7 @@ function ServicesPage({ content, services, navigateTo, activePaket, onOpenPaket,
             <div className="sv-testi-grid" style={{ display:"grid", gridTemplateColumns:"repeat(3,1fr)", gap:20 }}>
               {TESTIMONI.map((t,i) => (
                 <div key={i} style={{ background:"rgba(255,255,255,.06)", borderRadius:14, padding:"26px 24px", border:"1px solid rgba(255,255,255,.1)" }}>
-                  <div style={{ fontSize:"2.2rem", color:"#C9AA71", lineHeight:1, marginBottom:14, fontFamily:"Georgia,serif" }}>"</div>
+                  <div style={{ fontSize:"2.2rem", color:"#C9AA71", lineHeight:1, marginBottom:14, fontFamily:"Georgia,'Noto Emoji',serif" }}>"</div>
                   <p style={{ fontSize:"0.875rem", color:"rgba(255,255,255,.82)", lineHeight:1.75, marginBottom:20 }}>{t.text}</p>
                   {/* Stars */}
                   <div style={{ display:"flex", gap:3, marginBottom:16 }}>
@@ -6573,7 +6575,7 @@ function AboutPage({ content, images, teamMembers, aboutStats, aboutMisiList, ab
         <div style={{ maxWidth: 1200, margin: "0 auto", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))", gap: 24, textAlign: "center" }}>
           {stats.map(s => (
             <div key={s.label}>
-              <div style={{ fontSize: "clamp(1.75rem,4vw,2.5rem)", fontWeight: 900, color: "#D4AF37", fontFamily: "'Playfair Display',serif", lineHeight: 1 }}>{s.num}</div>
+              <div style={{ fontSize: "clamp(1.75rem,4vw,2.5rem)", fontWeight: 900, color: "#D4AF37", fontFamily: "'Playfair Display','Noto Emoji',serif", lineHeight: 1 }}>{s.num}</div>
               <div style={{ fontSize: "0.8125rem", color: "rgba(255,255,255,.65)", marginTop: 6, fontWeight: 500, letterSpacing: ".04em" }}>{s.label}</div>
             </div>
           ))}
@@ -6585,14 +6587,14 @@ function AboutPage({ content, images, teamMembers, aboutStats, aboutMisiList, ab
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 40 }} className="grid-2">
           <div style={{ background: "linear-gradient(135deg, #2E3D3F 0%, #3D5254 100%)", borderRadius: 12, padding: "40px 36px", color: "#fff" }}>
             <div style={{ fontSize: 36, marginBottom: 20 }}>🎯</div>
-            <h3 style={{ fontSize: "1.5rem", fontFamily: "'Playfair Display',serif", fontWeight: 800, marginBottom: 16, color: "#fff" }}>Visi Kami</h3>
+            <h3 style={{ fontSize: "1.5rem", fontFamily: "'Playfair Display','Noto Emoji',serif", fontWeight: 800, marginBottom: 16, color: "#fff" }}>Visi Kami</h3>
             <p style={{ fontSize: "0.9375rem", lineHeight: 1.85, color: "rgba(255,255,255,.8)", whiteSpace: "pre-line" }}>
               {content.aboutVisiText || "Menjadi perusahaan developer perumahan dan jasa desain terkemuka di Indonesia yang dikenal atas pelayanan profesional, kualitas konstruksi, dan kemampuan mewujudkan hunian impian bagi setiap klien."}
             </p>
           </div>
           <div style={{ background: "#FAF7F0", borderRadius: 12, padding: "40px 36px", borderLeft: "4px solid #8B6914" }}>
             <div style={{ fontSize: 36, marginBottom: 20 }}>🚀</div>
-            <h3 style={{ fontSize: "1.5rem", fontFamily: "'Playfair Display',serif", fontWeight: 800, marginBottom: 16, color: "#2E3D3F" }}>Misi Kami</h3>
+            <h3 style={{ fontSize: "1.5rem", fontFamily: "'Playfair Display','Noto Emoji',serif", fontWeight: 800, marginBottom: 16, color: "#2E3D3F" }}>Misi Kami</h3>
             <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: 12 }}>
               {misi.map((m, i) => (
                 <li key={i} style={{ display: "flex", gap: 10, fontSize: "0.9rem", color: "#3D5254", lineHeight: 1.6 }}>
@@ -6616,7 +6618,7 @@ function AboutPage({ content, images, teamMembers, aboutStats, aboutMisiList, ab
             {values.map((v, i) => (
               <div key={v.id || i} className="hover-lift" style={{ background: "#fff", borderRadius: 12, padding: "32px 28px", boxShadow: "0 2px 12px rgba(46,61,63,.06)", borderTop: "3px solid #8B6914", transition: "all .3s" }}>
                 <div style={{ fontSize: 36, marginBottom: 16 }}>{v.icon}</div>
-                <h3 style={{ fontSize: "1.05rem", fontFamily: "'Playfair Display',serif", fontWeight: 700, color: "#2E3D3F", marginBottom: 10 }}>{v.title}</h3>
+                <h3 style={{ fontSize: "1.05rem", fontFamily: "'Playfair Display','Noto Emoji',serif", fontWeight: 700, color: "#2E3D3F", marginBottom: 10 }}>{v.title}</h3>
                 <p style={{ fontSize: "0.9rem", color: "#3D5254", lineHeight: 1.75, whiteSpace: "pre-line" }}>{v.desc}</p>
               </div>
             ))}
@@ -6654,7 +6656,7 @@ function AboutPage({ content, images, teamMembers, aboutStats, aboutMisiList, ab
                     <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: 60, background: "linear-gradient(to top, rgba(13,59,102,.75), transparent)", pointerEvents: "none" }} />
                   </div>
                   <div style={{ padding: "20px 20px 24px" }}>
-                    <h3 style={{ fontSize: "1rem", fontFamily: "'Playfair Display',serif", fontWeight: 800, color: "#2E3D3F", marginBottom: 4 }}>{member.name}</h3>
+                    <h3 style={{ fontSize: "1rem", fontFamily: "'Playfair Display','Noto Emoji',serif", fontWeight: 800, color: "#2E3D3F", marginBottom: 4 }}>{member.name}</h3>
                     <div style={{ fontSize: "0.8125rem", color: "#8B6914", fontWeight: 600, marginBottom: 12 }}>{member.role}</div>
                     {member.quotes && (
                       <p style={{ fontSize: "0.8125rem", color: "#5A6A6C", fontStyle: "italic", lineHeight: 1.65, whiteSpace: "pre-line" }}>"{member.quotes}"</p>
@@ -6795,11 +6797,11 @@ function AboutPage({ content, images, teamMembers, aboutStats, aboutMisiList, ab
 
             {/* Form */}
             <div style={{ background: "#fff", borderRadius: 14, padding: "36px 32px", boxShadow: "0 8px 40px rgba(46,61,63,.12)" }}>
-              <h3 style={{ fontSize: "1.25rem", fontFamily: "'Playfair Display',serif", fontWeight: 800, color: "#2E3D3F", marginBottom: 24 }}>Kirim Pesan</h3>
+              <h3 style={{ fontSize: "1.25rem", fontFamily: "'Playfair Display','Noto Emoji',serif", fontWeight: 800, color: "#2E3D3F", marginBottom: 24 }}>Kirim Pesan</h3>
               {contactSent ? (
                 <div style={{ textAlign: "center", padding: "40px 20px" }}>
                   <div style={{ fontSize: 56, marginBottom: 16 }}>✅</div>
-                  <h4 style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.25rem", color: "#27ae60", marginBottom: 8 }}>Pesan Terkirim!</h4>
+                  <h4 style={{ fontFamily: "'Playfair Display','Noto Emoji',serif", fontSize: "1.25rem", color: "#27ae60", marginBottom: 8 }}>Pesan Terkirim!</h4>
                   <p style={{ color: "#3D5254", fontSize: "0.9rem" }}>Kami akan segera menghubungi Anda melalui WhatsApp.</p>
                 </div>
               ) : (
@@ -7499,7 +7501,7 @@ function HeroSlideshow({ data, navigateTo }) {
             <div style={{ display: "inline-block", background: "#e8a020", color: "#fff", fontSize: "0.6875rem", fontWeight: 800, letterSpacing: ".18em", textTransform: "uppercase", padding: "5px 14px", borderRadius: 2, marginBottom: 18 }}>
               VASTURA GROUP
             </div>
-            <h1 style={{ fontFamily: "'Playfair Display',serif", fontSize: "clamp(1.75rem,4.2vw,2.8rem)", fontWeight: 900, color: "#fff", lineHeight: 1.18, marginBottom: 18, textShadow: "0 2px 16px rgba(0,0,0,.5)" }}>
+            <h1 style={{ fontFamily: "'Playfair Display','Noto Emoji',serif", fontSize: "clamp(1.75rem,4.2vw,2.8rem)", fontWeight: 900, color: "#fff", lineHeight: 1.18, marginBottom: 18, textShadow: "0 2px 16px rgba(0,0,0,.5)" }}>
               {data.content?.heroTitle || "Travel & Relax"}
             </h1>
             {data.content?.heroSub && (
@@ -7621,7 +7623,7 @@ function HeroSlideshow({ data, navigateTo }) {
           </div>
           {/* Title -- max 2 baris, potong sisanya */}
           <h1 className="hero-slide-title" style={{
-            fontFamily: "'Playfair Display',serif",
+            fontFamily: "'Playfair Display','Noto Emoji',serif",
             fontSize: "clamp(1.75rem,4.2vw,2.8rem)",
             fontWeight: 900,
             color: "#fff",
@@ -7728,7 +7730,7 @@ function ReviewForm({ token, onSubmitDone, data, save, notify, isLoading }) {
     <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "#FAF7F0" }}>
       <div style={{ textAlign: "center", background: "#fff", borderRadius: 16, padding: "48px 40px", maxWidth: 400, boxShadow: "0 8px 40px rgba(0,0,0,.1)" }}>
         <div style={{ fontSize: 56, marginBottom: 16 }}>❌</div>
-        <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.5rem", color: "#2E3D3F", marginBottom: 12 }}>Link Tidak Valid</h2>
+        <h2 style={{ fontFamily: "'Playfair Display','Noto Emoji',serif", fontSize: "1.5rem", color: "#2E3D3F", marginBottom: 12 }}>Link Tidak Valid</h2>
         <p style={{ color: "#5A6A6C", fontSize: "0.9375rem", lineHeight: 1.7 }}>Link form ulasan ini tidak ditemukan atau sudah tidak berlaku.</p>
       </div>
     </div>
@@ -7738,7 +7740,7 @@ function ReviewForm({ token, onSubmitDone, data, save, notify, isLoading }) {
     <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "#FAF7F0" }}>
       <div style={{ textAlign: "center", background: "#fff", borderRadius: 16, padding: "48px 40px", maxWidth: 400, boxShadow: "0 8px 40px rgba(0,0,0,.1)" }}>
         <div style={{ fontSize: 56, marginBottom: 16 }}>⏰</div>
-        <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.5rem", color: "#2E3D3F", marginBottom: 12 }}>Link Sudah Digunakan</h2>
+        <h2 style={{ fontFamily: "'Playfair Display','Noto Emoji',serif", fontSize: "1.5rem", color: "#2E3D3F", marginBottom: 12 }}>Link Sudah Digunakan</h2>
         <p style={{ color: "#5A6A6C", fontSize: "0.9375rem", lineHeight: 1.7 }}>Form ulasan ini sudah pernah diisi. Setiap link hanya bisa digunakan satu kali.</p>
       </div>
     </div>
@@ -7748,7 +7750,7 @@ function ReviewForm({ token, onSubmitDone, data, save, notify, isLoading }) {
     <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "linear-gradient(135deg,#FAF7F0,#F5EDD8)" }}>
       <div style={{ textAlign: "center", background: "#fff", borderRadius: 20, padding: "56px 48px", maxWidth: 440, boxShadow: "0 16px 56px rgba(46,61,63,.12)" }}>
         <div style={{ fontSize: 64, marginBottom: 20 }}>🎉</div>
-        <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.875rem", fontWeight: 900, color: "#2E3D3F", marginBottom: 14 }}>Terima Kasih!</h2>
+        <h2 style={{ fontFamily: "'Playfair Display','Noto Emoji',serif", fontSize: "1.875rem", fontWeight: 900, color: "#2E3D3F", marginBottom: 14 }}>Terima Kasih!</h2>
         <p style={{ color: "#3D5254", fontSize: "1rem", lineHeight: 1.8 }}>Ulasan Anda telah berhasil dikirim. Kami sangat menghargai kepercayaan Anda kepada VASTURA GROUP.</p>
         <div style={{ width: 48, height: 3, background: "#8B6914", borderRadius: 2, margin: "28px auto 0" }} />
       </div>
@@ -7807,7 +7809,7 @@ function ReviewForm({ token, onSubmitDone, data, save, notify, isLoading }) {
         {/* Header */}
         <div style={{ textAlign: "center", marginBottom: 36 }}>
           <div style={{ width: 64, height: 64, borderRadius: "50%", background: "linear-gradient(130deg,#2E3D3F 0%,#3D5254 50%,#8B6914 100%)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 16px", fontSize: 28 }}>⭐</div>
-          <h1 style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.75rem", fontWeight: 900, color: "#2E3D3F", marginBottom: 8 }}>Berikan Ulasan Anda</h1>
+          <h1 style={{ fontFamily: "'Playfair Display','Noto Emoji',serif", fontSize: "1.75rem", fontWeight: 900, color: "#2E3D3F", marginBottom: 8 }}>Berikan Ulasan Anda</h1>
           <p style={{ color: "#5A6A6C", fontSize: "0.9375rem", lineHeight: 1.6 }}>Bagikan pengalaman Anda bersama {content_data.logoText?.replace("\n"," ") || "VASTURA GROUP"}</p>
           {tokenObj.label && <div style={{ marginTop: 10, display: "inline-block", background: "#FAF7F0", border: "1px solid #A89070", color: "#8B6914", fontSize: "0.75rem", fontWeight: 600, padding: "4px 14px", borderRadius: 20 }}>{tokenObj.label}</div>}
         </div>
@@ -7970,7 +7972,7 @@ function ReviewSlideshow({ reviews }) {
           <span style={{ fontSize: "0.6875rem", letterSpacing: "3px", color: "rgba(255,255,255,.7)", textTransform: "uppercase", fontWeight: 700 }}>Testimoni Klien</span>
           <div style={{ width: 32, height: 1.5, background: "#C9AA71" }} />
         </div>
-        <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: "clamp(1.75rem,4vw,2.75rem)", fontWeight: 900, color: "#fff", lineHeight: 1.1 }}>
+        <h2 style={{ fontFamily: "'Playfair Display','Noto Emoji',serif", fontSize: "clamp(1.75rem,4vw,2.75rem)", fontWeight: 900, color: "#fff", lineHeight: 1.1 }}>
           Apa Kata Mereka?
         </h2>
         <p style={{ fontSize: "1rem", color: "rgba(255,255,255,.72)", marginTop: 12, maxWidth: 440, margin: "12px auto 0", lineHeight: 1.7 }}>
@@ -7984,7 +7986,7 @@ function ReviewSlideshow({ reviews }) {
           const avg = reviews.reduce((s, r) => s + (r.stars || 5), 0) / reviews.length;
           return (
             <div style={{ display: "inline-flex", alignItems: "center", gap: 10, background: "rgba(255,255,255,.12)", border: "1px solid rgba(255,255,255,.2)", borderRadius: 40, padding: "10px 24px", backdropFilter: "blur(8px)", boxShadow: "0 4px 16px rgba(0,0,0,.2)" }}>
-              <span style={{ fontSize: "1.5rem", fontWeight: 900, fontFamily: "'Playfair Display',serif", color: "#fff" }}>{avg.toFixed(1)}</span>
+              <span style={{ fontSize: "1.5rem", fontWeight: 900, fontFamily: "'Playfair Display','Noto Emoji',serif", color: "#fff" }}>{avg.toFixed(1)}</span>
               <div style={{ display: "flex", gap: 2 }}>
                 {[1,2,3,4,5].map(s => <span key={s} style={{ fontSize: 16, filter: s <= Math.round(avg) ? "none" : "grayscale(1) opacity(.3)" }}>⭐</span>)}
               </div>
@@ -8072,7 +8074,7 @@ function ReviewCard({ review }) {
         ))}
       </div>
       {/* Quote */}
-      <p style={{ fontSize: "0.9rem", color: "#2E3D3F", lineHeight: 1.75, fontStyle: "italic", fontFamily: "'Cormorant Garamond',serif", flex: 1, whiteSpace: "pre-line" }}>
+      <p style={{ fontSize: "0.9rem", color: "#2E3D3F", lineHeight: 1.75, fontStyle: "italic", fontFamily: "'Cormorant Garamond','Noto Emoji',serif", flex: 1, whiteSpace: "pre-line" }}>
         "{review.content?.length > 180 ? review.content.slice(0, 180) + "…" : review.content}"
       </p>
       {/* Author */}
@@ -8915,7 +8917,7 @@ function AdminReviews({ data, save, notify }) {
               <span style={{ fontSize: 16 }}>{tok.used ? "✅" : "🔑"}</span>
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div style={{ fontSize: 13, fontWeight: 600, color: "#2E3D3F" }}>{tok.label || "—"}</div>
-                <div style={{ fontSize: 11, color: "#5A6A6C", fontFamily: "monospace", wordBreak: "break-all" }}>/UlasanPelayanan/{tok.token}</div>
+                <div style={{ fontSize: 11, color: "#5A6A6C", fontFamily: "monospace,'Noto Emoji'", wordBreak: "break-all" }}>/UlasanPelayanan/{tok.token}</div>
                 <div style={{ fontSize: 11, color: "#5A6A6C" }}>Dibuat: {tok.createdAt} · {tok.used ? "Sudah digunakan" : "Belum digunakan"}</div>
               </div>
               {!tok.used && (
@@ -9128,7 +9130,7 @@ function DevServicePage({ pageKey, title, subtitle, icon, heroColor, sections, c
         <div style={{ position: "absolute", inset: 0, opacity: 0.08, backgroundImage: "radial-gradient(circle at 20% 50%, #fff 0%, transparent 50%), radial-gradient(circle at 80% 20%, #fff 0%, transparent 40%)" }} />
         <div style={{ position: "relative", zIndex: 1, maxWidth: 800, margin: "0 auto" }}>
           <div style={{ fontSize: "3.5rem", marginBottom: 16 }}>{icon}</div>
-          <h1 style={{ fontFamily: "'Playfair Display',serif", fontSize: "clamp(1.8rem,4vw,3rem)", fontWeight: 900, color: "#fff", marginBottom: 16, lineHeight: 1.2 }}>{title}</h1>
+          <h1 style={{ fontFamily: "'Playfair Display','Noto Emoji',serif", fontSize: "clamp(1.8rem,4vw,3rem)", fontWeight: 900, color: "#fff", marginBottom: 16, lineHeight: 1.2 }}>{title}</h1>
           <p style={{ fontSize: "clamp(0.9rem,2vw,1.1rem)", color: "rgba(255,255,255,.85)", lineHeight: 1.7, maxWidth: 600, margin: "0 auto 28px" }}>{subtitle}</p>
           <button onClick={() => onWaOpen && onWaOpen(waText)}
             style={{ padding: "13px 32px", background: "#e8a020", color: "#fff", border: "none", borderRadius: 4, fontSize: "0.875rem", fontWeight: 800, letterSpacing: ".1em", textTransform: "uppercase", cursor: "pointer", boxShadow: "0 4px 20px rgba(0,0,0,.25)" }}>
@@ -9146,7 +9148,7 @@ function DevServicePage({ pageKey, title, subtitle, icon, heroColor, sections, c
               <div style={{ width: 4, height: 40, background: "linear-gradient(180deg,#8B6914,#B8962A)", borderRadius: 4, flexShrink: 0 }} />
               <div>
                 <div style={{ fontSize: "0.7rem", letterSpacing: ".14em", textTransform: "uppercase", color: "#8B6914", fontWeight: 700, marginBottom: 4 }}>{sec.tag || `Layanan ${String(i+1).padStart(2,"0")}`}</div>
-                <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: "clamp(1.25rem,3vw,1.75rem)", fontWeight: 900, color: "#2E3D3F", lineHeight: 1.25 }}>{sec.title}</h2>
+                <h2 style={{ fontFamily: "'Playfair Display','Noto Emoji',serif", fontSize: "clamp(1.25rem,3vw,1.75rem)", fontWeight: 900, color: "#2E3D3F", lineHeight: 1.25 }}>{sec.title}</h2>
               </div>
             </div>
 
@@ -9179,7 +9181,7 @@ function DevServicePage({ pageKey, title, subtitle, icon, heroColor, sections, c
 
         {/* CTA Banner */}
         <div style={{ background: "linear-gradient(130deg,#2E3D3F 0%,#3D5254 50%,#8B6914 100%)", borderRadius: 16, padding: "40px 40px", textAlign: "center", boxShadow: "0 8px 32px rgba(8,145,178,.25)" }}>
-          <h3 style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.6rem", fontWeight: 900, color: "#fff", marginBottom: 12 }}>Siap Wujudkan Proyek Anda?</h3>
+          <h3 style={{ fontFamily: "'Playfair Display','Noto Emoji',serif", fontSize: "1.6rem", fontWeight: 900, color: "#fff", marginBottom: 12 }}>Siap Wujudkan Proyek Anda?</h3>
           <p style={{ color: "rgba(255,255,255,.85)", marginBottom: 24, fontSize: "0.95rem" }}>Konsultasikan kebutuhan Anda bersama tim ahli kami — gratis & tanpa komitmen.</p>
           <button onClick={() => onWaOpen && onWaOpen(waText)}
             style={{ padding: "13px 36px", background: "#e8a020", color: "#fff", border: "none", borderRadius: 4, fontSize: "0.875rem", fontWeight: 800, letterSpacing: ".1em", textTransform: "uppercase", cursor: "pointer" }}>
@@ -9257,7 +9259,7 @@ function DesainRabPage({ onWaOpen }) {
   const waMsg = { key: "desainrab", vars: { judul_paket: "Jasa Desain & RAB" } };
 
   return (
-    <div style={{ minHeight:"100vh", background:"#fff", fontFamily:"'Sora','DM Sans',sans-serif" }}>
+    <div style={{ minHeight:"100vh", background:"#fff", fontFamily:"'Sora','DM Sans','Noto Emoji',sans-serif" }}>
       <style>{`
         @keyframes drFadeUp { from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:none;} }
         .dr-faq-row { transition: background .2s; cursor:pointer; }
@@ -9778,7 +9780,7 @@ function KalkulatorLuas({ tema }) {
         <span style={{ fontSize: 24 }}>🧮</span>
         <div>
           <div style={{ fontSize: "0.65rem", letterSpacing: "0.12em", textTransform: "uppercase", color: tema.warna, fontWeight: 800 }}>ESTIMASI BIAYA</div>
-          <h3 style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.1rem", fontWeight: 800, margin: 0, color: "#fff" }}>Kalkulator Luas Lahan</h3>
+          <h3 style={{ fontFamily: "'Playfair Display','Noto Emoji',serif", fontSize: "1.1rem", fontWeight: 800, margin: 0, color: "#fff" }}>Kalkulator Luas Lahan</h3>
         </div>
       </div>
 
@@ -9927,7 +9929,7 @@ function KalkulatorLuas({ tema }) {
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 12 }}>
               <div>
                 <div style={{ fontSize: "0.62rem", textTransform: "uppercase", letterSpacing: "0.1em", color: "rgba(255,255,255,.5)", fontWeight: 700, marginBottom: 4 }}>Estimasi Total</div>
-                <div style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.6rem", fontWeight: 900, color: tema.warna, lineHeight: 1 }}>{fmtRp(totalHarga)}</div>
+                <div style={{ fontFamily: "'Playfair Display','Noto Emoji',serif", fontSize: "1.6rem", fontWeight: 900, color: tema.warna, lineHeight: 1 }}>{fmtRp(totalHarga)}</div>
               </div>
               <div style={{ textAlign: "right" }}>
                 <div style={{ fontSize: "0.62rem", textTransform: "uppercase", letterSpacing: "0.1em", color: "rgba(255,255,255,.5)", fontWeight: 700, marginBottom: 4 }}>Rincian</div>
@@ -10078,8 +10080,8 @@ function TemaCardContent({ tema, setTemaSlug }) {
   return (
     <>
       <div style={{ display: "flex", alignItems: "baseline", gap: 12, marginBottom: 12 }}>
-        <span style={{ fontFamily: "'Playfair Display',serif", fontSize: "2.4rem", fontWeight: 900, color: "#E8DCC8", lineHeight: 1 }}>{tema.no}</span>
-        <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.4rem", fontWeight: 900, color: "#2E3D3F", margin: 0, lineHeight: 1 }}>{tema.nama.toUpperCase()}</h2>
+        <span style={{ fontFamily: "'Playfair Display','Noto Emoji',serif", fontSize: "2.4rem", fontWeight: 900, color: "#E8DCC8", lineHeight: 1 }}>{tema.no}</span>
+        <h2 style={{ fontFamily: "'Playfair Display','Noto Emoji',serif", fontSize: "1.4rem", fontWeight: 900, color: "#2E3D3F", margin: 0, lineHeight: 1 }}>{tema.nama.toUpperCase()}</h2>
       </div>
       <div style={{ width: 38, height: 3, background: tema.warna, borderRadius: 2, marginBottom: 14 }} />
       <p style={{ fontSize: "0.86rem", color: "#5A6A6C", lineHeight: 1.72, marginBottom: 20 }}>{tema.tagline}</p>
@@ -10114,7 +10116,7 @@ function TemaDetailPage({ slug, onWaOpen, onBack, temaList }) {
   if (!tema) return (
     <div style={{ textAlign: "center", padding: "80px 20px" }}>
       <div style={{ fontSize: "3rem", marginBottom: 16 }}>🏡</div>
-      <h2 style={{ fontFamily: "'Playfair Display',serif", color: "#2E3D3F" }}>Tema tidak ditemukan</h2>
+      <h2 style={{ fontFamily: "'Playfair Display','Noto Emoji',serif", color: "#2E3D3F" }}>Tema tidak ditemukan</h2>
       <button onClick={onBack} style={{ marginTop: 16, padding: "10px 24px", background: "#2E3D3F", color: "#fff", border: "none", borderRadius: 8, cursor: "pointer" }}>← Kembali</button>
     </div>
   );
@@ -10131,7 +10133,7 @@ function TemaDetailPage({ slug, onWaOpen, onBack, temaList }) {
   );
 
   return (
-    <div style={{ fontFamily: "'Nunito','Segoe UI',sans-serif" }}>
+    <div style={{ fontFamily: "'Nunito','Segoe UI','Noto Emoji',sans-serif" }}>
       {/* Back Bar */}
       <div style={{ background: "linear-gradient(90deg,#1a2a2a,#2E3D3F)", padding: "0 5%", display: "flex", alignItems: "center", justifyContent: "space-between", position: "sticky", top: 0, zIndex: 90, borderBottom: `3px solid ${tema.warna}` }}>
         <button onClick={onBack} style={{ display: "flex", alignItems: "center", gap: 8, background: "none", border: "none", color: "#C9AA71", fontWeight: 700, fontSize: "0.78rem", cursor: "pointer", padding: "13px 0", letterSpacing: ".06em", textTransform: "uppercase" }}>
@@ -10146,7 +10148,7 @@ function TemaDetailPage({ slug, onWaOpen, onBack, temaList }) {
         <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to right,rgba(10,20,20,.88) 38%,rgba(10,20,20,.25) 100%)" }} />
         <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", justifyContent: "flex-end", padding: "36px 5%" }}>
           <div style={{ fontSize: "0.65rem", letterSpacing: "0.15em", textTransform: "uppercase", color: tema.warna, fontWeight: 800, marginBottom: 7 }}>TEMA RUMAH · {tema.no}</div>
-          <h1 style={{ fontFamily: "'Playfair Display',serif", fontSize: "clamp(1.8rem,4.5vw,3rem)", fontWeight: 900, color: "#fff", margin: "0 0 11px", lineHeight: 1.1, textShadow: "0 2px 18px rgba(0,0,0,.5)" }}>{tema.nama}</h1>
+          <h1 style={{ fontFamily: "'Playfair Display','Noto Emoji',serif", fontSize: "clamp(1.8rem,4.5vw,3rem)", fontWeight: 900, color: "#fff", margin: "0 0 11px", lineHeight: 1.1, textShadow: "0 2px 18px rgba(0,0,0,.5)" }}>{tema.nama}</h1>
           <p style={{ fontSize: "0.88rem", color: "rgba(255,255,255,.78)", maxWidth: 520, lineHeight: 1.65, margin: "0 0 20px" }}>{tema.deskripsi}</p>
           <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
             {tema.fitur.map((f, i) => (
@@ -10159,7 +10161,7 @@ function TemaDetailPage({ slug, onWaOpen, onBack, temaList }) {
       {/* ════════ SECTION: EKSTERIOR ════════ */}
       <div style={{ padding: "48px 5% 56px", maxWidth: 1060, margin: "0 auto" }}>
         <SectionLabel icon="🏠" text="EKSTERIOR" />
-        <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.7rem", fontWeight: 800, color: "#2E3D3F", margin: "0 0 14px" }}>Tampak Luar {tema.nama}</h2>
+        <h2 style={{ fontFamily: "'Playfair Display','Noto Emoji',serif", fontSize: "1.7rem", fontWeight: 800, color: "#2E3D3F", margin: "0 0 14px" }}>Tampak Luar {tema.nama}</h2>
         <p style={{ color: "#5A6A6C", lineHeight: 1.75, marginBottom: 28, fontSize: "0.88rem", maxWidth: 720 }}>{tema.detail.exterior.desc}</p>
 
         {(() => {
@@ -10207,7 +10209,7 @@ function TemaDetailPage({ slug, onWaOpen, onBack, temaList }) {
       <div style={{ background: "#FDFAF4", padding: "48px 5% 56px" }}>
         <div style={{ maxWidth: 1060, margin: "0 auto" }}>
           <SectionLabel icon="📐" text="DENAH RUANG" />
-          <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.7rem", fontWeight: 800, color: "#2E3D3F", margin: "0 0 12px" }}>Tata Ruang {tema.nama}</h2>
+          <h2 style={{ fontFamily: "'Playfair Display','Noto Emoji',serif", fontSize: "1.7rem", fontWeight: 800, color: "#2E3D3F", margin: "0 0 12px" }}>Tata Ruang {tema.nama}</h2>
           <p style={{ color: "#5A6A6C", lineHeight: 1.7, maxWidth: 660, marginBottom: 28, fontSize: "0.88rem" }}>{tema.detail.denah.desc}</p>
 
           {(tema.detail.denah.lantai || []).filter(l => l.imgs && l.imgs.length > 0).length > 0 ? (
@@ -10248,7 +10250,7 @@ function TemaDetailPage({ slug, onWaOpen, onBack, temaList }) {
       {/* ════════ SECTION: HARGA & RAB ════════ */}
       <div style={{ padding: "48px 5% 56px", maxWidth: 1060, margin: "0 auto" }}>
         <SectionLabel icon="💰" text="PAKET HARGA" />
-        <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.7rem", fontWeight: 800, color: "#2E3D3F", margin: "0 0 12px" }}>Harga & RAB {tema.nama}</h2>
+        <h2 style={{ fontFamily: "'Playfair Display','Noto Emoji',serif", fontSize: "1.7rem", fontWeight: 800, color: "#2E3D3F", margin: "0 0 12px" }}>Harga & RAB {tema.nama}</h2>
         <p style={{ color: "#5A6A6C", lineHeight: 1.7, maxWidth: 580, marginBottom: 28, fontSize: "0.88rem" }}>Pilih paket yang sesuai kebutuhan dan budget Anda.</p>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(260px,1fr))", gap: 18, marginBottom: 36 }}>
           {tema.detail.harga.paket.map((p, i) => (
@@ -10258,11 +10260,11 @@ function TemaDetailPage({ slug, onWaOpen, onBack, temaList }) {
               {i === 1 && <div style={{ background: tema.warna, color: "#fff", fontSize: "0.62rem", fontWeight: 800, letterSpacing: ".1em", textTransform: "uppercase", textAlign: "center", padding: "5px" }}>⭐ PALING POPULER</div>}
               <div style={{ padding: "22px" }}>
                 <div style={{ fontSize: "0.65rem", fontWeight: 700, letterSpacing: ".1em", textTransform: "uppercase", color: tema.warna, marginBottom: 7 }}>PAKET {i === 0 ? "STANDAR" : i === 1 ? "PREMIUM" : "LUXURY"}</div>
-                <h3 style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.05rem", fontWeight: 800, color: "#2E3D3F", margin: "0 0 5px" }}>{p.nama}</h3>
+                <h3 style={{ fontFamily: "'Playfair Display','Noto Emoji',serif", fontSize: "1.05rem", fontWeight: 800, color: "#2E3D3F", margin: "0 0 5px" }}>{p.nama}</h3>
                 <div style={{ fontSize: "0.78rem", color: "#5A6A6C", marginBottom: 18 }}>Luas bangunan: {p.luas}</div>
                 {p.harga === 0
-                  ? <div style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.35rem", fontWeight: 900, color: "#2E3D3F", marginBottom: 14 }}>Hubungi Kami</div>
-                  : <><div style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.45rem", fontWeight: 900, color: tema.warna, lineHeight: 1 }}>Rp {p.harga.toLocaleString("id-ID")}</div>
+                  ? <div style={{ fontFamily: "'Playfair Display','Noto Emoji',serif", fontSize: "1.35rem", fontWeight: 900, color: "#2E3D3F", marginBottom: 14 }}>Hubungi Kami</div>
+                  : <><div style={{ fontFamily: "'Playfair Display','Noto Emoji',serif", fontSize: "1.45rem", fontWeight: 900, color: tema.warna, lineHeight: 1 }}>Rp {p.harga.toLocaleString("id-ID")}</div>
                     <div style={{ fontSize: "0.72rem", color: "#5A6A6C", marginTop: 2, marginBottom: 14 }}>per meter persegi</div></>
                 }
                 <div style={{ borderTop: "1px solid #F5EDD8", paddingTop: 14, display: "flex", flexDirection: "column", gap: 7, marginBottom: 16 }}>
@@ -10298,7 +10300,7 @@ function TemaDetailPage({ slug, onWaOpen, onBack, temaList }) {
         <div style={{ maxWidth: 540, margin: "0 auto" }}>
           <div style={{ marginBottom: 28, textAlign: "center" }}>
             <SectionLabel icon="🧮" text="ESTIMASI BIAYA" />
-            <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.7rem", fontWeight: 800, color: "#2E3D3F", margin: "0 0 12px" }}>Kalkulator Lahan</h2>
+            <h2 style={{ fontFamily: "'Playfair Display','Noto Emoji',serif", fontSize: "1.7rem", fontWeight: 800, color: "#2E3D3F", margin: "0 0 12px" }}>Kalkulator Lahan</h2>
             <p style={{ color: "#5A6A6C", lineHeight: 1.7, fontSize: "0.88rem" }}>Masukkan luas bangunan Anda untuk estimasi biaya paket {tema.nama}.</p>
           </div>
           <KalkulatorLuas tema={tema} />
@@ -10314,7 +10316,7 @@ function TemaDetailPage({ slug, onWaOpen, onBack, temaList }) {
       {/* CTA Footer */}
       <div style={{ background: "linear-gradient(135deg,#1a2a2a 0%,#2E3D3F 60%)", padding: "46px 5%", display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center" }}>
         <div style={{ fontSize: "0.65rem", letterSpacing: ".15em", textTransform: "uppercase", color: tema.warna, fontWeight: 800, marginBottom: 8 }}>SIAP MEMULAI?</div>
-        <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: "clamp(1.35rem,4vw,2.1rem)", fontWeight: 800, color: "#fff", margin: "0 0 14px", lineHeight: 1.25 }}>
+        <h2 style={{ fontFamily: "'Playfair Display','Noto Emoji',serif", fontSize: "clamp(1.35rem,4vw,2.1rem)", fontWeight: 800, color: "#fff", margin: "0 0 14px", lineHeight: 1.25 }}>
           Wujudkan Rumah {tema.nama} Impian Anda
         </h2>
         <p style={{ color: "rgba(255,255,255,.6)", maxWidth: 480, lineHeight: 1.7, marginBottom: 26, fontSize: "0.88rem" }}>
@@ -10353,7 +10355,7 @@ function TemaRumahPage({ onWaOpen, temaSlug, setTemaSlug, cmsData }) {
 
   /* Landing /tema-rumah */
   return (
-    <div style={{ fontFamily: "'Nunito','Segoe UI',sans-serif" }}>
+    <div style={{ fontFamily: "'Nunito','Segoe UI','Noto Emoji',sans-serif" }}>
       <style>{`
         .tema-card-grid {
           display: grid;
@@ -10388,8 +10390,8 @@ function TemaRumahPage({ onWaOpen, temaSlug, setTemaSlug, cmsData }) {
         <div style={{ position: "absolute", inset: 0, background: "linear-gradient(90deg,rgba(10,25,20,.93) 44%,rgba(10,25,20,.18) 100%)" }} />
         <div style={{ position: "relative", zIndex: 2, padding: "58px 6% 50px", maxWidth: 620 }}>
           <div style={{ fontSize: "0.68rem", letterSpacing: "0.18em", textTransform: "uppercase", color: "#C9AA71", fontWeight: 800, marginBottom: 14 }}>{heroLabel}</div>
-          <h1 style={{ fontFamily: "'Playfair Display',serif", fontSize: "clamp(1.9rem,5vw,3.2rem)", fontWeight: 900, color: "#fff", lineHeight: 1.1, margin: "0 0 6px" }}>{heroTitle1}</h1>
-          <h1 style={{ fontFamily: "'Playfair Display',serif", fontSize: "clamp(1.9rem,5vw,3.2rem)", fontWeight: 900, color: "#C9AA71", lineHeight: 1.1, margin: "0 0 20px" }}>{heroTitle2}</h1>
+          <h1 style={{ fontFamily: "'Playfair Display','Noto Emoji',serif", fontSize: "clamp(1.9rem,5vw,3.2rem)", fontWeight: 900, color: "#fff", lineHeight: 1.1, margin: "0 0 6px" }}>{heroTitle1}</h1>
+          <h1 style={{ fontFamily: "'Playfair Display','Noto Emoji',serif", fontSize: "clamp(1.9rem,5vw,3.2rem)", fontWeight: 900, color: "#C9AA71", lineHeight: 1.1, margin: "0 0 20px" }}>{heroTitle2}</h1>
           <p style={{ fontSize: "0.92rem", color: "rgba(255,255,255,.73)", lineHeight: 1.72, marginBottom: 30, maxWidth: 460 }}>
             {heroDesc}
           </p>
@@ -10434,7 +10436,7 @@ function TemaRumahPage({ onWaOpen, temaSlug, setTemaSlug, cmsData }) {
       <div className="tema-cta-grid">
         <div>
           <div style={{ fontSize: "0.65rem", letterSpacing: ".18em", textTransform: "uppercase", color: "#C9AA71", fontWeight: 800, marginBottom: 12 }}>SIAP MEMULAI?</div>
-          <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: "clamp(1.35rem,3.5vw,2rem)", fontWeight: 800, color: "#fff", margin: "0 0 14px", lineHeight: 1.25 }}>
+          <h2 style={{ fontFamily: "'Playfair Display','Noto Emoji',serif", fontSize: "clamp(1.35rem,3.5vw,2rem)", fontWeight: 800, color: "#fff", margin: "0 0 14px", lineHeight: 1.25 }}>
             {ctaTitle.includes("\n") ? ctaTitle.split("\n").map((line, i, arr) => <span key={i}>{line}{i < arr.length-1 && <br />}</span>) : ctaTitle}
           </h2>
           <p style={{ fontSize: "0.84rem", color: "rgba(255,255,255,.6)", lineHeight: 1.7 }}>{ctaDesc}</p>
@@ -10898,7 +10900,7 @@ function LandscapePage({ onWaOpen, categories }) {
 
         /* ── Kartu putih ── */
         .ls-info-card { background:#fff; padding:20px 18px 22px; }
-        .ls-card-title { font-family:'Playfair Display',serif; font-size:clamp(.88rem,1.8vw,1.05rem); font-weight:900; color:#1a2a1a; margin:0 0 8px; line-height:1.3; }
+        .ls-card-title { font-family:'Playfair Display','Noto Emoji',serif; font-size:clamp(.88rem,1.8vw,1.05rem); font-weight:900; color:#1a2a1a; margin:0 0 8px; line-height:1.3; }
         .ls-desc { font-size:.825rem; color:#4a5a4a; line-height:1.7; margin:0 0 14px; }
 
         /* ── Harga + CTA ── */
@@ -10949,7 +10951,7 @@ function LandscapePage({ onWaOpen, categories }) {
             <span style={{ fontSize: "0.65rem", fontWeight: 800, letterSpacing: ".16em", textTransform: "uppercase", color: "#A8D5B5" }}>VASTURA GROUP · LANDSCAPE</span>
           </div>
           <div style={{ fontSize: "clamp(2rem,7vw,3.5rem)", marginBottom: 10 }}>🌳</div>
-          <h1 style={{ fontFamily: "'Playfair Display',serif", fontSize: "clamp(1.75rem,5vw,2.75rem)", fontWeight: 900, color: "#fff", margin: "0 0 14px", lineHeight: 1.2 }}>Landscape & Taman</h1>
+          <h1 style={{ fontFamily: "'Playfair Display','Noto Emoji',serif", fontSize: "clamp(1.75rem,5vw,2.75rem)", fontWeight: 900, color: "#fff", margin: "0 0 14px", lineHeight: 1.2 }}>Landscape & Taman</h1>
           <p style={{ fontSize: "clamp(.875rem,2vw,1rem)", color: "rgba(255,255,255,.75)", lineHeight: 1.8, margin: "0 0 26px" }}>
             Dari taman depan hingga rooftop garden — kami wujudkan setiap sudut hijau impian Anda.
           </p>
@@ -11041,7 +11043,7 @@ function LandscapePage({ onWaOpen, categories }) {
         <div style={{ maxWidth: 1280, margin: "0 auto" }}>
           <div style={{ textAlign: "center", marginBottom: 48 }}>
             <div style={{ fontSize: "0.65rem", fontWeight: 800, letterSpacing: ".14em", textTransform: "uppercase", color: "#40916c", marginBottom: 8 }}>Material & Elemen</div>
-            <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: "clamp(1.5rem,4vw,2.25rem)", fontWeight: 900, color: "#2E3D3F", margin: "0 0 14px" }}>Elemen Taman Premium</h2>
+            <h2 style={{ fontFamily: "'Playfair Display','Noto Emoji',serif", fontSize: "clamp(1.5rem,4vw,2.25rem)", fontWeight: 900, color: "#2E3D3F", margin: "0 0 14px" }}>Elemen Taman Premium</h2>
             <p style={{ fontSize: "0.9375rem", color: "#5A6A6C", maxWidth: 520, margin: "0 auto", lineHeight: 1.75 }}>Kami hanya menggunakan material terpilih untuk memastikan taman Anda indah, tahan lama, dan mudah dirawat.</p>
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(280px,1fr))", gap: 24 }}>
@@ -11071,7 +11073,7 @@ function LandscapePage({ onWaOpen, categories }) {
       <div style={{ padding: "60px 5%", textAlign: "center", background: "#0d1f18" }}>
         <div style={{ maxWidth: 600, margin: "0 auto", background: "linear-gradient(135deg,#1a472a 0%,#2d6a4f 100%)", borderRadius: 20, padding: "48px 32px", color: "#fff" }}>
           <div style={{ fontSize: "0.7rem", letterSpacing: ".14em", textTransform: "uppercase", color: "#A8D5B5", fontWeight: 700, marginBottom: 12 }}>Konsultasi Gratis</div>
-          <h3 style={{ fontFamily: "'Playfair Display',serif", fontSize: "clamp(1.25rem,3vw,1.75rem)", fontWeight: 900, margin: "0 0 12px" }}>Wujudkan Taman Impian Anda</h3>
+          <h3 style={{ fontFamily: "'Playfair Display','Noto Emoji',serif", fontSize: "clamp(1.25rem,3vw,1.75rem)", fontWeight: 900, margin: "0 0 12px" }}>Wujudkan Taman Impian Anda</h3>
           <p style={{ color: "rgba(255,255,255,.75)", fontSize: "0.9rem", margin: "0 0 28px", lineHeight: 1.7 }}>Tim landscape kami siap membantu dari survei, desain, hingga pemasangan dan perawatan berkala.</p>
           <button onClick={() => onWaOpen && onWaOpen({ key: "konsultasi", vars: {} })}
             style={{ background: "#C9AA71", color: "#2E3D3F", border: "none", borderRadius: 10, padding: "15px 36px", fontSize: "0.95rem", fontWeight: 800, cursor: "pointer", letterSpacing: ".05em" }}>
@@ -11396,7 +11398,7 @@ function RumahSubsidiPage({ onWaOpen, paketData }) {
         .ls-mag-overlay-btn { opacity:0; transition:opacity .3s; position:absolute; bottom:16px; right:14px; z-index:4; }
 
         .ls-info-card { background:#fff; padding:20px 18px 22px; }
-        .ls-card-title { font-family:'Playfair Display',serif; font-size:clamp(.88rem,1.8vw,1.05rem); font-weight:900; color:#2E3D3F; margin:0 0 8px; line-height:1.3; }
+        .ls-card-title { font-family:'Playfair Display','Noto Emoji',serif; font-size:clamp(.88rem,1.8vw,1.05rem); font-weight:900; color:#2E3D3F; margin:0 0 8px; line-height:1.3; }
         .ls-desc { font-size:.825rem; color:#5A6A6C; line-height:1.7; margin:0 0 14px; }
 
         .ls-cta-row { display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap; margin-bottom:12px; }
@@ -11441,7 +11443,7 @@ function RumahSubsidiPage({ onWaOpen, paketData }) {
             <span style={{ fontSize: "0.65rem", fontWeight: 800, letterSpacing: ".16em", textTransform: "uppercase", color: "#C9AA71" }}>VASTURA GROUP · PROGRAM RENOVASI</span>
           </div>
           <div style={{ fontSize: "clamp(2rem,7vw,3.5rem)", marginBottom: 10 }}>🏠</div>
-          <h1 style={{ fontFamily: "'Playfair Display',serif", fontSize: "clamp(1.75rem,5vw,2.75rem)", fontWeight: 900, color: "#fff", margin: "0 0 14px", lineHeight: 1.2 }}>Renovasi Rumah Subsidi</h1>
+          <h1 style={{ fontFamily: "'Playfair Display','Noto Emoji',serif", fontSize: "clamp(1.75rem,5vw,2.75rem)", fontWeight: 900, color: "#fff", margin: "0 0 14px", lineHeight: 1.2 }}>Renovasi Rumah Subsidi</h1>
           <p style={{ fontSize: "clamp(.875rem,2vw,1rem)", color: "rgba(255,255,255,.75)", lineHeight: 1.8, margin: "0 0 26px" }}>
             Tingkatkan kualitas hunian subsidi Anda — dari perbaikan ringan hingga renovasi total, dikerjakan tukang berpengalaman dengan harga terjangkau.
           </p>
@@ -11515,7 +11517,7 @@ function RumahSubsidiPage({ onWaOpen, paketData }) {
       <div style={{ padding: "60px 5%", textAlign: "center", background: "#FAF7F0" }}>
         <div style={{ maxWidth: 600, margin: "0 auto", background: "linear-gradient(135deg,#2E3D3F 0%,#8B6914 100%)", borderRadius: 20, padding: "48px 32px", color: "#fff" }}>
           <div style={{ fontSize: "0.7rem", letterSpacing: ".14em", textTransform: "uppercase", color: "#C9AA71", fontWeight: 700, marginBottom: 12 }}>Konsultasi Gratis</div>
-          <h3 style={{ fontFamily: "'Playfair Display',serif", fontSize: "clamp(1.25rem,3vw,1.75rem)", fontWeight: 900, margin: "0 0 12px" }}>Wujudkan Rumah Subsidi yang Lebih Layak</h3>
+          <h3 style={{ fontFamily: "'Playfair Display','Noto Emoji',serif", fontSize: "clamp(1.25rem,3vw,1.75rem)", fontWeight: 900, margin: "0 0 12px" }}>Wujudkan Rumah Subsidi yang Lebih Layak</h3>
           <p style={{ color: "rgba(255,255,255,.75)", fontSize: "0.9rem", margin: "0 0 28px", lineHeight: 1.7 }}>Tim kami siap survei, menghitung RAB, dan mengerjakan renovasi rumah subsidi Anda dari awal hingga selesai.</p>
           <button onClick={() => onWaOpen && onWaOpen({ key: "konsultasi", vars: {} })}
             style={{ background: "#C9AA71", color: "#2E3D3F", border: "none", borderRadius: 10, padding: "15px 36px", fontSize: "0.95rem", fontWeight: 800, cursor: "pointer", letterSpacing: ".05em" }}>
@@ -11998,7 +12000,7 @@ function MobileLayananAccordion({ page, navigateTo, setMobileMenu, navDropdownLa
   const topPages = ["services","desainrab","temarumah"];
 
   const mBtn = (active, depth=0) => ({
-    fontSize:".8rem", letterSpacing:".12em", textTransform:"uppercase", fontFamily:"'Jost',sans-serif",
+    fontSize:".8rem", letterSpacing:".12em", textTransform:"uppercase", fontFamily:"'Jost','Noto Emoji',sans-serif",
     color:active?"var(--re-black)":"var(--re-grey-dk)", fontWeight:active?700:400,
     border:"none", background:active?"rgba(139,105,20,.08)":"transparent",
     textAlign:"left", padding:`11px ${18 + depth*14}px`, borderRadius:6, width:"100%",
@@ -12038,7 +12040,7 @@ function MobileLayananAccordion({ page, navigateTo, setMobileMenu, navDropdownLa
           <button onClick={()=>setSubOpen(v=>v==="interior"?null:"interior")}
             style={{ ...mBtn(page.startsWith("interior"), 1), justifyContent:"space-between" }}>
             <span>🛋️ Interior</span>
-            <span style={{ fontSize:"0.65rem", opacity:0.6, transition:"transform .2s", transform:subOpen==="interior"?"rotate(180deg)":"none" }}>▼</span>
+            <span style={{ fontSize:"0.6rem", fontWeight:800, color:"#fff", background:"#8B6914", padding:"4px 12px", borderRadius:5, letterSpacing:".06em" }}>{subOpen==="interior"?"TUTUP":"BUKA"}</span>
           </button>
           {subOpen==="interior" && (
             <div style={{ borderLeft:"2px solid #C9AA71", marginLeft:28 }}>
@@ -12063,7 +12065,7 @@ function MobileLayananAccordion({ page, navigateTo, setMobileMenu, navDropdownLa
           <button onClick={()=>setSubOpen(v=>v==="eksterior"?null:"eksterior")}
             style={{ ...mBtn(page.startsWith("eksterior"), 1), justifyContent:"space-between" }}>
             <span>🏠 Eksterior</span>
-            <span style={{ fontSize:"0.65rem", opacity:0.6, transition:"transform .2s", transform:subOpen==="eksterior"?"rotate(180deg)":"none" }}>▼</span>
+            <span style={{ fontSize:"0.6rem", fontWeight:800, color:"#fff", background:"#8B6914", padding:"4px 12px", borderRadius:5, letterSpacing:".06em" }}>{subOpen==="eksterior"?"TUTUP":"BUKA"}</span>
           </button>
           {subOpen==="eksterior" && (
             <div style={{ borderLeft:"2px solid #C9AA71", marginLeft:28 }}>
@@ -12079,6 +12081,12 @@ function MobileLayananAccordion({ page, navigateTo, setMobileMenu, navDropdownLa
               ))}
             </div>
           )}
+
+          {/* Landscape & Taman -- dipindah ke bawah Interior & Eksterior */}
+          <button onClick={()=>{ navigateTo("eksterior/taman-landscape"); setMobileMenu(false); setOpen(false); setSubOpen(null); }}
+            style={mBtn(page==="eksterior/taman-landscape", 1)}>
+            🌳 Landscape & Taman
+          </button>
 
         </div>
       )}
@@ -12132,7 +12140,7 @@ function FurniturPage({ data, onWaOpen }) {
   }
 
   return (
-    <div style={{ minHeight:"100vh", background:"#FAFAF7", fontFamily:"'Jost',sans-serif" }}>
+    <div style={{ minHeight:"100vh", background:"#FAFAF7", fontFamily:"'Jost','Noto Emoji',sans-serif" }}>
       <style>{`
         .fur-card { transition: transform .22s, box-shadow .22s; }
         .fur-card:hover { transform: translateY(-4px); box-shadow: 0 12px 36px rgba(0,0,0,.13) !important; }
@@ -12153,7 +12161,7 @@ function FurniturPage({ data, onWaOpen }) {
             <span style={{ fontSize:13 }}>🪑</span>
             <span style={{ fontSize:"0.7rem", letterSpacing:"3px", color:accentGold, fontWeight:700, textTransform:"uppercase" }}>Produk Retail</span>
           </div>
-          <h1 style={{ fontSize:"clamp(1.8rem,4vw,3rem)", fontWeight:800, color:"#fff", letterSpacing:"-0.02em", margin:"0 0 12px", fontFamily:"'Playfair Display',serif" }}>
+          <h1 style={{ fontSize:"clamp(1.8rem,4vw,3rem)", fontWeight:800, color:"#fff", letterSpacing:"-0.02em", margin:"0 0 12px", fontFamily:"'Playfair Display','Noto Emoji',serif" }}>
             Koleksi Furnitur
           </h1>
           <p style={{ fontSize:"1rem", color:"rgba(255,255,255,.72)", maxWidth:520, margin:"0 auto", lineHeight:1.7 }}>
@@ -12183,7 +12191,7 @@ function FurniturPage({ data, onWaOpen }) {
               placeholder="Cari produk furnitur..."
               value={search}
               onChange={e=>setSearch(e.target.value)}
-              style={{ width:"100%", paddingLeft:36, paddingRight:12, height:40, border:"1.5px solid #E8DCC8", borderRadius:8, fontSize:"0.85rem", color:darkTeal, outline:"none", boxSizing:"border-box", fontFamily:"'Jost',sans-serif" }}
+              style={{ width:"100%", paddingLeft:36, paddingRight:12, height:40, border:"1.5px solid #E8DCC8", borderRadius:8, fontSize:"0.85rem", color:darkTeal, outline:"none", boxSizing:"border-box", fontFamily:"'Jost','Noto Emoji',sans-serif" }}
             />
           </div>
           {/* Category filter */}
@@ -12193,14 +12201,14 @@ function FurniturPage({ data, onWaOpen }) {
                 style={{ padding:"7px 16px", borderRadius:20, border:`1.5px solid ${category===cat ? accentGold : "#E8DCC8"}`,
                   background: category===cat ? accentGold : "#fff",
                   color: category===cat ? "#fff" : darkTeal,
-                  fontSize:"0.78rem", fontWeight:600, cursor:"pointer", transition:"all .15s", fontFamily:"'Jost',sans-serif" }}>
+                  fontSize:"0.78rem", fontWeight:600, cursor:"pointer", transition:"all .15s", fontFamily:"'Jost','Noto Emoji',sans-serif" }}>
                 {cat === "all" ? "Semua" : cat}
               </button>
             ))}
           </div>
           {/* Sort */}
           <select value={sortBy} onChange={e=>setSortBy(e.target.value)}
-            style={{ flex:"0 0 auto", height:40, border:"1.5px solid #E8DCC8", borderRadius:8, padding:"0 12px", fontSize:"0.82rem", color:darkTeal, background:"#fff", fontFamily:"'Jost',sans-serif", cursor:"pointer", outline:"none" }}>
+            style={{ flex:"0 0 auto", height:40, border:"1.5px solid #E8DCC8", borderRadius:8, padding:"0 12px", fontSize:"0.82rem", color:darkTeal, background:"#fff", fontFamily:"'Jost','Noto Emoji',sans-serif", cursor:"pointer", outline:"none" }}>
             <option value="default">Urutan Default</option>
             <option value="nama">Nama A–Z</option>
             <option value="harga_asc">Harga: Terendah</option>
@@ -12260,13 +12268,13 @@ function FurniturPage({ data, onWaOpen }) {
                   </p>
                 )}
                 <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", gap:10, marginTop:"auto" }}>
-                  <span style={{ fontSize:"1.05rem", fontWeight:800, color:prod.harga ? "#8B6914" : "#5A6A6C", fontFamily:"'Playfair Display',serif" }}>
+                  <span style={{ fontSize:"1.05rem", fontWeight:800, color:prod.harga ? "#8B6914" : "#5A6A6C", fontFamily:"'Playfair Display','Noto Emoji',serif" }}>
                     {formatRp(prod.harga)}
                   </span>
                   <button
                     className="fur-btn-wa"
                     onClick={e=>{ e.stopPropagation(); onWaOpen && onWaOpen({ key:"layanan", vars:{ judul_layanan: prod.nama } }); }}
-                    style={{ background:`linear-gradient(135deg,${darkTeal},#3D5254)`, color:"#fff", border:"none", borderRadius:8, padding:"8px 14px", fontSize:"0.75rem", fontWeight:700, cursor:"pointer", whiteSpace:"nowrap", fontFamily:"'Jost',sans-serif" }}>
+                    style={{ background:`linear-gradient(135deg,${darkTeal},#3D5254)`, color:"#fff", border:"none", borderRadius:8, padding:"8px 14px", fontSize:"0.75rem", fontWeight:700, cursor:"pointer", whiteSpace:"nowrap", fontFamily:"'Jost','Noto Emoji',sans-serif" }}>
                     💬 Tanya
                   </button>
                 </div>
@@ -12326,7 +12334,7 @@ function FurniturDetailPage({ product, onBack, onWaOpen, formatRp }) {
   };
 
   return (
-    <div style={{ minHeight: "100vh", background: "#FAFAF7", fontFamily: "'Jost',sans-serif" }}>
+    <div style={{ minHeight: "100vh", background: "#FAFAF7", fontFamily: "'Jost','Noto Emoji',sans-serif" }}>
       {/* Back bar */}
       <div style={{ background: `linear-gradient(90deg,${darkTeal},#3D5254)`, padding: "0 5%", position: "sticky", top: 0, zIndex: 50, borderBottom: `3px solid ${accentGold}` }}>
         <button onClick={onBack} style={{ display: "flex", alignItems: "center", gap: 8, background: "none", border: "none", color: accentGold, fontWeight: 700, fontSize: "0.78rem", cursor: "pointer", padding: "13px 0", letterSpacing: ".06em", textTransform: "uppercase" }}>
@@ -12378,10 +12386,10 @@ function FurniturDetailPage({ product, onBack, onWaOpen, formatRp }) {
                 {product.kategori}
               </span>
             )}
-            <h1 style={{ fontSize: "1.85rem", fontWeight: 800, color: darkTeal, margin: "0 0 12px", fontFamily: "'Playfair Display',serif", lineHeight: 1.25 }}>
+            <h1 style={{ fontSize: "1.85rem", fontWeight: 800, color: darkTeal, margin: "0 0 12px", fontFamily: "'Playfair Display','Noto Emoji',serif", lineHeight: 1.25 }}>
               {product.nama}
             </h1>
-            <div style={{ fontSize: "1.55rem", fontWeight: 800, color: "#8B6914", fontFamily: "'Playfair Display',serif", marginBottom: 22 }}>
+            <div style={{ fontSize: "1.55rem", fontWeight: 800, color: "#8B6914", fontFamily: "'Playfair Display','Noto Emoji',serif", marginBottom: 22 }}>
               {formatRp(product.harga)}
             </div>
 
@@ -12402,13 +12410,13 @@ function FurniturDetailPage({ product, onBack, onWaOpen, formatRp }) {
                 Ingin ukuran, warna, atau material berbeda dari produk ini? Kirim permintaan custom langsung ke tim kami via WhatsApp.
               </p>
               <button onClick={handleRequestCustom}
-                style={{ width: "100%", background: "linear-gradient(135deg,#25D366,#128C7E)", color: "#fff", border: "none", borderRadius: 10, padding: "14px 24px", fontSize: "0.92rem", fontWeight: 700, cursor: "pointer", fontFamily: "'Jost',sans-serif", display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
+                style={{ width: "100%", background: "linear-gradient(135deg,#25D366,#128C7E)", color: "#fff", border: "none", borderRadius: 10, padding: "14px 24px", fontSize: "0.92rem", fontWeight: 700, cursor: "pointer", fontFamily: "'Jost','Noto Emoji',sans-serif", display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
                 💬 Request Custom via WhatsApp
               </button>
             </div>
 
             <button onClick={() => onWaOpen && onWaOpen({ key: "layanan", vars: { judul_layanan: product.nama } })}
-              style={{ width: "100%", marginTop: 10, background: "#FAF7F0", color: darkTeal, border: "1.5px solid #E8DCC8", borderRadius: 10, padding: "12px 20px", fontSize: "0.85rem", fontWeight: 600, cursor: "pointer", fontFamily: "'Jost',sans-serif" }}>
+              style={{ width: "100%", marginTop: 10, background: "#FAF7F0", color: darkTeal, border: "1.5px solid #E8DCC8", borderRadius: 10, padding: "12px 20px", fontSize: "0.85rem", fontWeight: 600, cursor: "pointer", fontFamily: "'Jost','Noto Emoji',sans-serif" }}>
               💬 Tanya Produk Ini (Sesuai Spesifikasi)
             </button>
           </div>
@@ -12465,7 +12473,7 @@ function SubPageCatalog({ heroColor, heroIcon, title, subtitle, breadcrumb, cata
             </div>
           )}
           <div style={{ fontSize:"clamp(2.5rem,8vw,4rem)", marginBottom:16 }}>{heroIcon}</div>
-          <h1 style={{ fontFamily:"'Playfair Display',serif", fontSize:"clamp(1.75rem,5vw,2.75rem)", fontWeight:900, color:"#fff", margin:"0 0 16px", lineHeight:1.2 }}>{title}</h1>
+          <h1 style={{ fontFamily:"'Playfair Display','Noto Emoji',serif", fontSize:"clamp(1.75rem,5vw,2.75rem)", fontWeight:900, color:"#fff", margin:"0 0 16px", lineHeight:1.2 }}>{title}</h1>
           <p style={{ fontSize:"clamp(0.875rem,2vw,1rem)", color:"rgba(255,255,255,.8)", lineHeight:1.8, margin:0 }}>{subtitle}</p>
         </div>
       </div>
@@ -12501,7 +12509,7 @@ function SubPageCatalog({ heroColor, heroIcon, title, subtitle, breadcrumb, cata
 
               {/* Info */}
               <div style={{ padding:"20px 20px 22px" }}>
-                <h3 style={{ fontFamily:"'Playfair Display',serif", fontSize:"1rem", fontWeight:800, color:"#2E3D3F", margin:"0 0 8px", lineHeight:1.35 }}>{item.nama}</h3>
+                <h3 style={{ fontFamily:"'Playfair Display','Noto Emoji',serif", fontSize:"1rem", fontWeight:800, color:"#2E3D3F", margin:"0 0 8px", lineHeight:1.35 }}>{item.nama}</h3>
                 {item.material && (
                   <div style={{ fontSize:"0.75rem", color:"#8B9A9C", marginBottom:8, display:"flex", alignItems:"center", gap:5 }}>
                     <span style={{ color:"#C9AA71" }}>◆</span> {item.material}
@@ -12536,7 +12544,7 @@ function SubPageCatalog({ heroColor, heroIcon, title, subtitle, breadcrumb, cata
         {/* CTA Bottom */}
         <div style={{ textAlign:"center", marginTop:56, padding:"40px 24px", background:"linear-gradient(135deg,#2E3D3F 0%,#1a2526 100%)", borderRadius:20, color:"#fff" }}>
           <div style={{ fontSize:"0.75rem", letterSpacing:".14em", textTransform:"uppercase", color:"#C9AA71", fontWeight:700, marginBottom:12 }}>Konsultasi Gratis</div>
-          <h3 style={{ fontFamily:"'Playfair Display',serif", fontSize:"clamp(1.25rem,3vw,1.75rem)", fontWeight:900, margin:"0 0 12px" }}>Tidak menemukan yang sesuai?</h3>
+          <h3 style={{ fontFamily:"'Playfair Display','Noto Emoji',serif", fontSize:"clamp(1.25rem,3vw,1.75rem)", fontWeight:900, margin:"0 0 12px" }}>Tidak menemukan yang sesuai?</h3>
           <p style={{ color:"rgba(255,255,255,.7)", fontSize:"0.875rem", margin:"0 0 24px", lineHeight:1.7 }}>Kami siap membuat desain custom sesuai kebutuhan dan budget Anda.</p>
           <button onClick={()=>onWaOpen && onWaOpen({ key: "konsultasi", vars: {} })}
             style={{ background:"#C9AA71", color:"#2E3D3F", border:"none", borderRadius:10, padding:"14px 32px", fontSize:"0.9rem", fontWeight:800, cursor:"pointer", letterSpacing:".05em" }}>
@@ -12572,7 +12580,7 @@ function SubPageCatalogDetailPage({ item, onBack, onWaOpen, formatHarga, breadcr
   };
 
   return (
-    <div style={{ minHeight: "100vh", background: "#FAFAF7", fontFamily: "'Jost',sans-serif" }}>
+    <div style={{ minHeight: "100vh", background: "#FAFAF7", fontFamily: "'Jost','Noto Emoji',sans-serif" }}>
       {/* Back bar */}
       <div style={{ background: `linear-gradient(90deg,${darkTeal},#3D5254)`, padding: "0 5%", position: "sticky", top: 0, zIndex: 50, borderBottom: `3px solid ${accentGold}` }}>
         <button onClick={onBack} style={{ display: "flex", alignItems: "center", gap: 8, background: "none", border: "none", color: accentGold, fontWeight: 700, fontSize: "0.78rem", cursor: "pointer", padding: "13px 0", letterSpacing: ".06em", textTransform: "uppercase" }}>
@@ -12633,7 +12641,7 @@ function SubPageCatalogDetailPage({ item, onBack, onWaOpen, formatHarga, breadcr
 
           {/* ── Info & Request Custom ── */}
           <div>
-            <h1 style={{ fontSize: "1.85rem", fontWeight: 800, color: darkTeal, margin: "0 0 8px", fontFamily: "'Playfair Display',serif", lineHeight: 1.25 }}>
+            <h1 style={{ fontSize: "1.85rem", fontWeight: 800, color: darkTeal, margin: "0 0 8px", fontFamily: "'Playfair Display','Noto Emoji',serif", lineHeight: 1.25 }}>
               {item.nama}
             </h1>
             {item.material && (
@@ -12641,7 +12649,7 @@ function SubPageCatalogDetailPage({ item, onBack, onWaOpen, formatHarga, breadcr
                 <span style={{ color: accentGold }}>◆</span> {item.material}
               </div>
             )}
-            <div style={{ fontSize: "1.4rem", fontWeight: 800, color: "#8B6914", fontFamily: "'Playfair Display',serif", marginBottom: 18 }}>
+            <div style={{ fontSize: "1.4rem", fontWeight: 800, color: "#8B6914", fontFamily: "'Playfair Display','Noto Emoji',serif", marginBottom: 18 }}>
               {formatHarga(item.harga)}
             </div>
 
@@ -12670,13 +12678,13 @@ function SubPageCatalogDetailPage({ item, onBack, onWaOpen, formatHarga, breadcr
                 Ingin ukuran, material, atau desain berbeda dari contoh ini? Kirim permintaan custom langsung ke tim kami via WhatsApp.
               </p>
               <button onClick={handleRequestCustom}
-                style={{ width: "100%", background: "linear-gradient(135deg,#25D366,#128C7E)", color: "#fff", border: "none", borderRadius: 10, padding: "14px 24px", fontSize: "0.92rem", fontWeight: 700, cursor: "pointer", fontFamily: "'Jost',sans-serif", display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
+                style={{ width: "100%", background: "linear-gradient(135deg,#25D366,#128C7E)", color: "#fff", border: "none", borderRadius: 10, padding: "14px 24px", fontSize: "0.92rem", fontWeight: 700, cursor: "pointer", fontFamily: "'Jost','Noto Emoji',sans-serif", display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
                 💬 Request Custom via WhatsApp
               </button>
             </div>
 
             <button onClick={() => onWaOpen && onWaOpen({ key: "layanan", vars: { judul_layanan: item.nama } })}
-              style={{ width: "100%", marginTop: 10, background: "#FAF7F0", color: darkTeal, border: "1.5px solid #E8DCC8", borderRadius: 10, padding: "12px 20px", fontSize: "0.85rem", fontWeight: 600, cursor: "pointer", fontFamily: "'Jost',sans-serif" }}>
+              style={{ width: "100%", marginTop: 10, background: "#FAF7F0", color: darkTeal, border: "1.5px solid #E8DCC8", borderRadius: 10, padding: "12px 20px", fontSize: "0.85rem", fontWeight: 600, cursor: "pointer", fontFamily: "'Jost','Noto Emoji',sans-serif" }}>
               💬 Konsultasi Item Ini
             </button>
           </div>
@@ -12895,7 +12903,7 @@ function VasturaFooter({ data, navigateTo, onWaOpen, showDevProfile }) {
     <button onClick={() => navigateTo(page)}
       style={{ display:"flex", alignItems:"center", gap:8, background:"none", border:"none",
         color:"rgba(255,255,255,.72)", fontSize:13, cursor:"pointer", padding:"3px 0",
-        textAlign:"left", fontFamily:"'Jost',sans-serif", transition:"color .15s, gap .15s",
+        textAlign:"left", fontFamily:"'Jost','Noto Emoji',sans-serif", transition:"color .15s, gap .15s",
         lineHeight:1.6 }}
       onMouseEnter={e => { e.currentTarget.style.color = accentGold; e.currentTarget.style.gap = "12px"; }}
       onMouseLeave={e => { e.currentTarget.style.color = "rgba(255,255,255,.72)"; e.currentTarget.style.gap = "8px"; }}>
@@ -12916,7 +12924,7 @@ function VasturaFooter({ data, navigateTo, onWaOpen, showDevProfile }) {
   );
 
   return (
-    <footer style={{ background: darkBg, fontFamily:"'Jost',sans-serif" }}>
+    <footer style={{ background: darkBg, fontFamily:"'Jost','Noto Emoji',sans-serif" }}>
       <style>{`
         .vf-col-title { font-size:11px; font-weight:800; letter-spacing:.18em; text-transform:uppercase; color:${accentGold}; margin-bottom:18px; }
         .vf-divider { height:1px; background:${borderCol}; margin:0; }
@@ -12938,7 +12946,8 @@ function VasturaFooter({ data, navigateTo, onWaOpen, showDevProfile }) {
               <img
                 src={c.footerLogoImage || c.logoImage || VASTURA_LOGO_URL}
                 alt={c.logoText?.replace("\n"," ") || "Vastura Grup"}
-                style={{ height:70, maxWidth:220, objectFit:"contain", display:"block", filter:"brightness(1.05)" }}
+                style={{ height:70, maxWidth:220, objectFit:"contain", display:"block",
+                  filter:"brightness(1.05) drop-shadow(0 0 1px rgba(255,255,255,.9)) drop-shadow(0 0 1px rgba(255,255,255,.9)) drop-shadow(0 1px 3px rgba(0,0,0,.35))" }}
               />
             </div>
 
@@ -13047,14 +13056,14 @@ function VasturaFooter({ data, navigateTo, onWaOpen, showDevProfile }) {
           <div style={{ display:"flex", gap:20, alignItems:"center", flexWrap:"wrap" }}>
             <button onClick={() => {}}
               style={{ background:"none", border:"none", fontSize:12, color:"rgba(255,255,255,.38)", cursor:"pointer",
-                fontFamily:"'Jost',sans-serif", transition:"color .15s", padding:0 }}
+                fontFamily:"'Jost','Noto Emoji',sans-serif", transition:"color .15s", padding:0 }}
               onMouseEnter={e => e.currentTarget.style.color = accentGold}
               onMouseLeave={e => e.currentTarget.style.color = "rgba(255,255,255,.38)"}>
               Kebijakan Privasi
             </button>
             <button onClick={() => {}}
               style={{ background:"none", border:"none", fontSize:12, color:"rgba(255,255,255,.38)", cursor:"pointer",
-                fontFamily:"'Jost',sans-serif", transition:"color .15s", padding:0 }}
+                fontFamily:"'Jost','Noto Emoji',sans-serif", transition:"color .15s", padding:0 }}
               onMouseEnter={e => e.currentTarget.style.color = accentGold}
               onMouseLeave={e => e.currentTarget.style.color = "rgba(255,255,255,.38)"}>
               Syarat & Ketentuan
@@ -13062,7 +13071,7 @@ function VasturaFooter({ data, navigateTo, onWaOpen, showDevProfile }) {
             {showDevProfile && (
               <button onClick={showDevProfile}
                 style={{ background:"none", border:"none", fontSize:11, color:"rgba(255,255,255,.22)", cursor:"pointer",
-                  fontFamily:"'Jost',sans-serif", transition:"color .15s", padding:0, letterSpacing:".06em" }}
+                  fontFamily:"'Jost','Noto Emoji',sans-serif", transition:"color .15s", padding:0, letterSpacing:".06em" }}
                 onMouseEnter={e => e.currentTarget.style.color = "rgba(255,255,255,.5)"}
                 onMouseLeave={e => e.currentTarget.style.color = "rgba(255,255,255,.22)"}>
                 Power Developer
@@ -13263,7 +13272,7 @@ function NavDropdownLayanan({ page, navigateTo, navDropdownLayanan }) {
             onMouseEnter={()=>setSubOpen("interior")}
             onMouseLeave={()=>setSubOpen(null)}>
             <button style={btn(page.startsWith("interior"))} onMouseEnter={e=>{e.currentTarget.style.background="#FAF7F0";}} onMouseLeave={e=>{e.currentTarget.style.background=page.startsWith("interior")?"#FAF7F0":"transparent";}}>
-              <span>🛋️ Interior</span><span style={{fontSize:"0.65rem",opacity:0.6}}>▶</span>
+              <span>🛋️ Interior</span><span style={{fontSize:"0.63rem",fontWeight:800,color:"#fff",background:"#8B6914",padding:"4px 12px",borderRadius:5,letterSpacing:".06em"}}>BUKA</span>
             </button>
             {subOpen==="interior" && (
               <div style={{...ddBase, top:0, left:"100%", marginLeft:4}}>
@@ -13292,7 +13301,7 @@ function NavDropdownLayanan({ page, navigateTo, navDropdownLayanan }) {
             onMouseEnter={()=>setSubOpen("eksterior")}
             onMouseLeave={()=>setSubOpen(null)}>
             <button style={btn(page.startsWith("eksterior"))} onMouseEnter={e=>{e.currentTarget.style.background="#FAF7F0";}} onMouseLeave={e=>{e.currentTarget.style.background=page.startsWith("eksterior")?"#FAF7F0":"transparent";}}>
-              <span>🏠 Eksterior</span><span style={{fontSize:"0.65rem",opacity:0.6}}>▶</span>
+              <span>🏠 Eksterior</span><span style={{fontSize:"0.63rem",fontWeight:800,color:"#fff",background:"#8B6914",padding:"4px 12px",borderRadius:5,letterSpacing:".06em"}}>BUKA</span>
             </button>
             {subOpen==="eksterior" && (
               <div style={{...ddBase, top:0, left:"100%", marginLeft:4}}>
@@ -13300,7 +13309,6 @@ function NavDropdownLayanan({ page, navigateTo, navDropdownLayanan }) {
                   {key:"eksterior/pagar",           label:"🔒 Pagar"},
                   {key:"eksterior/kanopi",           label:"🏗️ Kanopi"},
                   {key:"eksterior/aluminium",        label:"🪟 Aluminium"},
-                  {key:"eksterior/taman-landscape",  label:"🌳 Taman Landscape"},
                 ].map(sub=>(
                   <button key={sub.key} onClick={()=>{ navigateTo(sub.key); setDdOpen(false); setSubOpen(null); }}
                     style={btn(page===sub.key)}
@@ -13312,6 +13320,14 @@ function NavDropdownLayanan({ page, navigateTo, navDropdownLayanan }) {
               </div>
             )}
           </div>
+
+          {/* Landscape & Taman -- dipindah ke bawah Interior & Eksterior */}
+          <button onClick={()=>{ navigateTo("eksterior/taman-landscape"); setDdOpen(false); setSubOpen(null); }}
+            style={btn(page==="eksterior/taman-landscape")}
+            onMouseEnter={e=>{e.currentTarget.style.background="#FAF7F0"; e.currentTarget.style.color="#2E3D3F";}}
+            onMouseLeave={e=>{e.currentTarget.style.background=page==="eksterior/taman-landscape"?"#FAF7F0":"transparent"; e.currentTarget.style.color=page==="eksterior/taman-landscape"?"#2E3D3F":"#3D5254";}}>
+            🌳 Landscape & Taman
+          </button>
 
           {/* Divider Produk Retail */}
           <div style={{ margin:"4px 0 2px", borderTop:"1px solid #edf2f4" }}/>
@@ -14985,7 +15001,7 @@ export default function BricksyTravel() {
   const navDropdownInterior = [];
   // Dropdown: Program Renovasi -- Rumah Subsidi & Landscape & Taman
   const navDropdownGaleri = [
-    { key: "shop",      label: data.content.nav4  || "Rumah Subsidi" },
+    { key: "shop",      label: data.content.nav4  || "Paket Rumah Subsidi" },
     { key: "landscape", label: data.content.nav13 || "Landscape & Taman" },
   ];
   // All keys that are "active" as pages for highlight purposes
@@ -15133,7 +15149,7 @@ export default function BricksyTravel() {
                    : saveProgress.status === "warning"  ? "#f39c12"
                    : saveProgress.status === "error"    ? "#e74c3c"
                    : "#8B6914",
-              fontFamily: "'Playfair Display', serif",
+              fontFamily: "'Playfair Display','Noto Emoji', serif",
             }}>
               {saveProgress.pct}%
             </div>
@@ -15724,7 +15740,7 @@ export default function BricksyTravel() {
                 {/* -- Mobile: main nav items -- */}
                 {navItems.map(item => (
                   <button key={item.key} onClick={() => { navigateTo(item.key); setMobileMenu(false); }}
-                    style={{ fontSize:".8rem", letterSpacing:".14em", textTransform:"uppercase", fontFamily:"'Jost',sans-serif",
+                    style={{ fontSize:".8rem", letterSpacing:".14em", textTransform:"uppercase", fontFamily:"'Jost','Noto Emoji',sans-serif",
                       color:page===item.key?"var(--re-black)":"var(--re-grey-dk)", fontWeight:page===item.key?700:400,
                       border:"none", background:"transparent", textAlign:"left", padding:"13px 18px", borderRadius:6, width:"100%",
                       borderLeft:page===item.key?"2px solid var(--re-black)":"2px solid transparent", transition:"all .15s", cursor:"pointer" }}
@@ -15741,7 +15757,7 @@ export default function BricksyTravel() {
                 <div style={{ padding:"10px 18px 4px", fontSize:"0.6rem", fontWeight:800, letterSpacing:".18em", textTransform:"uppercase", color:"#8B6914", opacity:0.8 }}>Program Renovasi</div>
                 {navDropdownGaleri.map(item=>(
                   <button key={item.key} onClick={()=>{ navigateTo(item.key); setMobileMenu(false); }}
-                    style={{ fontSize:".8rem", letterSpacing:".12em", textTransform:"uppercase", fontFamily:"'Jost',sans-serif",
+                    style={{ fontSize:".8rem", letterSpacing:".12em", textTransform:"uppercase", fontFamily:"'Jost','Noto Emoji',sans-serif",
                       color:page===item.key?"var(--re-black)":"var(--re-grey-dk)", fontWeight:page===item.key?700:400,
                       border:"none", background:"transparent", textAlign:"left", padding:"11px 28px", borderRadius:6, width:"100%",
                       borderLeft:page===item.key?"2px solid #8B6914":"2px solid transparent", transition:"all .15s", cursor:"pointer" }}
@@ -15754,7 +15770,7 @@ export default function BricksyTravel() {
                 {/* -- Mobile: Produk Retail Furnitur -- */}
                 <div style={{ padding:"10px 18px 4px", fontSize:"0.6rem", fontWeight:800, letterSpacing:".18em", textTransform:"uppercase", color:"#8B6914", opacity:0.8 }}>Produk Retail</div>
                 <button onClick={()=>{ navigateTo("furnitur"); setMobileMenu(false); }}
-                  style={{ fontSize:".8rem", letterSpacing:".12em", textTransform:"uppercase", fontFamily:"'Jost',sans-serif",
+                  style={{ fontSize:".8rem", letterSpacing:".12em", textTransform:"uppercase", fontFamily:"'Jost','Noto Emoji',sans-serif",
                     color:page==="furnitur"?"var(--re-black)":"var(--re-grey-dk)", fontWeight:page==="furnitur"?700:400,
                     border:"none", background:"transparent", textAlign:"left", padding:"11px 28px", borderRadius:6, width:"100%",
                     borderLeft:page==="furnitur"?"2px solid #8B6914":"2px solid transparent", transition:"all .15s", cursor:"pointer" }}
@@ -15768,11 +15784,11 @@ export default function BricksyTravel() {
                       Login sebagai <strong style={{ color: "var(--re-black)" }}>{user.name || user.username}</strong>
                     </div>
                     <button onClick={() => { openAdmin(); setMobileMenu(false); }}
-                      style={{ fontSize: ".875rem", color: "#fff", background: "var(--re-black)", border: "none", borderRadius: 6, padding: "11px 16px", fontWeight: 700, width: "100%", marginBottom: 8, fontFamily:"'Jost',sans-serif" }}>
+                      style={{ fontSize: ".875rem", color: "#fff", background: "var(--re-black)", border: "none", borderRadius: 6, padding: "11px 16px", fontWeight: 700, width: "100%", marginBottom: 8, fontFamily:"'Jost','Noto Emoji',sans-serif" }}>
                       ⚙ Admin Panel
                     </button>
                     <button onClick={() => { logout(); setMobileMenu(false); }}
-                      style={{ fontSize: ".875rem", color: "rgba(160,40,40,.9)", background: "rgba(200,50,50,.08)", border: "1px solid rgba(200,50,50,.2)", borderRadius: 6, padding: "10px 16px", width: "100%", fontFamily:"'Jost',sans-serif" }}>
+                      style={{ fontSize: ".875rem", color: "rgba(160,40,40,.9)", background: "rgba(200,50,50,.08)", border: "1px solid rgba(200,50,50,.2)", borderRadius: 6, padding: "10px 16px", width: "100%", fontFamily:"'Jost','Noto Emoji',sans-serif" }}>
                       Logout
                     </button>
                   </div>
@@ -16003,8 +16019,8 @@ export default function BricksyTravel() {
                   <section style={{ background:"#F8F5EE", padding:"56px 0 52px", overflow:"hidden" }}>
                     {/* Label */}
                     <div style={{ textAlign:"center", marginBottom:32 }}>
-                      <p style={{ fontSize:"0.7rem", letterSpacing:"3px", color:"#8B6914", fontWeight:700, textTransform:"uppercase", fontFamily:"'Jost',sans-serif", marginBottom:10 }}>Koleksi Kami</p>
-                      <h2 style={{ fontFamily:"'Playfair Display',serif", fontSize:"clamp(1.4rem,3vw,2rem)", fontWeight:800, color:"#2E3D3F", margin:0, letterSpacing:"-0.01em" }}>
+                      <p style={{ fontSize:"0.7rem", letterSpacing:"3px", color:"#8B6914", fontWeight:700, textTransform:"uppercase", fontFamily:"'Jost','Noto Emoji',sans-serif", marginBottom:10 }}>Koleksi Kami</p>
+                      <h2 style={{ fontFamily:"'Playfair Display','Noto Emoji',serif", fontSize:"clamp(1.4rem,3vw,2rem)", fontWeight:800, color:"#2E3D3F", margin:0, letterSpacing:"-0.01em" }}>
                         Tema Rumah · Interior · Eksterior · Furnitur
                       </h2>
                     </div>
@@ -16145,7 +16161,7 @@ export default function BricksyTravel() {
                           alt={data.content.logoText?.replace("\n"," ") || "VASTURA GROUP"}
                           style={{ height: 72, maxWidth: 200, objectFit: "contain", display: "block", marginBottom: 16 }}
                         />
-                        <p style={{ fontFamily:"'Jost',sans-serif", fontSize:".85rem", color:"var(--re-grey-md)", lineHeight:1.8, marginBottom:14 }}>
+                        <p style={{ fontFamily:"'Jost','Noto Emoji',sans-serif", fontSize:".85rem", color:"var(--re-grey-md)", lineHeight:1.8, marginBottom:14 }}>
                           {data.content.email || "halo@vastura.co.id"}
                         </p>
                       </div>
@@ -17659,7 +17675,7 @@ export default function BricksyTravel() {
                             id={`wa-tpl-${key}`}
                             defaultValue={val}
                             ref={autoGrowTextarea}
-                            style={{ width: "100%", padding: "10px 12px", border: "1.5px solid #D4C4A0", borderRadius: 8, fontSize: 12, fontFamily: "monospace", resize: "none", overflow: "hidden", outline: "none", boxSizing: "border-box", lineHeight: 1.7 }}
+                            style={{ width: "100%", padding: "10px 12px", border: "1.5px solid #D4C4A0", borderRadius: 8, fontSize: 12, fontFamily: "monospace,'Noto Emoji'", resize: "none", overflow: "hidden", outline: "none", boxSizing: "border-box", lineHeight: 1.7 }}
                             onInput={e => autoGrowTextarea(e.target)}
                             onFocus={e => e.target.style.borderColor = "#25d366"}
                             onBlur={e => e.target.style.borderColor = "#D4C4A0"}
