@@ -15001,7 +15001,7 @@ export default function BricksyTravel() {
   const navDropdownInterior = [];
   // Dropdown: Program Renovasi -- Rumah Subsidi & Landscape & Taman
   const navDropdownGaleri = [
-    { key: "shop",      label: data.content.nav4  || "Paket Rumah Subsidi" },
+    { key: "shop",      label: "Paket Rumah Subsidi" },
     { key: "landscape", label: data.content.nav13 || "Landscape & Taman" },
   ];
   // All keys that are "active" as pages for highlight purposes
