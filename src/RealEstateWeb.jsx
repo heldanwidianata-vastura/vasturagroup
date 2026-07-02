@@ -12757,7 +12757,7 @@ const CATALOG_DATA = {
     items:[
       {id:"km1", nama:"Bathroom Minimalis Modern", style:"Clean", material:"Granit + Keramik", desc:"Desain kotak-kotak bersih dengan shower box kaca, cermin LED, dan sanitasi premium.", harga:12000000, fitur:["Shower Box","LED Mirror","Waterproof"], img:"https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=600&q=80"},
       {id:"km2", nama:"Bathroom Mewah Spa", style:"Luxury", material:"Marmer Impor + Brass", desc:"Nuansa spa bintang 5. Bathtub freestanding, shower rainfall, dan aksen emas.", harga:45000000, fitur:["Freestanding Bathtub","Rain Shower","Gold Accent"], img:"https://images.unsplash.com/photo-1507652313519-d4e9174996dd?w=600&q=80"},
-      {id:"km3", nama:"Bathroom Industrial", style:"Urban", material:"Beton Ekspos + Pipa", desc:"Nuansa gudang modern. Dinding semen ekspos, pipa galvanis dekoratif, cermin bulat.", harga:9500000, fitur:["Concrete Wall","Pipe Decor","Round Mirror"], img:"https://images.unsplash.com/photo-1620626011761-996317702782?w=600&q=80"},
+      {id:"km3", nama:"Bathroom Industrial", style:"Urban", material:"Beton Ekspos + Pipa", desc:"Nuansa gudang modern. Dinding semen ekspos, pipa galvanis dekoratif, cermin bulat.", harga:9500000, fitur:["Concrete Wall","Pipe Decor","Round Mirror"], img:"https://images.unsplash.com/photo-1620626011761-996317b8d101?w=600&q=80"},
       {id:"km4", nama:"Bathroom Natural Spa", style:"Organic", material:"Batu Alam + Kayu", desc:"Harmonis dengan alam. Lantai pebble, dinding batu andesit, dan bathtub kayu.", harga:18000000, fitur:["Pebble Floor","Stone Wall","Wood Tub"], img:"https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=600&q=80"},
       {id:"km5", nama:"Bathroom Scandinavian", style:"Light", material:"Keramik Putih + Kayu", desc:"Terang dan bersih. White subway tile, wooden vanity, dan tanaman pot kecil.", harga:8000000, fitur:["Subway Tile","Wood Vanity","Plant Decor"], img:"https://images.unsplash.com/photo-1600566752355-35792bedcfea?w=600&q=80"},
       {id:"km6", nama:"Bathroom Japandi", style:"Zen", material:"Bambu + Batu + Kayu", desc:"Ketenangan ala Jepang. Ofuro mini, tatami step, dan elemen alam yang menenangkan.", harga:22000000, fitur:["Mini Ofuro","Bamboo Decor","Zen Elements"], img:"https://images.unsplash.com/photo-1556909211-36987daf7b4d?w=600&q=80"},
@@ -14255,10 +14255,14 @@ export default function BricksyTravel() {
     const obs = new IntersectionObserver((entries) => {
       entries.forEach(e => {
         if (e.isIntersecting) {
-          // Masuk viewport: hapus exit, tambah visible
-          e.target.classList.remove("exit");
-          void e.target.offsetWidth; // reflow agar animasi restart
-          e.target.classList.add("visible");
+          // Masuk viewport: hapus exit, tambah visible -- HANYA jika belum visible
+          // (tanpa guard ini, observer bisa fire berkali-kali saat isIntersecting tetap true,
+          //  memaksa reflow + restart animasi terus-menerus → efek kedip/flicker cepat)
+          if (!e.target.classList.contains("visible")) {
+            e.target.classList.remove("exit");
+            void e.target.offsetWidth; // reflow agar animasi restart
+            e.target.classList.add("visible");
+          }
         } else {
           // Keluar viewport: hapus visible, tambah exit (hanya jika pernah visible)
           if (e.target.classList.contains("visible")) {
@@ -14299,9 +14303,11 @@ export default function BricksyTravel() {
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(e => {
         if (e.isIntersecting) {
-          e.target.classList.remove("exit");
-          void e.target.offsetWidth;
-          e.target.classList.add("visible");
+          if (!e.target.classList.contains("visible")) {
+            e.target.classList.remove("exit");
+            void e.target.offsetWidth;
+            e.target.classList.add("visible");
+          }
         } else {
           if (e.target.classList.contains("visible")) {
             e.target.classList.remove("visible");
