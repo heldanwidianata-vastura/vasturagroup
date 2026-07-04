@@ -274,21 +274,14 @@ async function uploadToCloudinary(file) {
   return data.secure_url;
 }
 
-/* ─────────────── FILTER NAMA FILE DARI CAPTION FOTO PUBLIK ───────────────
-   Jaring pengaman PERMANEN: dipakai di setiap tempat yang menampilkan caption/
-   label foto ke publik (slideshow, galeri, dsb). Walaupun sumber upload sudah
-   tidak lagi menyimpan nama file sebagai label, data lama di Firestore atau
-   input manual admin yang kebetulan mirip nama file tetap akan disaring di
-   sini supaya TIDAK PERNAH tampil ke pengunjung. */
-function publicCaption(label) {
-  if (!label || typeof label !== "string") return "";
-  const s = label.trim();
-  if (!s) return "";
-  const looksLikeFilename =
-    /\.(jpe?g|png|webp|gif|heic|bmp|avif)$/i.test(s) ||                 // diakhiri ekstensi gambar
-    /^(img|dsc|whatsapp image|screenshot|photo|vid|image)[\s_-]/i.test(s) || // pola nama file kamera/HP umum
-    /^[a-f0-9]{8,}$/i.test(s.replace(/[\s_-]/g, ""));                    // hash/angka acak panjang
-  return looksLikeFilename ? "" : s;
+/* ─────────────── CAPTION/LABEL FOTO PUBLIK — DINONAKTIFKAN PERMANEN ───────────────
+   Sesuai permintaan: TIDAK ADA caption/label/nama file apa pun yang boleh
+   tampil di atas gambar publik (slideshow, galeri, dsb) — hanya gambar saja.
+   Fungsi ini sengaja selalu mengembalikan string kosong apa pun inputnya,
+   supaya seluruh pemanggil publicCaption() di kode (yang jumlahnya banyak)
+   tidak perlu diubah satu-satu, tapi outputnya tetap tidak pernah tampil. */
+function publicCaption(_label) {
+  return "";
 }
 
 /* ─────────────── FORMAT RUPIAH GLOBAL ─────────────── */
@@ -2838,9 +2831,10 @@ const GS = () => (
       .re-services-grid { grid-template-columns:1fr 1fr; }
       .re-contact-grid { grid-template-columns:1fr; gap:40px; }
     }
-    /* Panah navigasi slideshow foto: di mobile dibuat pudar & tanpa warna (greyscale) */
+    /* Panah navigasi slideshow foto: disembunyikan total di mobile —
+       diganti interaksi tap-langsung-di-foto (lihat handleTouchEnd di komponen) */
     @media(max-width:768px) {
-      .re-tema-arrow { opacity:.5; filter:grayscale(100%); }
+      .re-tema-arrow, .slide-arrow-btn { display:none; }
     }
     @media(max-width:600px) {
       /* Hero mobile — 75vh konsisten, video tidak terpotong aneh, fokus tengah */
@@ -5454,6 +5448,7 @@ function ServiceHeroSlideshow({ slides, catColor }) {
   const timerRef = useRef(null);
   const pausedRef = useRef(false);
   pausedRef.current = paused;
+  const touchRef = useRef({ down: false, startX: 0, moved: false });
 
   const next = useCallback(() => setCur(c => (c + 1) % slides.length), [slides.length]);
   const back = useCallback(() => setCur(c => (c - 1 + slides.length) % slides.length), [slides.length]);
@@ -5466,13 +5461,37 @@ function ServiceHeroSlideshow({ slides, catColor }) {
     return () => clearInterval(timerRef.current);
   }, [slides.length]);
 
+  /* MOBILE: tap di area gambar = lanjut ke slide berikutnya, geser jari = swipe sesuai arah */
+  const onTouchStart = (e) => {
+    if (slides.length < 2) return;
+    const t = e.touches[0];
+    touchRef.current = { down: true, startX: t.clientX, moved: false };
+  };
+  const onTouchMoveH = (e) => {
+    if (!touchRef.current.down) return;
+    const t = e.touches[0];
+    if (Math.abs(t.clientX - touchRef.current.startX) > 4) touchRef.current.moved = true;
+  };
+  const onTouchEndH = (e) => {
+    if (!touchRef.current.down || slides.length < 2) return;
+    const t = e.changedTouches[0];
+    const dx = t.clientX - touchRef.current.startX;
+    const wasTap = !touchRef.current.moved;
+    touchRef.current.down = false;
+    if (Math.abs(dx) > 40) { dx < 0 ? next() : back(); }
+    else if (wasTap) { next(); }
+  };
+
   if (!slides.length) return null;
   const slide = slides[cur];
 
   return (
-    <div style={{ position: "relative", overflow: "hidden", display: "flex", alignItems: "stretch" }}
+    <div style={{ position: "relative", overflow: "hidden", display: "flex", alignItems: "stretch", touchAction: slides.length > 1 ? "pan-y" : "auto" }}
       onMouseEnter={() => setPaused(true)}
-      onMouseLeave={() => setPaused(false)}>
+      onMouseLeave={() => setPaused(false)}
+      onTouchStart={onTouchStart}
+      onTouchMove={onTouchMoveH}
+      onTouchEnd={onTouchEndH}>
       <style>{`
         @keyframes heroFadeIn { from { opacity:0; transform:scale(1.04); } to { opacity:1; transform:scale(1); } }
       `}</style>
@@ -5499,9 +5518,9 @@ function ServiceHeroSlideshow({ slides, catColor }) {
               </div>
               <div style={{ fontSize: "0.875rem", fontWeight: 700, color: "#fff", textShadow: "0 2px 8px rgba(0,0,0,.6)", lineHeight: 1.25 }}>{slide.title || slide.name}</div>
             </div>
-            {/* Prev / Next */}
+            {/* Prev / Next -- disembunyikan di mobile (class slide-arrow-btn), diganti tap-di-gambar */}
             {slides.length > 1 && (
-              <div style={{ display: "flex", gap: 6 }}>
+              <div className="slide-arrow-btn" style={{ display: "flex", gap: 6 }}>
                 <button onClick={e => { e.stopPropagation(); back(); }}
                   style={{ width: 32, height: 32, borderRadius: "50%", background: "rgba(255,255,255,.15)", backdropFilter: "blur(6px)", border: "1px solid rgba(255,255,255,.25)", color: "#fff", fontSize: "1rem", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}>‹</button>
                 <button onClick={e => { e.stopPropagation(); next(); }}
@@ -5556,6 +5575,24 @@ function DestGallerySlideshow({ slides, catColor, svcTitle }) {
     return () => clearInterval(timerRef.current);
   }, [slides.length]);
 
+  const touchRef = useRef({ down: false, startX: 0, moved: false });
+  const onTouchStart = (e) => {
+    if (slides.length < 2) return;
+    touchRef.current = { down: true, startX: e.touches[0].clientX, moved: false };
+  };
+  const onTouchMoveH = (e) => {
+    if (!touchRef.current.down) return;
+    if (Math.abs(e.touches[0].clientX - touchRef.current.startX) > 4) touchRef.current.moved = true;
+  };
+  const onTouchEndH = (e) => {
+    if (!touchRef.current.down || slides.length < 2) return;
+    const dx = e.changedTouches[0].clientX - touchRef.current.startX;
+    const wasTap = !touchRef.current.moved;
+    touchRef.current.down = false;
+    if (Math.abs(dx) > 40) { dx < 0 ? next() : back(); }
+    else if (wasTap) { next(); }
+  };
+
   const slide = slides[cur];
 
   return (
@@ -5576,11 +5613,14 @@ function DestGallerySlideshow({ slides, catColor, svcTitle }) {
         </div>
       </div>
 
-      {/* Slideshow frame */}
+      {/* Slideshow frame -- MOBILE: tap gambar = next, geser jari = swipe */}
       <div
-        style={{ position: "relative", borderRadius: 14, overflow: "hidden", boxShadow: "0 8px 36px rgba(13,59,102,.16)", height: "min(420px, 56vw)", minHeight: 220, background: "#2E3D3F", cursor: "pointer" }}
+        style={{ position: "relative", borderRadius: 14, overflow: "hidden", boxShadow: "0 8px 36px rgba(13,59,102,.16)", height: "min(420px, 56vw)", minHeight: 220, background: "#2E3D3F", cursor: "pointer", touchAction: slides.length > 1 ? "pan-y" : "auto" }}
         onMouseEnter={() => setPaused(true)}
         onMouseLeave={() => setPaused(false)}
+        onTouchStart={onTouchStart}
+        onTouchMove={onTouchMoveH}
+        onTouchEnd={onTouchEndH}
       >
         {/* Current slide */}
         <img key={`cur-${cur}`} loading="lazy" src={slide.img} alt={slide.name}
@@ -5603,9 +5643,9 @@ function DestGallerySlideshow({ slides, catColor, svcTitle }) {
                 <div style={{ fontSize: "0.75rem", color: "rgba(255,255,255,.6)", marginTop: 3 }}>📍 {slide.name}</div>
               )}
             </div>
-            {/* Nav buttons */}
+            {/* Nav buttons -- disembunyikan di mobile, diganti tap-di-gambar */}
             {slides.length > 1 && (
-              <div style={{ display: "flex", gap: 8 }}>
+              <div className="slide-arrow-btn" style={{ display: "flex", gap: 8 }}>
                 <button onClick={e => { e.stopPropagation(); back(); }}
                   style={{ width: 38, height: 38, borderRadius: "50%", background: "rgba(255,255,255,.15)", backdropFilter: "blur(8px)", border: "1.5px solid rgba(255,255,255,.25)", color: "#fff", fontSize: "0.875rem", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", transition: "background .2s" }}
                   onMouseEnter={e => e.currentTarget.style.background = "rgba(255,255,255,.3)"}
@@ -10080,7 +10120,18 @@ function TemaPhotoSlideshow({ slug, nama, cmsData, duration = 3500, fallbackImg 
   const handleTouchEnd = (e) => {
     if (!dragRef.current.down) return;
     const t = e.changedTouches[0];
-    endDrag({ clientX: t.clientX });
+    const dx = t.clientX - dragRef.current.startX;
+    const wasTap = !dragRef.current.moved; // jari nyaris tidak bergeser = dianggap "tap", bukan swipe
+    dragRef.current.down = false;
+    if (photos.length < 2) return;
+    if (Math.abs(dx) > 40) {
+      // Swipe beneran: geser sesuai arah jari
+      if (dx < 0) goTo((idx + 1) % photos.length);
+      else goTo((idx - 1 + photos.length) % photos.length);
+    } else if (wasTap) {
+      // MOBILE: tap di area foto langsung ganti ke foto berikutnya (pengganti tombol panah yang disembunyikan)
+      goTo((idx + 1) % photos.length);
+    }
   };
   const endDrag = (e) => {
     if (!dragRef.current.down) return;
@@ -10851,6 +10902,7 @@ const ELEMEN_PREMIUM = [
 function LsMiniSlide({ slides, height = "100%" }) {
   const [idx, setIdx] = useState(0);
   const timerRef = useRef(null);
+  const touchRef = useRef({ down: false, startX: 0, moved: false });
   const startTimer = useCallback(() => {
     clearInterval(timerRef.current);
     timerRef.current = setInterval(() => setIdx(p => (p + 1) % slides.length), 3800 + Math.random() * 1200);
@@ -10858,8 +10910,26 @@ function LsMiniSlide({ slides, height = "100%" }) {
   useEffect(() => { startTimer(); return () => clearInterval(timerRef.current); }, [startTimer]);
   const go = (d) => { setIdx(p => (p + d + slides.length) % slides.length); startTimer(); };
   const sl = slides[idx];
+  /* MOBILE: tap gambar = foto berikutnya, geser jari = swipe sesuai arah */
+  const onTouchStart = (e) => {
+    if (slides.length < 2) return;
+    touchRef.current = { down: true, startX: e.touches[0].clientX, moved: false };
+  };
+  const onTouchMoveH = (e) => {
+    if (!touchRef.current.down) return;
+    if (Math.abs(e.touches[0].clientX - touchRef.current.startX) > 4) touchRef.current.moved = true;
+  };
+  const onTouchEndH = (e) => {
+    if (!touchRef.current.down || slides.length < 2) return;
+    const dx = e.changedTouches[0].clientX - touchRef.current.startX;
+    const wasTap = !touchRef.current.moved;
+    touchRef.current.down = false;
+    if (Math.abs(dx) > 40) go(dx < 0 ? 1 : -1);
+    else if (wasTap) go(1);
+  };
   return (
-    <div style={{ position: "relative", width: "100%", height, overflow: "hidden" }}>
+    <div style={{ position: "relative", width: "100%", height, overflow: "hidden", touchAction: slides.length > 1 ? "pan-y" : "auto" }}
+      onTouchStart={onTouchStart} onTouchMove={onTouchMoveH} onTouchEnd={onTouchEndH}>
       <style>{`@keyframes lmFade{from{opacity:0;transform:scale(1.05)}to{opacity:1;transform:scale(1)}}`}</style>
       <img key={idx} src={sl.img} alt={sl.tema}
         style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", animation: "lmFade .55s ease" }}
@@ -10873,9 +10943,9 @@ function LsMiniSlide({ slides, height = "100%" }) {
       </div>
       {/* Counter */}
       <div style={{ position: "absolute", top: 10, right: 10, background: "rgba(0,0,0,.45)", backdropFilter: "blur(4px)", color: "#C9AA71", fontSize: "0.58rem", fontWeight: 800, padding: "2px 8px", borderRadius: 20 }}>{idx + 1}/{slides.length}</div>
-      {/* Arrows */}
+      {/* Arrows -- disembunyikan di mobile, diganti tap-di-gambar */}
       {slides.length > 1 && [["◀", -1], ["▶", 1]].map(([ch, d], i) => (
-        <button key={i} onClick={() => go(d)}
+        <button key={i} className="slide-arrow-btn" onClick={() => go(d)}
           style={{ position: "absolute", top: "50%", [i === 0 ? "left" : "right"]: 8, transform: "translateY(-50%)", background: "rgba(0,0,0,.35)", backdropFilter: "blur(4px)", border: "none", color: "#fff", fontSize: 12, width: 28, height: 28, borderRadius: "50%", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 2 }}>{ch}</button>
       ))}
       {/* Dots */}
@@ -11345,27 +11415,52 @@ function RsMiniSlide({ slides, slideDir = "right", height = "100%" }) {
   const timerRef = useRef(null);
   const clearRef = useRef(null);
   const idxRef = useRef(0);
+  const touchRef = useRef({ down: false, startX: 0, moved: false });
 
-  useEffect(() => {
-    timerRef.current = setInterval(() => {
-      const current = idxRef.current;
-      const next = (current + 1) % slides.length;
-      setPrevIdx(current);
-      setIdx(next);
-      idxRef.current = next;
-      setAnimating(true);
-      clearTimeout(clearRef.current);
-      clearRef.current = setTimeout(() => { setAnimating(false); setPrevIdx(null); }, 400);
-    }, 3000);
-    return () => { clearInterval(timerRef.current); clearTimeout(clearRef.current); };
+  const advance = useCallback((step = 1) => {
+    const current = idxRef.current;
+    const next = (current + step + slides.length) % slides.length;
+    setPrevIdx(current);
+    setIdx(next);
+    idxRef.current = next;
+    setAnimating(true);
+    clearTimeout(clearRef.current);
+    clearRef.current = setTimeout(() => { setAnimating(false); setPrevIdx(null); }, 400);
   }, [slides.length]);
+
+  const startTimer = useCallback(() => {
+    clearInterval(timerRef.current);
+    timerRef.current = setInterval(() => advance(1), 3000);
+  }, [advance]);
+
+  useEffect(() => { startTimer(); return () => { clearInterval(timerRef.current); clearTimeout(clearRef.current); }; }, [startTimer]);
+
+  /* MOBILE: tap gambar = foto berikutnya, geser jari = swipe sesuai arah
+     (sebelumnya slideshow ini murni otomatis, tidak ada kontrol manual sama sekali) */
+  const onTouchStart = (e) => {
+    if (slides.length < 2) return;
+    touchRef.current = { down: true, startX: e.touches[0].clientX, moved: false };
+  };
+  const onTouchMoveH = (e) => {
+    if (!touchRef.current.down) return;
+    if (Math.abs(e.touches[0].clientX - touchRef.current.startX) > 4) touchRef.current.moved = true;
+  };
+  const onTouchEndH = (e) => {
+    if (!touchRef.current.down || slides.length < 2) return;
+    const dx = e.changedTouches[0].clientX - touchRef.current.startX;
+    const wasTap = !touchRef.current.moved;
+    touchRef.current.down = false;
+    if (Math.abs(dx) > 40) { advance(dx < 0 ? 1 : -1); startTimer(); }
+    else if (wasTap) { advance(1); startTimer(); }
+  };
 
   const dirIn = { right: "rsSlideInRight", up: "rsSlideInUp", left: "rsSlideInLeft", down: "rsSlideInDown" };
   const dirOut = { right: "rsSlideOutRight", up: "rsSlideOutUp", left: "rsSlideOutLeft", down: "rsSlideOutDown" };
   const sl = slides[idx];
 
   return (
-    <div style={{ position: "relative", width: "100%", height, overflow: "hidden", background: "#1a1a1a" }}>
+    <div style={{ position: "relative", width: "100%", height, overflow: "hidden", background: "#1a1a1a", touchAction: slides.length > 1 ? "pan-y" : "auto" }}
+      onTouchStart={onTouchStart} onTouchMove={onTouchMoveH} onTouchEnd={onTouchEndH}>
       {prevIdx !== null && animating && (
         <img key={`p${prevIdx}`} src={slides[prevIdx].img} alt={slides[prevIdx].tema}
           className={dirOut[slideDir]}
