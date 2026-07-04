@@ -2838,6 +2838,10 @@ const GS = () => (
       .re-services-grid { grid-template-columns:1fr 1fr; }
       .re-contact-grid { grid-template-columns:1fr; gap:40px; }
     }
+    /* Panah navigasi slideshow foto: di mobile dibuat pudar & tanpa warna (greyscale) */
+    @media(max-width:768px) {
+      .re-tema-arrow { opacity:.5; filter:grayscale(100%); }
+    }
     @media(max-width:600px) {
       /* Hero mobile — 75vh konsisten, video tidak terpotong aneh, fokus tengah */
       .re-hero {
@@ -10058,6 +10062,26 @@ function TemaPhotoSlideshow({ slug, nama, cmsData, duration = 3500, fallbackImg 
     if (!dragRef.current.down) return;
     if (Math.abs(e.clientX - dragRef.current.startX) > 4) dragRef.current.moved = true;
   };
+  /* MOBILE: sentuh & geser jari (touch/swipe) -- HP tidak punya mouse, jadi
+     interaksi drag mouse di atas ditiru pakai touch event di sini supaya
+     tetap bisa geser foto pakai jari di HP. */
+  const handleTouchStart = (e) => {
+    if (photos.length < 2) return;
+    const t = e.touches[0];
+    dragRef.current = { down: true, startX: t.clientX, moved: false };
+    preload((idx + 1) % photos.length);
+    preload((idx - 1 + photos.length) % photos.length);
+  };
+  const handleTouchMove = (e) => {
+    if (!dragRef.current.down) return;
+    const t = e.touches[0];
+    if (Math.abs(t.clientX - dragRef.current.startX) > 4) dragRef.current.moved = true;
+  };
+  const handleTouchEnd = (e) => {
+    if (!dragRef.current.down) return;
+    const t = e.changedTouches[0];
+    endDrag({ clientX: t.clientX });
+  };
   const endDrag = (e) => {
     if (!dragRef.current.down) return;
     const dx = (e.clientX ?? dragRef.current.startX) - dragRef.current.startX;
@@ -10075,11 +10099,14 @@ function TemaPhotoSlideshow({ slug, nama, cmsData, duration = 3500, fallbackImg 
   const cur = photos[idx];
   return (
     <div
-      style={{ position: "relative", width: "100%", height: "100%", overflow: "hidden", cursor: photos.length > 1 ? "grab" : "default", userSelect: "none" }}
+      style={{ position: "relative", width: "100%", height: "100%", overflow: "hidden", cursor: photos.length > 1 ? "grab" : "default", userSelect: "none", touchAction: photos.length > 1 ? "pan-y" : "auto" }}
       onMouseDown={handleMouseDown}
       onMouseMove={handleMouseMove}
       onMouseUp={endDrag}
       onMouseLeave={endDrag}
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
     >
       {/* Image — tanpa key, jadi browser cuma ganti src elemen yang sama (tidak ada blank/kedip) */}
       <img src={cur.img} alt={publicCaption(cur.label) || nama || "Foto tema rumah"}
@@ -10099,19 +10126,22 @@ function TemaPhotoSlideshow({ slug, nama, cmsData, duration = 3500, fallbackImg 
         </div>
       ) : null}
 
-      {/* Dots */}
-      <div style={{ position: "absolute", bottom: 14, left: 0, right: 0, display: "flex", justifyContent: "center", gap: 6 }}>
+      {/* Dots -- area sentuh diperbesar (padding transparan) tanpa mengubah ukuran visual dot */}
+      <div style={{ position: "absolute", bottom: 8, left: 0, right: 0, display: "flex", justifyContent: "center", gap: 2 }}>
         {photos.map((_, i) => (
           <button key={i} onClick={() => goTo(i)}
-            style={{ width: i === idx ? 18 : 6, height: 6, borderRadius: 3, background: i === idx ? "#C9AA71" : "rgba(255,255,255,.55)", border: "none", cursor: "pointer", padding: 0, transition: "all .3s" }} />
+            style={{ width: (i === idx ? 18 : 6) + 16, height: 22, display: "flex", alignItems: "center", justifyContent: "center", background: "transparent", border: "none", cursor: "pointer", padding: 0 }}>
+            <span style={{ width: i === idx ? 18 : 6, height: 6, borderRadius: 3, background: i === idx ? "#C9AA71" : "rgba(255,255,255,.55)", transition: "all .3s", display: "block" }} />
+          </button>
         ))}
       </div>
 
-      {/* Side arrows -- appear on hover via CSS */}
+      {/* Panah kiri/kanan -- ukuran diperbesar (40px) supaya nyaman disentuh di HP.
+          Class "re-tema-arrow" dipakai buat aturan mobile: opacity 50% + greyscale (lihat CSS). */}
       {photos.length > 1 && ["◀","▶"].map((ch, d) => (
-        <button key={d}
+        <button key={d} className="re-tema-arrow"
           onClick={() => goTo((idx + (d === 0 ? -1 : 1) + photos.length) % photos.length)}
-          style={{ position: "absolute", top: "50%", [d === 0 ? "left" : "right"]: 10, transform: "translateY(-50%)", background: "rgba(0,0,0,.38)", backdropFilter: "blur(4px)", border: "none", color: "#fff", fontSize: 14, width: 32, height: 32, borderRadius: "50%", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}>
+          style={{ position: "absolute", top: "50%", [d === 0 ? "left" : "right"]: 8, transform: "translateY(-50%)", background: "rgba(0,0,0,.38)", backdropFilter: "blur(4px)", border: "none", color: "#fff", fontSize: 15, width: 40, height: 40, borderRadius: "50%", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}>
           {ch}
         </button>
       ))}
