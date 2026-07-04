@@ -6766,7 +6766,7 @@ function AboutPage({ content, images, teamMembers, aboutStats, aboutMisiList, ab
             {/* Info kontak */}
             <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
               {[
-                { icon: "📞", label: "Telepon / WhatsApp", value: content.phone, href: "#wa-picker", type: "link", onClick: (e) => { e.preventDefault(); if (onWaOpen) onWaOpen(); } },
+                { icon: "📞", label: "Telepon / WhatsApp", value: displayPhone(content), href: "#wa-picker", type: "link", onClick: (e) => { e.preventDefault(); if (onWaOpen) onWaOpen(); } },
                 { icon: "✉️", label: "Email", value: content.email, href: `mailto:${content.email}`, type: "link" },
                 { icon: "📍", label: "Alamat", value: content.address || "Malang, Jawa Timur, Indonesia", type: "text" },
                 { icon: "🕐", label: "Jam Operasional", value: content.hours || "Senin – Sabtu: 08.00 – 20.00 WIB", type: "text" },
@@ -11594,6 +11594,27 @@ function buildWaMsg(templates = {}, key = "umum", vars = {}) {
   return tpl.replace(/\{(\w+)\}/g, (_, k) => vars[k] || "");
 }
 
+/* ─────────────── NOMOR TELEPON YANG DITAMPILKAN KE PUBLIK ───────────────
+   PERMANEN: nomor yang ditampilkan di Footer, section Kontak, dsb SELALU
+   ikut siapa yang jadi admin WA `primary` di daftar `waAdmins` — bukan dari
+   field `content.phone` yang disimpan terpisah (field itu bisa "nyangkut"
+   ke nilai lama kalau pernah diedit manual sebelum ada sistem waAdmins).
+   Jadi kalau primary admin diganti lewat panel, nomor yang tampil di
+   seluruh situs otomatis ikut berubah, tidak perlu disinkronkan manual. */
+function displayPhone(content) {
+  const admins = content?.waAdmins || [];
+  const primary = admins.find(a => a.primary) || admins[0];
+  if (primary?.wa) {
+    const digits = primary.wa.replace(/\D/g, "");
+    // digits diawali "62" (kode negara) -> format +62 XXX-XXXX-XXXX
+    const local = digits.startsWith("62") ? digits.slice(2) : digits;
+    if (local.length >= 9) {
+      return `+62 ${local.slice(0, 3)}-${local.slice(3, 7)}-${local.slice(7)}`;
+    }
+  }
+  return content?.phone || "";
+}
+
 /* ════════════════════════════════════════════ WA PICKER MODAL ════════════════════════════════════════════ */
 function WaPickerModal({ admins = [], msgText = "", onClose }) {
   if (!admins || admins.length === 0) return null;
@@ -12942,7 +12963,7 @@ function VasturaFooter({ data, navigateTo, onWaOpen, showDevProfile }) {
     { label:"Kontak",        page:"about" },
   ];
 
-  const phone   = c.phone   || "0812-3456-7890";
+  const phone   = displayPhone(c) || "0812-3456-7890";
   const email   = c.email   || "info@vasturagrup.com";
   const address = c.address || "Jl. Contoh No.123, Kota Anda\nIndonesia 12345";
   const website = c.website || "www.vasturagrup.com";
@@ -16223,7 +16244,7 @@ export default function BricksyTravel() {
                         </div>
                         <div>
                           <div className="re-contact-label">Telepon</div>
-                          <div className="re-contact-val">{data.content.phone || "021 123 456 7890"}</div>
+                          <div className="re-contact-val">{displayPhone(data.content) || "021 123 456 7890"}</div>
                           <div className="re-contact-label" style={{ marginTop:20 }}>Email</div>
                           <div className="re-contact-val">{data.content.email || "halo@vastura.co.id"}</div>
                         </div>
