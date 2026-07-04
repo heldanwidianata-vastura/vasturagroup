@@ -9154,6 +9154,15 @@ const parsePaketPath = (path) => {
   return { category: m[1], slug: m[2], id: Number(m[3]) };
 };
 
+/** URL canonical untuk detail tema rumah: /tema-rumah/{slug} — dipakai untuk share link */
+const temaDetailUrl = (slug) => `/tema-rumah/${slug}`;
+
+/** Parse URL /tema-rumah/{slug} → slug, atau null kalau cuma landing "/tema-rumah" polos */
+const parseTemaPath = (path) => {
+  const m = path.match(/^\/tema-rumah\/([^/]+)$/);
+  return m ? m[1] : null;
+};
+
 /** Baca halaman awal dari URL saat render — bukan saat module load. */
 const getInitialPage = () => {
   const p = window.location.pathname;
@@ -9163,6 +9172,8 @@ const getInitialPage = () => {
   if (p.startsWith("/eksterior/")) return p.replace("/","");
   // URL paket → langsung mount ServicesPage (activePaket sudah di-init dari URL)
   if (parsePaketPath(p)) return "services";
+  // URL detail tema rumah /tema-rumah/{slug} → mount TemaRumahPage (temaSlug di-init dari URL)
+  if (parseTemaPath(p)) return "temarumah";
   // URL artikel → mount section yang sesuai (readPost di-resolve setelah data load)
   const art = parseArtikelPath(p);
   if (art) return { news: "news", shop: "shop", destinations: "destinations" }[art.section] || "news";
@@ -10239,8 +10250,21 @@ function TemaCardContent({ tema, setTemaSlug }) {
 function TemaDetailPage({ slug, onWaOpen, onBack, temaList }) {
   const resolvedList = (temaList && temaList.length > 0) ? temaList : TEMA_DATA;
   const tema = resolvedList.find(t => t.slug === slug);
+  const [linkCopied, setLinkCopied] = useState(false);
+  /* Foto pertama tema — dipakai sebagai background section tengah (opacity 40%) */
+  const firstPhotoUrl = tema ? ((tema.imgs && tema.imgs.length > 0 ? tema.imgs[0].img : "") || tema.img || "") : "";
 
   useEffect(() => { window.scrollTo(0, 0); }, [slug]);
+
+  const copyTemaLink = () => {
+    const url = window.location.origin + temaDetailUrl(slug);
+    if (navigator.clipboard?.writeText) {
+      navigator.clipboard.writeText(url).then(() => {
+        setLinkCopied(true);
+        setTimeout(() => setLinkCopied(false), 1800);
+      });
+    }
+  };
 
   if (!tema) return (
     <div style={{ textAlign: "center", padding: "80px 20px" }}>
@@ -10268,7 +10292,12 @@ function TemaDetailPage({ slug, onWaOpen, onBack, temaList }) {
         <button onClick={onBack} style={{ display: "flex", alignItems: "center", gap: 8, background: "none", border: "none", color: "#C9AA71", fontWeight: 700, fontSize: "0.78rem", cursor: "pointer", padding: "13px 0", letterSpacing: ".06em", textTransform: "uppercase" }}>
           <span style={{ fontSize: 18 }}>←</span> Kembali ke Tema Rumah
         </button>
-        <span style={{ fontSize: "0.74rem", color: "rgba(255,255,255,.45)", letterSpacing: ".06em", textTransform: "uppercase", fontWeight: 600 }}>{tema.no} · {tema.nama}</span>
+        <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+          <button onClick={copyTemaLink} style={{ display: "flex", alignItems: "center", gap: 6, background: "rgba(255,255,255,.08)", border: "1px solid rgba(255,255,255,.2)", color: linkCopied ? "#8BD9A0" : "#fff", fontWeight: 700, fontSize: "0.72rem", cursor: "pointer", padding: "6px 12px", borderRadius: 20, letterSpacing: ".04em", whiteSpace: "nowrap" }}>
+            {linkCopied ? "✓ Link disalin!" : "🔗 Bagikan"}
+          </button>
+          <span style={{ fontSize: "0.74rem", color: "rgba(255,255,255,.45)", letterSpacing: ".06em", textTransform: "uppercase", fontWeight: 600 }}>{tema.no} · {tema.nama}</span>
+        </div>
       </div>
 
       {/* Hero */}
@@ -10286,6 +10315,22 @@ function TemaDetailPage({ slug, onWaOpen, onBack, temaList }) {
           </div>
         </div>
       </div>
+
+      {/* ════════ WRAPPER: BACKGROUND FOTO TEMA (opacity 40%) UNTUK SELURUH BAGIAN TENGAH ════════ */}
+      <div style={{ position: "relative" }}>
+        {/* Base color di bawah foto — jaga-jaga kalau foto gagal load / masih loading */}
+        <div style={{ position: "absolute", inset: 0, background: "#1a2a2a" }} />
+        {/* Foto pertama tema, opacity 40% */}
+        {firstPhotoUrl && (
+          <div style={{
+            position: "absolute", inset: 0,
+            backgroundImage: `url(${firstPhotoUrl})`,
+            backgroundSize: "cover", backgroundPosition: "center",
+            opacity: 0.4,
+          }} />
+        )}
+        {/* Konten section — di atas layer background */}
+        <div style={{ position: "relative" }}>
 
       {/* ════════ SECTION: EKSTERIOR ════════ */}
       <div style={{ padding: "48px 5% 56px", maxWidth: 1060, margin: "0 auto" }}>
@@ -10335,7 +10380,7 @@ function TemaDetailPage({ slug, onWaOpen, onBack, temaList }) {
       </div>
 
       {/* ════════ SECTION: DENAH RUANG ════════ */}
-      <div style={{ background: "#FDFAF4", padding: "48px 5% 56px" }}>
+      <div style={{ background: "rgba(253,250,244,.94)", padding: "48px 5% 56px" }}>
         <div style={{ maxWidth: 1060, margin: "0 auto" }}>
           <SectionLabel icon="📐" text="DENAH RUANG" />
           <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.7rem", fontWeight: 800, color: "#2E3D3F", margin: "0 0 12px" }}>Tata Ruang {tema.nama}</h2>
@@ -10425,7 +10470,7 @@ function TemaDetailPage({ slug, onWaOpen, onBack, temaList }) {
       </div>
 
       {/* ════════ SECTION: KALKULATOR (paling bawah, sebelum footer) ════════ */}
-      <div style={{ background: "#FDFAF4", padding: "48px 5% 56px" }}>
+      <div style={{ background: "rgba(253,250,244,.94)", padding: "48px 5% 56px" }}>
         <div style={{ maxWidth: 540, margin: "0 auto" }}>
           <div style={{ marginBottom: 28, textAlign: "center" }}>
             <SectionLabel icon="🧮" text="ESTIMASI BIAYA" />
@@ -10441,6 +10486,10 @@ function TemaDetailPage({ slug, onWaOpen, onBack, temaList }) {
           </div>
         </div>
       </div>
+
+        </div>
+      </div>
+      {/* ════════ /WRAPPER: BACKGROUND FOTO TEMA ════════ */}
 
       {/* CTA Footer */}
       <div style={{ background: "linear-gradient(135deg,#1a2a2a 0%,#2E3D3F 60%)", padding: "46px 5%", display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center" }}>
@@ -10460,16 +10509,16 @@ function TemaDetailPage({ slug, onWaOpen, onBack, temaList }) {
 }
 
 /* ── Page: Tema Rumah (Landing + Sub-page router) ── */
-function TemaRumahPage({ onWaOpen, temaSlug, setTemaSlug, cmsData }) {
+function TemaRumahPage({ onWaOpen, temaSlug, openTemaDetail, closeTemaDetail, cmsData }) {
   useEffect(() => { window.scrollTo(0, 0); }, []);
   const cms = cmsData || {};
 
   /* Gunakan temaData dari CMS jika sudah di-load, fallback ke hardcoded */
   const activeTemaData = (cms.temaData && cms.temaData.length > 0) ? cms.temaData : TEMA_DATA;
 
-  /* Jika ada slug → tampilkan detail page */
+  /* Jika ada slug → tampilkan detail page (URL: /tema-rumah/{slug} — bisa di-share) */
   if (temaSlug) {
-    return <TemaDetailPage slug={temaSlug} onWaOpen={onWaOpen} onBack={() => setTemaSlug(null)} temaList={activeTemaData} />;
+    return <TemaDetailPage slug={temaSlug} onWaOpen={onWaOpen} onBack={closeTemaDetail} temaList={activeTemaData} />;
   }
 
   /* Teks hero — CMS override atau fallback hardcoded */
@@ -10550,7 +10599,7 @@ function TemaRumahPage({ onWaOpen, temaSlug, setTemaSlug, cmsData }) {
           );
           const contentEl = (
             <div className="tema-card-content">
-              <TemaCardContent tema={tema} setTemaSlug={setTemaSlug} />
+              <TemaCardContent tema={tema} setTemaSlug={openTemaDetail} />
             </div>
           );
           return (
@@ -14326,7 +14375,7 @@ export default function BricksyTravel() {
   const [canBack, setCanBack] = useState(false);
   const [canFwd,  setCanFwd]  = useState(false);
   const [readPost, setReadPost] = useState(null);
-  const [temaSlug, setTemaSlug] = useState(null);
+  const [temaSlug, setTemaSlug] = useState(() => parseTemaPath(window.location.pathname));
   const [showLogin, setShowLogin] = useState(false);
   const [comingSoon, setComingSoon] = useState(null); // null | "google" | "apple"
   const [showAdmin, setShowAdmin] = useState(() => getInitialShowAdmin()); // restore dari URL /control-panel
@@ -14534,14 +14583,25 @@ export default function BricksyTravel() {
         _syncDepth(e.state?.depth);
         return;
       }
+      // /tema-rumah/{slug} → buka detail tema rumah
+      const temaSlugParsed = parseTemaPath(pathname);
+      if (temaSlugParsed) {
+        setPage("temarumah");
+        setTemaSlug(temaSlugParsed);
+        setMobileMenu(false);
+        window.scrollTo(0, 0);
+        _syncDepth(e.state?.depth);
+        return;
+      }
       // Sub-route interior/* dan eksterior/*
       if (pathname.startsWith("/interior/") || pathname.startsWith("/eksterior/")) {
         const key = pathname.replace("/","");
         setPage(key); setMobileMenu(false); window.scrollTo(0,0); _syncDepth(e.state?.depth); return;
       }
-      // Normal page -- tutup detail paket & artikel
+      // Normal page -- tutup detail paket, artikel & tema rumah
       setActivePaket(null);
       setReadPost(null);
+      setTemaSlug(null);
       const p = e.state?.page || PATH_TO_PAGE[pathname] || "home";
       setPage(p);
       setMobileMenu(false);
@@ -15079,6 +15139,24 @@ export default function BricksyTravel() {
   };
 
   const closePaket = () => {
+    window.history.back();
+  };
+
+  /** Buka detail tema rumah: push URL /tema-rumah/{slug} + set state — agar bisa di-share sebagai link sendiri */
+  const openTemaDetail = (slug) => {
+    const url = temaDetailUrl(slug);
+    const newDepth = spaDepth.current + 1;
+    window.history.pushState({ temaSlug: slug, depth: newDepth }, "", url);
+    spaDepth.current = newDepth;
+    spaMaxDepth.current = newDepth;
+    setCanBack(true);
+    setCanFwd(false);
+    setTemaSlug(slug);
+    window.scrollTo(0, 0);
+  };
+
+  /** Tutup detail tema rumah: native back — biar onPopState yang atur state */
+  const closeTemaDetail = () => {
     window.history.back();
   };
 
@@ -16427,7 +16505,7 @@ export default function BricksyTravel() {
 
               {/* SUB-SERVICE PAGES */}
               {page === "desainrab"   && <DesainRabPage   onWaOpen={openWaPicker} />}
-              {page === "temarumah"   && <TemaRumahPage   onWaOpen={openWaPicker} temaSlug={temaSlug} setTemaSlug={setTemaSlug} cmsData={data} />}
+              {page === "temarumah"   && <TemaRumahPage   onWaOpen={openWaPicker} temaSlug={temaSlug} openTemaDetail={openTemaDetail} closeTemaDetail={closeTemaDetail} cmsData={data} />}
               {page === "interior"    && <InteriorPage    onWaOpen={openWaPicker} />}
               {page === "pagar"       && <PagarPage       onWaOpen={openWaPicker} />}
               {page === "kanopi"      && <KanopiPage      onWaOpen={openWaPicker} />}
