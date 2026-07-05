@@ -10281,8 +10281,8 @@ function TemaDetailPage({ slug, onWaOpen, onBack, temaList }) {
     </div>
   );
 
-  const SectionLabel = ({ icon, text }) => (
-    <div style={{ fontSize: "0.65rem", letterSpacing: ".12em", textTransform: "uppercase", color: tema.warna, fontWeight: 800, marginBottom: 7 }}>{icon} {text}</div>
+  const SectionLabel = ({ icon, text, color }) => (
+    <div style={{ fontSize: "0.65rem", letterSpacing: ".12em", textTransform: "uppercase", color: color || tema.warna, fontWeight: 800, marginBottom: 7, textShadow: "0 1px 6px rgba(0,0,0,.4)" }}>{icon} {text}</div>
   );
 
   return (
@@ -10334,9 +10334,11 @@ function TemaDetailPage({ slug, onWaOpen, onBack, temaList }) {
 
       {/* ════════ SECTION: EKSTERIOR ════════ */}
       <div style={{ padding: "48px 5% 56px", maxWidth: 1060, margin: "0 auto" }}>
-        <SectionLabel icon="🏠" text="EKSTERIOR" />
-        <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.7rem", fontWeight: 800, color: "#2E3D3F", margin: "0 0 14px" }}>Tampak Luar {tema.nama}</h2>
-        <p style={{ color: "#5A6A6C", lineHeight: 1.75, marginBottom: 28, fontSize: "0.88rem", maxWidth: 720 }}>{tema.detail.exterior.desc}</p>
+        <div style={{ background: "rgba(255,255,255,.16)", backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)", borderRadius: 16, padding: "22px 26px", marginBottom: 28, display: "inline-block", maxWidth: "100%", boxSizing: "border-box" }}>
+          <SectionLabel icon="🏠" text="EKSTERIOR" color="#fff" />
+          <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.7rem", fontWeight: 800, color: "#fff", margin: "0 0 14px", textShadow: "0 2px 10px rgba(0,0,0,.55)" }}>Tampak Luar {tema.nama}</h2>
+          <p style={{ color: "#fff", lineHeight: 1.75, margin: 0, fontSize: "0.88rem", maxWidth: 720, textShadow: "0 1px 6px rgba(0,0,0,.55)" }}>{tema.detail.exterior.desc}</p>
+        </div>
 
         {(() => {
           const photos = (tema.imgs && tema.imgs.length > 0) ? tema.imgs : (tema.img ? [{ img: tema.img, label: tema.nama }] : []);
@@ -10423,9 +10425,11 @@ function TemaDetailPage({ slug, onWaOpen, onBack, temaList }) {
 
       {/* ════════ SECTION: HARGA & RAB ════════ */}
       <div style={{ padding: "48px 5% 56px", maxWidth: 1060, margin: "0 auto" }}>
-        <SectionLabel icon="💰" text="PAKET HARGA" />
-        <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.7rem", fontWeight: 800, color: "#2E3D3F", margin: "0 0 12px" }}>Harga & RAB {tema.nama}</h2>
-        <p style={{ color: "#5A6A6C", lineHeight: 1.7, maxWidth: 580, marginBottom: 28, fontSize: "0.88rem" }}>Pilih paket yang sesuai kebutuhan dan budget Anda.</p>
+        <div style={{ background: "rgba(255,255,255,.16)", backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)", borderRadius: 16, padding: "22px 26px", marginBottom: 28, display: "inline-block", maxWidth: "100%", boxSizing: "border-box" }}>
+          <SectionLabel icon="💰" text="PAKET HARGA" />
+          <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.7rem", fontWeight: 800, color: "#2E3D3F", margin: "0 0 12px", textShadow: "0 2px 10px rgba(255,255,255,.5)" }}>Harga & RAB {tema.nama}</h2>
+          <p style={{ color: "#3D4D4F", lineHeight: 1.7, maxWidth: 580, margin: 0, fontSize: "0.88rem", textShadow: "0 1px 6px rgba(255,255,255,.5)" }}>Pilih paket yang sesuai kebutuhan dan budget Anda.</p>
+        </div>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(260px,1fr))", gap: 18, marginBottom: 36 }}>
           {tema.detail.harga.paket.map((p, i) => (
             <div key={i} style={{ background: "#fff", borderRadius: 14, border: `2px solid ${i === 1 ? tema.warna : "#F5EDD8"}`, overflow: "hidden", boxShadow: i === 1 ? `0 8px 28px ${tema.warna}20` : "0 2px 10px rgba(0,0,0,.06)", transition: "all .25s" }}
@@ -13703,9 +13707,47 @@ function TemaHeroImgRow({ data, save, notify, uploadToCloudinary }) {
 
 /* ── 3. Form edit satu tema ── */
 function TemaEditForm({ temaOrig, editIdx, activeTemas, data, save, notify, onBack, uploadToCloudinary }) {
-  const [draft, setDraft] = useState(() => JSON.parse(JSON.stringify(temaOrig)));
+  const [draft, setDraft] = useState(() => {
+    const initial = JSON.parse(JSON.stringify(temaOrig));
+    /* Tema baru (slug masih kosong saat dibuat) → langsung isi slug otomatis dari nama,
+       supaya admin tidak perlu mengetik slug sendiri sama sekali. */
+    if (!initial.slug) {
+      const base = makeSlug(initial.nama || "tema-baru") || "tema-baru";
+      let candidate = base, i = 2;
+      while (activeTemas.some(t => t.slug === candidate)) { candidate = `${base}-${i}`; i++; }
+      initial.slug = candidate;
+    }
+    return initial;
+  });
   const [saving, setSaving] = useState(false);
   const [uploadingImg, setUploadingImg] = useState(false);
+
+  /* ── Auto-slug: tema baru (slug masih kosong) → slug ikut mengikuti "Nama Tema" otomatis,
+     berhenti mengikuti begitu admin mengetik manual di kolom Slug. Tema lama (sudah punya
+     slug) tidak pernah disentuh otomatis, supaya link yang sudah di-share tidak berubah. */
+  const [slugManuallyEdited, setSlugManuallyEdited] = useState(!!temaOrig.slug);
+  /* Pastikan slug otomatis tidak bentrok dengan tema lain yang sudah ada */
+  const uniqueSlug = (base) => {
+    if (!base) return base;
+    let candidate = base;
+    let i = 2;
+    while (activeTemas.some((t, idx) => idx !== editIdx && t.slug === candidate)) {
+      candidate = `${base}-${i}`;
+      i++;
+    }
+    return candidate;
+  };
+  const handleNamaChange = (val) => {
+    setDraft(prev => {
+      const next = { ...prev, nama: val };
+      if (!slugManuallyEdited) next.slug = uniqueSlug(makeSlug(val));
+      return next;
+    });
+  };
+  const handleSlugChange = (val) => {
+    setSlugManuallyEdited(true);
+    setDraft(prev => ({ ...prev, slug: val }));
+  };
 
   /* ── Multi-foto slideshow state ── */
   const initImgs = () => {
@@ -13891,9 +13933,19 @@ function TemaEditForm({ temaOrig, editIdx, activeTemas, data, save, notify, onBa
         {ST("🏷️", "Identitas Tema")}
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
           <div>{inp("No. Urut", "no", false, "01")}</div>
-          <div>{inp("Slug (URL key)", "slug", false, "modern-minimalis")}</div>
+          <div style={{ marginBottom: 14 }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#5A6A6C", marginBottom: 5, textTransform: "uppercase", letterSpacing: ".04em" }}>
+              Slug (URL key) {!slugManuallyEdited && <span style={{ fontWeight: 400, textTransform: "none", letterSpacing: 0, color: "#A89070" }}>— otomatis dari nama</span>}
+            </div>
+            <input type="text" value={draft.slug || ""} onChange={e => handleSlugChange(e.target.value)} placeholder="modern-minimalis"
+              style={{ width: "100%", padding: "9px 12px", border: "1.5px solid #D5C9B0", borderRadius: 8, fontSize: 13, boxSizing: "border-box" }} />
+          </div>
         </div>
-        {inp("Nama Tema", "nama", false, "Modern Minimalis")}
+        <div style={{ marginBottom: 14 }}>
+          <div style={{ fontSize: 11, fontWeight: 700, color: "#5A6A6C", marginBottom: 5, textTransform: "uppercase", letterSpacing: ".04em" }}>Nama Tema</div>
+          <input type="text" value={draft.nama || ""} onChange={e => handleNamaChange(e.target.value)} placeholder="Modern Minimalis"
+            style={{ width: "100%", padding: "9px 12px", border: "1.5px solid #D5C9B0", borderRadius: 8, fontSize: 13, boxSizing: "border-box" }} />
+        </div>
         {inp("Tagline (1 kalimat singkat)", "tagline", false, "Desain simpel, elegan...")}
         {inp("Deskripsi panjang (hero detail)", "deskripsi", true)}
         <div style={{ marginBottom: 14 }}>
