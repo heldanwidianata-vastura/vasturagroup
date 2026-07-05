@@ -8574,7 +8574,7 @@ function SubLayananAdmin({
   const accent    = accentColor;
 
   /* ── State ── */
-  const emptyForm = () => { const o = {}; crudFields.forEach(f => { o[f.key] = ""; }); if (crudHasImage) o._img = ""; if (crudHasGallery) o.imgs = []; return o; };
+  const emptyForm = () => { const o = {}; crudFields.forEach(f => { o[f.key] = f.type === "toggle" ? (f.default !== undefined ? f.default : true) : ""; }); if (crudHasImage) o._img = ""; if (crudHasGallery) o.imgs = []; return o; };
   const [mode, setMode]         = useState("list");   // "list" | "add" | "edit"
   const [editItem, setEditItem] = useState(null);
   const [form, setForm]         = useState(emptyForm());
@@ -8673,7 +8673,10 @@ function SubLayananAdmin({
   /* ── Buka form edit ── */
   const openEdit = (item) => {
     const f = emptyForm();
-    crudFields.forEach(fd => { f[fd.key] = item[fd.key] || ""; });
+    crudFields.forEach(fd => {
+      if (fd.type === "toggle") f[fd.key] = item[fd.key] !== undefined ? !!item[fd.key] : (fd.default !== undefined ? fd.default : true);
+      else f[fd.key] = item[fd.key] || "";
+    });
     if (crudHasImage) f._img = item._img || "";
     if (crudHasGallery) f.imgs = item.imgs || [];
     setForm(f); setEditItem(item); setMode("edit");
@@ -8684,7 +8687,23 @@ function SubLayananAdmin({
   const openAdd = () => { setForm(emptyForm()); setEditItem(null); setMode("add"); window.scrollTo({ top: 0, behavior: "smooth" }); };
 
   /* ── Render field ── */
-  const Field = ({ fd }) => (
+  const Field = ({ fd }) => {
+    if (fd.type === "toggle") {
+      const checked = form[fd.key] !== undefined ? !!form[fd.key] : (fd.default !== undefined ? fd.default : true);
+      return (
+        <div style={{ marginBottom: 14, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, background: "#FAF7F0", border: "1.5px solid #E8DCC8", borderRadius: 10, padding: "12px 16px" }}>
+          <div>
+            <div style={{ fontSize: 13, fontWeight: 700, color: "#2E3D3F" }}>{fd.label}</div>
+            {fd.desc && <div style={{ fontSize: 11.5, color: "#8B9A9C", marginTop: 2 }}>{fd.desc}</div>}
+          </div>
+          <button type="button" onClick={() => setForm(p => ({ ...p, [fd.key]: !checked }))}
+            style={{ position: "relative", width: 46, height: 26, borderRadius: 20, border: "none", cursor: "pointer", flexShrink: 0, background: checked ? accent : "#D5C9B0", transition: "background .2s" }}>
+            <span style={{ position: "absolute", top: 3, left: checked ? 23 : 3, width: 20, height: 20, borderRadius: "50%", background: "#fff", boxShadow: "0 1px 4px rgba(0,0,0,.3)", transition: "left .2s" }} />
+          </button>
+        </div>
+      );
+    }
+    return (
     <div style={{ marginBottom: 14 }}>
       <div style={{ fontSize: 13, fontWeight: 700, color: "#5A6A6C", marginBottom: 5 }}>{fd.label}</div>
       {fd.type === "textarea"
@@ -8698,7 +8717,8 @@ function SubLayananAdmin({
             style={{ width: "100%", padding: "10px 12px", border: "1.5px solid #D5C9B0", borderRadius: 8, fontSize: 14, boxSizing: "border-box" }} />
       }
     </div>
-  );
+    );
+  };
 
   /* ═══ LIST VIEW ═══ */
   if (mode === "list") return (
@@ -11110,13 +11130,15 @@ function LsInfoCard({ cat, fmt, onWaOpen }) {
 
       {/* Harga + CTA row */}
       <div className="ls-cta-row">
-        <div className="ls-price-badge">
-          <span className="lb">Mulai dari</span>
-          <span className="vl">{fmt(cat.startFrom)} / {cat.satuan}</span>
-        </div>
-        <button className="ls-cta-btn"
+        {cat.tampilHarga !== false && (
+          <div className="ls-price-badge">
+            <span className="lb">Mulai dari</span>
+            <span className="vl">{fmt(cat.startFrom)} / {cat.satuan}</span>
+          </div>
+        )}
+        <button className="ls-cta-btn" style={cat.tampilHarga === false ? { flex: "1 1 100%" } : undefined}
           onClick={() => onWaOpen && onWaOpen({ key: "layanan", vars: { judul_layanan: cat.title } })}>
-          🌿 Konsultasi Gratis
+          🌿 Konsultasi {cat.tampilHarga === false ? "Sekarang" : "Gratis"}
         </button>
       </div>
 
@@ -11271,7 +11293,7 @@ function LandscapePage({ onWaOpen, categories }) {
                     </div>
 
                     {/* Harga kanan atas */}
-                    <div className="ls-price-pill">Mulai {fmt(cat.startFrom)} / {cat.satuan}</div>
+                    {cat.tampilHarga !== false && <div className="ls-price-pill">Mulai {fmt(cat.startFrom)} / {cat.satuan}</div>}
 
                     {/* CTA hover */}
                     <div className="ls-mag-overlay-btn">
@@ -11311,7 +11333,7 @@ function LandscapePage({ onWaOpen, categories }) {
               </div>
 
               {/* Harga kanan atas */}
-              <div className="ls-price-pill">Mulai {fmt(cat.startFrom)} / {cat.satuan}</div>
+              {cat.tampilHarga !== false && <div className="ls-price-pill">Mulai {fmt(cat.startFrom)} / {cat.satuan}</div>}
             </div>
 
             {/* Kartu putih dengan dropdown includes */}
@@ -12123,6 +12145,7 @@ function PaketGridManager({ data, save, notify, storeKey, title, icon, accentCol
     desc: "",
     startFrom: 0,
     satuan: "paket",
+    tampilHarga: true,
     slideDir: "right",
     includes: [],
     slides: [],
@@ -12232,6 +12255,18 @@ function PaketGridManager({ data, save, notify, storeKey, title, icon, accentCol
                 </select>
               </div>
             )}
+          </div>
+
+          {/* -- Toggle Tampilkan Harga -- */}
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, background: "#FAF7F0", border: "1.5px solid #E8DCC8", borderRadius: 10, padding: "12px 16px", marginBottom: 22 }}>
+            <div>
+              <div style={{ fontSize: 13, fontWeight: 700, color: "#2E3D3F" }}>Tampilkan Harga</div>
+              <div style={{ fontSize: 11.5, color: "#8B9A9C", marginTop: 2 }}>Nonaktifkan untuk sembunyikan harga — kartu akan menampilkan tombol Konsultasi Sekarang penuh sebagai gantinya.</div>
+            </div>
+            <button type="button" onClick={() => setForm(p => ({ ...p, tampilHarga: p.tampilHarga === false ? true : false }))}
+              style={{ position: "relative", width: 46, height: 26, borderRadius: 20, border: "none", cursor: "pointer", flexShrink: 0, background: form.tampilHarga === false ? "#D5C9B0" : accentColor, transition: "background .2s" }}>
+              <span style={{ position: "absolute", top: 3, left: form.tampilHarga === false ? 3 : 23, width: 20, height: 20, borderRadius: "50%", background: "#fff", boxShadow: "0 1px 4px rgba(0,0,0,.3)", transition: "left .2s" }} />
+            </button>
           </div>
 
           {/* -- Yang Termasuk -- */}
@@ -12858,16 +12893,25 @@ function SubPageCatalog({ heroColor, heroIcon, title, subtitle, breadcrumb, cata
                     ))}
                   </div>
                 )}
-                <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", paddingTop:14, borderTop:"1px solid #F0EDE8" }}>
-                  <div>
-                    <div style={{ fontSize:"0.65rem", color:"#8B9A9C", letterSpacing:".06em", textTransform:"uppercase", marginBottom:2 }}>Harga</div>
-                    <div style={{ fontSize:"0.9rem", fontWeight:800, color:"#8B6914" }}>{formatHarga(item.harga)}</div>
+                {item.tampilHarga === false ? (
+                  <div style={{ paddingTop:14, borderTop:"1px solid #F0EDE8" }}>
+                    <button onClick={(e)=>{ e.stopPropagation(); onWaOpen && onWaOpen({ key: "layanan", vars: { judul_layanan: item.nama } }); }}
+                      style={{ width:"100%", background:"linear-gradient(135deg,#2E3D3F,#8B6914)", color:"#fff", border:"none", borderRadius:8, padding:"11px 16px", fontSize:"0.8rem", fontWeight:700, cursor:"pointer", letterSpacing:".04em" }}>
+                      💬 Konsultasi Sekarang
+                    </button>
                   </div>
-                  <button onClick={(e)=>{ e.stopPropagation(); onWaOpen && onWaOpen({ key: "layanan", vars: { judul_layanan: item.nama } }); }}
-                    style={{ background:"linear-gradient(135deg,#2E3D3F,#8B6914)", color:"#fff", border:"none", borderRadius:8, padding:"9px 16px", fontSize:"0.75rem", fontWeight:700, cursor:"pointer", letterSpacing:".04em" }}>
-                    Konsultasi
-                  </button>
-                </div>
+                ) : (
+                  <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", paddingTop:14, borderTop:"1px solid #F0EDE8" }}>
+                    <div>
+                      <div style={{ fontSize:"0.65rem", color:"#8B9A9C", letterSpacing:".06em", textTransform:"uppercase", marginBottom:2 }}>Harga</div>
+                      <div style={{ fontSize:"0.9rem", fontWeight:800, color:"#8B6914" }}>{formatHarga(item.harga)}</div>
+                    </div>
+                    <button onClick={(e)=>{ e.stopPropagation(); onWaOpen && onWaOpen({ key: "layanan", vars: { judul_layanan: item.nama } }); }}
+                      style={{ background:"linear-gradient(135deg,#2E3D3F,#8B6914)", color:"#fff", border:"none", borderRadius:8, padding:"9px 16px", fontSize:"0.75rem", fontWeight:700, cursor:"pointer", letterSpacing:".04em" }}>
+                      Konsultasi
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
           ))}
@@ -12981,9 +13025,11 @@ function SubPageCatalogDetailPage({ item, onBack, onWaOpen, formatHarga, breadcr
                 <span style={{ color: accentGold }}>◆</span> {item.material}
               </div>
             )}
-            <div style={{ fontSize: "1.4rem", fontWeight: 800, color: "#8B6914", fontFamily: "'Playfair Display',serif", marginBottom: 18 }}>
-              {formatHarga(item.harga)}
-            </div>
+            {item.tampilHarga !== false && (
+              <div style={{ fontSize: "1.4rem", fontWeight: 800, color: "#8B6914", fontFamily: "'Playfair Display',serif", marginBottom: 18 }}>
+                {formatHarga(item.harga)}
+              </div>
+            )}
 
             {item.fitur && item.fitur.length > 0 && (
               <div style={{ display: "flex", flexWrap: "wrap", gap: 7, marginBottom: 20 }}>
@@ -13441,6 +13487,7 @@ function normalizeIntItem(item) {
     fitur: typeof item.fitur === "string"
       ? item.fitur.split(",").map(s=>s.trim()).filter(Boolean)
       : (item.fitur || []),
+    tampilHarga: item.tampilHarga !== undefined ? !!item.tampilHarga : true,
   };
 }
 
@@ -16921,6 +16968,7 @@ export default function BricksyTravel() {
                     { key:"harga",    label:"Harga (Rp)",   type:"text",     placeholder:"contoh: 8500000" },
                     { key:"desc",     label:"Deskripsi",    type:"textarea", placeholder:"Keunggulan dan detail desain..." },
                     { key:"fitur",    label:"Fitur (pisah koma)", type:"text", placeholder:"contoh: Storage Built-in, Hidden Lamp" },
+                    { key:"tampilHarga", label:"Tampilkan Harga", type:"toggle", default: true, desc: "Nonaktifkan untuk sembunyikan harga -- kartu akan menampilkan tombol Konsultasi Sekarang penuh sebagai gantinya." },
                   ]}
                   crudHasImage
                   crudHasGallery={true}
@@ -16955,6 +17003,7 @@ export default function BricksyTravel() {
                     { key:"harga",    label:"Harga (Rp)",   type:"text",     placeholder:"contoh: 12000000" },
                     { key:"desc",     label:"Deskripsi",    type:"textarea", placeholder:"Keunggulan dan detail desain..." },
                     { key:"fitur",    label:"Fitur (pisah koma)", type:"text", placeholder:"contoh: Shower Box, LED Mirror" },
+                    { key:"tampilHarga", label:"Tampilkan Harga", type:"toggle", default: true, desc: "Nonaktifkan untuk sembunyikan harga -- kartu akan menampilkan tombol Konsultasi Sekarang penuh sebagai gantinya." },
                   ]}
                   crudHasImage
                   crudHasGallery={true}
@@ -16989,6 +17038,7 @@ export default function BricksyTravel() {
                     { key:"harga",    label:"Harga (Rp)",   type:"text",     placeholder:"contoh: 18000000" },
                     { key:"desc",     label:"Deskripsi",    type:"textarea", placeholder:"Keunggulan dan detail desain..." },
                     { key:"fitur",    label:"Fitur (pisah koma)", type:"text", placeholder:"contoh: Modular Sofa, TV Wall" },
+                    { key:"tampilHarga", label:"Tampilkan Harga", type:"toggle", default: true, desc: "Nonaktifkan untuk sembunyikan harga -- kartu akan menampilkan tombol Konsultasi Sekarang penuh sebagai gantinya." },
                   ]}
                   crudHasImage
                   crudHasGallery={true}
@@ -17023,6 +17073,7 @@ export default function BricksyTravel() {
                     { key:"harga",    label:"Harga (Rp)",   type:"text",     placeholder:"contoh: 10000000" },
                     { key:"desc",     label:"Deskripsi",    type:"textarea", placeholder:"Keunggulan dan detail desain..." },
                     { key:"fitur",    label:"Fitur (pisah koma)", type:"text", placeholder:"contoh: Space Efficient, Art Display" },
+                    { key:"tampilHarga", label:"Tampilkan Harga", type:"toggle", default: true, desc: "Nonaktifkan untuk sembunyikan harga -- kartu akan menampilkan tombol Konsultasi Sekarang penuh sebagai gantinya." },
                   ]}
                   crudHasImage
                   crudHasGallery={true}
@@ -17057,6 +17108,7 @@ export default function BricksyTravel() {
                     { key:"harga",    label:"Harga (Rp)",   type:"text",     placeholder:"contoh: 15000000" },
                     { key:"desc",     label:"Deskripsi",    type:"textarea", placeholder:"Keunggulan dan detail desain..." },
                     { key:"fitur",    label:"Fitur (pisah koma)", type:"text", placeholder:"contoh: Soft Close Hinge, Granite Top" },
+                    { key:"tampilHarga", label:"Tampilkan Harga", type:"toggle", default: true, desc: "Nonaktifkan untuk sembunyikan harga -- kartu akan menampilkan tombol Konsultasi Sekarang penuh sebagai gantinya." },
                   ]}
                   crudHasImage
                   crudHasGallery={true}
@@ -17091,6 +17143,7 @@ export default function BricksyTravel() {
                     { key:"harga",    label:"Harga (Rp)",   type:"text",     placeholder:"contoh: 7500000" },
                     { key:"desc",     label:"Deskripsi",    type:"textarea", placeholder:"Keunggulan dan detail desain..." },
                     { key:"fitur",    label:"Fitur (pisah koma)", type:"text", placeholder:"contoh: Floating Desk, Task Light" },
+                    { key:"tampilHarga", label:"Tampilkan Harga", type:"toggle", default: true, desc: "Nonaktifkan untuk sembunyikan harga -- kartu akan menampilkan tombol Konsultasi Sekarang penuh sebagai gantinya." },
                   ]}
                   crudHasImage
                   crudHasGallery={true}
@@ -17125,6 +17178,7 @@ export default function BricksyTravel() {
                     { key:"harga",    label:"Harga per m² (Rp)", type:"text", placeholder:"contoh: 185000" },
                     { key:"desc",     label:"Deskripsi",    type:"textarea", placeholder:"Keunggulan dan detail produk plafon..." },
                     { key:"fitur",    label:"Fitur (pisah koma)", type:"text", placeholder:"contoh: LED Hidden Light, Bertingkat" },
+                    { key:"tampilHarga", label:"Tampilkan Harga", type:"toggle", default: true, desc: "Nonaktifkan untuk sembunyikan harga -- kartu akan menampilkan tombol Konsultasi Sekarang penuh sebagai gantinya." },
                   ]}
                   crudHasImage
                   crudHasGallery={true}
@@ -17159,6 +17213,7 @@ export default function BricksyTravel() {
                     { key:"harga",    label:"Harga (Rp)",   type:"text",     placeholder:"contoh: 850000" },
                     { key:"desc",     label:"Deskripsi",    type:"textarea", placeholder:"Keunggulan dan detail desain pagar..." },
                     { key:"fitur",    label:"Fitur (pisah koma)", type:"text", placeholder:"contoh: Anti Karat, Custom Warna" },
+                    { key:"tampilHarga", label:"Tampilkan Harga", type:"toggle", default: true, desc: "Nonaktifkan untuk sembunyikan harga -- kartu akan menampilkan tombol Konsultasi Sekarang penuh sebagai gantinya." },
                   ]}
                   crudHasImage
                   crudHasGallery={true}
@@ -17193,6 +17248,7 @@ export default function BricksyTravel() {
                     { key:"harga",    label:"Harga (Rp)",   type:"text",     placeholder:"contoh: 280000" },
                     { key:"desc",     label:"Deskripsi",    type:"textarea", placeholder:"Keunggulan dan detail desain kanopi..." },
                     { key:"fitur",    label:"Fitur (pisah koma)", type:"text", placeholder:"contoh: Tembus Cahaya, UV Protection" },
+                    { key:"tampilHarga", label:"Tampilkan Harga", type:"toggle", default: true, desc: "Nonaktifkan untuk sembunyikan harga -- kartu akan menampilkan tombol Konsultasi Sekarang penuh sebagai gantinya." },
                   ]}
                   crudHasImage
                   crudHasGallery={true}
@@ -17227,6 +17283,7 @@ export default function BricksyTravel() {
                     { key:"harga",    label:"Harga (Rp)",   type:"text",     placeholder:"contoh: 450000" },
                     { key:"desc",     label:"Deskripsi",    type:"textarea", placeholder:"Keunggulan dan detail produk aluminium..." },
                     { key:"fitur",    label:"Fitur (pisah koma)", type:"text", placeholder:"contoh: Rapat Udara, Easy Clean" },
+                    { key:"tampilHarga", label:"Tampilkan Harga", type:"toggle", default: true, desc: "Nonaktifkan untuk sembunyikan harga -- kartu akan menampilkan tombol Konsultasi Sekarang penuh sebagai gantinya." },
                   ]}
                   crudHasImage
                   crudHasGallery={true}
