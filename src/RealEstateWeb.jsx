@@ -284,6 +284,65 @@ function publicCaption(_label) {
   return "";
 }
 
+/* ─────────────── VIDEO EMBED UNIVERSAL (YouTube / TikTok / Instagram Reels) ───────────────
+   Deteksi otomatis platform + orientasi dari sebuah link video, lalu kembalikan info
+   embed-nya. Dipakai di halaman Detail Tema Rumah & panel admin (form edit tema),
+   supaya video bisa diputar LANGSUNG di web tanpa pindah tab.
+   - YouTube biasa (watch?v=... / youtu.be/...)  → embed landscape 16:9
+   - YouTube Shorts (youtube.com/shorts/...)     → embed vertical 9:16
+   - TikTok (tiktok.com/@user/video/ID)          → embed vertical 9:16
+   - Instagram Reels/Post (instagram.com/reel/..)→ embed vertical (butuh sedikit lebih tinggi
+                                                     karena ada header/caption bawaan Instagram)
+*/
+function detectVideoEmbed(url) {
+  if (!url || typeof url !== "string") return null;
+  const u = url.trim();
+
+  // YouTube Shorts
+  let m = u.match(/youtube\.com\/shorts\/([\w-]{6,})/i);
+  if (m) return { platform: "youtube", embedUrl: `https://www.youtube.com/embed/${m[1]}`, vertical: true };
+
+  // YouTube biasa (watch?v=, youtu.be/, embed/)
+  m = u.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([\w-]{6,})/i);
+  if (m) return { platform: "youtube", embedUrl: `https://www.youtube.com/embed/${m[1]}`, vertical: false };
+
+  // TikTok
+  m = u.match(/tiktok\.com\/[^/]+\/video\/(\d+)/i);
+  if (m) return { platform: "tiktok", embedUrl: `https://www.tiktok.com/embed/v2/${m[1]}`, vertical: true };
+
+  // Instagram Reels / Post
+  m = u.match(/instagram\.com\/(?:reel|p)\/([A-Za-z0-9_-]+)/i);
+  if (m) return { platform: "instagram", embedUrl: `https://www.instagram.com/reel/${m[1]}/embed`, vertical: true, extraTall: true };
+
+  return null;
+}
+
+/** Komponen player video universal — tinggal kasih link mentahnya */
+function VideoEmbed({ url, style }) {
+  const info = detectVideoEmbed(url);
+  if (!info) {
+    return (
+      <div style={{ padding: "28px 16px", textAlign: "center", background: "#FDFAF4", borderRadius: 14, border: "1px solid #F5EDD8", color: "#A89070", fontSize: "0.8rem", ...style }}>
+        ⚠️ Link video tidak dikenali. Gunakan link YouTube, TikTok, atau Instagram Reels yang valid.
+      </div>
+    );
+  }
+  const aspect = info.vertical ? (info.extraTall ? "9 / 18" : "9 / 16") : "16 / 9";
+  const maxWidth = info.vertical ? 340 : "100%";
+  return (
+    <div style={{ width: "100%", maxWidth, margin: "0 auto", aspectRatio: aspect, borderRadius: 16, overflow: "hidden", boxShadow: "0 8px 28px rgba(0,0,0,.2)", background: "#000", ...style }}>
+      <iframe
+        src={info.embedUrl}
+        title={`video-${info.platform}`}
+        style={{ width: "100%", height: "100%", border: "none", display: "block" }}
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowFullScreen
+        loading="lazy"
+      />
+    </div>
+  );
+}
+
 /* ─────────────── FORMAT RUPIAH GLOBAL ─────────────── */
 /**
  * Format angka menjadi string Rupiah: 500000 → "Rp 500.000"
@@ -10381,6 +10440,28 @@ function TemaDetailPage({ slug, onWaOpen, onBack, temaList }) {
         </div>
       </div>
 
+      {/* ════════ SECTION: VIDEO TUR RUMAH (YouTube / TikTok / Instagram Reels) ════════ */}
+      {(tema.videos && tema.videos.length > 0) && (
+        <div style={{ padding: "0 5% 56px", maxWidth: 1060, margin: "0 auto" }}>
+          <div style={{ background: "rgba(255,255,255,.16)", backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)", borderRadius: 16, padding: "22px 26px", marginBottom: 28, display: "inline-block", maxWidth: "100%", boxSizing: "border-box" }}>
+            <SectionLabel icon="🎬" text="VIDEO TUR RUMAH" color="#fff" />
+            <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.7rem", fontWeight: 800, color: "#fff", margin: 0, textShadow: "0 2px 10px rgba(0,0,0,.55)" }}>Lihat Langsung {tema.nama}</h2>
+          </div>
+          <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: 22 }}>
+            {tema.videos.map((v, i) => {
+              const url = typeof v === "string" ? v : v.url;
+              const info = detectVideoEmbed(url);
+              const basis = info?.vertical ? "300px" : "560px";
+              return (
+                <div key={i} style={{ flex: `0 1 ${basis}` }}>
+                  <VideoEmbed url={url} />
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
       {/* ════════ SECTION: DENAH RUANG ════════ */}
       <div style={{ background: "rgba(253,250,244,.94)", padding: "48px 5% 56px" }}>
         <div style={{ maxWidth: 1060, margin: "0 auto" }}>
@@ -10426,9 +10507,9 @@ function TemaDetailPage({ slug, onWaOpen, onBack, temaList }) {
       {/* ════════ SECTION: HARGA & RAB ════════ */}
       <div style={{ padding: "48px 5% 56px", maxWidth: 1060, margin: "0 auto" }}>
         <div style={{ background: "rgba(255,255,255,.16)", backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)", borderRadius: 16, padding: "22px 26px", marginBottom: 28, display: "inline-block", maxWidth: "100%", boxSizing: "border-box" }}>
-          <SectionLabel icon="💰" text="PAKET HARGA" />
-          <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.7rem", fontWeight: 800, color: "#2E3D3F", margin: "0 0 12px", textShadow: "0 2px 10px rgba(255,255,255,.5)" }}>Harga & RAB {tema.nama}</h2>
-          <p style={{ color: "#3D4D4F", lineHeight: 1.7, maxWidth: 580, margin: 0, fontSize: "0.88rem", textShadow: "0 1px 6px rgba(255,255,255,.5)" }}>Pilih paket yang sesuai kebutuhan dan budget Anda.</p>
+          <SectionLabel icon="💰" text="PAKET HARGA" color="#fff" />
+          <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.7rem", fontWeight: 800, color: "#fff", margin: "0 0 12px", textShadow: "0 2px 10px rgba(0,0,0,.55)" }}>Harga & RAB {tema.nama}</h2>
+          <p style={{ color: "#fff", lineHeight: 1.7, maxWidth: 580, margin: 0, fontSize: "0.88rem", textShadow: "0 1px 6px rgba(0,0,0,.55)" }}>Pilih paket yang sesuai kebutuhan dan budget Anda.</p>
         </div>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(260px,1fr))", gap: 18, marginBottom: 36 }}>
           {tema.detail.harga.paket.map((p, i) => (
@@ -14144,6 +14225,38 @@ function TemaEditForm({ temaOrig, editIdx, activeTemas, data, save, notify, onBa
           style={{ padding: "6px 14px", background: "#F5EDD8", border: "1.5px dashed #D5C9B0", color: "#5A6A6C", borderRadius: 8, fontSize: 12, fontWeight: 700, cursor: "pointer" }}>+ Poin</button>
       </div>
 
+      {/* Video Tur Rumah — YouTube / TikTok / Instagram Reels */}
+      <div style={SS}>
+        {ST("🎬", "Video Tur Rumah")}
+        <p style={{ fontSize: 12, color: "#5A6A6C", margin: "0 0 12px", lineHeight: 1.6 }}>
+          Tempel link video YouTube (biasa atau Shorts), TikTok, atau Instagram Reels. Video akan diputar langsung di website — pengunjung tidak perlu pindah ke aplikasi lain.
+        </p>
+        {(draft.videos || []).map((v, vi) => {
+          const url = typeof v === "string" ? v : v.url;
+          const info = detectVideoEmbed(url);
+          return (
+            <div key={vi} style={{ display: "flex", gap: 10, alignItems: "flex-start", marginBottom: 12, padding: 10, background: "#FAF7F0", borderRadius: 10, border: "1px solid #F0E6D0" }}>
+              <div style={{ width: info?.vertical ? 70 : 120, flexShrink: 0 }}>
+                <VideoEmbed url={url} />
+              </div>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <input type="text" value={url}
+                  onChange={e => { const a = [...(draft.videos || [])]; a[vi] = e.target.value; upd("videos", a); }}
+                  placeholder="https://youtube.com/watch?v=... atau tiktok.com/... atau instagram.com/reel/..."
+                  style={{ width: "100%", padding: "8px 10px", border: "1.5px solid #D5C9B0", borderRadius: 8, fontSize: 12, boxSizing: "border-box", marginBottom: 6 }} />
+                <div style={{ fontSize: 11, fontWeight: 700, color: info ? "#3A7D4F" : "#dc2626" }}>
+                  {info ? `✓ Terdeteksi: ${info.platform === "youtube" ? "YouTube" + (info.vertical ? " Shorts" : "") : info.platform === "tiktok" ? "TikTok" : "Instagram Reels"}` : "⚠️ Link belum valid / tidak dikenali"}
+                </div>
+              </div>
+              <button onClick={() => upd("videos", (draft.videos || []).filter((_, j) => j !== vi))}
+                style={{ padding: "7px 10px", background: "#fee2e2", color: "#dc2626", border: "none", borderRadius: 8, cursor: "pointer", fontWeight: 700, flexShrink: 0 }}>✕</button>
+            </div>
+          );
+        })}
+        <button onClick={() => upd("videos", [...(draft.videos || []), ""])}
+          style={{ padding: "7px 16px", background: "#F5EDD8", color: "#5A6A6C", border: "1.5px dashed #D5C9B0", borderRadius: 8, fontSize: 13, fontWeight: 700, cursor: "pointer" }}>+ Tambah Video</button>
+      </div>
+
       {/* Interior */}
       <div style={SS}>
         {ST("🛋️", "Interior")}
@@ -14255,6 +14368,7 @@ function TemaRumahAdminPanel({ data, save, notify, uploadToCloudinary }) {
       ],
       img: "",
       imgs: [],
+      videos: [],
       warna: "#C9AA71",
       deskripsi: "",
       detail: {
