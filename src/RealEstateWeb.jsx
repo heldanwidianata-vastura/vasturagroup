@@ -34,6 +34,49 @@ function CrudField({ fd, form, setForm, accent }) {
       </div>
     );
   }
+  if (fd.type === "priceBreakdown") {
+    const val = form[fd.key] || { aktif: false, items: [] };
+    const setVal = (patch) => setForm(p => ({ ...p, [fd.key]: { ...(p[fd.key] || { aktif: false, items: [] }), ...patch } }));
+    const updateItem = (i, patch) => setVal({ items: val.items.map((it, idx) => idx === i ? { ...it, ...patch } : it) });
+    const addItem = () => setVal({ items: [...(val.items || []), { label: "", min: 0, max: 0 }] });
+    const removeItem = (i) => setVal({ items: val.items.filter((_, idx) => idx !== i) });
+    return (
+      <div style={{ marginBottom: 14, background: "#FAF7F0", border: "1.5px solid #E8DCC8", borderRadius: 10, padding: "14px 16px" }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, marginBottom: val.aktif ? 14 : 0 }}>
+          <div>
+            <div style={{ fontSize: 13, fontWeight: 700, color: "#2E3D3F" }}>{fd.label}</div>
+            <div style={{ fontSize: 11.5, color: "#8B9A9C", marginTop: 2 }}>Aktifkan untuk isi rincian harga per kombinasi material (per m²). Harga TERENDAH dari daftar ini otomatis jadi harga utama di kartu produk sebelum diklik; rincian lengkap muncul di halaman Lihat Detail.</div>
+          </div>
+          <button type="button" onClick={() => setVal({ aktif: !val.aktif })}
+            style={{ position: "relative", width: 46, height: 26, borderRadius: 20, border: "none", cursor: "pointer", flexShrink: 0, background: val.aktif ? accent : "#D5C9B0", transition: "background .2s" }}>
+            <span style={{ position: "absolute", top: 3, left: val.aktif ? 23 : 3, width: 20, height: 20, borderRadius: "50%", background: "#fff", boxShadow: "0 1px 4px rgba(0,0,0,.3)", transition: "left .2s" }} />
+          </button>
+        </div>
+        {val.aktif && (
+          <>
+            {(val.items || []).map((it, i) => (
+              <div key={i} style={{ display: "flex", gap: 8, marginBottom: 8, alignItems: "center", flexWrap: "wrap" }}>
+                <input type="text" value={it.label || ""} placeholder="contoh: Polycarbonate Twinwall + Baja Ringan"
+                  onChange={e => updateItem(i, { label: e.target.value })}
+                  style={{ flex: "1 1 220px", padding: "8px 10px", border: "1.5px solid #D5C9B0", borderRadius: 8, fontSize: 12.5, boxSizing: "border-box" }} />
+                <input type="number" value={it.min || 0} placeholder="Harga min"
+                  onChange={e => updateItem(i, { min: Number(e.target.value) })}
+                  style={{ width: 110, padding: "8px 10px", border: "1.5px solid #D5C9B0", borderRadius: 8, fontSize: 12.5, boxSizing: "border-box" }} />
+                <span style={{ fontSize: 12, color: "#8B9A9C" }}>–</span>
+                <input type="number" value={it.max || 0} placeholder="Harga max (opsional)"
+                  onChange={e => updateItem(i, { max: Number(e.target.value) })}
+                  style={{ width: 130, padding: "8px 10px", border: "1.5px solid #D5C9B0", borderRadius: 8, fontSize: 12.5, boxSizing: "border-box" }} />
+                <button onClick={() => removeItem(i)}
+                  style={{ padding: "7px 10px", background: "#fee2e2", color: "#dc2626", border: "none", borderRadius: 8, cursor: "pointer", fontWeight: 700, flexShrink: 0 }}>✕</button>
+              </div>
+            ))}
+            <button onClick={addItem}
+              style={{ padding: "7px 14px", background: "#F5EDD8", border: "1.5px dashed #D5C9B0", color: "#5A6A6C", borderRadius: 8, fontSize: 12, fontWeight: 700, cursor: "pointer" }}>+ Tambah Kombinasi Harga</button>
+          </>
+        )}
+      </div>
+    );
+  }
   return (
     <div style={{ marginBottom: 14 }}>
       <div style={{ fontSize: 13, fontWeight: 700, color: "#5A6A6C", marginBottom: 5 }}>{fd.label}</div>
@@ -8656,7 +8699,7 @@ function SubLayananAdmin({
   const accent    = accentColor;
 
   /* ── State ── */
-  const emptyForm = () => { const o = {}; crudFields.forEach(f => { o[f.key] = f.type === "toggle" ? (f.default !== undefined ? f.default : true) : ""; }); if (crudHasImage) o._img = ""; if (crudHasGallery) o.imgs = []; return o; };
+  const emptyForm = () => { const o = {}; crudFields.forEach(f => { o[f.key] = f.type === "toggle" ? (f.default !== undefined ? f.default : true) : f.type === "priceBreakdown" ? { aktif: false, items: [] } : ""; }); if (crudHasImage) o._img = ""; if (crudHasGallery) o.imgs = []; return o; };
   const [mode, setMode]         = useState("list");   // "list" | "add" | "edit"
   const [editItem, setEditItem] = useState(null);
   const [form, setForm]         = useState(emptyForm());
@@ -8757,6 +8800,7 @@ function SubLayananAdmin({
     const f = emptyForm();
     crudFields.forEach(fd => {
       if (fd.type === "toggle") f[fd.key] = item[fd.key] !== undefined ? !!item[fd.key] : (fd.default !== undefined ? fd.default : true);
+      else if (fd.type === "priceBreakdown") f[fd.key] = (item[fd.key] && typeof item[fd.key] === "object") ? item[fd.key] : { aktif: false, items: [] };
       else f[fd.key] = item[fd.key] || "";
     });
     if (crudHasImage) f._img = item._img || "";
@@ -12969,7 +13013,7 @@ function SubPageCatalog({ heroColor, heroIcon, title, subtitle, breadcrumb, cata
                   <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", paddingTop:14, borderTop:"1px solid #F0EDE8" }}>
                     <div>
                       <div style={{ fontSize:"0.65rem", color:"#8B9A9C", letterSpacing:".06em", textTransform:"uppercase", marginBottom:2 }}>Harga</div>
-                      <div style={{ fontSize:"0.9rem", fontWeight:800, color:"#8B6914" }}>{formatHarga(item.harga)}</div>
+                      <div style={{ fontSize:"0.9rem", fontWeight:800, color:"#8B6914" }}>{formatHarga(getHargaDetailLowest(item) ?? item.harga)}</div>
                     </div>
                     <button onClick={(e)=>{ e.stopPropagation(); onWaOpen && onWaOpen({ key: "layanan", vars: { judul_layanan: item.nama } }); }}
                       style={{ background:"linear-gradient(135deg,#2E3D3F,#8B6914)", color:"#fff", border:"none", borderRadius:8, padding:"9px 16px", fontSize:"0.75rem", fontWeight:700, cursor:"pointer", letterSpacing:".04em" }}>
@@ -13091,8 +13135,23 @@ function SubPageCatalogDetailPage({ item, onBack, onWaOpen, formatHarga, breadcr
               </div>
             )}
             {item.tampilHarga !== false && (
-              <div style={{ fontSize: "1.4rem", fontWeight: 800, color: "#8B6914", fontFamily: "'Playfair Display',serif", marginBottom: 18 }}>
-                {formatHarga(item.harga)}
+              <div style={{ fontSize: "1.4rem", fontWeight: 800, color: "#8B6914", fontFamily: "'Playfair Display',serif", marginBottom: item.hargaDetail?.aktif && item.hargaDetail.items?.length > 0 ? 6 : 18 }}>
+                {formatHarga(getHargaDetailLowest(item) ?? item.harga)}
+              </div>
+            )}
+
+            {/* ── Rincian Harga Per M² (kalau diaktifkan admin) ── */}
+            {item.tampilHarga !== false && item.hargaDetail?.aktif && item.hargaDetail.items?.length > 0 && (
+              <div style={{ background: "#FAF7F0", border: "1.5px solid #E8DCC8", borderRadius: 12, padding: "16px 18px", marginBottom: 22 }}>
+                <div style={{ fontSize: "0.65rem", letterSpacing: ".1em", textTransform: "uppercase", color: accentGold, fontWeight: 800, marginBottom: 10 }}>📋 Rincian Harga per Kombinasi</div>
+                <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                  {item.hargaDetail.items.map((it, i) => (
+                    <div key={i} style={{ display: "flex", alignItems: "baseline", gap: 8, fontSize: "0.84rem", color: "#3D4D4F", lineHeight: 1.6 }}>
+                      <span style={{ color: accentGold, flexShrink: 0 }}>◦</span>
+                      <span><strong>{it.label}</strong>: {fmtHargaRange(it.min, it.max)}</span>
+                    </div>
+                  ))}
+                </div>
               </div>
             )}
 
@@ -13553,7 +13612,25 @@ function normalizeIntItem(item) {
       ? item.fitur.split(",").map(s=>s.trim()).filter(Boolean)
       : (item.fitur || []),
     tampilHarga: item.tampilHarga !== undefined ? !!item.tampilHarga : true,
+    hargaDetail: item.hargaDetail && typeof item.hargaDetail === "object" ? item.hargaDetail : { aktif: false, items: [] },
   };
+}
+
+/** Harga terendah dari rincian harga per-m² (kalau aktif) — dipakai sebagai harga utama
+    yang tampil di kartu produk SEBELUM pengunjung klik "Lihat Detail". */
+function getHargaDetailLowest(item) {
+  if (item?.hargaDetail?.aktif && Array.isArray(item.hargaDetail.items) && item.hargaDetail.items.length > 0) {
+    const mins = item.hargaDetail.items.map(it => Number(it.min) || 0).filter(n => n > 0);
+    if (mins.length > 0) return Math.min(...mins);
+  }
+  return null;
+}
+
+/** Format satu baris rincian harga: "Rp300.000–450.000" atau "Rp300.000" kalau tanpa rentang */
+function fmtHargaRange(min, max) {
+  const fmt = (n) => "Rp" + Number(n || 0).toLocaleString("id-ID");
+  if (max && Number(max) > Number(min)) return `${fmt(min)}–${fmt(max)}`;
+  return fmt(min);
 }
 
 function SubInteriorPage({ pageKey, onWaOpen, navigateTo, data }) {
@@ -17244,6 +17321,7 @@ export default function BricksyTravel() {
                     { key:"desc",     label:"Deskripsi",    type:"textarea", placeholder:"Keunggulan dan detail produk plafon..." },
                     { key:"fitur",    label:"Fitur (pisah koma)", type:"text", placeholder:"contoh: LED Hidden Light, Bertingkat" },
                     { key:"tampilHarga", label:"Tampilkan Harga", type:"toggle", default: true, desc: "Nonaktifkan untuk sembunyikan harga -- kartu akan menampilkan tombol Konsultasi Sekarang penuh sebagai gantinya." },
+                    { key:"hargaDetail", label:"Harga Detail Per M²", type:"priceBreakdown" },
                   ]}
                   crudHasImage
                   crudHasGallery={true}
@@ -17279,6 +17357,7 @@ export default function BricksyTravel() {
                     { key:"desc",     label:"Deskripsi",    type:"textarea", placeholder:"Keunggulan dan detail desain pagar..." },
                     { key:"fitur",    label:"Fitur (pisah koma)", type:"text", placeholder:"contoh: Anti Karat, Custom Warna" },
                     { key:"tampilHarga", label:"Tampilkan Harga", type:"toggle", default: true, desc: "Nonaktifkan untuk sembunyikan harga -- kartu akan menampilkan tombol Konsultasi Sekarang penuh sebagai gantinya." },
+                    { key:"hargaDetail", label:"Harga Detail Per M²", type:"priceBreakdown" },
                   ]}
                   crudHasImage
                   crudHasGallery={true}
@@ -17314,6 +17393,7 @@ export default function BricksyTravel() {
                     { key:"desc",     label:"Deskripsi",    type:"textarea", placeholder:"Keunggulan dan detail desain kanopi..." },
                     { key:"fitur",    label:"Fitur (pisah koma)", type:"text", placeholder:"contoh: Tembus Cahaya, UV Protection" },
                     { key:"tampilHarga", label:"Tampilkan Harga", type:"toggle", default: true, desc: "Nonaktifkan untuk sembunyikan harga -- kartu akan menampilkan tombol Konsultasi Sekarang penuh sebagai gantinya." },
+                    { key:"hargaDetail", label:"Harga Detail Per M²", type:"priceBreakdown" },
                   ]}
                   crudHasImage
                   crudHasGallery={true}
