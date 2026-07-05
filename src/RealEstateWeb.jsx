@@ -358,31 +358,6 @@ async function uploadToCloudinary(file) {
   return data.secure_url;
 }
 
-/* ─────────────── HAPUS FOTO DI CLOUDINARY (bukan cuma di array/Firestore) ───────────────
-   Manggil serverless function /api/delete-cloudinary (Vercel), karena hapus foto
-   butuh CLOUDINARY_API_SECRET yang tidak boleh ada di kode browser.
-   - Kalau url bukan dari Cloudinary (mis. hasil paste URL dari sumber lain), dilewati saja.
-   - Kalau gagal (network error, endpoint belum di-deploy, dsb), tidak melempar error ke
-     pemanggil — supaya hapus dari tampilan/Firestore tetap jalan meski cleanup Cloudinary gagal.
-     Cukup dikasih tahu lewat return value { ok, skipped }. */
-async function deleteFromCloudinary(url) {
-  if (!url || typeof url !== "string" || !url.includes(`res.cloudinary.com/${CLOUDINARY.cloudName}/`)) {
-    return { ok: true, skipped: true }; // bukan aset Cloudinary kita, tidak perlu dihapus di server
-  }
-  try {
-    const res = await fetch("/api/delete-cloudinary", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ url }),
-    });
-    const data = await res.json().catch(() => ({}));
-    if (!res.ok || !data.success) return { ok: false, skipped: false, error: data.error || "Gagal hapus di Cloudinary" };
-    return { ok: true, skipped: false };
-  } catch (err) {
-    return { ok: false, skipped: false, error: String(err) };
-  }
-}
-
 /* ─────────────── CAPTION/LABEL FOTO PUBLIK — DINONAKTIFKAN PERMANEN ───────────────
    Sesuai permintaan: TIDAK ADA caption/label/nama file apa pun yang boleh
    tampil di atas gambar publik (slideshow, galeri, dsb) — hanya gambar saja.
@@ -8791,15 +8766,7 @@ function SubLayananAdmin({
     } catch { notify("❌ Gagal upload foto galeri."); }
     setUploadingGallery(false);
   };
-  const removeGalleryImg = (i) => {
-    const target = form.imgs?.[i];
-    setForm(p => ({ ...p, imgs: (p.imgs || []).filter((_, j) => j !== i) }));
-    if (target?.img) {
-      deleteFromCloudinary(target.img).then(r => {
-        if (!r.ok && !r.skipped) notify("⚠️ Foto terhapus dari daftar, tapi gagal dihapus dari Cloudinary.");
-      });
-    }
-  };
+  const removeGalleryImg = (i) => setForm(p => ({ ...p, imgs: (p.imgs || []).filter((_, j) => j !== i) }));
 
   /* ── Simpan (tambah / edit) ── */
   const handleSave = async () => {
@@ -10298,7 +10265,10 @@ function TemaPhotoSlideshow({ slug, nama, cmsData, duration = 3500, fallbackImg 
   const photos = photosRaw.length > 0 ? photosRaw : (fallbackImg ? [{ img: fallbackImg, label: nama || "" }] : []);
   const [idx, setIdx] = useState(0);
   const dragRef = useRef({ down: false, startX: 0, moved: false });
-  const brokenSkipCount = useRef(0); // guard: hentikan auto-skip kalau sudah muter satu putaran penuh (semua foto rusak)
+  /* Kalau foto yang lagi aktif gagal dimuat (rusak/link putus), tampilkan fallback
+     ikon rumah, jangan biarkan blank kosong ke pengunjung website. */
+  const [imgBroken, setImgBroken] = useState(false);
+  useEffect(() => { setImgBroken(false); }, [idx, photos]);
 
   /* AUTO-SLIDE DIMATIKAN: foto TIDAK berpindah sendiri lagi.
      Berpindah HANYA lewat drag mouse (klik-tahan lalu geser), atau lewat
@@ -10379,21 +10349,14 @@ function TemaPhotoSlideshow({ slug, nama, cmsData, duration = 3500, fallbackImg 
       onTouchEnd={handleTouchEnd}
     >
       {/* Image — tanpa key, jadi browser cuma ganti src elemen yang sama (tidak ada blank/kedip) */}
-      <img src={cur.img} alt={publicCaption(cur.label) || nama || "Foto tema rumah"}
-        draggable={false}
-        style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", pointerEvents: "none" }}
-        onError={e => {
-          // Link foto ini rusak/mati — jangan tampilkan kotak kosong ke pengunjung,
-          // langsung lompat ke foto lain yang valid dalam slideshow ini (kalau ada).
-          // Guard: kalau sudah muter satu putaran penuh dan semua tetap gagal
-          // (kemungkinan semua link rusak), berhenti mencoba dan sembunyikan saja.
-          brokenSkipCount.current += 1;
-          if (photos.length > 1 && brokenSkipCount.current < photos.length) {
-            goTo((idx + 1) % photos.length);
-          } else {
-            e.target.style.display = "none";
-          }
-        }} />
+      {imgBroken ? (
+        <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", background: "#E8DCC8", fontSize: "2.5rem" }}>🏡</div>
+      ) : (
+        <img src={cur.img} alt={publicCaption(cur.label) || nama || "Foto tema rumah"}
+          draggable={false}
+          style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", pointerEvents: "none" }}
+          onError={() => setImgBroken(true)} />
+      )}
 
       {/* Overlay bottom gradient */}
       <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(0,0,0,.55) 0%, transparent 50%)", pointerEvents: "none" }} />
@@ -12334,15 +12297,7 @@ function PaketGridManager({ data, save, notify, storeKey, title, icon, accentCol
   // -- Slides helpers --
   const addSlide = () => setForm(p => ({ ...p, slides: [...(p.slides || []), { img: "", tema: "", desc: "" }] }));
   const updateSlide = (i, field, val) => setForm(p => ({ ...p, slides: p.slides.map((s, idx) => idx === i ? { ...s, [field]: val } : s) }));
-  const removeSlide = (i) => {
-    const target = form.slides?.[i];
-    setForm(p => ({ ...p, slides: p.slides.filter((_, idx) => idx !== i) }));
-    if (target?.img) {
-      deleteFromCloudinary(target.img).then(r => {
-        if (!r.ok && !r.skipped) notify("⚠️ Foto terhapus dari daftar, tapi gagal dihapus dari Cloudinary.");
-      });
-    }
-  };
+  const removeSlide = (i) => setForm(p => ({ ...p, slides: p.slides.filter((_, idx) => idx !== i) }));
 
   const fmt = (n) => "Rp " + Number(n || 0).toLocaleString("id-ID") + ",-";
   const labelStyle = { display: "block", fontSize: 11, fontWeight: 700, color: "#5A6A6C", letterSpacing: "1px", textTransform: "uppercase", marginBottom: 6 };
@@ -12522,11 +12477,11 @@ function PaketGridManager({ data, save, notify, storeKey, title, icon, accentCol
 }
 
 /* ─────────────── MOBILE LAYANAN ACCORDION (3-level) ─────────────── */
-function MobileLayananAccordion({ page, navigateTo, setMobileMenu, navDropdownLayanan }) {
+function MobileLayananAccordion({ page, navigateTo, setMobileMenu, navDropdownLayanan, temaList, temaSlug, openTemaDetail }) {
   const [open, setOpen]       = useState(false);
-  const [subOpen, setSubOpen] = useState(null); // "interior"|"eksterior"|null
+  const [subOpen, setSubOpen] = useState(null); // "interior"|"eksterior"|"tema"|null
 
-  const topPages = ["services","desainrab","temarumah"];
+  const topPages = ["services","desainrab"];
 
   const mBtn = (active, depth=0) => ({
     fontSize:".8rem", letterSpacing:".12em", textTransform:"uppercase", fontFamily:"'Jost',sans-serif",
@@ -12540,7 +12495,7 @@ function MobileLayananAccordion({ page, navigateTo, setMobileMenu, navDropdownLa
   const isLayananActive = [...topPages,
     "interior/kamar-tidur","interior/kamar-mandi","interior/ruang-keluarga","interior/ruang-tamu","interior/kitchen-set","interior/ruang-kerja","interior/plafon-modern",
     "eksterior/pagar","eksterior/kanopi","eksterior/aluminium","eksterior/taman-landscape",
-  ].some(k=>k===page);
+  ].some(k=>k===page) || page==="temarumah";
 
   return (
     <div style={{ width:"100%" }}>
@@ -12562,6 +12517,27 @@ function MobileLayananAccordion({ page, navigateTo, setMobileMenu, navDropdownLa
               {item.label}
             </button>
           ))}
+
+          {/* Tema Rumah accordion — daftar tema otomatis mengikuti data (bertambah sendiri kalau admin tambah tema baru) */}
+          <button onClick={()=>setSubOpen(v=>v==="tema"?null:"tema")}
+            style={{ ...mBtn(page==="temarumah", 1), justifyContent:"space-between" }}>
+            <span>🏡 Tema Rumah</span>
+            <span style={{ fontSize:"0.6rem", fontWeight:800, color:"#fff", background:"#8B6914", padding:"4px 12px", borderRadius:5, letterSpacing:".06em" }}>{subOpen==="tema"?"TUTUP":"BUKA"}</span>
+          </button>
+          {subOpen==="tema" && (
+            <div style={{ borderLeft:"2px solid #C9AA71", marginLeft:28 }}>
+              <button onClick={()=>{ navigateTo("temarumah"); setMobileMenu(false); setOpen(false); setSubOpen(null); }}
+                style={mBtn(page==="temarumah" && !temaSlug, 2)}>
+                📖 Semua Tema Rumah
+              </button>
+              {(temaList || []).map(tema=>(
+                <button key={tema.slug} onClick={()=>{ openTemaDetail(tema.slug); setMobileMenu(false); setOpen(false); setSubOpen(null); }}
+                  style={mBtn(page==="temarumah" && temaSlug===tema.slug, 2)}>
+                  {tema.nama}
+                </button>
+              ))}
+            </div>
+          )}
 
           <div style={{ margin:"6px 16px", borderTop:"1px solid #E8DCC8" }}/>
 
@@ -13798,9 +13774,9 @@ function HomeServiceCardEditor({ index, svc, data, save, notify }) {
 
 
 /* ─────────────── NAV DROPDOWN: LAYANAN KAMI (3-level nested) ─────────────── */
-function NavDropdownLayanan({ page, navigateTo, navDropdownLayanan }) {
+function NavDropdownLayanan({ page, navigateTo, navDropdownLayanan, temaList, temaSlug, openTemaDetail }) {
   const [ddOpen, setDdOpen]   = useState(false);
-  const [subOpen, setSubOpen] = useState(null); // "interior"|"eksterior"|null
+  const [subOpen, setSubOpen] = useState(null); // "interior"|"eksterior"|"tema"|null
   const ref = useRef(null);
 
   useEffect(() => {
@@ -13811,8 +13787,9 @@ function NavDropdownLayanan({ page, navigateTo, navDropdownLayanan }) {
 
   const subIntPages = ["interior/kamar-tidur","interior/kamar-mandi","interior/ruang-keluarga","interior/ruang-tamu","interior/kitchen-set","interior/ruang-kerja","interior/plafon-modern"];
   const subExtPages = ["eksterior/pagar","eksterior/kanopi","eksterior/aluminium","eksterior/taman-landscape"];
-  const topPages    = ["services","desainrab","temarumah"];
-  const isActive    = [...topPages,...subIntPages,...subExtPages,"interior","pagar","kanopi","aluminium","landscape","furnitur"].some(k => k === page);
+  const topPages    = ["services","desainrab"];
+  const isTemaActive = page === "temarumah";
+  const isActive    = [...topPages,...subIntPages,...subExtPages,"interior","pagar","kanopi","aluminium","landscape","furnitur"].some(k => k === page) || isTemaActive;
 
   const ddBase = { position:"absolute", background:"rgba(255,255,255,.98)", borderRadius:10, boxShadow:"0 8px 32px rgba(0,0,0,.14)", border:"1px solid rgba(158,155,150,.15)", padding:"6px 0", zIndex:300, backdropFilter:"blur(12px)", minWidth:210 };
   const btn = (active) => ({ display:"flex", alignItems:"center", justifyContent:"space-between", width:"100%", textAlign:"left", padding:"9px 18px", fontSize:"0.78rem", fontWeight:active?700:500, color:active?"#2E3D3F":"#3D5254", background:active?"#FAF7F0":"transparent", border:"none", cursor:"pointer", borderLeft:active?"2px solid #8B6914":"2px solid transparent", transition:"all .15s", letterSpacing:".04em" });
@@ -13837,6 +13814,34 @@ function NavDropdownLayanan({ page, navigateTo, navDropdownLayanan }) {
               {item.label}
             </button>
           ))}
+
+          {/* Tema Rumah nested — daftar tema otomatis mengikuti data (bertambah sendiri kalau admin tambah tema baru) */}
+          <div style={{ position:"relative" }}
+            onMouseEnter={()=>setSubOpen("tema")}
+            onMouseLeave={()=>setSubOpen(null)}>
+            <button style={btn(isTemaActive)} onMouseEnter={e=>{e.currentTarget.style.background="#FAF7F0";}} onMouseLeave={e=>{e.currentTarget.style.background=isTemaActive?"#FAF7F0":"transparent";}}>
+              <span>🏡 Tema Rumah</span><span style={{fontSize:"0.63rem",fontWeight:800,color:"#fff",background:"#8B6914",padding:"4px 12px",borderRadius:5,letterSpacing:".06em"}}>BUKA</span>
+            </button>
+            {subOpen==="tema" && (
+              <div style={{...ddBase, top:0, left:"100%", marginLeft:4, maxHeight:360, overflowY:"auto"}}>
+                <button onClick={()=>{ navigateTo("temarumah"); setDdOpen(false); setSubOpen(null); }}
+                  style={{...btn(page==="temarumah" && !temaSlug), fontWeight:700}}
+                  onMouseEnter={e=>{e.currentTarget.style.background="#FAF7F0"; e.currentTarget.style.color="#2E3D3F";}}
+                  onMouseLeave={e=>{e.currentTarget.style.background=(page==="temarumah"&&!temaSlug)?"#FAF7F0":"transparent"; e.currentTarget.style.color=(page==="temarumah"&&!temaSlug)?"#2E3D3F":"#3D5254";}}>
+                  📖 Semua Tema Rumah
+                </button>
+                <div style={{ margin:"4px 0 2px", borderTop:"1px solid #edf2f4" }}/>
+                {(temaList || []).map(tema=>(
+                  <button key={tema.slug} onClick={()=>{ openTemaDetail(tema.slug); setDdOpen(false); setSubOpen(null); }}
+                    style={btn(page==="temarumah" && temaSlug===tema.slug)}
+                    onMouseEnter={e=>{e.currentTarget.style.background="#FAF7F0"; e.currentTarget.style.color="#2E3D3F";}}
+                    onMouseLeave={e=>{e.currentTarget.style.background=(page==="temarumah"&&temaSlug===tema.slug)?"#FAF7F0":"transparent"; e.currentTarget.style.color=(page==="temarumah"&&temaSlug===tema.slug)?"#2E3D3F":"#3D5254";}}>
+                    {tema.nama}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
 
           <div style={{ margin:"4px 0 2px", borderTop:"1px solid #edf2f4" }}/>
           <div style={{ padding:"4px 18px 2px", fontSize:"0.63rem", fontWeight:700, color:"#8B9A9C", letterSpacing:".1em", textTransform:"uppercase" }}>Interior & Eksterior</div>
@@ -14083,6 +14088,10 @@ function TemaEditForm({ temaOrig, editIdx, activeTemas, data, save, notify, onBa
   };
   const [slideshowImgs, setSlideshowImgs] = useState(initImgs);
   const [slideshowPrev, setSlideshowPrev] = useState(0);
+  /* Lacak URL foto yang gagal dimuat (rusak/link putus/dihapus) — dipakai untuk
+     tampilkan peringatan jelas ke admin, bukan cuma kotak kosong membingungkan. */
+  const [brokenImgUrls, setBrokenImgUrls] = useState(() => new Set());
+  const markImgBroken = (url) => setBrokenImgUrls(prev => { const next = new Set(prev); next.add(url); return next; });
 
   /* ── Multi-lantai foto denah state ── */
   const initLantai = () => {
@@ -14114,13 +14123,7 @@ function TemaEditForm({ temaOrig, editIdx, activeTemas, data, save, notify, onBa
     setUploadingDenah(null);
   };
   const removeDenahImg = (li, ii) => {
-    const targetUrl = denahLantai[li]?.imgs?.[ii];
     setDenahLantai(prev => prev.map((l, j) => j === li ? { ...l, imgs: l.imgs.filter((_, k) => k !== ii) } : l));
-    if (targetUrl) {
-      deleteFromCloudinary(targetUrl).then(r => {
-        if (!r.ok && !r.skipped) notify("⚠️ Foto denah terhapus dari daftar, tapi gagal dihapus dari Cloudinary.");
-      });
-    }
   };
 
   /* Upload foto denah via paste URL (per lantai) */
@@ -14157,18 +14160,11 @@ function TemaEditForm({ temaOrig, editIdx, activeTemas, data, save, notify, onBa
   };
 
   const removeSlide = (i) => {
-    const target = slideshowImgs[i];
     setSlideshowImgs(prev => {
       const next = prev.filter((_, j) => j !== i);
       setSlideshowPrev(p => Math.min(p, Math.max(0, next.length - 1)));
       return next;
     });
-    // Hapus juga file aslinya di Cloudinary (tidak memblokir UI — array sudah kehapus duluan di atas)
-    if (target?.img) {
-      deleteFromCloudinary(target.img).then(r => {
-        if (!r.ok && !r.skipped) notify("⚠️ Foto terhapus dari daftar, tapi gagal dihapus dari Cloudinary (mungkin sudah tidak ada / cek koneksi).");
-      });
-    }
   };
 
   const updateSlideLabel = (i, lbl) =>
@@ -14301,21 +14297,21 @@ function TemaEditForm({ temaOrig, editIdx, activeTemas, data, save, notify, onBa
           {/* Preview slideshow */}
           {slideshowImgs.length > 0 && (
             <div style={{ position: "relative", width: "100%", height: 160, borderRadius: 10, overflow: "hidden", marginBottom: 10, background: "#E8DCC8" }}>
-              <img
-                key={slideshowPrev}
-                src={slideshowImgs[slideshowPrev]?.img}
-                alt=""
-                style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
-                onError={e => {
-                  e.target.onerror = null;
-                  e.target.style.objectFit = "contain";
-                  e.target.style.padding = "30px";
-                  e.target.style.opacity = "0.6";
-                  e.target.src = "data:image/svg+xml;utf8," + encodeURIComponent(
-                    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><rect width="200" height="200" fill="#E8DCC8"/><text x="100" y="90" font-size="40" text-anchor="middle">⚠️</text><text x="100" y="130" font-size="13" text-anchor="middle" fill="#8B6914" font-family="sans-serif">Link foto rusak</text></svg>'
-                  );
-                }}
-              />
+              {slideshowImgs[slideshowPrev]?.img && !brokenImgUrls.has(slideshowImgs[slideshowPrev].img) ? (
+                <img
+                  key={slideshowPrev}
+                  src={slideshowImgs[slideshowPrev]?.img}
+                  alt=""
+                  style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+                  onError={() => markImgBroken(slideshowImgs[slideshowPrev].img)}
+                />
+              ) : (
+                <div style={{ width: "100%", height: "100%", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 6, background: "#FDF3F0" }}>
+                  <span style={{ fontSize: 26 }}>⚠️</span>
+                  <span style={{ fontSize: 12, fontWeight: 700, color: "#dc2626" }}>Foto ini rusak / link putus</span>
+                  <span style={{ fontSize: 10.5, color: "#A89070" }}>Hapus (✕) lalu upload ulang fotonya</span>
+                </div>
+              )}
               <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(0,0,0,.45) 0%, transparent 60%)", pointerEvents: "none" }} />
               <div style={{ position: "absolute", bottom: 8, left: 10, fontSize: 11, color: "#fff", fontWeight: 700, textShadow: "0 1px 4px rgba(0,0,0,.7)" }}>
                 {slideshowImgs[slideshowPrev]?.label || `Foto ${slideshowPrev + 1}`}
@@ -14340,17 +14336,14 @@ function TemaEditForm({ temaOrig, editIdx, activeTemas, data, save, notify, onBa
               {slideshowImgs.map((ph, i) => (
                 <div key={i} style={{ position: "relative", borderRadius: 8, overflow: "hidden", border: slideshowPrev === i ? "2.5px solid #C9AA71" : "1.5px solid #E8DCC8", cursor: "pointer" }}
                   onClick={() => setSlideshowPrev(i)}>
-                  <img src={ph.img} alt={ph.label} style={{ width: "100%", height: 70, objectFit: "cover", display: "block" }}
-                    onError={e => {
-                      e.target.onerror = null;
-                      e.target.style.objectFit = "contain";
-                      e.target.style.background = "#F5EDD8";
-                      e.target.style.padding = "10px";
-                      e.target.title = "Link foto rusak / tidak bisa dimuat";
-                      e.target.src = "data:image/svg+xml;utf8," + encodeURIComponent(
-                        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 70"><rect width="100" height="70" fill="#F5EDD8"/><text x="50" y="42" font-size="24" text-anchor="middle">⚠️</text></svg>'
-                      );
-                    }} />
+                  {ph.img && !brokenImgUrls.has(ph.img) ? (
+                    <img src={ph.img} alt={ph.label} style={{ width: "100%", height: 70, objectFit: "cover", display: "block" }} onError={() => markImgBroken(ph.img)} />
+                  ) : (
+                    <div style={{ width: "100%", height: 70, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 2, background: "#FDF3F0" }}>
+                      <span style={{ fontSize: 16 }}>⚠️</span>
+                      <span style={{ fontSize: 8.5, fontWeight: 700, color: "#dc2626" }}>Foto rusak</span>
+                    </div>
+                  )}
                   <div style={{ padding: "4px 6px 3px" }}>
                     <input type="text" value={ph.label || ""} onClick={e => e.stopPropagation()} onChange={e => updateSlideLabel(i, e.target.value)}
                       placeholder={`Foto ${i + 1}`}
@@ -16328,7 +16321,8 @@ export default function BricksyTravel() {
                 ))}
 
                 {/* Dropdown: Layanan */}
-                <NavDropdownLayanan page={page} navigateTo={navigateTo} navDropdownLayanan={navDropdownLayanan} />
+                <NavDropdownLayanan page={page} navigateTo={navigateTo} navDropdownLayanan={navDropdownLayanan}
+                  temaList={(data.temaData && data.temaData.length > 0) ? data.temaData : TEMA_DATA} temaSlug={temaSlug} openTemaDetail={openTemaDetail} />
 
                 {/* Interior & Eksterior sudah digabung ke dropdown Layanan */}
 
@@ -16462,11 +16456,12 @@ export default function BricksyTravel() {
                 ))}
 
                 {/* -- Mobile: Layanan Kami (accordion) -- */}
-                <MobileLayananAccordion page={page} navigateTo={navigateTo} setMobileMenu={setMobileMenu} navDropdownLayanan={navDropdownLayanan} />
+                <MobileLayananAccordion page={page} navigateTo={navigateTo} setMobileMenu={setMobileMenu} navDropdownLayanan={navDropdownLayanan}
+                  temaList={(data.temaData && data.temaData.length > 0) ? data.temaData : TEMA_DATA} temaSlug={temaSlug} openTemaDetail={openTemaDetail} />
 
                 {/* -- Mobile: Program Renovasi -- */}
                 <div style={{ padding:"10px 18px 4px", fontSize:"0.6rem", fontWeight:800, letterSpacing:".18em", textTransform:"uppercase", color:"#8B6914", opacity:0.8 }}>Program Renovasi</div>
-                {navDropdownGaleri.map(item=>(
+                {navDropdownGaleri.filter(item=>item.key!=="landscape").map(item=>(
                   <button key={item.key} onClick={()=>{ navigateTo(item.key); setMobileMenu(false); }}
                     style={{ fontSize:".8rem", letterSpacing:".12em", textTransform:"uppercase", fontFamily:"'Jost',sans-serif",
                       color:page===item.key?"var(--re-black)":"var(--re-grey-dk)", fontWeight:page===item.key?700:400,
@@ -16534,48 +16529,63 @@ export default function BricksyTravel() {
           {/* Spacer to push content below fixed navbar */}
           <div style={{ height: "clamp(60px,10vw,96px)" }} />
 
-          {/* -- NAVIGASI MAJU / MUNDUR -- */}
-          {(() => {
-            const isMobileNav = window.innerWidth <= 768;
-            if (isMobileNav) return null; // hapus floating nav di mobile
-            /* ── DESKTOP: dua tombol persegi panjang bold vertikal di kanan ── */
-            return (
-              <div style={{ position: "fixed", bottom: 100, right: 20, zIndex: 9989, display: "flex", flexDirection: "column", gap: 6 }}>
-                <button onClick={spaForward} disabled={!canFwd} title="Maju"
-                  style={{
-                    width: 52, height: 44, borderRadius: 8, border: "none",
-                    background: canFwd ? "linear-gradient(135deg,#2E3D3F,#8B6914)" : "rgba(200,210,220,.55)",
-                    boxShadow: canFwd ? "0 4px 14px rgba(13,59,102,.40)" : "0 2px 6px rgba(0,0,0,.12)",
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                    cursor: canFwd ? "pointer" : "default", opacity: canFwd ? 1 : 0.45,
-                    transition: "transform .18s, box-shadow .18s, opacity .18s",
-                  }}
-                  onMouseEnter={e => { if (canFwd) { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = "0 8px 22px rgba(13,59,102,.5)"; }}}
-                  onMouseLeave={e => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = canFwd ? "0 4px 14px rgba(13,59,102,.40)" : "0 2px 6px rgba(0,0,0,.12)"; }}
-                >
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                    <polyline points="9 18 15 12 9 6" />
-                  </svg>
-                </button>
-                <button onClick={spaBack} disabled={!canBack} title="Mundur"
-                  style={{
-                    width: 52, height: 44, borderRadius: 8, border: "none",
-                    background: canBack ? "linear-gradient(135deg,#2E3D3F,#8B6914)" : "rgba(200,210,220,.55)",
-                    boxShadow: canBack ? "0 4px 14px rgba(13,59,102,.40)" : "0 2px 6px rgba(0,0,0,.12)",
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                    cursor: canBack ? "pointer" : "default", opacity: canBack ? 1 : 0.45,
-                    transition: "transform .18s, box-shadow .18s, opacity .18s",
-                  }}
-                  onMouseEnter={e => { if (canBack) { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = "0 8px 22px rgba(13,59,102,.5)"; }}}
-                  onMouseLeave={e => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = canBack ? "0 4px 14px rgba(13,59,102,.40)" : "0 2px 6px rgba(0,0,0,.12)"; }}
-                >
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                    <polyline points="15 18 9 12 15 6" />
-                  </svg>
-                </button>
-              </div>
-            );
-          })()}
+          {/* -- Ukuran tombol floating (YouTube/Instagram/WhatsApp) menyesuaikan layar:
+                lebih kecil di mobile supaya tidak menutupi terlalu banyak area viewport -- */}
+          <style>{`
+            .float-social-btn { width: 52px; height: 52px; }
+            .float-social-icon { width: 24px; height: 24px; }
+            .float-yt-btn { bottom: 160px; }
+            .float-ig-btn { bottom: 92px; }
+            .float-wa-btn { width: 58px; height: 58px; }
+            .float-wa-icon { width: 30px; height: 30px; }
+            @media (max-width: 768px) {
+              .float-social-btn { width: 40px !important; height: 40px !important; right: 14px !important; }
+              .float-social-icon { width: 19px !important; height: 19px !important; }
+              .float-yt-btn { bottom: 122px !important; }
+              .float-ig-btn { bottom: 70px !important; }
+              .float-wa-btn { width: 48px !important; height: 48px !important; bottom: 16px !important; right: 14px !important; }
+              .float-wa-icon { width: 25px !important; height: 25px !important; }
+            }
+          `}</style>
+
+          {/* -- YOUTUBE FLOATING BUTTON -- */}
+          <a href="https://youtube.com/@vasturagroup?si=6HJ-HRBWIQF4FtBN" target="_blank" rel="noopener noreferrer"
+            title="Kunjungi YouTube Vastura Group" className="float-social-btn float-yt-btn"
+            style={{
+              position: "fixed", right: 20, zIndex: 9989,
+              borderRadius: "50%",
+              background: "#FF0000",
+              display: "flex", alignItems: "center", justifyContent: "center",
+              boxShadow: "0 4px 18px rgba(255,0,0,.45), 0 2px 8px rgba(0,0,0,.2)",
+              border: "none", cursor: "pointer", transition: "transform .18s, box-shadow .18s", textDecoration: "none",
+            }}
+            onMouseEnter={e => { e.currentTarget.style.transform = "scale(1.1)"; e.currentTarget.style.boxShadow = "0 6px 24px rgba(255,0,0,.6), 0 4px 12px rgba(0,0,0,.25)"; }}
+            onMouseLeave={e => { e.currentTarget.style.transform = "scale(1)"; e.currentTarget.style.boxShadow = "0 4px 18px rgba(255,0,0,.45), 0 2px 8px rgba(0,0,0,.2)"; }}>
+            <svg className="float-social-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31.6 31.6 0 0 0 0 12a31.6 31.6 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31.6 31.6 0 0 0 24 12a31.6 31.6 0 0 0-.5-5.8z" fill="#fff"/>
+              <path d="M9.6 15.6 15.8 12 9.6 8.4v7.2z" fill="#FF0000"/>
+            </svg>
+          </a>
+
+          {/* -- INSTAGRAM FLOATING BUTTON -- */}
+          <a href="https://www.instagram.com/vastura_group" target="_blank" rel="noopener noreferrer"
+            title="Ikuti Instagram @vastura_group" className="float-social-btn float-ig-btn"
+            style={{
+              position: "fixed", right: 20, zIndex: 9989,
+              borderRadius: "50%",
+              background: "linear-gradient(135deg,#f9ce34,#ee2a7b,#6228d7)",
+              display: "flex", alignItems: "center", justifyContent: "center",
+              boxShadow: "0 4px 18px rgba(238,42,123,.45), 0 2px 8px rgba(0,0,0,.2)",
+              border: "none", cursor: "pointer", transition: "transform .18s, box-shadow .18s", textDecoration: "none",
+            }}
+            onMouseEnter={e => { e.currentTarget.style.transform = "scale(1.1)"; e.currentTarget.style.boxShadow = "0 6px 24px rgba(238,42,123,.6), 0 4px 12px rgba(0,0,0,.25)"; }}
+            onMouseLeave={e => { e.currentTarget.style.transform = "scale(1)"; e.currentTarget.style.boxShadow = "0 4px 18px rgba(238,42,123,.45), 0 2px 8px rgba(0,0,0,.2)"; }}>
+            <svg className="float-social-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="2" y="2" width="20" height="20" rx="6" stroke="#fff" strokeWidth="2"/>
+              <circle cx="12" cy="12" r="4.2" stroke="#fff" strokeWidth="2"/>
+              <circle cx="17.4" cy="6.6" r="1.3" fill="#fff"/>
+            </svg>
+          </a>
 
           {/* -- WA PICKER MODAL -- */}
           {waPicker && (
@@ -16588,10 +16598,10 @@ export default function BricksyTravel() {
 
           {/* -- WHATSAPP FLOATING BUTTON -- */}
           <button onClick={() => openWaPicker()}
-            title="Hubungi Kami via WhatsApp"
+            title="Hubungi Kami via WhatsApp" className="float-wa-btn"
             style={{
               position: "fixed", bottom: 24, right: 20, zIndex: 9990,
-              width: 58, height: 58, borderRadius: "50%",
+              borderRadius: "50%",
               background: "#25d366",
               display: "flex", alignItems: "center", justifyContent: "center",
               boxShadow: "0 4px 20px rgba(37,211,102,.5), 0 2px 8px rgba(0,0,0,.2)",
@@ -16600,7 +16610,7 @@ export default function BricksyTravel() {
             onMouseEnter={e => { e.currentTarget.style.transform = "scale(1.12)"; e.currentTarget.style.boxShadow = "0 6px 28px rgba(37,211,102,.65), 0 4px 12px rgba(0,0,0,.25)"; }}
             onMouseLeave={e => { e.currentTarget.style.transform = "scale(1)"; e.currentTarget.style.boxShadow = "0 4px 20px rgba(37,211,102,.5), 0 2px 8px rgba(0,0,0,.2)"; }}>
             {/* WhatsApp SVG Icon */}
-            <svg width="30" height="30" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <svg className="float-wa-icon" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M16 3C8.82 3 3 8.82 3 16c0 2.38.65 4.61 1.78 6.53L3 29l6.64-1.74A12.93 12.93 0 0 0 16 29c7.18 0 13-5.82 13-13S23.18 3 16 3z" fill="#fff"/>
               <path d="M16 5.5c-5.79 0-10.5 4.71-10.5 10.5 0 2.03.58 3.93 1.59 5.54l.28.45-.97 3.54 3.65-.95.43.25A10.44 10.44 0 0 0 16 26.5c5.79 0 10.5-4.71 10.5-10.5S21.79 5.5 16 5.5zm5.32 14.57c-.22.62-1.28 1.18-1.76 1.23-.45.05-.87.22-2.93-.61-2.49-1-4.07-3.54-4.2-3.7-.12-.17-.99-1.32-.99-2.52 0-1.2.63-1.79.85-2.03.22-.25.49-.31.65-.31l.47.01c.15.01.36-.06.56.43.21.5.72 1.76.78 1.89.07.13.11.28.02.45-.08.17-.13.28-.25.43l-.38.44c-.12.13-.25.26-.11.51.14.25.63 1.04 1.35 1.68.93.83 1.71 1.09 1.96 1.21.25.12.39.1.54-.06.15-.16.62-.72.78-.97.16-.25.33-.21.55-.13.22.08 1.41.67 1.65.79.24.12.4.18.46.28.06.1.06.58-.16 1.2z" fill="#25d366"/>
             </svg>
