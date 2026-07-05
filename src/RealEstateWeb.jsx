@@ -10,6 +10,47 @@ function autoGrowTextarea(el) {
   el.style.height = el.scrollHeight + "px";
 }
 
+/* ─────────────── CRUD FIELD (dipakai SubLayananAdmin) ───────────────
+   PENTING: komponen ini SENGAJA didefinisikan di top-level (bukan di dalam
+   SubLayananAdmin), karena kalau didefinisikan ulang di setiap render, React
+   menganggapnya "tipe komponen baru" tiap kali form berubah — akibatnya
+   input/textarea di-unmount+mount ulang tiap ketik 1 huruf, dan kursor jadi
+   hilang terus (harus klik lagi tiap huruf). Dengan di-hoist ke sini + props
+   eksplisit (form, setForm, accent), identitas komponennya stabil antar
+   render sehingga fokus & kursor tetap terjaga saat mengetik. */
+function CrudField({ fd, form, setForm, accent }) {
+  if (fd.type === "toggle") {
+    const checked = form[fd.key] !== undefined ? !!form[fd.key] : (fd.default !== undefined ? fd.default : true);
+    return (
+      <div style={{ marginBottom: 14, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, background: "#FAF7F0", border: "1.5px solid #E8DCC8", borderRadius: 10, padding: "12px 16px" }}>
+        <div>
+          <div style={{ fontSize: 13, fontWeight: 700, color: "#2E3D3F" }}>{fd.label}</div>
+          {fd.desc && <div style={{ fontSize: 11.5, color: "#8B9A9C", marginTop: 2 }}>{fd.desc}</div>}
+        </div>
+        <button type="button" onClick={() => setForm(p => ({ ...p, [fd.key]: !checked }))}
+          style={{ position: "relative", width: 46, height: 26, borderRadius: 20, border: "none", cursor: "pointer", flexShrink: 0, background: checked ? accent : "#D5C9B0", transition: "background .2s" }}>
+          <span style={{ position: "absolute", top: 3, left: checked ? 23 : 3, width: 20, height: 20, borderRadius: "50%", background: "#fff", boxShadow: "0 1px 4px rgba(0,0,0,.3)", transition: "left .2s" }} />
+        </button>
+      </div>
+    );
+  }
+  return (
+    <div style={{ marginBottom: 14 }}>
+      <div style={{ fontSize: 13, fontWeight: 700, color: "#5A6A6C", marginBottom: 5 }}>{fd.label}</div>
+      {fd.type === "textarea"
+        ? <textarea rows={3} placeholder={fd.placeholder || ""} value={form[fd.key] || ""}
+            ref={autoGrowTextarea}
+            onInput={e => autoGrowTextarea(e.target)}
+            onChange={e => setForm(p => ({ ...p, [fd.key]: e.target.value }))}
+            style={{ width: "100%", padding: "10px 12px", border: "1.5px solid #D5C9B0", borderRadius: 8, fontSize: 14, resize: "none", overflow: "hidden", fontFamily: "inherit", boxSizing: "border-box" }} />
+        : <input type="text" placeholder={fd.placeholder || ""} value={form[fd.key] || ""}
+            onChange={e => setForm(p => ({ ...p, [fd.key]: e.target.value }))}
+            style={{ width: "100%", padding: "10px 12px", border: "1.5px solid #D5C9B0", borderRadius: 8, fontSize: 14, boxSizing: "border-box" }} />
+      }
+    </div>
+  );
+}
+
 /* ─────────────── DASHBOARD TABS SUB-COMPONENT ─────────────── */
 function DashTabs({ user, allPosts, publishedCount, draftCount, data, canEdit, canCS, isAdmin, setAdminTab, setCmsEditPost, SECTION_LABELS, SECTIONS, formatDate }) {
   // setAdminTab is navigateAdminTab from parent; alias it so inline references resolve
@@ -300,26 +341,38 @@ function detectVideoEmbed(url) {
 
   // YouTube Shorts
   let m = u.match(/youtube\.com\/shorts\/([\w-]{6,})/i);
-  if (m) return { platform: "youtube", embedUrl: `https://www.youtube.com/embed/${m[1]}`, vertical: true };
+  if (m) return { platform: "youtube", id: m[1], embedUrl: `https://www.youtube.com/embed/${m[1]}?autoplay=1`, vertical: true };
 
   // YouTube biasa (watch?v=, youtu.be/, embed/)
   m = u.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([\w-]{6,})/i);
-  if (m) return { platform: "youtube", embedUrl: `https://www.youtube.com/embed/${m[1]}`, vertical: false };
+  if (m) return { platform: "youtube", id: m[1], embedUrl: `https://www.youtube.com/embed/${m[1]}?autoplay=1`, vertical: false };
 
   // TikTok
   m = u.match(/tiktok\.com\/[^/]+\/video\/(\d+)/i);
-  if (m) return { platform: "tiktok", embedUrl: `https://www.tiktok.com/embed/v2/${m[1]}`, vertical: true };
+  if (m) return { platform: "tiktok", id: m[1], embedUrl: `https://www.tiktok.com/embed/v2/${m[1]}?autoplay=1`, vertical: true };
 
   // Instagram Reels / Post
   m = u.match(/instagram\.com\/(?:reel|p)\/([A-Za-z0-9_-]+)/i);
-  if (m) return { platform: "instagram", embedUrl: `https://www.instagram.com/reel/${m[1]}/embed`, vertical: true, extraTall: true };
+  if (m) return { platform: "instagram", id: m[1], embedUrl: `https://www.instagram.com/reel/${m[1]}/embed`, vertical: true, extraTall: true };
 
   return null;
 }
 
-/** Komponen player video universal — tinggal kasih link mentahnya */
+/** Ikon & warna brand per platform — dipakai di facade sebelum video diputar */
+const VIDEO_PLATFORM_META = {
+  youtube:   { icon: "▶", label: "YouTube",   color: "#FF0000" },
+  tiktok:    { icon: "🎵", label: "TikTok",    color: "#000000" },
+  instagram: { icon: "📷", label: "Instagram", color: "#C13584" },
+};
+
+/** Komponen player video universal dengan FACADE — tinggal kasih link mentahnya.
+    Video TIDAK langsung dimuat (iframe berat, apalagi kalau ada beberapa sekaligus
+    di 1 halaman). Yang tampil awal cuma thumbnail/preview + tombol play; iframe
+    asli baru dibuat begitu pengunjung klik, jadi halaman tetap ringan & cepat. */
 function VideoEmbed({ url, style }) {
   const info = detectVideoEmbed(url);
+  const [playing, setPlaying] = useState(false);
+
   if (!info) {
     return (
       <div style={{ padding: "28px 16px", textAlign: "center", background: "#FDFAF4", borderRadius: 14, border: "1px solid #F5EDD8", color: "#A89070", fontSize: "0.8rem", ...style }}>
@@ -327,18 +380,47 @@ function VideoEmbed({ url, style }) {
       </div>
     );
   }
+
   const aspect = info.vertical ? (info.extraTall ? "9 / 18" : "9 / 16") : "16 / 9";
   const maxWidth = info.vertical ? 340 : "100%";
+  const meta = VIDEO_PLATFORM_META[info.platform];
+
+  if (playing) {
+    return (
+      <div style={{ width: "100%", maxWidth, margin: "0 auto", aspectRatio: aspect, borderRadius: 16, overflow: "hidden", boxShadow: "0 8px 28px rgba(0,0,0,.2)", background: "#000", ...style }}>
+        <iframe
+          src={info.embedUrl}
+          title={`video-${info.platform}`}
+          style={{ width: "100%", height: "100%", border: "none", display: "block" }}
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowFullScreen
+        />
+      </div>
+    );
+  }
+
+  /* ── FACADE: belum diputar → tampilkan thumbnail (YouTube) atau placeholder brand (TikTok/IG) + tombol play ── */
   return (
-    <div style={{ width: "100%", maxWidth, margin: "0 auto", aspectRatio: aspect, borderRadius: 16, overflow: "hidden", boxShadow: "0 8px 28px rgba(0,0,0,.2)", background: "#000", ...style }}>
-      <iframe
-        src={info.embedUrl}
-        title={`video-${info.platform}`}
-        style={{ width: "100%", height: "100%", border: "none", display: "block" }}
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-        allowFullScreen
-        loading="lazy"
-      />
+    <div onClick={() => setPlaying(true)} role="button" aria-label={`Putar video ${meta.label}`}
+      style={{ width: "100%", maxWidth, margin: "0 auto", aspectRatio: aspect, borderRadius: 16, overflow: "hidden", boxShadow: "0 8px 28px rgba(0,0,0,.2)", background: "#111", position: "relative", cursor: "pointer", ...style }}>
+      {info.platform === "youtube" ? (
+        <img src={`https://img.youtube.com/vi/${info.id}/hqdefault.jpg`} alt={`Thumbnail ${meta.label}`} loading="lazy"
+          style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+          onError={e => { e.target.style.display = "none"; }} />
+      ) : (
+        <div style={{ position: "absolute", inset: 0, background: `linear-gradient(135deg,${meta.color},#2a2a2a)`, display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column", gap: 8 }}>
+          <span style={{ fontSize: "2.2rem" }}>{meta.icon}</span>
+          <span style={{ color: "#fff", fontSize: "0.75rem", fontWeight: 700, letterSpacing: ".04em" }}>Tonton di {meta.label}</span>
+        </div>
+      )}
+      {/* Overlay gelap tipis supaya tombol play kontras di atas thumbnail apa pun */}
+      <div style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,.18)" }} />
+      {/* Tombol play */}
+      <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%,-50%)", width: 62, height: 62, borderRadius: "50%", background: "rgba(255,255,255,.94)", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 4px 20px rgba(0,0,0,.4)", transition: "transform .18s" }}
+        onMouseEnter={e => e.currentTarget.style.transform = "translate(-50%,-50%) scale(1.08)"}
+        onMouseLeave={e => e.currentTarget.style.transform = "translate(-50%,-50%) scale(1)"}>
+        <span style={{ fontSize: "1.4rem", color: "#1a1a1a", marginLeft: 4 }}>▶</span>
+      </div>
     </div>
   );
 }
@@ -8686,39 +8768,8 @@ function SubLayananAdmin({
   /* ── Buka form tambah ── */
   const openAdd = () => { setForm(emptyForm()); setEditItem(null); setMode("add"); window.scrollTo({ top: 0, behavior: "smooth" }); };
 
-  /* ── Render field ── */
-  const Field = ({ fd }) => {
-    if (fd.type === "toggle") {
-      const checked = form[fd.key] !== undefined ? !!form[fd.key] : (fd.default !== undefined ? fd.default : true);
-      return (
-        <div style={{ marginBottom: 14, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, background: "#FAF7F0", border: "1.5px solid #E8DCC8", borderRadius: 10, padding: "12px 16px" }}>
-          <div>
-            <div style={{ fontSize: 13, fontWeight: 700, color: "#2E3D3F" }}>{fd.label}</div>
-            {fd.desc && <div style={{ fontSize: 11.5, color: "#8B9A9C", marginTop: 2 }}>{fd.desc}</div>}
-          </div>
-          <button type="button" onClick={() => setForm(p => ({ ...p, [fd.key]: !checked }))}
-            style={{ position: "relative", width: 46, height: 26, borderRadius: 20, border: "none", cursor: "pointer", flexShrink: 0, background: checked ? accent : "#D5C9B0", transition: "background .2s" }}>
-            <span style={{ position: "absolute", top: 3, left: checked ? 23 : 3, width: 20, height: 20, borderRadius: "50%", background: "#fff", boxShadow: "0 1px 4px rgba(0,0,0,.3)", transition: "left .2s" }} />
-          </button>
-        </div>
-      );
-    }
-    return (
-    <div style={{ marginBottom: 14 }}>
-      <div style={{ fontSize: 13, fontWeight: 700, color: "#5A6A6C", marginBottom: 5 }}>{fd.label}</div>
-      {fd.type === "textarea"
-        ? <textarea rows={3} placeholder={fd.placeholder || ""} value={form[fd.key] || ""}
-            ref={autoGrowTextarea}
-            onInput={e => autoGrowTextarea(e.target)}
-            onChange={e => setForm(p => ({ ...p, [fd.key]: e.target.value }))}
-            style={{ width: "100%", padding: "10px 12px", border: "1.5px solid #D5C9B0", borderRadius: 8, fontSize: 14, resize: "none", overflow: "hidden", fontFamily: "inherit", boxSizing: "border-box" }} />
-        : <input type="text" placeholder={fd.placeholder || ""} value={form[fd.key] || ""}
-            onChange={e => setForm(p => ({ ...p, [fd.key]: e.target.value }))}
-            style={{ width: "100%", padding: "10px 12px", border: "1.5px solid #D5C9B0", borderRadius: 8, fontSize: 14, boxSizing: "border-box" }} />
-      }
-    </div>
-    );
-  };
+  /* Field component di-hoist ke top-level module scope (lihat CrudField) supaya
+     tidak dibuat ulang setiap render — mencegah bug kursor hilang saat mengetik. */
 
   /* ═══ LIST VIEW ═══ */
   if (mode === "list") return (
@@ -8914,7 +8965,7 @@ function SubLayananAdmin({
         )}
 
         {/* Fields */}
-        {crudFields.map(fd => <Field key={fd.key} fd={fd} />)}
+        {crudFields.map(fd => <CrudField key={fd.key} fd={fd} form={form} setForm={setForm} accent={accent} />)}
 
         {/* Tombol simpan */}
         <div style={{ display: "flex", gap: 10, marginTop: 6 }}>
@@ -10334,6 +10385,20 @@ function TemaDetailPage({ slug, onWaOpen, onBack, temaList }) {
   const firstPhotoUrl = tema ? ((tema.imgs && tema.imgs.length > 0 ? tema.imgs[0].img : "") || tema.img || "") : "";
 
   useEffect(() => { window.scrollTo(0, 0); }, [slug]);
+
+  /* Tema tidak ditemukan (link salah, typo, atau tema sudah dihapus admin) → tampilkan fallback, bukan crash */
+  if (!tema) {
+    return (
+      <div style={{ minHeight: "60vh", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "80px 5%", textAlign: "center" }}>
+        <div style={{ fontSize: "3rem", marginBottom: 16 }}>🏠</div>
+        <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.4rem", fontWeight: 800, color: "#2E3D3F", margin: "0 0 10px" }}>Tema Rumah Tidak Ditemukan</h2>
+        <p style={{ color: "#5A6A6C", fontSize: "0.9rem", maxWidth: 420, marginBottom: 24 }}>Link yang Anda buka mungkin salah, atau tema ini sudah tidak tersedia.</p>
+        <button onClick={onBack} style={{ padding: "12px 28px", background: "#2E3D3F", color: "#fff", border: "none", borderRadius: 8, fontWeight: 700, fontSize: "0.85rem", cursor: "pointer" }}>
+          ← Lihat Semua Tema Rumah
+        </button>
+      </div>
+    );
+  }
 
   const copyTemaLink = () => {
     const url = window.location.origin + temaDetailUrl(slug);
