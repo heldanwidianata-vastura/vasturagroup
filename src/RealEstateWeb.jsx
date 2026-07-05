@@ -358,6 +358,31 @@ async function uploadToCloudinary(file) {
   return data.secure_url;
 }
 
+/* ─────────────── HAPUS FOTO DI CLOUDINARY (bukan cuma di array/Firestore) ───────────────
+   Manggil serverless function /api/delete-cloudinary (Vercel), karena hapus foto
+   butuh CLOUDINARY_API_SECRET yang tidak boleh ada di kode browser.
+   - Kalau url bukan dari Cloudinary (mis. hasil paste URL dari sumber lain), dilewati saja.
+   - Kalau gagal (network error, endpoint belum di-deploy, dsb), tidak melempar error ke
+     pemanggil — supaya hapus dari tampilan/Firestore tetap jalan meski cleanup Cloudinary gagal.
+     Cukup dikasih tahu lewat return value { ok, skipped }. */
+async function deleteFromCloudinary(url) {
+  if (!url || typeof url !== "string" || !url.includes(`res.cloudinary.com/${CLOUDINARY.cloudName}/`)) {
+    return { ok: true, skipped: true }; // bukan aset Cloudinary kita, tidak perlu dihapus di server
+  }
+  try {
+    const res = await fetch("/api/delete-cloudinary", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ url }),
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok || !data.success) return { ok: false, skipped: false, error: data.error || "Gagal hapus di Cloudinary" };
+    return { ok: true, skipped: false };
+  } catch (err) {
+    return { ok: false, skipped: false, error: String(err) };
+  }
+}
+
 /* ─────────────── CAPTION/LABEL FOTO PUBLIK — DINONAKTIFKAN PERMANEN ───────────────
    Sesuai permintaan: TIDAK ADA caption/label/nama file apa pun yang boleh
    tampil di atas gambar publik (slideshow, galeri, dsb) — hanya gambar saja.
@@ -8766,7 +8791,15 @@ function SubLayananAdmin({
     } catch { notify("❌ Gagal upload foto galeri."); }
     setUploadingGallery(false);
   };
-  const removeGalleryImg = (i) => setForm(p => ({ ...p, imgs: (p.imgs || []).filter((_, j) => j !== i) }));
+  const removeGalleryImg = (i) => {
+    const target = form.imgs?.[i];
+    setForm(p => ({ ...p, imgs: (p.imgs || []).filter((_, j) => j !== i) }));
+    if (target?.img) {
+      deleteFromCloudinary(target.img).then(r => {
+        if (!r.ok && !r.skipped) notify("⚠️ Foto terhapus dari daftar, tapi gagal dihapus dari Cloudinary.");
+      });
+    }
+  };
 
   /* ── Simpan (tambah / edit) ── */
   const handleSave = async () => {
@@ -10265,6 +10298,7 @@ function TemaPhotoSlideshow({ slug, nama, cmsData, duration = 3500, fallbackImg 
   const photos = photosRaw.length > 0 ? photosRaw : (fallbackImg ? [{ img: fallbackImg, label: nama || "" }] : []);
   const [idx, setIdx] = useState(0);
   const dragRef = useRef({ down: false, startX: 0, moved: false });
+  const brokenSkipCount = useRef(0); // guard: hentikan auto-skip kalau sudah muter satu putaran penuh (semua foto rusak)
 
   /* AUTO-SLIDE DIMATIKAN: foto TIDAK berpindah sendiri lagi.
      Berpindah HANYA lewat drag mouse (klik-tahan lalu geser), atau lewat
@@ -10348,7 +10382,18 @@ function TemaPhotoSlideshow({ slug, nama, cmsData, duration = 3500, fallbackImg 
       <img src={cur.img} alt={publicCaption(cur.label) || nama || "Foto tema rumah"}
         draggable={false}
         style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", pointerEvents: "none" }}
-        onError={e => { e.target.style.display = "none"; }} />
+        onError={e => {
+          // Link foto ini rusak/mati — jangan tampilkan kotak kosong ke pengunjung,
+          // langsung lompat ke foto lain yang valid dalam slideshow ini (kalau ada).
+          // Guard: kalau sudah muter satu putaran penuh dan semua tetap gagal
+          // (kemungkinan semua link rusak), berhenti mencoba dan sembunyikan saja.
+          brokenSkipCount.current += 1;
+          if (photos.length > 1 && brokenSkipCount.current < photos.length) {
+            goTo((idx + 1) % photos.length);
+          } else {
+            e.target.style.display = "none";
+          }
+        }} />
 
       {/* Overlay bottom gradient */}
       <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(0,0,0,.55) 0%, transparent 50%)", pointerEvents: "none" }} />
@@ -12289,7 +12334,15 @@ function PaketGridManager({ data, save, notify, storeKey, title, icon, accentCol
   // -- Slides helpers --
   const addSlide = () => setForm(p => ({ ...p, slides: [...(p.slides || []), { img: "", tema: "", desc: "" }] }));
   const updateSlide = (i, field, val) => setForm(p => ({ ...p, slides: p.slides.map((s, idx) => idx === i ? { ...s, [field]: val } : s) }));
-  const removeSlide = (i) => setForm(p => ({ ...p, slides: p.slides.filter((_, idx) => idx !== i) }));
+  const removeSlide = (i) => {
+    const target = form.slides?.[i];
+    setForm(p => ({ ...p, slides: p.slides.filter((_, idx) => idx !== i) }));
+    if (target?.img) {
+      deleteFromCloudinary(target.img).then(r => {
+        if (!r.ok && !r.skipped) notify("⚠️ Foto terhapus dari daftar, tapi gagal dihapus dari Cloudinary.");
+      });
+    }
+  };
 
   const fmt = (n) => "Rp " + Number(n || 0).toLocaleString("id-ID") + ",-";
   const labelStyle = { display: "block", fontSize: 11, fontWeight: 700, color: "#5A6A6C", letterSpacing: "1px", textTransform: "uppercase", marginBottom: 6 };
@@ -14061,7 +14114,13 @@ function TemaEditForm({ temaOrig, editIdx, activeTemas, data, save, notify, onBa
     setUploadingDenah(null);
   };
   const removeDenahImg = (li, ii) => {
+    const targetUrl = denahLantai[li]?.imgs?.[ii];
     setDenahLantai(prev => prev.map((l, j) => j === li ? { ...l, imgs: l.imgs.filter((_, k) => k !== ii) } : l));
+    if (targetUrl) {
+      deleteFromCloudinary(targetUrl).then(r => {
+        if (!r.ok && !r.skipped) notify("⚠️ Foto denah terhapus dari daftar, tapi gagal dihapus dari Cloudinary.");
+      });
+    }
   };
 
   /* Upload foto denah via paste URL (per lantai) */
@@ -14098,11 +14157,18 @@ function TemaEditForm({ temaOrig, editIdx, activeTemas, data, save, notify, onBa
   };
 
   const removeSlide = (i) => {
+    const target = slideshowImgs[i];
     setSlideshowImgs(prev => {
       const next = prev.filter((_, j) => j !== i);
       setSlideshowPrev(p => Math.min(p, Math.max(0, next.length - 1)));
       return next;
     });
+    // Hapus juga file aslinya di Cloudinary (tidak memblokir UI — array sudah kehapus duluan di atas)
+    if (target?.img) {
+      deleteFromCloudinary(target.img).then(r => {
+        if (!r.ok && !r.skipped) notify("⚠️ Foto terhapus dari daftar, tapi gagal dihapus dari Cloudinary (mungkin sudah tidak ada / cek koneksi).");
+      });
+    }
   };
 
   const updateSlideLabel = (i, lbl) =>
@@ -14240,7 +14306,15 @@ function TemaEditForm({ temaOrig, editIdx, activeTemas, data, save, notify, onBa
                 src={slideshowImgs[slideshowPrev]?.img}
                 alt=""
                 style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
-                onError={e => e.target.style.display = "none"}
+                onError={e => {
+                  e.target.onerror = null;
+                  e.target.style.objectFit = "contain";
+                  e.target.style.padding = "30px";
+                  e.target.style.opacity = "0.6";
+                  e.target.src = "data:image/svg+xml;utf8," + encodeURIComponent(
+                    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><rect width="200" height="200" fill="#E8DCC8"/><text x="100" y="90" font-size="40" text-anchor="middle">⚠️</text><text x="100" y="130" font-size="13" text-anchor="middle" fill="#8B6914" font-family="sans-serif">Link foto rusak</text></svg>'
+                  );
+                }}
               />
               <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(0,0,0,.45) 0%, transparent 60%)", pointerEvents: "none" }} />
               <div style={{ position: "absolute", bottom: 8, left: 10, fontSize: 11, color: "#fff", fontWeight: 700, textShadow: "0 1px 4px rgba(0,0,0,.7)" }}>
@@ -14266,7 +14340,17 @@ function TemaEditForm({ temaOrig, editIdx, activeTemas, data, save, notify, onBa
               {slideshowImgs.map((ph, i) => (
                 <div key={i} style={{ position: "relative", borderRadius: 8, overflow: "hidden", border: slideshowPrev === i ? "2.5px solid #C9AA71" : "1.5px solid #E8DCC8", cursor: "pointer" }}
                   onClick={() => setSlideshowPrev(i)}>
-                  <img src={ph.img} alt={ph.label} style={{ width: "100%", height: 70, objectFit: "cover", display: "block" }} onError={e => e.target.style.display = "none"} />
+                  <img src={ph.img} alt={ph.label} style={{ width: "100%", height: 70, objectFit: "cover", display: "block" }}
+                    onError={e => {
+                      e.target.onerror = null;
+                      e.target.style.objectFit = "contain";
+                      e.target.style.background = "#F5EDD8";
+                      e.target.style.padding = "10px";
+                      e.target.title = "Link foto rusak / tidak bisa dimuat";
+                      e.target.src = "data:image/svg+xml;utf8," + encodeURIComponent(
+                        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 70"><rect width="100" height="70" fill="#F5EDD8"/><text x="50" y="42" font-size="24" text-anchor="middle">⚠️</text></svg>'
+                      );
+                    }} />
                   <div style={{ padding: "4px 6px 3px" }}>
                     <input type="text" value={ph.label || ""} onClick={e => e.stopPropagation()} onChange={e => updateSlideLabel(i, e.target.value)}
                       placeholder={`Foto ${i + 1}`}
