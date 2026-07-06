@@ -468,6 +468,42 @@ function VideoEmbed({ url, style }) {
   );
 }
 
+/* ─────────────── "CONTOH POSTINGAN LEBIH LANJUT" — tombol IG & YouTube ───────────────
+   Dipasang tepat sebelum CTA/footer di halaman Tema Rumah, Interior, dan Eksterior.
+   Cuma 1 komponen ini yang perlu di-update kalau nanti link sosmed berubah. */
+function SocialProofCTA() {
+  return (
+    <div style={{ textAlign: "center", padding: "8px 16px 36px" }}>
+      <div style={{ fontSize: "0.68rem", fontWeight: 800, letterSpacing: ".16em", textTransform: "uppercase", color: "#8B9A9C", marginBottom: 16 }}>
+        Contoh Postingan Lebih Lanjut
+      </div>
+      <div style={{ display: "flex", gap: 14, justifyContent: "center", flexWrap: "wrap" }}>
+        <a href="https://www.instagram.com/vastura_group" target="_blank" rel="noopener noreferrer"
+          style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 9, padding: "13px 30px", borderRadius: 8, background: "linear-gradient(135deg,#f9ce34,#ee2a7b,#6228d7)", color: "#fff", fontWeight: 700, fontSize: "0.82rem", textDecoration: "none", minWidth: 160, boxShadow: "0 4px 16px rgba(238,42,123,.32)", transition: "transform .18s" }}
+          onMouseEnter={e => e.currentTarget.style.transform = "translateY(-2px)"}
+          onMouseLeave={e => e.currentTarget.style.transform = "translateY(0)"}>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="2" y="2" width="20" height="20" rx="6" stroke="#fff" strokeWidth="2"/>
+            <circle cx="12" cy="12" r="4.2" stroke="#fff" strokeWidth="2"/>
+            <circle cx="17.4" cy="6.6" r="1.3" fill="#fff"/>
+          </svg>
+          Instagram
+        </a>
+        <a href="https://youtube.com/@vasturagroup?si=6HJ-HRBWIQF4FtBN" target="_blank" rel="noopener noreferrer"
+          style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 9, padding: "13px 30px", borderRadius: 8, background: "#FF0000", color: "#fff", fontWeight: 700, fontSize: "0.82rem", textDecoration: "none", minWidth: 160, boxShadow: "0 4px 16px rgba(255,0,0,.32)", transition: "transform .18s" }}
+          onMouseEnter={e => e.currentTarget.style.transform = "translateY(-2px)"}
+          onMouseLeave={e => e.currentTarget.style.transform = "translateY(0)"}>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31.6 31.6 0 0 0 0 12a31.6 31.6 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31.6 31.6 0 0 0 24 12a31.6 31.6 0 0 0-.5-5.8z" fill="#fff"/>
+            <path d="M9.6 15.6 15.8 12 9.6 8.4v7.2z" fill="#FF0000"/>
+          </svg>
+          YouTube
+        </a>
+      </div>
+    </div>
+  );
+}
+
 /* ─────────────── FORMAT RUPIAH GLOBAL ─────────────── */
 /**
  * Format angka menjadi string Rupiah: 500000 → "Rp 500.000"
@@ -9421,6 +9457,9 @@ function DevServicePage({ pageKey, title, subtitle, icon, heroColor, sections, c
           </div>
         ))}
 
+        {/* Contoh postingan lebih lanjut — Instagram & YouTube */}
+        <SocialProofCTA />
+
         {/* CTA Banner */}
         <div style={{ background: "linear-gradient(130deg,#2E3D3F 0%,#3D5254 50%,#8B6914 100%)", borderRadius: 16, padding: "40px 40px", textAlign: "center", boxShadow: "0 8px 32px rgba(8,145,178,.25)" }}>
           <h3 style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.6rem", fontWeight: 900, color: "#fff", marginBottom: 12 }}>Siap Wujudkan Proyek Anda?</h3>
@@ -10712,6 +10751,9 @@ function TemaDetailPage({ slug, onWaOpen, onBack, temaList }) {
         </div>
       </div>
       {/* ════════ /WRAPPER: BACKGROUND FOTO TEMA ════════ */}
+
+      {/* Contoh postingan lebih lanjut — Instagram & YouTube */}
+      <SocialProofCTA />
 
       {/* CTA Footer */}
       <div style={{ background: "linear-gradient(135deg,#1a2a2a 0%,#2E3D3F 60%)", padding: "46px 5%", display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center" }}>
@@ -12477,9 +12519,46 @@ function PaketGridManager({ data, save, notify, storeKey, title, icon, accentCol
 }
 
 /* ─────────────── MOBILE LAYANAN ACCORDION (3-level) ─────────────── */
-function MobileLayananAccordion({ page, navigateTo, setMobileMenu, navDropdownLayanan, temaList, temaSlug, openTemaDetail }) {
+/* ─────────────── MOBILE: TEMA RUMAH ACCORDION (standalone, tepat di bawah About) ─────────────── */
+function MobileTemaRumahAccordion({ page, navigateTo, setMobileMenu, temaList, temaSlug, openTemaDetail }) {
+  const [open, setOpen] = useState(false);
+  const mBtn = (active, depth=0) => ({
+    fontSize:".8rem", letterSpacing:".12em", textTransform:"uppercase", fontFamily:"'Jost',sans-serif",
+    color:active?"var(--re-black)":"var(--re-grey-dk)", fontWeight:active?700:400,
+    border:"none", background:active?"rgba(139,105,20,.08)":"transparent",
+    textAlign:"left", padding:`11px ${18 + depth*14}px`, borderRadius:6, width:"100%",
+    borderLeft:active?"2px solid #8B6914":"2px solid transparent", transition:"all .15s", cursor:"pointer",
+    display:"flex", alignItems:"center", justifyContent:"space-between",
+  });
+  return (
+    <div style={{ width:"100%" }}>
+      <button onClick={()=>setOpen(v=>!v)}
+        style={{ ...mBtn(page==="temarumah"), padding:"13px 18px", fontWeight:700 }}>
+        <span>🏡 Tema Rumah</span>
+        <span style={{ fontSize:"0.6rem", fontWeight:800, color:"#fff", background:"#8B6914", padding:"4px 12px", borderRadius:5, letterSpacing:".06em" }}>{open?"TUTUP":"BUKA"}</span>
+      </button>
+      {open && (
+        <div style={{ background:"rgba(0,0,0,.02)", borderLeft:"2px solid #E8DCC8", marginLeft:18 }}>
+          <button onClick={()=>{ navigateTo("temarumah"); setMobileMenu(false); setOpen(false); }}
+            style={mBtn(page==="temarumah" && !temaSlug, 1)}>
+            📖 Semua Tema Rumah
+          </button>
+          {(temaList || []).map(tema=>(
+            <button key={tema.slug} onClick={()=>{ openTemaDetail(tema.slug); setMobileMenu(false); setOpen(false); }}
+              style={mBtn(page==="temarumah" && temaSlug===tema.slug, 1)}>
+              {tema.nama}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ─────────────── MOBILE: PAKET LAYANAN KAMI ACCORDION ─────────────── */
+function MobileLayananAccordion({ page, navigateTo, setMobileMenu, navDropdownLayanan }) {
   const [open, setOpen]       = useState(false);
-  const [subOpen, setSubOpen] = useState(null); // "interior"|"eksterior"|"tema"|null
+  const [subOpen, setSubOpen] = useState(null); // "interior"|"eksterior"|null
 
   const topPages = ["services","desainrab"];
 
@@ -12495,15 +12574,15 @@ function MobileLayananAccordion({ page, navigateTo, setMobileMenu, navDropdownLa
   const isLayananActive = [...topPages,
     "interior/kamar-tidur","interior/kamar-mandi","interior/ruang-keluarga","interior/ruang-tamu","interior/kitchen-set","interior/ruang-kerja","interior/plafon-modern",
     "eksterior/pagar","eksterior/kanopi","eksterior/aluminium","eksterior/taman-landscape",
-  ].some(k=>k===page) || page==="temarumah";
+  ].some(k=>k===page);
 
   return (
     <div style={{ width:"100%" }}>
-      {/* Header Layanan Kami */}
+      {/* Header Paket Layanan Kami */}
       <button onClick={()=>{ setOpen(v=>!v); setSubOpen(null); }}
         style={{ ...mBtn(isLayananActive), padding:"13px 18px", fontWeight:700 }}>
-        <span>Layanan Kami</span>
-        <span style={{ fontSize:"0.65rem", opacity:0.6, transition:"transform .2s", transform:open?"rotate(180deg)":"none" }}>▼</span>
+        <span>Paket Layanan Kami</span>
+        <span style={{ fontSize:"0.6rem", fontWeight:800, color:"#fff", background:"#8B6914", padding:"4px 12px", borderRadius:5, letterSpacing:".06em" }}>{open?"TUTUP":"BUKA"}</span>
       </button>
 
       {open && (
@@ -12517,27 +12596,6 @@ function MobileLayananAccordion({ page, navigateTo, setMobileMenu, navDropdownLa
               {item.label}
             </button>
           ))}
-
-          {/* Tema Rumah accordion — daftar tema otomatis mengikuti data (bertambah sendiri kalau admin tambah tema baru) */}
-          <button onClick={()=>setSubOpen(v=>v==="tema"?null:"tema")}
-            style={{ ...mBtn(page==="temarumah", 1), justifyContent:"space-between" }}>
-            <span>🏡 Tema Rumah</span>
-            <span style={{ fontSize:"0.6rem", fontWeight:800, color:"#fff", background:"#8B6914", padding:"4px 12px", borderRadius:5, letterSpacing:".06em" }}>{subOpen==="tema"?"TUTUP":"BUKA"}</span>
-          </button>
-          {subOpen==="tema" && (
-            <div style={{ borderLeft:"2px solid #C9AA71", marginLeft:28 }}>
-              <button onClick={()=>{ navigateTo("temarumah"); setMobileMenu(false); setOpen(false); setSubOpen(null); }}
-                style={mBtn(page==="temarumah" && !temaSlug, 2)}>
-                📖 Semua Tema Rumah
-              </button>
-              {(temaList || []).map(tema=>(
-                <button key={tema.slug} onClick={()=>{ openTemaDetail(tema.slug); setMobileMenu(false); setOpen(false); setSubOpen(null); }}
-                  style={mBtn(page==="temarumah" && temaSlug===tema.slug, 2)}>
-                  {tema.nama}
-                </button>
-              ))}
-            </div>
-          )}
 
           <div style={{ margin:"6px 16px", borderTop:"1px solid #E8DCC8" }}/>
 
@@ -13054,6 +13112,9 @@ function SubPageCatalog({ heroColor, heroIcon, title, subtitle, breadcrumb, cata
             </div>
           ))}
         </div>
+
+        {/* Contoh postingan lebih lanjut — Instagram & YouTube */}
+        <SocialProofCTA />
 
         {/* CTA Bottom */}
         <div style={{ textAlign:"center", marginTop:56, padding:"40px 24px", background:"linear-gradient(135deg,#2E3D3F 0%,#1a2526 100%)", borderRadius:20, color:"#fff" }}>
@@ -13773,10 +13834,54 @@ function HomeServiceCardEditor({ index, svc, data, save, notify }) {
 }
 
 
-/* ─────────────── NAV DROPDOWN: LAYANAN KAMI (3-level nested) ─────────────── */
-function NavDropdownLayanan({ page, navigateTo, navDropdownLayanan, temaList, temaSlug, openTemaDetail }) {
+/* ─────────────── NAV DROPDOWN: TEMA RUMAH (standalone, tepat di bawah About) ─────────────── */
+function NavDropdownTemaRumah({ page, navigateTo, temaList, temaSlug, openTemaDetail }) {
+  const [ddOpen, setDdOpen] = useState(false);
+  const ref = useRef(null);
+  useEffect(() => {
+    const h = (e) => { if (ref.current && !ref.current.contains(e.target)) setDdOpen(false); };
+    document.addEventListener("mousedown", h);
+    return () => document.removeEventListener("mousedown", h);
+  }, []);
+  const isActive = page === "temarumah";
+  const ddBase = { position:"absolute", background:"rgba(255,255,255,.98)", borderRadius:10, boxShadow:"0 8px 32px rgba(0,0,0,.14)", border:"1px solid rgba(158,155,150,.15)", padding:"6px 0", zIndex:300, backdropFilter:"blur(12px)", minWidth:210, maxHeight:360, overflowY:"auto" };
+  const btn = (active) => ({ display:"block", width:"100%", textAlign:"left", padding:"9px 18px", fontSize:"0.78rem", fontWeight:active?700:500, color:active?"#2E3D3F":"#3D5254", background:active?"#FAF7F0":"transparent", border:"none", cursor:"pointer", borderLeft:active?"2px solid #8B6914":"2px solid transparent", transition:"all .15s", letterSpacing:".04em" });
+
+  return (
+    <div style={{ position:"relative" }} ref={ref}>
+      <button className={`nav-link${isActive?" active":""}`}
+        onClick={() => setDdOpen(v=>!v)}
+        style={{ border:"none", background:"none", cursor:"pointer", display:"flex", alignItems:"center", gap:6, padding:"4px 2px" }}>
+        🏡 Tema Rumah
+        <span style={{fontSize:"0.6rem",fontWeight:800,color:"#fff",background:"#8B6914",padding:"3px 10px",borderRadius:5,letterSpacing:".06em"}}>BUKA</span>
+      </button>
+      {ddOpen && (
+        <div style={{ ...ddBase, top:"calc(100% + 6px)", left:0 }}>
+          <button onClick={()=>{ navigateTo("temarumah"); setDdOpen(false); }}
+            style={{...btn(page==="temarumah" && !temaSlug), fontWeight:700}}
+            onMouseEnter={e=>{e.currentTarget.style.background="#FAF7F0"; e.currentTarget.style.color="#2E3D3F";}}
+            onMouseLeave={e=>{e.currentTarget.style.background=(page==="temarumah"&&!temaSlug)?"#FAF7F0":"transparent"; e.currentTarget.style.color=(page==="temarumah"&&!temaSlug)?"#2E3D3F":"#3D5254";}}>
+            📖 Semua Tema Rumah
+          </button>
+          <div style={{ margin:"4px 0 2px", borderTop:"1px solid #edf2f4" }}/>
+          {(temaList || []).map(tema=>(
+            <button key={tema.slug} onClick={()=>{ openTemaDetail(tema.slug); setDdOpen(false); }}
+              style={btn(page==="temarumah" && temaSlug===tema.slug)}
+              onMouseEnter={e=>{e.currentTarget.style.background="#FAF7F0"; e.currentTarget.style.color="#2E3D3F";}}
+              onMouseLeave={e=>{e.currentTarget.style.background=(page==="temarumah"&&temaSlug===tema.slug)?"#FAF7F0":"transparent"; e.currentTarget.style.color=(page==="temarumah"&&temaSlug===tema.slug)?"#2E3D3F":"#3D5254";}}>
+              {tema.nama}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ─────────────── NAV DROPDOWN: PAKET LAYANAN KAMI (3-level nested) ─────────────── */
+function NavDropdownLayanan({ page, navigateTo, navDropdownLayanan }) {
   const [ddOpen, setDdOpen]   = useState(false);
-  const [subOpen, setSubOpen] = useState(null); // "interior"|"eksterior"|"tema"|null
+  const [subOpen, setSubOpen] = useState(null); // "interior"|"eksterior"|null
   const ref = useRef(null);
 
   useEffect(() => {
@@ -13788,8 +13893,7 @@ function NavDropdownLayanan({ page, navigateTo, navDropdownLayanan, temaList, te
   const subIntPages = ["interior/kamar-tidur","interior/kamar-mandi","interior/ruang-keluarga","interior/ruang-tamu","interior/kitchen-set","interior/ruang-kerja","interior/plafon-modern"];
   const subExtPages = ["eksterior/pagar","eksterior/kanopi","eksterior/aluminium","eksterior/taman-landscape"];
   const topPages    = ["services","desainrab"];
-  const isTemaActive = page === "temarumah";
-  const isActive    = [...topPages,...subIntPages,...subExtPages,"interior","pagar","kanopi","aluminium","landscape","furnitur"].some(k => k === page) || isTemaActive;
+  const isActive    = [...topPages,...subIntPages,...subExtPages,"interior","pagar","kanopi","aluminium","landscape","furnitur"].some(k => k === page);
 
   const ddBase = { position:"absolute", background:"rgba(255,255,255,.98)", borderRadius:10, boxShadow:"0 8px 32px rgba(0,0,0,.14)", border:"1px solid rgba(158,155,150,.15)", padding:"6px 0", zIndex:300, backdropFilter:"blur(12px)", minWidth:210 };
   const btn = (active) => ({ display:"flex", alignItems:"center", justifyContent:"space-between", width:"100%", textAlign:"left", padding:"9px 18px", fontSize:"0.78rem", fontWeight:active?700:500, color:active?"#2E3D3F":"#3D5254", background:active?"#FAF7F0":"transparent", border:"none", cursor:"pointer", borderLeft:active?"2px solid #8B6914":"2px solid transparent", transition:"all .15s", letterSpacing:".04em" });
@@ -13798,8 +13902,9 @@ function NavDropdownLayanan({ page, navigateTo, navDropdownLayanan, temaList, te
     <div style={{ position:"relative" }} ref={ref}>
       <button className={`nav-link${isActive?" active":""}`}
         onClick={() => { setDdOpen(v=>!v); setSubOpen(null); }}
-        style={{ border:"none", background:"none", cursor:"pointer", display:"flex", alignItems:"center", gap:4, padding:"4px 2px" }}>
-        Layanan Kami <span style={{ fontSize:"0.6rem", opacity:0.7, transition:"transform .2s", display:"inline-block", transform:ddOpen?"rotate(180deg)":"rotate(0deg)" }}>▼</span>
+        style={{ border:"none", background:"none", cursor:"pointer", display:"flex", alignItems:"center", gap:6, padding:"4px 2px" }}>
+        Paket Layanan Kami
+        <span style={{fontSize:"0.6rem",fontWeight:800,color:"#fff",background:"#8B6914",padding:"3px 10px",borderRadius:5,letterSpacing:".06em"}}>BUKA</span>
       </button>
 
       {ddOpen && (
@@ -13814,34 +13919,6 @@ function NavDropdownLayanan({ page, navigateTo, navDropdownLayanan, temaList, te
               {item.label}
             </button>
           ))}
-
-          {/* Tema Rumah nested — daftar tema otomatis mengikuti data (bertambah sendiri kalau admin tambah tema baru) */}
-          <div style={{ position:"relative" }}
-            onMouseEnter={()=>setSubOpen("tema")}
-            onMouseLeave={()=>setSubOpen(null)}>
-            <button style={btn(isTemaActive)} onMouseEnter={e=>{e.currentTarget.style.background="#FAF7F0";}} onMouseLeave={e=>{e.currentTarget.style.background=isTemaActive?"#FAF7F0":"transparent";}}>
-              <span>🏡 Tema Rumah</span><span style={{fontSize:"0.63rem",fontWeight:800,color:"#fff",background:"#8B6914",padding:"4px 12px",borderRadius:5,letterSpacing:".06em"}}>BUKA</span>
-            </button>
-            {subOpen==="tema" && (
-              <div style={{...ddBase, top:0, left:"100%", marginLeft:4, maxHeight:360, overflowY:"auto"}}>
-                <button onClick={()=>{ navigateTo("temarumah"); setDdOpen(false); setSubOpen(null); }}
-                  style={{...btn(page==="temarumah" && !temaSlug), fontWeight:700}}
-                  onMouseEnter={e=>{e.currentTarget.style.background="#FAF7F0"; e.currentTarget.style.color="#2E3D3F";}}
-                  onMouseLeave={e=>{e.currentTarget.style.background=(page==="temarumah"&&!temaSlug)?"#FAF7F0":"transparent"; e.currentTarget.style.color=(page==="temarumah"&&!temaSlug)?"#2E3D3F":"#3D5254";}}>
-                  📖 Semua Tema Rumah
-                </button>
-                <div style={{ margin:"4px 0 2px", borderTop:"1px solid #edf2f4" }}/>
-                {(temaList || []).map(tema=>(
-                  <button key={tema.slug} onClick={()=>{ openTemaDetail(tema.slug); setDdOpen(false); setSubOpen(null); }}
-                    style={btn(page==="temarumah" && temaSlug===tema.slug)}
-                    onMouseEnter={e=>{e.currentTarget.style.background="#FAF7F0"; e.currentTarget.style.color="#2E3D3F";}}
-                    onMouseLeave={e=>{e.currentTarget.style.background=(page==="temarumah"&&temaSlug===tema.slug)?"#FAF7F0":"transparent"; e.currentTarget.style.color=(page==="temarumah"&&temaSlug===tema.slug)?"#2E3D3F":"#3D5254";}}>
-                    {tema.nama}
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
 
           <div style={{ margin:"4px 0 2px", borderTop:"1px solid #edf2f4" }}/>
           <div style={{ padding:"4px 18px 2px", fontSize:"0.63rem", fontWeight:700, color:"#8B9A9C", letterSpacing:".1em", textTransform:"uppercase" }}>Interior & Eksterior</div>
@@ -16320,9 +16397,12 @@ export default function BricksyTravel() {
                   </button>
                 ))}
 
-                {/* Dropdown: Layanan */}
-                <NavDropdownLayanan page={page} navigateTo={navigateTo} navDropdownLayanan={navDropdownLayanan}
+                {/* Dropdown: Tema Rumah — tepat di bawah About */}
+                <NavDropdownTemaRumah page={page} navigateTo={navigateTo}
                   temaList={(data.temaData && data.temaData.length > 0) ? data.temaData : TEMA_DATA} temaSlug={temaSlug} openTemaDetail={openTemaDetail} />
+
+                {/* Dropdown: Paket Layanan Kami */}
+                <NavDropdownLayanan page={page} navigateTo={navigateTo} navDropdownLayanan={navDropdownLayanan} />
 
                 {/* Interior & Eksterior sudah digabung ke dropdown Layanan */}
 
@@ -16455,9 +16535,12 @@ export default function BricksyTravel() {
                   </button>
                 ))}
 
-                {/* -- Mobile: Layanan Kami (accordion) -- */}
-                <MobileLayananAccordion page={page} navigateTo={navigateTo} setMobileMenu={setMobileMenu} navDropdownLayanan={navDropdownLayanan}
+                {/* -- Mobile: Tema Rumah (accordion) — tepat di bawah About -- */}
+                <MobileTemaRumahAccordion page={page} navigateTo={navigateTo} setMobileMenu={setMobileMenu}
                   temaList={(data.temaData && data.temaData.length > 0) ? data.temaData : TEMA_DATA} temaSlug={temaSlug} openTemaDetail={openTemaDetail} />
+
+                {/* -- Mobile: Paket Layanan Kami (accordion) -- */}
+                <MobileLayananAccordion page={page} navigateTo={navigateTo} setMobileMenu={setMobileMenu} navDropdownLayanan={navDropdownLayanan} />
 
                 {/* -- Mobile: Program Renovasi -- */}
                 <div style={{ padding:"10px 18px 4px", fontSize:"0.6rem", fontWeight:800, letterSpacing:".18em", textTransform:"uppercase", color:"#8B6914", opacity:0.8 }}>Program Renovasi</div>
