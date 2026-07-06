@@ -10493,6 +10493,15 @@ function TemaDetailPage({ slug, onWaOpen, onBack, temaList }) {
 
   const copyTemaLink = () => {
     const url = window.location.origin + temaDetailUrl(slug);
+    const shareData = { title: `Tema ${tema.nama} — VASTURA GROUP`, text: `Lihat Tema ${tema.nama} dari VASTURA GROUP:`, url };
+
+    /* Prioritaskan native share sheet (WhatsApp/Instagram/dll langsung muncul di device),
+       fallback ke copy clipboard biasa kalau browser tidak mendukung Web Share API
+       (misalnya di desktop Chrome/Firefox). */
+    if (navigator.share) {
+      navigator.share(shareData).catch(() => {}); // diamkan kalau user membatalkan share sheet
+      return;
+    }
     if (navigator.clipboard?.writeText) {
       navigator.clipboard.writeText(url).then(() => {
         setLinkCopied(true);
