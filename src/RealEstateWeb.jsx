@@ -13851,9 +13851,8 @@ function NavDropdownTemaRumah({ page, navigateTo, temaList, temaSlug, openTemaDe
     <div style={{ position:"relative" }} ref={ref}>
       <button className={`nav-link${isActive?" active":""}`}
         onClick={() => setDdOpen(v=>!v)}
-        style={{ border:"none", background:"none", cursor:"pointer", display:"flex", alignItems:"center", gap:6, padding:"4px 2px" }}>
-        🏡 Tema Rumah
-        <span style={{fontSize:"0.6rem",fontWeight:800,color:"#fff",background:"#8B6914",padding:"3px 10px",borderRadius:5,letterSpacing:".06em"}}>BUKA</span>
+        style={{ border:"none", background:"none", cursor:"pointer", display:"flex", alignItems:"center", gap:4, padding:"4px 2px" }}>
+        Tema Rumah <span style={{ fontSize:"0.6rem", opacity:0.7, transition:"transform .2s", display:"inline-block", transform:ddOpen?"rotate(180deg)":"rotate(0deg)" }}>▼</span>
       </button>
       {ddOpen && (
         <div style={{ ...ddBase, top:"calc(100% + 6px)", left:0 }}>
@@ -13902,9 +13901,8 @@ function NavDropdownLayanan({ page, navigateTo, navDropdownLayanan }) {
     <div style={{ position:"relative" }} ref={ref}>
       <button className={`nav-link${isActive?" active":""}`}
         onClick={() => { setDdOpen(v=>!v); setSubOpen(null); }}
-        style={{ border:"none", background:"none", cursor:"pointer", display:"flex", alignItems:"center", gap:6, padding:"4px 2px" }}>
-        Paket Layanan Kami
-        <span style={{fontSize:"0.6rem",fontWeight:800,color:"#fff",background:"#8B6914",padding:"3px 10px",borderRadius:5,letterSpacing:".06em"}}>BUKA</span>
+        style={{ border:"none", background:"none", cursor:"pointer", display:"flex", alignItems:"center", gap:4, padding:"4px 2px" }}>
+        Paket Layanan Kami <span style={{ fontSize:"0.6rem", opacity:0.7, transition:"transform .2s", display:"inline-block", transform:ddOpen?"rotate(180deg)":"rotate(0deg)" }}>▼</span>
       </button>
 
       {ddOpen && (
