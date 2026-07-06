@@ -9444,7 +9444,7 @@ function DevServicePage({ pageKey, title, subtitle, icon, heroColor, sections, c
                     onMouseLeave={e => { e.currentTarget.style.transform="none"; e.currentTarget.style.boxShadow="0 2px 14px rgba(0,0,0,.07)"; }}>
                     <div style={{ fontSize: "2rem", marginBottom: 12 }}>{item.icon}</div>
                     <h3 style={{ fontSize: "1rem", fontWeight: 700, color: "#2E3D3F", marginBottom: 8 }}>{item.title}</h3>
-                    <p style={{ fontSize: "0.875rem", color: "#5A6A6C", lineHeight: 1.65 }}>{item.desc}</p>
+                    <p style={{ fontSize: "0.875rem", color: "#5A6A6C", lineHeight: 1.65, whiteSpace: "pre-line" }}>{item.desc}</p>
                   </div>
                 ))}
               </div>
@@ -10523,17 +10523,25 @@ function TemaDetailPage({ slug, onWaOpen, onBack, temaList }) {
   return (
     <div style={{ fontFamily: "'Nunito','Segoe UI',sans-serif" }}>
       {/* Back Bar */}
-      <div style={{ background: "linear-gradient(90deg,#1a2a2a,#2E3D3F)", padding: "0 5%", display: "flex", alignItems: "center", justifyContent: "space-between", position: "sticky", top: 0, zIndex: 90, borderBottom: `3px solid ${tema.warna}` }}>
-        <button onClick={onBack} style={{ display: "flex", alignItems: "center", gap: 8, background: "none", border: "none", color: "#C9AA71", fontWeight: 700, fontSize: "0.78rem", cursor: "pointer", padding: "13px 0", letterSpacing: ".06em", textTransform: "uppercase" }}>
-          <span style={{ fontSize: 18 }}>←</span> Kembali ke Tema Rumah
+      <div className="tema-backbar" style={{ background: "linear-gradient(90deg,#1a2a2a,#2E3D3F)", padding: "0 5%", display: "flex", alignItems: "center", justifyContent: "space-between", position: "sticky", top: 0, zIndex: 90, borderBottom: `3px solid ${tema.warna}`, gap: 10 }}>
+        <button onClick={onBack} className="tema-back-btn" style={{ display: "flex", alignItems: "center", gap: 8, background: "none", border: "none", color: "#C9AA71", fontWeight: 700, fontSize: "0.78rem", cursor: "pointer", padding: "13px 0", letterSpacing: ".06em", textTransform: "uppercase", flexShrink: 0 }}>
+          <span style={{ fontSize: 18 }}>←</span> <span className="tema-back-label">Kembali ke Tema Rumah</span>
         </button>
-        <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
-          <button onClick={copyTemaLink} style={{ display: "flex", alignItems: "center", gap: 6, background: "rgba(255,255,255,.08)", border: "1px solid rgba(255,255,255,.2)", color: linkCopied ? "#8BD9A0" : "#fff", fontWeight: 700, fontSize: "0.72rem", cursor: "pointer", padding: "6px 12px", borderRadius: 20, letterSpacing: ".04em", whiteSpace: "nowrap" }}>
-            {linkCopied ? "✓ Link disalin!" : "🔗 Bagikan"}
-          </button>
-          <span style={{ fontSize: "0.74rem", color: "rgba(255,255,255,.45)", letterSpacing: ".06em", textTransform: "uppercase", fontWeight: 600 }}>{tema.no} · {tema.nama}</span>
-        </div>
+        <span className="tema-name-badge" style={{ fontSize: "0.74rem", color: "rgba(255,255,255,.45)", letterSpacing: ".06em", textTransform: "uppercase", fontWeight: 600, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{tema.no} · {tema.nama}</span>
+        <button onClick={copyTemaLink} className="tema-share-btn" style={{ display: "flex", alignItems: "center", gap: 6, background: "rgba(255,255,255,.08)", border: "1px solid rgba(255,255,255,.2)", color: linkCopied ? "#8BD9A0" : "#fff", fontWeight: 700, fontSize: "0.72rem", cursor: "pointer", padding: "6px 12px", borderRadius: 20, letterSpacing: ".04em", whiteSpace: "nowrap", flexShrink: 0 }}>
+          <span>🔗</span> <span className="tema-share-label">{linkCopied ? "Link disalin!" : "Bagikan"}</span>
+        </button>
       </div>
+      <style>{`
+        @media (max-width: 768px) {
+          .tema-backbar { padding: 8px 4% !important; gap: 8px !important; }
+          .tema-back-btn { order: 1; padding: 8px !important; }
+          .tema-back-label { display: none !important; }
+          .tema-name-badge { order: 2; flex: 1 1 auto; text-align: center; font-size: 0.66rem !important; }
+          .tema-share-btn { order: 3; padding: 8px !important; border-radius: 50% !important; width: 34px; height: 34px; justify-content: center; }
+          .tema-share-label { display: none !important; }
+        }
+      `}</style>
 
       {/* Hero */}
       <div style={{ position: "relative", height: 400, overflow: "hidden" }}>
@@ -10572,7 +10580,7 @@ function TemaDetailPage({ slug, onWaOpen, onBack, temaList }) {
         <div style={{ background: "rgba(255,255,255,.16)", backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)", borderRadius: 16, padding: "22px 26px", marginBottom: 28, display: "inline-block", maxWidth: "100%", boxSizing: "border-box" }}>
           <SectionLabel icon="🏠" text="EKSTERIOR" color="#fff" />
           <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.7rem", fontWeight: 800, color: "#fff", margin: "0 0 14px", textShadow: "0 2px 10px rgba(0,0,0,.55)" }}>Tampak Luar {tema.nama}</h2>
-          <p style={{ color: "#fff", lineHeight: 1.75, margin: 0, fontSize: "0.88rem", maxWidth: 720, textShadow: "0 1px 6px rgba(0,0,0,.55)" }}>{tema.detail.exterior.desc}</p>
+          <p style={{ color: "#fff", lineHeight: 1.75, margin: 0, fontSize: "0.88rem", maxWidth: 720, textShadow: "0 1px 6px rgba(0,0,0,.55)", whiteSpace: "pre-line" }}>{tema.detail.exterior.desc}</p>
         </div>
 
         {(() => {
@@ -10643,7 +10651,7 @@ function TemaDetailPage({ slug, onWaOpen, onBack, temaList }) {
         <div style={{ maxWidth: 1060, margin: "0 auto" }}>
           <SectionLabel icon="📐" text="DENAH RUANG" />
           <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.7rem", fontWeight: 800, color: "#2E3D3F", margin: "0 0 12px" }}>Tata Ruang {tema.nama}</h2>
-          <p style={{ color: "#5A6A6C", lineHeight: 1.7, maxWidth: 660, marginBottom: 28, fontSize: "0.88rem" }}>{tema.detail.denah.desc}</p>
+          <p style={{ color: "#5A6A6C", lineHeight: 1.7, maxWidth: 660, marginBottom: 28, fontSize: "0.88rem", whiteSpace: "pre-line" }}>{tema.detail.denah.desc}</p>
 
           {(tema.detail.denah.lantai || []).filter(l => l.imgs && l.imgs.length > 0).length > 0 ? (
             (tema.detail.denah.lantai || []).map((lantai, li) => (
@@ -11364,7 +11372,7 @@ function LandscapePage({ onWaOpen, categories }) {
         /* ── Kartu putih ── */
         .ls-info-card { background:#fff; padding:20px 18px 22px; }
         .ls-card-title { font-family:'Playfair Display',serif; font-size:clamp(.88rem,1.8vw,1.05rem); font-weight:900; color:#1a2a1a; margin:0 0 8px; line-height:1.3; }
-        .ls-desc { font-size:.825rem; color:#4a5a4a; line-height:1.7; margin:0 0 14px; }
+        .ls-desc { font-size:.825rem; color:#4a5a4a; line-height:1.7; margin:0 0 14px; white-space:pre-line; }
 
         /* ── Harga + CTA ── */
         .ls-cta-row { display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap; margin-bottom:12px; }
@@ -11524,7 +11532,7 @@ function LandscapePage({ onWaOpen, categories }) {
                 <div style={{ padding: "18px 18px 20px" }}>
                   <div style={{ fontSize: 20, marginBottom: 8 }}>{el.icon}</div>
                   <h3 style={{ fontSize: "0.9375rem", fontWeight: 800, color: "#2E3D3F", margin: "0 0 8px" }}>{el.title}</h3>
-                  <p style={{ fontSize: "0.8125rem", color: "#5A6A6C", lineHeight: 1.65, margin: 0 }}>{el.desc}</p>
+                  <p style={{ fontSize: "0.8125rem", color: "#5A6A6C", lineHeight: 1.65, margin: 0, whiteSpace: "pre-line" }}>{el.desc}</p>
                 </div>
               </div>
             ))}
@@ -11887,7 +11895,7 @@ function RumahSubsidiPage({ onWaOpen, paketData }) {
 
         .ls-info-card { background:#fff; padding:20px 18px 22px; }
         .ls-card-title { font-family:'Playfair Display',serif; font-size:clamp(.88rem,1.8vw,1.05rem); font-weight:900; color:#2E3D3F; margin:0 0 8px; line-height:1.3; }
-        .ls-desc { font-size:.825rem; color:#5A6A6C; line-height:1.7; margin:0 0 14px; }
+        .ls-desc { font-size:.825rem; color:#5A6A6C; line-height:1.7; margin:0 0 14px; white-space:pre-line; }
 
         .ls-cta-row { display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap; margin-bottom:12px; }
         .ls-price-badge { background:#f0fdf4; border:1.5px solid #86efac; border-radius:8px; padding:6px 14px; flex-shrink:0; }
@@ -13079,7 +13087,7 @@ function SubPageCatalog({ heroColor, heroIcon, title, subtitle, breadcrumb, cata
                   </div>
                 )}
                 {item.desc && (
-                  <p style={{ fontSize:"0.82rem", color:"#5A6A6C", lineHeight:1.65, margin:"0 0 14px" }}>{item.desc}</p>
+                  <p style={{ fontSize:"0.82rem", color:"#5A6A6C", lineHeight:1.65, margin:"0 0 14px", whiteSpace:"pre-line" }}>{item.desc}</p>
                 )}
                 {/* Fitur list */}
                 {item.fitur && item.fitur.length > 0 && (
