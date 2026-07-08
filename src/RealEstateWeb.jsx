@@ -125,10 +125,10 @@ function DashTabs({ user, allPosts, publishedCount, draftCount, data, canEdit, c
           {dashTab === "notifications" && (
             <div style={{ padding: "8px 0" }}>
               {data.messages.length === 0 ? (
-                <div style={{ padding: "32px", textAlign: "center", color: "#5A6A6C", fontSize: "0.875rem" }}>🔔 Belum ada notifikasi.</div>
+                <div style={{ padding: "32px", textAlign: "center", color: "#5A6A6C", fontSize: "0.875rem" }}>Belum ada notifikasi.</div>
               ) : data.messages.slice().reverse().slice(0, 5).map(m => (
                 <div key={m.id} style={{ display: "flex", gap: 14, padding: "16px 20px", borderBottom: "1px solid #FAF7F0", alignItems: "flex-start" }}>
-                  <div style={{ width: 44, height: 44, borderRadius: 8, background: "#FAF7F0", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18 }}>✉️</div>
+                  <div style={{ width: 44, height: 44, borderRadius: 8, background: "#FAF7F0", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18 }}></div>
                   <div style={{ flex: 1 }}>
                     <p style={{ fontSize: "0.875rem", color: "#2E3D3F", lineHeight: 1.6, marginBottom: 4 }}>
                       Pesan baru dari <strong>{m.name}</strong> ({m.email}): <em style={{ color: "#3D5254" }}>{m.message?.slice(0, 80)}{m.message?.length > 80 ? "…" : ""}</em>
@@ -153,7 +153,7 @@ function DashTabs({ user, allPosts, publishedCount, draftCount, data, canEdit, c
               ) : allPosts.slice(-5).reverse().map(p => (
                 <div key={p.id} style={{ display: "flex", alignItems: "center", gap: 12, padding: "10px 0", borderBottom: "1px solid #FAF7F0" }}>
                   <div style={{ width: 42, height: 42, borderRadius: 6, overflow: "hidden", flexShrink: 0, background: "#FAF7F0", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18 }}>
-                    {(() => { const img = (p.content||[]).find(b=>b.type==="image")?.value; return img ? <img loading="lazy" src={img} alt="" style={{ width:"100%", height:"100%", objectFit:"cover" }} onError={e=>e.target.style.display="none"} /> : "📄"; })()}
+                    {(() => { const img = (p.content||[]).find(b=>b.type==="image")?.value; return img ? <img loading="lazy" src={img} alt="" style={{ width:"100%", height:"100%", objectFit:"cover" }} onError={e=>e.target.style.display="none"} /> : ""; })()}
                   </div>
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <p style={{ fontSize: "0.875rem", fontWeight: 600, color: "#2E3D3F", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{p.title}</p>
@@ -171,10 +171,10 @@ function DashTabs({ user, allPosts, publishedCount, draftCount, data, canEdit, c
             <div style={{ padding: "20px" }}>
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 20 }}>
                 {[
-                  { label: "Total Artikel", value: allPosts.length, icon: "📄", color: "#8B6914" },
-                  { label: "Tayang", value: publishedCount, icon: "✅", color: "#27ae60" },
-                  { label: "Draft", value: draftCount, icon: "📋", color: "#f39c12" },
-                  { label: "Pesan Masuk", value: data.messages.length, icon: "✉️", color: "#8e44ad" },
+                  { label: "Total Artikel", value: allPosts.length, icon: "", color: "#8B6914" },
+                  { label: "Tayang", value: publishedCount, icon: "", color: "#27ae60" },
+                  { label: "Draft", value: draftCount, icon: "", color: "#f39c12" },
+                  { label: "Pesan Masuk", value: data.messages.length, icon: "", color: "#8e44ad" },
                 ].map(s => (
                   <div key={s.label} style={{ background: "rgba(255,255,255,.1)", borderRadius: 10, padding: "16px 18px", backdropFilter: "blur(6px)", borderLeft: `3px solid ${s.color}` }}>
                     <div style={{ fontSize: "1.5rem", fontWeight: 900, color: s.color, fontFamily: "'Playfair Display',serif" }}>{s.value}</div>
@@ -207,14 +207,14 @@ function DashTabs({ user, allPosts, publishedCount, draftCount, data, canEdit, c
           {dashTab === "guide" && (
             <div style={{ padding: "20px" }}>
               {[
-                { q: "Bagaimana cara membuat artikel baru?", a: "Klik tombol '✏ Buat Artikel' di dashboard atau masuk ke menu Posts / CMS lalu klik '+ New Post'." },
+                { q: "Bagaimana cara membuat artikel baru?", a: "Klik tombol 'Buat Artikel' di dashboard atau masuk ke menu Posts / CMS lalu klik '+ New Post'." },
                 { q: "Bagaimana cara mengubah gambar hero?", a: "Masuk ke menu 'Images' di sidebar, lalu klik gambar yang ingin diganti dan masukkan URL baru." },
                 { q: "Cara membalas pesan dari pengunjung?", a: "Masuk ke menu 'Messages', buka pesan, lalu klik tombol Reply untuk membalas." },
                 { q: "Bagaimana cara mengganti teks di website?", a: "Masuk ke menu 'Site Content' (khusus admin) untuk mengedit semua teks halaman." },
                 { q: "Apa perbedaan Draft dan Published?", a: "Draft hanya terlihat di admin panel. Published akan tampil di website untuk pengunjung umum." },
               ].map((faq, i) => (
                 <div key={i} style={{ marginBottom: 14, padding: "14px 16px", background: "#FAF7F0", borderRadius: 8, borderLeft: "3px solid #8B6914" }}>
-                  <p style={{ fontSize: "0.875rem", fontWeight: 700, color: "#2E3D3F", marginBottom: 6 }}>❓ {faq.q}</p>
+                  <p style={{ fontSize: "0.875rem", fontWeight: 700, color: "#2E3D3F", marginBottom: 6 }}>{faq.q}</p>
                   <p style={{ fontSize: "0.8125rem", color: "#3D5254", lineHeight: 1.65 }}>{faq.a}</p>
                 </div>
               ))}
@@ -236,7 +236,7 @@ function DashTabs({ user, allPosts, publishedCount, draftCount, data, canEdit, c
               const authorMap = {};
               allPosts.filter(p => p.status === "published").forEach(p => { authorMap[p.author] = (authorMap[p.author] || 0) + 1; });
               const sorted = Object.entries(authorMap).sort((a,b) => b[1]-a[1]).slice(0, 3);
-              const medals = ["🥇","🥈","🥉"];
+              const medals = ["","",""];
               if (!sorted.length) return <p style={{ padding: "16px 20px", fontSize: "0.8125rem", color: "#5A6A6C" }}>Belum ada artikel tayang.</p>;
               return sorted.map(([author, count], i) => (
                 <div key={author} style={{ display: "flex", alignItems: "center", gap: 12, padding: "10px 20px", borderBottom: "1px solid #FAF7F0" }}>
@@ -272,11 +272,11 @@ function DashTabs({ user, allPosts, publishedCount, draftCount, data, canEdit, c
           </div>
           <div style={{ padding: "12px 16px", display: "flex", flexDirection: "column", gap: 8 }}>
             {[
-              ...(canEdit ? [{ label: "✏ Buat Artikel Baru", action: () => { navigateAdminTab("cms"); setCmsEditPost("new"); } }] : []),
-              ...(canCS ? [{ label: `✉ Pesan (${data.messages.length})`, action: () => setAdminTab("messages") }] : []),
-              ...(isAdmin ? [{ label: "🖼 Kelola Gambar", action: () => setAdminTab("images") }] : []),
-              ...(isAdmin ? [{ label: "🔤 Konten Website", action: () => setAdminTab("content") }] : []),
-              ...(isAdmin ? [{ label: "⚙ Pengaturan", action: () => setAdminTab("settings") }] : []),
+              ...(canEdit ? [{ label: "Buat Artikel Baru", action: () => { navigateAdminTab("cms"); setCmsEditPost("new"); } }] : []),
+              ...(canCS ? [{ label: `Pesan (${data.messages.length})`, action: () => setAdminTab("messages") }] : []),
+              ...(isAdmin ? [{ label: "Kelola Gambar", action: () => setAdminTab("images") }] : []),
+              ...(isAdmin ? [{ label: "Konten Website", action: () => setAdminTab("content") }] : []),
+              ...(isAdmin ? [{ label: "Pengaturan", action: () => setAdminTab("settings") }] : []),
             ].map(item => (
               <button key={item.label} onClick={item.action}
                 style={{ textAlign: "left", padding: "9px 12px", background: "#FAF7F0", border: "none", borderRadius: 7, fontSize: "0.8125rem", color: "#2E3D3F", fontWeight: 500, cursor: "pointer", transition: "background .15s" }}
@@ -404,8 +404,8 @@ function detectVideoEmbed(url) {
 /** Ikon & warna brand per platform — dipakai di facade sebelum video diputar */
 const VIDEO_PLATFORM_META = {
   youtube:   { icon: "▶", label: "YouTube",   color: "#FF0000" },
-  tiktok:    { icon: "🎵", label: "TikTok",    color: "#000000" },
-  instagram: { icon: "📷", label: "Instagram", color: "#C13584" },
+  tiktok:    { icon: "", label: "TikTok",    color: "#000000" },
+  instagram: { icon: "", label: "Instagram", color: "#C13584" },
 };
 
 /** Komponen player video universal dengan FACADE — tinggal kasih link mentahnya.
@@ -419,7 +419,7 @@ function VideoEmbed({ url, style }) {
   if (!info) {
     return (
       <div style={{ padding: "28px 16px", textAlign: "center", background: "#FDFAF4", borderRadius: 14, border: "1px solid #F5EDD8", color: "#A89070", fontSize: "0.8rem", ...style }}>
-        ⚠️ Link video tidak dikenali. Gunakan link YouTube, TikTok, atau Instagram Reels yang valid.
+        Link video tidak dikenali. Gunakan link YouTube, TikTok, atau Instagram Reels yang valid.
       </div>
     );
   }
@@ -595,21 +595,21 @@ function GalleryImageTile({ src, onUrlEdit, onUploaded, onError }) {
           </div>
           <div style={{ fontSize: 9, fontWeight: 700, color: item.error ? "#e74c3c" : item.done ? "#27ae60" : "#8B6914",
             textAlign: "right", marginTop: 2 }}>
-            {item.error ? "❌ Gagal" : item.done ? "✅ Selesai" : `📤 ${item.pct}%`}
+            {item.error ? "Gagal" : item.done ? "Selesai" : `${item.pct}%`}
           </div>
         </div>
       )}
       <div style={{ display: "flex", gap: 3, marginTop: 5 }}>
         <button onClick={onUrlEdit} style={{
           flex: 1, background: "#FAF7F0", color: "#C9AA71",
-          border: "1px solid #D4C4A0", borderRadius: 4, padding: "4px 0", fontSize: 10, fontWeight: 600, cursor: "pointer" }}>🔗 URL</button>
+          border: "1px solid #D4C4A0", borderRadius: 4, padding: "4px 0", fontSize: 10, fontWeight: 600, cursor: "pointer" }}>URL</button>
         <label style={{
           flex: 1, background: isUploading ? "#e0f7ff" : "#eeffee",
           color: isUploading ? "#5A6A6C" : "#27ae60",
           border: "1px solid #D4C4A0", borderRadius: 4, padding: "4px 0", fontSize: 10, fontWeight: 600,
           cursor: isUploading ? "not-allowed" : "pointer", textAlign: "center", display: "block",
           pointerEvents: isUploading ? "none" : "auto" }}>
-          {isUploading ? "⏳..." : "⬆ Upload"}
+          {isUploading ? "..." : "⬆ Upload"}
           <input ref={inputRef} type="file" accept="image/*" style={{ display: "none" }} onChange={handleChange} disabled={isUploading} />
         </label>
       </div>
@@ -632,7 +632,7 @@ function HeroVideoPanel({ data, save, notify }) {
   const [videoUrl, setVideoUrl] = React.useState(data.content.heroVideoUrl || "");
   return (
     <div style={{ background: "#f5eeff", borderRadius: 8, padding: "16px 18px", border: "1px solid #d8b4fe" }}>
-      <label style={{ fontSize: 11, fontWeight: 700, color: "#8e44ad", letterSpacing: "1px", textTransform: "uppercase", display: "block", marginBottom: 10 }}>🎬 URL Video Background Hero</label>
+      <label style={{ fontSize: 11, fontWeight: 700, color: "#8e44ad", letterSpacing: "1px", textTransform: "uppercase", display: "block", marginBottom: 10 }}>URL Video Background Hero</label>
       <p style={{ fontSize: 12, color: "#5A6A6C", marginBottom: 12, lineHeight: 1.5 }}>
         Masukkan link URL video (format MP4 direkomendasikan). Video akan diputar otomatis, senyap, dan berulang sebagai latar hero.
       </p>
@@ -647,7 +647,7 @@ function HeroVideoPanel({ data, save, notify }) {
           const url = videoUrl.trim();
           if (!url) return notify("Masukkan URL video.", "error");
           save({ ...data, content: { ...data.content, heroVideoUrl: url } });
-          notify("✅ URL video background disimpan!");
+          notify("URL video background disimpan!");
         }} style={{ padding: "9px 16px", background: "#8e44ad", color: "#fff", borderRadius: 6, fontSize: 12, border: "none", fontWeight: 700, whiteSpace: "nowrap", cursor: "pointer" }}>
           Simpan
         </button>
@@ -659,7 +659,7 @@ function HeroVideoPanel({ data, save, notify }) {
       )}
       {!data.content.heroVideoUrl && (
         <div style={{ fontSize: 11, color: "#8e44ad", background: "#fff", borderRadius: 6, padding: "8px 12px", border: "1px dashed #d8b4fe" }}>
-          ℹ️ Belum ada URL disimpan — menggunakan video bawaan Vastura Group.
+          Belum ada URL disimpan — menggunakan video bawaan Vastura Group.
         </div>
       )}
     </div>
@@ -670,7 +670,7 @@ function HeroStaticImagePanel({ data, save, notify }) {
   const [imgUrl, setImgUrl] = React.useState(data.content.heroStaticImage || "");
   return (
     <div style={{ background: "#f5eeff", borderRadius: 8, padding: "16px 18px", border: "1px solid #d8b4fe" }}>
-      <label style={{ fontSize: 11, fontWeight: 700, color: "#8e44ad", letterSpacing: "1px", textTransform: "uppercase", display: "block", marginBottom: 10 }}>🖼 URL Gambar Statis Hero</label>
+      <label style={{ fontSize: 11, fontWeight: 700, color: "#8e44ad", letterSpacing: "1px", textTransform: "uppercase", display: "block", marginBottom: 10 }}>URL Gambar Statis Hero</label>
       <div style={{ display: "flex", gap: 8, marginBottom: 12 }}>
         <input
           value={imgUrl}
@@ -682,18 +682,18 @@ function HeroStaticImagePanel({ data, save, notify }) {
           const url = imgUrl.trim();
           if (!url) return notify("Masukkan URL gambar.", "error");
           save({ ...data, content: { ...data.content, heroStaticImage: url } });
-          notify("✅ Gambar statis hero disimpan!");
+          notify("Gambar statis hero disimpan!");
         }} style={{ padding: "9px 16px", background: "#8e44ad", color: "#fff", borderRadius: 6, fontSize: 12, border: "none", fontWeight: 700, whiteSpace: "nowrap", cursor: "pointer" }}>
           Simpan
         </button>
       </div>
       <label style={{ fontSize: 11, fontWeight: 600, color: "#5A6A6C", letterSpacing: "1px", textTransform: "uppercase", display: "block", marginBottom: 6 }}>Atau Upload Gambar</label>
-      <UploadButton label="📁 Pilih Gambar Hero"
+      <UploadButton label="Pilih Gambar Hero"
         style={{ border: "1.5px dashed #8e44ad", color: "#8e44ad", background: "#fff" }}
         onDone={urls => {
           setImgUrl(urls[0]);
           save({ ...data, content: { ...data.content, heroStaticImage: urls[0] } });
-          notify("✅ Gambar hero statis diupload!");
+          notify("Gambar hero statis diupload!");
         }}
         onError={() => notify("Gagal upload. Coba lagi.", "error")} />
       {data.content.heroStaticImage && (
@@ -705,7 +705,7 @@ function HeroStaticImagePanel({ data, save, notify }) {
   );
 }
 
-function UploadButton({ accept = "image/*", multiple = false, label = "📁 Upload Gambar", onDone, onError, style: styleProp = {}, dropZone = false }) {
+function UploadButton({ accept = "image/*", multiple = false, label = "Upload Gambar", onDone, onError, style: styleProp = {}, dropZone = false }) {
   const [items, setItems] = useState([]); // [{name, pct, done, error}]
   const inputRef = useRef();
   const isUploading = items.some(it => !it.done && !it.error);
@@ -742,7 +742,7 @@ function UploadButton({ accept = "image/*", multiple = false, label = "📁 Uplo
         <div key={i}>
           <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 3 }}>
             <span style={{ fontSize: 11, fontWeight: 600, color: it.error ? "#e74c3c" : "#2E3D3F", maxWidth: 200, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-              {it.error ? "❌ " : it.done ? "✅ " : "📤 "}{it.name}
+              {it.error ? "" : it.done ? "" : ""}{it.name}
             </span>
             <span style={{ fontSize: 11, fontWeight: 800, color: it.error ? "#e74c3c" : it.done ? "#27ae60" : "#8B6914" }}>
               {it.error ? "Gagal" : it.done ? "Selesai" : `${it.pct}%`}
@@ -772,7 +772,7 @@ function UploadButton({ accept = "image/*", multiple = false, label = "📁 Uplo
       }}
         onMouseEnter={e => { if (!isUploading) e.currentTarget.style.background = "#daf4fb"; }}
         onMouseLeave={e => { if (!isUploading) e.currentTarget.style.background = "#f0fafe"; }}>
-        <span style={{ fontSize: 28 }}>{isUploading ? "⏳" : "🖼️"}</span>
+        <span style={{ fontSize: 28 }}>{isUploading ? "" : ""}</span>
         <span style={{ fontSize: 13, fontWeight: 700, color: "#8B6914" }}>{isUploading ? "Sedang mengupload..." : label}</span>
         <span style={{ fontSize: 11, color: "#5A6A6C" }}>JPG, PNG, WEBP</span>
         <input ref={inputRef} type="file" accept={accept} multiple={multiple} onChange={onChange} style={{ display: "none" }} disabled={isUploading} />
@@ -791,7 +791,7 @@ function UploadButton({ accept = "image/*", multiple = false, label = "📁 Uplo
         pointerEvents: isUploading ? "none" : "auto",
         ...styleProp
       }}>
-        {isUploading ? "⏳ Mengupload..." : label}
+        {isUploading ? "Mengupload..." : label}
         <input ref={inputRef} type="file" accept={accept} multiple={multiple} onChange={onChange} style={{ display: "none" }} disabled={isUploading} />
       </label>
       {progressArea}
@@ -982,10 +982,10 @@ const DEFAULT_DATA = {
     aboutTeamTitle: "Susunan Tim Kami",
     aboutLayananLabel: "LAYANAN KAMI",
     aboutLayananTitle: "Layanan Terbaik Untuk Anda",
-    aboutV1Icon: "🏠", aboutV1Title: "Desain Profesional", aboutV1Desc: "Tim arsitek & desainer interior berpengalaman untuk setiap proyek.",
-    aboutV2Icon: "🛡",  aboutV2Title: "Terpercaya & Legal", aboutV2Desc: "Semua proyek dilaksanakan sesuai perizinan dan standar konstruksi yang berlaku.",
-    aboutV3Icon: "⚡", aboutV3Title: "Tepat Waktu",        aboutV3Desc: "Komitmen penyelesaian proyek sesuai timeline yang disepakati.",
-    aboutV4Icon: "⭐", aboutV4Title: "Harga Transparan",   aboutV4Desc: "RAB detail dan transparan — tidak ada biaya tersembunyi dalam setiap proyek.",
+    aboutV1Icon: "", aboutV1Title: "Desain Profesional", aboutV1Desc: "Tim arsitek & desainer interior berpengalaman untuk setiap proyek.",
+    aboutV2Icon: "",  aboutV2Title: "Terpercaya & Legal", aboutV2Desc: "Semua proyek dilaksanakan sesuai perizinan dan standar konstruksi yang berlaku.",
+    aboutV3Icon: "", aboutV3Title: "Tepat Waktu",        aboutV3Desc: "Komitmen penyelesaian proyek sesuai timeline yang disepakati.",
+    aboutV4Icon: "", aboutV4Title: "Harga Transparan",   aboutV4Desc: "RAB detail dan transparan — tidak ada biaya tersembunyi dalam setiap proyek.",
     aboutContactTitle: "Get in Touch",
     aboutContactSub: "We'd love to help plan your next event.",
     email:   "heldanwidianata@gmail.com",
@@ -1013,7 +1013,7 @@ const DEFAULT_DATA = {
     servicesPageTitle: "Paket Layanan Kami",
     servicesPageSub: "Pilih paket yang sesuai dengan kebutuhan Anda. Setiap paket dirancang untuk memberikan pengalaman terbaik bersama VASTURA GROUP.",
     waTemplates: {
-      umum: "Halo VASTURA GROUP! 👋\n\nSaya ingin mengetahui lebih lanjut tentang layanan Anda.\n\nTerima kasih!",
+      umum: "Halo VASTURA GROUP!\n\nSaya ingin mengetahui lebih lanjut tentang layanan Anda.\n\nTerima kasih!",
     },
   },
   posts: DEFAULT_POSTS,
@@ -1121,14 +1121,14 @@ const DEFAULT_DATA = {
       features: ["Hotel Bintang 3–4", "Konsumsi 3x Sehari", "Dokumentasi Foto", "Tour Leader", "Tiket Masuk Destinasi", "Asuransi Jiwa", "ID Card & Buku Panduan"],
       highlight: true,
       facilities: [
-        { icon: "🏨", label: "Hotel Bintang 3–4", detail: "Kamar twin sharing ber-AC" },
-        { icon: "🍽", label: "Konsumsi 3x Sehari", detail: "Sarapan, makan siang, makan malam" },
-        { icon: "📸", label: "Dokumentasi Foto", detail: "Fotografer profesional sepanjang tour" },
-        { icon: "👨‍💼", label: "Tour Leader", detail: "Pendamping berpengalaman" },
-        { icon: "🎫", label: "Tiket Masuk", detail: "Semua destinasi dalam itinerary" },
-        { icon: "💊", label: "P3K Lengkap", detail: "Kotak P3K di setiap kendaraan" },
-        { icon: "🛡", label: "Asuransi Jiwa", detail: "Seluruh peserta tercover" },
-        { icon: "💧", label: "Air Mineral", detail: "Gratis sepanjang perjalanan" },
+        { icon: "", label: "Hotel Bintang 3–4", detail: "Kamar twin sharing ber-AC" },
+        { icon: "", label: "Konsumsi 3x Sehari", detail: "Sarapan, makan siang, makan malam" },
+        { icon: "", label: "Dokumentasi Foto", detail: "Fotografer profesional sepanjang tour" },
+        { icon: "", label: "Tour Leader", detail: "Pendamping berpengalaman" },
+        { icon: "", label: "Tiket Masuk", detail: "Semua destinasi dalam itinerary" },
+        { icon: "", label: "P3K Lengkap", detail: "Kotak P3K di setiap kendaraan" },
+        { icon: "", label: "Asuransi Jiwa", detail: "Seluruh peserta tercover" },
+        { icon: "", label: "Air Mineral", detail: "Gratis sepanjang perjalanan" },
       ],
       services: [
         "Koordinasi langsung dengan pihak sekolah",
@@ -1174,14 +1174,14 @@ const DEFAULT_DATA = {
       features: ["Hotel Bintang 2–3", "Konsumsi 3x Sehari (incl. Gudeg)", "Dokumentasi Foto", "Tour Leader", "Tiket Masuk Destinasi", "Asuransi Jiwa", "Workshop Batik Opsional"],
       highlight: false,
       facilities: [
-        { icon: "🏨", label: "Hotel Bintang 2–3", detail: "Kamar twin sharing ber-AC" },
-        { icon: "🍽", label: "Konsumsi 3x Sehari", detail: "Termasuk gudeg khas Jogja" },
-        { icon: "📸", label: "Dokumentasi Foto", detail: "Fotografer profesional" },
-        { icon: "👨‍💼", label: "Tour Leader", detail: "Pendamping berpengalaman" },
-        { icon: "🎫", label: "Tiket Masuk", detail: "Semua destinasi dalam itinerary" },
-        { icon: "💊", label: "P3K Lengkap", detail: "Kotak P3K di kendaraan" },
-        { icon: "🛡", label: "Asuransi Jiwa", detail: "Seluruh peserta tercover" },
-        { icon: "💧", label: "Air Mineral", detail: "Gratis sepanjang perjalanan" },
+        { icon: "", label: "Hotel Bintang 2–3", detail: "Kamar twin sharing ber-AC" },
+        { icon: "", label: "Konsumsi 3x Sehari", detail: "Termasuk gudeg khas Jogja" },
+        { icon: "", label: "Dokumentasi Foto", detail: "Fotografer profesional" },
+        { icon: "", label: "Tour Leader", detail: "Pendamping berpengalaman" },
+        { icon: "", label: "Tiket Masuk", detail: "Semua destinasi dalam itinerary" },
+        { icon: "", label: "P3K Lengkap", detail: "Kotak P3K di kendaraan" },
+        { icon: "", label: "Asuransi Jiwa", detail: "Seluruh peserta tercover" },
+        { icon: "", label: "Air Mineral", detail: "Gratis sepanjang perjalanan" },
       ],
       services: [
         "Koordinasi langsung dengan pihak sekolah",
@@ -1225,14 +1225,14 @@ const DEFAULT_DATA = {
       features: ["Hotel Bintang 2", "Konsumsi 2x Sehari", "Dokumentasi Foto", "Tour Leader", "Tiket Masuk Destinasi", "Asuransi Jiwa", "Workshop Membatik"],
       highlight: false,
       facilities: [
-        { icon: "🏨", label: "Hotel Bintang 2", detail: "Kamar twin sharing ber-AC" },
-        { icon: "🍽", label: "Konsumsi 2x Sehari", detail: "Sarapan & makan siang" },
-        { icon: "📸", label: "Dokumentasi Foto", detail: "Tim fotografer" },
-        { icon: "👨‍💼", label: "Tour Leader", detail: "Pendamping berpengalaman" },
-        { icon: "🎫", label: "Tiket Masuk", detail: "Semua destinasi paket" },
-        { icon: "💊", label: "P3K Lengkap", detail: "Kotak P3K di kendaraan" },
-        { icon: "🛡", label: "Asuransi Jiwa", detail: "Seluruh peserta" },
-        { icon: "💧", label: "Air Mineral", detail: "Gratis di kendaraan" },
+        { icon: "", label: "Hotel Bintang 2", detail: "Kamar twin sharing ber-AC" },
+        { icon: "", label: "Konsumsi 2x Sehari", detail: "Sarapan & makan siang" },
+        { icon: "", label: "Dokumentasi Foto", detail: "Tim fotografer" },
+        { icon: "", label: "Tour Leader", detail: "Pendamping berpengalaman" },
+        { icon: "", label: "Tiket Masuk", detail: "Semua destinasi paket" },
+        { icon: "", label: "P3K Lengkap", detail: "Kotak P3K di kendaraan" },
+        { icon: "", label: "Asuransi Jiwa", detail: "Seluruh peserta" },
+        { icon: "", label: "Air Mineral", detail: "Gratis di kendaraan" },
       ],
       services: [
         "Koordinasi langsung dengan guru pendamping",
@@ -1275,14 +1275,14 @@ const DEFAULT_DATA = {
       features: ["Tujuan Bebas Seluruh Indonesia", "Durasi 1 Hari – 2 Minggu", "Konsultasi Gratis", "Survey Lokasi", "Itinerary Custom bersama Tim Sekolah", "Support 24 Jam Selama Perjalanan"],
       highlight: false,
       facilities: [
-        { icon: "🗺", label: "Tujuan Bebas", detail: "Seluruh Indonesia tersedia" },
-        { icon: "📅", label: "Durasi Fleksibel", detail: "1 hari hingga 2 minggu" },
-        { icon: "💬", label: "Konsultasi Gratis", detail: "Diskusi bersama tim kami" },
-        { icon: "🔍", label: "Survey Lokasi", detail: "Tim survei terlebih dahulu" },
-        { icon: "📋", label: "Itinerary Custom", detail: "Bersama tim sekolah" },
-        { icon: "📞", label: "Support 24 Jam", detail: "Selama perjalanan berlangsung" },
-        { icon: "🛡", label: "Asuransi Jiwa", detail: "Seluruh peserta tercover" },
-        { icon: "💧", label: "Air Mineral", detail: "Gratis sepanjang perjalanan" },
+        { icon: "", label: "Tujuan Bebas", detail: "Seluruh Indonesia tersedia" },
+        { icon: "", label: "Durasi Fleksibel", detail: "1 hari hingga 2 minggu" },
+        { icon: "", label: "Konsultasi Gratis", detail: "Diskusi bersama tim kami" },
+        { icon: "", label: "Survey Lokasi", detail: "Tim survei terlebih dahulu" },
+        { icon: "", label: "Itinerary Custom", detail: "Bersama tim sekolah" },
+        { icon: "", label: "Support 24 Jam", detail: "Selama perjalanan berlangsung" },
+        { icon: "", label: "Asuransi Jiwa", detail: "Seluruh peserta tercover" },
+        { icon: "", label: "Air Mineral", detail: "Gratis sepanjang perjalanan" },
       ],
       services: [
         "Tujuan bebas seluruh Indonesia",
@@ -1294,7 +1294,7 @@ const DEFAULT_DATA = {
         "Harga transparan tanpa biaya tersembunyi",
       ],
       destinations: [
-        { no: "✈", name: "Bebas Pilih Destinasi", sub: "Seluruh Indonesia", tag: "Custom · Fleksibel", title: "Pilih Destinasi Sesuai Keinginan", desc: "Tidak ada batasan! Pilih dari ratusan destinasi wisata di seluruh Indonesia. Tim kami siap merancang perjalanan terbaik untuk sekolah Anda — dari Sabang sampai Merauke.", points: ["Bali, Jogja, Solo, Lombok, Bromo", "Labuan Bajo, Raja Ampat, Belitung", "Destinasi lokal & regional Jawa Timur", "Rute kombinasi multi-kota tersedia"], duration: "Fleksibel", img: "" },
+        { no: "", name: "Bebas Pilih Destinasi", sub: "Seluruh Indonesia", tag: "Custom · Fleksibel", title: "Pilih Destinasi Sesuai Keinginan", desc: "Tidak ada batasan! Pilih dari ratusan destinasi wisata di seluruh Indonesia. Tim kami siap merancang perjalanan terbaik untuk sekolah Anda — dari Sabang sampai Merauke.", points: ["Bali, Jogja, Solo, Lombok, Bromo", "Labuan Bajo, Raja Ampat, Belitung", "Destinasi lokal & regional Jawa Timur", "Rute kombinasi multi-kota tersedia"], duration: "Fleksibel", img: "" },
       ],
       paketTypes: [
         { id: "pt-a", name: "Paket A", price: "Hubungi kami", priceNote: "/ orang (mulai)", points: ["Armada premium besar","Full AC & fasilitas lengkap","Kapasitas grup besar","Harga terbaik grup besar"] },
@@ -1326,14 +1326,14 @@ const DEFAULT_DATA = {
       features: ["Hotel Bintang 2–3", "Konsumsi 3x Sehari", "Dokumentasi Foto", "Tour Leader", "Tiket Masuk Destinasi", "Asuransi Jiwa", "ID Card & Buku Panduan"],
       highlight: true,
       facilities: [
-        { icon: "🏨", label: "Hotel Bintang 2–3", detail: "Kamar twin sharing ber-AC" },
-        { icon: "🍽", label: "Konsumsi 3x Sehari", detail: "Sarapan, makan siang, makan malam" },
-        { icon: "📸", label: "Dokumentasi Foto", detail: "Fotografer profesional sepanjang tour" },
-        { icon: "👨‍💼", label: "Tour Leader", detail: "Pendamping berpengalaman" },
-        { icon: "🎫", label: "Tiket Masuk", detail: "Semua destinasi dalam itinerary" },
-        { icon: "💊", label: "P3K Lengkap", detail: "Kotak P3K di setiap kendaraan" },
-        { icon: "🛡", label: "Asuransi Jiwa", detail: "Seluruh peserta tercover" },
-        { icon: "💧", label: "Air Mineral", detail: "Gratis sepanjang perjalanan" },
+        { icon: "", label: "Hotel Bintang 2–3", detail: "Kamar twin sharing ber-AC" },
+        { icon: "", label: "Konsumsi 3x Sehari", detail: "Sarapan, makan siang, makan malam" },
+        { icon: "", label: "Dokumentasi Foto", detail: "Fotografer profesional sepanjang tour" },
+        { icon: "", label: "Tour Leader", detail: "Pendamping berpengalaman" },
+        { icon: "", label: "Tiket Masuk", detail: "Semua destinasi dalam itinerary" },
+        { icon: "", label: "P3K Lengkap", detail: "Kotak P3K di setiap kendaraan" },
+        { icon: "", label: "Asuransi Jiwa", detail: "Seluruh peserta tercover" },
+        { icon: "", label: "Air Mineral", detail: "Gratis sepanjang perjalanan" },
       ],
       services: [
         "Koordinasi langsung dengan pihak sekolah / instansi",
@@ -1409,14 +1409,14 @@ const DEFAULT_DATA = {
       features: ["Hotel Bintang 3", "Konsumsi 3x Sehari", "Dokumentasi Foto", "Tour Leader", "Tiket Masuk Destinasi", "Asuransi Jiwa", "Workshop Angklung Opsional"],
       highlight: false,
       facilities: [
-        { icon: "🏨", label: "Hotel Bintang 3", detail: "Kamar twin sharing ber-AC" },
-        { icon: "🍽", label: "Konsumsi 3x Sehari", detail: "Sarapan, makan siang, makan malam" },
-        { icon: "📸", label: "Dokumentasi Foto", detail: "Fotografer profesional" },
-        { icon: "👨‍💼", label: "Tour Leader", detail: "Pendamping berpengalaman" },
-        { icon: "🎫", label: "Tiket Masuk", detail: "Semua destinasi dalam itinerary" },
-        { icon: "💊", label: "P3K Lengkap", detail: "Kotak P3K di setiap kendaraan" },
-        { icon: "🛡", label: "Asuransi Jiwa", detail: "Seluruh peserta tercover" },
-        { icon: "💧", label: "Air Mineral", detail: "Gratis sepanjang perjalanan" },
+        { icon: "", label: "Hotel Bintang 3", detail: "Kamar twin sharing ber-AC" },
+        { icon: "", label: "Konsumsi 3x Sehari", detail: "Sarapan, makan siang, makan malam" },
+        { icon: "", label: "Dokumentasi Foto", detail: "Fotografer profesional" },
+        { icon: "", label: "Tour Leader", detail: "Pendamping berpengalaman" },
+        { icon: "", label: "Tiket Masuk", detail: "Semua destinasi dalam itinerary" },
+        { icon: "", label: "P3K Lengkap", detail: "Kotak P3K di setiap kendaraan" },
+        { icon: "", label: "Asuransi Jiwa", detail: "Seluruh peserta tercover" },
+        { icon: "", label: "Air Mineral", detail: "Gratis sepanjang perjalanan" },
       ],
       services: [
         "Koordinasi langsung dengan pihak sekolah / instansi",
@@ -1494,14 +1494,14 @@ const DEFAULT_DATA = {
       features: ["Fasilitator Outbound Berpengalaman", "Games & Simulasi Team Building", "Flying Fox & High Rope Course", "Konsumsi & Snack", "Dokumentasi Foto & Video", "Sertifikat Peserta", "P3K & Asuransi Kegiatan"],
       highlight: false,
       facilities: [
-        { icon: "🎯", label: "Fasilitator Profesional", detail: "Tim fasilitator bersertifikat" },
-        { icon: "🏕", label: "Area Outdoor Luas", detail: "Lapangan & alam terbuka" },
-        { icon: "🍽", label: "Konsumsi & Snack", detail: "Makan siang + snack 2x" },
-        { icon: "📸", label: "Dokumentasi", detail: "Foto & video kegiatan" },
-        { icon: "🛡", label: "Asuransi Kegiatan", detail: "Seluruh peserta tercover" },
-        { icon: "📋", label: "Sertifikat", detail: "Sertifikat peserta outbound" },
-        { icon: "💊", label: "P3K Lengkap", detail: "Tim medis & kotak P3K" },
-        { icon: "💧", label: "Air Mineral", detail: "Gratis sepanjang kegiatan" },
+        { icon: "", label: "Fasilitator Profesional", detail: "Tim fasilitator bersertifikat" },
+        { icon: "", label: "Area Outdoor Luas", detail: "Lapangan & alam terbuka" },
+        { icon: "", label: "Konsumsi & Snack", detail: "Makan siang + snack 2x" },
+        { icon: "", label: "Dokumentasi", detail: "Foto & video kegiatan" },
+        { icon: "", label: "Asuransi Kegiatan", detail: "Seluruh peserta tercover" },
+        { icon: "", label: "Sertifikat", detail: "Sertifikat peserta outbound" },
+        { icon: "", label: "P3K Lengkap", detail: "Tim medis & kotak P3K" },
+        { icon: "", label: "Air Mineral", detail: "Gratis sepanjang kegiatan" },
       ],
       services: [
         "Konsultasi & perancangan program outbound custom",
@@ -1546,14 +1546,14 @@ const DEFAULT_DATA = {
       features: ["Koordinasi dengan Instansi Tujuan", "Konsumsi 3x Sehari", "Dokumentasi Foto & Video", "Tour Leader Berpengalaman", "Laporan Kunjungan Resmi", "Sertifikat Peserta", "Asuransi Perjalanan"],
       highlight: false,
       facilities: [
-        { icon: "🏛", label: "Koordinasi Instansi", detail: "Pengurusan izin & jadwal kunjungan" },
-        { icon: "🍽", label: "Konsumsi 3x Sehari", detail: "Sarapan, makan siang, makan malam" },
-        { icon: "📸", label: "Dokumentasi", detail: "Foto & video kunjungan resmi" },
-        { icon: "👨‍💼", label: "Tour Leader", detail: "Pendamping & koordinator berpengalaman" },
-        { icon: "📄", label: "Laporan Resmi", detail: "Laporan kunjungan tertulis lengkap" },
-        { icon: "📋", label: "Sertifikat Peserta", detail: "Sertifikat study banding resmi" },
-        { icon: "🛡", label: "Asuransi Perjalanan", detail: "Seluruh peserta tercover" },
-        { icon: "💧", label: "Air Mineral", detail: "Gratis sepanjang perjalanan" },
+        { icon: "", label: "Koordinasi Instansi", detail: "Pengurusan izin & jadwal kunjungan" },
+        { icon: "", label: "Konsumsi 3x Sehari", detail: "Sarapan, makan siang, makan malam" },
+        { icon: "", label: "Dokumentasi", detail: "Foto & video kunjungan resmi" },
+        { icon: "", label: "Tour Leader", detail: "Pendamping & koordinator berpengalaman" },
+        { icon: "", label: "Laporan Resmi", detail: "Laporan kunjungan tertulis lengkap" },
+        { icon: "", label: "Sertifikat Peserta", detail: "Sertifikat study banding resmi" },
+        { icon: "", label: "Asuransi Perjalanan", detail: "Seluruh peserta tercover" },
+        { icon: "", label: "Air Mineral", detail: "Gratis sepanjang perjalanan" },
       ],
       services: [
         "Koordinasi & pengurusan izin kunjungan ke instansi tujuan",
@@ -1598,14 +1598,14 @@ const DEFAULT_DATA = {
       features: ["Koordinasi dengan Perusahaan Tujuan", "Konsumsi 2–3x Sehari", "Dokumentasi Foto & Video", "Tour Leader & Pemandu Industri", "Sertifikat Kunjungan Industri", "Laporan Kunjungan Resmi", "Asuransi Perjalanan"],
       highlight: false,
       facilities: [
-        { icon: "🏭", label: "Koordinasi Pabrik/Industri", detail: "Pengurusan izin & jadwal kunjungan" },
-        { icon: "🍽", label: "Konsumsi 2–3x Sehari", detail: "Makan siang wajib, sarapan & malam opsional" },
-        { icon: "📸", label: "Dokumentasi", detail: "Foto & video area produksi (area yg diizinkan)" },
-        { icon: "👨‍🏭", label: "Pemandu Industri", detail: "Staf ahli perusahaan sebagai pemandu" },
-        { icon: "📋", label: "Sertifikat Kunjungan", detail: "Sertifikat kunjungan industri resmi" },
-        { icon: "📄", label: "Laporan Resmi", detail: "Laporan kunjungan industri lengkap" },
-        { icon: "🛡", label: "Asuransi Perjalanan", detail: "Seluruh peserta tercover" },
-        { icon: "⛑", label: "APD Kunjungan", detail: "Helm & safety vest tersedia" },
+        { icon: "", label: "Koordinasi Pabrik/Industri", detail: "Pengurusan izin & jadwal kunjungan" },
+        { icon: "", label: "Konsumsi 2–3x Sehari", detail: "Makan siang wajib, sarapan & malam opsional" },
+        { icon: "", label: "Dokumentasi", detail: "Foto & video area produksi (area yg diizinkan)" },
+        { icon: "", label: "Pemandu Industri", detail: "Staf ahli perusahaan sebagai pemandu" },
+        { icon: "", label: "Sertifikat Kunjungan", detail: "Sertifikat kunjungan industri resmi" },
+        { icon: "", label: "Laporan Resmi", detail: "Laporan kunjungan industri lengkap" },
+        { icon: "", label: "Asuransi Perjalanan", detail: "Seluruh peserta tercover" },
+        { icon: "", label: "APD Kunjungan", detail: "Helm & safety vest tersedia" },
       ],
       services: [
         "Koordinasi & pengurusan izin kunjungan ke perusahaan/pabrik",
@@ -1650,14 +1650,14 @@ const DEFAULT_DATA = {
       features: ["Koordinasi dengan Pihak Kampus", "Konsumsi 2–3x Sehari", "Dokumentasi Foto & Video", "Tour Leader Berpengalaman", "Campus Tour Terpandu", "Sertifikat Kunjungan", "Asuransi Perjalanan"],
       highlight: false,
       facilities: [
-        { icon: "🎓", label: "Campus Tour Terpandu", detail: "Mahasiswa guide dari kampus tujuan" },
-        { icon: "🍽", label: "Konsumsi 2–3x Sehari", detail: "Makan di kantin kampus / restoran" },
-        { icon: "📸", label: "Dokumentasi", detail: "Foto & video selama kunjungan" },
-        { icon: "👨‍💼", label: "Tour Leader", detail: "Pendamping & koordinator berpengalaman" },
-        { icon: "📋", label: "Sertifikat Kunjungan", detail: "Sertifikat kunjungan kampus resmi" },
-        { icon: "📚", label: "Brosur & Informasi", detail: "Materi jurusan & beasiswa kampus" },
-        { icon: "🛡", label: "Asuransi Perjalanan", detail: "Seluruh peserta tercover" },
-        { icon: "💧", label: "Air Mineral", detail: "Gratis sepanjang perjalanan" },
+        { icon: "", label: "Campus Tour Terpandu", detail: "Mahasiswa guide dari kampus tujuan" },
+        { icon: "", label: "Konsumsi 2–3x Sehari", detail: "Makan di kantin kampus / restoran" },
+        { icon: "", label: "Dokumentasi", detail: "Foto & video selama kunjungan" },
+        { icon: "", label: "Tour Leader", detail: "Pendamping & koordinator berpengalaman" },
+        { icon: "", label: "Sertifikat Kunjungan", detail: "Sertifikat kunjungan kampus resmi" },
+        { icon: "", label: "Brosur & Informasi", detail: "Materi jurusan & beasiswa kampus" },
+        { icon: "", label: "Asuransi Perjalanan", detail: "Seluruh peserta tercover" },
+        { icon: "", label: "Air Mineral", detail: "Gratis sepanjang perjalanan" },
       ],
       services: [
         "Koordinasi dengan humas / biro penerimaan mahasiswa kampus tujuan",
@@ -3185,7 +3185,7 @@ const LazyImage = React.memo(function LazyImage({
         display: "flex", alignItems: "center",
         justifyContent: "center", fontSize: 28,
         ...style,
-      }} className={className}>🖼</div>
+      }} className={className}></div>
     );
   }
   return (
@@ -3287,7 +3287,7 @@ function RichRenderer({ blocks }) {
         if (b.type === "embed_instagram") return (
           <div key={i} style={{ display: "flex", flexDirection: "column", gap: 6 }}>
             <div style={{ background: "#FAF7F0", border: "1px solid #E8DCC8", borderRadius: 8, padding: 16, fontSize: "0.8125rem", color: "#3D5254" }}>
-              📸 <strong>Instagram Embed:</strong> <a href={b.value} target="_blank" rel="noopener noreferrer" style={{ color: "#8B6914" }}>{b.value}</a>
+              <strong>Instagram Embed:</strong> <a href={b.value} target="_blank" rel="noopener noreferrer" style={{ color: "#8B6914" }}>{b.value}</a>
               <blockquote className="instagram-media" data-instgrm-permalink={b.value} data-instgrm-version="14" style={{ border: "1px solid #D4C4A0", borderRadius: 6, padding: 10, marginTop: 8, background: "#fff" }}>
                 <a href={b.value} target="_blank" rel="noopener noreferrer" style={{ color: "#8B6914", display: "block", marginTop: 6 }}>View on Instagram</a>
               </blockquote>
@@ -3297,7 +3297,7 @@ function RichRenderer({ blocks }) {
         if (b.type === "embed_tiktok") return (
           <div key={i} style={{ display: "flex", flexDirection: "column", gap: 6 }}>
             <div style={{ background: "#FAF7F0", border: "1px solid #E8DCC8", borderRadius: 8, padding: 16, fontSize: "0.8125rem", color: "#3D5254" }}>
-              🎵 <strong>TikTok Embed:</strong> <a href={b.value} target="_blank" rel="noopener noreferrer" style={{ color: "#8B6914" }}>{b.value}</a>
+              <strong>TikTok Embed:</strong> <a href={b.value} target="_blank" rel="noopener noreferrer" style={{ color: "#8B6914" }}>{b.value}</a>
               <div style={{ background: "#fff", borderRadius: 6, border: "1px solid #D4C4A0", padding: "12px 14px", marginTop: 8 }}>
                 <blockquote className="tiktok-embed" cite={b.value} data-video-id={b.value.split("/video/")[1]?.split("?")[0] || ""}>
                   <section><a href={b.value} target="_blank" rel="noopener noreferrer" style={{ color: "#8B6914" }}>View on TikTok</a></section>
@@ -3309,7 +3309,7 @@ function RichRenderer({ blocks }) {
         if (b.type === "divider") return <hr key={i} style={{ border: "none", borderTop: "1px solid #E8DCC8" }} />;
         if (b.type === "baca_juga") return (
           <div key={i} style={{ borderLeft: "4px solid #8B6914", background: "linear-gradient(90deg,#FAF7F0 0%,#f8fdff 100%)", borderRadius: "0 10px 10px 0", padding: "14px 18px", display: "flex", alignItems: "center", gap: 14 }}>
-            <span style={{ fontSize: 18 }}>📖</span>
+            <span style={{ fontSize: 18 }}></span>
             <div style={{ flex: 1, minWidth: 0 }}>
               <div style={{ fontSize: "0.6875rem", fontWeight: 700, color: "#8B6914", letterSpacing: ".08em", textTransform: "uppercase", marginBottom: 4 }}>Baca Juga</div>
               <div style={{ fontSize: "0.9375rem", fontWeight: 700, color: "#2E3D3F", lineHeight: 1.4, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{b.title}</div>
@@ -3626,10 +3626,10 @@ function CMSEditor({ post, onSave, onCancel, section, onSectionChange, user, not
       const url = await uploadWithProgress(file, pct => setImgUploadItems([{ name: file.name, pct, done: false, error: false }]));
       setImgUploadItems([{ name: file.name, pct: 100, done: true, error: false }]);
       setAddVal(url);
-      notify("✅ Gambar berhasil diupload!");
+      notify("Gambar berhasil diupload!");
     } catch {
       setImgUploadItems([{ name: file.name, pct: 0, done: false, error: true }]);
-      notify("❌ Gagal upload gambar. Periksa koneksi & Cloudinary preset.", "error");
+      notify("Gagal upload gambar. Periksa koneksi & Cloudinary preset.", "error");
     }
     setTimeout(() => { setImgUploadItems([]); if (fileRef.current) fileRef.current.value = ""; }, 2500);
   };
@@ -3643,10 +3643,10 @@ function CMSEditor({ post, onSave, onCancel, section, onSectionChange, user, not
       const url = await uploadWithProgress(file, pct => setCoverUploadItems([{ name: file.name, pct, done: false, error: false }]));
       setCoverUploadItems([{ name: file.name, pct: 100, done: true, error: false }]);
       setForm(p => ({ ...p, coverImage: url }));
-      notify("✅ Cover image berhasil diupload!");
+      notify("Cover image berhasil diupload!");
     } catch {
       setCoverUploadItems([{ name: file.name, pct: 0, done: false, error: true }]);
-      notify("❌ Gagal upload cover. Periksa koneksi & Cloudinary preset.", "error");
+      notify("Gagal upload cover. Periksa koneksi & Cloudinary preset.", "error");
     } finally {
       setCoverUploading(false);
       setTimeout(() => { setCoverUploadItems([]); if (coverFileRef.current) coverFileRef.current.value = ""; }, 2500);
@@ -3673,9 +3673,9 @@ function CMSEditor({ post, onSave, onCancel, section, onSectionChange, user, not
   };
 
   const blockLabels = {
-    paragraph: "📝 Paragraph", heading: "📌 Heading", image: "🖼 Image",
-    quote: "💬 Quote", embed_instagram: "📸 Instagram Embed", embed_tiktok: "🎵 TikTok Embed", divider: "⸻ Divider",
-    baca_juga: "🔗 Baca Juga",
+    paragraph: "Paragraph", heading: "Heading", image: "Image",
+    quote: "Quote", embed_instagram: "Instagram Embed", embed_tiktok: "TikTok Embed", divider: "⸻ Divider",
+    baca_juga: "Baca Juga",
   };
 
   const needsValue = addType !== "divider" && addType !== "baca_juga";
@@ -3689,7 +3689,7 @@ function CMSEditor({ post, onSave, onCancel, section, onSectionChange, user, not
           <div className="fade-in" style={{ background: "#fff", borderRadius: 14, padding: "28px 32px", maxWidth: 440, width: "90%",
             boxShadow: "0 24px 60px rgba(0,0,0,.22)", maxHeight: "90vh", overflowY: "auto" }}>
             <div style={{ textAlign: "center", marginBottom: 8 }}>
-              <span style={{ fontSize: 32 }}>🚀</span>
+              <span style={{ fontSize: 32 }}></span>
             </div>
             <h2 style={{ fontSize: 20, fontWeight: 800, color: "#2E3D3F", textAlign: "center", marginBottom: 6, fontFamily: "'Playfair Display',serif" }}>
               Pilih Tujuan Publish
@@ -3699,9 +3699,9 @@ function CMSEditor({ post, onSave, onCancel, section, onSectionChange, user, not
             </p>
             <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
               {[
-                { key: "shop", icon: "🏠", label: "Gedung & Rumah", desc: "Proyek rumah, gedung & properti" },
-                { key: "news", icon: "🔧", label: "Exterior", desc: "Pagar, kanopi, landscape & eksterior" },
-                { key: "destinations", icon: "🛋️", label: "Interior", desc: "Desain & dekorasi interior rumah" },
+                { key: "shop", icon: "", label: "Gedung & Rumah", desc: "Proyek rumah, gedung & properti" },
+                { key: "news", icon: "", label: "Exterior", desc: "Pagar, kanopi, landscape & eksterior" },
+                { key: "destinations", icon: "", label: "Interior", desc: "Desain & dekorasi interior rumah" },
               ].map(opt => (
                 <button key={opt.key} onClick={() => {
                   if (onSectionChange) onSectionChange(opt.key);
@@ -3752,7 +3752,7 @@ function CMSEditor({ post, onSave, onCancel, section, onSectionChange, user, not
           <button onClick={() => setPublishModal(true)} style={{
             padding: "7px 18px", background: "#27ae60", borderRadius: 6,
             color: "#fff", fontSize: 12, border: "none", fontWeight: 500, letterSpacing: ".5px"
-          }}>🚀 Publish…</button>
+          }}>Publish…</button>
           <button onClick={onCancel} style={{
             padding: "7px 14px", border: "none", borderRadius: 6,
             color: "rgba(255,255,255,.6)", fontSize: 12, background: "rgba(255,255,255,.08)"
@@ -3801,7 +3801,7 @@ function CMSEditor({ post, onSave, onCancel, section, onSectionChange, user, not
                     <button onClick={() => moveBlock(i, -1)} title="Naik" style={{ padding: "3px 8px", fontSize: 11, border: "1px solid #D4C4A0", borderRadius: 4, color: "#5A6A6C", background: "#fff" }}>↑</button>
                     <button onClick={() => moveBlock(i, 1)} title="Turun" style={{ padding: "3px 8px", fontSize: 11, border: "1px solid #D4C4A0", borderRadius: 4, color: "#5A6A6C", background: "#fff" }}>↓</button>
                     {b.type !== "divider" && b.type !== "image" && b.type !== "baca_juga" && (
-                      <button onClick={() => { setEditBlockIdx(i); setEditBlockVal(b.value || ""); }} title="Edit" style={{ padding: "3px 8px", fontSize: 11, border: "1px solid #C9AA71", background: "#FAF7F0", color: "#C9AA71", borderRadius: 4 }}>✏</button>
+                      <button onClick={() => { setEditBlockIdx(i); setEditBlockVal(b.value || ""); }} title="Edit" style={{ padding: "3px 8px", fontSize: 11, border: "1px solid #C9AA71", background: "#FAF7F0", color: "#C9AA71", borderRadius: 4 }}></button>
                     )}
                     <button onClick={() => { if (editBlockIdx === i) { setEditBlockIdx(null); setEditBlockVal(""); } removeBlock(i); }} title="Hapus" style={{ padding: "3px 8px", fontSize: 11, border: "none", background: "#fee", color: "#e74c3c", borderRadius: 4 }}>✕</button>
                   </div>
@@ -3834,7 +3834,7 @@ function CMSEditor({ post, onSave, onCancel, section, onSectionChange, user, not
                   <hr style={{ border: "none", borderTop: "2px solid #D4C4A0" }} />
                 ) : b.type === "baca_juga" ? (
                   <div style={{ display: "flex", alignItems: "center", gap: 10, background: "#FAF7F0", borderLeft: "3px solid #8B6914", borderRadius: "0 6px 6px 0", padding: "8px 12px" }}>
-                    <span style={{ fontSize: 15 }}>📖</span>
+                    <span style={{ fontSize: 15 }}></span>
                     <div style={{ flex: 1, minWidth: 0 }}>
                       <div style={{ fontSize: 10, fontWeight: 700, color: "#8B6914", textTransform: "uppercase", letterSpacing: ".06em" }}>Baca Juga</div>
                       <div style={{ fontSize: 12, fontWeight: 600, color: "#2E3D3F", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{b.title}</div>
@@ -3892,12 +3892,12 @@ function CMSEditor({ post, onSave, onCancel, section, onSectionChange, user, not
                         color: imgUploadItems.some(it => !it.done && !it.error) ? "#5A6A6C" : "#C9AA71",
                         fontSize: 13, background: "#FAF7F0", width: "100%", marginBottom: 8,
                         cursor: imgUploadItems.some(it => !it.done && !it.error) ? "not-allowed" : "pointer"
-                      }}>{imgUploadItems.some(it => !it.done && !it.error) ? "⏳ Mengupload..." : "📁 Click to Upload Image"}</button>
+                      }}>{imgUploadItems.some(it => !it.done && !it.error) ? "Mengupload..." : "Click to Upload Image"}</button>
                     {imgUploadItems.length > 0 && imgUploadItems.map((it, i) => (
                       <div key={i} style={{ marginBottom: 8 }}>
                         <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 3 }}>
                           <span style={{ fontSize: 11, fontWeight: 600, color: it.error ? "#e74c3c" : "#2E3D3F", maxWidth: 200, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                            {it.error ? "❌ " : it.done ? "✅ " : "📤 "}{it.name}
+                            {it.error ? "" : it.done ? "" : ""}{it.name}
                           </span>
                           <span style={{ fontSize: 11, fontWeight: 800, color: it.error ? "#e74c3c" : it.done ? "#27ae60" : "#8B6914" }}>
                             {it.error ? "Gagal" : it.done ? "Selesai" : `${it.pct}%`}
@@ -3959,7 +3959,7 @@ function CMSEditor({ post, onSave, onCancel, section, onSectionChange, user, not
                   <input
                     value={bacaJugaSearch}
                     onChange={e => { setBacaJugaSearch(e.target.value); setBacaJugaSelected(null); }}
-                    placeholder="🔍 Cari judul artikel..."
+                    placeholder="Cari judul artikel..."
                     style={{ width: "100%", padding: "9px 12px", border: "1px solid #D4C4A0", borderRadius: 6, fontSize: 13, outline: "none", marginBottom: 8, boxSizing: "border-box" }}
                   />
                   {bacaJugaSelected ? (
@@ -4044,7 +4044,7 @@ function CMSEditor({ post, onSave, onCancel, section, onSectionChange, user, not
                 <button onClick={() => setPublishModal(true)} style={{
                   padding: "8px 0", background: "linear-gradient(130deg,#2E3D3F 0%,#3D5254 45%,#8B6914 78%,#C9AA71 100%)", border: "none",
                   borderRadius: 6, fontSize: 12, color: "#fff", fontWeight: 600, letterSpacing: ".5px", cursor: "pointer"
-                }}>🚀 Publish…</button>
+                }}>Publish…</button>
               </div>
             </div>
           </div>
@@ -4070,7 +4070,7 @@ function CMSEditor({ post, onSave, onCancel, section, onSectionChange, user, not
             <div style={{ position: "relative" }}>
               <input value={form.author || ""} readOnly
                 style={{ width: "100%", padding: "7px 28px 7px 10px", border: "1px solid #D4C4A0", borderRadius: 6, fontSize: 12, outline: "none", background: "#FAF7F0", color: "#2E3D3F", fontWeight: 600, cursor: "default", boxSizing: "border-box" }} />
-              <span style={{ position: "absolute", right: 8, top: "50%", transform: "translateY(-50%)", fontSize: 11 }}>🔒</span>
+              <span style={{ position: "absolute", right: 8, top: "50%", transform: "translateY(-50%)", fontSize: 11 }}></span>
             </div>
             <p style={{ fontSize: 10, color: "#5A6A6C", marginTop: 3 }}>Diisi otomatis dari akun yang login</p>
           </div>
@@ -4216,14 +4216,14 @@ function ArticleDetail({ post, onBack, allPosts = [], onReadPost }) {
         {[
           { bg: "#1877f2", label: "f", url: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}` },
           { bg: "#1da1f2", label: "𝕏", url: `https://twitter.com/intent/tweet?text=${encodeURIComponent(post.title)}&url=${encodeURIComponent(shareUrl)}` },
-          { bg: "#25d366", label: "💬", url: `https://wa.me/?text=${encodeURIComponent(post.title + " " + shareUrl)}` },
-          { bg: "#0088cc", label: "✈", url: `https://t.me/share/url?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(post.title)}` },
+          { bg: "#25d366", label: "", url: `https://wa.me/?text=${encodeURIComponent(post.title + " " + shareUrl)}` },
+          { bg: "#0088cc", label: "", url: `https://t.me/share/url?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(post.title)}` },
         ].map(s => (
           <div key={s.label} className="art-share-icon" style={{ background: s.bg }}
             onClick={() => window.open(s.url, "_blank")}>{s.label}</div>
         ))}
         <span className="art-share-title">{post.title}</span>
-        <span style={{ fontSize: 11, color: "#666", fontWeight: 600, letterSpacing: ".5px", whiteSpace: "nowrap" }}>KOMENTAR: 💬</span>
+        <span style={{ fontSize: 11, color: "#666", fontWeight: 600, letterSpacing: ".5px", whiteSpace: "nowrap" }}>KOMENTAR:</span>
       </div>
 
       {/* == BODY WRAPPER: main + right sidebar == */}
@@ -4257,12 +4257,12 @@ function ArticleDetail({ post, onBack, allPosts = [], onReadPost }) {
                 </div>
                 <div className="art-actions">
                   {[
-                    { icon: "👍", title: "Suka" },
+                    { icon: "", title: "Suka" },
                     { icon: "G", title: "Google", style: { fontSize: 11, fontWeight: 700, color: "#4285f4" } },
-                    { icon: "🔖", title: "Simpan" },
+                    { icon: "", title: "Simpan" },
                     { icon: "↗", title: "Bagikan" },
-                    { icon: "💬", title: "Komentar" },
-                    { icon: "🔔", title: "Ikuti" },
+                    { icon: "", title: "Komentar" },
+                    { icon: "", title: "Ikuti" },
                   ].map(a => (
                     <button key={a.title} className="art-action-btn" title={a.title}>
                       <span style={a.style}>{a.icon}</span>
@@ -4296,8 +4296,8 @@ function ArticleDetail({ post, onBack, allPosts = [], onReadPost }) {
                 {[
                   { label: "Facebook", bg: "#1877f2", icon: "f", url: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}` },
                   { label: "Twitter/X", bg: "#000", icon: "𝕏", url: `https://twitter.com/intent/tweet?text=${encodeURIComponent(post.title)}` },
-                  { label: "WhatsApp", bg: "#25d366", icon: "💬", url: `https://wa.me/?text=${encodeURIComponent(post.title + " " + shareUrl)}` },
-                  { label: "Telegram", bg: "#0088cc", icon: "✈", url: `https://t.me/share/url?url=${encodeURIComponent(shareUrl)}` },
+                  { label: "WhatsApp", bg: "#25d366", icon: "", url: `https://wa.me/?text=${encodeURIComponent(post.title + " " + shareUrl)}` },
+                  { label: "Telegram", bg: "#0088cc", icon: "", url: `https://t.me/share/url?url=${encodeURIComponent(shareUrl)}` },
                 ].map(s => (
                   <button key={s.label} onClick={() => window.open(s.url, "_blank")}
                     style={{ display: "flex", alignItems: "center", gap: 7, padding: "7px 16px", borderRadius: 4, background: s.bg,
@@ -4309,7 +4309,7 @@ function ArticleDetail({ post, onBack, allPosts = [], onReadPost }) {
                   style={{ display: "flex", alignItems: "center", gap: 7, padding: "7px 16px", borderRadius: 4,
                     background: copied ? "#27ae60" : "#f0f0f0", border: "1px solid #ddd",
                     color: copied ? "#fff" : "#555", fontSize: 12, fontWeight: 600, cursor: "pointer" }}>
-                  🔗 {copied ? "Tersalin!" : "Salin Link"}
+                  {copied ? "Tersalin!" : "Salin Link"}
                 </button>
               </div>
             </div>
@@ -4326,7 +4326,7 @@ function ArticleDetail({ post, onBack, allPosts = [], onReadPost }) {
                   <div key={p.id} className="art-terkait-card" onClick={() => handlePost(p)}>
                     {(() => { const img = (p.content||[]).find(b=>b.type==="image")?.value; return img
                       ? <div style={{ height: 120, overflow: "hidden" }}><img loading="lazy" src={img} alt="" style={{ width:"100%", height:"100%", objectFit:"cover", transition:"transform .3s" }} onMouseEnter={e=>e.target.style.transform="scale(1.05)"} onMouseLeave={e=>e.target.style.transform="scale(1)"} onError={e=>e.target.style.display="none"} /></div>
-                      : <div style={{ height: 120, background: "linear-gradient(135deg,#FAF7F0,#E8DCC8)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 28 }}>📄</div>;
+                      : <div style={{ height: 120, background: "linear-gradient(135deg,#FAF7F0,#E8DCC8)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 28 }}></div>;
                     })()}
                     <div style={{ padding: "10px 12px 14px" }}>
                       {p.category && <div style={{ fontSize: 10, color: "#8B6914", fontWeight: 700, textTransform: "uppercase", letterSpacing: ".5px", marginBottom: 5 }}>{p.category}</div>}
@@ -4352,7 +4352,7 @@ function ArticleDetail({ post, onBack, allPosts = [], onReadPost }) {
                   <div key={p.id} className="art-pilihan-card" onClick={() => handlePost(p)}>
                     {(() => { const img = (p.content||[]).find(b=>b.type==="image")?.value; return img
                       ? <div style={{ height: 140, overflow: "hidden" }}><img loading="lazy" src={img} alt="" style={{ width:"100%", height:"100%", objectFit:"cover", transition:"transform .3s" }} onMouseEnter={e=>e.target.style.transform="scale(1.05)"} onMouseLeave={e=>e.target.style.transform="scale(1)"} onError={e=>e.target.style.display="none"} /></div>
-                      : <div style={{ height: 140, background: "linear-gradient(135deg,#FDFAF4,#FAF7F0)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 32 }}>🌟</div>;
+                      : <div style={{ height: 140, background: "linear-gradient(135deg,#FDFAF4,#FAF7F0)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 32 }}></div>;
                     })()}
                     <div style={{ padding: "12px 14px 16px" }}>
                       {p.category && <div style={{ fontSize: 10, color: "#8B6914", fontWeight: 700, textTransform: "uppercase", letterSpacing: ".5px", marginBottom: 5 }}>{p.category}</div>}
@@ -4377,7 +4377,7 @@ function ArticleDetail({ post, onBack, allPosts = [], onReadPost }) {
 
           {/* -- Ad Placeholder -- */}
           <div style={{ background: "#fff", borderRadius: 6, border: "1px dashed #ddd", marginBottom: 20, height: 240, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", color: "#bbb", gap: 8 }}>
-            <div style={{ fontSize: 28 }}>🏔</div>
+            <div style={{ fontSize: 28 }}></div>
             <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: "1px", textTransform: "uppercase" }}>VASTURA GROUP</div>
             <div style={{ fontSize: 11, color: "#ccc", textAlign: "center", padding: "0 20px", lineHeight: 1.6 }}>
               Wujudkan perjalanan impian & momen spesialmu bersama kami
@@ -4399,7 +4399,7 @@ function ArticleDetail({ post, onBack, allPosts = [], onReadPost }) {
                     <div className="art-sb-thumb">
                       {(() => { const img = (p.content||[]).find(b=>b.type==="image")?.value; return img
                         ? <img loading="lazy" src={img} alt="" onError={e=>e.target.style.display="none"} />
-                        : <div style={{ width:"100%", height:"100%", background:"#FAF7F0", display:"flex", alignItems:"center", justifyContent:"center", fontSize:18 }}>📄</div>;
+                        : <div style={{ width:"100%", height:"100%", background:"#FAF7F0", display:"flex", alignItems:"center", justifyContent:"center", fontSize:18 }}></div>;
                       })()}
                     </div>
                     <div style={{ flex: 1, minWidth: 0 }}>
@@ -4418,12 +4418,12 @@ function ArticleDetail({ post, onBack, allPosts = [], onReadPost }) {
           {/* -- Layanan Unggulan sidebar -- */}
           <div style={{ background: "linear-gradient(135deg,#2E3D3F 0%,#3D5254 55%,#E8C96A 100%)", borderRadius: 6, padding: "20px 18px", position: "relative", overflow: "hidden" }}>
             <div style={{ position: "absolute", top: -20, right: -20, width: 90, height: 90, borderRadius: "50%", background: "rgba(255,255,255,.08)" }} />
-            <div style={{ fontSize: 11, fontWeight: 700, color: "rgba(255,255,255,.7)", textTransform: "uppercase", letterSpacing: "1px", marginBottom: 12 }}>🌟 Layanan Kami</div>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "rgba(255,255,255,.7)", textTransform: "uppercase", letterSpacing: "1px", marginBottom: 12 }}>Layanan Kami</div>
             {[
-              { icon: "🏠", txt: "Gedung & Rumah" },
-              { icon: "🛋️", txt: "Interior" },
-              { icon: "🔧", txt: "Exterior" },
-              { icon: "🏨", txt: "Hotel & Villa" },
+              { icon: "", txt: "Gedung & Rumah" },
+              { icon: "", txt: "Interior" },
+              { icon: "", txt: "Exterior" },
+              { icon: "", txt: "Hotel & Villa" },
             ].map(s => (
               <div key={s.txt} style={{ display: "flex", alignItems: "center", gap: 9, marginBottom: 10 }}>
                 <span style={{ fontSize: 16 }}>{s.icon}</span>
@@ -4446,7 +4446,7 @@ function ArticleDetail({ post, onBack, allPosts = [], onReadPost }) {
           {sidebarCards.length > 0 && (
             <div style={{ background: "#fff", borderRadius: 8, overflow: "hidden", marginTop: 20, boxShadow: "0 2px 10px rgba(0,0,0,.06)" }}>
               <div style={{ background: "linear-gradient(130deg,#2E3D3F 0%,#3D5254 60%,#E8C96A 100%)", padding: "12px 16px", display: "flex", alignItems: "center", gap: 7 }}>
-                <span style={{ fontSize: 14 }}>✨</span>
+                <span style={{ fontSize: 14 }}></span>
                 <span style={{ fontSize: 11, fontWeight: 700, color: "#fff", textTransform: "uppercase", letterSpacing: "1px" }}>Saran Postingan</span>
               </div>
               <div style={{ padding: "10px 14px", display: "flex", flexDirection: "column", gap: 10 }}>
@@ -4457,7 +4457,7 @@ function ArticleDetail({ post, onBack, allPosts = [], onReadPost }) {
                     onMouseLeave={e => e.currentTarget.style.background = "transparent"}>
                     {(() => { const img = (p.content||[]).find(b=>b.type==="image")?.value; return img
                       ? <div style={{ width:36, height:36, borderRadius:6, overflow:"hidden", flexShrink:0 }}><img loading="lazy" src={img} alt="" style={{ width:"100%", height:"100%", objectFit:"cover" }} onError={e=>e.target.style.display="none"} /></div>
-                      : <div style={{ width:36, height:36, borderRadius:6, background:"#FAF7F0", flexShrink:0, display:"flex", alignItems:"center", justifyContent:"center", fontSize:16 }}>📄</div>;
+                      : <div style={{ width:36, height:36, borderRadius:6, background:"#FAF7F0", flexShrink:0, display:"flex", alignItems:"center", justifyContent:"center", fontSize:16 }}></div>;
                     })()}
                     <div style={{ flex: 1, minWidth: 0 }}>
                       <p style={{ fontSize: 12, fontWeight: 600, color: "#1a2e3b", lineHeight: 1.45, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden", marginBottom: 4 }}>{p.title}</p>
@@ -4477,7 +4477,7 @@ function ArticleDetail({ post, onBack, allPosts = [], onReadPost }) {
             return (
               <div style={{ background: "#fff", borderRadius: 8, overflow: "hidden", marginTop: 16, boxShadow: "0 2px 10px rgba(0,0,0,.06)" }}>
                 <div style={{ padding: "12px 16px", borderBottom: "1px solid #FAF7F0", display: "flex", alignItems: "center", gap: 7 }}>
-                  <span style={{ fontSize: 13 }}>🗂</span>
+                  <span style={{ fontSize: 13 }}></span>
                   <span style={{ fontSize: 11, fontWeight: 700, color: "#2E3D3F", textTransform: "uppercase", letterSpacing: "1px" }}>Topik</span>
                 </div>
                 <div style={{ padding: "12px 14px", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 7 }}>
@@ -4497,11 +4497,11 @@ function ArticleDetail({ post, onBack, allPosts = [], onReadPost }) {
             </div>
             <div style={{ padding: "12px 14px", display: "flex", flexDirection: "column", gap: 10 }}>
               {[
-                { icon: "🌤", tip: "Periksa cuaca setempat sebelum berangkat." },
-                { icon: "🛡", tip: "Bawa asuransi perjalanan untuk ketenangan pikiran." },
-                { icon: "📷", tip: "Simpan foto offline sebagai kenang-kenangan." },
-                { icon: "🌏", tip: "Hormati budaya & adat istiadat lokal setempat." },
-                { icon: "💳", tip: "Siapkan uang tunai & kartu cadangan untuk keadaan darurat." },
+                { icon: "", tip: "Periksa cuaca setempat sebelum berangkat." },
+                { icon: "", tip: "Bawa asuransi perjalanan untuk ketenangan pikiran." },
+                { icon: "", tip: "Simpan foto offline sebagai kenang-kenangan." },
+                { icon: "", tip: "Hormati budaya & adat istiadat lokal setempat." },
+                { icon: "", tip: "Siapkan uang tunai & kartu cadangan untuk keadaan darurat." },
               ].map((item, i) => (
                 <div key={i} style={{ display: "flex", gap: 9, alignItems: "flex-start" }}>
                   <span style={{ fontSize: 15, flexShrink: 0, marginTop: 1 }}>{item.icon}</span>
@@ -4527,9 +4527,9 @@ function SectionPage({ section, posts, onReadPost }) {
   const popular = [...published].sort((a, b) => b.id - a.id).slice(0, 8);
 
   const sectionMeta = {
-    news: { title: "Exterior", sub: "Pagar, kanopi, landscape, aluminium & semua layanan eksterior hunian Anda.", icon: "🔧" },
-    shop: { title: "Gedung & Rumah", sub: "Proyek pembangunan, renovasi, dan pengembangan properti hunian berkualitas.", icon: "🏠" },
-    destinations: { title: "Interior", sub: "Desain dan dekorasi interior profesional untuk setiap ruangan — dari konsep hingga finishing.", icon: "🛋️" },
+    news: { title: "Exterior", sub: "Pagar, kanopi, landscape, aluminium & semua layanan eksterior hunian Anda.", icon: "" },
+    shop: { title: "Gedung & Rumah", sub: "Proyek pembangunan, renovasi, dan pengembangan properti hunian berkualitas.", icon: "" },
+    destinations: { title: "Interior", sub: "Desain dan dekorasi interior profesional untuk setiap ruangan — dari konsep hingga finishing.", icon: "" },
   };
   const meta = sectionMeta[section] || { title: section, sub: "", icon: "◈" };
 
@@ -4579,7 +4579,7 @@ function SectionPage({ section, posts, onReadPost }) {
 
             {filtered.length === 0 ? (
               <div style={{ textAlign: "center", padding: "60px 0", color: "#5A6A6C" }}>
-                <div style={{ fontSize: 40, marginBottom: 16 }}>📭</div>
+                <div style={{ fontSize: 40, marginBottom: 16 }}></div>
                 <p style={{ fontSize: 15 }}>No posts published yet.</p>
               </div>
             ) : viewMode === "grid" ? (
@@ -4660,7 +4660,7 @@ function EventWeddingCustomCardWide({ svc, onDetail, onWaOpen }) {
   const gradientBg = isWedding
     ? `linear-gradient(135deg, #2d1b4e 0%, #5b2d8e 50%, ${ac} 100%)`
     : `linear-gradient(135deg, #0a2e52 0%, #3D5254 50%, ${ac} 100%)`;
-  const icon = isWedding ? "💍" : "🎉";
+  const icon = isWedding ? "" : "";
   return (
     <div
       onMouseEnter={() => setHovered(true)}
@@ -4772,7 +4772,7 @@ function EventWeddingPackageCard({ svc, onDetail, onWaOpen, isWide, categoryPack
             <div style={{ position: "absolute", top: 14, left: 14, background: svc.badgeColor || ac, color: "#fff", borderRadius: 20, padding: "4px 14px", fontSize: "0.625rem", fontWeight: 700, letterSpacing: ".1em", textTransform: "uppercase" }}>{svc.badge}</div>
           )}
           {svc.highlight && (
-            <div style={{ position: "absolute", top: 14, right: 0, background: "linear-gradient(130deg,#2E3D3F,#8B6914)", color: "#fff", borderRadius: "20px 0 0 20px", padding: "4px 12px 4px 14px", fontSize: "0.625rem", fontWeight: 700 }}>⭐ Pilihan Utama</div>
+            <div style={{ position: "absolute", top: 14, right: 0, background: "linear-gradient(130deg,#2E3D3F,#8B6914)", color: "#fff", borderRadius: "20px 0 0 20px", padding: "4px 12px 4px 14px", fontSize: "0.625rem", fontWeight: 700 }}>Pilihan Utama</div>
           )}
           {/* Dots navigasi gambar */}
           {imgs.length > 1 && (
@@ -4790,8 +4790,8 @@ function EventWeddingPackageCard({ svc, onDetail, onWaOpen, isWide, categoryPack
         {/* Konten kanan */}
         <div style={{ flex: 1, display: "flex", flexDirection: "column", minWidth: 0 }}>
           <div style={{ padding: "16px 20px 8px", display: "flex", gap: 14, flexWrap: "wrap" }}>
-            {imgs.length > 1 && <span style={{ fontSize: "0.8125rem", color: "#5A6A6C" }}>🖼 {imgs.length} Foto Kegiatan</span>}
-            <span style={{ fontSize: "0.8125rem", color: "#5A6A6C" }}>{svc.category === "wedding" ? "🛋️ Interior" : "🔧 Exterior"}</span>
+            {imgs.length > 1 && <span style={{ fontSize: "0.8125rem", color: "#5A6A6C" }}>{imgs.length} Foto Kegiatan</span>}
+            <span style={{ fontSize: "0.8125rem", color: "#5A6A6C" }}>{svc.category === "wedding" ? "Interior" : "Exterior"}</span>
           </div>
           <p style={{ fontSize: "0.875rem", color: "#5A6A6C", lineHeight: 1.65, padding: "0 20px 12px" }}>{svc.description}</p>
           {(svc.features || []).length > 0 && (
@@ -4823,7 +4823,7 @@ function EventWeddingPackageCard({ svc, onDetail, onWaOpen, isWide, categoryPack
               <div style={{ display: "flex", flexDirection: "column", flexShrink: 0, gap: 0 }}>
                 <button onClick={e => { e.stopPropagation(); onWaOpen && onWaOpen({ key: "paket", vars: { judul_paket: svc.title } }); }}
                   style={{ padding: "8px 20px", background: "#25D366", color: "#fff", border: "none", fontSize: "0.8125rem", fontWeight: 700, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 5, borderBottom: "1px solid rgba(255,255,255,.2)" }}>
-                  💬 WA
+                  WA
                 </button>
                 <button onClick={e => { e.stopPropagation(); onDetail(); }}
                   style={{ padding: "8px 20px", background: `linear-gradient(135deg,#2E3D3F,${ac})`, color: "#fff", border: "none", fontSize: "0.8125rem", fontWeight: 700, cursor: "pointer", transition: "opacity .2s" }}
@@ -4880,7 +4880,7 @@ function EventWeddingPackageCard({ svc, onDetail, onWaOpen, isWide, categoryPack
           </div>
         )}
         {svc.highlight && (
-          <div style={{ position: "absolute", top: 12, right: 12, background: "linear-gradient(130deg,#2E3D3F,#8B6914)", color: "#fff", borderRadius: 20, padding: "3px 10px", fontSize: "0.625rem", fontWeight: 700 }}>⭐ Pilihan Utama</div>
+          <div style={{ position: "absolute", top: 12, right: 12, background: "linear-gradient(130deg,#2E3D3F,#8B6914)", color: "#fff", borderRadius: 20, padding: "3px 10px", fontSize: "0.625rem", fontWeight: 700 }}>Pilihan Utama</div>
         )}
         {/* Image thumbnails nav (if multiple) */}
         {imgs.length > 1 && (
@@ -4898,9 +4898,9 @@ function EventWeddingPackageCard({ svc, onDetail, onWaOpen, isWide, categoryPack
 
       {/* Info row: foto kegiatan count + category label */}
       <div style={{ padding: "10px 14px 0", display: "flex", gap: 14, flexWrap: "wrap" }}>
-        {imgs.length > 1 && <span style={{ fontSize: "0.75rem", color: "#5A6A6C" }}>🖼 {imgs.length} Foto Kegiatan</span>}
+        {imgs.length > 1 && <span style={{ fontSize: "0.75rem", color: "#5A6A6C" }}>{imgs.length} Foto Kegiatan</span>}
         <span style={{ fontSize: "0.75rem", color: "#5A6A6C", textTransform: "capitalize" }}>
-          {svc.category === "wedding" ? "🛋️ Interior" : "🔧 Exterior"}
+          {svc.category === "wedding" ? "Interior" : "Exterior"}
         </span>
       </div>
 
@@ -4974,7 +4974,7 @@ function EventWeddingPackageCard({ svc, onDetail, onWaOpen, isWide, categoryPack
         <button
           onClick={() => onWaOpen && onWaOpen({ key: "paket", vars: { judul_paket: svc.title } })}
           style={{ flex: 1, padding: "10px 0", background: "#25D366", color: "#fff", border: "none", borderRadius: 8, fontSize: "0.75rem", fontWeight: 700, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 4 }}>
-          💬 WA
+          WA
         </button>
         <button onClick={onDetail}
           style={{ flex: 3, padding: "10px 0", background: `linear-gradient(135deg,#2E3D3F,${ac})`, color: "#fff", border: "none", borderRadius: 8, fontSize: "0.8125rem", fontWeight: 700, cursor: "pointer", transition: "opacity .2s" }}
@@ -5049,7 +5049,7 @@ function TravelPackageCardWide({ svc, onDetail, onWaOpen }) {
             style={{ padding: "12px 24px", background: "#25d366", color: "#fff", borderRadius: 10, fontSize: "0.9375rem", fontWeight: 700, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 8, border: "none", transition: "opacity .2s", width: isMobile ? "100%" : "auto" }}
             onMouseEnter={e => e.currentTarget.style.opacity = ".85"}
             onMouseLeave={e => e.currentTarget.style.opacity = "1"}>
-            💬 WhatsApp Sekarang
+            WhatsApp Sekarang
           </button>
         </div>
       </div>
@@ -5100,7 +5100,7 @@ function TravelPackageCard({ svc, onDetail, onWaOpen, isWide }) {
             </div>
           )}
           {svc.highlight && (
-            <div style={{ position: "absolute", top: 14, right: 0, background: "linear-gradient(130deg,#2E3D3F,#8B6914)", color: "#fff", borderRadius: "20px 0 0 20px", padding: "4px 12px 4px 14px", fontSize: "0.625rem", fontWeight: 700 }}>⭐ Pilihan Utama</div>
+            <div style={{ position: "absolute", top: 14, right: 0, background: "linear-gradient(130deg,#2E3D3F,#8B6914)", color: "#fff", borderRadius: "20px 0 0 20px", padding: "4px 12px 4px 14px", fontSize: "0.625rem", fontWeight: 700 }}>Pilihan Utama</div>
           )}
           {/* Judul di atas gambar bawah kiri */}
           <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, padding: "32px 16px 16px", background: "linear-gradient(to top, rgba(0,0,0,.72) 0%, transparent 100%)" }}>
@@ -5113,7 +5113,7 @@ function TravelPackageCard({ svc, onDetail, onWaOpen, isWide }) {
         <div style={{ flex: 1, display: "flex", flexDirection: "column", minWidth: 0 }}>
           {/* Info row */}
           <div style={{ padding: "18px 20px 8px", display: "flex", gap: 16, flexWrap: "wrap" }}>
-            {[`⏱ ${svc.duration}`, `👥 Min. ${svc.minPeserta} peserta`, ...(svc.destinations?.length ? [`🗺 ${svc.destinations.length} Destinasi`] : [])].map(m => (
+            {[`${svc.duration}`, `Min. ${svc.minPeserta} peserta`, ...(svc.destinations?.length ? [`${svc.destinations.length} Destinasi`] : [])].map(m => (
               <span key={m} style={{ fontSize: "0.8125rem", color: "#5A6A6C" }}>{m}</span>
             ))}
           </div>
@@ -5168,7 +5168,7 @@ function TravelPackageCard({ svc, onDetail, onWaOpen, isWide }) {
             <div style={{ display: "flex", flexDirection: "column", gap: 0, flexShrink: 0 }}>
               <button onClick={() => onWaOpen && onWaOpen({ key: "paket", vars: { judul_paket: svc.title } })}
                 style={{ flex: 1, padding: "0 24px", background: "#25D366", color: "#fff", border: "none", fontSize: "0.8125rem", fontWeight: 700, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 5, borderBottom: "1px solid rgba(255,255,255,.2)" }}>
-                💬 WA
+                WA
               </button>
               <button onClick={onDetail}
                 style={{ flex: 1, padding: "0 24px", background: `linear-gradient(135deg,#2E3D3F,${ac})`, color: "#fff", border: "none", fontSize: "0.8125rem", fontWeight: 700, cursor: "pointer", transition: "opacity .2s" }}
@@ -5221,7 +5221,7 @@ function TravelPackageCard({ svc, onDetail, onWaOpen, isWide }) {
           </div>
         )}
         {svc.highlight && (
-          <div style={{ position: "absolute", top: 12, right: 12, background: "linear-gradient(130deg,#2E3D3F,#8B6914)", color: "#fff", borderRadius: 20, padding: "3px 10px", fontSize: "0.625rem", fontWeight: 700 }}>⭐ Pilihan Utama</div>
+          <div style={{ position: "absolute", top: 12, right: 12, background: "linear-gradient(130deg,#2E3D3F,#8B6914)", color: "#fff", borderRadius: 20, padding: "3px 10px", fontSize: "0.625rem", fontWeight: 700 }}>Pilihan Utama</div>
         )}
         <div style={{ position: "absolute", bottom: 12, left: 14, right: 14 }}>
           <h3 style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.125rem", fontWeight: 700, color: "#fff", lineHeight: 1.2, marginBottom: 2, textShadow: "0 2px 12px rgba(0,0,0,.8), 0 1px 4px rgba(0,0,0,.6)" }}>{svc.title}</h3>
@@ -5231,7 +5231,7 @@ function TravelPackageCard({ svc, onDetail, onWaOpen, isWide }) {
 
       {/* Info row */}
       <div style={{ padding: "12px 16px 0", display: "flex", gap: 14, flexWrap: "wrap" }}>
-        {[`⏱ ${svc.duration}`, `👥 Min. ${svc.minPeserta} peserta`, ...(svc.destinations?.length ? [`🗺 ${svc.destinations.length} Destinasi`] : [])].map(m => (
+        {[`${svc.duration}`, `Min. ${svc.minPeserta} peserta`, ...(svc.destinations?.length ? [`${svc.destinations.length} Destinasi`] : [])].map(m => (
           <span key={m} style={{ fontSize: "0.75rem", color: "#5A6A6C" }}>{m}</span>
         ))}
       </div>
@@ -5310,7 +5310,7 @@ function TravelPackageCard({ svc, onDetail, onWaOpen, isWide }) {
         <button
           onClick={() => onWaOpen && onWaOpen({ key: "paket", vars: { judul_paket: svc.title } })}
           style={{ flex: 1, padding: "9px 0", background: "#25D366", color: "#fff", border: "none", borderRadius: 8, fontSize: "0.75rem", fontWeight: 700, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 4 }}>
-          💬 WA
+          WA
         </button>
         <button onClick={onDetail}
           style={{ flex: 3, padding: "9px 0", background: `linear-gradient(135deg,#2E3D3F,${ac})`, color: "#fff", border: "none", borderRadius: 8, fontSize: "0.8125rem", fontWeight: 700, cursor: "pointer", transition: "opacity .2s" }}
@@ -5393,7 +5393,7 @@ function TravelPackageDetailModal({ svc, onClose, onWaOpen }) {
               {svc.tagline && <div style={{ fontSize: "0.5625rem", color: "rgba(255,255,255,.72)", fontWeight: 700, letterSpacing: ".12em", textTransform: "uppercase", marginBottom: 4 }}>{svc.tagline}</div>}
               <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: "clamp(1.3rem,3vw,1.875rem)", fontWeight: 900, color: "#fff", marginBottom: 8, lineHeight: 1.1 }}>{svc.title}</h2>
               <div style={{ display: "flex", gap: 18, flexWrap: "wrap" }}>
-                {[`⏱ ${svc.duration}`, `👥 Min. ${svc.minPeserta} peserta`, svc.destinations?.length && `🗺 ${svc.destinations.length} Destinasi`, `💰 Mulai ${svc.price}`].filter(Boolean).map(m => (
+                {[`${svc.duration}`, `Min. ${svc.minPeserta} peserta`, svc.destinations?.length && `${svc.destinations.length} Destinasi`, `Mulai ${svc.price}`].filter(Boolean).map(m => (
                   <span key={m} style={{ fontSize: "0.6875rem", color: "rgba(255,255,255,.85)", fontWeight: 500 }}>{m}</span>
                 ))}
               </div>
@@ -5435,7 +5435,7 @@ function TravelPackageDetailModal({ svc, onClose, onWaOpen }) {
                     <div style={{ flex: 1, padding: "16px 18px", minWidth: 180 }}>
                       <div style={{ fontSize: "0.5625rem", color: ac, fontWeight: 800, letterSpacing: ".1em", textTransform: "uppercase", marginBottom: 3 }}>{dest.tag}</div>
                       <h3 style={{ fontFamily: "'Playfair Display',serif", fontSize: "0.9375rem", fontWeight: 800, color: "#2E3D3F", marginBottom: 4, lineHeight: 1.3 }}>{dest.title}</h3>
-                      <div style={{ fontSize: "0.6875rem", color: "#5A6A6C", marginBottom: 7 }}>📍 {dest.sub} &nbsp;·&nbsp; ⏱ {dest.duration}</div>
+                      <div style={{ fontSize: "0.6875rem", color: "#5A6A6C", marginBottom: 7 }}>{dest.sub} &nbsp;·&nbsp; {dest.duration}</div>
                       <p style={{ fontSize: "0.78125rem", color: "#3a5266", lineHeight: 1.65, marginBottom: 9 }}>{dest.desc}</p>
                       <div style={{ display: "flex", flexWrap: "wrap", gap: "4px 12px" }}>
                         {(dest.points || []).map((pt, pi) => (
@@ -5495,7 +5495,7 @@ function TravelPackageDetailModal({ svc, onClose, onWaOpen }) {
               <button
                 onClick={() => onWaOpen && onWaOpen({ key: "paket", vars: { judul_paket: `${svc.title} — ${svc.price} ${svc.priceNote}` } })}
                 style={{ padding: "11px 28px", background: "#25D366", color: "#fff", border: "none", borderRadius: 8, fontSize: "0.875rem", fontWeight: 700, cursor: "pointer", display: "flex", alignItems: "center", gap: 6 }}>
-                💬 WhatsApp Sekarang
+                WhatsApp Sekarang
               </button>
               <button onClick={onClose}
                 style={{ padding: "11px 22px", background: "rgba(255,255,255,.14)", color: "#fff", border: "1.5px solid rgba(255,255,255,.3)", borderRadius: 8, fontSize: "0.875rem", fontWeight: 600, cursor: "pointer" }}>
@@ -5593,14 +5593,14 @@ function DestinationsSection({ svc, catInfo, activePt }) {
                 onMouseLeave={e => e.target.style.transform = "scale(1)"}
                 onError={e => { e.target.style.display = "none"; }} />
             ) : (
-              <div style={{ position: "absolute", inset: 0, background: `linear-gradient(135deg,${ac}22,#e8f4f8)`, display: "flex", alignItems: "center", justifyContent: "center", color: ac, opacity: .4, fontSize: "3rem" }}>🏔</div>
+              <div style={{ position: "absolute", inset: 0, background: `linear-gradient(135deg,${ac}22,#e8f4f8)`, display: "flex", alignItems: "center", justifyContent: "center", color: ac, opacity: .4, fontSize: "3rem" }}></div>
             )}
             <div style={{ position: "absolute", top: 12, left: 12, background: ac, color: "#fff", borderRadius: "50%", width: 34, height: 34, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "0.6875rem", fontWeight: 800, zIndex: 2, boxShadow: "0 2px 8px rgba(0,0,0,.2)" }}>{dest.no}</div>
           </div>
           <div style={{ padding: "20px 24px 24px" }}>
             <div style={{ fontSize: "0.5625rem", color: ac, fontWeight: 800, letterSpacing: ".1em", textTransform: "uppercase", marginBottom: 6 }}>{dest.tag}</div>
             <h3 style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.125rem", fontWeight: 800, color: "#2E3D3F", marginBottom: 6, lineHeight: 1.3 }}>{dest.title}</h3>
-            <div style={{ fontSize: "0.75rem", color: "#5A6A6C", marginBottom: 12 }}>📍 {dest.sub} &nbsp;·&nbsp; ⏱ {dest.duration}</div>
+            <div style={{ fontSize: "0.75rem", color: "#5A6A6C", marginBottom: 12 }}>{dest.sub} &nbsp;·&nbsp; {dest.duration}</div>
             <p style={{ fontSize: "0.875rem", color: "#3a5266", lineHeight: 1.75, marginBottom: 14 }}>{dest.desc}</p>
             <div style={{ display: "flex", flexWrap: "wrap", gap: "6px 20px" }}>
               {(dest.points || []).map((pt, pi) => (
@@ -5613,7 +5613,7 @@ function DestinationsSection({ svc, catInfo, activePt }) {
         </div>
       ) : (
         <div style={{ textAlign: "center", padding: "40px 20px", background: "#f8fbfd", borderRadius: 14, border: `2px dashed ${ac}40`, color: "#5A6A6C" }}>
-          <div style={{ fontSize: "2rem", marginBottom: 8 }}>🗺</div>
+          <div style={{ fontSize: "2rem", marginBottom: 8 }}></div>
           <div style={{ fontWeight: 600, fontSize: "0.875rem" }}>Belum ada destinasi ditambahkan</div>
         </div>
       )}
@@ -5653,7 +5653,7 @@ function FacilitiesSection({ svc, catInfo, activePt }) {
         </div>
       ) : (
         <div style={{ textAlign: "center", padding: "32px 20px", background: "#f8fbfd", borderRadius: 10, border: `2px dashed ${ac}40`, color: "#5A6A6C" }}>
-          <div style={{ fontSize: "2rem", marginBottom: 6 }}>🎒</div>
+          <div style={{ fontSize: "2rem", marginBottom: 6 }}></div>
           <div style={{ fontWeight: 600, fontSize: "0.875rem" }}>Belum ada fasilitas ditambahkan</div>
         </div>
       )}
@@ -5860,7 +5860,7 @@ function DestGallerySlideshow({ slides, catColor, svcTitle }) {
               </div>
               <div style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.2rem", fontWeight: 800, color: "#fff", textShadow: "0 2px 10px rgba(0,0,0,.5)", lineHeight: 1.2 }}>{slide.title || slide.name}</div>
               {slide.name && slide.title && slide.name !== slide.title && (
-                <div style={{ fontSize: "0.75rem", color: "rgba(255,255,255,.6)", marginTop: 3 }}>📍 {slide.name}</div>
+                <div style={{ fontSize: "0.75rem", color: "rgba(255,255,255,.6)", marginTop: 3 }}>{slide.name}</div>
               )}
             </div>
             {/* Nav buttons -- disembunyikan di mobile, diganti tap-di-gambar */}
@@ -5881,7 +5881,7 @@ function DestGallerySlideshow({ slides, catColor, svcTitle }) {
 
         {/* Pause indicator */}
         {paused && slides.length > 1 && (
-          <div style={{ position: "absolute", top: 12, right: 12, background: "rgba(0,0,0,.4)", backdropFilter: "blur(6px)", borderRadius: 20, padding: "3px 10px", fontSize: "0.625rem", color: "rgba(255,255,255,.7)", fontWeight: 600, letterSpacing: ".08em" }}>⏸ PAUSE</div>
+          <div style={{ position: "absolute", top: 12, right: 12, background: "rgba(0,0,0,.4)", backdropFilter: "blur(6px)", borderRadius: 20, padding: "3px 10px", fontSize: "0.625rem", color: "rgba(255,255,255,.7)", fontWeight: 600, letterSpacing: ".08em" }}>PAUSE</div>
         )}
 
         {/* Slide animation keyframes */}
@@ -5924,7 +5924,7 @@ function PaketBackBar({ svc, onClose }) {
         <span style={{ fontSize: 18, lineHeight: 1 }}>←</span> Kembali ke Layanan
       </button>
       <button onClick={copy} style={{ display: "flex", alignItems: "center", gap: 6, background: copied ? "rgba(16,208,224,.25)" : "rgba(255,255,255,.10)", border: "1px solid rgba(255,255,255,.20)", borderRadius: 20, color: copied ? "#E8C96A" : "#b8dde8", fontSize: "0.75rem", fontWeight: 600, padding: "6px 14px", cursor: "pointer", transition: "all .2s", letterSpacing: ".04em" }}>
-        🔗 {copied ? "Tersalin!" : "Salin Link Paket"}
+        {copied ? "Tersalin!" : "Salin Link Paket"}
       </button>
     </div>
   );
@@ -5932,12 +5932,12 @@ function PaketBackBar({ svc, onClose }) {
 
 /* ─────────────── SERVICES PAGE ─────────────── */
 const LAYANAN_LIST = [
-  { key: "interior", icon: "🛋️", label: "Interior", desc: "Desain interior modern, nyaman dan fungsional sesuai kebutuhan Anda.", color: "#8B6914", category: "wedding", img: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=600&q=80" },
-  { key: "eksterior", icon: "🏠", label: "Eksterior", desc: "Desain eksterior menarik, kokoh dan estetis.", color: "#3D5254", category: "traveling", img: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&q=80" },
-  { key: "rab", icon: "📐", label: "Desain & RAB", desc: "Desain arsitektur lengkap dengan RAB yang akurat.", color: "#8B6914", category: "traveling", img: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=600&q=80" },
-  { key: "landscape", icon: "🌿", label: "Landscape", desc: "Taman indah dan asri yang menyatu dengan hunian Anda.", color: "#2E7D32", category: "traveling", img: "https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=600&q=80" },
-  { key: "aluminium", icon: "🪟", label: "Aluminium", desc: "Kusen, pintu & jendela aluminium berkualitas tinggi.", color: "#3D5254", category: "event", img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80" },
-  { key: "kanopi", icon: "🏗️", label: "Kanopi", desc: "Kanopi kuat, modern dan tahan segala cuaca.", color: "#8B6914", category: "event", img: "https://images.unsplash.com/photo-1600566752355-35792bedcfea?w=600&q=80" },
+  { key: "interior", icon: "", label: "Interior", desc: "Desain interior modern, nyaman dan fungsional sesuai kebutuhan Anda.", color: "#8B6914", category: "wedding", img: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=600&q=80" },
+  { key: "eksterior", icon: "", label: "Eksterior", desc: "Desain eksterior menarik, kokoh dan estetis.", color: "#3D5254", category: "traveling", img: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&q=80" },
+  { key: "rab", icon: "", label: "Desain & RAB", desc: "Desain arsitektur lengkap dengan RAB yang akurat.", color: "#8B6914", category: "traveling", img: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=600&q=80" },
+  { key: "landscape", icon: "", label: "Landscape", desc: "Taman indah dan asri yang menyatu dengan hunian Anda.", color: "#2E7D32", category: "traveling", img: "https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=600&q=80" },
+  { key: "aluminium", icon: "", label: "Aluminium", desc: "Kusen, pintu & jendela aluminium berkualitas tinggi.", color: "#3D5254", category: "event", img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80" },
+  { key: "kanopi", icon: "", label: "Kanopi", desc: "Kanopi kuat, modern dan tahan segala cuaca.", color: "#8B6914", category: "event", img: "https://images.unsplash.com/photo-1600566752355-35792bedcfea?w=600&q=80" },
 ];
 
 function ServicesPage({ content, services, navigateTo, activePaket, onOpenPaket, onClosePaket, onWaOpen }) {
@@ -5948,12 +5948,12 @@ function ServicesPage({ content, services, navigateTo, activePaket, onOpenPaket,
   /* ── Static layanan list — defined at module scope as LAYANAN_LIST ── */
 
   const KEUNGGULAN = [
-    { icon: "👷", label: "Tim Profesional", desc: "Tenaga ahli berpengalaman di bidangnya" },
-    { icon: "⏱️", label: "Proses Cepat", desc: "Pengerjaan tepat waktu dan terukur" },
-    { icon: "📋", label: "Budget Transparan", desc: "RAB jelas dan tanpa biaya tersembunyi" },
-    { icon: "🛡️", label: "Material Berkualitas", desc: "Menggunakan bahan terbaik dan tahan lama" },
-    { icon: "✅", label: "Garansi Pekerjaan", desc: "Garansi hingga 1 tahun setelah proyek selesai" },
-    { icon: "💬", label: "Konsultasi Gratis", desc: "Konsultasi gratis sebelum proyek dimulai" },
+    { icon: "", label: "Tim Profesional", desc: "Tenaga ahli berpengalaman di bidangnya" },
+    { icon: "", label: "Proses Cepat", desc: "Pengerjaan tepat waktu dan terukur" },
+    { icon: "", label: "Budget Transparan", desc: "RAB jelas dan tanpa biaya tersembunyi" },
+    { icon: "", label: "Material Berkualitas", desc: "Menggunakan bahan terbaik dan tahan lama" },
+    { icon: "", label: "Garansi Pekerjaan", desc: "Garansi hingga 1 tahun setelah proyek selesai" },
+    { icon: "", label: "Konsultasi Gratis", desc: "Konsultasi gratis sebelum proyek dimulai" },
   ];
 
   /* ── Old category-based state (kept for detail page backward compat) ── */
@@ -5962,9 +5962,9 @@ function ServicesPage({ content, services, navigateTo, activePaket, onOpenPaket,
   const [activePaketTypeId, setActivePaketTypeId] = useState(null);
 
   const CATEGORIES = [
-    { key: "traveling", label: "🏠 Gedung & Rumah", color: "#8B6914" },
-    { key: "event",     label: "🔧 Exterior", color: "#3D5254" },
-    { key: "wedding",   label: "🛋️ Interior", color: "#C9AA71" },
+    { key: "traveling", label: "Gedung & Rumah", color: "#8B6914" },
+    { key: "event",     label: "Exterior", color: "#3D5254" },
+    { key: "wedding",   label: "Interior", color: "#C9AA71" },
   ];
 
   const openDetail = (svc) => {
@@ -6108,7 +6108,7 @@ function ServicesPage({ content, services, navigateTo, activePaket, onOpenPaket,
                 </div>
                 {svc.minPeserta && (
                   <div style={{ display: "inline-flex", alignItems: "center", gap: 6, marginTop: 10, padding: "5px 14px", background: "rgba(255,255,255,.08)", border: "1px solid rgba(255,255,255,.13)", borderRadius: 20 }}>
-                    <span style={{ fontSize: "0.875rem" }}>👥</span>
+                    <span style={{ fontSize: "0.875rem" }}></span>
                     <span style={{ fontSize: "0.75rem", color: "rgba(255,255,255,.72)", fontWeight: 600 }}>Min. <strong style={{ color: "#fff" }}>{svc.minPeserta} peserta</strong></span>
                   </div>
                 )}
@@ -6334,7 +6334,7 @@ function ServicesPage({ content, services, navigateTo, activePaket, onOpenPaket,
                     <div style={{ fontSize: "0.875rem", color: "rgba(255,255,255,.45)", fontWeight: 500 }}>{activePriceNote}</div>
                     {activeMinPeserta && (
                       <div style={{ display: "inline-flex", alignItems: "center", gap: 5, marginTop: 8, padding: "4px 12px", background: "rgba(255,255,255,.07)", border: "1px solid rgba(255,255,255,.1)", borderRadius: 20 }}>
-                        <span style={{ fontSize: "0.8rem" }}>👥</span>
+                        <span style={{ fontSize: "0.8rem" }}></span>
                         <span style={{ fontSize: "0.7rem", color: "rgba(255,255,255,.65)", fontWeight: 600 }}>Min. <strong style={{ color: "#fff" }}>{activeMinPeserta} peserta</strong></span>
                       </div>
                     )}
@@ -6342,7 +6342,7 @@ function ServicesPage({ content, services, navigateTo, activePaket, onOpenPaket,
 
                   {/* Nego info */}
                   <div style={{ display: "flex", alignItems: "flex-start", gap: 8, background: "rgba(255,255,255,.06)", borderRadius: 8, padding: "10px 12px", marginBottom: 4, border: "1px solid rgba(255,255,255,.07)" }}>
-                    <span style={{ fontSize: "1rem", flexShrink: 0, marginTop: 1 }}>💬</span>
+                    <span style={{ fontSize: "1rem", flexShrink: 0, marginTop: 1 }}></span>
                     <span style={{ fontSize: "0.8rem", color: "rgba(255,255,255,.55)", fontStyle: "italic", lineHeight: 1.45 }}>Harga dapat disesuaikan dengan kebutuhan dan budget Anda</span>
                   </div>
                 </div>
@@ -6355,11 +6355,11 @@ function ServicesPage({ content, services, navigateTo, activePaket, onOpenPaket,
                     handleBook({ ...activeSidebarPkg, price: priceStr });
                   }}
                     style={{ width: "100%", padding: "15px 20px", background: "linear-gradient(135deg,#8B6914,#C9AA71)", color: "#fff", border: "none", borderRadius: 10, fontSize: "0.9rem", fontWeight: 700, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 8, marginBottom: 10, transition: "all .2s", letterSpacing: ".01em" }}>
-                    <span style={{ fontSize: "1.1rem" }}>💬</span> Pesan via WhatsApp
+                    <span style={{ fontSize: "1.1rem" }}></span> Pesan via WhatsApp
                   </button>
                   <button onClick={() => onWaOpen && onWaOpen()} className="mg-cta-tel"
                     style={{ width: "100%", padding: "13px 20px", background: "rgba(255,255,255,.08)", color: "rgba(255,255,255,.9)", border: "1.5px solid rgba(255,255,255,.15)", borderRadius: 10, fontSize: "0.875rem", fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center", gap: 8, transition: "all .2s", cursor: "pointer" }}>
-                    <span style={{ fontSize: "1rem" }}>📞</span> Hubungi Langsung
+                    <span style={{ fontSize: "1rem" }}></span> Hubungi Langsung
                   </button>
                 </div>
               </div>
@@ -6377,10 +6377,10 @@ function ServicesPage({ content, services, navigateTo, activePaket, onOpenPaket,
                     <div style={{ fontSize: "0.5625rem", letterSpacing: "3px", color: catInfo.color || "#D4AF37", fontWeight: 700, textTransform: "uppercase", marginBottom: 8 }}>Keunggulan Kami</div>
                     <div style={{ width: 28, height: 2, background: catInfo.color || "#D4AF37", borderRadius: 1, marginBottom: 18 }} />
                     {[
-                      { icon: "🏆", label: "Tim Profesional", desc: "Berpengalaman di bidangnya" },
-                      { icon: "🤝", label: "Konsultasi Gratis", desc: "Diskusi tanpa biaya apapun" },
-                      { icon: "⭐", label: "Kepuasan Terjamin", desc: "Rating tinggi dari klien kami" },
-                      { icon: "📋", label: "Paket Fleksibel", desc: "Disesuaikan kebutuhan Anda" },
+                      { icon: "", label: "Tim Profesional", desc: "Berpengalaman di bidangnya" },
+                      { icon: "", label: "Konsultasi Gratis", desc: "Diskusi tanpa biaya apapun" },
+                      { icon: "", label: "Kepuasan Terjamin", desc: "Rating tinggi dari klien kami" },
+                      { icon: "", label: "Paket Fleksibel", desc: "Disesuaikan kebutuhan Anda" },
                     ].map((item, i, arr) => (
                       <div key={i} style={{ display: "flex", gap: 12, alignItems: "flex-start", marginBottom: i < arr.length - 1 ? 14 : 0, paddingBottom: i < arr.length - 1 ? 14 : 0, borderBottom: i < arr.length - 1 ? "1px solid rgba(255,255,255,.06)" : "none" }}>
                         <span style={{ fontSize: "1.1rem", flexShrink: 0, marginTop: 1 }}>{item.icon}</span>
@@ -6510,7 +6510,7 @@ function ServicesPage({ content, services, navigateTo, activePaket, onOpenPaket,
             <div style={{ display:"flex", gap:14, flexWrap:"wrap", alignItems:"center" }}>
               <button className="sv-wa-btn" onClick={() => onWaOpen && onWaOpen()}
                 style={{ padding:"13px 26px", background:"#25D366", color:"#fff", border:"none", borderRadius:8, fontSize:"0.9375rem", fontWeight:700, cursor:"pointer", display:"flex", alignItems:"center", gap:8 }}>
-                <span style={{ fontSize:"1.1rem" }}>💬</span> KONSULTASI GRATIS
+                <span style={{ fontSize:"1.1rem" }}></span> KONSULTASI GRATIS
               </button>
               <button style={{ padding:"13px 22px", background:"transparent", color:"#fff", border:"none", borderRadius:8, fontSize:"0.9rem", fontWeight:500, cursor:"pointer", display:"flex", alignItems:"center", gap:8 }}>
                 <span style={{ width:34, height:34, borderRadius:"50%", border:"2px solid rgba(255,255,255,.7)", display:"inline-flex", alignItems:"center", justifyContent:"center", fontSize:"0.75rem" }}>▶</span>
@@ -6723,7 +6723,7 @@ function ServicesPage({ content, services, navigateTo, activePaket, onOpenPaket,
           </div>
           <button className="sv-wa-btn" onClick={() => onWaOpen && onWaOpen()}
             style={{ padding:"15px 32px", background:"#25D366", color:"#fff", border:"none", borderRadius:8, fontSize:"1rem", fontWeight:700, cursor:"pointer", display:"flex", alignItems:"center", gap:10, whiteSpace:"nowrap", flexShrink:0, boxShadow:"0 4px 20px rgba(37,211,102,.4)" }}>
-            <span style={{ fontSize:"1.2rem" }}>💬</span> KONSULTASI SEKARANG
+            <span style={{ fontSize:"1.2rem" }}></span> KONSULTASI SEKARANG
           </button>
         </div>
       </section>
@@ -6749,21 +6749,21 @@ const ABOUT_MISI_DEFAULT = [
 ];
 
 const ABOUT_WHY_DEFAULT = [
-  { icon: "✈️", title: "Expert Travel Planning", desc: "Kami merencanakan setiap detail perjalanan Anda — dari tiket, akomodasi, hingga tur lokal — agar Anda bisa menikmati tanpa khawatir." },
-  { icon: "🛋️", title: "Interior", desc: "Transformasi ruang hidup Anda dengan desain interior profesional — dari konsep, pemilihan material, hingga pemasangan." },
-  { icon: "🔧", title: "Exterior", desc: "Pagar, kanopi, aluminium, dan landscape yang mempercantik fasad dan halaman rumah Anda secara menyeluruh." },
-  { icon: "🛡️", title: "Terpercaya & Aman", desc: "Kepercayaan klien adalah prioritas kami. Setiap layanan dirancang dengan standar keamanan dan profesionalisme tinggi." },
-  { icon: "🌟", title: "Pengalaman Bertahun-tahun", desc: "Didukung tim berpengalaman yang telah melayani ratusan klien puas di seluruh Indonesia." },
-  { icon: "💬", title: "Layanan 24/7", desc: "Tim customer service kami siap membantu kapan saja, memastikan setiap pertanyaan dan kebutuhan Anda terpenuhi." },
+  { icon: "", title: "Expert Travel Planning", desc: "Kami merencanakan setiap detail perjalanan Anda — dari tiket, akomodasi, hingga tur lokal — agar Anda bisa menikmati tanpa khawatir." },
+  { icon: "", title: "Interior", desc: "Transformasi ruang hidup Anda dengan desain interior profesional — dari konsep, pemilihan material, hingga pemasangan." },
+  { icon: "", title: "Exterior", desc: "Pagar, kanopi, aluminium, dan landscape yang mempercantik fasad dan halaman rumah Anda secara menyeluruh." },
+  { icon: "", title: "Terpercaya & Aman", desc: "Kepercayaan klien adalah prioritas kami. Setiap layanan dirancang dengan standar keamanan dan profesionalisme tinggi." },
+  { icon: "", title: "Pengalaman Bertahun-tahun", desc: "Didukung tim berpengalaman yang telah melayani ratusan klien puas di seluruh Indonesia." },
+  { icon: "", title: "Layanan 24/7", desc: "Tim customer service kami siap membantu kapan saja, memastikan setiap pertanyaan dan kebutuhan Anda terpenuhi." },
 ];
 
 const ABOUT_LAYANAN_DEFAULT = [
-  { icon: "🛋️", title: "Interior",     desc: "Desain interior modern, nyaman dan fungsional sesuai kebutuhan Anda.", img: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=600&q=80", slug: "interior" },
-  { icon: "🏠", title: "Eksterior",    desc: "Desain eksterior menarik, kokoh dan estetis.",                          img: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&q=80", slug: "eksterior" },
-  { icon: "📐", title: "Desain & RAB", desc: "Desain arsitektur lengkap dengan RAB yang akurat.",                     img: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=600&q=80", slug: "desain-rab" },
-  { icon: "🌿", title: "Landscape",    desc: "Taman indah dan asri yang menyatu dengan hunian Anda.",                 img: "https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=600&q=80", slug: "landscape" },
-  { icon: "🪟", title: "Aluminium",    desc: "Kusen, pintu & jendela aluminium berkualitas tinggi.",                  img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80", slug: "aluminium" },
-  { icon: "🏗️", title: "Kanopi",       desc: "Kanopi kuat, modern dan tahan segala cuaca.",                           img: "https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?w=600&q=80", slug: "kanopi" },
+  { icon: "", title: "Interior",     desc: "Desain interior modern, nyaman dan fungsional sesuai kebutuhan Anda.", img: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=600&q=80", slug: "interior" },
+  { icon: "", title: "Eksterior",    desc: "Desain eksterior menarik, kokoh dan estetis.",                          img: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&q=80", slug: "eksterior" },
+  { icon: "", title: "Desain & RAB", desc: "Desain arsitektur lengkap dengan RAB yang akurat.",                     img: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=600&q=80", slug: "desain-rab" },
+  { icon: "", title: "Landscape",    desc: "Taman indah dan asri yang menyatu dengan hunian Anda.",                 img: "https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=600&q=80", slug: "landscape" },
+  { icon: "", title: "Aluminium",    desc: "Kusen, pintu & jendela aluminium berkualitas tinggi.",                  img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80", slug: "aluminium" },
+  { icon: "", title: "Kanopi",       desc: "Kanopi kuat, modern dan tahan segala cuaca.",                           img: "https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?w=600&q=80", slug: "kanopi" },
 ];
 
 /* ─────────────── ABOUT PAGE ─────────────── */
@@ -6774,7 +6774,7 @@ function AboutPage({ content, images, teamMembers, aboutStats, aboutMisiList, ab
   const handleContactSubmit = () => {
     if (!contactForm.name || !contactForm.message) return;
     const lines = [
-      "Halo VASTURA GROUP! 👋",
+      "Halo VASTURA GROUP!",
       "",
       "Nama: " + contactForm.name,
       "Email: " + (contactForm.email || "-"),
@@ -6825,14 +6825,14 @@ function AboutPage({ content, images, teamMembers, aboutStats, aboutMisiList, ab
                 style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "13px 28px", background: "linear-gradient(130deg,#2E3D3F 0%,#3D5254 45%,#8B6914 78%,#C9AA71 100%)", color: "#fff", borderRadius: 4, fontSize: "0.8125rem", fontWeight: 700, letterSpacing: ".08em", textTransform: "uppercase", border: "none", cursor: "pointer", transition: "background .2s" }}
                 onMouseEnter={e => e.currentTarget.style.background = "#8B6914"}
                 onMouseLeave={e => e.currentTarget.style.background = "#2E3D3F"}>
-                💬 Hubungi Kami
+                Hubungi Kami
               </button>
               {content.phone && (
                 <button onClick={() => onWaOpen && onWaOpen()}
                   style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "13px 28px", background: "rgba(255,255,255,.15)", color: "#fff", borderRadius: 4, fontSize: "0.8125rem", fontWeight: 700, letterSpacing: ".08em", textTransform: "uppercase", border: "1px solid rgba(255,255,255,.3)", cursor: "pointer", textDecoration: "none", transition: "background .2s" }}
                   onMouseEnter={e => e.currentTarget.style.background = "rgba(255,255,255,.25)"}
                   onMouseLeave={e => e.currentTarget.style.background = "rgba(255,255,255,.15)"}>
-                  📱 Hubungi via WhatsApp
+                  Hubungi via WhatsApp
                 </button>
               )}
             </div>
@@ -6863,14 +6863,14 @@ function AboutPage({ content, images, teamMembers, aboutStats, aboutMisiList, ab
       <div style={{ padding: "80px 5%", maxWidth: 1200, margin: "0 auto" }}>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 40 }} className="grid-2">
           <div style={{ background: "linear-gradient(135deg, #2E3D3F 0%, #3D5254 100%)", borderRadius: 12, padding: "40px 36px", color: "#fff" }}>
-            <div style={{ fontSize: 36, marginBottom: 20 }}>🎯</div>
+            <div style={{ fontSize: 36, marginBottom: 20 }}></div>
             <h3 style={{ fontSize: "1.5rem", fontFamily: "'Playfair Display',serif", fontWeight: 800, marginBottom: 16, color: "#fff" }}>Visi Kami</h3>
             <p style={{ fontSize: "0.9375rem", lineHeight: 1.85, color: "rgba(255,255,255,.8)", whiteSpace: "pre-line" }}>
               {content.aboutVisiText || "Menjadi perusahaan developer perumahan dan jasa desain terkemuka di Indonesia yang dikenal atas pelayanan profesional, kualitas konstruksi, dan kemampuan mewujudkan hunian impian bagi setiap klien."}
             </p>
           </div>
           <div style={{ background: "#FAF7F0", borderRadius: 12, padding: "40px 36px", borderLeft: "4px solid #8B6914" }}>
-            <div style={{ fontSize: 36, marginBottom: 20 }}>🚀</div>
+            <div style={{ fontSize: 36, marginBottom: 20 }}></div>
             <h3 style={{ fontSize: "1.5rem", fontFamily: "'Playfair Display',serif", fontWeight: 800, marginBottom: 16, color: "#2E3D3F" }}>Misi Kami</h3>
             <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: 12 }}>
               {misi.map((m, i) => (
@@ -6926,7 +6926,7 @@ function AboutPage({ content, images, teamMembers, aboutStats, aboutMisiList, ab
                         onError={e => { e.target.style.display = "none"; e.target.parentNode.querySelector(".team-fallback").style.display = "flex"; }} />
                     ) : null}
                     <div className="team-fallback" style={{ position: "absolute", inset: 0, display: member.photo ? "none" : "flex", alignItems: "center", justifyContent: "center", flexDirection: "column", gap: 8 }}>
-                      <div style={{ width: 72, height: 72, borderRadius: "50%", background: "rgba(255,255,255,.15)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 36 }}>👤</div>
+                      <div style={{ width: 72, height: 72, borderRadius: "50%", background: "rgba(255,255,255,.15)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 36 }}></div>
                       <span style={{ fontSize: "0.7rem", color: "rgba(255,255,255,.5)", letterSpacing: "1px", textTransform: "uppercase" }}>No Photo</span>
                     </div>
                     {/* Name overlay at bottom */}
@@ -7030,10 +7030,10 @@ function AboutPage({ content, images, teamMembers, aboutStats, aboutMisiList, ab
             {/* Info kontak */}
             <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
               {[
-                { icon: "📞", label: "Telepon / WhatsApp", value: displayPhone(content), href: "#wa-picker", type: "link", onClick: (e) => { e.preventDefault(); if (onWaOpen) onWaOpen(); } },
-                { icon: "✉️", label: "Email", value: content.email, href: `mailto:${content.email}`, type: "link" },
-                { icon: "📍", label: "Alamat", value: content.address || "Malang, Jawa Timur, Indonesia", type: "text" },
-                { icon: "🕐", label: "Jam Operasional", value: content.hours || "Senin – Sabtu: 08.00 – 20.00 WIB", type: "text" },
+                { icon: "", label: "Telepon / WhatsApp", value: displayPhone(content), href: "#wa-picker", type: "link", onClick: (e) => { e.preventDefault(); if (onWaOpen) onWaOpen(); } },
+                { icon: "", label: "Email", value: content.email, href: `mailto:${content.email}`, type: "link" },
+                { icon: "", label: "Alamat", value: content.address || "Malang, Jawa Timur, Indonesia", type: "text" },
+                { icon: "", label: "Jam Operasional", value: content.hours || "Senin – Sabtu: 08.00 – 20.00 WIB", type: "text" },
               ].map(info => (
                 <div key={info.label} style={{ display: "flex", gap: 16, alignItems: "flex-start", background: "rgba(255,255,255,.7)", borderRadius: 10, padding: "18px 20px", backdropFilter: "blur(8px)" }}>
                   <div style={{ width: 44, height: 44, borderRadius: 10, background: "linear-gradient(130deg,#2E3D3F 0%,#3D5254 45%,#8B6914 78%,#C9AA71 100%)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20, flexShrink: 0 }}>{info.icon}</div>
@@ -7052,8 +7052,8 @@ function AboutPage({ content, images, teamMembers, aboutStats, aboutMisiList, ab
                 <div style={{ fontSize: "0.75rem", color: "#5A6A6C", fontWeight: 700, letterSpacing: ".05em", textTransform: "uppercase", marginBottom: 14 }}>Media Sosial</div>
                 <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
                   {[
-                    { label: "Instagram", icon: "📷", href: content.igLink || "https://instagram.com", color: "#e1306c" },
-                    { label: "Facebook", icon: "📘", href: content.fbLink || "https://facebook.com", color: "#1877f2" },
+                    { label: "Instagram", icon: "", href: content.igLink || "https://instagram.com", color: "#e1306c" },
+                    { label: "Facebook", icon: "", href: content.fbLink || "https://facebook.com", color: "#1877f2" },
                   ].map(s => (
                     <a key={s.label} href={s.href} target="_blank" rel="noopener noreferrer"
                       style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "8px 16px", background: s.color, color: "#fff", borderRadius: 20, fontSize: "0.8125rem", fontWeight: 600, textDecoration: "none", transition: "opacity .2s" }}
@@ -7066,7 +7066,7 @@ function AboutPage({ content, images, teamMembers, aboutStats, aboutMisiList, ab
                     style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "8px 16px", background: "#25d366", color: "#fff", borderRadius: 20, fontSize: "0.8125rem", fontWeight: 600, border: "none", cursor: "pointer", transition: "opacity .2s" }}
                     onMouseEnter={e => e.currentTarget.style.opacity = ".85"}
                     onMouseLeave={e => e.currentTarget.style.opacity = "1"}>
-                    💬 WhatsApp
+                    WhatsApp
                   </button>
                 </div>
               </div>
@@ -7077,7 +7077,7 @@ function AboutPage({ content, images, teamMembers, aboutStats, aboutMisiList, ab
               <h3 style={{ fontSize: "1.25rem", fontFamily: "'Playfair Display',serif", fontWeight: 800, color: "#2E3D3F", marginBottom: 24 }}>Kirim Pesan</h3>
               {contactSent ? (
                 <div style={{ textAlign: "center", padding: "40px 20px" }}>
-                  <div style={{ fontSize: 56, marginBottom: 16 }}>✅</div>
+                  <div style={{ fontSize: 56, marginBottom: 16 }}></div>
                   <h4 style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.25rem", color: "#27ae60", marginBottom: 8 }}>Pesan Terkirim!</h4>
                   <p style={{ color: "#3D5254", fontSize: "0.9rem" }}>Kami akan segera menghubungi Anda melalui WhatsApp.</p>
                 </div>
@@ -7114,11 +7114,11 @@ function AboutPage({ content, images, teamMembers, aboutStats, aboutMisiList, ab
                     <select value={contactForm.subject} onChange={e => setContactForm(p => ({ ...p, subject: e.target.value }))}
                       style={{ width: "100%", padding: "11px 14px", border: "1.5px solid #D4C4A0", borderRadius: 8, fontSize: "0.9rem", outline: "none", background: "#fff", color: contactForm.subject ? "#2E3D3F" : "#7ab5cc" }}>
                       <option value="">-- Pilih keperluan --</option>
-                      <option value="Gedung & Rumah">🏠 Gedung & Rumah</option>
-                      <option value="Interior">🛋️ Interior</option>
-                      <option value="Exterior">🔧 Exterior</option>
-                      <option value="Konsultasi">💬 Konsultasi Umum</option>
-                      <option value="Lainnya">📋 Lainnya</option>
+                      <option value="Gedung & Rumah">Gedung & Rumah</option>
+                      <option value="Interior">Interior</option>
+                      <option value="Exterior">Exterior</option>
+                      <option value="Konsultasi">Konsultasi Umum</option>
+                      <option value="Lainnya">Lainnya</option>
                     </select>
                   </div>
                   <div>
@@ -7136,7 +7136,7 @@ function AboutPage({ content, images, teamMembers, aboutStats, aboutMisiList, ab
                     style={{ padding: "13px 28px", background: "linear-gradient(130deg,#2E3D3F 0%,#3D5254 45%,#8B6914 78%,#C9AA71 100%)", color: "#fff", border: "none", borderRadius: 8, fontSize: "0.875rem", fontWeight: 700, letterSpacing: ".06em", textTransform: "uppercase", cursor: "pointer", transition: "background .2s", display: "flex", alignItems: "center", gap: 8, justifyContent: "center" }}
                     onMouseEnter={e => e.currentTarget.style.background = "#8B6914"}
                     onMouseLeave={e => e.currentTarget.style.background = "#2E3D3F"}>
-                    💬 Kirim via WhatsApp
+                    Kirim via WhatsApp
                   </button>
                   <p style={{ fontSize: "0.8rem", color: "#7ab5cc", textAlign: "center" }}>Pesan akan diteruskan ke WhatsApp kami untuk respons lebih cepat.</p>
                 </div>
@@ -7193,7 +7193,7 @@ function TeamAdmin({ data, save, notify, uploadToCloudinary, embedded = false })
   return (
     <div className={embedded ? "" : "fade-in"}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24 }}>
-        {!embedded && <h1 style={{ fontSize: 24, fontWeight: 500, color: "#2E3D3F" }}>👥 Susunan Tim</h1>}
+        {!embedded && <h1 style={{ fontSize: 24, fontWeight: 500, color: "#2E3D3F" }}>Susunan Tim</h1>}
         {embedded && <div style={{ fontSize: 12, color: "#8B9A9C" }}>{members.length} anggota tim ditampilkan di halaman About.</div>}
         {!editId && <button onClick={openNew} style={{ padding: "10px 20px", background: "linear-gradient(130deg,#2E3D3F 0%,#3D5254 45%,#8B6914 78%,#C9AA71 100%)", color: "#fff", border: "none", borderRadius: 8, fontSize: 13, fontWeight: 700, cursor: "pointer" }}>+ Tambah Anggota</button>}
       </div>
@@ -7201,7 +7201,7 @@ function TeamAdmin({ data, save, notify, uploadToCloudinary, embedded = false })
       {/* Form Edit */}
       {editId && (
         <div style={{ background: "#fff", borderRadius: 12, padding: "28px", boxShadow: "0 4px 20px rgba(0,0,0,.08)", marginBottom: 28, borderTop: "4px solid #C9AA71" }}>
-          <h2 style={{ fontSize: 16, fontWeight: 700, color: "#2E3D3F", marginBottom: 20 }}>{editId === "new" ? "➕ Tambah Anggota Tim" : "✏ Edit Anggota Tim"}</h2>
+          <h2 style={{ fontSize: 16, fontWeight: 700, color: "#2E3D3F", marginBottom: 20 }}>{editId === "new" ? "Tambah Anggota Tim" : "Edit Anggota Tim"}</h2>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 16 }}>
             {[
               { label: "Nama *", key: "name", placeholder: "Budi Santoso" },
@@ -7224,7 +7224,7 @@ function TeamAdmin({ data, save, notify, uploadToCloudinary, embedded = false })
             <label style={{ display: "block", fontSize: 11, fontWeight: 600, color: "#5A6A6C", letterSpacing: "1px", textTransform: "uppercase", marginBottom: 6 }}>Foto</label>
             {form.photo && <img loading="lazy" src={form.photo} alt="preview" style={{ height: 80, width: 80, objectFit: "cover", borderRadius: "50%", marginBottom: 10, border: "2px solid #E8DCC8" }} />}
             <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-              <UploadButton label="📁 Upload Foto Tim"
+              <UploadButton label="Upload Foto Tim"
                 onDone={urls => { setForm(p => ({ ...p, photo: urls[0] })); notify("Foto berhasil diupload!"); }}
                 onError={msg => notify(msg, "error")} />
               <div style={{ fontSize: 11, color: "#7ab5cc", textAlign: "center" }}>— atau paste URL foto —</div>
@@ -7233,7 +7233,7 @@ function TeamAdmin({ data, save, notify, uploadToCloudinary, embedded = false })
             </div>
           </div>
           <div style={{ display: "flex", gap: 10 }}>
-            <button onClick={saveMember} style={{ padding: "10px 22px", background: "linear-gradient(130deg,#2E3D3F 0%,#3D5254 45%,#8B6914 78%,#C9AA71 100%)", color: "#fff", border: "none", borderRadius: 8, fontSize: 13, fontWeight: 700, cursor: "pointer" }}>💾 Simpan</button>
+            <button onClick={saveMember} style={{ padding: "10px 22px", background: "linear-gradient(130deg,#2E3D3F 0%,#3D5254 45%,#8B6914 78%,#C9AA71 100%)", color: "#fff", border: "none", borderRadius: 8, fontSize: 13, fontWeight: 700, cursor: "pointer" }}>Simpan</button>
             <button onClick={cancelEdit} style={{ padding: "10px 18px", background: "#FAF7F0", color: "#5A6A6C", border: "1px solid #D4C4A0", borderRadius: 8, fontSize: 13, cursor: "pointer" }}>Batal</button>
           </div>
         </div>
@@ -7244,7 +7244,7 @@ function TeamAdmin({ data, save, notify, uploadToCloudinary, embedded = false })
         {members.map(m => (
           <div key={m.id} style={{ background: "#fff", borderRadius: 12, padding: "20px", boxShadow: "0 2px 8px rgba(0,0,0,.06)", display: "flex", flexDirection: "column", gap: 12, alignItems: "center", textAlign: "center" }}>
             <div style={{ width: 72, height: 72, borderRadius: "50%", overflow: "hidden", background: "#FAF7F0", border: "2px solid #E8DCC8", flexShrink: 0 }}>
-              {m.photo ? <img loading="lazy" src={m.photo} alt={m.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 30 }}>👤</div>}
+              {m.photo ? <img loading="lazy" src={m.photo} alt={m.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 30 }}></div>}
             </div>
             <div>
               <div style={{ fontWeight: 700, color: "#2E3D3F", fontSize: 14 }}>{m.name}</div>
@@ -7252,14 +7252,14 @@ function TeamAdmin({ data, save, notify, uploadToCloudinary, embedded = false })
               {m.quotes && <div style={{ fontSize: 11, color: "#5A6A6C", fontStyle: "italic", marginTop: 6, lineHeight: 1.5, whiteSpace: "pre-line" }}>"{m.quotes}"</div>}
             </div>
             <div style={{ display: "flex", gap: 8 }}>
-              <button onClick={() => openEdit(m)} style={{ padding: "6px 14px", background: "#FAF7F0", color: "#C9AA71", border: "1px solid #E8DCC8", borderRadius: 6, fontSize: 12, fontWeight: 600, cursor: "pointer" }}>✏ Edit</button>
-              <button onClick={() => deleteMember(m.id)} style={{ padding: "6px 14px", background: "#fee", color: "#e74c3c", border: "1px solid #fecaca", borderRadius: 6, fontSize: 12, fontWeight: 600, cursor: "pointer" }}>🗑 Hapus</button>
+              <button onClick={() => openEdit(m)} style={{ padding: "6px 14px", background: "#FAF7F0", color: "#C9AA71", border: "1px solid #E8DCC8", borderRadius: 6, fontSize: 12, fontWeight: 600, cursor: "pointer" }}>Edit</button>
+              <button onClick={() => deleteMember(m.id)} style={{ padding: "6px 14px", background: "#fee", color: "#e74c3c", border: "1px solid #fecaca", borderRadius: 6, fontSize: 12, fontWeight: 600, cursor: "pointer" }}>Hapus</button>
             </div>
           </div>
         ))}
         {members.length === 0 && !editId && (
           <div style={{ gridColumn: "1/-1", textAlign: "center", padding: "60px 0", color: "#5A6A6C" }}>
-            <div style={{ fontSize: 40, marginBottom: 12 }}>👥</div>
+            <div style={{ fontSize: 40, marginBottom: 12 }}></div>
             <p>Belum ada anggota tim. Klik "+ Tambah Anggota" untuk mulai.</p>
           </div>
         )}
@@ -7329,9 +7329,9 @@ function AdvSection({ data, navigateTo }) {
 
           <div className="adv2-btns">
             {[
-              { label: "🏠 Desain Rumah", key: "desainrab" },
-              { label: "🛋️ Interior", key: "interior" },
-              { label: "🌳 Taman & Landscape", key: "landscape" },
+              { label: "Desain Rumah", key: "desainrab" },
+              { label: "Interior", key: "interior" },
+              { label: "Taman & Landscape", key: "landscape" },
             ].map(item => (
               <button key={item.key} className="adv2-btn-pill" onClick={() => navigateTo(item.key)}>
                 {item.label}
@@ -7987,7 +7987,7 @@ function ReviewForm({ token, onSubmitDone, data, save, notify, isLoading }) {
   const [photoUploading, setPhotoUploading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [err, setErr] = useState("");
-  // ⚠ Must be declared here (before any early return) to obey Rules of Hooks
+  // Must be declared here (before any early return) to obey Rules of Hooks
   const [photoUploadItem, setPhotoUploadItem] = useState(null); // {name, pct, done, error}
 
   // Tunggu data selesai load dari Firestore sebelum validasi token
@@ -8006,7 +8006,7 @@ function ReviewForm({ token, onSubmitDone, data, save, notify, isLoading }) {
   if (!tokenObj) return (
     <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "#FAF7F0" }}>
       <div style={{ textAlign: "center", background: "#fff", borderRadius: 16, padding: "48px 40px", maxWidth: 400, boxShadow: "0 8px 40px rgba(0,0,0,.1)" }}>
-        <div style={{ fontSize: 56, marginBottom: 16 }}>❌</div>
+        <div style={{ fontSize: 56, marginBottom: 16 }}></div>
         <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.5rem", color: "#2E3D3F", marginBottom: 12 }}>Link Tidak Valid</h2>
         <p style={{ color: "#5A6A6C", fontSize: "0.9375rem", lineHeight: 1.7 }}>Link form ulasan ini tidak ditemukan atau sudah tidak berlaku.</p>
       </div>
@@ -8016,7 +8016,7 @@ function ReviewForm({ token, onSubmitDone, data, save, notify, isLoading }) {
   if (tokenObj.used) return (
     <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "#FAF7F0" }}>
       <div style={{ textAlign: "center", background: "#fff", borderRadius: 16, padding: "48px 40px", maxWidth: 400, boxShadow: "0 8px 40px rgba(0,0,0,.1)" }}>
-        <div style={{ fontSize: 56, marginBottom: 16 }}>⏰</div>
+        <div style={{ fontSize: 56, marginBottom: 16 }}></div>
         <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.5rem", color: "#2E3D3F", marginBottom: 12 }}>Link Sudah Digunakan</h2>
         <p style={{ color: "#5A6A6C", fontSize: "0.9375rem", lineHeight: 1.7 }}>Form ulasan ini sudah pernah diisi. Setiap link hanya bisa digunakan satu kali.</p>
       </div>
@@ -8026,7 +8026,7 @@ function ReviewForm({ token, onSubmitDone, data, save, notify, isLoading }) {
   if (step === "done") return (
     <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", background: "linear-gradient(135deg,#FAF7F0,#F5EDD8)" }}>
       <div style={{ textAlign: "center", background: "#fff", borderRadius: 20, padding: "56px 48px", maxWidth: 440, boxShadow: "0 16px 56px rgba(46,61,63,.12)" }}>
-        <div style={{ fontSize: 64, marginBottom: 20 }}>🎉</div>
+        <div style={{ fontSize: 64, marginBottom: 20 }}></div>
         <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.875rem", fontWeight: 900, color: "#2E3D3F", marginBottom: 14 }}>Terima Kasih!</h2>
         <p style={{ color: "#3D5254", fontSize: "1rem", lineHeight: 1.8 }}>Ulasan Anda telah berhasil dikirim. Kami sangat menghargai kepercayaan Anda kepada VASTURA GROUP.</p>
         <div style={{ width: 48, height: 3, background: "#8B6914", borderRadius: 2, margin: "28px auto 0" }} />
@@ -8085,7 +8085,7 @@ function ReviewForm({ token, onSubmitDone, data, save, notify, isLoading }) {
       <div style={{ background: "#fff", borderRadius: 20, padding: "48px 44px", maxWidth: 520, width: "100%", boxShadow: "0 16px 56px rgba(46,61,63,.12)" }}>
         {/* Header */}
         <div style={{ textAlign: "center", marginBottom: 36 }}>
-          <div style={{ width: 64, height: 64, borderRadius: "50%", background: "linear-gradient(130deg,#2E3D3F 0%,#3D5254 50%,#8B6914 100%)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 16px", fontSize: 28 }}>⭐</div>
+          <div style={{ width: 64, height: 64, borderRadius: "50%", background: "linear-gradient(130deg,#2E3D3F 0%,#3D5254 50%,#8B6914 100%)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 16px", fontSize: 28 }}></div>
           <h1 style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.75rem", fontWeight: 900, color: "#2E3D3F", marginBottom: 8 }}>Berikan Ulasan Anda</h1>
           <p style={{ color: "#5A6A6C", fontSize: "0.9375rem", lineHeight: 1.6 }}>Bagikan pengalaman Anda bersama {content_data.logoText?.replace("\n"," ") || "VASTURA GROUP"}</p>
           {tokenObj.label && <div style={{ marginTop: 10, display: "inline-block", background: "#FAF7F0", border: "1px solid #A89070", color: "#8B6914", fontSize: "0.75rem", fontWeight: 600, padding: "4px 14px", borderRadius: 20 }}>{tokenObj.label}</div>}
@@ -8097,7 +8097,7 @@ function ReviewForm({ token, onSubmitDone, data, save, notify, isLoading }) {
             <label style={{ fontSize: "0.75rem", fontWeight: 700, color: "#5A6A6C", letterSpacing: ".08em", textTransform: "uppercase" }}>Foto Profil (Opsional)</label>
             <div style={{ display: "flex", alignItems: "flex-start", gap: 16 }}>
               <div style={{ width: 60, height: 60, borderRadius: "50%", background: form.photo ? "transparent" : "linear-gradient(135deg,#E8DCC8,#E8DCC8)", border: "2px solid #E8DCC8", overflow: "hidden", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                {form.photo ? <img loading="lazy" src={form.photo} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : <span style={{ fontSize: 24 }}>👤</span>}
+                {form.photo ? <img loading="lazy" src={form.photo} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : <span style={{ fontSize: 24 }}></span>}
               </div>
               <div style={{ flex: 1 }}>
                 <input type="file" accept="image/*" onChange={e => handlePhotoUpload(e.target.files?.[0])}
@@ -8107,7 +8107,7 @@ function ReviewForm({ token, onSubmitDone, data, save, notify, isLoading }) {
                   <div style={{ marginTop: 6 }}>
                     <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 3 }}>
                       <span style={{ fontSize: 11, fontWeight: 600, color: photoUploadItem.error ? "#e74c3c" : "#2E3D3F", maxWidth: 180, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                        {photoUploadItem.error ? "❌ " : photoUploadItem.done ? "✅ " : "📤 "}{photoUploadItem.name}
+                        {photoUploadItem.error ? "" : photoUploadItem.done ? "" : ""}{photoUploadItem.name}
                       </span>
                       <span style={{ fontSize: 11, fontWeight: 800, color: photoUploadItem.error ? "#e74c3c" : photoUploadItem.done ? "#27ae60" : "#8B6914" }}>
                         {photoUploadItem.error ? "Gagal" : photoUploadItem.done ? "Selesai" : `${photoUploadItem.pct}%`}
@@ -8150,7 +8150,7 @@ function ReviewForm({ token, onSubmitDone, data, save, notify, isLoading }) {
                 <button key={s} onClick={() => setForm(p => ({ ...p, stars: s }))}
                   style={{ fontSize: 32, background: "none", border: "none", cursor: "pointer", transition: "transform .15s", filter: s <= form.stars ? "none" : "grayscale(1) opacity(.3)" }}
                   onMouseEnter={e => e.currentTarget.style.transform = "scale(1.2)"}
-                  onMouseLeave={e => e.currentTarget.style.transform = "scale(1)"}>⭐</button>
+                  onMouseLeave={e => e.currentTarget.style.transform = "scale(1)"}></button>
               ))}
               <span style={{ fontSize: "0.875rem", color: "#5A6A6C", alignSelf: "center", marginLeft: 6 }}>
                 {["","Sangat Buruk","Buruk","Cukup","Bagus","Sangat Bagus"][form.stars]}
@@ -8174,7 +8174,7 @@ function ReviewForm({ token, onSubmitDone, data, save, notify, isLoading }) {
 
           <button onClick={handleSubmit} disabled={submitting || photoUploading}
             style={{ padding: "14px", background: submitting ? "#5A6A6C" : "linear-gradient(135deg,#2E3D3F,#8B6914)", color: "#fff", border: "none", borderRadius: 10, fontSize: "0.9375rem", fontWeight: 700, letterSpacing: ".05em", cursor: submitting ? "not-allowed" : "pointer", transition: "opacity .2s" }}>
-            {submitting ? "⏳ Mengirim..." : "✨ Kirim Ulasan"}
+            {submitting ? "Mengirim..." : "Kirim Ulasan"}
           </button>
         </div>
       </div>
@@ -8265,7 +8265,7 @@ function ReviewSlideshow({ reviews }) {
             <div style={{ display: "inline-flex", alignItems: "center", gap: 10, background: "rgba(255,255,255,.12)", border: "1px solid rgba(255,255,255,.2)", borderRadius: 40, padding: "10px 24px", backdropFilter: "blur(8px)", boxShadow: "0 4px 16px rgba(0,0,0,.2)" }}>
               <span style={{ fontSize: "1.5rem", fontWeight: 900, fontFamily: "'Playfair Display',serif", color: "#fff" }}>{avg.toFixed(1)}</span>
               <div style={{ display: "flex", gap: 2 }}>
-                {[1,2,3,4,5].map(s => <span key={s} style={{ fontSize: 16, filter: s <= Math.round(avg) ? "none" : "grayscale(1) opacity(.3)" }}>⭐</span>)}
+                {[1,2,3,4,5].map(s => <span key={s} style={{ fontSize: 16, filter: s <= Math.round(avg) ? "none" : "grayscale(1) opacity(.3)" }}></span>)}
               </div>
               <span style={{ fontSize: "0.8125rem", color: "rgba(255,255,255,.7)", fontWeight: 500 }}>{reviews.length} ulasan</span>
             </div>
@@ -8347,7 +8347,7 @@ function ReviewCard({ review }) {
       {/* Stars */}
       <div style={{ display: "flex", gap: 3 }}>
         {[1,2,3,4,5].map(s => (
-          <span key={s} style={{ fontSize: 14, filter: s <= stars ? "none" : "grayscale(1) opacity(.25)" }}>⭐</span>
+          <span key={s} style={{ fontSize: 14, filter: s <= stars ? "none" : "grayscale(1) opacity(.25)" }}></span>
         ))}
       </div>
       {/* Quote */}
@@ -8429,7 +8429,7 @@ function AboutTextField({ data, save, notify, label, fieldKey, multiline, placeh
         <button onClick={() => {
           const val = document.getElementById(fieldId)?.value ?? "";
           save({ ...data, content: { ...data.content, [fieldKey]: val.trim() } });
-          notify(`✅ ${label} disimpan!`);
+          notify(`${label} disimpan!`);
         }} style={{ padding: "7px 18px", background: accent, color: "#fff", borderRadius: 6, fontSize: 12, border: "none", fontWeight: 600, cursor: "pointer" }}>Simpan</button>
       </div>
     </div>
@@ -8458,7 +8458,7 @@ function AboutStatsEditor({ data, save, notify }) {
             <input defaultValue={s.label} onBlur={e => patch(idx, "label", e.target.value)} placeholder="Klien Puas"
               style={{ width: "100%", padding: "6px 8px", border: "1px solid #D4C4A0", borderRadius: 5, fontSize: 12, marginBottom: 6, boxSizing: "border-box" }} />
             <button onClick={() => removeItem(idx)}
-              style={{ width: "100%", padding: "5px", background: "none", color: "#e74c3c", border: "1px solid #e74c3c", borderRadius: 5, fontSize: 10, cursor: "pointer" }}>🗑 Hapus</button>
+              style={{ width: "100%", padding: "5px", background: "none", color: "#e74c3c", border: "1px solid #e74c3c", borderRadius: 5, fontSize: 10, cursor: "pointer" }}>Hapus</button>
           </div>
         ))}
       </div>
@@ -8488,7 +8488,7 @@ function AboutMisiEditor({ data, save, notify }) {
           <input defaultValue={m} onBlur={e => patch(idx, e.target.value)}
             style={{ flex: 1, padding: "8px 10px", border: "1px solid #D4C4A0", borderRadius: 6, fontSize: 13, boxSizing: "border-box" }} />
           <button onClick={() => removeItem(idx)}
-            style={{ padding: "7px 10px", background: "none", color: "#e74c3c", border: "1px solid #e74c3c", borderRadius: 5, fontSize: 11, cursor: "pointer", flexShrink: 0 }}>🗑</button>
+            style={{ padding: "7px 10px", background: "none", color: "#e74c3c", border: "1px solid #e74c3c", borderRadius: 5, fontSize: 11, cursor: "pointer", flexShrink: 0 }}></button>
         </div>
       ))}
       <button onClick={addItem} style={{ padding: "8px 16px", background: "#8B6914", color: "#fff", border: "none", borderRadius: 6, fontSize: 12, fontWeight: 700, cursor: "pointer", marginTop: 6 }}>+ Tambah Poin Misi</button>
@@ -8506,7 +8506,7 @@ function AboutWhyUsEditor({ data, save, notify }) {
     next[idx][field] = val;
     save({ ...data, aboutWhyList: next });
   };
-  const addItem = () => save({ ...data, aboutWhyList: [...list, { icon: "⭐", title: "Keunggulan Baru", desc: "Deskripsi singkat keunggulan." }] });
+  const addItem = () => save({ ...data, aboutWhyList: [...list, { icon: "", title: "Keunggulan Baru", desc: "Deskripsi singkat keunggulan." }] });
   const removeItem = (idx) => save({ ...data, aboutWhyList: list.filter((_, i) => i !== idx) });
 
   return (
@@ -8514,7 +8514,7 @@ function AboutWhyUsEditor({ data, save, notify }) {
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(220px,1fr))", gap: 10, marginBottom: 12 }}>
         {list.map((v, idx) => (
           <div key={idx} style={{ background: "#FAF7F0", borderRadius: 8, padding: 10, border: "1px solid #E8DCC8" }}>
-            <input defaultValue={v.icon} onBlur={e => patch(idx, "icon", e.target.value)} placeholder="🌟"
+            <input defaultValue={v.icon} onBlur={e => patch(idx, "icon", e.target.value)} placeholder=""
               style={{ width: "100%", padding: "6px 8px", border: "1px solid #D4C4A0", borderRadius: 5, fontSize: 18, marginBottom: 6, boxSizing: "border-box", textAlign: "center" }} />
             <input defaultValue={v.title} onBlur={e => patch(idx, "title", e.target.value)} placeholder="Judul keunggulan"
               style={{ width: "100%", padding: "6px 8px", border: "1px solid #D4C4A0", borderRadius: 5, fontSize: 12, fontWeight: 700, marginBottom: 6, boxSizing: "border-box" }} />
@@ -8523,7 +8523,7 @@ function AboutWhyUsEditor({ data, save, notify }) {
               onInput={e => autoGrowTextarea(e.target)}
               style={{ width: "100%", padding: "6px 8px", border: "1px solid #D4C4A0", borderRadius: 5, fontSize: 11, marginBottom: 6, boxSizing: "border-box", resize: "none", overflow: "hidden", fontFamily: "inherit" }} />
             <button onClick={() => removeItem(idx)}
-              style={{ width: "100%", padding: "5px", background: "none", color: "#e74c3c", border: "1px solid #e74c3c", borderRadius: 5, fontSize: 10, cursor: "pointer" }}>🗑 Hapus</button>
+              style={{ width: "100%", padding: "5px", background: "none", color: "#e74c3c", border: "1px solid #e74c3c", borderRadius: 5, fontSize: 10, cursor: "pointer" }}>Hapus</button>
           </div>
         ))}
       </div>
@@ -8550,8 +8550,8 @@ function AboutLayananCardEditor({ index, item, data, save, notify, uploadToCloud
 
   const doSaveText = async () => {
     setSaving(true);
-    try { await patchAndSave({ title, desc, icon }); notify("✅ Kartu layanan diperbarui!"); }
-    catch { notify("❌ Gagal menyimpan.", "error"); }
+    try { await patchAndSave({ title, desc, icon }); notify("Kartu layanan diperbarui!"); }
+    catch { notify("Gagal menyimpan.", "error"); }
     setSaving(false);
   };
 
@@ -8569,11 +8569,11 @@ function AboutLayananCardEditor({ index, item, data, save, notify, uploadToCloud
       ) : (
         <div style={{ width: "100%", height: 110, background: "#E8DCC8", borderRadius: 6, marginBottom: 8, display: "flex", alignItems: "center", justifyContent: "center", color: "#5A6A6C", fontSize: 11 }}>Belum ada foto</div>
       )}
-      <UploadButton label="📁 Ganti Foto"
+      <UploadButton label="Ganti Foto"
         style={{ fontSize: 11, padding: "6px 10px", marginBottom: 8, width: "100%", justifyContent: "center" }}
-        onDone={urls => { patchAndSave({ img: urls[0] }); notify("✅ Foto kartu layanan diperbarui!"); }}
+        onDone={urls => { patchAndSave({ img: urls[0] }); notify("Foto kartu layanan diperbarui!"); }}
         onError={() => notify("Gagal upload.", "error")} />
-      <input value={icon} onChange={e => setIcon(e.target.value)} placeholder="Icon (mis. 🛋️)"
+      <input value={icon} onChange={e => setIcon(e.target.value)} placeholder="Icon (mis.)"
         style={{ width: "100%", padding: "7px 9px", border: "1px solid #D4C4A0", borderRadius: 5, fontSize: 16, marginBottom: 6, boxSizing: "border-box", textAlign: "center" }} />
       <input value={title} onChange={e => setTitle(e.target.value)} placeholder="Judul layanan"
         style={{ width: "100%", padding: "7px 9px", border: "1px solid #D4C4A0", borderRadius: 5, fontSize: 12, marginBottom: 6, boxSizing: "border-box", fontWeight: 700 }} />
@@ -8584,10 +8584,10 @@ function AboutLayananCardEditor({ index, item, data, save, notify, uploadToCloud
       <div style={{ display: "flex", gap: 6 }}>
         <button onClick={doSaveText} disabled={saving}
           style={{ flex: 1, padding: "6px", background: "#C9AA71", color: "#fff", border: "none", borderRadius: 5, fontSize: 11, fontWeight: 700, cursor: "pointer" }}>
-          {saving ? "..." : "💾 Simpan Teks"}
+          {saving ? "..." : "Simpan Teks"}
         </button>
         <button onClick={doRemove}
-          style={{ padding: "6px 10px", background: "none", color: "#e74c3c", border: "1px solid #e74c3c", borderRadius: 5, fontSize: 11, cursor: "pointer" }}>🗑</button>
+          style={{ padding: "6px 10px", background: "none", color: "#e74c3c", border: "1px solid #e74c3c", borderRadius: 5, fontSize: 11, cursor: "pointer" }}></button>
       </div>
     </div>
   );
@@ -8598,11 +8598,11 @@ function AboutLayananListEditor({ data, save, notify, uploadToCloudinary }) {
 
   const addItem = () => {
     const next = list.map(x => ({ ...x }));
-    next.push({ icon: "🛠", title: "Layanan Baru", desc: "Deskripsi singkat layanan.", img: "", slug: "" });
+    next.push({ icon: "", title: "Layanan Baru", desc: "Deskripsi singkat layanan.", img: "", slug: "" });
     save({ ...data, aboutLayananList: next });
-    notify("✅ Kartu layanan baru ditambahkan!");
+    notify("Kartu layanan baru ditambahkan!");
   };
-  const resetDefault = () => { save({ ...data, aboutLayananList: [] }); notify("🔄 Direset ke kartu layanan default."); };
+  const resetDefault = () => { save({ ...data, aboutLayananList: [] }); notify("Direset ke kartu layanan default."); };
 
   return (
     <div>
@@ -8613,7 +8613,7 @@ function AboutLayananListEditor({ data, save, notify, uploadToCloudinary }) {
       </div>
       <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
         <button onClick={addItem} style={{ padding: "9px 16px", background: "#2ecc71", color: "#fff", border: "none", borderRadius: 6, fontSize: 12, fontWeight: 700, cursor: "pointer" }}>+ Tambah Kartu Layanan</button>
-        <button onClick={resetDefault} style={{ padding: "9px 16px", background: "#6c757d", color: "#fff", border: "none", borderRadius: 6, fontSize: 12, fontWeight: 700, cursor: "pointer" }}>🔄 Reset ke Default</button>
+        <button onClick={resetDefault} style={{ padding: "9px 16px", background: "#6c757d", color: "#fff", border: "none", borderRadius: 6, fontSize: 12, fontWeight: 700, cursor: "pointer" }}>Reset ke Default</button>
       </div>
     </div>
   );
@@ -8626,7 +8626,7 @@ function AboutHeroBgEditor({ data, save, notify }) {
     const next = [heroImgs[0] || "", heroImgs[1] || "", heroImgs[2] || "", heroImgs[3] || ""];
     next[idx] = urls[0];
     save({ ...data, images: { ...data.images, hero: next } });
-    notify("✅ Foto Background Hero diperbarui!");
+    notify("Foto Background Hero diperbarui!");
   };
   return (
     <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(130px,1fr))", gap: 10 }}>
@@ -8637,7 +8637,7 @@ function AboutHeroBgEditor({ data, save, notify }) {
           ) : (
             <div style={{ width: "100%", height: 78, background: "#E8DCC8", borderRadius: 5, marginBottom: 6, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, color: "#8B9A9C" }}>Foto {idx + 1}</div>
           )}
-          <UploadButton label="📁 Ganti"
+          <UploadButton label="Ganti"
             style={{ fontSize: 10, padding: "5px 8px", width: "100%", justifyContent: "center" }}
             onDone={urls => handleUpload(idx, urls)} onError={() => notify("Gagal upload.", "error")} />
         </div>
@@ -8651,7 +8651,7 @@ function AboutPageAdmin({ data, save, notify, uploadToCloudinary }) {
   return (
     <div className="fade-in" style={{ maxWidth: 860 }}>
       <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 24 }}>
-        <span style={{ fontSize: 30 }}>📄</span>
+        <span style={{ fontSize: 30 }}></span>
         <div>
           <h1 style={{ fontSize: 22, fontWeight: 800, color: "#2E3D3F", margin: 0 }}>Setting Halaman About</h1>
           <p style={{ fontSize: 13, color: "#8B9A9C", margin: "3px 0 0" }}>
@@ -8660,7 +8660,7 @@ function AboutPageAdmin({ data, save, notify, uploadToCloudinary }) {
         </div>
       </div>
 
-      <AboutAdminSection title="🖼 Hero & Background" accent="#8B6914"
+      <AboutAdminSection title="Hero & Background" accent="#8B6914"
         desc="Label kecil, judul besar, dan deskripsi yang tampil di bagian paling atas halaman About. Background Hero adalah 4 foto grid yang juga dipakai sebagai Hero Slideshow di halaman Home.">
         <AboutTextField data={data} save={save} notify={notify} label="Hero — Label Kecil" fieldKey="aboutHeroLabel" placeholder="Tentang Kami" />
         <AboutTextField data={data} save={save} notify={notify} label="Hero — Judul Utama" fieldKey="aboutHeroTitle" placeholder="Membangun Hunian, Mewujudkan Impian" />
@@ -8672,12 +8672,12 @@ function AboutPageAdmin({ data, save, notify, uploadToCloudinary }) {
         </div>
       </AboutAdminSection>
 
-      <AboutAdminSection title="📊 Statistik (Stats Strip)" accent="#3D5254"
+      <AboutAdminSection title="Statistik (Stats Strip)" accent="#3D5254"
         desc='Angka pencapaian yang tampil sebagai strip di bawah Hero, misalnya "500+ Klien Puas".'>
         <AboutStatsEditor data={data} save={save} notify={notify} />
       </AboutAdminSection>
 
-      <AboutAdminSection title="🎯 Visi & Misi" accent="#2E3D3F" desc="Teks Visi perusahaan dan daftar poin Misi.">
+      <AboutAdminSection title="Visi & Misi" accent="#2E3D3F" desc="Teks Visi perusahaan dan daftar poin Misi.">
         <AboutTextField data={data} save={save} notify={notify} label="Visi Kami" fieldKey="aboutVisiText" multiline accent="#2E3D3F" />
         <div style={{ marginTop: 14 }}>
           <div style={{ fontSize: 11, fontWeight: 700, color: "#5A6A6C", letterSpacing: "0.8px", textTransform: "uppercase", marginBottom: 8 }}>Misi Kami (Daftar Poin)</div>
@@ -8685,7 +8685,7 @@ function AboutPageAdmin({ data, save, notify, uploadToCloudinary }) {
         </div>
       </AboutAdminSection>
 
-      <AboutAdminSection title="⭐ Mengapa Memilih Kami" accent="#0a6ea0" desc="Label, judul section, dan kartu-kartu keunggulan (icon, judul, deskripsi).">
+      <AboutAdminSection title="Mengapa Memilih Kami" accent="#0a6ea0" desc="Label, judul section, dan kartu-kartu keunggulan (icon, judul, deskripsi).">
         <AboutTextField data={data} save={save} notify={notify} label="Label Kecil" fieldKey="aboutWhyLabel" placeholder="Keunggulan Kami" accent="#0a6ea0" />
         <AboutTextField data={data} save={save} notify={notify} label="Judul Section" fieldKey="aboutWhyTitle" placeholder="Mengapa Memilih VASTURA GROUP?" accent="#0a6ea0" />
         <div style={{ marginTop: 14 }}>
@@ -8693,7 +8693,7 @@ function AboutPageAdmin({ data, save, notify, uploadToCloudinary }) {
         </div>
       </AboutAdminSection>
 
-      <AboutAdminSection title="👥 Susunan Tim" accent="#8B6914" desc="Label, judul, dan daftar anggota tim (foto, nama, jabatan, kutipan) yang tampil di halaman About.">
+      <AboutAdminSection title="Susunan Tim" accent="#8B6914" desc="Label, judul, dan daftar anggota tim (foto, nama, jabatan, kutipan) yang tampil di halaman About.">
         <AboutTextField data={data} save={save} notify={notify} label="Label Kecil" fieldKey="aboutTeamLabel" placeholder="Orang-Orang di Balik Layanan" />
         <AboutTextField data={data} save={save} notify={notify} label="Judul Section" fieldKey="aboutTeamTitle" placeholder="Susunan Tim Kami" />
         <div style={{ marginTop: 14, background: "#FAF7F0", borderRadius: 10, padding: 16, border: "1px dashed #D5C9B0" }}>
@@ -8701,7 +8701,7 @@ function AboutPageAdmin({ data, save, notify, uploadToCloudinary }) {
         </div>
       </AboutAdminSection>
 
-      <AboutAdminSection title="🛠 Layanan Kami (Kartu di Halaman About)" accent="#C9AA71" desc="Label, judul, dan kartu-kartu layanan (icon, judul, deskripsi, foto) yang tampil di bagian bawah halaman About.">
+      <AboutAdminSection title="Layanan Kami (Kartu di Halaman About)" accent="#C9AA71" desc="Label, judul, dan kartu-kartu layanan (icon, judul, deskripsi, foto) yang tampil di bagian bawah halaman About.">
         <AboutTextField data={data} save={save} notify={notify} label="Label Kecil" fieldKey="aboutLayananLabel" placeholder="LAYANAN KAMI" />
         <AboutTextField data={data} save={save} notify={notify} label="Judul Section" fieldKey="aboutLayananTitle" placeholder="Layanan Terbaik Untuk Anda" />
         <div style={{ marginTop: 14 }}>
@@ -8757,9 +8757,9 @@ function SubLayananAdmin({
       try {
         const seeded = defaultItems.map((it, i) => ({ ...it, id: it.id || String(Date.now() + i) }));
         await save({ ...data, [crudKey]: seeded });
-        notify("✅ Data awal berhasil dimuat otomatis!");
+        notify("Data awal berhasil dimuat otomatis!");
         setSeedDone(true);
-      } catch { notify("⚠️ Gagal memuat data awal — coba refresh."); }
+      } catch { notify("Gagal memuat data awal — coba refresh."); }
       setSeeding(false);
     };
     run();
@@ -8773,9 +8773,9 @@ function SubLayananAdmin({
     try {
       const seeded = defaultItems.map((it, i) => ({ ...it, id: it.id || String(Date.now() + i) }));
       await save({ ...data, [crudKey]: seeded });
-      notify("✅ Data berhasil dimuat!");
+      notify("Data berhasil dimuat!");
       setSeedDone(true);
-    } catch { notify("❌ Gagal memuat data."); }
+    } catch { notify("Gagal memuat data."); }
     setSeeding(false);
   };
 
@@ -8786,8 +8786,8 @@ function SubLayananAdmin({
     try {
       const url = await uploadToCloudinary(file);
       setForm(p => ({ ...p, _img: url }));
-      notify("✅ Foto berhasil diupload!");
-    } catch { notify("❌ Gagal upload foto."); }
+      notify("Foto berhasil diupload!");
+    } catch { notify("Gagal upload foto."); }
     setUploading(false);
   };
 
@@ -8798,15 +8798,15 @@ function SubLayananAdmin({
     try {
       const url = await uploadToCloudinary(file);
       setForm(p => ({ ...p, imgs: [...(p.imgs || []), { img: url, label: "" }] }));
-      notify("✅ Foto galeri ditambahkan!");
-    } catch { notify("❌ Gagal upload foto galeri."); }
+      notify("Foto galeri ditambahkan!");
+    } catch { notify("Gagal upload foto galeri."); }
     setUploadingGallery(false);
   };
   const removeGalleryImg = (i) => setForm(p => ({ ...p, imgs: (p.imgs || []).filter((_, j) => j !== i) }));
 
   /* ── Simpan (tambah / edit) ── */
   const handleSave = async () => {
-    if (!form[crudFields[0]?.key]?.trim()) { notify("⚠️ Nama tidak boleh kosong."); return; }
+    if (!form[crudFields[0]?.key]?.trim()) { notify("Nama tidak boleh kosong."); return; }
     setSaving(true);
     try {
       let next;
@@ -8816,9 +8816,9 @@ function SubLayananAdmin({
         next = items.map(it => it.id === editItem.id ? { ...it, ...form } : it);
       }
       await save({ ...data, [crudKey]: next });
-      notify("✅ Tersimpan!");
+      notify("Tersimpan!");
       setMode("list"); setForm(emptyForm()); setEditItem(null);
-    } catch (err) { notify("❌ Gagal menyimpan: " + (err?.message || "Periksa koneksi.")); }
+    } catch (err) { notify("Gagal menyimpan: " + (err?.message || "Periksa koneksi.")); }
     finally { setSaving(false); }
   };
 
@@ -8826,9 +8826,9 @@ function SubLayananAdmin({
   const handleDelete = async (id) => {
     try {
       await save({ ...data, [crudKey]: items.filter(it => it.id !== id) });
-      notify("✅ Item dihapus.");
+      notify("Item dihapus.");
       setDelTarget(null);
-    } catch (err) { notify("❌ Gagal menghapus: " + (err?.message || "Periksa koneksi.")); }
+    } catch (err) { notify("Gagal menghapus: " + (err?.message || "Periksa koneksi.")); }
   };
 
   /* ── Buka form edit ── */
@@ -8896,7 +8896,7 @@ function SubLayananAdmin({
             transition: "background .15s" }}
           onMouseEnter={e => (e.currentTarget.style.background = "#FAF7F0")}
           onMouseLeave={e => (e.currentTarget.style.background = "#fff")}>
-          🔄 Reset ke Data Contoh Awal
+          Reset ke Data Contoh Awal
         </button>
       )}
 
@@ -8928,7 +8928,7 @@ function SubLayananAdmin({
                       transition: "transform .12s, box-shadow .12s" }}
                     onMouseEnter={e => { e.currentTarget.style.transform = "scale(1.06)"; e.currentTarget.style.boxShadow = `0 4px 12px ${accent}50`; }}
                     onMouseLeave={e => { e.currentTarget.style.transform = "scale(1)"; e.currentTarget.style.boxShadow = "none"; }}>
-                    ✏️ Edit
+                    Edit
                   </button>
                   <button onClick={() => setDelTarget(item.id)}
                     style={{ background: "#fef2f2", color: "#e74c3c", border: "1.5px solid #fca5a5",
@@ -8936,7 +8936,7 @@ function SubLayananAdmin({
                       transition: "all .12s" }}
                     onMouseEnter={e => { e.currentTarget.style.background = "#e74c3c"; e.currentTarget.style.color = "#fff"; }}
                     onMouseLeave={e => { e.currentTarget.style.background = "#fef2f2"; e.currentTarget.style.color = "#e74c3c"; }}>
-                    🗑
+                   
                   </button>
                 </div>
               </div>
@@ -8944,7 +8944,7 @@ function SubLayananAdmin({
               {/* Konfirmasi hapus */}
               {delTarget === item.id && (
                 <div style={{ background: "#fef2f2", borderTop: "1px solid #fca5a5", padding: "10px 14px", display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
-                  <span style={{ fontSize: 13, color: "#b91c1c", fontWeight: 600, flex: 1 }}>⚠️ Yakin ingin menghapus ini?</span>
+                  <span style={{ fontSize: 13, color: "#b91c1c", fontWeight: 600, flex: 1 }}>Yakin ingin menghapus ini?</span>
                   <button onClick={() => handleDelete(item.id)}
                     style={{ background: "#e74c3c", color: "#fff", border: "none", borderRadius: 7, padding: "7px 16px", fontSize: 13, fontWeight: 700, cursor: "pointer" }}>
                     Ya, Hapus
@@ -8971,7 +8971,7 @@ function SubLayananAdmin({
         ← Kembali ke daftar
       </button>
       <h2 style={{ fontSize: 18, fontWeight: 800, color: "#2E3D3F", marginBottom: 20, display: "flex", alignItems: "center", gap: 8 }}>
-        <span>{mode === "add" ? "＋" : "✏️"}</span>
+        <span>{mode === "add" ? "＋" : ""}</span>
         {mode === "add" ? `Tambah ${crudLabel || "Item"}` : `Edit: ${editItem?.nama || editItem?.[crudFields[0]?.key] || "Item"}`}
       </h2>
 
@@ -9002,7 +9002,7 @@ function SubLayananAdmin({
                             borderRadius: "50%", display: "inline-block", animation: "spin .7s linear infinite" }} />
                           Mengupload...
                         </>
-                      ) : "📷 Upload Foto"}
+                      ) : "Upload Foto"}
                     </span>
                   </div>
                   <input type="file" accept="image/*" style={{ display: "none" }} disabled={uploading}
@@ -9011,7 +9011,7 @@ function SubLayananAdmin({
                 {form._img && (
                   <button onClick={() => setForm(p => ({ ...p, _img: "" }))}
                     style={{ marginTop: 6, background: "none", border: "none", color: "#e74c3c", fontSize: 12, cursor: "pointer", padding: 0 }}>
-                    🗑 Hapus foto
+                    Hapus foto
                   </button>
                 )}
               </div>
@@ -9035,7 +9035,7 @@ function SubLayananAdmin({
               </div>
             )}
             <label style={{ display: "inline-block", padding: "8px 14px", background: uploadingGallery ? "#ccc" : "#3498db", color: "#fff", borderRadius: 8, fontSize: 12, fontWeight: 700, cursor: uploadingGallery ? "default" : "pointer" }}>
-              {uploadingGallery ? "⏳ Mengupload..." : "📷 Tambah Foto Galeri"}
+              {uploadingGallery ? "Mengupload..." : "Tambah Foto Galeri"}
               <input type="file" accept="image/*" style={{ display: "none" }} disabled={uploadingGallery} onChange={e => handleGalleryUpload(e.target.files?.[0])} />
             </label>
             <div style={{ fontSize: 11, color: "#8B9A9C", marginTop: 6 }}>
@@ -9105,7 +9105,7 @@ function AdminReviews({ data, save, notify }) {
     const link = `${window.location.origin}/UlasanPelayanan/${token}`;
     setGeneratedLink(link);
     setNewTokenLabel("");
-    notify("✅ Link ulasan berhasil dibuat!");
+    notify("Link ulasan berhasil dibuat!");
   };
 
   const deleteToken = (id) => {
@@ -9120,7 +9120,7 @@ function AdminReviews({ data, save, notify }) {
 
   const approveReview = (id) => {
     save({ ...data, reviews: reviews.map(r => r.id === id ? { ...r, approved: true } : r) });
-    notify("✅ Ulasan disetujui dan ditampilkan ke publik.");
+    notify("Ulasan disetujui dan ditampilkan ke publik.");
   };
 
   const rejectReview = (id) => {
@@ -9141,11 +9141,11 @@ function AdminReviews({ data, save, notify }) {
 
   return (
   <div className="fade-in">
-    <h1 style={{ fontSize: 24, fontWeight: 500, color: "#2E3D3F", marginBottom: 28 }}>⭐ Kelola Ulasan</h1>
+    <h1 style={{ fontSize: 24, fontWeight: 500, color: "#2E3D3F", marginBottom: 28 }}>Kelola Ulasan</h1>
 
     {/* Generate Review Link */}
     <div style={{ background: "#fff", borderRadius: 8, padding: "22px 24px", marginBottom: 24, boxShadow: "0 2px 8px rgba(0,0,0,.06)", borderTop: "4px solid #C9AA71" }}>
-      <h3 style={{ fontSize: 15, fontWeight: 600, color: "#2E3D3F", marginBottom: 6 }}>🔗 Buat Link Form Ulasan</h3>
+      <h3 style={{ fontSize: 15, fontWeight: 600, color: "#2E3D3F", marginBottom: 6 }}>Buat Link Form Ulasan</h3>
       <p style={{ fontSize: 12, color: "#5A6A6C", marginBottom: 16, lineHeight: 1.6 }}>
         Buat link sekali pakai untuk dikirimkan ke klien. Link hanya bisa digunakan satu kali — setelah diisi, link akan hangus otomatis.
       </p>
@@ -9166,7 +9166,7 @@ function AdminReviews({ data, save, notify }) {
           </div>
           <button onClick={() => { navigator.clipboard?.writeText(generatedLink); notify("Link disalin!"); }}
             style={{ padding: "7px 14px", background: "#8B6914", color: "#fff", borderRadius: 6, fontSize: 12, border: "none", fontWeight: 600, flexShrink: 0 }}>
-            📋 Salin
+            Salin
           </button>
         </div>
       )}
@@ -9174,14 +9174,14 @@ function AdminReviews({ data, save, notify }) {
 
     {/* Active Tokens */}
     <div style={{ background: "#fff", borderRadius: 8, padding: "22px 24px", marginBottom: 24, boxShadow: "0 2px 8px rgba(0,0,0,.06)" }}>
-      <h3 style={{ fontSize: 14, fontWeight: 600, color: "#2E3D3F", marginBottom: 14 }}>🔑 Token Aktif ({tokens.filter(t => !t.used).length})</h3>
+      <h3 style={{ fontSize: 14, fontWeight: 600, color: "#2E3D3F", marginBottom: 14 }}>Token Aktif ({tokens.filter(t => !t.used).length})</h3>
       {tokens.length === 0 ? (
         <p style={{ fontSize: 13, color: "#5A6A6C" }}>Belum ada token dibuat.</p>
       ) : (
         <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
           {tokens.slice().reverse().map(tok => (
             <div key={tok.id} style={{ display: "flex", alignItems: "center", gap: 12, padding: "10px 14px", background: tok.used ? "#f9f9f9" : "#FAF7F0", borderRadius: 8, border: `1px solid ${tok.used ? "#e8e8e8" : "#A89070"}` }}>
-              <span style={{ fontSize: 16 }}>{tok.used ? "✅" : "🔑"}</span>
+              <span style={{ fontSize: 16 }}>{tok.used ? "" : ""}</span>
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div style={{ fontSize: 13, fontWeight: 600, color: "#2E3D3F" }}>{tok.label || "—"}</div>
                 <div style={{ fontSize: 11, color: "#5A6A6C", fontFamily: "monospace", wordBreak: "break-all" }}>/UlasanPelayanan/{tok.token}</div>
@@ -9189,7 +9189,7 @@ function AdminReviews({ data, save, notify }) {
               </div>
               {!tok.used && (
                 <button onClick={() => { const l = `${window.location.origin}/UlasanPelayanan/${tok.token}`; navigator.clipboard?.writeText(l); notify("Link disalin!"); }}
-                  style={{ padding: "5px 10px", background: "#C9AA71", color: "#fff", borderRadius: 5, fontSize: 11, border: "none" }}>📋</button>
+                  style={{ padding: "5px 10px", background: "#C9AA71", color: "#fff", borderRadius: 5, fontSize: 11, border: "none" }}></button>
               )}
               <button onClick={() => deleteToken(tok.id)}
                 style={{ padding: "5px 10px", background: "#fee", color: "#e74c3c", borderRadius: 5, fontSize: 11, border: "none" }}>Hapus</button>
@@ -9202,7 +9202,7 @@ function AdminReviews({ data, save, notify }) {
     {/* Reviews List */}
     <div style={{ background: "#fff", borderRadius: 8, padding: "22px 24px", boxShadow: "0 2px 8px rgba(0,0,0,.06)" }}>
       <h3 style={{ fontSize: 14, fontWeight: 600, color: "#2E3D3F", marginBottom: 14 }}>
-        💬 Ulasan Masuk ({reviews.length})
+        Ulasan Masuk ({reviews.length})
         {reviews.filter(r => !r.approved).length > 0 && (
           <span style={{ marginLeft: 8, background: "#e74c3c", color: "#fff", borderRadius: 10, padding: "2px 8px", fontSize: 11, fontWeight: 700 }}>
             {reviews.filter(r => !r.approved).length} pending
@@ -9229,12 +9229,12 @@ function AdminReviews({ data, save, notify }) {
                       color: r.approved ? "#27ae60" : "#f39c12",
                       border: `1px solid ${r.approved ? "#27ae60" : "#f39c12"}40`
                     }}>
-                      {r.approved ? "✓ Tayang" : "⏳ Pending"}
+                      {r.approved ? "✓ Tayang" : "Pending"}
                     </span>
                     <span style={{ marginLeft: "auto", fontSize: 12, color: "#5A6A6C" }}>{r.date}</span>
                   </div>
                   <div style={{ display: "flex", gap: 2, marginBottom: 8 }}>
-                    {[1,2,3,4,5].map(s => <span key={s} style={{ fontSize: 13, filter: s <= r.stars ? "none" : "grayscale(1) opacity(.3)" }}>⭐</span>)}
+                    {[1,2,3,4,5].map(s => <span key={s} style={{ fontSize: 13, filter: s <= r.stars ? "none" : "grayscale(1) opacity(.3)" }}></span>)}
                   </div>
                   {editReviewId === r.id ? (
                     <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
@@ -9243,7 +9243,7 @@ function AdminReviews({ data, save, notify }) {
                       <div style={{ display: "flex", gap: 4 }}>
                         {[1,2,3,4,5].map(s => (
                           <button key={s} onClick={() => setEditReviewForm(p => ({ ...p, stars: s }))}
-                            style={{ fontSize: 18, background: "none", border: "none", cursor: "pointer", filter: s <= editReviewForm.stars ? "none" : "grayscale(1) opacity(.3)" }}>⭐</button>
+                            style={{ fontSize: 18, background: "none", border: "none", cursor: "pointer", filter: s <= editReviewForm.stars ? "none" : "grayscale(1) opacity(.3)" }}></button>
                         ))}
                       </div>
                       <textarea value={editReviewForm.content} onChange={e => setEditReviewForm(p => ({ ...p, content: e.target.value }))}
@@ -9258,18 +9258,18 @@ function AdminReviews({ data, save, notify }) {
                   ) : (
                     <p style={{ fontSize: 13, color: "#2E3D3F", lineHeight: 1.7, fontStyle: "italic", whiteSpace: "pre-line" }}>"{r.content}"</p>
                   )}
-                  {r.tokenLabel && <div style={{ marginTop: 6, fontSize: 11, color: "#8B6914", fontWeight: 500 }}>🏷 {r.tokenLabel}</div>}
+                  {r.tokenLabel && <div style={{ marginTop: 6, fontSize: 11, color: "#8B6914", fontWeight: 500 }}>{r.tokenLabel}</div>}
                 </div>
               </div>
               {editReviewId !== r.id && (
                 <div style={{ padding: "10px 20px", background: "#FDFAF4", borderTop: "1px solid #f0f4f8", display: "flex", gap: 8, flexWrap: "wrap" }}>
                   {r.approved ? (
-                    <button onClick={() => rejectReview(r.id)} style={{ padding: "5px 14px", background: "#fff8e1", color: "#f39c12", borderRadius: 5, fontSize: 12, border: "1px solid #f39c1240", fontWeight: 500 }}>👁 Sembunyikan</button>
+                    <button onClick={() => rejectReview(r.id)} style={{ padding: "5px 14px", background: "#fff8e1", color: "#f39c12", borderRadius: 5, fontSize: 12, border: "1px solid #f39c1240", fontWeight: 500 }}>Sembunyikan</button>
                   ) : (
-                    <button onClick={() => approveReview(r.id)} style={{ padding: "5px 14px", background: "#e8f8ef", color: "#27ae60", borderRadius: 5, fontSize: 12, border: "1px solid #27ae6040", fontWeight: 600 }}>✅ Setujui & Tayangkan</button>
+                    <button onClick={() => approveReview(r.id)} style={{ padding: "5px 14px", background: "#e8f8ef", color: "#27ae60", borderRadius: 5, fontSize: 12, border: "1px solid #27ae6040", fontWeight: 600 }}>Setujui & Tayangkan</button>
                   )}
-                  <button onClick={() => startEditReview(r)} style={{ padding: "5px 14px", background: "#F5EDD8", color: "#8B6914", borderRadius: 5, fontSize: 12, border: "none", fontWeight: 500 }}>✏ Edit</button>
-                  <button onClick={() => { if (window.confirm("Hapus ulasan ini?")) deleteReview(r.id); }} style={{ padding: "5px 14px", background: "#fee", color: "#e74c3c", borderRadius: 5, fontSize: 12, border: "none" }}>🗑 Hapus</button>
+                  <button onClick={() => startEditReview(r)} style={{ padding: "5px 14px", background: "#F5EDD8", color: "#8B6914", borderRadius: 5, fontSize: 12, border: "none", fontWeight: 500 }}>Edit</button>
+                  <button onClick={() => { if (window.confirm("Hapus ulasan ini?")) deleteReview(r.id); }} style={{ padding: "5px 14px", background: "#fee", color: "#e74c3c", borderRadius: 5, fontSize: 12, border: "none" }}>Hapus</button>
                 </div>
               )}
             </div>
@@ -9520,21 +9520,21 @@ function DesainRabPage({ onWaOpen }) {
   const [activePaket, setActivePaket] = useState(null);
 
   const PROSES = [
-    { no:"01", icon:"👥", label:"Konsultasi", desc:"Konsultasi kebutuhan, konsep desain & budget awal." },
-    { no:"02", icon:"📍", label:"Survey Lokasi", desc:"Survey lokasi untuk pengambilan data dan analisa." },
-    { no:"03", icon:"💡", label:"Konsep Desain", desc:"Pembuatan konsep desain sesuai kebutuhan Anda." },
-    { no:"04", icon:"✏️", label:"Revisi Desain", desc:"Revisi desain hingga sesuai dengan keinginan." },
-    { no:"05", icon:"📋", label:"Final Drawing", desc:"Penyelesaian gambar kerja dan dokumen lengkap." },
-    { no:"06", icon:"💰", label:"RAB & Estimasi", desc:"Perhitungan RAB detail dan estimasi biaya." },
+    { no:"01", icon:"", label:"Konsultasi", desc:"Konsultasi kebutuhan, konsep desain & budget awal." },
+    { no:"02", icon:"", label:"Survey Lokasi", desc:"Survey lokasi untuk pengambilan data dan analisa." },
+    { no:"03", icon:"", label:"Konsep Desain", desc:"Pembuatan konsep desain sesuai kebutuhan Anda." },
+    { no:"04", icon:"", label:"Revisi Desain", desc:"Revisi desain hingga sesuai dengan keinginan." },
+    { no:"05", icon:"", label:"Final Drawing", desc:"Penyelesaian gambar kerja dan dokumen lengkap." },
+    { no:"06", icon:"", label:"RAB & Estimasi", desc:"Perhitungan RAB detail dan estimasi biaya." },
   ];
 
   const DAPATKAN = [
-    { icon:"🏠", title:"Denah Ruangan", desc:"Denah arsitektur dengan ukuran yang presisi dan detail." },
-    { icon:"📄", title:"Gambar Kerja Lengkap", desc:"Gambar kerja teknis untuk panduan pelaksanaan konstruksi." },
-    { icon:"📐", title:"Tampak & Potongan", desc:"Tampak depan, samping, belakang dan potongan bangunan." },
-    { icon:"📊", title:"RAB Detail", desc:"Rincian anggaran biaya material dan upah secara transparan." },
-    { icon:"🖥️", title:"3D Rendering", desc:"Visualisasi 3D eksterior & interior realistis dan detail." },
-    { icon:"🔄", title:"Konsultasi & Revisi", desc:"Revisi desain fleksibel sampai Anda puas dengan hasilnya." },
+    { icon:"", title:"Denah Ruangan", desc:"Denah arsitektur dengan ukuran yang presisi dan detail." },
+    { icon:"", title:"Gambar Kerja Lengkap", desc:"Gambar kerja teknis untuk panduan pelaksanaan konstruksi." },
+    { icon:"", title:"Tampak & Potongan", desc:"Tampak depan, samping, belakang dan potongan bangunan." },
+    { icon:"", title:"RAB Detail", desc:"Rincian anggaran biaya material dan upah secara transparan." },
+    { icon:"", title:"3D Rendering", desc:"Visualisasi 3D eksterior & interior realistis dan detail." },
+    { icon:"", title:"Konsultasi & Revisi", desc:"Revisi desain fleksibel sampai Anda puas dengan hasilnya." },
   ];
 
   const GALERI = [
@@ -9592,7 +9592,7 @@ function DesainRabPage({ onWaOpen }) {
             </p>
             {/* Mini badges */}
             <div style={{ display:"flex", gap:18, flexWrap:"wrap", marginBottom:28 }}>
-              {[{i:"🏅",t:"Desain Berkualitas"},{i:"📊",t:"RAB Akurat & Transparan"},{i:"🔄",t:"Revisi Fleksibel"},{i:"⚡",t:"Pengerjaan Cepat"}].map((b,i)=>(
+              {[{i:"",t:"Desain Berkualitas"},{i:"",t:"RAB Akurat & Transparan"},{i:"",t:"Revisi Fleksibel"},{i:"",t:"Pengerjaan Cepat"}].map((b,i)=>(
                 <div key={i} style={{ display:"flex", alignItems:"center", gap:5, color:"rgba(255,255,255,.78)", fontSize:"0.75rem", fontWeight:600 }}>
                   <span style={{ fontSize:"0.9rem" }}>{b.i}</span>{b.t}
                 </div>
@@ -9602,7 +9602,7 @@ function DesainRabPage({ onWaOpen }) {
             <div style={{ display:"flex", gap:14, flexWrap:"wrap", alignItems:"center" }}>
               <button onClick={()=>onWaOpen&&onWaOpen(waMsg)}
                 style={{ padding:"12px 24px", background:"#C9AA71", color:"#1a2526", border:"none", borderRadius:7, fontSize:"0.9rem", fontWeight:800, cursor:"pointer", display:"flex", alignItems:"center", gap:8 }}>
-                KONSULTASI GRATIS 💬
+                KONSULTASI GRATIS
               </button>
               <button style={{ padding:"12px 20px", background:"transparent", color:"#fff", border:"none", fontSize:"0.85rem", fontWeight:600, cursor:"pointer", display:"flex", alignItems:"center", gap:8 }}>
                 <span style={{ width:32, height:32, borderRadius:"50%", border:"2px solid rgba(255,255,255,.6)", display:"inline-flex", alignItems:"center", justifyContent:"center", fontSize:"0.7rem" }}>▶</span>
@@ -9721,7 +9721,7 @@ function DesainRabPage({ onWaOpen }) {
                 <div style={{ padding:"12px 14px 14px", background:"#fff" }}>
                   <div style={{ fontWeight:800, fontSize:"0.8125rem", color:"#1a2526", lineHeight:1.35, marginBottom:4 }}>{g.label}</div>
                   <div style={{ display:"flex", alignItems:"center", gap:5, fontSize:"0.7rem", color:"#5A6A6C" }}>
-                    <span style={{ color:"#C9AA71", fontWeight:700 }}>📐</span> Luas {g.luas}
+                    <span style={{ color:"#C9AA71", fontWeight:700 }}></span> Luas {g.luas}
                   </div>
                 </div>
               </div>
@@ -9779,7 +9779,7 @@ function DesainRabPage({ onWaOpen }) {
               <p style={{ fontSize:"0.8rem", color:"rgba(255,255,255,.7)", lineHeight:1.65, marginBottom:22 }}>Kami siap menyesuaikan kebutuhan proyek Anda.</p>
               <button onClick={()=>onWaOpen&&onWaOpen({ key: "desainrab", vars: { judul_paket: "Custom" } })}
                 style={{ padding:"12px 16px", background:"#C9AA71", color:"#1a2526", border:"none", borderRadius:8, fontSize:"0.8rem", fontWeight:800, cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center", gap:8 }}>
-                KONSULTASI SEKARANG 💬
+                KONSULTASI SEKARANG
               </button>
             </div>
           </div>
@@ -9822,7 +9822,7 @@ function DesainRabPage({ onWaOpen }) {
           </div>
           <button onClick={()=>onWaOpen&&onWaOpen(waMsg)}
             style={{ padding:"14px 30px", background:"#C9AA71", color:"#1a2526", border:"none", borderRadius:8, fontSize:"0.95rem", fontWeight:800, cursor:"pointer", display:"flex", alignItems:"center", gap:10, whiteSpace:"nowrap", flexShrink:0 }}>
-            💬 KONSULTASI GRATIS
+            KONSULTASI GRATIS
           </button>
         </div>
       </section>
@@ -9843,8 +9843,8 @@ const TEMA_DATA = [
     id: 1, slug: "modern-minimalis", no: "01", nama: "Modern Minimalis",
     tagline: "Desain simpel, elegan, dan fungsional dengan garis tegas dan warna netral yang menciptakan kesan luas, bersih, dan modern.",
     fitur: [
-      { icon: "🏠", label: "Tampilan Modern" }, { icon: "📐", label: "Ruang Lebih Luas" },
-      { icon: "🔧", label: "Perawatan Mudah" }, { icon: "💰", label: "Biaya Efisien" },
+      { icon: "", label: "Tampilan Modern" }, { icon: "", label: "Ruang Lebih Luas" },
+      { icon: "", label: "Perawatan Mudah" }, { icon: "", label: "Biaya Efisien" },
     ],
     img: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=900&q=80",
     warna: "#C9AA71",
@@ -9861,10 +9861,10 @@ const TEMA_DATA = [
       denah: {
         desc: "Layout open-plan yang memaksimalkan sirkulasi udara dan cahaya alami. Ruang tamu, ruang makan, dan dapur terhubung tanpa sekat masif.",
         ruangan: [
-          { nama: "Ruang Tamu", ukuran: "5 × 6 m", ikon: "🛋️" }, { nama: "Ruang Makan", ukuran: "4 × 4 m", ikon: "🍽️" },
-          { nama: "Dapur", ukuran: "3 × 4 m", ikon: "🍳" }, { nama: "Master Bedroom", ukuran: "5 × 5 m", ikon: "🛏️" },
-          { nama: "Kamar 2", ukuran: "4 × 4 m", ikon: "🛏️" }, { nama: "Kamar Mandi", ukuran: "2 × 3 m", ikon: "🚿" },
-          { nama: "Teras Depan", ukuran: "3 × 2 m", ikon: "🏡" }, { nama: "Carport", ukuran: "3 × 6 m", ikon: "🚗" },
+          { nama: "Ruang Tamu", ukuran: "5 × 6 m", ikon: "" }, { nama: "Ruang Makan", ukuran: "4 × 4 m", ikon: "" },
+          { nama: "Dapur", ukuran: "3 × 4 m", ikon: "" }, { nama: "Master Bedroom", ukuran: "5 × 5 m", ikon: "" },
+          { nama: "Kamar 2", ukuran: "4 × 4 m", ikon: "" }, { nama: "Kamar Mandi", ukuran: "2 × 3 m", ikon: "" },
+          { nama: "Teras Depan", ukuran: "3 × 2 m", ikon: "" }, { nama: "Carport", ukuran: "3 × 6 m", ikon: "" },
         ],
       },
       harga: {
@@ -9880,8 +9880,8 @@ const TEMA_DATA = [
     id: 2, slug: "skandinavian", no: "02", nama: "Skandinavian",
     tagline: "Kombinasi warna terang, material alami, dan pencahayaan maksimal untuk menciptakan suasana hangat, nyaman, dan menenangkan.",
     fitur: [
-      { icon: "🌿", label: "Natural & Hangat" }, { icon: "💡", label: "Pencahayaan Optimal" },
-      { icon: "🛋️", label: "Ruang Nyaman" }, { icon: "✨", label: "Estetika Abadi" },
+      { icon: "", label: "Natural & Hangat" }, { icon: "", label: "Pencahayaan Optimal" },
+      { icon: "", label: "Ruang Nyaman" }, { icon: "", label: "Estetika Abadi" },
     ],
     img: "https://images.unsplash.com/photo-1449844908441-8829872d2607?w=900&q=80",
     warna: "#7a9e87",
@@ -9898,10 +9898,10 @@ const TEMA_DATA = [
       denah: {
         desc: "Konsep 'Hygge' — menciptakan sudut-sudut nyaman di setiap ruang. Reading nook, cozy corner, dan dapur yang menjadi jantung rumah.",
         ruangan: [
-          { nama: "Ruang Tamu", ukuran: "5 × 5 m", ikon: "🛋️" }, { nama: "Ruang Makan", ukuran: "4 × 3.5 m", ikon: "🍽️" },
-          { nama: "Dapur Hygge", ukuran: "3.5 × 4 m", ikon: "🍳" }, { nama: "Master Bedroom", ukuran: "4.5 × 5 m", ikon: "🛏️" },
-          { nama: "Kamar 2", ukuran: "3.5 × 4 m", ikon: "🛏️" }, { nama: "Reading Nook", ukuran: "2 × 2 m", ikon: "📚" },
-          { nama: "Kamar Mandi", ukuran: "2.5 × 3 m", ikon: "🚿" }, { nama: "Teras Belakang", ukuran: "4 × 3 m", ikon: "🌿" },
+          { nama: "Ruang Tamu", ukuran: "5 × 5 m", ikon: "" }, { nama: "Ruang Makan", ukuran: "4 × 3.5 m", ikon: "" },
+          { nama: "Dapur Hygge", ukuran: "3.5 × 4 m", ikon: "" }, { nama: "Master Bedroom", ukuran: "4.5 × 5 m", ikon: "" },
+          { nama: "Kamar 2", ukuran: "3.5 × 4 m", ikon: "" }, { nama: "Reading Nook", ukuran: "2 × 2 m", ikon: "" },
+          { nama: "Kamar Mandi", ukuran: "2.5 × 3 m", ikon: "" }, { nama: "Teras Belakang", ukuran: "4 × 3 m", ikon: "" },
         ],
       },
       harga: {
@@ -9917,8 +9917,8 @@ const TEMA_DATA = [
     id: 3, slug: "industrial", no: "03", nama: "Industrial",
     tagline: "Gaya maskulin dengan material ekspos seperti beton, besi, dan kayu yang menghadirkan kesan tegas, unik, dan berkarakter.",
     fitur: [
-      { icon: "⚡", label: "Kesan Maskulin" }, { icon: "🏗️", label: "Material Ekspos" },
-      { icon: "🛡️", label: "Tahan Lama" }, { icon: "🔩", label: "Desain Unik" },
+      { icon: "", label: "Kesan Maskulin" }, { icon: "", label: "Material Ekspos" },
+      { icon: "", label: "Tahan Lama" }, { icon: "", label: "Desain Unik" },
     ],
     img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=900&q=80",
     warna: "#6b7c8a",
@@ -9935,10 +9935,10 @@ const TEMA_DATA = [
       denah: {
         desc: "Open space besar tanpa banyak sekat — tipikal ruang industri yang dikonversi. Mezzanine sebagai ruang tidur atau kerja memberikan kedalaman visual yang dramatik.",
         ruangan: [
-          { nama: "Ruang Utama (Open)", ukuran: "8 × 10 m", ikon: "🏭" }, { nama: "Dapur Industrial", ukuran: "4 × 5 m", ikon: "🍳" },
-          { nama: "Master Bedroom", ukuran: "5 × 6 m", ikon: "🛏️" }, { nama: "Mezzanine / Studio", ukuran: "4 × 5 m", ikon: "🎨" },
-          { nama: "Kamar Mandi", ukuran: "3 × 3 m", ikon: "🚿" }, { nama: "Workshop / Garasi", ukuran: "6 × 5 m", ikon: "🔧" },
-          { nama: "Ruang Tamu", ukuran: "5 × 6 m", ikon: "🛋️" }, { nama: "Teras / Balkon", ukuran: "3 × 4 m", ikon: "🏗️" },
+          { nama: "Ruang Utama (Open)", ukuran: "8 × 10 m", ikon: "" }, { nama: "Dapur Industrial", ukuran: "4 × 5 m", ikon: "" },
+          { nama: "Master Bedroom", ukuran: "5 × 6 m", ikon: "" }, { nama: "Mezzanine / Studio", ukuran: "4 × 5 m", ikon: "" },
+          { nama: "Kamar Mandi", ukuran: "3 × 3 m", ikon: "" }, { nama: "Workshop / Garasi", ukuran: "6 × 5 m", ikon: "" },
+          { nama: "Ruang Tamu", ukuran: "5 × 6 m", ikon: "" }, { nama: "Teras / Balkon", ukuran: "3 × 4 m", ikon: "" },
         ],
       },
       harga: {
@@ -9954,8 +9954,8 @@ const TEMA_DATA = [
     id: 4, slug: "tropical-modern", no: "04", nama: "Tropical Modern",
     tagline: "Menggabungkan elemen alam dan desain modern untuk sirkulasi udara maksimal dan suasana yang sejuk serta menyegarkan.",
     fitur: [
-      { icon: "🌴", label: "Sejuk & Alami" }, { icon: "💨", label: "Sirkulasi Udara Baik" },
-      { icon: "⚡", label: "Hemat Energi" }, { icon: "🌞", label: "Nyaman Setiap Saat" },
+      { icon: "", label: "Sejuk & Alami" }, { icon: "", label: "Sirkulasi Udara Baik" },
+      { icon: "", label: "Hemat Energi" }, { icon: "", label: "Nyaman Setiap Saat" },
     ],
     img: "https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=900&q=80",
     warna: "#4a8c6f",
@@ -9972,10 +9972,10 @@ const TEMA_DATA = [
       denah: {
         desc: "Zoning yang memisahkan area publik dan privat dengan buffer tanaman. Ruang tengah terbuka ke halaman (courtyard). Teras menjadi ruang sosial utama.",
         ruangan: [
-          { nama: "Teras & Carport", ukuran: "5 × 6 m", ikon: "🌴" }, { nama: "Ruang Tamu", ukuran: "5 × 6 m", ikon: "🛋️" },
-          { nama: "Ruang Keluarga", ukuran: "5 × 5 m", ikon: "👨‍👩‍👧" }, { nama: "Dapur + Makan", ukuran: "4 × 6 m", ikon: "🍳" },
-          { nama: "Master Bedroom", ukuran: "5 × 5 m", ikon: "🛏️" }, { nama: "Kamar 2 & 3", ukuran: "3.5 × 4 m", ikon: "🛏️" },
-          { nama: "Kolam & Taman", ukuran: "4 × 6 m", ikon: "🌊" }, { nama: "Musholla", ukuran: "2.5 × 3 m", ikon: "🕌" },
+          { nama: "Teras & Carport", ukuran: "5 × 6 m", ikon: "" }, { nama: "Ruang Tamu", ukuran: "5 × 6 m", ikon: "" },
+          { nama: "Ruang Keluarga", ukuran: "5 × 5 m", ikon: "" }, { nama: "Dapur + Makan", ukuran: "4 × 6 m", ikon: "" },
+          { nama: "Master Bedroom", ukuran: "5 × 5 m", ikon: "" }, { nama: "Kamar 2 & 3", ukuran: "3.5 × 4 m", ikon: "" },
+          { nama: "Kolam & Taman", ukuran: "4 × 6 m", ikon: "" }, { nama: "Musholla", ukuran: "2.5 × 3 m", ikon: "" },
         ],
       },
       harga: {
@@ -9991,8 +9991,8 @@ const TEMA_DATA = [
     id: 5, slug: "luxury-modern", no: "05", nama: "Luxury Modern",
     tagline: "Desain eksklusif dengan detail premium, material berkualitas tinggi, dan tata ruang mewah yang memancarkan prestise.",
     fitur: [
-      { icon: "👑", label: "Eksklusif" }, { icon: "💎", label: "Material Premium" },
-      { icon: "🏆", label: "Detail Mewah" }, { icon: "⭐", label: "Prestise Tinggi" },
+      { icon: "", label: "Eksklusif" }, { icon: "", label: "Material Premium" },
+      { icon: "", label: "Detail Mewah" }, { icon: "", label: "Prestise Tinggi" },
     ],
     img: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=900&q=80",
     warna: "#8B6914",
@@ -10009,10 +10009,10 @@ const TEMA_DATA = [
       denah: {
         desc: "Layout mewah dengan foyer grand entrance, ruang tamu double-volume, ruang makan formal terpisah, dan home theater. Kamar utama dengan walk-in closet dan ensuite bathroom spa-grade.",
         ruangan: [
-          { nama: "Grand Foyer", ukuran: "4 × 5 m", ikon: "🚪" }, { nama: "Ruang Tamu (Double Vol.)", ukuran: "8 × 9 m", ikon: "🛋️" },
-          { nama: "Ruang Makan Formal", ukuran: "5 × 7 m", ikon: "🍽️" }, { nama: "Dapur Premium", ukuran: "5 × 5 m", ikon: "🍳" },
-          { nama: "Master Suite", ukuran: "7 × 8 m", ikon: "👑" }, { nama: "Walk-in Closet", ukuran: "4 × 4 m", ikon: "👗" },
-          { nama: "Home Theater", ukuran: "5 × 6 m", ikon: "🎬" }, { nama: "Kolam Renang", ukuran: "4 × 10 m", ikon: "🏊" },
+          { nama: "Grand Foyer", ukuran: "4 × 5 m", ikon: "" }, { nama: "Ruang Tamu (Double Vol.)", ukuran: "8 × 9 m", ikon: "" },
+          { nama: "Ruang Makan Formal", ukuran: "5 × 7 m", ikon: "" }, { nama: "Dapur Premium", ukuran: "5 × 5 m", ikon: "" },
+          { nama: "Master Suite", ukuran: "7 × 8 m", ikon: "" }, { nama: "Walk-in Closet", ukuran: "4 × 4 m", ikon: "" },
+          { nama: "Home Theater", ukuran: "5 × 6 m", ikon: "" }, { nama: "Kolam Renang", ukuran: "4 × 10 m", ikon: "" },
         ],
       },
       harga: {
@@ -10077,7 +10077,7 @@ function KalkulatorLuas({ tema }) {
 
       {/* Header */}
       <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 24 }}>
-        <span style={{ fontSize: 24 }}>🧮</span>
+        <span style={{ fontSize: 24 }}></span>
         <div>
           <div style={{ fontSize: "0.65rem", letterSpacing: "0.12em", textTransform: "uppercase", color: tema.warna, fontWeight: 800 }}>ESTIMASI BIAYA</div>
           <h3 style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.1rem", fontWeight: 800, margin: 0, color: "#fff" }}>Kalkulator Luas Lahan</h3>
@@ -10184,7 +10184,7 @@ function KalkulatorLuas({ tema }) {
         </div>
         {!fromDimensi && !adaLuasLangsung && !adaDimensi && (
           <div style={{ marginTop: 5, fontSize: "0.68rem", color: "#f87171" }}>
-            ⚠ Isi Panjang × Lebar atau Luas untuk melihat estimasi
+            Isi Panjang × Lebar atau Luas untuk melihat estimasi
           </div>
         )}
       </div>
@@ -10215,12 +10215,12 @@ function KalkulatorLuas({ tema }) {
       <div style={{ background: isCustom ? "rgba(255,255,255,.08)" : `rgba(${parseInt(tema.warna.slice(1,3),16)},${parseInt(tema.warna.slice(3,5),16)},${parseInt(tema.warna.slice(5,7),16)},.15)`, border: `1.5px solid ${valid ? tema.warna + "88" : "rgba(255,255,255,.15)"}`, borderRadius: 12, padding: "20px 22px" }}>
         {!valid ? (
           <div style={{ textAlign: "center", padding: "8px 0" }}>
-            <div style={{ fontSize: "1.6rem", marginBottom: 6 }}>📐</div>
+            <div style={{ fontSize: "1.6rem", marginBottom: 6 }}></div>
             <div style={{ fontSize: "0.82rem", color: "rgba(255,255,255,.45)" }}>Isi dimensi atau luas untuk melihat estimasi harga</div>
           </div>
         ) : isCustom ? (
           <div style={{ textAlign: "center" }}>
-            <div style={{ fontSize: "1.5rem", marginBottom: 8 }}>👑</div>
+            <div style={{ fontSize: "1.5rem", marginBottom: 8 }}></div>
             <div style={{ fontSize: "0.95rem", fontWeight: 700, color: "#fff" }}>Harga Konsultasi Eksklusif</div>
             <div style={{ fontSize: "0.78rem", color: "rgba(255,255,255,.6)", marginTop: 4 }}>Hubungi tim kami untuk penawaran ultra-luxury</div>
           </div>
@@ -10391,7 +10391,7 @@ function TemaPhotoSlideshow({ slug, nama, cmsData, duration = 3500, fallbackImg 
   };
 
   if (photos.length === 0) return (
-    <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", background: "#E8DCC8", fontSize: "2.5rem" }}>🏡</div>
+    <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", background: "#E8DCC8", fontSize: "2.5rem" }}></div>
   );
 
   const cur = photos[idx];
@@ -10408,7 +10408,7 @@ function TemaPhotoSlideshow({ slug, nama, cmsData, duration = 3500, fallbackImg 
     >
       {/* Image — tanpa key, jadi browser cuma ganti src elemen yang sama (tidak ada blank/kedip) */}
       {imgBroken ? (
-        <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", background: "#E8DCC8", fontSize: "2.5rem" }}>🏡</div>
+        <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", background: "#E8DCC8", fontSize: "2.5rem" }}></div>
       ) : (
         <img src={cur.img} alt={publicCaption(cur.label) || nama || "Foto tema rumah"}
           draggable={false}
@@ -10500,7 +10500,7 @@ function TemaDetailPage({ slug, onWaOpen, onBack, temaList }) {
   if (!tema) {
     return (
       <div style={{ minHeight: "60vh", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "80px 5%", textAlign: "center" }}>
-        <div style={{ fontSize: "3rem", marginBottom: 16 }}>🏠</div>
+        <div style={{ fontSize: "3rem", marginBottom: 16 }}></div>
         <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.4rem", fontWeight: 800, color: "#2E3D3F", margin: "0 0 10px" }}>Tema Rumah Tidak Ditemukan</h2>
         <p style={{ color: "#5A6A6C", fontSize: "0.9rem", maxWidth: 420, marginBottom: 24 }}>Link yang Anda buka mungkin salah, atau tema ini sudah tidak tersedia.</p>
         <button onClick={onBack} style={{ padding: "12px 28px", background: "#2E3D3F", color: "#fff", border: "none", borderRadius: 8, fontWeight: 700, fontSize: "0.85rem", cursor: "pointer" }}>
@@ -10531,7 +10531,7 @@ function TemaDetailPage({ slug, onWaOpen, onBack, temaList }) {
 
   if (!tema) return (
     <div style={{ textAlign: "center", padding: "80px 20px" }}>
-      <div style={{ fontSize: "3rem", marginBottom: 16 }}>🏡</div>
+      <div style={{ fontSize: "3rem", marginBottom: 16 }}></div>
       <h2 style={{ fontFamily: "'Playfair Display',serif", color: "#2E3D3F" }}>Tema tidak ditemukan</h2>
       <button onClick={onBack} style={{ marginTop: 16, padding: "10px 24px", background: "#2E3D3F", color: "#fff", border: "none", borderRadius: 8, cursor: "pointer" }}>← Kembali</button>
     </div>
@@ -10557,7 +10557,7 @@ function TemaDetailPage({ slug, onWaOpen, onBack, temaList }) {
         </button>
         <span className="tema-name-badge" style={{ fontSize: "0.74rem", color: "rgba(255,255,255,.45)", letterSpacing: ".06em", textTransform: "uppercase", fontWeight: 600, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{tema.no} · {tema.nama}</span>
         <button onClick={copyTemaLink} className="tema-share-btn" style={{ display: "flex", alignItems: "center", gap: 6, background: "rgba(255,255,255,.08)", border: "1px solid rgba(255,255,255,.2)", color: linkCopied ? "#8BD9A0" : "#fff", fontWeight: 700, fontSize: "0.72rem", cursor: "pointer", padding: "6px 12px", borderRadius: 20, letterSpacing: ".04em", whiteSpace: "nowrap", flexShrink: 0 }}>
-          <span>🔗</span> <span className="tema-share-label">{linkCopied ? "Link disalin!" : "Bagikan"}</span>
+          <span></span> <span className="tema-share-label">{linkCopied ? "Link disalin!" : "Bagikan"}</span>
         </button>
       </div>
       <style>{`
@@ -10606,7 +10606,7 @@ function TemaDetailPage({ slug, onWaOpen, onBack, temaList }) {
       {/* ════════ SECTION: EKSTERIOR ════════ */}
       <div style={{ padding: "48px 5% 56px", maxWidth: 1060, margin: "0 auto" }}>
         <div style={{ background: "rgba(255,255,255,.16)", backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)", borderRadius: 16, padding: "22px 26px", marginBottom: 28, display: "inline-block", maxWidth: "100%", boxSizing: "border-box" }}>
-          <SectionLabel icon="🏠" text="EKSTERIOR" color="#fff" />
+          <SectionLabel icon="" text="EKSTERIOR" color="#fff" />
           <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.7rem", fontWeight: 800, color: "#fff", margin: "0 0 14px", textShadow: "0 2px 10px rgba(0,0,0,.55)" }}>Tampak Luar {tema.nama}</h2>
           <p style={{ color: "#fff", lineHeight: 1.75, margin: 0, fontSize: "0.88rem", maxWidth: 720, textShadow: "0 1px 6px rgba(0,0,0,.55)", whiteSpace: "pre-line" }}>{tema.detail.exterior.desc}</p>
         </div>
@@ -10616,7 +10616,7 @@ function TemaDetailPage({ slug, onWaOpen, onBack, temaList }) {
           if (photos.length === 0) {
             return (
               <div style={{ textAlign: "center", padding: "50px 20px", background: "#FDFAF4", borderRadius: 14, border: "1px solid #F5EDD8", color: "#A89070", fontSize: "0.85rem" }}>
-                🏠 Foto eksterior belum tersedia untuk tema ini.
+                Foto eksterior belum tersedia untuk tema ini.
               </div>
             );
           }
@@ -10656,7 +10656,7 @@ function TemaDetailPage({ slug, onWaOpen, onBack, temaList }) {
       {(tema.videos && tema.videos.length > 0) && (
         <div style={{ padding: "0 5% 56px", maxWidth: 1060, margin: "0 auto" }}>
           <div style={{ background: "rgba(255,255,255,.16)", backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)", borderRadius: 16, padding: "22px 26px", marginBottom: 28, display: "inline-block", maxWidth: "100%", boxSizing: "border-box" }}>
-            <SectionLabel icon="🎬" text="VIDEO TUR RUMAH" color="#fff" />
+            <SectionLabel icon="" text="VIDEO TUR RUMAH" color="#fff" />
             <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.7rem", fontWeight: 800, color: "#fff", margin: 0, textShadow: "0 2px 10px rgba(0,0,0,.55)" }}>Lihat Langsung {tema.nama}</h2>
           </div>
           <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: 22 }}>
@@ -10677,7 +10677,7 @@ function TemaDetailPage({ slug, onWaOpen, onBack, temaList }) {
       {/* ════════ SECTION: DENAH RUANG ════════ */}
       <div style={{ background: "rgba(253,250,244,.94)", padding: "48px 5% 56px" }}>
         <div style={{ maxWidth: 1060, margin: "0 auto" }}>
-          <SectionLabel icon="📐" text="DENAH RUANG" />
+          <SectionLabel icon="" text="DENAH RUANG" />
           <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.7rem", fontWeight: 800, color: "#2E3D3F", margin: "0 0 12px" }}>Tata Ruang {tema.nama}</h2>
           <p style={{ color: "#5A6A6C", lineHeight: 1.7, maxWidth: 660, marginBottom: 28, fontSize: "0.88rem", whiteSpace: "pre-line" }}>{tema.detail.denah.desc}</p>
 
@@ -10686,7 +10686,7 @@ function TemaDetailPage({ slug, onWaOpen, onBack, temaList }) {
               lantai.imgs && lantai.imgs.length > 0 && (
                 <div key={li} style={{ marginBottom: 32 }}>
                   <div style={{ fontSize: "0.95rem", fontWeight: 800, color: "#2E3D3F", marginBottom: 12, display: "flex", alignItems: "center", gap: 8 }}>
-                    <span style={{ width: 26, height: 26, borderRadius: "50%", background: tema.warna + "22", color: tema.warna, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "0.8rem" }}>🏢</span>
+                    <span style={{ width: 26, height: 26, borderRadius: "50%", background: tema.warna + "22", color: tema.warna, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "0.8rem" }}></span>
                     {lantai.label}
                   </div>
                   <div style={{ display: "grid", gridTemplateColumns: lantai.imgs.length === 1 ? "1fr" : "repeat(auto-fit,minmax(320px,1fr))", gap: 16 }}>
@@ -10701,13 +10701,13 @@ function TemaDetailPage({ slug, onWaOpen, onBack, temaList }) {
             ))
           ) : (
             <div style={{ textAlign: "center", padding: "50px 20px", background: "#fff", borderRadius: 14, border: "1px solid #F5EDD8", color: "#A89070", fontSize: "0.85rem" }}>
-              📐 Foto denah belum tersedia untuk tema ini.
+              Foto denah belum tersedia untuk tema ini.
             </div>
           )}
 
           {/* Disclaimer */}
           <div style={{ marginTop: 24, display: "flex", alignItems: "flex-start", gap: 10, padding: "14px 18px", background: "#fff", borderRadius: 10, border: "1px solid #E8DCC8" }}>
-            <span style={{ fontSize: "1rem", flexShrink: 0, marginTop: 1 }}>ℹ️</span>
+            <span style={{ fontSize: "1rem", flexShrink: 0, marginTop: 1 }}></span>
             <p style={{ margin: 0, fontSize: "0.78rem", color: "#7A8A8C", lineHeight: 1.65 }}>
               <strong style={{ color: "#5A6A6C", fontWeight: 700 }}>Disclaimer: </strong>
               Denah hanya ilustrasi dan bisa berubah sesuai permintaan customer.
@@ -10719,7 +10719,7 @@ function TemaDetailPage({ slug, onWaOpen, onBack, temaList }) {
       {/* ════════ SECTION: HARGA & RAB ════════ */}
       <div style={{ padding: "48px 5% 56px", maxWidth: 1060, margin: "0 auto" }}>
         <div style={{ background: "rgba(255,255,255,.16)", backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)", borderRadius: 16, padding: "22px 26px", marginBottom: 28, display: "inline-block", maxWidth: "100%", boxSizing: "border-box" }}>
-          <SectionLabel icon="💰" text="PAKET HARGA" color="#fff" />
+          <SectionLabel icon="" text="PAKET HARGA" color="#fff" />
           <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.7rem", fontWeight: 800, color: "#fff", margin: "0 0 12px", textShadow: "0 2px 10px rgba(0,0,0,.55)" }}>Harga & RAB {tema.nama}</h2>
           <p style={{ color: "#fff", lineHeight: 1.7, maxWidth: 580, margin: 0, fontSize: "0.88rem", textShadow: "0 1px 6px rgba(0,0,0,.55)" }}>Pilih paket yang sesuai kebutuhan dan budget Anda.</p>
         </div>
@@ -10728,7 +10728,7 @@ function TemaDetailPage({ slug, onWaOpen, onBack, temaList }) {
             <div key={i} style={{ background: "#fff", borderRadius: 14, border: `2px solid ${i === 1 ? tema.warna : "#F5EDD8"}`, overflow: "hidden", boxShadow: i === 1 ? `0 8px 28px ${tema.warna}20` : "0 2px 10px rgba(0,0,0,.06)", transition: "all .25s" }}
               onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-3px)"; e.currentTarget.style.boxShadow = `0 12px 32px rgba(0,0,0,.1)`; }}
               onMouseLeave={e => { e.currentTarget.style.transform = ""; e.currentTarget.style.boxShadow = i === 1 ? `0 8px 28px ${tema.warna}20` : "0 2px 10px rgba(0,0,0,.06)"; }}>
-              {i === 1 && <div style={{ background: tema.warna, color: "#fff", fontSize: "0.62rem", fontWeight: 800, letterSpacing: ".1em", textTransform: "uppercase", textAlign: "center", padding: "5px" }}>⭐ PALING POPULER</div>}
+              {i === 1 && <div style={{ background: tema.warna, color: "#fff", fontSize: "0.62rem", fontWeight: 800, letterSpacing: ".1em", textTransform: "uppercase", textAlign: "center", padding: "5px" }}>PALING POPULER</div>}
               <div style={{ padding: "22px" }}>
                 <div style={{ fontSize: "0.65rem", fontWeight: 700, letterSpacing: ".1em", textTransform: "uppercase", color: tema.warna, marginBottom: 7 }}>PAKET {i === 0 ? "STANDAR" : i === 1 ? "PREMIUM" : "LUXURY"}</div>
                 <h3 style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.05rem", fontWeight: 800, color: "#2E3D3F", margin: "0 0 5px" }}>{p.nama}</h3>
@@ -10747,14 +10747,14 @@ function TemaDetailPage({ slug, onWaOpen, onBack, temaList }) {
                   ))}
                 </div>
                 <button onClick={() => onWaOpen && onWaOpen()} style={{ width: "100%", padding: "10px", borderRadius: 7, border: "none", background: i === 1 ? tema.warna : "linear-gradient(90deg,#2E3D3F,#3D5254)", color: "#fff", fontWeight: 700, fontSize: "0.82rem", cursor: "pointer" }}>
-                  💬 Konsultasi Paket Ini
+                  Konsultasi Paket Ini
                 </button>
               </div>
             </div>
           ))}
         </div>
         <div style={{ background: "#FDFAF4", borderRadius: 12, padding: "22px 26px", border: "1px solid #F5EDD8" }}>
-          <div style={{ fontWeight: 800, color: "#2E3D3F", marginBottom: 12, fontSize: "0.9rem" }}>📋 Catatan RAB & Harga</div>
+          <div style={{ fontWeight: 800, color: "#2E3D3F", marginBottom: 12, fontSize: "0.9rem" }}>Catatan RAB & Harga</div>
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
             {["Harga belum termasuk biaya IMB/PBG", "Harga belum termasuk biaya utilitas (air, listrik)", "Bahan material dapat diganti sesuai budget", "Harga valid per tahun berjalan, hubungi untuk update", "Pembayaran bertahap sesuai progress pekerjaan", "Garansi pekerjaan 6–12 bulan sesuai kontrak"].map((c, i) => (
               <div key={i} style={{ display: "flex", gap: 7, alignItems: "flex-start" }}>
@@ -10770,14 +10770,14 @@ function TemaDetailPage({ slug, onWaOpen, onBack, temaList }) {
       <div style={{ background: "rgba(253,250,244,.94)", padding: "48px 5% 56px" }}>
         <div style={{ maxWidth: 540, margin: "0 auto" }}>
           <div style={{ marginBottom: 28, textAlign: "center" }}>
-            <SectionLabel icon="🧮" text="ESTIMASI BIAYA" />
+            <SectionLabel icon="" text="ESTIMASI BIAYA" />
             <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.7rem", fontWeight: 800, color: "#2E3D3F", margin: "0 0 12px" }}>Kalkulator Lahan</h2>
             <p style={{ color: "#5A6A6C", lineHeight: 1.7, fontSize: "0.88rem" }}>Masukkan luas bangunan Anda untuk estimasi biaya paket {tema.nama}.</p>
           </div>
           <KalkulatorLuas tema={tema} />
           <div style={{ marginTop: 22, textAlign: "center" }}>
             <button onClick={() => onWaOpen && onWaOpen()} style={{ padding: "14px 32px", background: `linear-gradient(135deg,${tema.warna},#C9AA71)`, color: "#fff", border: "none", borderRadius: 8, fontWeight: 800, fontSize: "0.88rem", cursor: "pointer", letterSpacing: ".06em" }}>
-              💬 KONSULTASI GRATIS →
+              KONSULTASI GRATIS →
             </button>
             <p style={{ fontSize: "0.72rem", color: "#5A6A6C", marginTop: 10 }}>Gratis konsultasi · Respon cepat · Solusi tepat</p>
           </div>
@@ -10801,7 +10801,7 @@ function TemaDetailPage({ slug, onWaOpen, onBack, temaList }) {
           Konsultasikan kebutuhan desain rumah Anda dengan tim profesional kami. Gratis, cepat, dan tepat sasaran.
         </p>
         <button onClick={() => onWaOpen && onWaOpen()} style={{ padding: "15px 34px", background: tema.warna, color: "#fff", border: "none", borderRadius: 7, fontWeight: 800, fontSize: "0.9rem", cursor: "pointer", letterSpacing: ".08em", textTransform: "uppercase", boxShadow: `0 8px 22px ${tema.warna}44` }}>
-          💬 KONSULTASI GRATIS
+          KONSULTASI GRATIS
         </button>
       </div>
     </div>
@@ -10875,7 +10875,7 @@ function TemaRumahPage({ onWaOpen, temaSlug, openTemaDetail, closeTemaDetail, cm
           </p>
           <div style={{ display: "flex", gap: 14, flexWrap: "wrap", alignItems: "center" }}>
             <button onClick={() => onWaOpen && onWaOpen()} style={{ display: "flex", alignItems: "center", gap: 8, padding: "13px 26px", background: "#C9AA71", color: "#fff", border: "none", borderRadius: 4, fontWeight: 800, fontSize: "0.78rem", cursor: "pointer", letterSpacing: ".1em", textTransform: "uppercase", boxShadow: "0 4px 18px rgba(201,170,113,.4)" }}>
-              💬 {heroBtn}
+              {heroBtn}
             </button>
             <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
               <span style={{ width: 40, height: 40, borderRadius: "50%", border: "1.5px solid rgba(255,255,255,.45)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "0.68rem", color: "#fff" }}>▶</span>
@@ -10921,10 +10921,10 @@ function TemaRumahPage({ onWaOpen, temaSlug, openTemaDetail, closeTemaDetail, cm
         </div>
         <div className="tema-cta-right">
           <button onClick={() => onWaOpen && onWaOpen()} style={{ padding: "15px 34px", background: "#C9AA71", color: "#fff", border: "none", borderRadius: 4, fontWeight: 800, fontSize: "0.84rem", cursor: "pointer", letterSpacing: ".1em", textTransform: "uppercase", boxShadow: "0 8px 22px rgba(201,170,113,.32)" }}>
-            💬 {heroBtn}
+            {heroBtn}
           </button>
           <div style={{ display: "flex", gap: 20 }}>
-            {["✅ Gratis Konsultasi", "⚡ Respon Cepat", "🎯 Solusi Tepat"].map((t, i) => (
+            {["Gratis Konsultasi", "Respon Cepat", "Solusi Tepat"].map((t, i) => (
               <span key={i} style={{ fontSize: "0.74rem", color: "rgba(255,255,255,.62)", fontWeight: 600 }}>{t}</span>
             ))}
           </div>
@@ -10940,7 +10940,7 @@ function InteriorPage({ onWaOpen }) {
     pageKey="interior"
     title="Desain Interior"
     subtitle="Wujudkan interior impian Anda — dari teras hingga kamar tidur, setiap ruang dirancang indah, fungsional, dan mencerminkan kepribadian Anda."
-    icon="🛋️"
+    icon=""
     heroColor="linear-gradient(135deg,#4a1942 0%,#7b3f8a 50%,#b565c0 100%)"
     onWaOpen={onWaOpen}
     sections={[
@@ -10948,23 +10948,23 @@ function InteriorPage({ onWaOpen }) {
         tag: "Ruang Utama",
         title: "Layanan Desain Interior Lengkap",
         items: [
-          { icon: "🔲", title: "Plafon Modern", desc: "Desain plafon kreatif — drop ceiling, gypsum, kayu, dan pencahayaan tersembunyi (hidden lamp)." },
-          { icon: "🍳", title: "Kitchen Set", desc: "Dapur impian dengan kabinet custom, material tahan lama, dan ergonomis untuk memasak." },
-          { icon: "📺", title: "Backdrop TV", desc: "Feature wall TV yang menjadi focal point ruangan — material batu alam, kayu, panel 3D, dll." },
-          { icon: "🏠", title: "Teras", desc: "Desain teras yang menyambut — kombinasi material, pencahayaan, dan tanaman hias yang harmonis." },
-          { icon: "🛋️", title: "Ruang Tamu", desc: "Furnitur elegan, layout optimal, dan dekorasi yang menciptakan kesan pertama yang kuat." },
-          { icon: "👨‍👩‍👧", title: "Ruang Keluarga", desc: "Ruang hangat dan fungsional untuk quality time keluarga dengan konsep cozy living." },
-          { icon: "🛏️", title: "Kamar Tidur", desc: "Desain kamar nyaman dan personal — dari master bedroom hingga kamar anak yang kreatif." },
-          { icon: "🚿", title: "Kamar Mandi", desc: "Bathroom modern dengan material premium, pencahayaan spa, dan layout yang efisien." },
+          { icon: "", title: "Plafon Modern", desc: "Desain plafon kreatif — drop ceiling, gypsum, kayu, dan pencahayaan tersembunyi (hidden lamp)." },
+          { icon: "", title: "Kitchen Set", desc: "Dapur impian dengan kabinet custom, material tahan lama, dan ergonomis untuk memasak." },
+          { icon: "", title: "Backdrop TV", desc: "Feature wall TV yang menjadi focal point ruangan — material batu alam, kayu, panel 3D, dll." },
+          { icon: "", title: "Teras", desc: "Desain teras yang menyambut — kombinasi material, pencahayaan, dan tanaman hias yang harmonis." },
+          { icon: "", title: "Ruang Tamu", desc: "Furnitur elegan, layout optimal, dan dekorasi yang menciptakan kesan pertama yang kuat." },
+          { icon: "", title: "Ruang Keluarga", desc: "Ruang hangat dan fungsional untuk quality time keluarga dengan konsep cozy living." },
+          { icon: "", title: "Kamar Tidur", desc: "Desain kamar nyaman dan personal — dari master bedroom hingga kamar anak yang kreatif." },
+          { icon: "", title: "Kamar Mandi", desc: "Bathroom modern dengan material premium, pencahayaan spa, dan layout yang efisien." },
         ]
       },
       {
         tag: "Proses Kerja",
         title: "Alur Proyek Interior",
         items: [
-          { icon: "📝", title: "Survei & Ukur", desc: "Tim kami datang langsung ke lokasi untuk mengukur dan memahami kondisi lapangan." },
-          { icon: "🎨", title: "Konsep & 3D Visual", desc: "Presentasi desain 3D lengkap sebelum eksekusi agar Anda tahu hasilnya." },
-          { icon: "🔨", title: "Eksekusi & Finishing", desc: "Pengerjaan oleh tenaga ahli berpengalaman dengan quality control ketat." },
+          { icon: "", title: "Survei & Ukur", desc: "Tim kami datang langsung ke lokasi untuk mengukur dan memahami kondisi lapangan." },
+          { icon: "", title: "Konsep & 3D Visual", desc: "Presentasi desain 3D lengkap sebelum eksekusi agar Anda tahu hasilnya." },
+          { icon: "", title: "Eksekusi & Finishing", desc: "Pengerjaan oleh tenaga ahli berpengalaman dengan quality control ketat." },
         ]
       }
     ]}
@@ -10977,7 +10977,7 @@ function PagarPage({ onWaOpen }) {
     pageKey="pagar"
     title="Pagar Rumah"
     subtitle="Pagar bukan sekadar keamanan — ini ekspresi pertama rumah Anda. Kami menghadirkan pagar yang kokoh, estetis, dan sesuai karakter hunian Anda."
-    icon="🔒"
+    icon=""
     heroColor="linear-gradient(135deg,#1a1a2e 0%,#16213e 50%,#0f3460 100%)"
     onWaOpen={onWaOpen}
     sections={[
@@ -10985,21 +10985,21 @@ function PagarPage({ onWaOpen }) {
         tag: "Jenis Pagar",
         title: "Pilihan Model & Material Pagar",
         items: [
-          { icon: "🔩", title: "Pagar Besi Tempa", desc: "Klasik dan kokoh, tersedia berbagai motif ornamen — cocok untuk rumah gaya Eropa atau klasik." },
-          { icon: "⬛", title: "Pagar Hollow Minimalis", desc: "Garis bersih dari besi hollow finishing cat duco — populer untuk rumah modern minimalis." },
-          { icon: "🌿", title: "Pagar Panel Kayu + Besi", desc: "Kombinasi kayu solid/WPC dengan rangka besi — kesan natural namun tetap modern dan tahan lama." },
-          { icon: "🧱", title: "Pagar Tembok + Ornamen", desc: "Dinding bata/batako finishing plester dengan sisipan ornamen besi atau roster kerawang." },
-          { icon: "🚪", title: "Pintu Gerbang Otomatis", desc: "Gate geser/lipat dengan motor otomatis dan remote control untuk kemudahan akses." },
-          { icon: "✨", title: "Pagar Stainless Steel", desc: "Tampilan premium dan anti karat — pilihan ideal untuk hunian mewah dan eksklusif." },
+          { icon: "", title: "Pagar Besi Tempa", desc: "Klasik dan kokoh, tersedia berbagai motif ornamen — cocok untuk rumah gaya Eropa atau klasik." },
+          { icon: "", title: "Pagar Hollow Minimalis", desc: "Garis bersih dari besi hollow finishing cat duco — populer untuk rumah modern minimalis." },
+          { icon: "", title: "Pagar Panel Kayu + Besi", desc: "Kombinasi kayu solid/WPC dengan rangka besi — kesan natural namun tetap modern dan tahan lama." },
+          { icon: "", title: "Pagar Tembok + Ornamen", desc: "Dinding bata/batako finishing plester dengan sisipan ornamen besi atau roster kerawang." },
+          { icon: "", title: "Pintu Gerbang Otomatis", desc: "Gate geser/lipat dengan motor otomatis dan remote control untuk kemudahan akses." },
+          { icon: "", title: "Pagar Stainless Steel", desc: "Tampilan premium dan anti karat — pilihan ideal untuk hunian mewah dan eksklusif." },
         ]
       },
       {
         tag: "Proses",
         title: "Cara Kerja Kami",
         items: [
-          { icon: "📐", title: "Survei & Desain", desc: "Pengukuran lokasi dan presentasi desain 3D sebelum produksi dimulai." },
-          { icon: "🏭", title: "Fabrikasi Custom", desc: "Diproduksi sesuai ukuran dan desain di workshop kami dengan standar kualitas tinggi." },
-          { icon: "🔧", title: "Instalasi & Finishing", desc: "Pemasangan oleh tim terlatih, termasuk cat, galvanis, atau finishing sesuai spesifikasi." },
+          { icon: "", title: "Survei & Desain", desc: "Pengukuran lokasi dan presentasi desain 3D sebelum produksi dimulai." },
+          { icon: "", title: "Fabrikasi Custom", desc: "Diproduksi sesuai ukuran dan desain di workshop kami dengan standar kualitas tinggi." },
+          { icon: "", title: "Instalasi & Finishing", desc: "Pemasangan oleh tim terlatih, termasuk cat, galvanis, atau finishing sesuai spesifikasi." },
         ]
       }
     ]}
@@ -11012,7 +11012,7 @@ function KanopiPage({ onWaOpen }) {
     pageKey="kanopi"
     title="Kanopi"
     subtitle="Lindungi carport, teras, atau area outdoor Anda dengan kanopi yang fungsional dan estetis. Berbagai material dan model tersedia sesuai kebutuhan."
-    icon="🏗️"
+    icon=""
     heroColor="linear-gradient(135deg,#1b4332 0%,#2d6a4f 50%,#52b788 100%)"
     onWaOpen={onWaOpen}
     sections={[
@@ -11020,21 +11020,21 @@ function KanopiPage({ onWaOpen }) {
         tag: "Jenis Kanopi",
         title: "Model & Material Kanopi",
         items: [
-          { icon: "🔵", title: "Kanopi Polycarbonate", desc: "Ringan, tembus cahaya, dan tahan UV. Pilihan paling populer untuk carport dan teras." },
-          { icon: "🔩", title: "Kanopi Rangka Besi Hollow", desc: "Struktur kokoh dari besi hollow galvanis dengan penutup atap polycarbonate atau spandek." },
-          { icon: "🌊", title: "Kanopi Alderon / UPVC", desc: "Material anti karat, ringan, dan estetis — tidak perlu cat ulang, perawatan minimal." },
-          { icon: "🏠", title: "Kanopi Atap Kaca", desc: "Tampilan premium dan modern, memaksimalkan cahaya alami sekaligus terlindungi dari hujan." },
-          { icon: "🎨", title: "Kanopi Custom Laser Cut", desc: "Ornamen plat besi dengan pola custom dipotong laser untuk sentuhan artistik yang unik." },
-          { icon: "🔑", title: "Kanopi Alderon (HPL)", desc: "Panel HPL berwarna-warni untuk tampilan modern dan colorful sesuai selera." },
+          { icon: "", title: "Kanopi Polycarbonate", desc: "Ringan, tembus cahaya, dan tahan UV. Pilihan paling populer untuk carport dan teras." },
+          { icon: "", title: "Kanopi Rangka Besi Hollow", desc: "Struktur kokoh dari besi hollow galvanis dengan penutup atap polycarbonate atau spandek." },
+          { icon: "", title: "Kanopi Alderon / UPVC", desc: "Material anti karat, ringan, dan estetis — tidak perlu cat ulang, perawatan minimal." },
+          { icon: "", title: "Kanopi Atap Kaca", desc: "Tampilan premium dan modern, memaksimalkan cahaya alami sekaligus terlindungi dari hujan." },
+          { icon: "", title: "Kanopi Custom Laser Cut", desc: "Ornamen plat besi dengan pola custom dipotong laser untuk sentuhan artistik yang unik." },
+          { icon: "", title: "Kanopi Alderon (HPL)", desc: "Panel HPL berwarna-warni untuk tampilan modern dan colorful sesuai selera." },
         ]
       },
       {
         tag: "Area Aplikasi",
         title: "Dimana Kanopi Dipasang?",
         items: [
-          { icon: "🚗", title: "Carport / Garasi", desc: "Pelindung kendaraan dari panas dan hujan sekaligus mempercantik area depan rumah." },
-          { icon: "☕", title: "Teras Belakang / Balkon", desc: "Jadikan teras sebagai ruang outdoor yang nyaman sepanjang hari sepanjang tahun." },
-          { icon: "🏪", title: "Ruko & Komersial", desc: "Kanopi teras ruko, restoran, atau kafe yang meningkatkan daya tarik eksterior bisnis." },
+          { icon: "", title: "Carport / Garasi", desc: "Pelindung kendaraan dari panas dan hujan sekaligus mempercantik area depan rumah." },
+          { icon: "", title: "Teras Belakang / Balkon", desc: "Jadikan teras sebagai ruang outdoor yang nyaman sepanjang hari sepanjang tahun." },
+          { icon: "", title: "Ruko & Komersial", desc: "Kanopi teras ruko, restoran, atau kafe yang meningkatkan daya tarik eksterior bisnis." },
         ]
       }
     ]}
@@ -11047,7 +11047,7 @@ function AluminiumPage({ onWaOpen }) {
     pageKey="aluminium"
     title="Aluminium"
     subtitle="Kusen, pintu, jendela, dan partisi aluminium berkualitas tinggi — ringan, anti karat, dan tersedia dalam berbagai profil dan warna finishing."
-    icon="🔲"
+    icon=""
     heroColor="linear-gradient(135deg,#2b2d42 0%,#555b6e 50%,#8d99ae 100%)"
     onWaOpen={onWaOpen}
     sections={[
@@ -11055,21 +11055,21 @@ function AluminiumPage({ onWaOpen }) {
         tag: "Produk Aluminium",
         title: "Rangkaian Produk Aluminium Kami",
         items: [
-          { icon: "🪟", title: "Kusen & Jendela Aluminium", desc: "Anti karat, tidak perlu dicat ulang, dan tersedia sistem swing, casement, maupun sliding." },
-          { icon: "🚪", title: "Pintu Aluminium", desc: "Ringan namun kuat — pilihan ideal untuk pintu kamar mandi, balkon, dan eksterior." },
-          { icon: "🔲", title: "Partisi Aluminium & Kaca", desc: "Pembatas ruang kantor atau rumah yang elegan dan mudah disesuaikan." },
-          { icon: "🌿", title: "Fasad Aluminium Composite", desc: "ACP (Aluminium Composite Panel) untuk cladding fasad eksterior modern dan premium." },
-          { icon: "🏠", title: "Canopy Aluminium", desc: "Kanopi dari profil aluminium ekstrusi — ringan, anti karat, dan estetis." },
-          { icon: "📐", title: "Railing & Handrail", desc: "Pegangan tangga dan railing balkon dari aluminium finishing powder coat aneka warna." },
+          { icon: "", title: "Kusen & Jendela Aluminium", desc: "Anti karat, tidak perlu dicat ulang, dan tersedia sistem swing, casement, maupun sliding." },
+          { icon: "", title: "Pintu Aluminium", desc: "Ringan namun kuat — pilihan ideal untuk pintu kamar mandi, balkon, dan eksterior." },
+          { icon: "", title: "Partisi Aluminium & Kaca", desc: "Pembatas ruang kantor atau rumah yang elegan dan mudah disesuaikan." },
+          { icon: "", title: "Fasad Aluminium Composite", desc: "ACP (Aluminium Composite Panel) untuk cladding fasad eksterior modern dan premium." },
+          { icon: "", title: "Canopy Aluminium", desc: "Kanopi dari profil aluminium ekstrusi — ringan, anti karat, dan estetis." },
+          { icon: "", title: "Railing & Handrail", desc: "Pegangan tangga dan railing balkon dari aluminium finishing powder coat aneka warna." },
         ]
       },
       {
         tag: "Keunggulan",
         title: "Mengapa Memilih Aluminium?",
         items: [
-          { icon: "🛡️", title: "Anti Karat & Tahan Lama", desc: "Tidak berkarat meski terpapar hujan dan panas ekstrem — perawatan minimal, usia panjang." },
-          { icon: "⚡", title: "Ringan & Kuat", desc: "Ratio kekuatan-bobot tinggi sehingga tidak membebani struktur bangunan." },
-          { icon: "🎨", title: "Aneka Pilihan Warna", desc: "Finishing powder coat dengan ratusan pilihan warna agar cocok dengan tema hunian Anda." },
+          { icon: "", title: "Anti Karat & Tahan Lama", desc: "Tidak berkarat meski terpapar hujan dan panas ekstrem — perawatan minimal, usia panjang." },
+          { icon: "", title: "Ringan & Kuat", desc: "Ratio kekuatan-bobot tinggi sehingga tidak membebani struktur bangunan." },
+          { icon: "", title: "Aneka Pilihan Warna", desc: "Finishing powder coat dengan ratusan pilihan warna agar cocok dengan tema hunian Anda." },
         ]
       }
     ]}
@@ -11080,20 +11080,20 @@ function AluminiumPage({ onWaOpen }) {
 const LANDSCAPE_CATEGORIES = [
   {
     id: "taman-depan",
-    icon: "🌿",
+    icon: "",
     title: "Contoh Desain Taman Depan",
     desc: "Kesan pertama hunian Anda dimulai dari taman depan. Kami menghadirkan desain teras dan taman depan yang memukau — dari gaya minimalis modern hingga tropis nan asri.",
     startFrom: 4500000,
     satuan: "paket",
     includes: [
-      { icon: "📐", item: "Konsultasi & survei lokasi gratis" },
-      { icon: "🎨", item: "Desain 3D taman depan (2 konsep pilihan)" },
-      { icon: "🌱", item: "Penanaman tanaman hias pilihan (min. 10 jenis)" },
-      { icon: "🪨", item: "Jalur stepping stone / batu andesit" },
-      { icon: "💡", item: "Instalasi lampu sorot taman (2 titik)" },
-      { icon: "🌿", item: "Mulsa & pupuk organik dasar" },
-      { icon: "🔧", item: "Sistem irigasi drip sederhana" },
-      { icon: "📋", item: "Garansi perawatan 30 hari setelah pemasangan" },
+      { icon: "", item: "Konsultasi & survei lokasi gratis" },
+      { icon: "", item: "Desain 3D taman depan (2 konsep pilihan)" },
+      { icon: "", item: "Penanaman tanaman hias pilihan (min. 10 jenis)" },
+      { icon: "", item: "Jalur stepping stone / batu andesit" },
+      { icon: "", item: "Instalasi lampu sorot taman (2 titik)" },
+      { icon: "", item: "Mulsa & pupuk organik dasar" },
+      { icon: "", item: "Sistem irigasi drip sederhana" },
+      { icon: "", item: "Garansi perawatan 30 hari setelah pemasangan" },
     ],
     slides: [
       { img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80", tema: "Minimalis Modern", desc: "Taman depan bersih dengan jalur batu andesit, tanaman hias rendah, dan lampu sorot tersembunyi. Cocok untuk rumah bergaya kontemporer." },
@@ -11106,21 +11106,21 @@ const LANDSCAPE_CATEGORIES = [
   },
   {
     id: "taman-belakang",
-    icon: "🏡",
+    icon: "",
     title: "Contoh Desain Taman Belakang",
     desc: "Halaman belakang adalah surga pribadi Anda. Kami mengubahnya menjadi oasis relaksasi — area bermain anak, ruang makan outdoor, hingga taman sayur organik.",
     startFrom: 7500000,
     satuan: "paket",
     includes: [
-      { icon: "📐", item: "Konsultasi & survei lahan belakang gratis" },
-      { icon: "🎨", item: "Desain 3D komprehensif (3 konsep pilihan)" },
-      { icon: "🌳", item: "Penanaman pohon peneduh & tanaman hias (min. 15 jenis)" },
-      { icon: "🏗️", item: "Pergola atau gazebo kayu ulin (opsional, extra)" },
-      { icon: "🪵", item: "Deck kayu composite atau batu paving area duduk" },
-      { icon: "💧", item: "Sistem irigasi otomatis dengan timer" },
-      { icon: "🌿", item: "Rumput premium (Gajah Mini / Zoysia)" },
-      { icon: "💡", item: "Paket lampu taman dasar (4 titik)" },
-      { icon: "📋", item: "Garansi perawatan 60 hari setelah pemasangan" },
+      { icon: "", item: "Konsultasi & survei lahan belakang gratis" },
+      { icon: "", item: "Desain 3D komprehensif (3 konsep pilihan)" },
+      { icon: "", item: "Penanaman pohon peneduh & tanaman hias (min. 15 jenis)" },
+      { icon: "", item: "Pergola atau gazebo kayu ulin (opsional, extra)" },
+      { icon: "", item: "Deck kayu composite atau batu paving area duduk" },
+      { icon: "", item: "Sistem irigasi otomatis dengan timer" },
+      { icon: "", item: "Rumput premium (Gajah Mini / Zoysia)" },
+      { icon: "", item: "Paket lampu taman dasar (4 titik)" },
+      { icon: "", item: "Garansi perawatan 60 hari setelah pemasangan" },
     ],
     slides: [
       { img: "https://images.unsplash.com/photo-1600210492493-0946911123ea?w=800&q=80", tema: "Outdoor Living Room", desc: "Ruang keluarga terbuka di taman belakang -- sofa outdoor, pergola kayu, dan area BBQ. Sempurna untuk berkumpul keluarga." },
@@ -11133,21 +11133,21 @@ const LANDSCAPE_CATEGORIES = [
   },
   {
     id: "rooftop",
-    icon: "🏙️",
+    icon: "",
     title: "Contoh Desain Roof Top Garden",
     desc: "Manfaatkan atap dak Anda menjadi taman rooftop yang spektakuler. Kami merancang taman atap yang ringan, tahan angin, dan memiliki sistem drainase sempurna.",
     startFrom: 12000000,
     satuan: "paket",
     includes: [
-      { icon: "📐", item: "Analisis struktural beban atap gratis" },
-      { icon: "🎨", item: "Desain 3D rooftop garden (2 konsep)" },
-      { icon: "🏗️", item: "Sistem drainase & waterproofing profesional" },
-      { icon: "🪴", item: "Media tanam ringan (campuran perlite & cocopeat)" },
-      { icon: "🌿", item: "Tanaman tahan angin & UV pilihan (min. 12 jenis)" },
-      { icon: "🪵", item: "Deck composite atau keramit anti-slip area jalan" },
-      { icon: "🔒", item: "Railing pengaman stainless / kaca" },
-      { icon: "💡", item: "Instalasi pencahayaan ambiance outdoor (6 titik)" },
-      { icon: "📋", item: "Garansi drainase & perawatan 90 hari" },
+      { icon: "", item: "Analisis struktural beban atap gratis" },
+      { icon: "", item: "Desain 3D rooftop garden (2 konsep)" },
+      { icon: "", item: "Sistem drainase & waterproofing profesional" },
+      { icon: "", item: "Media tanam ringan (campuran perlite & cocopeat)" },
+      { icon: "", item: "Tanaman tahan angin & UV pilihan (min. 12 jenis)" },
+      { icon: "", item: "Deck composite atau keramit anti-slip area jalan" },
+      { icon: "", item: "Railing pengaman stainless / kaca" },
+      { icon: "", item: "Instalasi pencahayaan ambiance outdoor (6 titik)" },
+      { icon: "", item: "Garansi drainase & perawatan 90 hari" },
     ],
     slides: [
       { img: "https://images.unsplash.com/photo-1567016432779-094069958ea5?w=800&q=80", tema: "Sky Lounge Garden", desc: "Lounge eksklusif di atap dengan sofa outdoor premium, tanaman dalam pot besar, dan pencahayaan ambiance malam hari." },
@@ -11160,20 +11160,20 @@ const LANDSCAPE_CATEGORIES = [
   },
   {
     id: "vertical-garden",
-    icon: "🌺",
+    icon: "",
     title: "Contoh Desain Vertical Garden",
     desc: "Solusi taman untuk ruang terbatas. Dinding hijau vertikal kami hadir sebagai statement piece yang hidup — menyejukkan, memperindah, dan meningkatkan kualitas udara.",
     startFrom: 2800000,
     satuan: "m²",
     includes: [
-      { icon: "📐", item: "Konsultasi & pengukuran dinding gratis" },
-      { icon: "🏗️", item: "Rangka sistem panel modular (GI / aluminium)" },
-      { icon: "🌱", item: "Media tanam hidroponik / cocopeat premium" },
-      { icon: "🌿", item: "Pilihan 20+ jenis tanaman hias / herba / sukulen" },
-      { icon: "💧", item: "Sistem irigasi drip otomatis + timer digital" },
-      { icon: "🔧", item: "Instalasi & finishing rapi (bisa indoor/outdoor)" },
-      { icon: "☀️", item: "Suplemen grow-light untuk area indoor (opsional)" },
-      { icon: "📋", item: "Garansi tumbuh tanaman 30 hari + panduan perawatan" },
+      { icon: "", item: "Konsultasi & pengukuran dinding gratis" },
+      { icon: "", item: "Rangka sistem panel modular (GI / aluminium)" },
+      { icon: "", item: "Media tanam hidroponik / cocopeat premium" },
+      { icon: "", item: "Pilihan 20+ jenis tanaman hias / herba / sukulen" },
+      { icon: "", item: "Sistem irigasi drip otomatis + timer digital" },
+      { icon: "", item: "Instalasi & finishing rapi (bisa indoor/outdoor)" },
+      { icon: "", item: "Suplemen grow-light untuk area indoor (opsional)" },
+      { icon: "", item: "Garansi tumbuh tanaman 30 hari + panduan perawatan" },
     ],
     slides: [
       { img: "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=800&q=80", tema: "Living Wall Interior", desc: "Dinding hidup di dalam ruangan -- sistem irigasi otomatis tersembunyi, media tanam hidroponik, dan pilihan 30+ jenis tanaman hias." },
@@ -11186,20 +11186,20 @@ const LANDSCAPE_CATEGORIES = [
   },
   {
     id: "kolam-hias",
-    icon: "💧",
+    icon: "",
     title: "Contoh Desain Kolam Hias & Air Mancur",
     desc: "Suara gemericik air adalah musik alami paling menenangkan. Kolam hias dan air mancur kami dirancang untuk keindahan visual sekaligus menciptakan mikroklimat yang sejuk.",
     startFrom: 8000000,
     satuan: "paket",
     includes: [
-      { icon: "📐", item: "Desain & layout kolam custom sesuai lahan" },
-      { icon: "🏗️", item: "Konstruksi dinding & lantai kolam (beton waterproof)" },
-      { icon: "🔧", item: "Sistem sirkulasi pompa & filter biologis" },
-      { icon: "🪨", item: "Finishing batu alam / keramik antik pilihan" },
-      { icon: "💡", item: "Lampu LED underwater berwarna (RGB)" },
-      { icon: "🐟", item: "Starter pack ikan koi / ikan hias (opsional)" },
-      { icon: "🌿", item: "Tanaman air & border kolam (teratai, eceng mini)" },
-      { icon: "📋", item: "Garansi kebocoran & sistem 90 hari" },
+      { icon: "", item: "Desain & layout kolam custom sesuai lahan" },
+      { icon: "", item: "Konstruksi dinding & lantai kolam (beton waterproof)" },
+      { icon: "", item: "Sistem sirkulasi pompa & filter biologis" },
+      { icon: "", item: "Finishing batu alam / keramik antik pilihan" },
+      { icon: "", item: "Lampu LED underwater berwarna (RGB)" },
+      { icon: "", item: "Starter pack ikan koi / ikan hias (opsional)" },
+      { icon: "", item: "Tanaman air & border kolam (teratai, eceng mini)" },
+      { icon: "", item: "Garansi kebocoran & sistem 90 hari" },
     ],
     slides: [
       { img: "https://images.unsplash.com/photo-1523301343968-6a6ebf63c672?w=800&q=80", tema: "Kolam Koi Jepang", desc: "Kolam koi bergaya Jepang lengkap dengan filter biologis, batu suiseki, jembatan mini kayu, dan ikan koi pilihan warna-warni." },
@@ -11212,20 +11212,20 @@ const LANDSCAPE_CATEGORIES = [
   },
   {
     id: "lampu-taman",
-    icon: "💡",
+    icon: "",
     title: "Contoh Desain Lampu Taman & Outdoor Lighting",
     desc: "Taman yang indah di siang hari harus tetap memukau di malam hari. Sistem pencahayaan outdoor kami mengubah taman menjadi panggung cahaya yang dramatis dan romantis.",
     startFrom: 1500000,
     satuan: "paket",
     includes: [
-      { icon: "📐", item: "Perencanaan titik lampu & layout pencahayaan" },
-      { icon: "💡", item: "Lampu taman LED (min. 4 titik, IP65 weatherproof)" },
-      { icon: "🔌", item: "Instalasi kabel tanam bawah tanah rapi & aman" },
-      { icon: "🌙", item: "Timer otomatis atau sensor cahaya senja-fajar" },
-      { icon: "🎨", item: "Pilihan warna: warm white, cool white, atau RGB" },
-      { icon: "☀️", item: "Opsi solar-powered untuk area tanpa listrik" },
-      { icon: "🔧", item: "Panel kontrol & MCB proteksi outdoor" },
-      { icon: "📋", item: "Garansi instalasi & produk 1 tahun" },
+      { icon: "", item: "Perencanaan titik lampu & layout pencahayaan" },
+      { icon: "", item: "Lampu taman LED (min. 4 titik, IP65 weatherproof)" },
+      { icon: "", item: "Instalasi kabel tanam bawah tanah rapi & aman" },
+      { icon: "", item: "Timer otomatis atau sensor cahaya senja-fajar" },
+      { icon: "", item: "Pilihan warna: warm white, cool white, atau RGB" },
+      { icon: "", item: "Opsi solar-powered untuk area tanpa listrik" },
+      { icon: "", item: "Panel kontrol & MCB proteksi outdoor" },
+      { icon: "", item: "Garansi instalasi & produk 1 tahun" },
     ],
     slides: [
       { img: "https://images.unsplash.com/photo-1558905586-b022cc14d2b3?w=800&q=80", tema: "Fairy Light Garden", desc: "Ribuan lampu kabel tembaga menyelimuti pepohonan dan pergola -- menciptakan suasana magis seperti bintang di taman Anda." },
@@ -11239,12 +11239,12 @@ const LANDSCAPE_CATEGORIES = [
 ];
 
 const ELEMEN_PREMIUM = [
-  { icon: "🪨", title: "Batu Alam & Kerikil", desc: "Batu andesit, batu candi, kerikil warna — untuk jalur taman, dinding, dan aksen dekoratif.", img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&q=80" },
-  { icon: "🌳", title: "Tanaman Pilihan Premium", desc: "Seleksi tanaman sesuai iklim lokal — tahan panas, mudah dirawat, dan bernilai estetis tinggi.", img: "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=400&q=80" },
-  { icon: "🏗️", title: "Pergola & Gazebo", desc: "Struktur atap taman dari kayu ulin atau besi untuk area duduk yang nyaman di luar ruangan.", img: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=400&q=80" },
-  { icon: "🌺", title: "Tanaman Hias Eksotis", desc: "Koleksi tanaman hias langka dan eksotis — heliconia, bromelia, monstera deliciosa, agave.", img: "https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=400&q=80" },
-  { icon: "🪵", title: "Deck & Paving Custom", desc: "Decking kayu ulin, composite, atau batu paving motif custom untuk area duduk dan jalur taman.", img: "https://images.unsplash.com/photo-1558905586-b022cc14d2b3?w=400&q=80" },
-  { icon: "🦋", title: "Dekorasi & Aksesoris", desc: "Patung taman, pot artisanal, windchime, dan elemen dekorasi outdoor untuk sentuhan personal.", img: "https://images.unsplash.com/photo-1524758631624-e2822e304c36?w=400&q=80" },
+  { icon: "", title: "Batu Alam & Kerikil", desc: "Batu andesit, batu candi, kerikil warna — untuk jalur taman, dinding, dan aksen dekoratif.", img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&q=80" },
+  { icon: "", title: "Tanaman Pilihan Premium", desc: "Seleksi tanaman sesuai iklim lokal — tahan panas, mudah dirawat, dan bernilai estetis tinggi.", img: "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=400&q=80" },
+  { icon: "", title: "Pergola & Gazebo", desc: "Struktur atap taman dari kayu ulin atau besi untuk area duduk yang nyaman di luar ruangan.", img: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=400&q=80" },
+  { icon: "", title: "Tanaman Hias Eksotis", desc: "Koleksi tanaman hias langka dan eksotis — heliconia, bromelia, monstera deliciosa, agave.", img: "https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=400&q=80" },
+  { icon: "", title: "Deck & Paving Custom", desc: "Decking kayu ulin, composite, atau batu paving motif custom untuk area duduk dan jalur taman.", img: "https://images.unsplash.com/photo-1558905586-b022cc14d2b3?w=400&q=80" },
+  { icon: "", title: "Dekorasi & Aksesoris", desc: "Patung taman, pot artisanal, windchime, dan elemen dekorasi outdoor untuk sentuhan personal.", img: "https://images.unsplash.com/photo-1524758631624-e2822e304c36?w=400&q=80" },
 ];
 
 /* ── Mini Slideshow untuk tiap cell magazine grid ── */
@@ -11333,20 +11333,20 @@ function LsInfoCard({ cat, fmt, onWaOpen }) {
         )}
         <button className="ls-cta-btn" style={cat.tampilHarga === false ? { flex: "1 1 100%" } : undefined}
           onClick={() => onWaOpen && onWaOpen({ key: "layanan", vars: { judul_layanan: cat.title } })}>
-          🌿 Konsultasi {cat.tampilHarga === false ? "Sekarang" : "Gratis"}
+          Konsultasi {cat.tampilHarga === false ? "Sekarang" : "Gratis"}
         </button>
       </div>
 
       {/* Tombol toggle dropdown includes */}
       <button className="ls-toggle-btn" onClick={() => setOpen(o => !o)}>
         <span>{open ? "▲" : "▼"}</span>
-        <span>{open ? "Sembunyikan Detail Paket" : "✅ Lihat Yang Termasuk dalam Paket"}</span>
+        <span>{open ? "Sembunyikan Detail Paket" : "Lihat Yang Termasuk dalam Paket"}</span>
       </button>
 
       {/* Dropdown includes -- muncul saat open */}
       {open && (
         <div className="ls-includes-box">
-          <div className="ls-includes-title">✅ Yang Termasuk dalam Paket</div>
+          <div className="ls-includes-title">Yang Termasuk dalam Paket</div>
           <div className="ls-includes-grid">
             {(cat.includes || []).map((inc, idx) => (
               <div key={idx} className="ls-include-item">
@@ -11449,7 +11449,7 @@ function LandscapePage({ onWaOpen, categories }) {
           <div style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "rgba(255,255,255,.1)", borderRadius: 20, padding: "5px 16px", marginBottom: 18 }}>
             <span style={{ fontSize: "0.65rem", fontWeight: 800, letterSpacing: ".16em", textTransform: "uppercase", color: "#A8D5B5" }}>VASTURA GROUP · LANDSCAPE</span>
           </div>
-          <div style={{ fontSize: "clamp(2rem,7vw,3.5rem)", marginBottom: 10 }}>🌳</div>
+          <div style={{ fontSize: "clamp(2rem,7vw,3.5rem)", marginBottom: 10 }}></div>
           <h1 style={{ fontFamily: "'Playfair Display',serif", fontSize: "clamp(1.75rem,5vw,2.75rem)", fontWeight: 900, color: "#fff", margin: "0 0 14px", lineHeight: 1.2 }}>Landscape & Taman</h1>
           <p style={{ fontSize: "clamp(.875rem,2vw,1rem)", color: "rgba(255,255,255,.75)", lineHeight: 1.8, margin: "0 0 26px" }}>
             Dari taman depan hingga rooftop garden — kami wujudkan setiap sudut hijau impian Anda.
@@ -11494,7 +11494,7 @@ function LandscapePage({ onWaOpen, categories }) {
                     <div className="ls-mag-overlay-btn">
                       <button onClick={() => onWaOpen && onWaOpen({ key: "layanan", vars: { judul_layanan: cat.title } })}
                         style={{ background: "#C9AA71", color: "#1a2a1a", border: "none", borderRadius: 8, padding: "9px 18px", fontSize: "0.75rem", fontWeight: 800, cursor: "pointer", whiteSpace: "nowrap", boxShadow: "0 4px 14px rgba(0,0,0,.3)" }}>
-                        🌿 Tanya Harga & Detail
+                        Tanya Harga & Detail
                       </button>
                     </div>
                   </div>
@@ -11576,7 +11576,7 @@ function LandscapePage({ onWaOpen, categories }) {
           <p style={{ color: "rgba(255,255,255,.75)", fontSize: "0.9rem", margin: "0 0 28px", lineHeight: 1.7 }}>Tim landscape kami siap membantu dari survei, desain, hingga pemasangan dan perawatan berkala.</p>
           <button onClick={() => onWaOpen && onWaOpen({ key: "konsultasi", vars: {} })}
             style={{ background: "#C9AA71", color: "#2E3D3F", border: "none", borderRadius: 10, padding: "15px 36px", fontSize: "0.95rem", fontWeight: 800, cursor: "pointer", letterSpacing: ".05em" }}>
-            🌳 Hubungi Tim Landscape Kami
+            Hubungi Tim Landscape Kami
           </button>
         </div>
       </div>
@@ -11603,21 +11603,21 @@ const HOME_SERVICES_DEFAULT = [
 const RS_PAKET_DATA = [
   {
     id: "rs-cat-dinding",
-    icon: "🎨",
+    icon: "",
     title: "Renovasi Cat & Dinding",
     desc: "Segarkan tampilan rumah subsidi Anda dengan pengecatan ulang interior & eksterior, perbaikan retak rambut, dan plamir dinding hingga rapi sempurna.",
     startFrom: 3500000,
     satuan: "paket",
     slideDir: "right",
     includes: [
-      { icon: "📐", item: "Survei & pengukuran luas dinding gratis" },
-      { icon: "🧱", item: "Perbaikan retak rambut & dinding mengelupas" },
-      { icon: "🪣", item: "Plamir dinding hingga permukaan halus" },
-      { icon: "🎨", item: "Cat dasar (primer) anti alkali" },
-      { icon: "🖌️", item: "Cat finishing 2 lapis (interior & eksterior)" },
-      { icon: "🌈", item: "Konsultasi pilihan warna & sample dinding" },
-      { icon: "🧰", item: "Tenaga tukang cat berpengalaman" },
-      { icon: "📋", item: "Garansi pengerjaan 30 hari" },
+      { icon: "", item: "Survei & pengukuran luas dinding gratis" },
+      { icon: "", item: "Perbaikan retak rambut & dinding mengelupas" },
+      { icon: "", item: "Plamir dinding hingga permukaan halus" },
+      { icon: "", item: "Cat dasar (primer) anti alkali" },
+      { icon: "", item: "Cat finishing 2 lapis (interior & eksterior)" },
+      { icon: "", item: "Konsultasi pilihan warna & sample dinding" },
+      { icon: "", item: "Tenaga tukang cat berpengalaman" },
+      { icon: "", item: "Garansi pengerjaan 30 hari" },
     ],
     slides: [
       { img: "https://images.unsplash.com/photo-1562259949-e8e7689d7828?w=800&q=80", tema: "Cat Eksterior Segar", desc: "Tampilan fasad rumah subsidi yang baru dicat -- bersih, cerah, dan tahan cuaca tropis." },
@@ -11628,21 +11628,21 @@ const RS_PAKET_DATA = [
   },
   {
     id: "rs-atap-plafon",
-    icon: "🏠",
+    icon: "",
     title: "Renovasi Atap & Plafon",
     desc: "Atasi kebocoran, genteng pecah, dan plafon lembap dengan perbaikan struktur atap menyeluruh agar rumah subsidi Anda kembali kering dan aman.",
     startFrom: 8500000,
     satuan: "paket",
     slideDir: "up",
     includes: [
-      { icon: "📐", item: "Inspeksi kebocoran & struktur atap gratis" },
-      { icon: "🔧", item: "Perbaikan / ganti rangka kayu & baja ringan" },
-      { icon: "🏠", item: "Ganti genteng pecah & nat bocor" },
-      { icon: "💧", item: "Waterproofing area dak & sambungan atap" },
-      { icon: "⬜", item: "Pemasangan plafon gypsum / GRC baru" },
-      { icon: "🎨", item: "Finishing cat plafon anti lembap" },
-      { icon: "🧰", item: "Pembersihan sisa material pasca renovasi" },
-      { icon: "📋", item: "Garansi anti bocor 6 bulan" },
+      { icon: "", item: "Inspeksi kebocoran & struktur atap gratis" },
+      { icon: "", item: "Perbaikan / ganti rangka kayu & baja ringan" },
+      { icon: "", item: "Ganti genteng pecah & nat bocor" },
+      { icon: "", item: "Waterproofing area dak & sambungan atap" },
+      { icon: "", item: "Pemasangan plafon gypsum / GRC baru" },
+      { icon: "", item: "Finishing cat plafon anti lembap" },
+      { icon: "", item: "Pembersihan sisa material pasca renovasi" },
+      { icon: "", item: "Garansi anti bocor 6 bulan" },
     ],
     slides: [
       { img: "https://images.unsplash.com/photo-1632759145351-1d592919f522?w=800&q=80", tema: "Perbaikan Rangka Atap", desc: "Penggantian rangka atap yang lapuk dengan baja ringan anti karat." },
@@ -11653,21 +11653,21 @@ const RS_PAKET_DATA = [
   },
   {
     id: "rs-lantai-keramik",
-    icon: "🧱",
+    icon: "",
     title: "Renovasi Lantai & Keramik",
     desc: "Ganti lantai semen polos atau keramik pecah dengan keramik baru yang rapi, presisi, dan tahan lama untuk seluruh ruangan di rumah subsidi.",
     startFrom: 6500000,
     satuan: "paket",
     slideDir: "left",
     includes: [
-      { icon: "📐", item: "Survei & pengukuran luas lantai gratis" },
-      { icon: "🔨", item: "Bongkar lantai/keramik lama" },
-      { icon: "🪣", item: "Pengurukan & perataan cor dasar" },
-      { icon: "🧱", item: "Pemasangan keramik baru (pilihan motif)" },
-      { icon: "📏", item: "Nat keramik rapi & presisi" },
-      { icon: "🚪", item: "Pemasangan plint lantai" },
-      { icon: "🧰", item: "Tukang keramik berpengalaman" },
-      { icon: "📋", item: "Garansi pemasangan 30 hari" },
+      { icon: "", item: "Survei & pengukuran luas lantai gratis" },
+      { icon: "", item: "Bongkar lantai/keramik lama" },
+      { icon: "", item: "Pengurukan & perataan cor dasar" },
+      { icon: "", item: "Pemasangan keramik baru (pilihan motif)" },
+      { icon: "", item: "Nat keramik rapi & presisi" },
+      { icon: "", item: "Pemasangan plint lantai" },
+      { icon: "", item: "Tukang keramik berpengalaman" },
+      { icon: "", item: "Garansi pemasangan 30 hari" },
     ],
     slides: [
       { img: "https://images.unsplash.com/photo-1581858726788-75bc0f6a952d?w=800&q=80", tema: "Pemasangan Keramik Baru", desc: "Keramik baru terpasang rapi dengan nat presisi di ruang utama." },
@@ -11678,21 +11678,21 @@ const RS_PAKET_DATA = [
   },
   {
     id: "rs-dapur-kamar-mandi",
-    icon: "🚿",
+    icon: "",
     title: "Renovasi Dapur & Kamar Mandi",
     desc: "Wujudkan dapur dan kamar mandi rumah subsidi yang lebih fungsional — perbaikan saluran air, keramik dinding baru, hingga pemasangan kitchen set sederhana.",
     startFrom: 12000000,
     satuan: "paket",
     slideDir: "down",
     includes: [
-      { icon: "📐", item: "Survei instalasi air & sanitasi gratis" },
-      { icon: "🚰", item: "Perbaikan / ganti pipa air bersih & limbah" },
-      { icon: "🧱", item: "Keramik dinding dapur & kamar mandi" },
-      { icon: "🚽", item: "Pemasangan kloset & wastafel baru" },
-      { icon: "🍳", item: "Kitchen set sederhana (kabinet bawah)" },
-      { icon: "💡", item: "Instalasi titik lampu tambahan" },
-      { icon: "🔧", item: "Pengecekan kebocoran pasca pemasangan" },
-      { icon: "📋", item: "Garansi instalasi air 60 hari" },
+      { icon: "", item: "Survei instalasi air & sanitasi gratis" },
+      { icon: "", item: "Perbaikan / ganti pipa air bersih & limbah" },
+      { icon: "", item: "Keramik dinding dapur & kamar mandi" },
+      { icon: "", item: "Pemasangan kloset & wastafel baru" },
+      { icon: "", item: "Kitchen set sederhana (kabinet bawah)" },
+      { icon: "", item: "Instalasi titik lampu tambahan" },
+      { icon: "", item: "Pengecekan kebocoran pasca pemasangan" },
+      { icon: "", item: "Garansi instalasi air 60 hari" },
     ],
     slides: [
       { img: "https://images.unsplash.com/photo-1556911220-bff31c812dba?w=800&q=80", tema: "Dapur Minimalis Baru", desc: "Dapur rumah subsidi dengan kitchen set sederhana dan keramik dinding baru." },
@@ -11704,21 +11704,21 @@ const RS_PAKET_DATA = [
   },
   {
     id: "rs-tambah-ruang",
-    icon: "📐",
+    icon: "",
     title: "Renovasi Tambah Ruang / Sekat",
     desc: "Tambah luas hunian dengan penambahan ruang baru atau sekat ruangan — solusi tepat untuk keluarga yang membutuhkan kamar tambahan di rumah subsidi.",
     startFrom: 15000000,
     satuan: "paket",
     slideDir: "left",
     includes: [
-      { icon: "📐", item: "Survei lahan & desain layout gratis" },
-      { icon: "🏗️", item: "Pembangunan dinding sekat / partisi" },
-      { icon: "🧱", item: "Pasangan bata ringan / hebel" },
-      { icon: "🚪", item: "Pemasangan pintu & kusen baru" },
-      { icon: "💡", item: "Instalasi listrik titik tambahan" },
-      { icon: "🎨", item: "Finishing plester & cat ruangan baru" },
-      { icon: "🏠", item: "Penyesuaian atap jika ada perluasan" },
-      { icon: "📋", item: "Garansi struktur 90 hari" },
+      { icon: "", item: "Survei lahan & desain layout gratis" },
+      { icon: "", item: "Pembangunan dinding sekat / partisi" },
+      { icon: "", item: "Pasangan bata ringan / hebel" },
+      { icon: "", item: "Pemasangan pintu & kusen baru" },
+      { icon: "", item: "Instalasi listrik titik tambahan" },
+      { icon: "", item: "Finishing plester & cat ruangan baru" },
+      { icon: "", item: "Penyesuaian atap jika ada perluasan" },
+      { icon: "", item: "Garansi struktur 90 hari" },
     ],
     slides: [
       { img: "https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=800&q=80", tema: "Sekat Ruangan Baru", desc: "Pembangunan dinding sekat untuk membagi ruangan menjadi kamar tambahan." },
@@ -11729,21 +11729,21 @@ const RS_PAKET_DATA = [
   },
   {
     id: "rs-total-rumah",
-    icon: "🏗️",
+    icon: "",
     title: "Renovasi Total Rumah Subsidi",
     desc: "Paket renovasi menyeluruh — atap, dinding, lantai, dapur, kamar mandi, hingga instalasi listrik & air — untuk transformasi total rumah subsidi Anda.",
     startFrom: 25000000,
     satuan: "unit",
     slideDir: "down",
     includes: [
-      { icon: "📐", item: "Survei & RAB renovasi total gratis" },
-      { icon: "🏠", item: "Perbaikan atap, plafon & struktur rumah" },
-      { icon: "🧱", item: "Renovasi dinding, plester & pengecatan" },
-      { icon: "🧱", item: "Penggantian lantai & keramik seluruh ruangan" },
-      { icon: "🚿", item: "Renovasi dapur & kamar mandi lengkap" },
-      { icon: "💡", item: "Pembaruan instalasi listrik & air" },
-      { icon: "🚪", item: "Penggantian pintu & jendela jika diperlukan" },
-      { icon: "📋", item: "Garansi pengerjaan 6 bulan + pendampingan tukang" },
+      { icon: "", item: "Survei & RAB renovasi total gratis" },
+      { icon: "", item: "Perbaikan atap, plafon & struktur rumah" },
+      { icon: "", item: "Renovasi dinding, plester & pengecatan" },
+      { icon: "", item: "Penggantian lantai & keramik seluruh ruangan" },
+      { icon: "", item: "Renovasi dapur & kamar mandi lengkap" },
+      { icon: "", item: "Pembaruan instalasi listrik & air" },
+      { icon: "", item: "Penggantian pintu & jendela jika diperlukan" },
+      { icon: "", item: "Garansi pengerjaan 6 bulan + pendampingan tukang" },
     ],
     slides: [
       { img: "https://images.unsplash.com/photo-1503387837-b154d5074bd2?w=800&q=80", tema: "Sebelum Renovasi", desc: "Kondisi rumah subsidi sebelum renovasi total -- siap diubah menjadi hunian layak." },
@@ -11849,7 +11849,7 @@ function RsInfoCard({ paket, fmt, onWaOpen }) {
         </div>
         <button className="ls-cta-btn"
           onClick={() => onWaOpen && onWaOpen({ key: "layanan", vars: { judul_layanan: paket.title } })}>
-          🏠 Konsultasi Sekarang
+          Konsultasi Sekarang
         </button>
       </div>
 
@@ -11857,13 +11857,13 @@ function RsInfoCard({ paket, fmt, onWaOpen }) {
         {open ? (
           <><span>▲</span><span>Sembunyikan Detail</span></>
         ) : (
-          <><span>✅</span><span>Lihat Yang Termasuk ▼</span></>
+          <><span></span><span>Lihat Yang Termasuk ▼</span></>
         )}
       </button>
 
       {open && (
         <div className="ls-includes-box">
-          <div className="ls-includes-title">✅ Yang Termasuk dalam Paket</div>
+          <div className="ls-includes-title">Yang Termasuk dalam Paket</div>
           <div className="ls-includes-grid">
             {(paket.includes || []).map((inc, idx) => (
               <div key={idx} className="ls-include-item">
@@ -11966,7 +11966,7 @@ function RumahSubsidiPage({ onWaOpen, paketData }) {
           <div style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "rgba(255,255,255,.1)", borderRadius: 20, padding: "5px 16px", marginBottom: 18 }}>
             <span style={{ fontSize: "0.65rem", fontWeight: 800, letterSpacing: ".16em", textTransform: "uppercase", color: "#C9AA71" }}>VASTURA GROUP · PROGRAM RENOVASI</span>
           </div>
-          <div style={{ fontSize: "clamp(2rem,7vw,3.5rem)", marginBottom: 10 }}>🏠</div>
+          <div style={{ fontSize: "clamp(2rem,7vw,3.5rem)", marginBottom: 10 }}></div>
           <h1 style={{ fontFamily: "'Playfair Display',serif", fontSize: "clamp(1.75rem,5vw,2.75rem)", fontWeight: 900, color: "#fff", margin: "0 0 14px", lineHeight: 1.2 }}>Renovasi Rumah Subsidi</h1>
           <p style={{ fontSize: "clamp(.875rem,2vw,1rem)", color: "rgba(255,255,255,.75)", lineHeight: 1.8, margin: "0 0 26px" }}>
             Tingkatkan kualitas hunian subsidi Anda — dari perbaikan ringan hingga renovasi total, dikerjakan tukang berpengalaman dengan harga terjangkau.
@@ -12003,7 +12003,7 @@ function RumahSubsidiPage({ onWaOpen, paketData }) {
                     <div className="ls-mag-overlay-btn">
                       <button onClick={() => onWaOpen && onWaOpen({ key: "layanan", vars: { judul_layanan: paket.title } })}
                         style={{ background: "#C9AA71", color: "#1a2a1a", border: "none", borderRadius: 8, padding: "9px 18px", fontSize: "0.75rem", fontWeight: 800, cursor: "pointer", whiteSpace: "nowrap", boxShadow: "0 4px 14px rgba(0,0,0,.3)" }}>
-                        🏠 Tanya Harga & Detail
+                        Tanya Harga & Detail
                       </button>
                     </div>
                   </div>
@@ -12045,7 +12045,7 @@ function RumahSubsidiPage({ onWaOpen, paketData }) {
           <p style={{ color: "rgba(255,255,255,.75)", fontSize: "0.9rem", margin: "0 0 28px", lineHeight: 1.7 }}>Tim kami siap survei, menghitung RAB, dan mengerjakan renovasi rumah subsidi Anda dari awal hingga selesai.</p>
           <button onClick={() => onWaOpen && onWaOpen({ key: "konsultasi", vars: {} })}
             style={{ background: "#C9AA71", color: "#2E3D3F", border: "none", borderRadius: 10, padding: "15px 36px", fontSize: "0.95rem", fontWeight: 800, cursor: "pointer", letterSpacing: ".05em" }}>
-            🏠 Hubungi Tim Renovasi Kami
+            Hubungi Tim Renovasi Kami
           </button>
         </div>
       </div>
@@ -12143,7 +12143,7 @@ function WaPickerModal({ admins = [], msgText = "", onClose }) {
                 {isPrimary && (
                   <div style={{ background: "#25d366", color: "#fff", fontSize: 9.5, fontWeight: 800,
                     letterSpacing: ".1em", textTransform: "uppercase", padding: "3px 12px" }}>
-                    ⭐ WhatsApp Utama
+                    WhatsApp Utama
                   </div>
                 )}
 
@@ -12236,7 +12236,7 @@ function WaAdminManager({ admins = [], onSave, notify }) {
   }
   function handleSave() {
     const invalid = list.find(a => !a.name.trim() || !a.wa.trim());
-    if (invalid) { notify("⚠️ Nama dan nomor WA wajib diisi!"); return; }
+    if (invalid) { notify("Nama dan nomor WA wajib diisi!"); return; }
     onSave(list);
     setDirty(false);
   }
@@ -12248,7 +12248,7 @@ function WaAdminManager({ admins = [], onSave, notify }) {
   return (
     <div style={{ background: "#fff", borderRadius: 8, padding: "18px 20px", marginBottom: 14, boxShadow: "0 1px 4px rgba(0,0,0,.05)" }}>
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 14 }}>
-        <label style={{ fontSize: 11, fontWeight: 700, color: "#5A6A6C", letterSpacing: "1px", textTransform: "uppercase" }}>📱 Admin WhatsApp</label>
+        <label style={{ fontSize: 11, fontWeight: 700, color: "#5A6A6C", letterSpacing: "1px", textTransform: "uppercase" }}>Admin WhatsApp</label>
         <button onClick={addAdmin} style={{ fontSize: 12, padding: "5px 12px", background: "#25d366", color: "#fff", border: "none", borderRadius: 6, cursor: "pointer", fontWeight: 600 }}>+ Tambah Admin</button>
       </div>
 
@@ -12256,7 +12256,7 @@ function WaAdminManager({ admins = [], onSave, notify }) {
         <div key={admin.id} style={cardStyle}>
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
             <input type="radio" name="wa_primary" checked={!!admin.primary} onChange={() => setPrimary(admin.id)} title="Jadikan Admin Utama" style={{ accentColor: "#25d366", width: 16, height: 16 }} />
-            <span style={{ fontSize: 11, color: "#888" }}>{admin.primary ? "⭐ Admin Utama (WA default)" : "Jadikan utama"}</span>
+            <span style={{ fontSize: 11, color: "#888" }}>{admin.primary ? "Admin Utama (WA default)" : "Jadikan utama"}</span>
             <button onClick={() => removeAdmin(admin.id)} style={{ marginLeft: "auto", fontSize: 11, padding: "3px 10px", background: "#fee2e2", color: "#dc2626", border: "none", borderRadius: 5, cursor: "pointer" }}>Hapus</button>
           </div>
           <div>
@@ -12278,7 +12278,7 @@ function WaAdminManager({ admins = [], onSave, notify }) {
 
       {dirty && (
         <button onClick={handleSave} style={{ marginTop: 6, width: "100%", padding: "10px", background: "#2E3D3F", color: "#fff", border: "none", borderRadius: 7, fontWeight: 700, fontSize: 13, cursor: "pointer" }}>
-          💾 Simpan Daftar Admin WA
+          Simpan Daftar Admin WA
         </button>
       )}
     </div>
@@ -12294,7 +12294,7 @@ function SosmedManager({ content, onSave, notify }) {
   function handleSave() {
     onSave({ igLink: ig, fbLink: fb });
     setDirty(false);
-    notify("✅ Link sosial media disimpan!");
+    notify("Link sosial media disimpan!");
   }
 
   const inputStyle = { width: "100%", padding: "8px 12px", border: "1px solid #ddd", borderRadius: 6, fontSize: 13, boxSizing: "border-box" };
@@ -12302,18 +12302,18 @@ function SosmedManager({ content, onSave, notify }) {
 
   return (
     <div style={{ background: "#fff", borderRadius: 8, padding: "18px 20px", marginBottom: 14, boxShadow: "0 1px 4px rgba(0,0,0,.05)" }}>
-      <label style={{ fontSize: 11, fontWeight: 700, color: "#5A6A6C", letterSpacing: "1px", textTransform: "uppercase", display: "block", marginBottom: 14 }}>🌐 Link Sosial Media</label>
+      <label style={{ fontSize: 11, fontWeight: 700, color: "#5A6A6C", letterSpacing: "1px", textTransform: "uppercase", display: "block", marginBottom: 14 }}>Link Sosial Media</label>
       <div style={{ marginBottom: 12 }}>
-        <label style={labelStyle}>📷 Instagram URL</label>
+        <label style={labelStyle}>Instagram URL</label>
         <input style={inputStyle} value={ig} onChange={e => { setIg(e.target.value); setDirty(true); }} placeholder="https://instagram.com/username" />
       </div>
       <div style={{ marginBottom: 12 }}>
-        <label style={labelStyle}>📘 Facebook URL</label>
+        <label style={labelStyle}>Facebook URL</label>
         <input style={inputStyle} value={fb} onChange={e => { setFb(e.target.value); setDirty(true); }} placeholder="https://facebook.com/username" />
       </div>
       {dirty && (
         <button onClick={handleSave} style={{ width: "100%", padding: "10px", background: "#2E3D3F", color: "#fff", border: "none", borderRadius: 7, fontWeight: 700, fontSize: 13, cursor: "pointer" }}>
-          💾 Simpan Link Sosmed
+          Simpan Link Sosmed
         </button>
       )}
     </div>
@@ -12335,7 +12335,7 @@ function PaketGridManager({ data, save, notify, storeKey, title, icon, accentCol
 
   const blankItem = () => ({
     id: `paket-${Date.now()}`,
-    icon: "🏠",
+    icon: "",
     title: "",
     desc: "",
     startFrom: 0,
@@ -12358,7 +12358,7 @@ function PaketGridManager({ data, save, notify, storeKey, title, icon, accentCol
     const updated = idx >= 0 ? items.map((x, i) => i === idx ? form : x) : [...items, form];
     persist(updated);
     cancelEdit();
-    notify("✅ Paket berhasil disimpan!");
+    notify("Paket berhasil disimpan!");
   };
 
   const deleteItem = (id) => {
@@ -12368,7 +12368,7 @@ function PaketGridManager({ data, save, notify, storeKey, title, icon, accentCol
   };
 
   // -- Includes helpers --
-  const addInclude = () => setForm(p => ({ ...p, includes: [...(p.includes || []), { icon: "✅", item: "" }] }));
+  const addInclude = () => setForm(p => ({ ...p, includes: [...(p.includes || []), { icon: "", item: "" }] }));
   const updateInclude = (i, field, val) => setForm(p => ({ ...p, includes: p.includes.map((inc, idx) => idx === i ? { ...inc, [field]: val } : inc) }));
   const removeInclude = (i) => setForm(p => ({ ...p, includes: p.includes.filter((_, idx) => idx !== i) }));
 
@@ -12399,7 +12399,7 @@ function PaketGridManager({ data, save, notify, storeKey, title, icon, accentCol
       {editId && (
         <div style={{ background: "#fff", borderRadius: 12, padding: "26px", boxShadow: "0 4px 20px rgba(0,0,0,.08)", marginBottom: 28, borderTop: `4px solid ${accentColor}` }}>
           <h2 style={{ fontSize: 16, fontWeight: 700, color: "#2E3D3F", marginBottom: 20 }}>
-            {editId === "new" ? "➕ Tambah Paket Baru" : "✏ Edit Paket"}
+            {editId === "new" ? "Tambah Paket Baru" : "Edit Paket"}
           </h2>
 
           {/* Icon + Title */}
@@ -12407,7 +12407,7 @@ function PaketGridManager({ data, save, notify, storeKey, title, icon, accentCol
             <div>
               <label style={labelStyle}>Ikon</label>
               <input value={form.icon || ""} onChange={e => setForm(p => ({ ...p, icon: e.target.value }))}
-                placeholder="🏠" style={{ ...inputStyle, textAlign: "center", fontSize: 20 }} />
+                placeholder="" style={{ ...inputStyle, textAlign: "center", fontSize: 20 }} />
             </div>
             <div>
               <label style={labelStyle}>Judul Paket *</label>
@@ -12467,7 +12467,7 @@ function PaketGridManager({ data, save, notify, storeKey, title, icon, accentCol
           {/* -- Yang Termasuk -- */}
           <div style={{ marginBottom: 24, background: "#f4faf6", borderRadius: 10, padding: "16px 18px", border: "1.5px solid #bbf7d0" }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
-              <label style={{ ...labelStyle, marginBottom: 0, color: "#166534" }}>✅ Yang Termasuk dalam Paket</label>
+              <label style={{ ...labelStyle, marginBottom: 0, color: "#166534" }}>Yang Termasuk dalam Paket</label>
               <button onClick={addInclude} style={{ padding: "5px 12px", background: "#27ae60", color: "#fff", border: "none", borderRadius: 6, fontSize: 11, fontWeight: 700, cursor: "pointer" }}>+ Tambah Item</button>
             </div>
             {(form.includes || []).length === 0 && <p style={{ fontSize: 12, color: "#5A6A6C", margin: 0 }}>Belum ada item. Klik "+ Tambah Item".</p>}
@@ -12475,10 +12475,10 @@ function PaketGridManager({ data, save, notify, storeKey, title, icon, accentCol
               {(form.includes || []).map((inc, i) => (
                 <div key={i} style={{ display: "flex", gap: 8, alignItems: "center" }}>
                   <input value={inc.icon} onChange={e => updateInclude(i, "icon", e.target.value)}
-                    style={{ ...inputStyle, width: 52, textAlign: "center", flexShrink: 0 }} placeholder="📐" />
+                    style={{ ...inputStyle, width: 52, textAlign: "center", flexShrink: 0 }} placeholder="" />
                   <input value={inc.item} onChange={e => updateInclude(i, "item", e.target.value)}
                     style={{ ...inputStyle, flex: 1 }} placeholder="Deskripsi item yang termasuk..." />
-                  <button onClick={() => removeInclude(i)} style={{ flexShrink: 0, padding: "8px 10px", background: "#fee2e2", color: "#dc2626", border: "none", borderRadius: 6, cursor: "pointer", fontSize: 12 }}>🗑</button>
+                  <button onClick={() => removeInclude(i)} style={{ flexShrink: 0, padding: "8px 10px", background: "#fee2e2", color: "#dc2626", border: "none", borderRadius: 6, cursor: "pointer", fontSize: 12 }}></button>
                 </div>
               ))}
             </div>
@@ -12487,7 +12487,7 @@ function PaketGridManager({ data, save, notify, storeKey, title, icon, accentCol
           {/* -- Slideshow Foto -- */}
           <div style={{ marginBottom: 24, background: "#FAF7F0", borderRadius: 10, padding: "16px 18px", border: "1.5px solid #E8DCC8" }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
-              <label style={{ ...labelStyle, marginBottom: 0, color: "#8B6914" }}>🖼 Foto Slideshow</label>
+              <label style={{ ...labelStyle, marginBottom: 0, color: "#8B6914" }}>Foto Slideshow</label>
               <button onClick={addSlide} style={{ padding: "5px 12px", background: "#8B6914", color: "#fff", border: "none", borderRadius: 6, fontSize: 11, fontWeight: 700, cursor: "pointer" }}>+ Tambah Foto</button>
             </div>
             {(form.slides || []).length === 0 && <p style={{ fontSize: 12, color: "#5A6A6C", margin: 0 }}>Belum ada foto. Klik "+ Tambah Foto" (minimal 4 foto direkomendasikan).</p>}
@@ -12496,9 +12496,9 @@ function PaketGridManager({ data, save, notify, storeKey, title, icon, accentCol
                 <div key={i} style={{ background: "#fff", borderRadius: 10, padding: 14, border: "1px solid #E8DCC8", position: "relative" }}>
                   <button onClick={() => removeSlide(i)} style={{ position: "absolute", top: 8, right: 8, background: "#fee2e2", color: "#dc2626", border: "none", borderRadius: 5, width: 22, height: 22, fontSize: 11, cursor: "pointer", zIndex: 2 }}>✕</button>
                   <div style={{ height: 110, borderRadius: 6, overflow: "hidden", background: "#FAF7F0", marginBottom: 8, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                    {s.img ? <img loading="lazy" src={s.img} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} onError={e => e.target.style.display = "none"} /> : <span style={{ fontSize: 24 }}>🖼️</span>}
+                    {s.img ? <img loading="lazy" src={s.img} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} onError={e => e.target.style.display = "none"} /> : <span style={{ fontSize: 24 }}></span>}
                   </div>
-                  <UploadButton label="📁 Upload Foto"
+                  <UploadButton label="Upload Foto"
                     onDone={urls => { updateSlide(i, "img", urls[0]); notify("Foto berhasil diupload!"); }}
                     onError={msg => notify(msg, "error")}
                     style={{ fontSize: 11, padding: "7px 10px" }} />
@@ -12517,7 +12517,7 @@ function PaketGridManager({ data, save, notify, storeKey, title, icon, accentCol
           </div>
 
           <div style={{ display: "flex", gap: 10 }}>
-            <button onClick={saveItem} style={{ padding: "10px 22px", background: `linear-gradient(130deg,${accentColor} 0%,#8B6914 100%)`, color: "#fff", border: "none", borderRadius: 8, fontSize: 13, fontWeight: 700, cursor: "pointer" }}>💾 Simpan Paket</button>
+            <button onClick={saveItem} style={{ padding: "10px 22px", background: `linear-gradient(130deg,${accentColor} 0%,#8B6914 100%)`, color: "#fff", border: "none", borderRadius: 8, fontSize: 13, fontWeight: 700, cursor: "pointer" }}>Simpan Paket</button>
             <button onClick={cancelEdit} style={{ padding: "10px 18px", background: "#FAF7F0", color: "#5A6A6C", border: "1px solid #D4C4A0", borderRadius: 8, fontSize: 13, cursor: "pointer" }}>Batal</button>
           </div>
         </div>
@@ -12537,8 +12537,8 @@ function PaketGridManager({ data, save, notify, storeKey, title, icon, accentCol
                 <div style={{ fontSize: 11, color: "#5A6A6C", marginTop: 4 }}>{(it.slides || []).length} foto · {(it.includes || []).length} item termasuk</div>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: "auto" }}>
-                <button onClick={() => openEdit(it)} style={{ flex: 1, padding: "7px 0", background: "#FAF7F0", color: "#8B6914", border: "1px solid #E8DCC8", borderRadius: 6, fontSize: 12, fontWeight: 600, cursor: "pointer" }}>✏ Edit</button>
-                <button onClick={() => deleteItem(it.id)} style={{ flex: 1, padding: "7px 0", background: "#fee2e2", color: "#dc2626", border: "1px solid #fecaca", borderRadius: 6, fontSize: 12, fontWeight: 600, cursor: "pointer" }}>🗑 Hapus</button>
+                <button onClick={() => openEdit(it)} style={{ flex: 1, padding: "7px 0", background: "#FAF7F0", color: "#8B6914", border: "1px solid #E8DCC8", borderRadius: 6, fontSize: 12, fontWeight: 600, cursor: "pointer" }}>Edit</button>
+                <button onClick={() => deleteItem(it.id)} style={{ flex: 1, padding: "7px 0", background: "#fee2e2", color: "#dc2626", border: "1px solid #fecaca", borderRadius: 6, fontSize: 12, fontWeight: 600, cursor: "pointer" }}>Hapus</button>
               </div>
             </div>
           ))}
@@ -12570,14 +12570,14 @@ function MobileTemaRumahAccordion({ page, navigateTo, setMobileMenu, temaList, t
     <div style={{ width:"100%" }}>
       <button onClick={()=>setOpen(v=>!v)}
         style={{ ...mBtn(page==="temarumah"), padding:"13px 18px", fontWeight:700 }}>
-        <span>🏡 Tema Rumah</span>
+        <span>Tema Rumah</span>
         <span style={{ fontSize:"0.6rem", fontWeight:800, color:"#fff", background:"#8B6914", padding:"4px 12px", borderRadius:5, letterSpacing:".06em" }}>{open?"TUTUP":"BUKA"}</span>
       </button>
       {open && (
         <div style={{ background:"rgba(0,0,0,.02)", borderLeft:"2px solid #E8DCC8", marginLeft:18 }}>
           <button onClick={()=>{ navigateTo("temarumah"); setMobileMenu(false); setOpen(false); }}
             style={mBtn(page==="temarumah" && !temaSlug, 1)}>
-            📖 Semua Tema Rumah
+            Semua Tema Rumah
           </button>
           {(temaList || []).map(tema=>(
             <button key={tema.slug} onClick={()=>{ openTemaDetail(tema.slug); setMobileMenu(false); setOpen(false); }}
@@ -12638,20 +12638,20 @@ function MobileLayananAccordion({ page, navigateTo, setMobileMenu, navDropdownLa
           {/* Interior accordion */}
           <button onClick={()=>setSubOpen(v=>v==="interior"?null:"interior")}
             style={{ ...mBtn(page.startsWith("interior"), 1), justifyContent:"space-between" }}>
-            <span>🛋️ Interior</span>
+            <span>Interior</span>
             <span style={{ fontSize:"0.6rem", fontWeight:800, color:"#fff", background:"#8B6914", padding:"4px 12px", borderRadius:5, letterSpacing:".06em" }}>{subOpen==="interior"?"TUTUP":"BUKA"}</span>
           </button>
           {subOpen==="interior" && (
             <div style={{ borderLeft:"2px solid #C9AA71", marginLeft:28 }}>
               {[
-                {key:"interior/plafon-modern",  label:"🏛️ Plafon Modern"},
-                {key:"interior/kitchen-set",    label:"🍳 Kitchen Set"},
-                {key:"interior/backdrop-tv",    label:"📺 Backdrop TV"},
-                {key:"interior/kamar-tidur",    label:"🛏️ Kamar Tidur"},
-                {key:"interior/kamar-mandi",    label:"🚿 Kamar Mandi"},
-                {key:"interior/ruang-keluarga", label:"👨‍👩‍👧 Ruang Keluarga"},
-                {key:"interior/ruang-tamu",     label:"🛋️ Ruang Tamu"},
-                {key:"interior/ruang-kerja",    label:"💼 Ruang Kerja"},
+                {key:"interior/plafon-modern",  label:"Plafon Modern"},
+                {key:"interior/kitchen-set",    label:"Kitchen Set"},
+                {key:"interior/backdrop-tv",    label:"Backdrop TV"},
+                {key:"interior/kamar-tidur",    label:"Kamar Tidur"},
+                {key:"interior/kamar-mandi",    label:"Kamar Mandi"},
+                {key:"interior/ruang-keluarga", label:"Ruang Keluarga"},
+                {key:"interior/ruang-tamu",     label:"Ruang Tamu"},
+                {key:"interior/ruang-kerja",    label:"Ruang Kerja"},
               ].map(sub=>(
                 <button key={sub.key} onClick={()=>{ navigateTo(sub.key); setMobileMenu(false); setOpen(false); setSubOpen(null); }}
                   style={mBtn(page===sub.key, 2)}>
@@ -12664,15 +12664,15 @@ function MobileLayananAccordion({ page, navigateTo, setMobileMenu, navDropdownLa
           {/* Eksterior accordion */}
           <button onClick={()=>setSubOpen(v=>v==="eksterior"?null:"eksterior")}
             style={{ ...mBtn(page.startsWith("eksterior"), 1), justifyContent:"space-between" }}>
-            <span>🏠 Eksterior</span>
+            <span>Eksterior</span>
             <span style={{ fontSize:"0.6rem", fontWeight:800, color:"#fff", background:"#8B6914", padding:"4px 12px", borderRadius:5, letterSpacing:".06em" }}>{subOpen==="eksterior"?"TUTUP":"BUKA"}</span>
           </button>
           {subOpen==="eksterior" && (
             <div style={{ borderLeft:"2px solid #C9AA71", marginLeft:28 }}>
               {[
-                {key:"eksterior/pagar",     label:"🔒 Pagar"},
-                {key:"eksterior/kanopi",    label:"🏗️ Kanopi"},
-                {key:"eksterior/aluminium", label:"🪟 Aluminium"},
+                {key:"eksterior/pagar",     label:"Pagar"},
+                {key:"eksterior/kanopi",    label:"Kanopi"},
+                {key:"eksterior/aluminium", label:"Aluminium"},
               ].map(sub=>(
                 <button key={sub.key} onClick={()=>{ navigateTo(sub.key); setMobileMenu(false); setOpen(false); setSubOpen(null); }}
                   style={mBtn(page===sub.key, 2)}>
@@ -12685,7 +12685,7 @@ function MobileLayananAccordion({ page, navigateTo, setMobileMenu, navDropdownLa
           {/* Landscape & Taman -- dipindah ke bawah Interior & Eksterior */}
           <button onClick={()=>{ navigateTo("eksterior/taman-landscape"); setMobileMenu(false); setOpen(false); setSubOpen(null); }}
             style={mBtn(page==="eksterior/taman-landscape", 1)}>
-            🌳 Landscape & Taman
+            Landscape & Taman
           </button>
 
         </div>
@@ -12758,7 +12758,7 @@ function FurniturPage({ data, onWaOpen }) {
         <div style={{ position:"absolute", inset:0, opacity:.08, backgroundImage:"radial-gradient(circle at 20% 50%,#fff 1px,transparent 1px),radial-gradient(circle at 80% 20%,#fff 1px,transparent 1px),radial-gradient(circle at 60% 80%,#fff 1px,transparent 1px)", backgroundSize:"48px 48px" }} />
         <div style={{ position:"relative" }}>
           <div style={{ display:"inline-flex", alignItems:"center", gap:8, background:"rgba(201,170,113,.18)", border:`1px solid rgba(201,170,113,.38)`, borderRadius:20, padding:"5px 16px", marginBottom:16 }}>
-            <span style={{ fontSize:13 }}>🪑</span>
+            <span style={{ fontSize:13 }}></span>
             <span style={{ fontSize:"0.7rem", letterSpacing:"3px", color:accentGold, fontWeight:700, textTransform:"uppercase" }}>Produk Retail</span>
           </div>
           <h1 style={{ fontSize:"clamp(1.8rem,4vw,3rem)", fontWeight:800, color:"#fff", letterSpacing:"-0.02em", margin:"0 0 12px", fontFamily:"'Playfair Display',serif" }}>
@@ -12785,7 +12785,7 @@ function FurniturPage({ data, onWaOpen }) {
         <div style={{ display:"flex", gap:12, flexWrap:"wrap", alignItems:"center", marginBottom:32, background:"#fff", borderRadius:12, padding:"16px 20px", boxShadow:"0 2px 12px rgba(0,0,0,.06)" }}>
           {/* Search */}
           <div style={{ flex:"1 1 220px", position:"relative" }}>
-            <span style={{ position:"absolute", left:12, top:"50%", transform:"translateY(-50%)", fontSize:15, opacity:.5 }}>🔍</span>
+            <span style={{ position:"absolute", left:12, top:"50%", transform:"translateY(-50%)", fontSize:15, opacity:.5 }}></span>
             <input
               type="text"
               placeholder="Cari produk furnitur..."
@@ -12821,7 +12821,7 @@ function FurniturPage({ data, onWaOpen }) {
         {/* -- Products Grid -- */}
         {filtered.length === 0 ? (
           <div style={{ textAlign:"center", padding:"80px 20px", color:"#8B9A9C" }}>
-            <div style={{ fontSize:48, marginBottom:16 }}>🪑</div>
+            <div style={{ fontSize:48, marginBottom:16 }}></div>
             <p style={{ fontSize:"1.05rem", fontWeight:600, color:darkTeal }}>Belum ada produk furnitur.</p>
             <p style={{ fontSize:"0.875rem", marginTop:8 }}>Produk akan ditampilkan di sini setelah ditambahkan dari Control Panel.</p>
           </div>
@@ -12852,7 +12852,7 @@ function FurniturPage({ data, onWaOpen }) {
                   <img src={prod._img} alt={prod.nama} style={{ width:"100%", height:"100%", objectFit:"cover", display:"block" }} loading="lazy"
                     onError={e=>{e.target.style.display="none"; e.target.nextSibling.style.display="flex";}} />
                 ) : null}
-                <div style={{ display: prod._img ? "none" : "flex", position:"absolute", inset:0, alignItems:"center", justifyContent:"center", fontSize:48, background:"#F5EDD8" }}>🪑</div>
+                <div style={{ display: prod._img ? "none" : "flex", position:"absolute", inset:0, alignItems:"center", justifyContent:"center", fontSize:48, background:"#F5EDD8" }}></div>
                 {prod.kategori && (
                   <span style={{ position:"absolute", top:12, left:12, background:"rgba(46,61,63,.82)", color:"#fff", fontSize:"0.65rem", padding:"3px 10px", borderRadius:12, fontWeight:700, letterSpacing:".08em", textTransform:"uppercase", backdropFilter:"blur(4px)" }}>
                     {prod.kategori}
@@ -12875,7 +12875,7 @@ function FurniturPage({ data, onWaOpen }) {
                     className="fur-btn-wa"
                     onClick={e=>{ e.stopPropagation(); onWaOpen && onWaOpen({ key:"layanan", vars:{ judul_layanan: prod.nama } }); }}
                     style={{ background:`linear-gradient(135deg,${darkTeal},#3D5254)`, color:"#fff", border:"none", borderRadius:8, padding:"8px 14px", fontSize:"0.75rem", fontWeight:700, cursor:"pointer", whiteSpace:"nowrap", fontFamily:"'Jost',sans-serif" }}>
-                    💬 Tanya
+                    Tanya
                   </button>
                 </div>
               </div>
@@ -12890,7 +12890,7 @@ function FurniturPage({ data, onWaOpen }) {
                     <div style={{ display:"flex", alignItems:"center", gap:14, margin: gi === 0 ? "0 0 24px" : "40px 0 24px" }}>
                       <div style={{ flex:1, height:1, background:"linear-gradient(to right,#E8DCC8,transparent)" }} />
                       <div style={{ display:"flex", alignItems:"center", gap:8, background:"#FAF7F0", border:"1px solid #E8DCC8", borderRadius:20, padding:"5px 16px", flexShrink:0 }}>
-                        <span style={{ fontSize:"0.68rem", fontWeight:800, letterSpacing:".12em", textTransform:"uppercase", color:accentGold }}>🪑</span>
+                        <span style={{ fontSize:"0.68rem", fontWeight:800, letterSpacing:".12em", textTransform:"uppercase", color:accentGold }}></span>
                         <span style={{ fontSize:"0.78rem", fontWeight:700, color:darkTeal, letterSpacing:".04em" }}>{group.label}</span>
                         <span style={{ fontSize:"0.68rem", color:"#8B9A9C", fontWeight:500 }}>({group.items.length})</span>
                       </div>
@@ -12960,7 +12960,7 @@ function FurniturDetailPage({ product, onBack, onWaOpen, formatRp }) {
               {mainImg ? (
                 <img src={mainImg} alt={product.nama} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} onError={e => e.target.style.display = "none"} />
               ) : (
-                <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 64 }}>🪑</div>
+                <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 64 }}></div>
               )}
             </div>
 
@@ -13003,7 +13003,7 @@ function FurniturDetailPage({ product, onBack, onWaOpen, formatRp }) {
             {/* ── Form Request Custom ── */}
             <div style={{ background: "#fff", border: `1.5px solid #E8DCC8`, borderRadius: 14, padding: "22px 24px", marginTop: 8 }}>
               <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
-                <span style={{ fontSize: 18 }}>🎨</span>
+                <span style={{ fontSize: 18 }}></span>
                 <div style={{ fontWeight: 800, fontSize: "0.95rem", color: darkTeal }}>Request Custom</div>
               </div>
               <p style={{ fontSize: "0.8rem", color: "#5A6A6C", lineHeight: 1.65, marginBottom: 16 }}>
@@ -13011,13 +13011,13 @@ function FurniturDetailPage({ product, onBack, onWaOpen, formatRp }) {
               </p>
               <button onClick={handleRequestCustom}
                 style={{ width: "100%", background: "linear-gradient(135deg,#25D366,#128C7E)", color: "#fff", border: "none", borderRadius: 10, padding: "14px 24px", fontSize: "0.92rem", fontWeight: 700, cursor: "pointer", fontFamily: "'Jost',sans-serif", display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
-                💬 Request Custom via WhatsApp
+                Request Custom via WhatsApp
               </button>
             </div>
 
             <button onClick={() => onWaOpen && onWaOpen({ key: "layanan", vars: { judul_layanan: product.nama } })}
               style={{ width: "100%", marginTop: 10, background: "#FAF7F0", color: darkTeal, border: "1.5px solid #E8DCC8", borderRadius: 10, padding: "12px 20px", fontSize: "0.85rem", fontWeight: 600, cursor: "pointer", fontFamily: "'Jost',sans-serif" }}>
-              💬 Tanya Produk Ini (Sesuai Spesifikasi)
+              Tanya Produk Ini (Sesuai Spesifikasi)
             </button>
           </div>
         </div>
@@ -13066,7 +13066,7 @@ function SubPageCatalog({ pageKey, heroColor, heroIcon, title, subtitle, breadcr
   if (itemSlug && !detailItem) {
     return (
       <div style={{ minHeight: "60vh", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "80px 5%", textAlign: "center" }}>
-        <div style={{ fontSize: "3rem", marginBottom: 16 }}>🔍</div>
+        <div style={{ fontSize: "3rem", marginBottom: 16 }}></div>
         <h2 style={{ fontFamily: "'Playfair Display',serif", fontSize: "1.4rem", fontWeight: 800, color: "#2E3D3F", margin: "0 0 10px" }}>Produk Tidak Ditemukan</h2>
         <p style={{ color: "#5A6A6C", fontSize: "0.9rem", maxWidth: 420, marginBottom: 24 }}>Link yang Anda buka mungkin salah, atau produk ini sudah tidak tersedia.</p>
         <button onClick={handleCloseItem} style={{ padding: "12px 28px", background: "#2E3D3F", color: "#fff", border: "none", borderRadius: 8, fontWeight: 700, fontSize: "0.85rem", cursor: "pointer" }}>
@@ -13124,7 +13124,7 @@ function SubPageCatalog({ pageKey, heroColor, heroIcon, title, subtitle, breadcr
                     onError={e=>{e.target.parentElement.style.background="#E8DCC8"; e.target.style.display="none";}} />
                 ) : (
                   <div style={{ width:"100%", height:"100%", display:"flex", alignItems:"center", justifyContent:"center", fontSize:"3rem", opacity:0.4 }}>
-                    {item.icon || "🏠"}
+                    {item.icon || ""}
                   </div>
                 )}
                 {/* Badge Style */}
@@ -13158,7 +13158,7 @@ function SubPageCatalog({ pageKey, heroColor, heroIcon, title, subtitle, breadcr
                   <div style={{ paddingTop:14, borderTop:"1px solid #F0EDE8" }}>
                     <button onClick={(e)=>{ e.stopPropagation(); onWaOpen && onWaOpen({ key: "layanan", vars: { judul_layanan: item.nama } }); }}
                       style={{ width:"100%", background:"linear-gradient(135deg,#2E3D3F,#8B6914)", color:"#fff", border:"none", borderRadius:8, padding:"11px 16px", fontSize:"0.8rem", fontWeight:700, cursor:"pointer", letterSpacing:".04em" }}>
-                      💬 Konsultasi Sekarang
+                      Konsultasi Sekarang
                     </button>
                   </div>
                 ) : (
@@ -13188,7 +13188,7 @@ function SubPageCatalog({ pageKey, heroColor, heroIcon, title, subtitle, breadcr
           <p style={{ color:"rgba(255,255,255,.7)", fontSize:"0.875rem", margin:"0 0 24px", lineHeight:1.7 }}>Kami siap membuat desain custom sesuai kebutuhan dan budget Anda.</p>
           <button onClick={()=>onWaOpen && onWaOpen({ key: "konsultasi", vars: {} })}
             style={{ background:"#C9AA71", color:"#2E3D3F", border:"none", borderRadius:10, padding:"14px 32px", fontSize:"0.9rem", fontWeight:800, cursor:"pointer", letterSpacing:".05em" }}>
-            💬 Konsultasi Sekarang
+            Konsultasi Sekarang
           </button>
         </div>
       </div>
@@ -13248,7 +13248,7 @@ function SubPageCatalogDetailPage({ item, pageKey, onBack, onWaOpen, formatHarga
         </button>
         {pageKey && (
           <button onClick={shareItemLink} style={{ display: "flex", alignItems: "center", gap: 6, background: "rgba(255,255,255,.08)", border: "1px solid rgba(255,255,255,.2)", color: linkCopied ? "#8BD9A0" : "#fff", fontWeight: 700, fontSize: "0.72rem", cursor: "pointer", padding: "6px 12px", borderRadius: 20, letterSpacing: ".04em", whiteSpace: "nowrap", flexShrink: 0 }}>
-            <span>🔗</span> <span>{linkCopied ? "Link disalin!" : "Bagikan"}</span>
+            <span></span> <span>{linkCopied ? "Link disalin!" : "Bagikan"}</span>
           </button>
         )}
       </div>
@@ -13280,7 +13280,7 @@ function SubPageCatalogDetailPage({ item, pageKey, onBack, onWaOpen, formatHarga
               {mainImg ? (
                 <img src={mainImg} alt={item.nama} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} onError={e => e.target.style.display = "none"} />
               ) : (
-                <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 64 }}>{item.icon || "🏠"}</div>
+                <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 64 }}>{item.icon || ""}</div>
               )}
               {item.style && (
                 <div style={{ position: "absolute", top: 14, left: 14, background: "rgba(46,61,63,.85)", backdropFilter: "blur(8px)", color: accentGold, fontSize: "0.65rem", fontWeight: 800, letterSpacing: ".1em", textTransform: "uppercase", padding: "4px 12px", borderRadius: 20 }}>
@@ -13323,7 +13323,7 @@ function SubPageCatalogDetailPage({ item, pageKey, onBack, onWaOpen, formatHarga
             {/* ── Rincian Harga Per M² (kalau diaktifkan admin) ── */}
             {item.tampilHarga !== false && item.hargaDetail?.aktif && item.hargaDetail.items?.length > 0 && (
               <div style={{ background: "#FAF7F0", border: "1.5px solid #E8DCC8", borderRadius: 12, padding: "16px 18px", marginBottom: 22 }}>
-                <div style={{ fontSize: "0.65rem", letterSpacing: ".1em", textTransform: "uppercase", color: accentGold, fontWeight: 800, marginBottom: 10 }}>📋 Rincian Harga per Kombinasi</div>
+                <div style={{ fontSize: "0.65rem", letterSpacing: ".1em", textTransform: "uppercase", color: accentGold, fontWeight: 800, marginBottom: 10 }}>Rincian Harga per Kombinasi</div>
                 <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
                   {item.hargaDetail.items.map((it, i) => (
                     <div key={i} style={{ display: "flex", alignItems: "baseline", gap: 8, fontSize: "0.84rem", color: "#3D4D4F", lineHeight: 1.6 }}>
@@ -13352,7 +13352,7 @@ function SubPageCatalogDetailPage({ item, pageKey, onBack, onWaOpen, formatHarga
 
             {item.poin && item.poin.length > 0 && (
               <div style={{ background: "#FAF7F0", border: "1.5px solid #E8DCC8", borderRadius: 12, padding: "18px 20px", marginBottom: 26 }}>
-                <div style={{ fontSize: "0.65rem", letterSpacing: ".1em", textTransform: "uppercase", color: accentGold, fontWeight: 800, marginBottom: 12 }}>📦 Yang Anda Dapatkan Dalam Paket Ini</div>
+                <div style={{ fontSize: "0.65rem", letterSpacing: ".1em", textTransform: "uppercase", color: accentGold, fontWeight: 800, marginBottom: 12 }}>Yang Anda Dapatkan Dalam Paket Ini</div>
                 <div style={{ display: "flex", flexDirection: "column", gap: 9 }}>
                   {item.poin.map((p, i) => (
                     <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 10 }}>
@@ -13367,7 +13367,7 @@ function SubPageCatalogDetailPage({ item, pageKey, onBack, onWaOpen, formatHarga
             {/* ── Form Request Custom ── */}
             <div style={{ background: "#fff", border: `1.5px solid #E8DCC8`, borderRadius: 14, padding: "22px 24px", marginTop: 8 }}>
               <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
-                <span style={{ fontSize: 18 }}>🎨</span>
+                <span style={{ fontSize: 18 }}></span>
                 <div style={{ fontWeight: 800, fontSize: "0.95rem", color: darkTeal }}>Request Custom</div>
               </div>
               <p style={{ fontSize: "0.8rem", color: "#5A6A6C", lineHeight: 1.65, marginBottom: 16 }}>
@@ -13375,13 +13375,13 @@ function SubPageCatalogDetailPage({ item, pageKey, onBack, onWaOpen, formatHarga
               </p>
               <button onClick={handleRequestCustom}
                 style={{ width: "100%", background: "linear-gradient(135deg,#25D366,#128C7E)", color: "#fff", border: "none", borderRadius: 10, padding: "14px 24px", fontSize: "0.92rem", fontWeight: 700, cursor: "pointer", fontFamily: "'Jost',sans-serif", display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
-                💬 Request Custom via WhatsApp
+                Request Custom via WhatsApp
               </button>
             </div>
 
             <button onClick={() => onWaOpen && onWaOpen({ key: "layanan", vars: { judul_layanan: item.nama } })}
               style={{ width: "100%", marginTop: 10, background: "#FAF7F0", color: darkTeal, border: "1.5px solid #E8DCC8", borderRadius: 10, padding: "12px 20px", fontSize: "0.85rem", fontWeight: 600, cursor: "pointer", fontFamily: "'Jost',sans-serif" }}>
-              💬 Konsultasi Item Ini
+              Konsultasi Item Ini
             </button>
           </div>
         </div>
@@ -13403,7 +13403,7 @@ const CATALOG_DATA = {
   /* ────────── INTERIOR ────────── */
   "interior/kamar-tidur": {
     heroColor:"linear-gradient(135deg,#2c1654 0%,#6a2fa0 60%,#9b59b6 100%)",
-    heroIcon:"🛏️", title:"Desain Kamar Tidur", subtitle:"Wujudkan kamar tidur impian — nyaman, estetis, dan mencerminkan karakter pribadi Anda.",
+    heroIcon:"", title:"Desain Kamar Tidur", subtitle:"Wujudkan kamar tidur impian — nyaman, estetis, dan mencerminkan karakter pribadi Anda.",
     breadcrumb:[{label:"Beranda",page:"home"},{label:"Interior",page:"interior"},{label:"Kamar Tidur"}],
     items:[
       {id:"kt1", nama:"Kamar Minimalis Modern", style:"Best Seller", material:"Kayu MDF + HPL", desc:"Desain bersih dengan storage tersembunyi. Warna netral abu-abu dan putih yang menenangkan.", harga:8500000, fitur:["Storage Built-in","Hidden Lamp","AC Concealed"], img:"https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=600&q=80", poin:["Survey lokasi & konsultasi desain gratis sebelum pengerjaan","Material utama: Kayu MDF + HPL","Storage Built-in","Hidden Lamp","AC Concealed","Pengerjaan oleh tenaga ahli berpengalaman","Garansi purna pengerjaan dari tim VASTURA GROUP"]},
@@ -13418,7 +13418,7 @@ const CATALOG_DATA = {
   },
   "interior/kamar-mandi": {
     heroColor:"linear-gradient(135deg,#0f3460 0%,#16213e 60%,#1a4a6e 100%)",
-    heroIcon:"🚿", title:"Desain Kamar Mandi", subtitle:"Transformasi kamar mandi menjadi ruang spa pribadi — bersih, modern, dan fungsional.",
+    heroIcon:"", title:"Desain Kamar Mandi", subtitle:"Transformasi kamar mandi menjadi ruang spa pribadi — bersih, modern, dan fungsional.",
     breadcrumb:[{label:"Beranda",page:"home"},{label:"Interior",page:"interior"},{label:"Kamar Mandi"}],
     items:[
       {id:"km1", nama:"Bathroom Minimalis Modern", style:"Clean", material:"Granit + Keramik", desc:"Desain kotak-kotak bersih dengan shower box kaca, cermin LED, dan sanitasi premium.", harga:12000000, fitur:["Shower Box","LED Mirror","Waterproof"], img:"https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?w=600&q=80", poin:["Survey lokasi & konsultasi desain gratis sebelum pengerjaan","Material utama: Granit + Keramik","Shower Box","LED Mirror","Waterproof","Pengerjaan oleh tenaga ahli berpengalaman","Garansi purna pengerjaan dari tim VASTURA GROUP"]},
@@ -13431,7 +13431,7 @@ const CATALOG_DATA = {
   },
   "interior/ruang-keluarga": {
     heroColor:"linear-gradient(135deg,#1a3c34 0%,#2d6a4f 60%,#52b788 100%)",
-    heroIcon:"👨‍👩‍👧", title:"Desain Ruang Keluarga", subtitle:"Ciptakan ruang keluarga yang hangat, nyaman, dan menjadi tempat berkumpul yang menyenangkan.",
+    heroIcon:"", title:"Desain Ruang Keluarga", subtitle:"Ciptakan ruang keluarga yang hangat, nyaman, dan menjadi tempat berkumpul yang menyenangkan.",
     breadcrumb:[{label:"Beranda",page:"home"},{label:"Interior",page:"interior"},{label:"Ruang Keluarga"}],
     items:[
       {id:"rk1", nama:"Family Room Modern", style:"Cozy", material:"Sofa Fabric + Kayu", desc:"Open plan yang luas dengan sofa modular, TV wall custom, dan pencahayaan hangat.", harga:18000000, fitur:["Modular Sofa","TV Wall","Warm Lighting"], img:"https://images.unsplash.com/photo-1567016432779-094069958ea5?w=600&q=80", poin:["Survey lokasi & konsultasi desain gratis sebelum pengerjaan","Material utama: Sofa Fabric + Kayu","Modular Sofa","TV Wall","Warm Lighting","Pengerjaan oleh tenaga ahli berpengalaman","Garansi purna pengerjaan dari tim VASTURA GROUP"]},
@@ -13444,7 +13444,7 @@ const CATALOG_DATA = {
   },
   "interior/ruang-tamu": {
     heroColor:"linear-gradient(135deg,#3d1a1a 0%,#8B4513 60%,#cd853f 100%)",
-    heroIcon:"🪑", title:"Desain Ruang Tamu", subtitle:"Kesan pertama yang tak terlupakan — ruang tamu elegan yang menyambut setiap tamu dengan hangat.",
+    heroIcon:"", title:"Desain Ruang Tamu", subtitle:"Kesan pertama yang tak terlupakan — ruang tamu elegan yang menyambut setiap tamu dengan hangat.",
     breadcrumb:[{label:"Beranda",page:"home"},{label:"Interior",page:"interior"},{label:"Ruang Tamu"}],
     items:[
       {id:"rt1", nama:"Ruang Tamu Minimalis", style:"Clean", material:"Keramik + Fabric", desc:"Bersih dan lapang. Sofa 3+1 seater, kopi table minimalis, dan artwork sederhana.", harga:10000000, fitur:["Space Efficient","Clean Lines","Art Display"], img:"https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=600&q=80", poin:["Survey lokasi & konsultasi desain gratis sebelum pengerjaan","Material utama: Keramik + Fabric","Space Efficient","Clean Lines","Art Display","Pengerjaan oleh tenaga ahli berpengalaman","Garansi purna pengerjaan dari tim VASTURA GROUP"]},
@@ -13457,7 +13457,7 @@ const CATALOG_DATA = {
   },
   "interior/kitchen-set": {
     heroColor:"linear-gradient(135deg,#1c3144 0%,#2c5282 60%,#3182ce 100%)",
-    heroIcon:"🍳", title:"Kitchen Set & Dapur", subtitle:"Dapur impian yang ergonomis, fungsional, dan cantik — tempat kreasi kuliner terbaik Anda.",
+    heroIcon:"", title:"Kitchen Set & Dapur", subtitle:"Dapur impian yang ergonomis, fungsional, dan cantik — tempat kreasi kuliner terbaik Anda.",
     breadcrumb:[{label:"Beranda",page:"home"},{label:"Interior",page:"interior"},{label:"Kitchen Set"}],
     items:[
       {id:"ks1", nama:"Kitchen Set Minimalis", style:"Clean", material:"HPL + Granit", desc:"Simpel dan efisien. Kabinet HPL putih, countertop granit hitam, dan backsplash subway tile.", harga:15000000, fitur:["Soft Close Hinge","Granite Top","Subway Tile"], img:"https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=600&q=80", poin:["Survey lokasi & konsultasi desain gratis sebelum pengerjaan","Material utama: HPL + Granit","Soft Close Hinge","Granite Top","Subway Tile","Pengerjaan oleh tenaga ahli berpengalaman","Garansi purna pengerjaan dari tim VASTURA GROUP"]},
@@ -13470,7 +13470,7 @@ const CATALOG_DATA = {
   },
   "interior/ruang-kerja": {
     heroColor:"linear-gradient(135deg,#1a1a2e 0%,#16213e 60%,#0f3460 100%)",
-    heroIcon:"💼", title:"Desain Ruang Kerja", subtitle:"Home office produktif dan inspiratif — desain yang mendukung fokus, kreativitas, dan kenyamanan kerja.",
+    heroIcon:"", title:"Desain Ruang Kerja", subtitle:"Home office produktif dan inspiratif — desain yang mendukung fokus, kreativitas, dan kenyamanan kerja.",
     breadcrumb:[{label:"Beranda",page:"home"},{label:"Interior",page:"interior"},{label:"Ruang Kerja"}],
     items:[
       {id:"rw1", nama:"Home Office Minimalis", style:"Focus", material:"Kayu MDF + Metal", desc:"Bersih dan fokus. Meja floating, storage tersembunyi, dan pencahayaan task light optimal.", harga:7500000, fitur:["Floating Desk","Hidden Storage","Task Light"], img:"https://images.unsplash.com/photo-1593642632559-0c6d3fc62b89?w=600&q=80", poin:["Survey lokasi & konsultasi desain gratis sebelum pengerjaan","Material utama: Kayu MDF + Metal","Floating Desk","Hidden Storage","Task Light","Pengerjaan oleh tenaga ahli berpengalaman","Garansi purna pengerjaan dari tim VASTURA GROUP"]},
@@ -13484,7 +13484,7 @@ const CATALOG_DATA = {
   /* ────────── EKSTERIOR ────────── */
   "eksterior/pagar": {
     heroColor:"linear-gradient(135deg,#1a1a2e 0%,#16213e 60%,#0f3460 100%)",
-    heroIcon:"🔒", title:"Pagar Rumah", subtitle:"Keamanan dan keindahan dalam satu desain — pagar yang kokoh, estetis, dan meningkatkan nilai properti.",
+    heroIcon:"", title:"Pagar Rumah", subtitle:"Keamanan dan keindahan dalam satu desain — pagar yang kokoh, estetis, dan meningkatkan nilai properti.",
     breadcrumb:[{label:"Beranda",page:"home"},{label:"Eksterior"},{label:"Pagar"}],
     items:[
       {id:"pg1", nama:"Pagar Hollow Minimalis", style:"Modern", material:"Besi Hollow 4x4cm", desc:"Garis tegas, simpel, dan elegan. Finishing powder coat anti karat tersedia berbagai warna.", harga:850000, fitur:["Anti Karat","Custom Warna","Powder Coat"], img:"https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80", poin:["Survey lokasi & konsultasi desain gratis sebelum pengerjaan","Material utama: Besi Hollow 4x4cm","Anti Karat","Custom Warna","Powder Coat","Pengerjaan oleh tenaga ahli berpengalaman","Garansi purna pengerjaan dari tim VASTURA GROUP"]},
@@ -13497,7 +13497,7 @@ const CATALOG_DATA = {
   },
   "eksterior/kanopi": {
     heroColor:"linear-gradient(135deg,#1b4332 0%,#2d6a4f 60%,#52b788 100%)",
-    heroIcon:"🏗️", title:"Kanopi", subtitle:"Pelindung carport dan teras yang fungsional, kuat, dan mempercantik tampilan luar rumah Anda.",
+    heroIcon:"", title:"Kanopi", subtitle:"Pelindung carport dan teras yang fungsional, kuat, dan mempercantik tampilan luar rumah Anda.",
     breadcrumb:[{label:"Beranda",page:"home"},{label:"Eksterior"},{label:"Kanopi"}],
     items:[
       {id:"kn1", nama:"Kanopi Polycarbonate", style:"Popular", material:"Baja Ringan + Polycarbonate", desc:"Paling populer — tembus cahaya, ringan, dan tahan UV. Tersedia berbagai warna polycarbonate.", harga:280000, fitur:["Tembus Cahaya","UV Protection","Berbagai Warna"], img:"https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=600&q=80", poin:["Survey lokasi & konsultasi desain gratis sebelum pengerjaan","Material utama: Baja Ringan + Polycarbonate","Tembus Cahaya","UV Protection","Berbagai Warna","Pengerjaan oleh tenaga ahli berpengalaman","Garansi purna pengerjaan dari tim VASTURA GROUP"]},
@@ -13510,7 +13510,7 @@ const CATALOG_DATA = {
   },
   "eksterior/aluminium": {
     heroColor:"linear-gradient(135deg,#2b2d42 0%,#555b6e 60%,#8d99ae 100%)",
-    heroIcon:"🪟", title:"Aluminium", subtitle:"Kusen, pintu, dan jendela aluminium — ringan, anti karat, dan tampilan premium untuk hunian modern.",
+    heroIcon:"", title:"Aluminium", subtitle:"Kusen, pintu, dan jendela aluminium — ringan, anti karat, dan tampilan premium untuk hunian modern.",
     breadcrumb:[{label:"Beranda",page:"home"},{label:"Eksterior"},{label:"Aluminium"}],
     items:[
       {id:"al1", nama:"Kusen Jendela Casement", style:"Classic", material:"Aluminium 4\"", desc:"Jendela swing ke luar (casement). Ventilasi optimal, seal udara rapat, dan profil ramping.", harga:450000, fitur:["Rapat Udara","Easy Clean","Custom Size"], img:"https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=600&q=80", poin:["Survey lokasi & konsultasi desain gratis sebelum pengerjaan","Material utama: Aluminium 4\"","Rapat Udara","Easy Clean","Custom Size","Pengerjaan oleh tenaga ahli berpengalaman","Garansi purna pengerjaan dari tim VASTURA GROUP"]},
@@ -13523,7 +13523,7 @@ const CATALOG_DATA = {
   },
   "eksterior/taman-landscape": {
     heroColor:"linear-gradient(135deg,#1a472a 0%,#2d6a4f 60%,#40916c 100%)",
-    heroIcon:"🌳", title:"Taman & Landscape", subtitle:"Ciptakan taman impian yang asri, hijau, dan menenangkan — oasis pribadi di tengah hunian.",
+    heroIcon:"", title:"Taman & Landscape", subtitle:"Ciptakan taman impian yang asri, hijau, dan menenangkan — oasis pribadi di tengah hunian.",
     breadcrumb:[{label:"Beranda",page:"home"},{label:"Eksterior"},{label:"Taman Landscape"}],
     items:[
       {id:"tm1", nama:"Taman Tropis Modern", style:"Tropical", material:"Batu Andesit + Tanaman Tropis", desc:"Tanaman tropis lebat, jalur batu andesit, dan kolam hias mini. Nuansa resort di rumah.", harga:15000000, fitur:["Kolam Hias","Tanaman Tropis","Batu Andesit"], img:"https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=600&q=80", poin:["Survey lokasi & konsultasi desain gratis sebelum pengerjaan","Material utama: Batu Andesit + Tanaman Tropis","Kolam Hias","Tanaman Tropis","Batu Andesit","Pengerjaan oleh tenaga ahli berpengalaman","Garansi purna pengerjaan dari tim VASTURA GROUP"]},
@@ -13538,7 +13538,7 @@ const CATALOG_DATA = {
   },
   "interior/plafon-modern": {
     heroColor:"linear-gradient(135deg,#1a1a2e 0%,#16213e 50%,#0f3460 100%)",
-    heroIcon:"🏛️", title:"Plafon Modern", subtitle:"Transformasi langit-langit ruangan menjadi karya seni arsitektur — elegan, modern, dan bernilai premium.",
+    heroIcon:"", title:"Plafon Modern", subtitle:"Transformasi langit-langit ruangan menjadi karya seni arsitektur — elegan, modern, dan bernilai premium.",
     breadcrumb:[{label:"Beranda",page:"home"},{label:"Interior",page:"interior"},{label:"Plafon Modern"}],
     satuan:"m²",
     items:[
@@ -13555,7 +13555,7 @@ const CATALOG_DATA = {
   },
   "interior/backdrop-tv": {
     heroColor:"linear-gradient(135deg,#1c1c1c 0%,#3a2f1f 50%,#8B6914 100%)",
-    heroIcon:"📺", title:"Backdrop TV", subtitle:"Feature wall di belakang TV yang menjadi pusat perhatian ruang keluarga — estetis, modern, dan bisa dipadukan dengan LED serta hiasan lainnya.",
+    heroIcon:"", title:"Backdrop TV", subtitle:"Feature wall di belakang TV yang menjadi pusat perhatian ruang keluarga — estetis, modern, dan bisa dipadukan dengan LED serta hiasan lainnya.",
     breadcrumb:[{label:"Beranda",page:"home"},{label:"Interior",page:"interior"},{label:"Backdrop TV"}],
     satuan:"m²",
     items:[
@@ -13719,12 +13719,12 @@ function VasturaFooter({ data, navigateTo, onWaOpen, showDevProfile }) {
             <div style={{ display:"flex", flexDirection:"column", gap:14 }}>
               {/* Alamat */}
               <div style={{ display:"flex", gap:10, alignItems:"flex-start" }}>
-                <span style={{ color:accentGold, fontSize:16, flexShrink:0, marginTop:2 }}>📍</span>
+                <span style={{ color:accentGold, fontSize:16, flexShrink:0, marginTop:2 }}></span>
                 <span style={{ fontSize:13, color:"rgba(255,255,255,.68)", lineHeight:1.75, whiteSpace:"pre-line" }}>{address}</span>
               </div>
               {/* Phone */}
               <div style={{ display:"flex", gap:10, alignItems:"center" }}>
-                <span style={{ color:accentGold, fontSize:16, flexShrink:0 }}>📞</span>
+                <span style={{ color:accentGold, fontSize:16, flexShrink:0 }}></span>
                 <a href={`tel:${phone.replace(/\s/g,"")}`}
                   style={{ fontSize:13, color:"rgba(255,255,255,.68)", textDecoration:"none", transition:"color .15s" }}
                   onMouseEnter={e => e.currentTarget.style.color = accentGold}
@@ -13734,7 +13734,7 @@ function VasturaFooter({ data, navigateTo, onWaOpen, showDevProfile }) {
               </div>
               {/* Email */}
               <div style={{ display:"flex", gap:10, alignItems:"center" }}>
-                <span style={{ color:accentGold, fontSize:16, flexShrink:0 }}>✉️</span>
+                <span style={{ color:accentGold, fontSize:16, flexShrink:0 }}></span>
                 <a href={`mailto:${email}`}
                   style={{ fontSize:13, color:"rgba(255,255,255,.68)", textDecoration:"none", transition:"color .15s" }}
                   onMouseEnter={e => e.currentTarget.style.color = accentGold}
@@ -13744,7 +13744,7 @@ function VasturaFooter({ data, navigateTo, onWaOpen, showDevProfile }) {
               </div>
               {/* Website */}
               <div style={{ display:"flex", gap:10, alignItems:"center" }}>
-                <span style={{ color:accentGold, fontSize:16, flexShrink:0 }}>🌐</span>
+                <span style={{ color:accentGold, fontSize:16, flexShrink:0 }}></span>
                 <span style={{ fontSize:13, color:"rgba(255,255,255,.68)" }}>{website}</span>
               </div>
             </div>
@@ -13915,8 +13915,8 @@ function HomeServiceCardEditor({ index, svc, data, save, notify }) {
 
   const doSaveText = async () => {
     setSaving(true);
-    try { await patchAndSave({ title, desc }); notify("✅ Layanan diperbarui!"); }
-    catch { notify("❌ Gagal menyimpan.", "error"); }
+    try { await patchAndSave({ title, desc }); notify("Layanan diperbarui!"); }
+    catch { notify("Gagal menyimpan.", "error"); }
     setSaving(false);
   };
 
@@ -13934,9 +13934,9 @@ function HomeServiceCardEditor({ index, svc, data, save, notify }) {
       ) : (
         <div style={{ width: "100%", height: 120, background: "#E8DCC8", borderRadius: 6, marginBottom: 8, display: "flex", alignItems: "center", justifyContent: "center", color: "#5A6A6C", fontSize: 11 }}>Belum ada foto</div>
       )}
-      <UploadButton label="📁 Ganti Foto"
+      <UploadButton label="Ganti Foto"
         style={{ fontSize: 11, padding: "6px 10px", marginBottom: 8, width: "100%", justifyContent: "center" }}
-        onDone={urls => { patchAndSave({ img: urls[0] }); notify("✅ Foto layanan diperbarui!"); }}
+        onDone={urls => { patchAndSave({ img: urls[0] }); notify("Foto layanan diperbarui!"); }}
         onError={() => notify("Gagal upload.", "error")} />
       <input value={title} onChange={e => setTitle(e.target.value)} placeholder="Judul layanan"
         style={{ width: "100%", padding: "7px 9px", border: "1px solid #D4C4A0", borderRadius: 5, fontSize: 12, marginBottom: 6, boxSizing: "border-box", fontWeight: 700 }} />
@@ -13947,10 +13947,10 @@ function HomeServiceCardEditor({ index, svc, data, save, notify }) {
       <div style={{ display: "flex", gap: 6 }}>
         <button onClick={doSaveText} disabled={saving}
           style={{ flex: 1, padding: "6px", background: "#3498db", color: "#fff", border: "none", borderRadius: 5, fontSize: 11, fontWeight: 700, cursor: "pointer" }}>
-          {saving ? "..." : "💾 Simpan Teks"}
+          {saving ? "..." : "Simpan Teks"}
         </button>
         <button onClick={doRemove}
-          style={{ padding: "6px 10px", background: "none", color: "#e74c3c", border: "1px solid #e74c3c", borderRadius: 5, fontSize: 11, cursor: "pointer" }}>🗑</button>
+          style={{ padding: "6px 10px", background: "none", color: "#e74c3c", border: "1px solid #e74c3c", borderRadius: 5, fontSize: 11, cursor: "pointer" }}></button>
       </div>
     </div>
   );
@@ -13983,7 +13983,7 @@ function NavDropdownTemaRumah({ page, navigateTo, temaList, temaSlug, openTemaDe
             style={{...btn(page==="temarumah" && !temaSlug), fontWeight:700}}
             onMouseEnter={e=>{e.currentTarget.style.background="#FAF7F0"; e.currentTarget.style.color="#2E3D3F";}}
             onMouseLeave={e=>{e.currentTarget.style.background=(page==="temarumah"&&!temaSlug)?"#FAF7F0":"transparent"; e.currentTarget.style.color=(page==="temarumah"&&!temaSlug)?"#2E3D3F":"#3D5254";}}>
-            📖 Semua Tema Rumah
+            Semua Tema Rumah
           </button>
           <div style={{ margin:"4px 0 2px", borderTop:"1px solid #edf2f4" }}/>
           {(temaList || []).map(tema=>(
@@ -14049,19 +14049,19 @@ function NavDropdownLayanan({ page, navigateTo, navDropdownLayanan }) {
             onMouseEnter={()=>setSubOpen("interior")}
             onMouseLeave={()=>setSubOpen(null)}>
             <button style={btn(page.startsWith("interior"))} onMouseEnter={e=>{e.currentTarget.style.background="#FAF7F0";}} onMouseLeave={e=>{e.currentTarget.style.background=page.startsWith("interior")?"#FAF7F0":"transparent";}}>
-              <span>🛋️ Interior</span><span style={{fontSize:"0.63rem",fontWeight:800,color:"#fff",background:"#8B6914",padding:"4px 12px",borderRadius:5,letterSpacing:".06em"}}>BUKA</span>
+              <span>Interior</span><span style={{fontSize:"0.63rem",fontWeight:800,color:"#fff",background:"#8B6914",padding:"4px 12px",borderRadius:5,letterSpacing:".06em"}}>BUKA</span>
             </button>
             {subOpen==="interior" && (
               <div style={{...ddBase, top:0, left:"100%", marginLeft:4}}>
                 {[
-                  {key:"interior/plafon-modern",  label:"🏛️ Plafon Modern"},
-                  {key:"interior/kitchen-set",    label:"🍳 Kitchen Set"},
-                  {key:"interior/backdrop-tv",    label:"📺 Backdrop TV"},
-                  {key:"interior/kamar-tidur",    label:"🛏️ Kamar Tidur"},
-                  {key:"interior/kamar-mandi",    label:"🚿 Kamar Mandi"},
-                  {key:"interior/ruang-keluarga", label:"👨‍👩‍👧 Ruang Keluarga"},
-                  {key:"interior/ruang-tamu",     label:"🛋️ Ruang Tamu"},
-                  {key:"interior/ruang-kerja",    label:"💼 Ruang Kerja"},
+                  {key:"interior/plafon-modern",  label:"Plafon Modern"},
+                  {key:"interior/kitchen-set",    label:"Kitchen Set"},
+                  {key:"interior/backdrop-tv",    label:"Backdrop TV"},
+                  {key:"interior/kamar-tidur",    label:"Kamar Tidur"},
+                  {key:"interior/kamar-mandi",    label:"Kamar Mandi"},
+                  {key:"interior/ruang-keluarga", label:"Ruang Keluarga"},
+                  {key:"interior/ruang-tamu",     label:"Ruang Tamu"},
+                  {key:"interior/ruang-kerja",    label:"Ruang Kerja"},
                 ].map(sub=>(
                   <button key={sub.key} onClick={()=>{ navigateTo(sub.key); setDdOpen(false); setSubOpen(null); }}
                     style={btn(page===sub.key)}
@@ -14079,14 +14079,14 @@ function NavDropdownLayanan({ page, navigateTo, navDropdownLayanan }) {
             onMouseEnter={()=>setSubOpen("eksterior")}
             onMouseLeave={()=>setSubOpen(null)}>
             <button style={btn(page.startsWith("eksterior"))} onMouseEnter={e=>{e.currentTarget.style.background="#FAF7F0";}} onMouseLeave={e=>{e.currentTarget.style.background=page.startsWith("eksterior")?"#FAF7F0":"transparent";}}>
-              <span>🏠 Eksterior</span><span style={{fontSize:"0.63rem",fontWeight:800,color:"#fff",background:"#8B6914",padding:"4px 12px",borderRadius:5,letterSpacing:".06em"}}>BUKA</span>
+              <span>Eksterior</span><span style={{fontSize:"0.63rem",fontWeight:800,color:"#fff",background:"#8B6914",padding:"4px 12px",borderRadius:5,letterSpacing:".06em"}}>BUKA</span>
             </button>
             {subOpen==="eksterior" && (
               <div style={{...ddBase, top:0, left:"100%", marginLeft:4}}>
                 {[
-                  {key:"eksterior/pagar",           label:"🔒 Pagar"},
-                  {key:"eksterior/kanopi",           label:"🏗️ Kanopi"},
-                  {key:"eksterior/aluminium",        label:"🪟 Aluminium"},
+                  {key:"eksterior/pagar",           label:"Pagar"},
+                  {key:"eksterior/kanopi",           label:"Kanopi"},
+                  {key:"eksterior/aluminium",        label:"Aluminium"},
                 ].map(sub=>(
                   <button key={sub.key} onClick={()=>{ navigateTo(sub.key); setDdOpen(false); setSubOpen(null); }}
                     style={btn(page===sub.key)}
@@ -14104,7 +14104,7 @@ function NavDropdownLayanan({ page, navigateTo, navDropdownLayanan }) {
             style={btn(page==="eksterior/taman-landscape")}
             onMouseEnter={e=>{e.currentTarget.style.background="#FAF7F0"; e.currentTarget.style.color="#2E3D3F";}}
             onMouseLeave={e=>{e.currentTarget.style.background=page==="eksterior/taman-landscape"?"#FAF7F0":"transparent"; e.currentTarget.style.color=page==="eksterior/taman-landscape"?"#2E3D3F":"#3D5254";}}>
-            🌳 Landscape & Taman
+            Landscape & Taman
           </button>
 
           {/* Divider Produk Retail */}
@@ -14116,7 +14116,7 @@ function NavDropdownLayanan({ page, navigateTo, navDropdownLayanan }) {
             style={btn(page==="furnitur")}
             onMouseEnter={e=>{e.currentTarget.style.background="#FAF7F0"; e.currentTarget.style.color="#2E3D3F";}}
             onMouseLeave={e=>{e.currentTarget.style.background=page==="furnitur"?"#FAF7F0":"transparent"; e.currentTarget.style.color=page==="furnitur"?"#2E3D3F":"#3D5254";}}>
-            🪑 Furnitur
+            Furnitur
           </button>
         </div>
       )}
@@ -14174,8 +14174,8 @@ function TemaHeroFieldRow({ fieldKey, label, placeholder, data, save, notify }) 
   const [saving, setSaving] = useState(false);
   const doSave = async () => {
     setSaving(true);
-    try { await save({ ...data, [fieldKey]: val }); notify("✅ Tersimpan!"); }
-    catch { notify("❌ Gagal menyimpan."); }
+    try { await save({ ...data, [fieldKey]: val }); notify("Tersimpan!"); }
+    catch { notify("Gagal menyimpan."); }
     setSaving(false);
   };
   return (
@@ -14201,14 +14201,14 @@ function TemaHeroImgRow({ data, save, notify, uploadToCloudinary }) {
   const [sav, setSav] = useState(false);
   const doUpload = async (f) => {
     if (!f) return; setUpl(true);
-    try { const u = await uploadToCloudinary(f); setUrl(u); notify("✅ Foto diupload!"); }
-    catch { notify("❌ Gagal upload."); }
+    try { const u = await uploadToCloudinary(f); setUrl(u); notify("Foto diupload!"); }
+    catch { notify("Gagal upload."); }
     setUpl(false);
   };
   const doSave = async () => {
     setSav(true);
-    try { await save({ ...data, temaHeroImg: url }); notify("✅ Foto hero tersimpan!"); }
-    catch { notify("❌ Gagal simpan."); }
+    try { await save({ ...data, temaHeroImg: url }); notify("Foto hero tersimpan!"); }
+    catch { notify("Gagal simpan."); }
     setSav(false);
   };
   return (
@@ -14217,12 +14217,12 @@ function TemaHeroImgRow({ data, save, notify, uploadToCloudinary }) {
       {url && <img src={url} alt="" style={{ width:"100%", maxHeight:160, objectFit:"cover", borderRadius:8, marginBottom:10 }} />}
       <div style={{ display:"flex", gap:10, flexWrap:"wrap" }}>
         <label style={{ padding:"9px 18px", background:"#3498db", color:"#fff", borderRadius:8, fontSize:13, fontWeight:700, cursor:"pointer" }}>
-          {upl ? "⏳ Upload..." : "📷 Upload Foto"}
+          {upl ? "Upload..." : "Upload Foto"}
           <input type="file" accept="image/*" style={{ display:"none" }} onChange={e => doUpload(e.target.files[0])} />
         </label>
         <button onClick={doSave} disabled={sav}
           style={{ padding:"9px 18px", background:"#C9AA71", color:"#fff", border:"none", borderRadius:8, fontSize:13, fontWeight:700, cursor:"pointer" }}>
-          {sav ? "..." : "💾 Simpan URL"}
+          {sav ? "..." : "Simpan URL"}
         </button>
       </div>
       <input type="text" value={url} onChange={e => setUrl(e.target.value)}
@@ -14317,8 +14317,8 @@ function TemaEditForm({ temaOrig, editIdx, activeTemas, data, save, notify, onBa
     try {
       const u = await uploadToCloudinary(f);
       setDenahLantai(prev => prev.map((l, j) => j === li ? { ...l, imgs: [...l.imgs, u] } : l));
-      notify("✅ Foto denah ditambahkan!");
-    } catch { notify("❌ Gagal upload foto denah."); }
+      notify("Foto denah ditambahkan!");
+    } catch { notify("Gagal upload foto denah."); }
     setUploadingDenah(null);
   };
   const removeDenahImg = (li, ii) => {
@@ -14332,7 +14332,7 @@ function TemaEditForm({ temaOrig, editIdx, activeTemas, data, save, notify, onBa
     if (!url) return;
     setDenahLantai(prev => prev.map((l, j) => j === li ? { ...l, imgs: [...l.imgs, url] } : l));
     setPasteUrlDenah(prev => ({ ...prev, [li]: "" }));
-    notify("✅ Foto denah ditambahkan dari URL!");
+    notify("Foto denah ditambahkan dari URL!");
   };
 
   const upd = (path, val) => {
@@ -14348,13 +14348,13 @@ function TemaEditForm({ temaOrig, editIdx, activeTemas, data, save, notify, onBa
 
   const handleSlideUpload = async (f) => {
     if (!f) return;
-    if (slideshowImgs.length >= 8) { notify("⚠️ Maksimal 8 foto per tema."); return; }
+    if (slideshowImgs.length >= 8) { notify("Maksimal 8 foto per tema."); return; }
     setUploadingImg(true);
     try {
       const u = await uploadToCloudinary(f);
       setSlideshowImgs(prev => [...prev, { img: u, label: "" }]); // label dikosongkan, jangan pakai nama file mentah ke publik
-      notify("✅ Foto ditambahkan!");
-    } catch { notify("❌ Gagal upload foto."); }
+      notify("Foto ditambahkan!");
+    } catch { notify("Gagal upload foto."); }
     setUploadingImg(false);
   };
 
@@ -14383,25 +14383,25 @@ function TemaEditForm({ temaOrig, editIdx, activeTemas, data, save, notify, onBa
   const [pasteUrl, setPasteUrl] = useState("");
   const addByUrl = () => {
     if (!pasteUrl.trim()) return;
-    if (slideshowImgs.length >= 8) { notify("⚠️ Maksimal 8 foto."); return; }
+    if (slideshowImgs.length >= 8) { notify("Maksimal 8 foto."); return; }
     setSlideshowImgs(prev => [...prev, { img: pasteUrl.trim(), label: "" }]);
     setPasteUrl("");
-    notify("✅ Foto ditambahkan dari URL!");
+    notify("Foto ditambahkan dari URL!");
   };
 
   const handleImgUpload = async (f) => {
     if (!f) return;
     setUploadingImg(true);
-    try { upd("img", await uploadToCloudinary(f)); notify("✅ Foto diupload!"); }
-    catch { notify("❌ Gagal upload foto."); }
+    try { upd("img", await uploadToCloudinary(f)); notify("Foto diupload!"); }
+    catch { notify("Gagal upload foto."); }
     setUploadingImg(false);
   };
 
   const saveTema = async () => {
-    if (!draft.nama?.trim()) { notify("⚠️ Nama tema wajib diisi."); return; }
-    if (!draft.slug?.trim()) { notify("⚠️ Slug (URL key) wajib diisi."); return; }
+    if (!draft.nama?.trim()) { notify("Nama tema wajib diisi."); return; }
+    if (!draft.slug?.trim()) { notify("Slug (URL key) wajib diisi."); return; }
     const slugClash = activeTemas.some((t, i) => i !== editIdx && t.slug === draft.slug.trim());
-    if (slugClash) { notify("⚠️ Slug sudah dipakai tema lain, gunakan slug unik."); return; }
+    if (slugClash) { notify("Slug sudah dipakai tema lain, gunakan slug unik."); return; }
     setSaving(true);
     try {
       /* Simpan imgs[] dan img (foto pertama sebagai fallback) ke dalam draft */
@@ -14414,10 +14414,10 @@ function TemaEditForm({ temaOrig, editIdx, activeTemas, data, save, notify, onBa
       /* Juga update temaPhotosOverride agar slideshow kartu ikut berubah */
       const nextOverride = { ...(data.temaPhotosOverride || {}), [draft.slug]: slideshowImgs };
       await save({ ...data, temaData: nextTemas, temaPhotosOverride: nextOverride });
-      notify("✅ Tema berhasil disimpan!");
+      notify("Tema berhasil disimpan!");
       onBack();
     } catch (err) {
-      notify("❌ Gagal menyimpan: " + (err?.message || "Periksa koneksi internet Anda."));
+      notify("Gagal menyimpan: " + (err?.message || "Periksa koneksi internet Anda."));
     } finally {
       setSaving(false);
     }
@@ -14455,13 +14455,13 @@ function TemaEditForm({ temaOrig, editIdx, activeTemas, data, save, notify, onBa
         <div style={{ fontWeight: 800, fontSize: 16, color: "#2E3D3F" }}>Edit: {draft.no} · {draft.nama}</div>
         <button onClick={saveTema} disabled={saving}
           style={{ padding: "8px 20px", background: "#C9AA71", color: "#fff", border: "none", borderRadius: 8, fontSize: 13, fontWeight: 700, cursor: "pointer" }}>
-          {saving ? "⏳ Menyimpan..." : "💾 Simpan Tema"}
+          {saving ? "Menyimpan..." : "Simpan Tema"}
         </button>
       </div>
 
       {/* Identitas */}
       <div style={SS}>
-        {ST("🏷️", "Identitas Tema")}
+        {ST("", "Identitas Tema")}
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
           <div>{inp("No. Urut", "no", false, "01")}</div>
           <div style={{ marginBottom: 14 }}>
@@ -14490,7 +14490,7 @@ function TemaEditForm({ temaOrig, editIdx, activeTemas, data, save, notify, onBa
         </div>
         <div style={{ marginBottom: 14 }}>
           <div style={{ fontSize: 11, fontWeight: 700, color: "#5A6A6C", marginBottom: 6, textTransform: "uppercase", letterSpacing: ".04em" }}>
-            📸 Foto Slideshow ({slideshowImgs.length}/8)
+            Foto Slideshow ({slideshowImgs.length}/8)
           </div>
 
           {/* Preview slideshow */}
@@ -14506,7 +14506,7 @@ function TemaEditForm({ temaOrig, editIdx, activeTemas, data, save, notify, onBa
                 />
               ) : (
                 <div style={{ width: "100%", height: "100%", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 6, background: "#FDF3F0" }}>
-                  <span style={{ fontSize: 26 }}>⚠️</span>
+                  <span style={{ fontSize: 26 }}></span>
                   <span style={{ fontSize: 12, fontWeight: 700, color: "#dc2626" }}>Foto ini rusak / link putus</span>
                   <span style={{ fontSize: 10.5, color: "#A89070" }}>Hapus (✕) lalu upload ulang fotonya</span>
                 </div>
@@ -14539,7 +14539,7 @@ function TemaEditForm({ temaOrig, editIdx, activeTemas, data, save, notify, onBa
                     <img src={ph.img} alt={ph.label} style={{ width: "100%", height: 70, objectFit: "cover", display: "block" }} onError={() => markImgBroken(ph.img)} />
                   ) : (
                     <div style={{ width: "100%", height: 70, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 2, background: "#FDF3F0" }}>
-                      <span style={{ fontSize: 16 }}>⚠️</span>
+                      <span style={{ fontSize: 16 }}></span>
                       <span style={{ fontSize: 8.5, fontWeight: 700, color: "#dc2626" }}>Foto rusak</span>
                     </div>
                   )}
@@ -14571,7 +14571,7 @@ function TemaEditForm({ temaOrig, editIdx, activeTemas, data, save, notify, onBa
           {/* Tombol upload */}
           <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 8 }}>
             <label style={{ padding: "9px 16px", background: slideshowImgs.length >= 8 ? "#ccc" : "#3498db", color: "#fff", borderRadius: 8, fontSize: 13, fontWeight: 700, cursor: slideshowImgs.length >= 8 ? "default" : "pointer" }}>
-              {uploadingImg ? "⏳ Mengupload..." : "📷 Upload Foto"}
+              {uploadingImg ? "Mengupload..." : "Upload Foto"}
               <input type="file" accept="image/*" style={{ display: "none" }} disabled={uploadingImg || slideshowImgs.length >= 8} onChange={e => handleSlideUpload(e.target.files?.[0])} />
             </label>
           </div>
@@ -14595,7 +14595,7 @@ function TemaEditForm({ temaOrig, editIdx, activeTemas, data, save, notify, onBa
         {/* ── Foto Denah per Lantai ── */}
         <div style={{ marginBottom: 14 }}>
           <div style={{ fontSize: 11, fontWeight: 700, color: "#5A6A6C", margin: "0 0 10px", textTransform: "uppercase", letterSpacing: ".04em", display: "flex", alignItems: "center", gap: 6 }}>
-            📐 Foto Denah per Lantai
+            Foto Denah per Lantai
             <span style={{ fontWeight: 400, fontSize: 10, color: "#A89070", textTransform: "none", letterSpacing: 0 }}>— tampil di halaman publik</span>
           </div>
 
@@ -14606,7 +14606,7 @@ function TemaEditForm({ temaOrig, editIdx, activeTemas, data, save, notify, onBa
                   placeholder="Lantai 1" style={{ flex: 1, padding: "8px 12px", border: "1.5px solid #D5C9B0", borderRadius: 8, fontSize: 13, fontWeight: 700 }} />
                 {denahLantai.length > 1 && (
                   <button onClick={() => removeLantai(li)}
-                    style={{ padding: "7px 11px", background: "#fee2e2", color: "#dc2626", border: "none", borderRadius: 8, cursor: "pointer", fontWeight: 700, fontSize: 12, whiteSpace: "nowrap" }}>🗑️ Hapus</button>
+                    style={{ padding: "7px 11px", background: "#fee2e2", color: "#dc2626", border: "none", borderRadius: 8, cursor: "pointer", fontWeight: 700, fontSize: 12, whiteSpace: "nowrap" }}>Hapus</button>
                 )}
               </div>
 
@@ -14628,7 +14628,7 @@ function TemaEditForm({ temaOrig, editIdx, activeTemas, data, save, notify, onBa
               )}
 
               <label style={{ display: "inline-block", padding: "8px 14px", background: uploadingDenah === li ? "#ccc" : "#3498db", color: "#fff", borderRadius: 8, fontSize: 12, fontWeight: 700, cursor: uploadingDenah === li ? "default" : "pointer", marginBottom: 8 }}>
-                {uploadingDenah === li ? "⏳ Mengupload..." : "📷 Upload Foto Denah"}
+                {uploadingDenah === li ? "Mengupload..." : "Upload Foto Denah"}
                 <input type="file" accept="image/*" style={{ display: "none" }} disabled={uploadingDenah === li} onChange={e => handleDenahUpload(li, e.target.files?.[0])} />
               </label>
 
@@ -14658,24 +14658,24 @@ function TemaEditForm({ temaOrig, editIdx, activeTemas, data, save, notify, onBa
 
       {/* Fitur */}
       <div style={SS}>
-        {ST("✨", "Fitur (badge kartu)")}
+        {ST("", "Fitur (badge kartu)")}
         {(draft.fitur || []).map((f, fi) => (
           <div key={fi} style={{ display: "flex", gap: 8, marginBottom: 8, alignItems: "center" }}>
             <input type="text" value={f.icon || ""} onChange={e => { const a = [...draft.fitur]; a[fi] = { ...a[fi], icon: e.target.value }; upd("fitur", a); }}
-              placeholder="🏠" style={{ width: 50, padding: "8px", border: "1.5px solid #D5C9B0", borderRadius: 8, fontSize: 16, textAlign: "center" }} />
+              placeholder="" style={{ width: 50, padding: "8px", border: "1.5px solid #D5C9B0", borderRadius: 8, fontSize: 16, textAlign: "center" }} />
             <input type="text" value={f.label || ""} onChange={e => { const a = [...draft.fitur]; a[fi] = { ...a[fi], label: e.target.value }; upd("fitur", a); }}
               placeholder="Label fitur" style={{ flex: 1, padding: "8px 12px", border: "1.5px solid #D5C9B0", borderRadius: 8, fontSize: 13 }} />
             <button onClick={() => { const a = draft.fitur.filter((_, j) => j !== fi); upd("fitur", a); }}
               style={{ padding: "8px 10px", background: "#fee2e2", color: "#dc2626", border: "none", borderRadius: 8, cursor: "pointer", fontWeight: 700, fontSize: 12 }}>✕</button>
           </div>
         ))}
-        <button onClick={() => upd("fitur", [...(draft.fitur || []), { icon: "⭐", label: "" }])}
+        <button onClick={() => upd("fitur", [...(draft.fitur || []), { icon: "", label: "" }])}
           style={{ padding: "7px 16px", background: "#F5EDD8", color: "#5A6A6C", border: "1.5px dashed #D5C9B0", borderRadius: 8, fontSize: 13, fontWeight: 700, cursor: "pointer" }}>+ Tambah Fitur</button>
       </div>
 
       {/* Eksterior */}
       <div style={SS}>
-        {ST("🏗️", "Eksterior")}
+        {ST("", "Eksterior")}
         {inp("Deskripsi eksterior", "detail.exterior.desc", true)}
         <div style={{ fontSize: 11, fontWeight: 700, color: "#5A6A6C", marginBottom: 8, textTransform: "uppercase", letterSpacing: ".04em" }}>Poin Eksterior</div>
         {(draft.detail?.exterior?.poin || []).map((p, pi) => (
@@ -14692,7 +14692,7 @@ function TemaEditForm({ temaOrig, editIdx, activeTemas, data, save, notify, onBa
 
       {/* Video Tur Rumah — YouTube / TikTok / Instagram Reels */}
       <div style={SS}>
-        {ST("🎬", "Video Tur Rumah")}
+        {ST("", "Video Tur Rumah")}
         <p style={{ fontSize: 12, color: "#5A6A6C", margin: "0 0 12px", lineHeight: 1.6 }}>
           Tempel link video YouTube (biasa atau Shorts), TikTok, atau Instagram Reels. Video akan diputar langsung di website — pengunjung tidak perlu pindah ke aplikasi lain.
         </p>
@@ -14710,7 +14710,7 @@ function TemaEditForm({ temaOrig, editIdx, activeTemas, data, save, notify, onBa
                   placeholder="https://youtube.com/watch?v=... atau tiktok.com/... atau instagram.com/reel/..."
                   style={{ width: "100%", padding: "8px 10px", border: "1.5px solid #D5C9B0", borderRadius: 8, fontSize: 12, boxSizing: "border-box", marginBottom: 6 }} />
                 <div style={{ fontSize: 11, fontWeight: 700, color: info ? "#3A7D4F" : "#dc2626" }}>
-                  {info ? `✓ Terdeteksi: ${info.platform === "youtube" ? "YouTube" + (info.vertical ? " Shorts" : "") : info.platform === "tiktok" ? "TikTok" : "Instagram Reels"}` : "⚠️ Link belum valid / tidak dikenali"}
+                  {info ? `✓ Terdeteksi: ${info.platform === "youtube" ? "YouTube" + (info.vertical ? " Shorts" : "") : info.platform === "tiktok" ? "TikTok" : "Instagram Reels"}` : "Link belum valid / tidak dikenali"}
                 </div>
               </div>
               <button onClick={() => upd("videos", (draft.videos || []).filter((_, j) => j !== vi))}
@@ -14724,7 +14724,7 @@ function TemaEditForm({ temaOrig, editIdx, activeTemas, data, save, notify, onBa
 
       {/* Interior */}
       <div style={SS}>
-        {ST("🛋️", "Interior")}
+        {ST("", "Interior")}
         {inp("Deskripsi interior", "detail.interior.desc", true)}
         <div style={{ fontSize: 11, fontWeight: 700, color: "#5A6A6C", marginBottom: 8, textTransform: "uppercase", letterSpacing: ".04em" }}>Poin Interior</div>
         {(draft.detail?.interior?.poin || []).map((p, pi) => (
@@ -14741,14 +14741,14 @@ function TemaEditForm({ temaOrig, editIdx, activeTemas, data, save, notify, onBa
 
       {/* Denah */}
       <div style={SS}>
-        {ST("📐", "Denah Ruang")}
+        {ST("", "Denah Ruang")}
         {inp("Deskripsi denah", "detail.denah.desc", true)}
 
         <div style={{ fontSize: 11, fontWeight: 700, color: "#5A6A6C", marginBottom: 8, textTransform: "uppercase", letterSpacing: ".04em" }}>Daftar Ruangan (data internal, tidak tampil di publik)</div>
         {(draft.detail?.denah?.ruangan || []).map((r, ri) => (
           <div key={ri} style={{ display: "flex", gap: 8, marginBottom: 8, alignItems: "center" }}>
             <input type="text" value={r.ikon || ""} onChange={e => { const a = [...draft.detail.denah.ruangan]; a[ri] = { ...a[ri], ikon: e.target.value }; upd("detail.denah.ruangan", a); }}
-              placeholder="🛋️" style={{ width: 50, padding: "8px", border: "1.5px solid #D5C9B0", borderRadius: 8, fontSize: 16, textAlign: "center" }} />
+              placeholder="" style={{ width: 50, padding: "8px", border: "1.5px solid #D5C9B0", borderRadius: 8, fontSize: 16, textAlign: "center" }} />
             <input type="text" value={r.nama || ""} onChange={e => { const a = [...draft.detail.denah.ruangan]; a[ri] = { ...a[ri], nama: e.target.value }; upd("detail.denah.ruangan", a); }}
               placeholder="Nama ruangan" style={{ flex: 2, padding: "8px 12px", border: "1.5px solid #D5C9B0", borderRadius: 8, fontSize: 13 }} />
             <input type="text" value={r.ukuran || ""} onChange={e => { const a = [...draft.detail.denah.ruangan]; a[ri] = { ...a[ri], ukuran: e.target.value }; upd("detail.denah.ruangan", a); }}
@@ -14757,13 +14757,13 @@ function TemaEditForm({ temaOrig, editIdx, activeTemas, data, save, notify, onBa
               style={{ padding: "8px 10px", background: "#fee2e2", color: "#dc2626", border: "none", borderRadius: 8, cursor: "pointer", fontWeight: 700 }}>✕</button>
           </div>
         ))}
-        <button onClick={() => upd("detail.denah.ruangan", [...(draft.detail?.denah?.ruangan || []), { ikon: "🏠", nama: "", ukuran: "" }])}
+        <button onClick={() => upd("detail.denah.ruangan", [...(draft.detail?.denah?.ruangan || []), { ikon: "", nama: "", ukuran: "" }])}
           style={{ padding: "6px 14px", background: "#F5EDD8", border: "1.5px dashed #D5C9B0", color: "#5A6A6C", borderRadius: 8, fontSize: 12, fontWeight: 700, cursor: "pointer" }}>+ Ruangan</button>
       </div>
 
       {/* Harga */}
       <div style={SS}>
-        {ST("💰", "Paket Harga")}
+        {ST("", "Paket Harga")}
         {(draft.detail?.harga?.paket || []).map((p, pi) => (
           <div key={pi} style={{ background: "#FAF7F0", border: "1.5px solid #E8DCC8", borderRadius: 10, padding: "14px 16px", marginBottom: 12 }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
@@ -14802,7 +14802,7 @@ function TemaEditForm({ temaOrig, editIdx, activeTemas, data, save, notify, onBa
           style={{ padding: "10px 20px", background: "#F5EDD8", color: "#5A6A6C", border: "none", borderRadius: 8, fontSize: 14, fontWeight: 700, cursor: "pointer" }}>Batal</button>
         <button onClick={saveTema} disabled={saving}
           style={{ padding: "10px 24px", background: "linear-gradient(130deg,#2E3D3F 0%,#3D5254 50%,#C9AA71 100%)", color: "#fff", border: "none", borderRadius: 8, fontSize: 14, fontWeight: 700, cursor: "pointer" }}>
-          {saving ? "⏳ Menyimpan..." : "💾 Simpan Tema"}
+          {saving ? "Menyimpan..." : "Simpan Tema"}
         </button>
       </div>
     </div>
@@ -14828,8 +14828,8 @@ function TemaRumahAdminPanel({ data, save, notify, uploadToCloudinary }) {
       nama: "Tema Baru",
       tagline: "",
       fitur: [
-        { icon: "🏠", label: "Fitur 1" }, { icon: "✨", label: "Fitur 2" },
-        { icon: "🔧", label: "Fitur 3" }, { icon: "💰", label: "Fitur 4" },
+        { icon: "", label: "Fitur 1" }, { icon: "", label: "Fitur 2" },
+        { icon: "", label: "Fitur 3" }, { icon: "", label: "Fitur 4" },
       ],
       img: "",
       imgs: [],
@@ -14856,10 +14856,10 @@ function TemaRumahAdminPanel({ data, save, notify, uploadToCloudinary }) {
     const nextTemas = [...activeTemas, blank];
     try {
       await save({ ...data, temaData: nextTemas });
-      notify("✅ Tema baru ditambahkan. Lengkapi datanya sekarang.");
+      notify("Tema baru ditambahkan. Lengkapi datanya sekarang.");
       setEditIdx(nextTemas.length - 1);
     } catch {
-      notify("❌ Gagal menambah tema baru.");
+      notify("Gagal menambah tema baru.");
     }
   };
 
@@ -14869,9 +14869,9 @@ function TemaRumahAdminPanel({ data, save, notify, uploadToCloudinary }) {
     const nextTemas = activeTemas.filter((_, j) => j !== i);
     try {
       await save({ ...data, temaData: nextTemas });
-      notify("🗑️ Tema dihapus.");
+      notify("Tema dihapus.");
     } catch {
-      notify("❌ Gagal menghapus tema.");
+      notify("Gagal menghapus tema.");
     }
   };
 
@@ -14880,9 +14880,9 @@ function TemaRumahAdminPanel({ data, save, notify, uploadToCloudinary }) {
     setLoadingDefault(true);
     try {
       await save({ ...data, temaData: TEMA_DATA });
-      notify("✅ Data default berhasil dimuat ke database!");
+      notify("Data default berhasil dimuat ke database!");
       setEditIdx(null);
-    } catch { notify("❌ Gagal load data default."); }
+    } catch { notify("Gagal load data default."); }
     setLoadingDefault(false);
   };
 
@@ -14901,7 +14901,7 @@ function TemaRumahAdminPanel({ data, save, notify, uploadToCloudinary }) {
       {/* Header */}
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, marginBottom: 16, flexWrap: "wrap" }}>
         <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-          <span style={{ fontSize: 30 }}>🏠</span>
+          <span style={{ fontSize: 30 }}></span>
           <div>
             <h2 style={{ fontSize: 20, fontWeight: 800, color: "#2E3D3F", margin: 0 }}>Setting Halaman Tema Rumah</h2>
             <p style={{ fontSize: 13, color: "#8B9A9C", margin: "3px 0 0" }}>Kelola hero, konten, dan data tiap tema rumah.</p>
@@ -14909,13 +14909,13 @@ function TemaRumahAdminPanel({ data, save, notify, uploadToCloudinary }) {
         </div>
         <button onClick={handleLoadDefault} disabled={loadingDefault}
           style={{ padding: "9px 16px", background: data.temaData?.length > 0 ? "#6c757d" : "#2ecc71", color: "#fff", border: "none", borderRadius: 8, fontSize: 13, fontWeight: 700, cursor: "pointer" }}>
-          {loadingDefault ? "⏳ Loading..." : data.temaData?.length > 0 ? "🔄 Reload Default" : "📥 Load Data Default"}
+          {loadingDefault ? "Loading..." : data.temaData?.length > 0 ? "Reload Default" : "Load Data Default"}
         </button>
       </div>
 
       {/* Sub-tabs */}
       <div style={{ display: "flex", gap: 6, marginBottom: 20, flexWrap: "wrap" }}>
-        {[{ id: "hero", label: "🖼️ Hero & CTA" }, { id: "temas", label: "🏠 Kelola Tema" }].map(t => (
+        {[{ id: "hero", label: "Hero & CTA" }, { id: "temas", label: "Kelola Tema" }].map(t => (
           <button key={t.id} onClick={() => { setTemaTab(t.id); setEditIdx(null); }}
             style={{ padding: "8px 18px", borderRadius: 20, border: "none", fontWeight: 700, fontSize: 13, cursor: "pointer",
               background: temaTab === t.id ? "#2E3D3F" : "#F5EDD8", color: temaTab === t.id ? "#fff" : "#5A6A6C" }}>
@@ -14939,8 +14939,8 @@ function TemaRumahAdminPanel({ data, save, notify, uploadToCloudinary }) {
         <div>
           <div style={{ background: data.temaData?.length > 0 ? "#e8f8ef" : "#fff8e1", border: `1.5px solid ${data.temaData?.length > 0 ? "#27ae60" : "#f39c12"}`, borderRadius: 10, padding: "12px 16px", marginBottom: 16, fontSize: 13 }}>
             {data.temaData?.length > 0
-              ? `✅ ${data.temaData.length} tema tersimpan di database. Halaman menggunakan data dari DB.`
-              : "⚠️ Data tema belum dimuat ke database. Halaman masih menggunakan data hardcoded. Klik \"📥 Load Data Default\" di atas untuk memuat."
+              ? `${data.temaData.length} tema tersimpan di database. Halaman menggunakan data dari DB.`
+              : "Data tema belum dimuat ke database. Halaman masih menggunakan data hardcoded. Klik \"Load Data Default\" di atas untuk memuat."
             }
           </div>
 
@@ -14948,7 +14948,7 @@ function TemaRumahAdminPanel({ data, save, notify, uploadToCloudinary }) {
             <div>
               <button onClick={handleAddNewTema}
                 style={{ display: "flex", alignItems: "center", gap: 8, padding: "11px 18px", background: "#2ecc71", color: "#fff", border: "none", borderRadius: 10, fontSize: 14, fontWeight: 800, cursor: "pointer", marginBottom: 16 }}>
-                ➕ Tambah Tema Baru
+                Tambah Tema Baru
               </button>
               {activeTemas.map((tema, i) => (
                 <div key={tema.slug} style={{ background: "#fff", border: "1.5px solid #E8DCC8", borderRadius: 12, padding: "16px 18px", marginBottom: 12, display: "flex", alignItems: "center", gap: 14 }}>
@@ -14964,11 +14964,11 @@ function TemaRumahAdminPanel({ data, save, notify, uploadToCloudinary }) {
                   </div>
                   <button onClick={() => setEditIdx(i)}
                     style={{ padding: "8px 16px", background: "#C9AA71", color: "#fff", border: "none", borderRadius: 8, fontSize: 13, fontWeight: 700, cursor: "pointer", flexShrink: 0 }}>
-                    ✏️ Edit
+                    Edit
                   </button>
                   <button onClick={() => handleDeleteTema(i)}
                     style={{ padding: "8px 12px", background: "#fee2e2", color: "#dc2626", border: "none", borderRadius: 8, fontSize: 13, fontWeight: 700, cursor: "pointer", flexShrink: 0 }}>
-                    🗑️
+                   
                   </button>
                 </div>
               ))}
@@ -15590,7 +15590,7 @@ export default function BricksyTravel() {
       sessionSave(sessionUser);
       setShowLogin(false); setLoginErr(""); setLoginForm({ username: "", password: "" });
       setLoginLoading(false); setLoginProgress(0);
-      notify(`✅ Selamat datang, ${profile.name || u.username}!`);
+      notify(`Selamat datang, ${profile.name || u.username}!`);
     } catch {
       clearInterval(tick);
       setLoginLoading(false); setLoginProgress(0);
@@ -15879,7 +15879,7 @@ export default function BricksyTravel() {
     const msg = { ...contact, id: Date.now(), date: new Date().toLocaleDateString("id-ID"), read: false, replies: [] };
     save({ ...data, messages: [...data.messages, msg] });
     // Redirect to WhatsApp
-    const text = `Halo VASTURA GROUP! 👋\n\nNama: ${contact.name}\nEmail: ${contact.email}\n\nPesan:\n${contact.message}\n\nSalam,\n${contact.name}`;
+    const text = `Halo VASTURA GROUP!\n\nNama: ${contact.name}\nEmail: ${contact.email}\n\nPesan:\n${contact.message}\n\nSalam,\n${contact.name}`;
     openWaPicker(text);
     setContact({ name: "", email: "", message: "" });
     notify("Mengarahkan ke WhatsApp...");
@@ -16009,7 +16009,7 @@ export default function BricksyTravel() {
           overflow: "hidden" }}>
           <div style={{ padding: "14px 20px", display: "flex", alignItems: "center", gap: 10 }}>
             <span style={{ fontSize: 18, flexShrink: 0 }}>
-              {notif.type === "error" ? "❌" : notif.type === "warning" ? "⚠️" : "✅"}
+              {notif.type === "error" ? "" : notif.type === "warning" ? "" : ""}
             </span>
             <span>{notif.msg}</span>
           </div>
@@ -16056,7 +16056,7 @@ export default function BricksyTravel() {
                        : "none",
             }}>
               {saveProgress.status === "success" ? "✓"
-               : saveProgress.status === "warning" ? "⚠"
+               : saveProgress.status === "warning" ? ""
                : saveProgress.status === "error"   ? "✕"
                : <span style={{ display:"inline-block", animation:"spin .7s linear infinite", fontSize:15 }}>⟳</span>}
             </div>
@@ -16121,9 +16121,9 @@ export default function BricksyTravel() {
           {/* Steps indicator */}
           <div style={{ padding: "8px 16px 11px", display: "flex", gap: 6, alignItems: "center" }}>
             {[
-              { pct: 30,  label: "Lokal",  icon: "💾" },
-              { pct: 60,  label: "Cloud",  icon: "☁️" },
-              { pct: 100, label: "Selesai",icon: "✅" },
+              { pct: 30,  label: "Lokal",  icon: "" },
+              { pct: 60,  label: "Cloud",  icon: "" },
+              { pct: 100, label: "Selesai",icon: "" },
             ].map((step, i) => {
               const done = saveProgress.pct >= step.pct;
               const active = saveProgress.pct >= (i === 0 ? 5 : i === 1 ? 30 : 60) && !done;
@@ -16170,7 +16170,7 @@ export default function BricksyTravel() {
               background: "linear-gradient(135deg,#2E3D3F,#C9AA71)",
               display: "flex", alignItems: "center", justifyContent: "center",
               margin: "0 auto 20px", fontSize: 32, boxShadow: "0 8px 24px rgba(201,170,113,.35)",
-              animation: "floatBob 2.4s ease-in-out infinite" }}>🚀</div>
+              animation: "floatBob 2.4s ease-in-out infinite" }}></div>
             <div style={{ fontSize: 10, letterSpacing: "3px", color: "#C9AA71", textTransform: "uppercase",
               fontWeight: 800, marginBottom: 10 }}>Segera Hadir</div>
             <h2 style={{ fontSize: 22, fontWeight: 800, color: "#2E3D3F", marginBottom: 10, lineHeight: 1.25 }}>
@@ -16232,7 +16232,7 @@ export default function BricksyTravel() {
                   transition: "background .2s", border: "1px solid #F5EDD8" }}
                 onMouseEnter={e => e.currentTarget.style.background = "#F5EDD8"}
                 onMouseLeave={e => e.currentTarget.style.background = "#FAF7F0"}>
-                <span style={{ fontSize: 18 }}>💬</span>
+                <span style={{ fontSize: 18 }}></span>
                 <div style={{ textAlign: "left" }}>
                   <div style={{ fontSize: 10, color: "#5A6A6C", letterSpacing: "1px", textTransform: "uppercase", fontWeight: 600 }}>WhatsApp</div>
                   <div style={{ fontSize: 14, color: "#2E3D3F", fontWeight: 500 }}>082234651413</div>
@@ -16241,7 +16241,7 @@ export default function BricksyTravel() {
               </a>
               <div style={{ display: "flex", alignItems: "center", gap: 10, padding: "10px 16px",
                 background: "#FAF7F0", borderRadius: 8, border: "1px solid #F5EDD8" }}>
-                <span style={{ fontSize: 18 }}>✉️</span>
+                <span style={{ fontSize: 18 }}></span>
                 <div style={{ textAlign: "left" }}>
                   <div style={{ fontSize: 10, color: "#5A6A6C", letterSpacing: "1px", textTransform: "uppercase", fontWeight: 600 }}>Email</div>
                   <div style={{ fontSize: 13, color: "#2E3D3F" }}>mahfudfebrys@gmail.com</div>
@@ -16277,7 +16277,7 @@ export default function BricksyTravel() {
                 <h2 style={{ fontSize: 24, fontWeight: 700, color: "#2E3D3F", marginBottom: 4, textAlign: "center" }}>Login</h2>
                 <p style={{ fontSize: 13, color: "#5A6A6C", textAlign: "center", marginBottom: 28 }}>Akses control panel Anda</p>
                 
-                {loginErr && <div style={{ background: "#fceaea", borderLeft: "3px solid #e74c3c", padding: "12px 14px", borderRadius: 6, fontSize: 12, color: "#c0392b", marginBottom: 16 }}>⚠ {loginErr}</div>}
+                {loginErr && <div style={{ background: "#fceaea", borderLeft: "3px solid #e74c3c", padding: "12px 14px", borderRadius: 6, fontSize: 12, color: "#c0392b", marginBottom: 16 }}>{loginErr}</div>}
                 
                 <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
                   <div>
@@ -16398,7 +16398,7 @@ export default function BricksyTravel() {
                 <h2 style={{ fontSize: 20, fontWeight: 700, color: "#2E3D3F", marginBottom: 4, textAlign: "center" }}>Reset Password</h2>
                 <p style={{ fontSize: 12, color: "#5A6A6C", textAlign: "center", marginBottom: 20 }}>Pulihkan akses Anda</p>
                 
-                {forgotErr && <div style={{ background: "#fceaea", borderLeft: "3px solid #e74c3c", padding: "10px 12px", borderRadius: 6, fontSize: 11, color: "#c0392b", marginBottom: 14 }}>⚠ {forgotErr}</div>}
+                {forgotErr && <div style={{ background: "#fceaea", borderLeft: "3px solid #e74c3c", padding: "10px 12px", borderRadius: 6, fontSize: 11, color: "#c0392b", marginBottom: 14 }}>{forgotErr}</div>}
 
                 {forgotStep === "input_user" && (
                   <>
@@ -16604,7 +16604,7 @@ export default function BricksyTravel() {
                           }}
                           onMouseEnter={e => { e.currentTarget.style.background = "rgba(255,255,255,.28)"; e.currentTarget.style.borderRadius = "4px 14px 4px 14px"; e.currentTarget.style.boxShadow = "0 4px 14px rgba(0,0,0,.28)"; }}
                           onMouseLeave={e => { e.currentTarget.style.background = "linear-gradient(130deg,rgba(8,145,178,.65),rgba(10,168,191,.45))"; e.currentTarget.style.borderRadius = "14px 4px 14px 4px"; e.currentTarget.style.boxShadow = "0 2px 8px rgba(0,0,0,.18)"; }}>
-                          ⚙ Control Panel
+                          Control Panel
                         </button>
                         {/* Tombol Logout */}
                         <button onClick={() => logout()}
@@ -16719,7 +16719,7 @@ export default function BricksyTravel() {
                     borderLeft:page==="furnitur"?"2px solid #8B6914":"2px solid transparent", transition:"all .15s", cursor:"pointer" }}
                   onMouseEnter={e=>{e.currentTarget.style.background="var(--re-grey-lt)";}}
                   onMouseLeave={e=>{e.currentTarget.style.background="transparent";}}>
-                  🪑 Produk Furnitur
+                  Produk Furnitur
                 </button>
                 {user && (
                   <div style={{ padding: "12px 4px 4px", borderTop: "1px solid var(--re-grey-lt)", marginTop: 8 }}>
@@ -16728,7 +16728,7 @@ export default function BricksyTravel() {
                     </div>
                     <button onClick={() => { openAdmin(); setMobileMenu(false); }}
                       style={{ fontSize: ".875rem", color: "#fff", background: "var(--re-black)", border: "none", borderRadius: 6, padding: "11px 16px", fontWeight: 700, width: "100%", marginBottom: 8, fontFamily:"'Jost',sans-serif" }}>
-                      ⚙ Admin Panel
+                      Admin Panel
                     </button>
                     <button onClick={() => { logout(); setMobileMenu(false); }}
                       style={{ fontSize: ".875rem", color: "rgba(160,40,40,.9)", background: "rgba(200,50,50,.08)", border: "1px solid rgba(200,50,50,.2)", borderRadius: 6, padding: "10px 16px", width: "100%", fontFamily:"'Jost',sans-serif" }}>
@@ -16969,7 +16969,7 @@ export default function BricksyTravel() {
                       }
                     `}</style>
                     <span className="running-text-inner">
-                      🔴&nbsp;&nbsp;PUNYA INFO PROYEK KONSTRUKSI?&nbsp;&nbsp;Referensikan kepada perusahaan kami dan dapatkan komisi hingga 3% dari nilai proyek apabila kami terpilih sebagai mitra pelaksana.&nbsp;&nbsp;Legal, transparan, dan tanpa modal.&nbsp;&nbsp;Hubungi kami sekarang!&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;🔴&nbsp;&nbsp;PUNYA INFO PROYEK KONSTRUKSI?&nbsp;&nbsp;Referensikan kepada perusahaan kami dan dapatkan komisi hingga 3% dari nilai proyek apabila kami terpilih sebagai mitra pelaksana.&nbsp;&nbsp;Legal, transparan, dan tanpa modal.&nbsp;&nbsp;Hubungi kami sekarang!
+                     &nbsp;&nbsp;PUNYA INFO PROYEK KONSTRUKSI?&nbsp;&nbsp;Referensikan kepada perusahaan kami dan dapatkan komisi hingga 3% dari nilai proyek apabila kami terpilih sebagai mitra pelaksana.&nbsp;&nbsp;Legal, transparan, dan tanpa modal.&nbsp;&nbsp;Hubungi kami sekarang!&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PUNYA INFO PROYEK KONSTRUKSI?&nbsp;&nbsp;Referensikan kepada perusahaan kami dan dapatkan komisi hingga 3% dari nilai proyek apabila kami terpilih sebagai mitra pelaksana.&nbsp;&nbsp;Legal, transparan, dan tanpa modal.&nbsp;&nbsp;Hubungi kami sekarang!
                     </span>
                   </div>
 
@@ -17234,7 +17234,7 @@ export default function BricksyTravel() {
           <div style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 220, height: 56, background: "#2E3D3F", display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 16px", boxShadow: "0 2px 8px rgba(0,0,0,.18)" }}>
             <button className="show-sm" onClick={() => setSidebarOpen(p => !p)}
               style={{ background: "rgba(255,255,255,.12)", border: "none", color: "#fff", borderRadius: 7, width: 36, height: 36, cursor: "pointer", fontSize: 18 }}>☰</button>
-            <span style={{ color: "#C9AA71", fontWeight: 800, fontSize: 15, letterSpacing: ".04em" }}>⚙ Control Panel</span>
+            <span style={{ color: "#C9AA71", fontWeight: 800, fontSize: 15, letterSpacing: ".04em" }}>Control Panel</span>
             <button onClick={closeAdmin}
               style={{ background: "#C9AA71", border: "none", color: "#fff", borderRadius: 7, padding: "7px 14px", fontSize: 13, fontWeight: 700, cursor: "pointer" }}>
               ✕ Keluar
@@ -17252,65 +17252,65 @@ export default function BricksyTravel() {
                 {
                   group: null,
                   items: [
-                    { id: "dashboard", label: "🏠 Dashboard",    show: true },
-                    { id: "messages",  label: "✉️ Pesan Masuk",   show: canCS },
-                    { id: "profil",    label: "👤 Profil Akun",   show: true },
+                    { id: "dashboard", label: "Dashboard",    show: true },
+                    { id: "messages",  label: "Pesan Masuk",   show: canCS },
+                    { id: "profil",    label: "Profil Akun",   show: true },
                   ]
                 },
                 /* ── Konten & Setting Website ── */
                 {
                   group: "KONTEN WEBSITE",
                   items: [
-                    { id: "content",         label: "📝 Konten & Nav",      show: isAdmin },
-                    { id: "set_layanankami", label: "📄 Setting Halaman About", show: isAdmin },
-                    { id: "settings",        label: "🔧 Pengaturan Sistem",  show: isAdmin },
+                    { id: "content",         label: "Konten & Nav",      show: isAdmin },
+                    { id: "set_layanankami", label: "Setting Halaman About", show: isAdmin },
+                    { id: "settings",        label: "Pengaturan Sistem",  show: isAdmin },
                   ]
                 },
                 /* ── Katalog Interior (7 ruangan) ── */
                 {
                   group: "INTERIOR",
                   items: [
-                    { id: "int_plafon",         label: "🏛️ Plafon",          show: isAdmin },
-                    { id: "int_kitchen_set",    label: "🍳 Kitchen Set",     show: isAdmin },
-                    { id: "int_backdrop_tv",    label: "📺 Backdrop TV",     show: isAdmin },
-                    { id: "int_kamar_tidur",    label: "🛏️ Kamar Tidur",     show: isAdmin },
-                    { id: "int_kamar_mandi",    label: "🚿 Kamar Mandi",     show: isAdmin },
-                    { id: "int_ruang_keluarga", label: "🛋️ Ruang Keluarga",  show: isAdmin },
-                    { id: "int_ruang_tamu",     label: "🪑 Ruang Tamu",      show: isAdmin },
-                    { id: "int_ruang_kerja",    label: "💼 Ruang Kerja",     show: isAdmin },
+                    { id: "int_plafon",         label: "Plafon",          show: isAdmin },
+                    { id: "int_kitchen_set",    label: "Kitchen Set",     show: isAdmin },
+                    { id: "int_backdrop_tv",    label: "Backdrop TV",     show: isAdmin },
+                    { id: "int_kamar_tidur",    label: "Kamar Tidur",     show: isAdmin },
+                    { id: "int_kamar_mandi",    label: "Kamar Mandi",     show: isAdmin },
+                    { id: "int_ruang_keluarga", label: "Ruang Keluarga",  show: isAdmin },
+                    { id: "int_ruang_tamu",     label: "Ruang Tamu",      show: isAdmin },
+                    { id: "int_ruang_kerja",    label: "Ruang Kerja",     show: isAdmin },
                   ]
                 },
                 /* ── Katalog Eksterior (Pagar, Kanopi, Aluminium) ── */
                 {
                   group: "EKSTERIOR",
                   items: [
-                    { id: "ext_pagar",     label: "🔒 Pagar",     show: isAdmin },
-                    { id: "ext_kanopi",    label: "🏗️ Kanopi",    show: isAdmin },
-                    { id: "ext_aluminium", label: "🪟 Aluminium", show: isAdmin },
+                    { id: "ext_pagar",     label: "Pagar",     show: isAdmin },
+                    { id: "ext_kanopi",    label: "Kanopi",    show: isAdmin },
+                    { id: "ext_aluminium", label: "Aluminium", show: isAdmin },
                   ]
                 },
                 /* ── Katalog & Paket (CMS terhubung ke frontend) ── */
                 {
                   group: "KATALOG & PAKET",
                   items: [
-                    { id: "produk_furnitur",    label: "🪑 Produk Furnitur",       show: isAdmin },
-                    { id: "paket_landscape",    label: "🌳 Paket Landscape",        show: isAdmin },
-                    { id: "paket_rumahsubsidi", label: "🏡 Paket Rumah Subsidi",    show: isAdmin },
+                    { id: "produk_furnitur",    label: "Produk Furnitur",       show: isAdmin },
+                    { id: "paket_landscape",    label: "Paket Landscape",        show: isAdmin },
+                    { id: "paket_rumahsubsidi", label: "Paket Rumah Subsidi",    show: isAdmin },
                   ]
                 },
                 /* ── Tema Rumah ── */
                 {
                   group: "TEMA RUMAH",
                   items: [
-                    { id: "set_temarumah",    label: "🏠 Setting Tema Rumah", show: isAdmin },
+                    { id: "set_temarumah",    label: "Setting Tema Rumah", show: isAdmin },
                   ]
                 },
                 /* ── Manajemen ── */
                 {
                   group: "MANAJEMEN",
                   items: [
-                    { id: "reviews", label: "⭐ Reviews",        show: isAdmin },
-                    { id: "users",   label: "🔐 Users",          show: isAdmin },
+                    { id: "reviews", label: "Reviews",        show: isAdmin },
+                    { id: "users",   label: "Users",          show: isAdmin },
                   ]
                 },
               ].map(({ group, items }) => (
@@ -17396,7 +17396,7 @@ export default function BricksyTravel() {
                     onSave={(list) => {
                       const primaryAdmin = list.find(a => a.primary) || list[0];
                       save({ ...data, content: { ...data.content, waAdmins: list, waLink: primaryAdmin?.wa || data.content.waLink, phone: primaryAdmin?.wa?.replace("https://wa.me/", "+").replace(/^\+62(\d{3})(\d{4})(\d+)$/, "+62 $1 $2-$3") || data.content.phone } });
-                      notify("✅ Daftar Admin WA disimpan!");
+                      notify("Daftar Admin WA disimpan!");
                     }}
                     notify={notify}
                   />
@@ -17423,7 +17423,7 @@ export default function BricksyTravel() {
               {adminTab === "int_kamar_tidur" && isAdmin && (
                 <SubLayananAdmin
                   title="Kamar Tidur"
-                  icon="🛏️"
+                  icon=""
                   accentColor="#6a2fa0"
                   storeKey="int_kamar_tidur"
                   data={data}
@@ -17459,7 +17459,7 @@ export default function BricksyTravel() {
               {adminTab === "int_kamar_mandi" && isAdmin && (
                 <SubLayananAdmin
                   title="Kamar Mandi"
-                  icon="🚿"
+                  icon=""
                   accentColor="#0f3460"
                   storeKey="int_kamar_mandi"
                   data={data}
@@ -17495,7 +17495,7 @@ export default function BricksyTravel() {
               {adminTab === "int_ruang_keluarga" && isAdmin && (
                 <SubLayananAdmin
                   title="Ruang Keluarga"
-                  icon="👨‍👩‍👧"
+                  icon=""
                   accentColor="#2d6a4f"
                   storeKey="int_ruang_keluarga"
                   data={data}
@@ -17531,7 +17531,7 @@ export default function BricksyTravel() {
               {adminTab === "int_ruang_tamu" && isAdmin && (
                 <SubLayananAdmin
                   title="Ruang Tamu"
-                  icon="🪑"
+                  icon=""
                   accentColor="#8B4513"
                   storeKey="int_ruang_tamu"
                   data={data}
@@ -17567,7 +17567,7 @@ export default function BricksyTravel() {
               {adminTab === "int_kitchen_set" && isAdmin && (
                 <SubLayananAdmin
                   title="Kitchen Set & Dapur"
-                  icon="🍳"
+                  icon=""
                   accentColor="#2c5282"
                   storeKey="int_kitchen_set"
                   data={data}
@@ -17603,7 +17603,7 @@ export default function BricksyTravel() {
               {adminTab === "int_ruang_kerja" && isAdmin && (
                 <SubLayananAdmin
                   title="Ruang Kerja"
-                  icon="💼"
+                  icon=""
                   accentColor="#16213e"
                   storeKey="int_ruang_kerja"
                   data={data}
@@ -17639,7 +17639,7 @@ export default function BricksyTravel() {
               {adminTab === "int_plafon" && isAdmin && (
                 <SubLayananAdmin
                   title="Plafon Modern"
-                  icon="🏛️"
+                  icon=""
                   accentColor="#0f3460"
                   storeKey="int_plafon"
                   data={data}
@@ -17676,7 +17676,7 @@ export default function BricksyTravel() {
               {adminTab === "int_backdrop_tv" && isAdmin && (
                 <SubLayananAdmin
                   title="Backdrop TV"
-                  icon="📺"
+                  icon=""
                   accentColor="#8B6914"
                   storeKey="int_backdrop_tv"
                   data={data}
@@ -17713,7 +17713,7 @@ export default function BricksyTravel() {
               {adminTab === "ext_pagar" && isAdmin && (
                 <SubLayananAdmin
                   title="Pagar Rumah"
-                  icon="🔒"
+                  icon=""
                   accentColor="#0f3460"
                   storeKey="ext_pagar"
                   data={data}
@@ -17750,7 +17750,7 @@ export default function BricksyTravel() {
               {adminTab === "ext_kanopi" && isAdmin && (
                 <SubLayananAdmin
                   title="Kanopi"
-                  icon="🏗️"
+                  icon=""
                   accentColor="#2d6a4f"
                   storeKey="ext_kanopi"
                   data={data}
@@ -17787,7 +17787,7 @@ export default function BricksyTravel() {
               {adminTab === "ext_aluminium" && isAdmin && (
                 <SubLayananAdmin
                   title="Aluminium"
-                  icon="🪟"
+                  icon=""
                   accentColor="#555b6e"
                   storeKey="ext_aluminium"
                   data={data}
@@ -17830,7 +17830,7 @@ export default function BricksyTravel() {
               {adminTab === "produk_furnitur" && isAdmin && (
                 <SubLayananAdmin
                   title="Produk Furnitur"
-                  icon="🪑"
+                  icon=""
                   accentColor="#C9AA71"
                   storeKey="furnitur"
                   data={data}
@@ -17869,7 +17869,7 @@ export default function BricksyTravel() {
                   notify={notify}
                   storeKey="landscapeCategories"
                   title="Paket Landscape & Taman (Halaman Mixing Grid)"
-                  icon="🌳"
+                  icon=""
                   accentColor="#1a472a"
                   defaultItems={LANDSCAPE_CATEGORIES}
                   showSlideDir={false}
@@ -17885,7 +17885,7 @@ export default function BricksyTravel() {
                   notify={notify}
                   storeKey="rumahSubsidiPaket"
                   title="Paket Renovasi Rumah Subsidi (Halaman Mixing Grid)"
-                  icon="🏠"
+                  icon=""
                   accentColor="#2E3D3F"
                   defaultItems={RS_PAKET_DATA}
                   showSlideDir
@@ -17928,7 +17928,7 @@ export default function BricksyTravel() {
 
                   {data.messages.length === 0
                     ? <div style={{ textAlign: "center", padding: "60px", color: "#5A6A6C", background: "#fff", borderRadius: 10, boxShadow: "0 2px 8px rgba(0,0,0,.06)" }}>
-                        <div style={{ fontSize: 40, marginBottom: 12 }}>✉️</div>
+                        <div style={{ fontSize: 40, marginBottom: 12 }}></div>
                         <p style={{ fontSize: 14 }}>Belum ada pesan masuk.</p>
                       </div>
                     : [...data.messages].reverse().map(m => (
@@ -17974,7 +17974,7 @@ export default function BricksyTravel() {
                               }
                             }} style={{ fontSize: 11, padding: "4px 10px", borderRadius: 5, border: "1px solid #f5c6c6",
                               background: "#fff", color: "#e74c3c", cursor: "pointer", fontWeight: 600 }}>
-                              🗑 Hapus
+                              Hapus
                             </button>
                           </div>
                         </div>
@@ -18035,7 +18035,7 @@ export default function BricksyTravel() {
                   {/* Add User Form */}
                   {userMgmtOpen && (
                     <div style={{ background: "#fff", borderRadius: 10, padding: "24px 28px", marginBottom: 24, boxShadow: "0 2px 10px rgba(0,0,0,.07)", borderTop: "4px solid #27ae60" }}>
-                      <h3 style={{ fontSize: 14, fontWeight: 600, color: "#2E3D3F", marginBottom: 18 }}>➕ Tambah Akun Baru</h3>
+                      <h3 style={{ fontSize: 14, fontWeight: 600, color: "#2E3D3F", marginBottom: 18 }}>Tambah Akun Baru</h3>
                       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
                         {[
                           { label: "Nama Lengkap", key: "name", placeholder: "Nama lengkap", type: "text" },
@@ -18145,7 +18145,7 @@ export default function BricksyTravel() {
                                       setEditRoleId(null);
                                     }}
                                       style={{ fontSize: 11, padding: "4px 10px", borderRadius: 5, background: "#fff8e1", color: "#b7600a", border: "1px solid #f5d78e", cursor: "pointer", fontWeight: 600 }}>
-                                      ✏ Edit
+                                      Edit
                                     </button>
                                   )}
                                   {/* Tutup Edit */}
@@ -18180,7 +18180,7 @@ export default function BricksyTravel() {
                                         save({ ...data, users }); notify(`User "${u.username}" dihapus.`);
                                       }
                                     }} style={{ fontSize: 11, padding: "4px 10px", borderRadius: 5, background: "#fff", border: "1px solid #f5c6c6", color: "#e74c3c", cursor: "pointer", fontWeight: 500 }}>
-                                      🗑 Hapus
+                                      Hapus
                                     </button>
                                   )}
                                   {u.username === "administrator" && (
@@ -18196,7 +18196,7 @@ export default function BricksyTravel() {
                                 <td colSpan={6} style={{ padding: "0" }}>
                                   <div style={{ padding: "18px 20px", borderTop: "2px solid #f5d78e", borderBottom: "2px solid #f5d78e", background: "linear-gradient(135deg,#fffef5 0%,#fffbea 100%)" }}>
                                     <div style={{ fontSize: 11, fontWeight: 700, color: "#b7600a", letterSpacing: ".08em", textTransform: "uppercase", marginBottom: 14 }}>
-                                      ✏ Edit Data User — @{u.username}
+                                      Edit Data User — @{u.username}
                                     </div>
                                     <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 12, marginBottom: 14 }}>
                                       {/* Nama */}
@@ -18249,10 +18249,10 @@ export default function BricksyTravel() {
                                         };
                                         const users = data.users.map(x => x.id === u.id ? updated : x);
                                         save({ ...data, users });
-                                        notify(`✅ Data user "@${u.username}" berhasil diperbarui.`);
+                                        notify(`Data user "@${u.username}" berhasil diperbarui.`);
                                         setEditUserId(null);
                                       }} style={{ padding: "7px 20px", background: "#b7600a", color: "#fff", border: "none", borderRadius: 6, fontSize: 12, fontWeight: 700, cursor: "pointer" }}>
-                                        💾 Simpan Perubahan
+                                        Simpan Perubahan
                                       </button>
                                       <button onClick={() => setEditUserId(null)}
                                         style={{ padding: "7px 14px", background: "#FAF7F0", color: "#5A6A6C", border: "1px solid #D4C4A0", borderRadius: 6, fontSize: 12, cursor: "pointer" }}>
@@ -18330,7 +18330,7 @@ export default function BricksyTravel() {
                             setProfileEdit({ name: user.name || "", phone: user.phone || "", email: user.email || "", desc: user.desc || "", photo: user.photo || "", oldPass: "", newPass: "", confirmPass: "" });
                             setProfileEditMode(true);
                           }} style={{ padding: "9px 22px", background: "linear-gradient(130deg,#2E3D3F,#8B6914)", color: "#fff", border: "none", borderRadius: 8, fontSize: 13, fontWeight: 600, cursor: "pointer" }}>
-                            ✏ Edit Profil
+                            Edit Profil
                           </button>
                         )}
                       </div>
@@ -18373,19 +18373,19 @@ export default function BricksyTravel() {
 
                             {/* Ganti Password */}
                             <div style={{ marginTop: 4, marginBottom: 20, background: "#FAF7F0", borderRadius: 10, padding: "18px 20px" }}>
-                              <div style={{ fontSize: 13, fontWeight: 700, color: "#2E3D3F", marginBottom: 14 }}>🔒 Ganti Password</div>
+                              <div style={{ fontSize: 13, fontWeight: 700, color: "#2E3D3F", marginBottom: 14 }}>Ganti Password</div>
                               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "0 16px" }}>
                                 {inp("Password Lama", "oldPass", "password", "••••••••")}
                                 {inp("Password Baru", "newPass", "password", "Min. 6 karakter")}
                                 {inp("Konfirmasi Baru", "confirmPass", "password", "Ulangi password")}
                               </div>
-                              <div style={{ fontSize: 11, color: "#5A6A6C" }}>⚠ Kosongkan jika tidak ingin mengganti password.</div>
+                              <div style={{ fontSize: 11, color: "#5A6A6C" }}>Kosongkan jika tidak ingin mengganti password.</div>
                             </div>
 
                             <div style={{ display: "flex", gap: 10 }}>
                               <button onClick={saveProfileFn}
                                 style={{ padding: "10px 26px", background: "linear-gradient(130deg,#2E3D3F,#8B6914)", color: "#fff", border: "none", borderRadius: 8, fontSize: 14, fontWeight: 700, cursor: "pointer" }}>
-                                💾 Simpan Perubahan
+                                Simpan Perubahan
                               </button>
                               <button onClick={() => setProfileEditMode(false)}
                                 style={{ padding: "10px 20px", background: "#F5EDD8", color: "#2E3D3F", border: "none", borderRadius: 8, fontSize: 14, fontWeight: 600, cursor: "pointer" }}>
@@ -18415,7 +18415,7 @@ export default function BricksyTravel() {
 
                     {/* -- Logo Navbar / Header -- */}
                     <div style={{ background: "#fff", borderRadius: 8, padding: "22px 24px", boxShadow: "0 2px 8px rgba(0,0,0,.06)", borderTop: "4px solid #C9AA71" }}>
-                      <h3 style={{ fontSize: 15, fontWeight: 700, color: "#2E3D3F", marginBottom: 4 }}>🔝 Logo Navbar / Header</h3>
+                      <h3 style={{ fontSize: 15, fontWeight: 700, color: "#2E3D3F", marginBottom: 4 }}>Logo Navbar / Header</h3>
                       <p style={{ fontSize: 12, color: "#5A6A6C", marginBottom: 14, lineHeight: 1.6 }}>
                         Tampil di navigasi atas dan admin panel. PNG transparan, rasio 3:1 atau 4:1 direkomendasikan.
                       </p>
@@ -18429,10 +18429,10 @@ export default function BricksyTravel() {
                       ) : (
                         <div style={{ height: 56, background: "#FAF7F0", borderRadius: 6, marginBottom: 12, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, color: "#5A6A6C", border: "1px dashed #D4C4A0" }}>Belum ada logo navbar</div>
                       )}
-                      <UploadButton label="📁 Upload Logo Navbar"
+                      <UploadButton label="Upload Logo Navbar"
                         onDone={urls => {
                           save({ ...data, content: { ...data.content, logoImage: urls[0] } });
-                          notify("✅ Logo navbar berhasil diupload!");
+                          notify("Logo navbar berhasil diupload!");
                         }}
                         onError={() => notify("Gagal upload logo navbar.", "error")} />
                       <label style={{ fontSize: 11, fontWeight: 600, color: "#5A6A6C", letterSpacing: "1px", textTransform: "uppercase", display: "block", marginTop: 10, marginBottom: 4 }}>Atau URL</label>
@@ -18444,14 +18444,14 @@ export default function BricksyTravel() {
                           const url = document.getElementById("logo-navbar-url-input")?.value?.trim();
                           if (!url) return notify("Masukkan URL logo navbar.", "error");
                           save({ ...data, content: { ...data.content, logoImage: url } });
-                          notify("✅ Logo navbar URL disimpan!");
+                          notify("Logo navbar URL disimpan!");
                         }} style={{ padding: "8px 14px", background: "#C9AA71", color: "#fff", borderRadius: 6, fontSize: 12, border: "none", cursor: "pointer", fontWeight: 600 }}>Apply</button>
                       </div>
                     </div>
 
                     {/* -- Logo Footer -- */}
                     <div style={{ background: "#fff", borderRadius: 8, padding: "22px 24px", boxShadow: "0 2px 8px rgba(0,0,0,.06)", borderTop: "4px solid #3D5254" }}>
-                      <h3 style={{ fontSize: 15, fontWeight: 700, color: "#2E3D3F", marginBottom: 4 }}>🔻 Logo Footer</h3>
+                      <h3 style={{ fontSize: 15, fontWeight: 700, color: "#2E3D3F", marginBottom: 4 }}>Logo Footer</h3>
                       <p style={{ fontSize: 12, color: "#5A6A6C", marginBottom: 14, lineHeight: 1.6 }}>
                         Tampil di bagian bawah halaman (section Kontak). Jika kosong, akan menggunakan Logo Navbar sebagai fallback.
                       </p>
@@ -18465,10 +18465,10 @@ export default function BricksyTravel() {
                       ) : (
                         <div style={{ height: 56, background: "#FAF7F0", borderRadius: 6, marginBottom: 12, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, color: "#5A6A6C", border: "1px dashed #D4C4A0" }}>Belum ada logo footer (pakai logo navbar)</div>
                       )}
-                      <UploadButton label="📁 Upload Logo Footer"
+                      <UploadButton label="Upload Logo Footer"
                         onDone={urls => {
                           save({ ...data, content: { ...data.content, footerLogoImage: urls[0] } });
-                          notify("✅ Logo footer berhasil diupload!");
+                          notify("Logo footer berhasil diupload!");
                         }}
                         onError={() => notify("Gagal upload logo footer.", "error")} />
                       <label style={{ fontSize: 11, fontWeight: 600, color: "#5A6A6C", letterSpacing: "1px", textTransform: "uppercase", display: "block", marginTop: 10, marginBottom: 4 }}>Atau URL</label>
@@ -18480,7 +18480,7 @@ export default function BricksyTravel() {
                           const url = document.getElementById("logo-footer-url-input")?.value?.trim();
                           if (!url) return notify("Masukkan URL logo footer.", "error");
                           save({ ...data, content: { ...data.content, footerLogoImage: url } });
-                          notify("✅ Logo footer URL disimpan!");
+                          notify("Logo footer URL disimpan!");
                         }} style={{ padding: "8px 14px", background: "#3D5254", color: "#fff", borderRadius: 6, fontSize: 12, border: "none", cursor: "pointer", fontWeight: 600 }}>Apply</button>
                       </div>
                     </div>
@@ -18491,19 +18491,19 @@ export default function BricksyTravel() {
                   {/* SECTION: FOTO BERJALAN (RUNNING) HOME */}
                   {/* ======================================================= */}
                   <div style={{ background: "#fff", borderRadius: 8, padding: "22px 24px", marginBottom: 24, boxShadow: "0 2px 8px rgba(0,0,0,.06)", borderTop: "4px solid #3498db" }}>
-                    <h3 style={{ fontSize: 16, fontWeight: 700, color: "#2E3D3F", marginBottom: 4 }}>🏠 Foto Berjalan (Running) Home</h3>
+                    <h3 style={{ fontSize: 16, fontWeight: 700, color: "#2E3D3F", marginBottom: 4 }}>Foto Berjalan (Running) Home</h3>
                     <p style={{ fontSize: 12, color: "#5A6A6C", marginBottom: 20, lineHeight: 1.6 }}>
                       Foto yang berjalan otomatis (scroll) di halaman Home, section "Koleksi Kami". Tampilan adalah <strong>campuran</strong> foto yang Anda upload manual di sini <strong>+</strong> foto yang diambil otomatis dari katalog Interior, Eksterior, dan Furnitur. Upload manual jumlahnya bebas / tidak terbatas.
                     </p>
 
                     {/* Upload baru */}
                     <div style={{ display: "flex", flexWrap: "wrap", gap: 10, alignItems: "center", marginBottom: 18 }}>
-                      <UploadButton label="📁 Upload Foto (bisa banyak sekaligus)" multiple={true}
+                      <UploadButton label="Upload Foto (bisa banyak sekaligus)" multiple={true}
                         style={{ fontSize: 12, padding: "9px 16px" }}
                         onDone={urls => {
                           const next = [...(data.images?.running || []), ...urls];
                           save({ ...data, images: { ...data.images, running: next } });
-                          notify(`✅ ${urls.length} foto running ditambahkan!`);
+                          notify(`${urls.length} foto running ditambahkan!`);
                         }}
                         onError={() => notify("Sebagian foto gagal diupload.", "error")} />
                       <div style={{ display: "flex", gap: 6 }}>
@@ -18516,7 +18516,7 @@ export default function BricksyTravel() {
                           const next = [...(data.images?.running || []), url];
                           save({ ...data, images: { ...data.images, running: next } });
                           if (inputEl) inputEl.value = "";
-                          notify("✅ Foto running ditambahkan!");
+                          notify("Foto running ditambahkan!");
                         }} style={{ padding: "8px 14px", background: "#3498db", color: "#fff", borderRadius: 6, fontSize: 12, border: "none", cursor: "pointer", fontWeight: 600 }}>Tambah</button>
                       </div>
                     </div>
@@ -18539,7 +18539,7 @@ export default function BricksyTravel() {
                               const next = data.images.running.filter((_, i) => i !== idx);
                               save({ ...data, images: { ...data.images, running: next } });
                               notify("Foto dihapus.");
-                            }} style={{ width: "100%", padding: "5px", background: "none", color: "#e74c3c", border: "1px solid #e74c3c", borderRadius: 5, fontSize: 10, cursor: "pointer" }}>🗑 Hapus</button>
+                            }} style={{ width: "100%", padding: "5px", background: "none", color: "#e74c3c", border: "1px solid #e74c3c", borderRadius: 5, fontSize: 10, cursor: "pointer" }}>Hapus</button>
                           </div>
                         ))}
                       </div>
@@ -18550,7 +18550,7 @@ export default function BricksyTravel() {
                   {/* SECTION: LAYANAN SECTION HOME */}
                   {/* ======================================================= */}
                   <div style={{ background: "#fff", borderRadius: 8, padding: "22px 24px", marginBottom: 24, boxShadow: "0 2px 8px rgba(0,0,0,.06)", borderTop: "4px solid #8B6914" }}>
-                    <h3 style={{ fontSize: 16, fontWeight: 700, color: "#2E3D3F", marginBottom: 4 }}>🛠 Layanan Section Home</h3>
+                    <h3 style={{ fontSize: 16, fontWeight: 700, color: "#2E3D3F", marginBottom: 4 }}>Layanan Section Home</h3>
                     <p style={{ fontSize: 12, color: "#5A6A6C", marginBottom: 20, lineHeight: 1.6 }}>
                       Atur foto & teks kartu pada section "Layanan VASTURA GROUP Kami" di halaman Home.
                     </p>
@@ -18564,12 +18564,12 @@ export default function BricksyTravel() {
                         const list = (data.homeServices && data.homeServices.length > 0) ? [...data.homeServices] : HOME_SERVICES_DEFAULT.map(x => ({ ...x }));
                         list.push({ num: String(list.length + 1).padStart(2, "0"), title: "Layanan Baru", desc: "Deskripsi singkat layanan.", img: "" });
                         save({ ...data, homeServices: list });
-                        notify("✅ Layanan baru ditambahkan!");
+                        notify("Layanan baru ditambahkan!");
                       }} style={{ padding: "9px 16px", background: "#2ecc71", color: "#fff", border: "none", borderRadius: 6, fontSize: 12, fontWeight: 700, cursor: "pointer" }}>+ Tambah Layanan</button>
                       <button onClick={() => {
                         save({ ...data, homeServices: [] });
-                        notify("🔄 Direset ke teks & foto default.");
-                      }} style={{ padding: "9px 16px", background: "#6c757d", color: "#fff", border: "none", borderRadius: 6, fontSize: 12, fontWeight: 700, cursor: "pointer" }}>🔄 Reset ke Default</button>
+                        notify("Direset ke teks & foto default.");
+                      }} style={{ padding: "9px 16px", background: "#6c757d", color: "#fff", border: "none", borderRadius: 6, fontSize: 12, fontWeight: 700, cursor: "pointer" }}>Reset ke Default</button>
                     </div>
                   </div>
 
@@ -18577,7 +18577,7 @@ export default function BricksyTravel() {
                   {/* SECTION: KONTEN TEKS HALAMAN HOME */}
                   {/* ======================================================= */}
                   <div style={{ background: "#fff", borderRadius: 8, padding: "22px 24px", marginBottom: 24, boxShadow: "0 2px 8px rgba(0,0,0,.06)", borderTop: "4px solid #27ae60" }}>
-                    <h3 style={{ fontSize: 16, fontWeight: 700, color: "#2E3D3F", marginBottom: 4 }}>✏️ Konten Teks Halaman Home</h3>
+                    <h3 style={{ fontSize: 16, fontWeight: 700, color: "#2E3D3F", marginBottom: 4 }}>Konten Teks Halaman Home</h3>
                     <p style={{ fontSize: 12, color: "#5A6A6C", marginBottom: 20, lineHeight: 1.6 }}>
                       Edit semua teks yang tampil di halaman utama — judul hero, subtitle, teks banner, section konsultasi, dan lainnya.
                     </p>
@@ -18611,7 +18611,7 @@ export default function BricksyTravel() {
                               const val = document.getElementById(fieldId)?.value?.trim();
                               if (!val) return notify(`Isi dulu field ${field.label}.`, "error");
                               save({ ...data, content: { ...data.content, [field.key]: val } });
-                              notify(`✅ ${field.label} disimpan!`);
+                              notify(`${field.label} disimpan!`);
                             }} style={{ padding: "7px 18px", background: "#27ae60", color: "#fff", borderRadius: 6, fontSize: 12, border: "none", fontWeight: 600, cursor: "pointer" }}>Simpan</button>
                           </div>
                         </div>
@@ -18623,9 +18623,9 @@ export default function BricksyTravel() {
                   {/* SECTION: KONTEN ABOUT & CONTACT */}
                   {/* ======================================================= */}
                   <div style={{ background: "#fff", borderRadius: 8, padding: "22px 24px", marginBottom: 24, boxShadow: "0 2px 8px rgba(0,0,0,.06)", borderTop: "4px solid #e67e22" }}>
-                    <h3 style={{ fontSize: 16, fontWeight: 700, color: "#2E3D3F", marginBottom: 4 }}>📋 Konten Kontak</h3>
+                    <h3 style={{ fontSize: 16, fontWeight: 700, color: "#2E3D3F", marginBottom: 4 }}>Konten Kontak</h3>
                     <p style={{ fontSize: 12, color: "#5A6A6C", marginBottom: 20, lineHeight: 1.6 }}>
-                      Edit informasi kontak, jam operasional, dan link media sosial. Untuk teks halaman About Us (Hero, Visi Misi, Susunan Tim, Layanan), buka menu <strong>⚙️ Setting Halaman About</strong>.
+                      Edit informasi kontak, jam operasional, dan link media sosial. Untuk teks halaman About Us (Hero, Visi Misi, Susunan Tim, Layanan), buka menu <strong>Setting Halaman About</strong>.
                     </p>
                     {[
                       { label: "Kontak — Teks", key: "contactText", multiline: true },
@@ -18654,7 +18654,7 @@ export default function BricksyTravel() {
                             <button onClick={() => {
                               const val = document.getElementById(fieldId)?.value?.trim();
                               save({ ...data, content: { ...data.content, [field.key]: val } });
-                              notify(`✅ ${field.label} disimpan!`);
+                              notify(`${field.label} disimpan!`);
                             }} style={{ padding: "7px 18px", background: "#e67e22", color: "#fff", borderRadius: 6, fontSize: 12, border: "none", fontWeight: 600, cursor: "pointer" }}>Simpan</button>
                           </div>
                         </div>
@@ -18666,7 +18666,7 @@ export default function BricksyTravel() {
                   {/* SECTION: TEMPLATE WHATSAPP */}
                   {/* ======================================================= */}
                   <div style={{ background: "#fff", borderRadius: 8, padding: "22px 24px", marginBottom: 24, boxShadow: "0 2px 8px rgba(0,0,0,.06)", borderTop: "4px solid #25d366" }}>
-                    <h3 style={{ fontSize: 15, fontWeight: 700, color: "#2E3D3F", marginBottom: 4 }}>💬 Template Pesan WhatsApp</h3>
+                    <h3 style={{ fontSize: 15, fontWeight: 700, color: "#2E3D3F", marginBottom: 4 }}>Template Pesan WhatsApp</h3>
                     <p style={{ fontSize: 12, color: "#5A6A6C", marginBottom: 6, lineHeight: 1.6 }}>
                       Hanya <strong>satu template</strong> ini yang dipakai oleh <strong>semua</strong> tombol WhatsApp di seluruh situs
                       (Hubungi Kami, Konsultasi, Paket, Layanan, dll) — tidak ada template berbeda per section.
@@ -18681,7 +18681,7 @@ export default function BricksyTravel() {
                       return (
                         <div style={{ marginBottom: 12 }}>
                           <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
-                            <span style={{ fontSize: 16 }}>💬</span>
+                            <span style={{ fontSize: 16 }}></span>
                             <span style={{ fontSize: 13, fontWeight: 700, color: "#2E3D3F" }}>Template Pesan (Satu-satunya)</span>
                           </div>
                           <textarea
@@ -18698,9 +18698,9 @@ export default function BricksyTravel() {
                             <button onClick={() => {
                               const newVal = document.getElementById(`wa-tpl-${key}`)?.value ?? "";
                               save({ ...data, content: { ...data.content, waTemplates: { umum: newVal } } });
-                              notify("✅ Template WhatsApp disimpan!");
+                              notify("Template WhatsApp disimpan!");
                             }} style={{ padding: "6px 16px", background: "#25d366", color: "#fff", borderRadius: 6, fontSize: 12, border: "none", cursor: "pointer", fontWeight: 600 }}>
-                              💾 Simpan
+                              Simpan
                             </button>
                             <button onClick={() => {
                               const newVal = document.getElementById(`wa-tpl-${key}`)?.value ?? "";
@@ -18710,7 +18710,7 @@ export default function BricksyTravel() {
                                 .replace(/{harga}/g, "Rp 5.000.000");
                               window.open("https://wa.me/?text=" + encodeURIComponent(preview), "_blank");
                             }} style={{ padding: "6px 16px", background: "#f0fdf4", color: "#16a34a", borderRadius: 6, fontSize: 12, border: "1.5px solid #25d366", cursor: "pointer", fontWeight: 600 }}>
-                              👁 Preview
+                              Preview
                             </button>
                           </div>
                         </div>
@@ -18720,7 +18720,7 @@ export default function BricksyTravel() {
 
                   {/* Founding Year */}
                   <div style={{ background: "#fff", borderRadius: 8, padding: "22px 24px", marginBottom: 24, boxShadow: "0 2px 8px rgba(0,0,0,.06)", borderTop: "4px solid #C9AA71" }}>
-                    <h3 style={{ fontSize: 15, fontWeight: 500, color: "#2E3D3F", marginBottom: 6 }}>🗓 Tahun Berdiri Perusahaan</h3>
+                    <h3 style={{ fontSize: 15, fontWeight: 500, color: "#2E3D3F", marginBottom: 6 }}>Tahun Berdiri Perusahaan</h3>
                     <p style={{ fontSize: 12, color: "#5A6A6C", marginBottom: 16, lineHeight: 1.6 }}>
                       Tahun ini digunakan untuk teks "sejak [tahun]", statistik "X Tahun Pengalaman", dan label dekorasi halaman.
                     </p>
@@ -18736,7 +18736,7 @@ export default function BricksyTravel() {
                         const yr = document.getElementById("founding-year-input")?.value?.trim();
                         if (!yr || !/^\d{4}$/.test(yr)) return notify("Masukkan tahun 4 digit (misal: 2026).", "error");
                         save({ ...data, content: { ...data.content, foundingYear: yr } });
-                        notify(`✅ Tahun berdiri diperbarui ke ${yr}`);
+                        notify(`Tahun berdiri diperbarui ke ${yr}`);
                       }} style={{ padding: "8px 16px", background: "linear-gradient(130deg,#2E3D3F 0%,#3D5254 45%,#8B6914 78%,#C9AA71 100%)", color: "#fff", borderRadius: 6, fontSize: 12, border: "none", fontWeight: 500 }}>
                         Simpan
                       </button>
@@ -18746,20 +18746,20 @@ export default function BricksyTravel() {
 
                   {/* Hero Display Mode */}
                   <div style={{ background: "#fff", borderRadius: 8, padding: "22px 24px", marginBottom: 24, boxShadow: "0 2px 8px rgba(0,0,0,.06)", borderTop: "4px solid #8e44ad" }}>
-                    <h3 style={{ fontSize: 15, fontWeight: 500, color: "#2E3D3F", marginBottom: 6 }}>🖥 Mode Tampilan Hero Beranda</h3>
+                    <h3 style={{ fontSize: 15, fontWeight: 500, color: "#2E3D3F", marginBottom: 6 }}>Mode Tampilan Hero Beranda</h3>
                     <p style={{ fontSize: 12, color: "#5A6A6C", marginBottom: 20, lineHeight: 1.6 }}>
                       Pilih mode tampilan bagian hero halaman utama: <strong>Video Background</strong> (video looping), <strong>Gambar Statis</strong> (satu foto diam), atau <strong>Slideshow Otomatis</strong> (berganti dari artikel).
                     </p>
                     {/* Toggle Pill — 3 opsi */}
                     <div style={{ display: "flex", gap: 10, marginBottom: 20, flexWrap: "wrap" }}>
                       {[
-                        { val: "video",     icon: "🎬", label: "Video Background", desc: "Video looping sebagai latar hero" },
-                        { val: "static",    icon: "🖼",  label: "Gambar Statis",    desc: "Satu gambar diam yang bisa diatur" },
+                        { val: "video",     icon: "", label: "Video Background", desc: "Video looping sebagai latar hero" },
+                        { val: "static",    icon: "",  label: "Gambar Statis",    desc: "Satu gambar diam yang bisa diatur" },
                         { val: "slideshow", icon: "▶",  label: "Slideshow Otomatis", desc: "Gambar berganti dari artikel published" },
                       ].map(opt => {
                         const active = (data.content.heroMode || "video") === opt.val;
                         return (
-                          <div key={opt.val} onClick={() => { save({ ...data, content: { ...data.content, heroMode: opt.val } }); notify(`✅ Mode hero diubah ke: ${opt.label}`); }}
+                          <div key={opt.val} onClick={() => { save({ ...data, content: { ...data.content, heroMode: opt.val } }); notify(`Mode hero diubah ke: ${opt.label}`); }}
                             style={{ flex: 1, minWidth: 180, padding: "14px 18px", borderRadius: 10, cursor: "pointer",
                               border: active ? "2px solid #8e44ad" : "2px solid #F5EDD8",
                               background: active ? "#f5eeff" : "#FDFAF4",
@@ -18812,7 +18812,7 @@ export default function BricksyTravel() {
                     ))}
                   </div>
                   <div style={{ background: "#fff3cd", borderRadius: 8, padding: "16px 20px", marginTop: 20, border: "1px solid #ffc107" }}>
-                    <h4 style={{ fontSize: 13, color: "#856404", marginBottom: 6 }}>⚠ Reset Site Data</h4>
+                    <h4 style={{ fontSize: 13, color: "#856404", marginBottom: 6 }}>Reset Site Data</h4>
                     <p style={{ fontSize: 12, color: "#856404", marginBottom: 12 }}>This will reset all content, images, and posts to defaults.</p>
                     <button onClick={async () => {
                       if (window.confirm("Reset all data to defaults?")) {
