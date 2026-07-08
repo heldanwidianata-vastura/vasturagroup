@@ -10948,14 +10948,14 @@ function InteriorPage({ onWaOpen }) {
         tag: "Ruang Utama",
         title: "Layanan Desain Interior Lengkap",
         items: [
+          { icon: "🔲", title: "Plafon Modern", desc: "Desain plafon kreatif — drop ceiling, gypsum, kayu, dan pencahayaan tersembunyi (hidden lamp)." },
+          { icon: "🍳", title: "Kitchen Set", desc: "Dapur impian dengan kabinet custom, material tahan lama, dan ergonomis untuk memasak." },
+          { icon: "📺", title: "Backdrop TV", desc: "Feature wall TV yang menjadi focal point ruangan — material batu alam, kayu, panel 3D, dll." },
           { icon: "🏠", title: "Teras", desc: "Desain teras yang menyambut — kombinasi material, pencahayaan, dan tanaman hias yang harmonis." },
           { icon: "🛋️", title: "Ruang Tamu", desc: "Furnitur elegan, layout optimal, dan dekorasi yang menciptakan kesan pertama yang kuat." },
           { icon: "👨‍👩‍👧", title: "Ruang Keluarga", desc: "Ruang hangat dan fungsional untuk quality time keluarga dengan konsep cozy living." },
           { icon: "🛏️", title: "Kamar Tidur", desc: "Desain kamar nyaman dan personal — dari master bedroom hingga kamar anak yang kreatif." },
           { icon: "🚿", title: "Kamar Mandi", desc: "Bathroom modern dengan material premium, pencahayaan spa, dan layout yang efisien." },
-          { icon: "🍳", title: "Kitchen Set", desc: "Dapur impian dengan kabinet custom, material tahan lama, dan ergonomis untuk memasak." },
-          { icon: "🔲", title: "Plafon", desc: "Desain plafon kreatif — drop ceiling, gypsum, kayu, dan pencahayaan tersembunyi (hidden lamp)." },
-          { icon: "📺", title: "Backdrop TV", desc: "Feature wall TV yang menjadi focal point ruangan — material batu alam, kayu, panel 3D, dll." },
         ]
       },
       {
@@ -12644,14 +12644,14 @@ function MobileLayananAccordion({ page, navigateTo, setMobileMenu, navDropdownLa
           {subOpen==="interior" && (
             <div style={{ borderLeft:"2px solid #C9AA71", marginLeft:28 }}>
               {[
+                {key:"interior/plafon-modern",  label:"🏛️ Plafon Modern"},
+                {key:"interior/kitchen-set",    label:"🍳 Kitchen Set"},
+                {key:"interior/backdrop-tv",    label:"📺 Backdrop TV"},
                 {key:"interior/kamar-tidur",    label:"🛏️ Kamar Tidur"},
                 {key:"interior/kamar-mandi",    label:"🚿 Kamar Mandi"},
                 {key:"interior/ruang-keluarga", label:"👨‍👩‍👧 Ruang Keluarga"},
                 {key:"interior/ruang-tamu",     label:"🛋️ Ruang Tamu"},
-                {key:"interior/kitchen-set",    label:"🍳 Kitchen Set"},
                 {key:"interior/ruang-kerja",    label:"💼 Ruang Kerja"},
-                {key:"interior/plafon-modern",  label:"🏛️ Plafon Modern"},
-                {key:"interior/backdrop-tv",    label:"📺 Backdrop TV"},
               ].map(sub=>(
                 <button key={sub.key} onClick={()=>{ navigateTo(sub.key); setMobileMenu(false); setOpen(false); setSubOpen(null); }}
                   style={mBtn(page===sub.key, 2)}>
@@ -14054,14 +14054,14 @@ function NavDropdownLayanan({ page, navigateTo, navDropdownLayanan }) {
             {subOpen==="interior" && (
               <div style={{...ddBase, top:0, left:"100%", marginLeft:4}}>
                 {[
+                  {key:"interior/plafon-modern",  label:"🏛️ Plafon Modern"},
+                  {key:"interior/kitchen-set",    label:"🍳 Kitchen Set"},
+                  {key:"interior/backdrop-tv",    label:"📺 Backdrop TV"},
                   {key:"interior/kamar-tidur",    label:"🛏️ Kamar Tidur"},
                   {key:"interior/kamar-mandi",    label:"🚿 Kamar Mandi"},
                   {key:"interior/ruang-keluarga", label:"👨‍👩‍👧 Ruang Keluarga"},
                   {key:"interior/ruang-tamu",     label:"🛋️ Ruang Tamu"},
-                  {key:"interior/kitchen-set",    label:"🍳 Kitchen Set"},
                   {key:"interior/ruang-kerja",    label:"💼 Ruang Kerja"},
-                  {key:"interior/plafon-modern",  label:"🏛️ Plafon Modern"},
-                  {key:"interior/backdrop-tv",    label:"📺 Backdrop TV"},
                 ].map(sub=>(
                   <button key={sub.key} onClick={()=>{ navigateTo(sub.key); setDdOpen(false); setSubOpen(null); }}
                     style={btn(page===sub.key)}
@@ -17270,14 +17270,14 @@ export default function BricksyTravel() {
                 {
                   group: "INTERIOR",
                   items: [
+                    { id: "int_plafon",         label: "🏛️ Plafon",          show: isAdmin },
+                    { id: "int_kitchen_set",    label: "🍳 Kitchen Set",     show: isAdmin },
+                    { id: "int_backdrop_tv",    label: "📺 Backdrop TV",     show: isAdmin },
                     { id: "int_kamar_tidur",    label: "🛏️ Kamar Tidur",     show: isAdmin },
                     { id: "int_kamar_mandi",    label: "🚿 Kamar Mandi",     show: isAdmin },
                     { id: "int_ruang_keluarga", label: "🛋️ Ruang Keluarga",  show: isAdmin },
                     { id: "int_ruang_tamu",     label: "🪑 Ruang Tamu",      show: isAdmin },
-                    { id: "int_kitchen_set",    label: "🍳 Kitchen Set",     show: isAdmin },
                     { id: "int_ruang_kerja",    label: "💼 Ruang Kerja",     show: isAdmin },
-                    { id: "int_plafon",         label: "🏛️ Plafon",          show: isAdmin },
-                    { id: "int_backdrop_tv",    label: "📺 Backdrop TV",     show: isAdmin },
                   ]
                 },
                 /* ── Katalog Eksterior (Pagar, Kanopi, Aluminium) ── */
