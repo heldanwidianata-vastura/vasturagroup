@@ -12830,6 +12830,8 @@ function FurniturPage({ data, onWaOpen }) {
         .fur-btn-wa:hover { transform: scale(1.04); }
         @media (max-width:700px) {
           .fur-grid { grid-template-columns: 1fr !important; }
+          .fur-cat-pills { display: none !important; }
+          .fur-cat-dropdown { display: block !important; }
         }
       `}</style>
 
@@ -12874,8 +12876,8 @@ function FurniturPage({ data, onWaOpen }) {
               style={{ width:"100%", paddingLeft:36, paddingRight:12, height:40, border:"1.5px solid #E8DCC8", borderRadius:8, fontSize:"0.85rem", color:darkTeal, outline:"none", boxSizing:"border-box", fontFamily:"'Jost',sans-serif" }}
             />
           </div>
-          {/* Category filter */}
-          <div style={{ flex:"0 0 auto", display:"flex", gap:8, flexWrap:"wrap" }}>
+          {/* Category filter — Desktop: pill buttons */}
+          <div className="fur-cat-pills" style={{ flex:"0 0 auto", display:"flex", gap:8, flexWrap:"wrap" }}>
             {["all",...categories].map(cat => (
               <button key={cat} onClick={()=>setCategory(cat)}
                 style={{ padding:"7px 16px", borderRadius:20, border:`1.5px solid ${category===cat ? accentGold : "#E8DCC8"}`,
@@ -12886,6 +12888,13 @@ function FurniturPage({ data, onWaOpen }) {
               </button>
             ))}
           </div>
+          {/* Category filter — Mobile: satu dropdown saja */}
+          <select className="fur-cat-dropdown" value={category} onChange={e=>setCategory(e.target.value)}
+            style={{ display:"none", flex:"1 1 100%", height:40, border:"1.5px solid #E8DCC8", borderRadius:8, padding:"0 12px", fontSize:"0.85rem", color:darkTeal, background:"#fff", fontFamily:"'Jost',sans-serif", cursor:"pointer", outline:"none", boxSizing:"border-box" }}>
+            {["all",...categories].map(cat => (
+              <option key={cat} value={cat}>{cat === "all" ? "Semua Kategori" : cat}</option>
+            ))}
+          </select>
           {/* Sort */}
           <select value={sortBy} onChange={e=>setSortBy(e.target.value)}
             style={{ flex:"0 0 auto", height:40, border:"1.5px solid #E8DCC8", borderRadius:8, padding:"0 12px", fontSize:"0.82rem", color:darkTeal, background:"#fff", fontFamily:"'Jost',sans-serif", cursor:"pointer", outline:"none" }}>
@@ -13158,6 +13167,13 @@ function SubPageCatalog({ pageKey, heroColor, heroIcon, title, subtitle, breadcr
 
   return (
     <div style={{ minHeight:"100vh", background:"#FAFAF8" }}>
+      <style>{`
+        /* Desktop: pindahkan tombol Konsultasi ke bawah Harga (bukan sejajar di samping) */
+        @media (min-width: 701px) {
+          .item-price-row { flex-direction: column !important; align-items: stretch !important; gap: 10px; }
+          .item-consult-btn { width: 100% !important; padding: 10px 16px !important; }
+        }
+      `}</style>
       {/* -- HERO -- */}
       <div style={{ background: heroColor || "linear-gradient(135deg,#2E3D3F 0%,#8B6914 100%)", padding:"72px 5% 56px", textAlign:"center", position:"relative", overflow:"hidden" }}>
         <div style={{ position:"absolute", inset:0, background:"rgba(0,0,0,.18)" }}/>
@@ -13242,12 +13258,12 @@ function SubPageCatalog({ pageKey, heroColor, heroIcon, title, subtitle, breadcr
                     </button>
                   </div>
                 ) : (
-                  <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", paddingTop:14, borderTop:"1px solid #F0EDE8" }}>
+                  <div className="item-price-row" style={{ display:"flex", alignItems:"center", justifyContent:"space-between", paddingTop:14, borderTop:"1px solid #F0EDE8" }}>
                     <div>
                       <div style={{ fontSize:"0.65rem", color:"#8B9A9C", letterSpacing:".06em", textTransform:"uppercase", marginBottom:2 }}>Harga</div>
                       <div style={{ fontSize:"0.9rem", fontWeight:800, color:"#8B6914" }}>{formatHarga(getHargaDetailLowest(item) ?? item.harga)}</div>
                     </div>
-                    <button onClick={(e)=>{ e.stopPropagation(); onWaOpen && onWaOpen({ key: "layanan", vars: { judul_layanan: item.nama } }); }}
+                    <button className="item-consult-btn" onClick={(e)=>{ e.stopPropagation(); onWaOpen && onWaOpen({ key: "layanan", vars: { judul_layanan: item.nama } }); }}
                       style={{ background:"linear-gradient(135deg,#2E3D3F,#8B6914)", color:"#fff", border:"none", borderRadius:8, padding:"9px 16px", fontSize:"0.75rem", fontWeight:700, cursor:"pointer", letterSpacing:".04em" }}>
                       Konsultasi
                     </button>
