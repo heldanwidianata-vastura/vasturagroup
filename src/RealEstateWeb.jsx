@@ -358,6 +358,41 @@ async function uploadToCloudinary(file) {
   return data.secure_url;
 }
 
+/* ─── Hapus Asset Cloudinary (dipanggil saat tombol "Hapus" produk/tema diklik) ───
+   Penghapusan sesungguhnya dieksekusi oleh serverless function /api/delete-cloudinary
+   (lihat file api/delete-cloudinary.js) karena butuh API Secret yang tidak boleh
+   ada di kode frontend. Fungsi di sini hanya: (1) ekstrak public_id dari URL,
+   (2) kelompokkan per resource type (image/video), (3) panggil endpoint tsb. */
+function extractCloudinaryAsset(url) {
+  if (!url || typeof url !== "string") return null;
+  // Contoh URL: https://res.cloudinary.com/<cloud>/image/upload/v169.../folder/nama_odul9j.png
+  //             https://res.cloudinary.com/<cloud>/video/upload/v169.../nama_xyz.mp4
+  const m = url.match(/\/(image|video)\/upload\/(?:[^/]*\/)*?v\d+\/(.+?)\.\w+(?:\?.*)?$/);
+  if (!m) return null;
+  return { resourceType: m[1], publicId: m[2] };
+}
+
+async function deleteCloudinaryAssets(urls) {
+  const assets = (urls || []).map(extractCloudinaryAsset).filter(Boolean);
+  if (assets.length === 0) return true;
+  const images = [...new Set(assets.filter(a => a.resourceType === "image").map(a => a.publicId))];
+  const videos = [...new Set(assets.filter(a => a.resourceType === "video").map(a => a.publicId))];
+  const calls = [];
+  if (images.length) calls.push(
+    fetch("/api/delete-cloudinary", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ publicIds: images, resourceType: "image" }) })
+  );
+  if (videos.length) calls.push(
+    fetch("/api/delete-cloudinary", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ publicIds: videos, resourceType: "video" }) })
+  );
+  if (calls.length === 0) return true;
+  try {
+    const results = await Promise.all(calls);
+    return results.every(r => r.ok);
+  } catch {
+    return false;
+  }
+}
+
 /* ─────────────── CAPTION/LABEL FOTO PUBLIK — DINONAKTIFKAN PERMANEN ───────────────
    Sesuai permintaan: TIDAK ADA caption/label/nama file apa pun yang boleh
    tampil di atas gambar publik (slideshow, galeri, dsb) — hanya gambar saja.
@@ -8822,13 +8857,21 @@ function SubLayananAdmin({
     finally { setSaving(false); }
   };
 
-  /* ── Hapus ── */
+  /* ── Hapus (data Firestore + foto/video terkait di Cloudinary) ── */
+  const [deleting, setDeleting] = useState(false);
   const handleDelete = async (id) => {
+    const item = items.find(it => it.id === id);
+    setDeleting(true);
     try {
+      const urls = [item?._img, ...((item?.imgs || []).map(g => g?.img))].filter(Boolean);
+      const cloudOk = urls.length > 0 ? await deleteCloudinaryAssets(urls) : true;
       await save({ ...data, [crudKey]: items.filter(it => it.id !== id) });
-      notify("Item dihapus.");
+      notify(cloudOk
+        ? "Item & foto terkait berhasil dihapus permanen."
+        : "Data berhasil dihapus, tapi sebagian foto di Cloudinary gagal terhapus otomatis (cek konfigurasi /api/delete-cloudinary).");
       setDelTarget(null);
     } catch (err) { notify("Gagal menghapus: " + (err?.message || "Periksa koneksi.")); }
+    finally { setDeleting(false); }
   };
 
   /* ── Toggle Hide/Publish: item tetap tersimpan di database, hanya disembunyikan dari halaman publik ── */
@@ -8978,13 +9021,15 @@ function SubLayananAdmin({
               {/* Konfirmasi hapus */}
               {delTarget === item.id && (
                 <div style={{ background: "#fef2f2", borderTop: "1px solid #fca5a5", padding: "10px 14px", display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
-                  <span style={{ fontSize: 13, color: "#b91c1c", fontWeight: 600, flex: 1 }}>Yakin ingin menghapus ini?</span>
-                  <button onClick={() => handleDelete(item.id)}
-                    style={{ background: "#e74c3c", color: "#fff", border: "none", borderRadius: 7, padding: "7px 16px", fontSize: 13, fontWeight: 700, cursor: "pointer" }}>
-                    Ya, Hapus
+                  <span style={{ fontSize: 13, color: "#b91c1c", fontWeight: 600, flex: 1 }}>
+                    {deleting ? "Menghapus data & foto di Cloudinary..." : "Yakin ingin menghapus ini? Foto terkait juga akan dihapus dari Cloudinary."}
+                  </span>
+                  <button onClick={() => handleDelete(item.id)} disabled={deleting}
+                    style={{ background: "#e74c3c", color: "#fff", border: "none", borderRadius: 7, padding: "7px 16px", fontSize: 13, fontWeight: 700, cursor: deleting ? "default" : "pointer", opacity: deleting ? 0.7 : 1 }}>
+                    {deleting ? "Menghapus..." : "Ya, Hapus"}
                   </button>
-                  <button onClick={() => setDelTarget(null)}
-                    style={{ background: "#fff", color: "#5A6A6C", border: "1.5px solid #D5C9B0", borderRadius: 7, padding: "7px 14px", fontSize: 13, cursor: "pointer" }}>
+                  <button onClick={() => setDelTarget(null)} disabled={deleting}
+                    style={{ background: "#fff", color: "#5A6A6C", border: "1.5px solid #D5C9B0", borderRadius: 7, padding: "7px 14px", fontSize: 13, cursor: deleting ? "default" : "pointer" }}>
                     Batal
                   </button>
                 </div>
@@ -14900,11 +14945,19 @@ function TemaRumahAdminPanel({ data, save, notify, uploadToCloudinary }) {
 
   const handleDeleteTema = async (i) => {
     const t = activeTemas[i];
-    if (!window.confirm(`Hapus tema "${t.nama || "(tanpa nama)"}" secara permanen? Tindakan ini tidak bisa dibatalkan.`)) return;
+    if (!window.confirm(`Hapus tema "${t.nama || "(tanpa nama)"}" secara permanen beserta semua foto & videonya di Cloudinary? Tindakan ini tidak bisa dibatalkan.`)) return;
     const nextTemas = activeTemas.filter((_, j) => j !== i);
     try {
+      const urls = [
+        t?.img,
+        ...((t?.imgs || []).map(g => g?.img)),
+        ...((t?.videos || [])),
+      ].filter(Boolean);
+      const cloudOk = urls.length > 0 ? await deleteCloudinaryAssets(urls) : true;
       await save({ ...data, temaData: nextTemas });
-      notify("Tema dihapus.");
+      notify(cloudOk
+        ? "Tema & seluruh foto/video terkait berhasil dihapus permanen."
+        : "Tema berhasil dihapus, tapi sebagian foto/video di Cloudinary gagal terhapus otomatis.");
     } catch {
       notify("Gagal menghapus tema.");
     }
