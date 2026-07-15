@@ -11515,7 +11515,7 @@ function LsInfoCard({ cat, fmt, onWaOpen }) {
 function LandscapePage({ onWaOpen, categories }) {
   useEffect(() => { window.scrollTo(0, 0); }, []);
   const fmt = (n) => "Rp " + n.toLocaleString("id-ID") + ",-";
-  const cats_ = (categories && categories.length) ? categories : LANDSCAPE_CATEGORIES;
+  const cats_ = ((categories && categories.length) ? categories : LANDSCAPE_CATEGORIES).filter(c => !c.hidden);
 
   // Susun kategori ke rows berdasar MAG_LAYOUT (desktop), berulang jika >6 kategori
   const rows = [];
@@ -12033,7 +12033,7 @@ function RsInfoCard({ paket, fmt, onWaOpen }) {
 function RumahSubsidiPage({ onWaOpen, paketData }) {
   useEffect(() => { window.scrollTo(0, 0); }, []);
   const fmt = (n) => "Rp " + n.toLocaleString("id-ID") + ",-";
-  const paket_ = (paketData && paketData.length) ? paketData : RS_PAKET_DATA;
+  const paket_ = ((paketData && paketData.length) ? paketData : RS_PAKET_DATA).filter(p => !p.hidden);
 
   // Susun paket ke rows sesuai RS_MAG_LAYOUT (1 | 3 | 2), berulang jika >6 paket
   const rows = [];
@@ -12492,6 +12492,7 @@ function PaketGridManager({ data, save, notify, storeKey, title, icon, accentCol
     startFrom: 0,
     satuan: "paket",
     tampilHarga: true,
+    hidden: false,
     slideDir: "right",
     includes: [],
     slides: [],
@@ -12516,6 +12517,12 @@ function PaketGridManager({ data, save, notify, storeKey, title, icon, accentCol
     if (!window.confirm("Hapus paket ini? Tindakan ini tidak bisa dibatalkan.")) return;
     persist(items.filter(x => x.id !== id));
     notify("Paket dihapus.");
+  };
+
+  const toggleHidden = (it) => {
+    const next = !it.hidden;
+    persist(items.map(x => x.id === it.id ? { ...x, hidden: next } : x));
+    notify(next ? "Paket disembunyikan dari halaman publik." : "Paket ditampilkan kembali di halaman publik.");
   };
 
   // -- Includes helpers --
@@ -12604,7 +12611,7 @@ function PaketGridManager({ data, save, notify, storeKey, title, icon, accentCol
           </div>
 
           {/* -- Toggle Tampilkan Harga -- */}
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, background: "#FAF7F0", border: "1.5px solid #E8DCC8", borderRadius: 10, padding: "12px 16px", marginBottom: 22 }}>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, background: "#FAF7F0", border: "1.5px solid #E8DCC8", borderRadius: 10, padding: "12px 16px", marginBottom: 14 }}>
             <div>
               <div style={{ fontSize: 13, fontWeight: 700, color: "#2E3D3F" }}>Tampilkan Harga</div>
               <div style={{ fontSize: 11.5, color: "#8B9A9C", marginTop: 2 }}>Nonaktifkan untuk sembunyikan harga — kartu akan menampilkan tombol Konsultasi Sekarang penuh sebagai gantinya.</div>
@@ -12612,6 +12619,18 @@ function PaketGridManager({ data, save, notify, storeKey, title, icon, accentCol
             <button type="button" onClick={() => setForm(p => ({ ...p, tampilHarga: p.tampilHarga === false ? true : false }))}
               style={{ position: "relative", width: 46, height: 26, borderRadius: 20, border: "none", cursor: "pointer", flexShrink: 0, background: form.tampilHarga === false ? "#D5C9B0" : accentColor, transition: "background .2s" }}>
               <span style={{ position: "absolute", top: 3, left: form.tampilHarga === false ? 3 : 23, width: 20, height: 20, borderRadius: "50%", background: "#fff", boxShadow: "0 1px 4px rgba(0,0,0,.3)", transition: "left .2s" }} />
+            </button>
+          </div>
+
+          {/* -- Toggle Tampil / Sembunyikan Paket di Halaman Publik -- */}
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, background: "#FAF7F0", border: "1.5px solid #E8DCC8", borderRadius: 10, padding: "12px 16px", marginBottom: 22 }}>
+            <div>
+              <div style={{ fontSize: 13, fontWeight: 700, color: "#2E3D3F" }}>Tampil di Halaman Publik</div>
+              <div style={{ fontSize: 11.5, color: "#8B9A9C", marginTop: 2 }}>Nonaktifkan untuk menyembunyikan item ini dari halaman publik — datanya tetap tersimpan, tidak dihapus.</div>
+            </div>
+            <button type="button" onClick={() => setForm(p => ({ ...p, hidden: !p.hidden }))}
+              style={{ position: "relative", width: 46, height: 26, borderRadius: 20, border: "none", cursor: "pointer", flexShrink: 0, background: form.hidden ? "#D5C9B0" : accentColor, transition: "background .2s" }}>
+              <span style={{ position: "absolute", top: 3, left: form.hidden ? 3 : 23, width: 20, height: 20, borderRadius: "50%", background: "#fff", boxShadow: "0 1px 4px rgba(0,0,0,.3)", transition: "left .2s" }} />
             </button>
           </div>
 
@@ -12678,14 +12697,25 @@ function PaketGridManager({ data, save, notify, storeKey, title, icon, accentCol
       {!editId && (
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(280px,1fr))", gap: 16 }}>
           {items.map(it => (
-            <div key={it.id} style={{ background: "#fff", borderRadius: 12, padding: "18px", boxShadow: "0 2px 8px rgba(0,0,0,.06)", display: "flex", flexDirection: "column", gap: 10 }}>
-              <div style={{ height: 110, borderRadius: 8, overflow: "hidden", background: "#FAF7F0", display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <div key={it.id} style={{ background: "#fff", borderRadius: 12, padding: "18px", boxShadow: "0 2px 8px rgba(0,0,0,.06)", display: "flex", flexDirection: "column", gap: 10, opacity: it.hidden ? 0.6 : 1, border: it.hidden ? "1.5px dashed #D5C9B0" : "1.5px solid transparent" }}>
+              <div style={{ height: 110, borderRadius: 8, overflow: "hidden", background: "#FAF7F0", display: "flex", alignItems: "center", justifyContent: "center", position: "relative" }}>
                 {it.slides?.[0]?.img ? <img loading="lazy" src={it.slides[0].img} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} onError={e => e.target.style.display = "none"} /> : <span style={{ fontSize: 30 }}>{it.icon}</span>}
+                {it.hidden && (
+                  <span style={{ position: "absolute", top: 8, left: 8, background: "#dc2626", color: "#fff", fontSize: 10, fontWeight: 700, padding: "3px 9px", borderRadius: 20, letterSpacing: ".04em", textTransform: "uppercase" }}>Disembunyikan</span>
+                )}
               </div>
               <div>
                 <div style={{ fontWeight: 700, color: "#2E3D3F", fontSize: 14 }}>{it.icon} {it.title}</div>
                 <div style={{ fontSize: 12, color: "#27ae60", fontWeight: 700, marginTop: 3 }}>{fmt(it.startFrom)} / {it.satuan}</div>
                 <div style={{ fontSize: 11, color: "#5A6A6C", marginTop: 4 }}>{(it.slides || []).length} foto · {(it.includes || []).length} item termasuk</div>
+              </div>
+              {/* Toggle Tampilkan / Sembunyikan di halaman publik */}
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8, background: "#FAF7F0", border: "1px solid #E8DCC8", borderRadius: 8, padding: "8px 12px" }}>
+                <span style={{ fontSize: 11.5, fontWeight: 600, color: it.hidden ? "#dc2626" : "#27ae60" }}>{it.hidden ? "Tersembunyi" : "Tampil di publik"}</span>
+                <button type="button" onClick={() => toggleHidden(it)} title={it.hidden ? "Tampilkan di halaman publik" : "Sembunyikan dari halaman publik"}
+                  style={{ position: "relative", width: 40, height: 22, borderRadius: 20, border: "none", cursor: "pointer", flexShrink: 0, background: it.hidden ? "#D5C9B0" : accentColor, transition: "background .2s" }}>
+                  <span style={{ position: "absolute", top: 3, left: it.hidden ? 3 : 21, width: 16, height: 16, borderRadius: "50%", background: "#fff", boxShadow: "0 1px 4px rgba(0,0,0,.3)", transition: "left .2s" }} />
+                </button>
               </div>
               <div style={{ display: "flex", gap: 8, marginTop: "auto" }}>
                 <button onClick={() => openEdit(it)} style={{ flex: 1, padding: "7px 0", background: "#FAF7F0", color: "#8B6914", border: "1px solid #E8DCC8", borderRadius: 6, fontSize: 12, fontWeight: 600, cursor: "pointer" }}>Edit</button>
