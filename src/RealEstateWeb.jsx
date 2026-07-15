@@ -8637,7 +8637,11 @@ function AboutLayananListEditor({ data, save, notify, uploadToCloudinary }) {
     save({ ...data, aboutLayananList: next });
     notify("Kartu layanan baru ditambahkan!");
   };
-  const resetDefault = () => { save({ ...data, aboutLayananList: [] }); notify("Direset ke kartu layanan default."); };
+  const resetDefault = () => {
+    if (!window.confirm("Yakin ingin reset kartu layanan ke default? Semua kartu yang sudah kamu ubah akan DIGANTI dan tidak bisa dikembalikan lagi.")) return;
+    save({ ...data, aboutLayananList: [] });
+    notify("Direset ke kartu layanan default.");
+  };
 
   return (
     <div>
@@ -8646,9 +8650,16 @@ function AboutLayananListEditor({ data, save, notify, uploadToCloudinary }) {
           <AboutLayananCardEditor key={idx} index={idx} item={item} data={data} save={save} notify={notify} uploadToCloudinary={uploadToCloudinary} />
         ))}
       </div>
-      <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
-        <button onClick={addItem} style={{ padding: "9px 16px", background: "#2ecc71", color: "#fff", border: "none", borderRadius: 6, fontSize: 12, fontWeight: 700, cursor: "pointer" }}>+ Tambah Kartu Layanan</button>
-        <button onClick={resetDefault} style={{ padding: "9px 16px", background: "#6c757d", color: "#fff", border: "none", borderRadius: 6, fontSize: 12, fontWeight: 700, cursor: "pointer" }}>Reset ke Default</button>
+      <button onClick={addItem} style={{ padding: "9px 16px", background: "#2ecc71", color: "#fff", border: "none", borderRadius: 6, fontSize: 12, fontWeight: 700, cursor: "pointer" }}>+ Tambah Kartu Layanan</button>
+
+      {/* Tombol reset — sengaja dibuat kecil & ditaruh terpisah paling bawah supaya tidak gampang kepencet tidak sengaja */}
+      <div style={{ textAlign: "center", marginTop: 28 }}>
+        <button onClick={resetDefault}
+          style={{ padding: "4px 10px", background: "transparent", border: "1px dashed #D5C9B0", color: "#A89070", borderRadius: 6, fontSize: 10.5, fontWeight: 500, cursor: "pointer", opacity: 0.7, transition: "opacity .15s" }}
+          onMouseEnter={e => (e.currentTarget.style.opacity = 1)}
+          onMouseLeave={e => (e.currentTarget.style.opacity = 0.7)}>
+          Reset ke Default
+        </button>
       </div>
     </div>
   );
@@ -8875,6 +8886,7 @@ function SubLayananAdmin({
   /* ── Seed manual (tetap tersedia lewat tombol di bawah list jika diperlukan) ── */
   const handleSeed = async () => {
     if (!defaultItems || seeding) return;
+    if (!window.confirm("Yakin ingin reset ke data contoh awal? Semua produk yang sudah kamu tambah/ubah di sini akan DIGANTI dan tidak bisa dikembalikan lagi.")) return;
     setSeeding(true);
     try {
       const seeded = defaultItems.map((it, i) => ({ ...it, id: it.id || String(Date.now() + i) }));
@@ -9011,18 +9023,7 @@ function SubLayananAdmin({
         </div>
       )}
 
-      {/* Tombol reset ke data hardcoded — selalu tampil jika ada defaultItems */}
-      {defaultItems && defaultItems.length > 0 && !seeding && (
-        <button onClick={handleSeed}
-          style={{ width: "100%", padding: "10px 20px", background: "#fff", border: `1.5px dashed ${accent}`,
-            color: "#8B6914", borderRadius: 10, fontSize: 13, fontWeight: 600, cursor: "pointer",
-            marginBottom: 16, display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
-            transition: "background .15s" }}
-          onMouseEnter={e => (e.currentTarget.style.background = "#FAF7F0")}
-          onMouseLeave={e => (e.currentTarget.style.background = "#fff")}>
-          Reset ke Data Contoh Awal
-        </button>
-      )}
+      {/* Tombol reset ke data hardcoded dipindah ke paling bawah halaman (lihat akhir list) */}
 
       {/* Daftar item */}
       {items.length === 0 ? (
@@ -9107,6 +9108,22 @@ function SubLayananAdmin({
               )}
             </div>
           ); })}
+        </div>
+      )}
+
+      {/* Tombol reset ke data contoh — sengaja dibuat kecil & ditaruh paling bawah
+          supaya tidak gampang kepencet tidak sengaja (bisa menghapus semua data
+          yang sudah di-setting). Ada juga konfirmasi sebelum benar-benar reset. */}
+      {defaultItems && defaultItems.length > 0 && !seeding && (
+        <div style={{ textAlign: "center", marginTop: 28 }}>
+          <button onClick={handleSeed}
+            style={{ padding: "4px 10px", background: "transparent", border: "1px dashed #D5C9B0",
+              color: "#A89070", borderRadius: 6, fontSize: 10.5, fontWeight: 500, cursor: "pointer",
+              opacity: 0.7, transition: "opacity .15s" }}
+            onMouseEnter={e => (e.currentTarget.style.opacity = 1)}
+            onMouseLeave={e => (e.currentTarget.style.opacity = 0.7)}>
+            Reset ke Data Contoh Awal
+          </button>
         </div>
       )}
     </div>
@@ -9473,6 +9490,43 @@ const PAGE_TO_PATH = {
 };
 const PATH_TO_PAGE = Object.fromEntries(Object.entries(PAGE_TO_PATH).map(([k, v]) => [v, k]));
 
+/* ── Mapping Control Panel: adminTab ↔ slug URL ───────────────────────────
+   Setiap tab/menu di Control Panel punya slug URL sendiri, contoh:
+   control-panel/plafon, control-panel/kamar-tidur, control-panel/backdrop-tv
+   dst. Sehingga setiap bagian bisa di-bookmark / dibagikan / dibuka langsung,
+   dan tombol Back/Forward browser jalan sesuai bagian yang sedang dibuka. ── */
+const ADMIN_TAB_TO_SLUG = {
+  dashboard: "dashboard",
+  messages: "pesan-masuk",
+  profil: "profil",
+  content: "konten-nav",
+  set_layanankami: "setting-about",
+  set_layanan: "setting-layanan",
+  settings: "pengaturan-sistem",
+  int_plafon: "plafon",
+  int_kitchen_set: "kitchen-set",
+  int_backdrop_tv: "backdrop-tv",
+  int_kamar_tidur: "kamar-tidur",
+  int_kamar_mandi: "kamar-mandi",
+  int_ruang_keluarga: "ruang-keluarga",
+  int_ruang_tamu: "ruang-tamu",
+  int_ruang_kerja: "ruang-kerja",
+  ext_pagar: "pagar",
+  ext_kanopi: "kanopi",
+  ext_aluminium: "kusen-partisi",
+  produk_furnitur: "furnitur",
+  paket_landscape: "landscape",
+  paket_rumahsubsidi: "rumah-subsidi",
+  set_temarumah: "tema-rumah",
+  reviews: "reviews",
+  users: "users",
+};
+const ADMIN_SLUG_TO_TAB = Object.fromEntries(Object.entries(ADMIN_TAB_TO_SLUG).map(([k, v]) => [v, k]));
+/** Bangun path URL /control-panel/<slug> dari sebuah adminTab id */
+const adminTabToPath = (tab) => `/control-panel/${ADMIN_TAB_TO_SLUG[tab] || "dashboard"}`;
+/** Ambil adminTab id dari path URL /control-panel/<slug> (default "dashboard") */
+const adminSlugToTab = (slug) => ADMIN_SLUG_TO_TAB[slug] || "dashboard";
+
 /* ── URL helper functions ─────────────────────────────────────────────────── */
 
 /** Slug generator dari teks judul */
@@ -9559,9 +9613,17 @@ const getInitialPage = () => {
   return "home";
 };
 
-// Restore showAdmin state dari URL: /control-panel → true
+// Restore showAdmin state dari URL: /control-panel atau /control-panel/<slug> → true
 const getInitialShowAdmin = () => {
-  return window.location.pathname === "/control-panel";
+  const p = window.location.pathname;
+  return p === "/control-panel" || p.startsWith("/control-panel/");
+};
+
+// Restore adminTab dari URL: /control-panel/plafon → "int_plafon", dst.
+const getInitialAdminTab = () => {
+  const p = window.location.pathname;
+  const m = p.match(/^\/control-panel\/([^/]+)$/);
+  return m ? adminSlugToTab(m[1]) : "dashboard";
 };
 
 /* ─────────────── REUSABLE SERVICE PAGE TEMPLATE ─────────────── */
@@ -15339,7 +15401,7 @@ export default function BricksyTravel() {
   const [showLogin, setShowLogin] = useState(false);
   const [comingSoon, setComingSoon] = useState(null); // null | "google" | "apple"
   const [showAdmin, setShowAdmin] = useState(() => getInitialShowAdmin()); // restore dari URL /control-panel
-  const [adminTab, setAdminTab] = useState("dashboard");
+  const [adminTab, setAdminTab] = useState(() => getInitialAdminTab());
   const [adminSection, setAdminSection] = useState("news");
   const [loginForm, setLoginForm] = useState({ username: "", password: "" });
   const [loginErr, setLoginErr] = useState("");
@@ -15503,15 +15565,19 @@ export default function BricksyTravel() {
         return;
       }
       setReviewTokenParam("");
-      // /control-panel -- restore tab dari state jika ada
-      if (pathname === "/control-panel" || e.state?.admin) {
+      // /control-panel atau /control-panel/<slug> -- restore tab dari URL slug (fallback ke history state)
+      if (pathname === "/control-panel" || pathname.startsWith("/control-panel/") || e.state?.admin) {
         // Jika sedang dalam mode edit paket dan user tekan Back → keluar edit dulu
         if (false) {
-          window.history.pushState({ admin: true, adminTab: adminTabRef.current, depth: (e.state?.depth ?? 0) }, "", "/control-panel");
+          window.history.pushState({ admin: true, adminTab: adminTabRef.current, depth: (e.state?.depth ?? 0) }, "", adminTabToPath(adminTabRef.current));
           return;
         }
         setShowAdmin(true);
-        if (e.state?.adminTab) {
+        const slugMatch = pathname.match(/^\/control-panel\/([^/]+)$/);
+        if (slugMatch) {
+          setAdminTab(adminSlugToTab(slugMatch[1]));
+          setCmsEditPost(null);
+        } else if (e.state?.adminTab) {
           setAdminTab(e.state.adminTab);
           setCmsEditPost(null);
         }
@@ -16057,10 +16123,10 @@ export default function BricksyTravel() {
     window.history.back();
   };
 
-  /** Buka admin panel: set state + sync URL ke /control-panel */
+  /** Buka admin panel: set state + sync URL ke /control-panel/dashboard */
   const openAdmin = () => {
     const newDepth = spaDepth.current + 1;
-    window.history.pushState({ admin: true, adminTab: "dashboard", depth: newDepth }, "", "/control-panel");
+    window.history.pushState({ admin: true, adminTab: "dashboard", depth: newDepth }, "", adminTabToPath("dashboard"));
     spaDepth.current = newDepth;
     spaMaxDepth.current = newDepth;
     setCanBack(true);
@@ -16076,10 +16142,11 @@ export default function BricksyTravel() {
     window.scrollTo(0, 0);
   };
 
-  /** Navigasi antar tab admin — push ke browser history agar tombol ← browser bisa step-back */
+  /** Navigasi antar tab admin — push ke browser history agar tombol ← browser bisa step-back.
+      Setiap tab punya slug URL sendiri, contoh: /control-panel/plafon, /control-panel/kamar-tidur */
   const navigateAdminTab = (tab, extra = {}) => {
     const newDepth = spaDepth.current + 1;
-    window.history.pushState({ admin: true, adminTab: tab, depth: newDepth, ...extra }, "", "/control-panel");
+    window.history.pushState({ admin: true, adminTab: tab, depth: newDepth, ...extra }, "", adminTabToPath(tab));
     spaDepth.current = newDepth;
     spaMaxDepth.current = newDepth;
     setCanBack(true);
@@ -18850,17 +18917,24 @@ export default function BricksyTravel() {
                         <HomeServiceCardEditor key={idx} index={idx} svc={svc} data={data} save={save} notify={notify} />
                       ))}
                     </div>
-                    <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
-                      <button onClick={() => {
+                    <button onClick={() => {
                         const list = (data.homeServices && data.homeServices.length > 0) ? [...data.homeServices] : HOME_SERVICES_DEFAULT.map(x => ({ ...x }));
                         list.push({ num: String(list.length + 1).padStart(2, "0"), title: "Layanan Baru", desc: "Deskripsi singkat layanan.", img: "" });
                         save({ ...data, homeServices: list });
                         notify("Layanan baru ditambahkan!");
                       }} style={{ padding: "9px 16px", background: "#2ecc71", color: "#fff", border: "none", borderRadius: 6, fontSize: 12, fontWeight: 700, cursor: "pointer" }}>+ Tambah Layanan</button>
+
+                    {/* Tombol reset — sengaja dibuat kecil & ditaruh terpisah paling bawah supaya tidak gampang kepencet tidak sengaja */}
+                    <div style={{ textAlign: "center", marginTop: 24 }}>
                       <button onClick={() => {
+                        if (!window.confirm("Yakin ingin reset ke teks & foto default? Semua layanan yang sudah kamu ubah akan DIGANTI dan tidak bisa dikembalikan lagi.")) return;
                         save({ ...data, homeServices: [] });
                         notify("Direset ke teks & foto default.");
-                      }} style={{ padding: "9px 16px", background: "#6c757d", color: "#fff", border: "none", borderRadius: 6, fontSize: 12, fontWeight: 700, cursor: "pointer" }}>Reset ke Default</button>
+                      }} style={{ padding: "4px 10px", background: "transparent", border: "1px dashed #D5C9B0", color: "#A89070", borderRadius: 6, fontSize: 10.5, fontWeight: 500, cursor: "pointer", opacity: 0.7, transition: "opacity .15s" }}
+                        onMouseEnter={e => (e.currentTarget.style.opacity = 1)}
+                        onMouseLeave={e => (e.currentTarget.style.opacity = 0.7)}>
+                        Reset ke Default
+                      </button>
                     </div>
                   </div>
 
@@ -19106,11 +19180,11 @@ export default function BricksyTravel() {
                     <h4 style={{ fontSize: 13, color: "#856404", marginBottom: 6 }}>Reset Site Data</h4>
                     <p style={{ fontSize: 12, color: "#856404", marginBottom: 12 }}>This will reset all content, images, and posts to defaults.</p>
                     <button onClick={async () => {
-                      if (window.confirm("Reset all data to defaults?")) {
-                        await save(DEFAULT_DATA);
-                        setEditContent({});
-                        notify("Data reset to defaults.");
-                      }
+                      if (!window.confirm("Apakah yakin ingin menghapus semua isi web?")) return;
+                      if (!window.confirm("Tindakan ini akan menghapus seluruh isi web dan mengembalikannya ke halaman kosong. Tindakan ini tidak bisa dibatalkan.")) return;
+                      await save(DEFAULT_DATA);
+                      setEditContent({});
+                      notify("Data reset to defaults.");
                     }} style={{ padding: "8px 18px", background: "#e74c3c", color: "#fff", borderRadius: 6, fontSize: 12, border: "none" }}>
                       Reset to Defaults
                     </button>
