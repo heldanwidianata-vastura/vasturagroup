@@ -8831,6 +8831,16 @@ function SubLayananAdmin({
     } catch (err) { notify("Gagal menghapus: " + (err?.message || "Periksa koneksi.")); }
   };
 
+  /* ── Toggle Hide/Publish: item tetap tersimpan di database, hanya disembunyikan dari halaman publik ── */
+  const handleToggleHidden = async (item) => {
+    try {
+      const nextHidden = !item.hidden;
+      const next = items.map(it => it.id === item.id ? { ...it, hidden: nextHidden } : it);
+      await save({ ...data, [crudKey]: next });
+      notify(nextHidden ? "Produk disembunyikan dari halaman publik." : "Produk sekarang tampil di halaman publik.");
+    } catch (err) { notify("Gagal mengubah status tampilan: " + (err?.message || "Periksa koneksi.")); }
+  };
+
   /* ── Buka form edit ── */
   const openEdit = (item) => {
     const f = emptyForm();
@@ -8907,20 +8917,41 @@ function SubLayananAdmin({
         </div>
       ) : (
         <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-          {items.map((item, idx) => (
-            <div key={item.id || idx} style={{ background: "#fff", border: "1.5px solid #E8DCC8", borderRadius: 12, overflow: "hidden" }}>
+          {items.map((item, idx) => { const isHidden = !!item.hidden; return (
+            <div key={item.id || idx} style={{ background: "#fff", border: `1.5px solid ${isHidden ? "#E5C07B" : "#E8DCC8"}`, borderRadius: 12, overflow: "hidden", opacity: isHidden ? 0.72 : 1, transition: "opacity .15s" }}>
               {/* Row item */}
-              <div style={{ display: "flex", alignItems: "center", gap: 12, padding: "12px 14px" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 12, padding: "12px 14px", flexWrap: "wrap" }}>
                 {item._img
                   ? <img src={item._img} alt="" style={{ width: 54, height: 44, objectFit: "cover", borderRadius: 7, flexShrink: 0 }} />
                   : <div style={{ width: 54, height: 44, background: "#F5EDD8", borderRadius: 7, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20, flexShrink: 0 }}>{icon}</div>
                 }
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ fontWeight: 700, fontSize: 14, color: "#2E3D3F", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                    {item.nama || item[crudFields[0]?.key] || `Item ${idx + 1}`}
+                <div style={{ flex: 1, minWidth: 120 }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
+                    <div style={{ fontWeight: 700, fontSize: 14, color: "#2E3D3F", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", maxWidth: 220 }}>
+                      {item.nama || item[crudFields[0]?.key] || `Item ${idx + 1}`}
+                    </div>
+                    <span style={{ fontSize: 10, fontWeight: 800, letterSpacing: ".03em", padding: "2px 8px", borderRadius: 20,
+                      background: isHidden ? "#FDF3E3" : "#E8F8EF", color: isHidden ? "#A9720F" : "#1A7A40", flexShrink: 0 }}>
+                      {isHidden ? "TERSEMBUNYI" : "PUBLIK"}
+                    </span>
                   </div>
-                  {item.harga && <div style={{ fontSize: 12, color: "#8B6914", fontWeight: 600 }}>{formatHargaRp(item.harga)}</div>}
+                  {item.harga && <div style={{ fontSize: 12, color: "#8B6914", fontWeight: 600, marginTop: 2 }}>{formatHargaRp(item.harga)}</div>}
                 </div>
+
+                {/* Toggle Hide / Public */}
+                <div style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}
+                  title={isHidden ? "Tersembunyi dari halaman publik — klik untuk publikasikan" : "Tampil di halaman publik — klik untuk sembunyikan"}>
+                  <span style={{ fontSize: 11, fontWeight: 700, color: isHidden ? "#A9720F" : "#1A7A40", minWidth: 34, textAlign: "right" }}>
+                    {isHidden ? "Hide" : "Public"}
+                  </span>
+                  <button type="button" onClick={() => handleToggleHidden(item)}
+                    style={{ position: "relative", width: 42, height: 24, borderRadius: 20, border: "none", cursor: "pointer",
+                      flexShrink: 0, background: isHidden ? "#D5C9B0" : accent, transition: "background .2s" }}>
+                    <span style={{ position: "absolute", top: 3, left: isHidden ? 3 : 21, width: 18, height: 18, borderRadius: "50%",
+                      background: "#fff", boxShadow: "0 1px 4px rgba(0,0,0,.3)", transition: "left .2s" }} />
+                  </button>
+                </div>
+
                 <div style={{ display: "flex", gap: 6, flexShrink: 0 }}>
                   <button onClick={() => openEdit(item)}
                     style={{ background: accent, color: "#fff", border: "none", borderRadius: 7,
@@ -8931,12 +8962,15 @@ function SubLayananAdmin({
                     Edit
                   </button>
                   <button onClick={() => setDelTarget(item.id)}
-                    style={{ background: "#fef2f2", color: "#e74c3c", border: "1.5px solid #fca5a5",
+                    style={{ display: "flex", alignItems: "center", gap: 5, background: "#fef2f2", color: "#e74c3c", border: "1.5px solid #fca5a5",
                       borderRadius: 7, padding: "7px 14px", fontSize: 13, fontWeight: 700, cursor: "pointer",
                       transition: "all .12s" }}
                     onMouseEnter={e => { e.currentTarget.style.background = "#e74c3c"; e.currentTarget.style.color = "#fff"; }}
                     onMouseLeave={e => { e.currentTarget.style.background = "#fef2f2"; e.currentTarget.style.color = "#e74c3c"; }}>
-                   
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                      <polyline points="3 6 5 6 21 6" /><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" /><path d="M10 11v6" /><path d="M14 11v6" /><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2" />
+                    </svg>
+                    Hapus
                   </button>
                 </div>
               </div>
@@ -8956,7 +8990,7 @@ function SubLayananAdmin({
                 </div>
               )}
             </div>
-          ))}
+          ); })}
         </div>
       )}
     </div>
@@ -10813,8 +10847,9 @@ function TemaRumahPage({ onWaOpen, temaSlug, openTemaDetail, closeTemaDetail, cm
   useEffect(() => { window.scrollTo(0, 0); }, []);
   const cms = cmsData || {};
 
-  /* Gunakan temaData dari CMS jika sudah di-load, fallback ke hardcoded */
-  const activeTemaData = (cms.temaData && cms.temaData.length > 0) ? cms.temaData : TEMA_DATA;
+  /* Gunakan temaData dari CMS jika sudah di-load, fallback ke hardcoded.
+     Tema yang di-set "Hide" disembunyikan dari halaman publik (data tetap tersimpan di CMS). */
+  const activeTemaData = ((cms.temaData && cms.temaData.length > 0) ? cms.temaData : TEMA_DATA).filter(t => !t.hidden);
 
   /* Jika ada slug → tampilkan detail page (URL: /tema-rumah/{slug} — bisa di-share) */
   if (temaSlug) {
@@ -12698,7 +12733,7 @@ function MobileLayananAccordion({ page, navigateTo, setMobileMenu, navDropdownLa
    FURNITUR PAGE — E-Commerce product listing dengan filter & cart UX
 ═══════════════════════════════════════════════════════════════════ */
 function FurniturPage({ data, onWaOpen }) {
-  const products = data.furniturItems || [];
+  const products = (data.furniturItems || []).filter(p => !p.hidden);
   const [search, setSearch]   = useState("");
   const [category, setCategory] = useState("all");
   const [sortBy, setSortBy]   = useState("default");
@@ -13852,7 +13887,7 @@ function SubInteriorPage({ pageKey, onWaOpen, navigateTo, data, itemSlug, openIt
   // Ambil dari Firestore dulu, fallback ke CATALOG_DATA hardcoded
   const crudKey = INT_PAGE_CRUD_KEY[pageKey];
   const firestoreItems = data && crudKey && data[crudKey] && data[crudKey].length > 0
-    ? data[crudKey].map(normalizeIntItem)
+    ? data[crudKey].filter(it => !it.hidden).map(normalizeIntItem)
     : null;
   const catalogItems = firestoreItems || config.items;
 
@@ -13880,9 +13915,9 @@ function getAutoHomeRunningImages(data) {
     const items = (data && data[crudKey] && data[crudKey].length > 0)
       ? data[crudKey]
       : (CATALOG_DATA[pageKey]?.items || []);
-    items.forEach(it => { const src = it._img || it.img; if (src) pool.push(src); });
+    items.filter(it => !it.hidden).forEach(it => { const src = it._img || it.img; if (src) pool.push(src); });
   });
-  (data?.furniturItems || []).forEach(p => { if (p._img) pool.push(p._img); });
+  (data?.furniturItems || []).filter(p => !p.hidden).forEach(p => { if (p._img) pool.push(p._img); });
   return [...new Set(pool)];
 }
 
@@ -14886,6 +14921,17 @@ function TemaRumahAdminPanel({ data, save, notify, uploadToCloudinary }) {
     setLoadingDefault(false);
   };
 
+  /* ── Toggle Hide/Publish tema: tema tetap tersimpan, hanya disembunyikan dari halaman publik ── */
+  const handleToggleHiddenTema = async (i) => {
+    const t = activeTemas[i];
+    const nextHidden = !t.hidden;
+    const nextTemas = activeTemas.map((tt, j) => j === i ? { ...tt, hidden: nextHidden } : tt);
+    try {
+      await save({ ...data, temaData: nextTemas });
+      notify(nextHidden ? "Tema disembunyikan dari halaman publik." : "Tema sekarang tampil di halaman publik.");
+    } catch { notify("Gagal mengubah status tampilan tema."); }
+  };
+
   const HERO_FIELDS = [
     { key: "temaHeroLabel",     label: "Label di atas judul (uppercase kecil)", placeholder: "TEMA RUMAH" },
     { key: "temaHeroTitle1",    label: "Judul baris 1 (warna putih)",           placeholder: "PILIH TEMA RUMAH" },
@@ -14950,11 +14996,17 @@ function TemaRumahAdminPanel({ data, save, notify, uploadToCloudinary }) {
                 style={{ display: "flex", alignItems: "center", gap: 8, padding: "11px 18px", background: "#2ecc71", color: "#fff", border: "none", borderRadius: 10, fontSize: 14, fontWeight: 800, cursor: "pointer", marginBottom: 16 }}>
                 Tambah Tema Baru
               </button>
-              {activeTemas.map((tema, i) => (
-                <div key={tema.slug} style={{ background: "#fff", border: "1.5px solid #E8DCC8", borderRadius: 12, padding: "16px 18px", marginBottom: 12, display: "flex", alignItems: "center", gap: 14 }}>
+              {activeTemas.map((tema, i) => { const isHidden = !!tema.hidden; return (
+                <div key={tema.slug} style={{ background: "#fff", border: `1.5px solid ${isHidden ? "#E5C07B" : "#E8DCC8"}`, borderRadius: 12, padding: "16px 18px", marginBottom: 12, display: "flex", alignItems: "center", gap: 14, flexWrap: "wrap", opacity: isHidden ? 0.72 : 1 }}>
                   <img src={tema.img} alt={tema.nama} style={{ width: 70, height: 52, objectFit: "cover", borderRadius: 8, flexShrink: 0 }} onError={e => e.target.style.display = "none"} />
-                  <div style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{ fontWeight: 800, fontSize: 15, color: "#2E3D3F" }}>{tema.no} · {tema.nama}</div>
+                  <div style={{ flex: 1, minWidth: 140 }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
+                      <div style={{ fontWeight: 800, fontSize: 15, color: "#2E3D3F" }}>{tema.no} · {tema.nama}</div>
+                      <span style={{ fontSize: 10, fontWeight: 800, letterSpacing: ".03em", padding: "2px 8px", borderRadius: 20,
+                        background: isHidden ? "#FDF3E3" : "#E8F8EF", color: isHidden ? "#A9720F" : "#1A7A40", flexShrink: 0 }}>
+                        {isHidden ? "TERSEMBUNYI" : "PUBLIK"}
+                      </span>
+                    </div>
                     <div style={{ fontSize: 12, color: "#5A6A6C", marginTop: 3, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{tema.tagline}</div>
                     <div style={{ display: "flex", gap: 6, marginTop: 6, flexWrap: "wrap" }}>
                       {(tema.fitur || []).map((f, fi) => (
@@ -14962,16 +15014,34 @@ function TemaRumahAdminPanel({ data, save, notify, uploadToCloudinary }) {
                       ))}
                     </div>
                   </div>
+
+                  {/* Toggle Hide / Public */}
+                  <div style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}
+                    title={isHidden ? "Tersembunyi dari halaman publik — klik untuk publikasikan" : "Tampil di halaman publik — klik untuk sembunyikan"}>
+                    <span style={{ fontSize: 11, fontWeight: 700, color: isHidden ? "#A9720F" : "#1A7A40", minWidth: 34, textAlign: "right" }}>
+                      {isHidden ? "Hide" : "Public"}
+                    </span>
+                    <button type="button" onClick={() => handleToggleHiddenTema(i)}
+                      style={{ position: "relative", width: 42, height: 24, borderRadius: 20, border: "none", cursor: "pointer",
+                        flexShrink: 0, background: isHidden ? "#D5C9B0" : "#C9AA71", transition: "background .2s" }}>
+                      <span style={{ position: "absolute", top: 3, left: isHidden ? 3 : 21, width: 18, height: 18, borderRadius: "50%",
+                        background: "#fff", boxShadow: "0 1px 4px rgba(0,0,0,.3)", transition: "left .2s" }} />
+                    </button>
+                  </div>
+
                   <button onClick={() => setEditIdx(i)}
                     style={{ padding: "8px 16px", background: "#C9AA71", color: "#fff", border: "none", borderRadius: 8, fontSize: 13, fontWeight: 700, cursor: "pointer", flexShrink: 0 }}>
                     Edit
                   </button>
                   <button onClick={() => handleDeleteTema(i)}
-                    style={{ padding: "8px 12px", background: "#fee2e2", color: "#dc2626", border: "none", borderRadius: 8, fontSize: 13, fontWeight: 700, cursor: "pointer", flexShrink: 0 }}>
-                   
+                    style={{ display: "flex", alignItems: "center", gap: 5, padding: "8px 14px", background: "#fee2e2", color: "#dc2626", border: "none", borderRadius: 8, fontSize: 13, fontWeight: 700, cursor: "pointer", flexShrink: 0 }}>
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                      <polyline points="3 6 5 6 21 6" /><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" /><path d="M10 11v6" /><path d="M14 11v6" /><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2" />
+                    </svg>
+                    Hapus
                   </button>
                 </div>
-              ))}
+              ); })}
             </div>
           ) : (
             <TemaEditForm
@@ -16553,7 +16623,7 @@ export default function BricksyTravel() {
 
                 {/* Dropdown: Tema Rumah — tepat di bawah About */}
                 <NavDropdownTemaRumah page={page} navigateTo={navigateTo}
-                  temaList={(data.temaData && data.temaData.length > 0) ? data.temaData : TEMA_DATA} temaSlug={temaSlug} openTemaDetail={openTemaDetail} />
+                  temaList={((data.temaData && data.temaData.length > 0) ? data.temaData : TEMA_DATA).filter(t => !t.hidden)} temaSlug={temaSlug} openTemaDetail={openTemaDetail} />
 
                 {/* Dropdown: Paket Layanan Kami */}
                 <NavDropdownLayanan page={page} navigateTo={navigateTo} navDropdownLayanan={navDropdownLayanan} />
@@ -16691,7 +16761,7 @@ export default function BricksyTravel() {
 
                 {/* -- Mobile: Tema Rumah (accordion) — tepat di bawah About -- */}
                 <MobileTemaRumahAccordion page={page} navigateTo={navigateTo} setMobileMenu={setMobileMenu}
-                  temaList={(data.temaData && data.temaData.length > 0) ? data.temaData : TEMA_DATA} temaSlug={temaSlug} openTemaDetail={openTemaDetail} />
+                  temaList={((data.temaData && data.temaData.length > 0) ? data.temaData : TEMA_DATA).filter(t => !t.hidden)} temaSlug={temaSlug} openTemaDetail={openTemaDetail} />
 
                 {/* -- Mobile: Paket Layanan Kami (accordion) -- */}
                 <MobileLayananAccordion page={page} navigateTo={navigateTo} setMobileMenu={setMobileMenu} navDropdownLayanan={navDropdownLayanan} />
@@ -17064,7 +17134,7 @@ export default function BricksyTravel() {
                     <div style={{ maxWidth:1200,margin:"0 auto" }}>
                       <p className="re-about-label re-reveal" style={{ marginBottom:48 }}>Listing Aktif Kami</p>
 
-                      {((data.temaData && data.temaData.length > 0) ? data.temaData : TEMA_DATA).map((tema, i) => {
+                      {((data.temaData && data.temaData.length > 0) ? data.temaData : TEMA_DATA).filter(t => !t.hidden).map((tema, i) => {
                         const imgRight = i % 2 === 1;
                         return (
                         <div key={tema.slug || tema.id || i} className="re-listing-item" style={{ direction: imgRight ? "rtl" : "ltr" }}>
