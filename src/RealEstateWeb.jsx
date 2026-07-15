@@ -1045,8 +1045,9 @@ const DEFAULT_DATA = {
     nav1: "Home", nav2: "About", nav3: "Program Affiliate", nav4: "Paket Rumah Subsidi", nav5: "Interior", nav6: "Layanan Kami",
     nav7: "Jasa Desain & RAB", nav8: "Tema Rumah",
     nav9: "Interior", nav10: "Pagar Rumah", nav11: "Kanopi", nav12: "Aluminium", nav13: "Landscape & Taman",
-    servicesPageTitle: "Paket Layanan Kami",
-    servicesPageSub: "Pilih paket yang sesuai dengan kebutuhan Anda. Setiap paket dirancang untuk memberikan pengalaman terbaik bersama VASTURA GROUP.",
+    servicesPageTitle: "SOLUSI LENGKAP DESAIN & KONSTRUKSI",
+    servicesPageSub: "Melayani desain, renovasi, interior, eksterior hingga penataan taman dengan standar profesional.",
+    servicesHeroImage: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1400&q=85",
     waTemplates: {
       umum: "Halo VASTURA GROUP!\n\nSaya ingin mengetahui lebih lanjut tentang layanan Anda.\n\nTerima kasih!",
     },
@@ -6525,7 +6526,7 @@ function ServicesPage({ content, services, navigateTo, activePaket, onOpenPaket,
       <div style={{ position:"relative", height:"clamp(420px,65vw,640px)", overflow:"hidden", background:"#1a2526" }}>
         {/* Hero BG image */}
         <img
-          src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1400&q=85"
+          src={content?.servicesHeroImage || "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1400&q=85"}
           alt="Vastura Hero"
           style={{ position:"absolute", inset:0, width:"100%", height:"100%", objectFit:"cover", objectPosition:"center", opacity:.72 }}
         />
@@ -6536,11 +6537,10 @@ function ServicesPage({ content, services, navigateTo, activePaket, onOpenPaket,
         <div style={{ position:"relative", zIndex:2, height:"100%", display:"flex", alignItems:"center", padding:"0 clamp(24px,6%,120px)" }}>
           <div style={{ maxWidth:560, animation:"svFadeUp .6s ease both" }}>
             <h1 style={{ fontSize:"clamp(2rem,5.5vw,3.4rem)", fontWeight:900, color:"#fff", lineHeight:1.08, marginBottom:14, letterSpacing:"-0.01em" }}>
-              <span style={{ display:"block" }}>SOLUSI LENGKAP</span>
-              <span style={{ color:"#C9AA71" }}>DESAIN &amp; KONSTRUKSI</span>
+              {content?.servicesPageTitle || "SOLUSI LENGKAP DESAIN & KONSTRUKSI"}
             </h1>
             <p style={{ fontSize:"clamp(0.9rem,2vw,1.0625rem)", color:"rgba(255,255,255,.82)", lineHeight:1.75, marginBottom:28, maxWidth:420 }}>
-              Melayani desain, renovasi, interior, eksterior hingga penataan taman dengan standar profesional.
+              {content?.servicesPageSub || "Melayani desain, renovasi, interior, eksterior hingga penataan taman dengan standar profesional."}
             </p>
             <div style={{ display:"flex", gap:14, flexWrap:"wrap", alignItems:"center" }}>
               <button className="sv-wa-btn" onClick={() => onWaOpen && onWaOpen()}
@@ -8743,6 +8743,77 @@ function AboutPageAdmin({ data, save, notify, uploadToCloudinary }) {
           <AboutLayananListEditor data={data} save={save} notify={notify} uploadToCloudinary={uploadToCloudinary} />
         </div>
       </AboutAdminSection>
+    </div>
+  );
+}
+
+/* ══════════════════════════════════════════════════════════
+   SETTING HALAMAN LAYANAN (/services) — satu tempat khusus
+   berisi teks (judul + deskripsi) DAN foto hero, digabung
+   jadi satu supaya tidak tersebar di tab lain.
+   ══════════════════════════════════════════════════════════ */
+function LayananPageAdmin({ data, save, notify }) {
+  return (
+    <div className="fade-in" style={{ maxWidth: 860 }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 24 }}>
+        <span style={{ fontSize: 30 }}></span>
+        <div>
+          <h1 style={{ fontSize: 22, fontWeight: 800, color: "#2E3D3F", margin: 0 }}>Setting Halaman Layanan</h1>
+          <p style={{ fontSize: 13, color: "#8B9A9C", margin: "3px 0 0" }}>
+            Kelola teks (judul & deskripsi) dan foto hero halaman Layanan (/services) — semuanya di satu tempat ini.
+          </p>
+        </div>
+      </div>
+
+      <AboutAdminSection title="Teks Hero Halaman Layanan" accent="#C9AA71"
+        desc="Judul besar dan deskripsi singkat yang tampil di bagian atas halaman Layanan.">
+        <AboutTextField data={data} save={save} notify={notify} label="Judul Halaman" fieldKey="servicesPageTitle" placeholder="SOLUSI LENGKAP DESAIN & KONSTRUKSI" accent="#C9AA71" />
+        <AboutTextField data={data} save={save} notify={notify} label="Deskripsi / Subjudul" fieldKey="servicesPageSub" multiline placeholder="Melayani desain, renovasi, interior, eksterior hingga penataan taman dengan standar profesional." accent="#C9AA71" />
+      </AboutAdminSection>
+
+      <AboutAdminSection title="Foto Hero Halaman Layanan" accent="#8B6914"
+        desc="Foto latar belakang besar di bagian paling atas halaman Layanan.">
+        <LayananHeroImagePanel data={data} save={save} notify={notify} />
+      </AboutAdminSection>
+    </div>
+  );
+}
+
+function LayananHeroImagePanel({ data, save, notify }) {
+  const [imgUrl, setImgUrl] = React.useState(data.content.servicesHeroImage || "");
+  return (
+    <div>
+      <label style={{ fontSize: 11, fontWeight: 700, color: "#5A6A6C", letterSpacing: "0.8px", textTransform: "uppercase", display: "block", marginBottom: 8 }}>URL Foto Hero</label>
+      <div style={{ display: "flex", gap: 8, marginBottom: 12 }}>
+        <input
+          value={imgUrl}
+          onChange={e => setImgUrl(e.target.value)}
+          placeholder="https://..."
+          style={{ flex: 1, padding: "9px 12px", border: "1px solid #D4C4A0", borderRadius: 6, fontSize: 13, outline: "none", boxSizing: "border-box" }}
+        />
+        <button onClick={() => {
+          const url = imgUrl.trim();
+          if (!url) return notify("Masukkan URL gambar.", "error");
+          save({ ...data, content: { ...data.content, servicesHeroImage: url } });
+          notify("Foto hero Layanan disimpan!");
+        }} style={{ padding: "9px 16px", background: "#8B6914", color: "#fff", borderRadius: 6, fontSize: 12, border: "none", fontWeight: 700, whiteSpace: "nowrap", cursor: "pointer" }}>
+          Simpan
+        </button>
+      </div>
+      <label style={{ fontSize: 11, fontWeight: 600, color: "#5A6A6C", letterSpacing: "1px", textTransform: "uppercase", display: "block", marginBottom: 6 }}>Atau Upload Foto</label>
+      <UploadButton label="Pilih Foto Hero"
+        style={{ border: "1.5px dashed #8B6914", color: "#8B6914", background: "#fff" }}
+        onDone={urls => {
+          setImgUrl(urls[0]);
+          save({ ...data, content: { ...data.content, servicesHeroImage: urls[0] } });
+          notify("Foto hero Layanan diupload!");
+        }}
+        onError={() => notify("Gagal upload. Coba lagi.", "error")} />
+      {data.content.servicesHeroImage && (
+        <img src={data.content.servicesHeroImage} alt="Preview Hero Layanan"
+          style={{ width: "100%", maxHeight: 220, objectFit: "cover", borderRadius: 8, border: "1px solid #E8DCC8", marginTop: 12 }}
+          onError={e => e.target.style.display = "none"} />
+      )}
     </div>
   );
 }
@@ -13993,6 +14064,93 @@ function interleaveArrays(a, b) {
   return out;
 }
 
+/* ═══════════════════════════════════════════════════════════════════
+   MARQUEE KECEPATAN KONSTAN (px/detik)
+   ───────────────────────────────────────────────────────────────────
+   Bug lama: durasi animasi di-hardcode (mis. 55s / 38s) sementara jarak
+   yang ditempuh bergantung pada lebar viewport (100vw) atau jumlah
+   konten (banyak foto = track lebih panjang). Akibatnya kecepatan yang
+   TERLIHAT beda-beda di tiap laptop/monitor — makin lebar layar atau
+   makin banyak foto, makin "ngebut" walau durasi CSS-nya sama.
+   Perbaikan: ukur lebar konten asli (scrollWidth/2, karena konten
+   diduplikasi 2x untuk loop mulus) lalu hitung durasi = jarak / speed,
+   sehingga kecepatan (px/detik) selalu KONSTAN di layar & jumlah
+   konten apa pun. ── */
+function useConstantMarqueeDuration(speedPxPerSec, watchKey) {
+  const trackRef = useRef(null);
+  const [state, setState] = useState({ duration: 30, ready: false });
+  useEffect(() => {
+    const el = trackRef.current;
+    if (!el) return;
+    let cancelled = false;
+    const measure = () => {
+      const half = el.scrollWidth / 2; // konten diduplikasi 2x
+      if (half > 0 && !cancelled) setState({ duration: Math.max(half / speedPxPerSec, 4), ready: true });
+    };
+    measure();
+    let ro;
+    if (typeof ResizeObserver !== "undefined") { ro = new ResizeObserver(measure); ro.observe(el); }
+    window.addEventListener("resize", measure);
+    // Re-ukur begitu gambar anak selesai dimuat -- lebar track bisa berubah
+    // setelah gambar tampil, terutama sesaat setelah halaman baru dibuka.
+    el.addEventListener("load", measure, true);
+    return () => {
+      cancelled = true;
+      if (ro) ro.disconnect();
+      window.removeEventListener("resize", measure);
+      el.removeEventListener("load", measure, true);
+    };
+  }, [speedPxPerSec, watchKey]);
+  return { trackRef, duration: state.duration, ready: state.ready };
+}
+
+/* Running text / marquee teks berjalan — kecepatan konstan di semua laptop/layar.
+   Animasi baru mulai SETELAH lebar konten terukur (ready=true), supaya tidak ada
+   kedipan/lompatan cepat sesaat halaman baru dibuka. */
+function RunningTextMarquee({ text, speedPxPerSec = 70 }) {
+  const { trackRef, duration, ready } = useConstantMarqueeDuration(speedPxPerSec, text);
+  return (
+    <div style={{ background:"#cc0000", overflow:"hidden", whiteSpace:"nowrap", padding:"5px 0", position:"relative", zIndex:10, lineHeight:1, display:"flex", alignItems:"center" }}>
+      <style>{`
+        @keyframes marqueeScrollConst { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+        .running-text-inner { display:inline-flex; will-change:transform; }
+        .running-text-inner span { color:#ffffff; font-weight:700; font-size:0.78rem; letter-spacing:.04em; line-height:1; vertical-align:middle; padding-right:0; }
+        @media (max-width: 600px) { .running-text-inner span { font-size:0.72rem; } }
+      `}</style>
+      <span ref={trackRef} className="running-text-inner" style={{ animation: ready ? `marqueeScrollConst ${duration}s linear infinite` : "none" }}>
+        <span>&nbsp;&nbsp;{text}&nbsp;&nbsp;</span>
+        <span aria-hidden="true">&nbsp;&nbsp;{text}&nbsp;&nbsp;</span>
+      </span>
+    </div>
+  );
+}
+
+/* Satu baris foto berjalan — dipakai 2x (kanan & kiri) di Home. Kecepatan konstan
+   walau jumlah foto (items) berubah-ubah (foto manual + otomatis dari katalog),
+   dan tidak bergerak sama sekali sampai lebar aslinya terukur (ready=true) —
+   mencegah lompatan cepat sesaat halaman baru dibuka / saat data asli baru masuk. */
+function RunningPhotoRow({ items, direction = "right", speedPxPerSec = 45 }) {
+  const { trackRef, duration, ready } = useConstantMarqueeDuration(speedPxPerSec, items.join("|"));
+  const anim = direction === "right" ? "scrollRightConst" : "scrollLeftConst";
+  return (
+    <div style={{ overflow:"hidden" }}>
+      <style>{`
+        @keyframes scrollRightConst { from { transform:translateX(0); } to { transform:translateX(-50%); } }
+        @keyframes scrollLeftConst  { from { transform:translateX(-50%); } to { transform:translateX(0); } }
+        .photo-strip-track { display:flex; gap:14px; width:max-content; will-change:transform; }
+        .photo-strip-track:hover { animation-play-state:paused; }
+        .photo-strip-img { width:280px; height:180px; border-radius:12px; object-fit:cover; flex-shrink:0; display:block; }
+      `}</style>
+      <div ref={trackRef} className="photo-strip-track" style={{ animation: ready ? `${anim} ${duration}s linear infinite` : "none" }}>
+        {items.concat(items).map((src, i) => (
+          <img key={i} src={src} alt={`Foto ${i+1}`} className="photo-strip-img"
+            onError={e=>{ e.target.style.display="none"; }} />
+        ))}
+      </div>
+    </div>
+  );
+}
+
 /* ── Editor 1 kartu Layanan Section Home (foto + judul + deskripsi) ── */
 function HomeServiceCardEditor({ index, svc, data, save, notify }) {
   const [title, setTitle] = useState(svc.title || "");
@@ -17077,40 +17235,10 @@ export default function BricksyTravel() {
                   </section>
 
                   {/* == RUNNING TEXT / MARQUEE == */}
-                  <div style={{
-                    background: "#cc0000",
-                    overflow: "hidden",
-                    whiteSpace: "nowrap",
-                    padding: "5px 0",
-                    position: "relative",
-                    zIndex: 10,
-                    lineHeight: 1,
-                    display: "flex",
-                    alignItems: "center",
-                  }}>
-                    <style>{`
-                      @keyframes marqueeScroll {
-                        0%   { transform: translateX(100vw); }
-                        100% { transform: translateX(-100%); }
-                      }
-                      .running-text-inner {
-                        display: inline-block;
-                        animation: marqueeScroll 55s linear infinite;
-                        color: #ffffff;
-                        font-weight: 700;
-                        font-size: 0.78rem;
-                        letter-spacing: 0.04em;
-                        line-height: 1;
-                        vertical-align: middle;
-                      }
-                      @media (max-width: 600px) {
-                        .running-text-inner { font-size: 0.72rem; }
-                      }
-                    `}</style>
-                    <span className="running-text-inner">
-                     &nbsp;&nbsp;PUNYA INFO PROYEK KONSTRUKSI?&nbsp;&nbsp;Referensikan kepada perusahaan kami dan dapatkan komisi hingga 3% dari nilai proyek apabila kami terpilih sebagai mitra pelaksana.&nbsp;&nbsp;Legal, transparan, dan tanpa modal.&nbsp;&nbsp;Hubungi kami sekarang!&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;PUNYA INFO PROYEK KONSTRUKSI?&nbsp;&nbsp;Referensikan kepada perusahaan kami dan dapatkan komisi hingga 3% dari nilai proyek apabila kami terpilih sebagai mitra pelaksana.&nbsp;&nbsp;Legal, transparan, dan tanpa modal.&nbsp;&nbsp;Hubungi kami sekarang!
-                    </span>
-                  </div>
+                  <RunningTextMarquee
+                    text="PUNYA INFO PROYEK KONSTRUKSI? Referensikan kepada perusahaan kami dan dapatkan komisi hingga 3% dari nilai proyek apabila kami terpilih sebagai mitra pelaksana. Legal, transparan, dan tanpa modal. Hubungi kami sekarang!"
+                    speedPxPerSec={70}
+                  />
 
                   {/* == RUNNING PHOTO STRIP == */}
                   <section style={{ background:"#F8F5EE", padding:"56px 0 52px", overflow:"hidden" }}>
@@ -17121,14 +17249,6 @@ export default function BricksyTravel() {
                         Tema Rumah · Interior · Eksterior · Furnitur
                       </h2>
                     </div>
-                    <style>{`
-                      @keyframes scrollRight { from { transform:translateX(0) } to { transform:translateX(-50%) } }
-                      @keyframes scrollLeft  { from { transform:translateX(-50%) } to { transform:translateX(0) } }
-                      .photo-strip-right { display:flex; gap:14px; width:max-content; animation:scrollRight 38s linear infinite; }
-                      .photo-strip-left  { display:flex; gap:14px; width:max-content; animation:scrollLeft  38s linear infinite; }
-                      .photo-strip-right:hover, .photo-strip-left:hover { animation-play-state:paused; }
-                      .photo-strip-img { width:280px; height:180px; border-radius:12px; object-fit:cover; flex-shrink:0; display:block; }
-                    `}</style>
 
                     {(() => {
                       const DEFAULT_RUNNING = [
@@ -17159,24 +17279,11 @@ export default function BricksyTravel() {
                       return (
                         <>
                           {/* Baris 1 — bergerak ke kanan */}
-                          <div style={{ overflow:"hidden", marginBottom:14 }}>
-                            <div className="photo-strip-right">
-                              {row1.concat(row1).map((src, i) => (
-                                <img key={i} src={src} alt={`Foto ${i+1}`} className="photo-strip-img"
-                                  onError={e=>{ e.target.style.display="none"; }} />
-                              ))}
-                            </div>
+                          <div style={{ marginBottom:14 }}>
+                            <RunningPhotoRow items={row1} direction="right" speedPxPerSec={45} />
                           </div>
-
                           {/* Baris 2 — bergerak ke kiri */}
-                          <div style={{ overflow:"hidden" }}>
-                            <div className="photo-strip-left">
-                              {row2.concat(row2).map((src, i) => (
-                                <img key={i} src={src} alt={`Foto ${i+1}`} className="photo-strip-img"
-                                  onError={e=>{ e.target.style.display="none"; }} />
-                              ))}
-                            </div>
-                          </div>
+                          <RunningPhotoRow items={row2} direction="left" speedPxPerSec={45} />
                         </>
                       );
                     })()}
@@ -17402,6 +17509,7 @@ export default function BricksyTravel() {
                   items: [
                     { id: "content",         label: "Konten & Nav",      show: isAdmin },
                     { id: "set_layanankami", label: "Setting Halaman About", show: isAdmin },
+                    { id: "set_layanan",     label: "Setting Halaman Layanan", show: isAdmin },
                     { id: "settings",        label: "Pengaturan Sistem",  show: isAdmin },
                   ]
                 },
@@ -17514,8 +17622,6 @@ export default function BricksyTravel() {
                     { label: "Nav: Kanopi", key: "nav11" },
                     { label: "Nav: Aluminium", key: "nav12" },
                     { label: "Nav: Landscape & Taman", key: "nav13" },
-                    { label: "Layanan — Judul Halaman", key: "servicesPageTitle" },
-                    { label: "Layanan — Subjudul Halaman", key: "servicesPageSub", multiline: true },
                   ].map(f => (
                     <div key={f.key} style={{ background: "#fff", borderRadius: 8, padding: "18px 20px", marginBottom: 14, boxShadow: "0 1px 4px rgba(0,0,0,.05)" }}>
                       <label style={{ display: "block", fontSize: 11, fontWeight: 600, color: "#5A6A6C", letterSpacing: "1px", textTransform: "uppercase", marginBottom: 8 }}>{f.label}</label>
@@ -17553,6 +17659,11 @@ export default function BricksyTravel() {
               {/* SETTING HALAMAN ABOUT */}
               {adminTab === "set_layanankami" && isAdmin && (
                 <AboutPageAdmin data={data} save={save} notify={notify} uploadToCloudinary={uploadToCloudinary} />
+              )}
+
+              {/* SETTING HALAMAN LAYANAN — teks + foto hero, satu tempat */}
+              {adminTab === "set_layanan" && isAdmin && (
+                <LayananPageAdmin data={data} save={save} notify={notify} />
               )}
 
 
