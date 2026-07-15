@@ -9468,7 +9468,7 @@ const PAGE_TO_PATH = {
   /* Sub-halaman Eksterior */
   "eksterior/pagar":         "/eksterior/pagar",
   "eksterior/kanopi":        "/eksterior/kanopi",
-  "eksterior/aluminium":     "/eksterior/aluminium",
+  "eksterior/kusen-partisi": "/eksterior/kusen-partisi",
   "eksterior/taman-landscape":"/eksterior/taman-landscape",
 };
 const PATH_TO_PAGE = Object.fromEntries(Object.entries(PAGE_TO_PATH).map(([k, v]) => [v, k]));
@@ -12760,7 +12760,7 @@ function MobileLayananAccordion({ page, navigateTo, setMobileMenu, navDropdownLa
 
   const isLayananActive = [...topPages,
     "interior/kamar-tidur","interior/kamar-mandi","interior/ruang-keluarga","interior/ruang-tamu","interior/kitchen-set","interior/ruang-kerja","interior/plafon-modern","interior/backdrop-tv",
-    "eksterior/pagar","eksterior/kanopi","eksterior/aluminium","eksterior/taman-landscape",
+    "eksterior/pagar","eksterior/kanopi","eksterior/kusen-partisi","eksterior/taman-landscape",
   ].some(k=>k===page);
 
   return (
@@ -12823,7 +12823,7 @@ function MobileLayananAccordion({ page, navigateTo, setMobileMenu, navDropdownLa
               {[
                 {key:"eksterior/pagar",     label:"Pagar"},
                 {key:"eksterior/kanopi",    label:"Kanopi"},
-                {key:"eksterior/aluminium", label:"Aluminium"},
+                {key:"eksterior/kusen-partisi", label:"Kusen & Partisi"},
               ].map(sub=>(
                 <button key={sub.key} onClick={()=>{ navigateTo(sub.key); setMobileMenu(false); setOpen(false); setSubOpen(null); }}
                   style={mBtn(page===sub.key, 2)}>
@@ -13675,10 +13675,10 @@ const CATALOG_DATA = {
       {id:"kn6", nama:"Pergola Kayu + Atap Kaca", style:"Elegant", material:"Kayu Ulin + Kaca", desc:"Pergola taman yang elegan. Kayu ulin kuat dan kaca transparan menciptakan nuansa resort.", harga:850000, fitur:["Kayu Ulin","Taman Resort","Glass Roof"], img:"https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=600&q=80", poin:["Survey lokasi & konsultasi desain gratis sebelum pengerjaan","Material utama: Kayu Ulin + Kaca","Kayu Ulin","Taman Resort","Glass Roof","Pengerjaan oleh tenaga ahli berpengalaman","Garansi purna pengerjaan dari tim VASTURA GROUP"]},
     ]
   },
-  "eksterior/aluminium": {
+  "eksterior/kusen-partisi": {
     heroColor:"linear-gradient(135deg,#2b2d42 0%,#555b6e 60%,#8d99ae 100%)",
-    heroIcon:"", title:"Aluminium", subtitle:"Kusen, pintu, dan jendela aluminium — ringan, anti karat, dan tampilan premium untuk hunian modern.",
-    breadcrumb:[{label:"Beranda",page:"home"},{label:"Eksterior"},{label:"Aluminium"}],
+    heroIcon:"", title:"Kusen & Partisi", subtitle:"Kusen, pintu, dan jendela aluminium — ringan, anti karat, dan tampilan premium untuk hunian modern.",
+    breadcrumb:[{label:"Beranda",page:"home"},{label:"Eksterior"},{label:"Kusen & Partisi"}],
     items:[
       {id:"al1", nama:"Kusen Jendela Casement", style:"Classic", material:"Aluminium 4\"", desc:"Jendela swing ke luar (casement). Ventilasi optimal, seal udara rapat, dan profil ramping.", harga:450000, fitur:["Rapat Udara","Easy Clean","Custom Size"], img:"https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=600&q=80", poin:["Survey lokasi & konsultasi desain gratis sebelum pengerjaan","Material utama: Aluminium 4\"","Rapat Udara","Easy Clean","Custom Size","Pengerjaan oleh tenaga ahli berpengalaman","Garansi purna pengerjaan dari tim VASTURA GROUP"]},
       {id:"al2", nama:"Pintu Sliding Aluminium", style:"Space Saver", material:"Aluminium 3\" + Kaca", desc:"Pintu geser space-saving. Cocok untuk balkon, teras, atau area transisi indoor-outdoor.", harga:1200000, fitur:["Space Saving","Smooth Slide","Glass Options"], img:"https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?w=600&q=80", poin:["Survey lokasi & konsultasi desain gratis sebelum pengerjaan","Material utama: Aluminium 3\" + Kaca","Space Saving","Smooth Slide","Glass Options","Pengerjaan oleh tenaga ahli berpengalaman","Garansi purna pengerjaan dari tim VASTURA GROUP"]},
@@ -13752,7 +13752,7 @@ function VasturaFooter({ data, navigateTo, onWaOpen, showDevProfile }) {
     { label:"Interior",          page:"interior" },
     { label:"Pagar Rumah",       page:"eksterior/pagar" },
     { label:"Kanopi",            page:"eksterior/kanopi" },
-    { label:"Aluminium",         page:"eksterior/aluminium" },
+    { label:"Kusen & Partisi",   page:"eksterior/kusen-partisi" },
     { label:"Landscape & Taman", page:"eksterior/taman-landscape" },
     { label:"Furnitur",          page:"furnitur" },
   ];
@@ -13974,7 +13974,7 @@ const INT_PAGE_CRUD_KEY = {
   "interior/backdrop-tv":    "intBackdropTvItems",
   "eksterior/pagar":         "extPagarItems",
   "eksterior/kanopi":        "extKanopiItems",
-  "eksterior/aluminium":     "extAluminiumItems",
+  "eksterior/kusen-partisi": "extAluminiumItems",
 };
 
 // Konversi item Firestore (field desc, fitur string) → format SubPageCatalog (field desc, fitur array)
@@ -14267,7 +14267,7 @@ function NavDropdownLayanan({ page, navigateTo, navDropdownLayanan }) {
   }, []);
 
   const subIntPages = ["interior/kamar-tidur","interior/kamar-mandi","interior/ruang-keluarga","interior/ruang-tamu","interior/kitchen-set","interior/ruang-kerja","interior/plafon-modern","interior/backdrop-tv"];
-  const subExtPages = ["eksterior/pagar","eksterior/kanopi","eksterior/aluminium","eksterior/taman-landscape"];
+  const subExtPages = ["eksterior/pagar","eksterior/kanopi","eksterior/kusen-partisi","eksterior/taman-landscape"];
   const topPages    = ["services","desainrab"];
   const isActive    = [...topPages,...subIntPages,...subExtPages,"interior","pagar","kanopi","aluminium","landscape","furnitur"].some(k => k === page);
 
@@ -14340,7 +14340,7 @@ function NavDropdownLayanan({ page, navigateTo, navDropdownLayanan }) {
                 {[
                   {key:"eksterior/pagar",           label:"Pagar"},
                   {key:"eksterior/kanopi",           label:"Kanopi"},
-                  {key:"eksterior/aluminium",        label:"Aluminium"},
+                  {key:"eksterior/kusen-partisi",    label:"Kusen & Partisi"},
                 ].map(sub=>(
                   <button key={sub.key} onClick={()=>{ navigateTo(sub.key); setDdOpen(false); setSubOpen(null); }}
                     style={btn(page===sub.key)}
@@ -16571,6 +16571,17 @@ export default function BricksyTravel() {
             
             {!forgotStep ? (
               <>
+                <div style={{ textAlign: "center", marginBottom: 18 }}>
+                  <img src={data.content.logoImage || VASTURA_LOGO_URL} alt="Logo Perusahaan"
+                    style={{ width: 54, height: 54, objectFit: "contain", margin: "0 auto 10px", display: "block" }}
+                    onError={e => { e.target.style.display = "none"; }} />
+                  <div style={{ fontSize: 15, fontWeight: 800, letterSpacing: "1.5px", color: "#2E3D3F", textTransform: "uppercase", fontFamily: "'Playfair Display', serif" }}>
+                    {(data.content.logoText || "VASTURA GROUP").replace("\n", " ")}
+                  </div>
+                  <div style={{ fontSize: 11, color: "#A89070", marginTop: 3, fontWeight: 600, letterSpacing: ".3px" }}>
+                    Solusi Desain &amp; Konstruksi Terpercaya
+                  </div>
+                </div>
                 <h2 style={{ fontSize: 24, fontWeight: 700, color: "#2E3D3F", marginBottom: 4, textAlign: "center" }}>Login</h2>
                 <p style={{ fontSize: 13, color: "#5A6A6C", textAlign: "center", marginBottom: 28 }}>Akses control panel Anda</p>
                 
@@ -16676,8 +16687,8 @@ export default function BricksyTravel() {
                       fontSize: 13, fontWeight: 600, color: "#fff", cursor: "pointer", transition: "all .18s" }}
                     onMouseEnter={e => { e.currentTarget.style.background = "#222"; e.currentTarget.style.boxShadow = "0 2px 10px rgba(0,0,0,.15)"; }}
                     onMouseLeave={e => { e.currentTarget.style.background = "#000"; e.currentTarget.style.boxShadow = "none"; }}>
-                    <svg width="16" height="18" viewBox="0 0 814 1000" fill="#fff">
-                      <path d="M788.1 340.9c-5.8 4.5-108.2 62.2-108.2 190.5 0 148.4 130.3 200.9 134.2 202.2-.6 3.2-20.7 71.9-68.7 141.9-42.8 61.6-87.5 123.1-155.5 123.1s-85.5-39.5-164-39.5c-76 0-103.7 40.8-165.9 40.8s-105-57.8-155.5-127.4C46 376.7 0 248.4 0 124.8c0-63.5 12.7-126.2 38.4-185.2 35.4-81.9 113.8-133.5 181.2-133.5 69.9 0 116.4 46.1 164.3 46.1 47.7 0 78.4-46.1 172.4-46.1 73.2 0 141.5 43.1 177.1 106.7l-55.5 35.3z"/>
+                    <svg width="16" height="18" viewBox="0 0 384 512" fill="#fff">
+                      <path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-27.1-47.4-42.1-84.8-45-35.4-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.5-76.4-19.5C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3z"/>
                     </svg>
                     Apple ID
                   </button>
@@ -17448,7 +17459,7 @@ export default function BricksyTravel() {
               {["interior/kamar-tidur","interior/kamar-mandi","interior/ruang-keluarga","interior/ruang-tamu","interior/kitchen-set","interior/ruang-kerja","interior/plafon-modern","interior/backdrop-tv"].includes(page) &&
                 <SubInteriorPage pageKey={page} onWaOpen={openWaPicker} navigateTo={navigateTo} data={data} itemSlug={catalogItemSlug} openItem={openCatalogItem} closeItem={closeCatalogItem} />}
               {/* -- Sub-halaman Eksterior -- */}
-              {["eksterior/pagar","eksterior/kanopi","eksterior/aluminium","eksterior/taman-landscape"].includes(page) &&
+              {["eksterior/pagar","eksterior/kanopi","eksterior/kusen-partisi","eksterior/taman-landscape"].includes(page) &&
                 <SubEksteriorPage pageKey={page} onWaOpen={openWaPicker} navigateTo={navigateTo} data={data} itemSlug={catalogItemSlug} openItem={openCatalogItem} closeItem={closeCatalogItem} />}
 
               {/* PROGRAM RENOVASI RUMAH SUBSIDI -- Magazine Mixing Grid */}
@@ -17527,13 +17538,13 @@ export default function BricksyTravel() {
                     { id: "int_ruang_kerja",    label: "Ruang Kerja",     show: isAdmin },
                   ]
                 },
-                /* ── Katalog Eksterior (Pagar, Kanopi, Aluminium) ── */
+                /* ── Katalog Eksterior (Pagar, Kanopi, Kusen & Partisi) ── */
                 {
                   group: "EKSTERIOR",
                   items: [
                     { id: "ext_pagar",     label: "Pagar",     show: isAdmin },
                     { id: "ext_kanopi",    label: "Kanopi",    show: isAdmin },
-                    { id: "ext_aluminium", label: "Aluminium", show: isAdmin },
+                    { id: "ext_aluminium", label: "Kusen & Partisi", show: isAdmin },
                   ]
                 },
                 /* ── Katalog & Paket (CMS terhubung ke frontend) ── */
@@ -18033,10 +18044,10 @@ export default function BricksyTravel() {
                 />
               )}
 
-              {/* SETTING ALUMINIUM */}
+              {/* SETTING KUSEN & PARTISI (eks. Aluminium) */}
               {adminTab === "ext_aluminium" && isAdmin && (
                 <SubLayananAdmin
-                  title="Aluminium"
+                  title="Kusen & Partisi"
                   icon=""
                   accentColor="#555b6e"
                   storeKey="ext_aluminium"
@@ -18044,11 +18055,11 @@ export default function BricksyTravel() {
                   save={save}
                   notify={notify}
                   uploadToCloudinary={uploadToCloudinary}
-                  pageDesc="Kelola katalog produk aluminium — tambah, edit, hapus kartu produk yang tampil di halaman Aluminium."
+                  pageDesc="Kelola katalog produk kusen & partisi aluminium — tambah, edit, hapus kartu produk yang tampil di halaman Kusen & Partisi."
                   sections={[]}
                   imageGroups={[]}
                   crudKey="extAluminiumItems"
-                  crudLabel="Produk Aluminium"
+                  crudLabel="Produk Kusen & Partisi"
                   crudFields={[
                     { key:"nama",     label:"Nama Produk",  type:"text",     placeholder:"contoh: Kusen Jendela Casement" },
                     { key:"style",    label:"Style / Tag",  type:"text",     placeholder:"contoh: Classic, Modern, Office..." },
@@ -18061,7 +18072,7 @@ export default function BricksyTravel() {
                   ]}
                   crudHasImage
                   crudHasGallery={true}
-                  defaultItems={CATALOG_DATA["eksterior/aluminium"].items.map(item => ({
+                  defaultItems={CATALOG_DATA["eksterior/kusen-partisi"].items.map(item => ({
                     id: item.id, nama: item.nama, style: item.style || "", material: item.material || "",
                     harga: item.harga ? String(item.harga) : "",
                     desc: item.desc || "", fitur: (item.fitur||[]).join(", "), poin: (item.poin||[]).join("\n"), _img: item.img || "",
