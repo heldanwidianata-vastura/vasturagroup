@@ -11604,7 +11604,7 @@ function LandscapePage({ onWaOpen, categories }) {
         @keyframes lsDropIn { from { opacity:0; transform:translateY(-8px) } to { opacity:1; transform:translateY(0) } }
 
         /* ── Wrap cell ── */
-        .ls-wrap { position:relative; }
+        .ls-wrap { position:relative; display:flex; flex-direction:column; height:100%; }
         .ls-img-box { position:relative; overflow:hidden; }
         .ls-img-box:hover .ls-mag-overlay-btn { opacity:1 !important; }
 
@@ -11614,12 +11614,12 @@ function LandscapePage({ onWaOpen, categories }) {
         .ls-mag-overlay-btn { opacity:0; transition:opacity .3s; position:absolute; bottom:16px; right:14px; z-index:4; }
 
         /* ── Kartu putih ── */
-        .ls-info-card { background:#fff; padding:20px 18px 22px; }
+        .ls-info-card { background:#fff; padding:20px 18px 22px; display:flex; flex-direction:column; flex:1; }
         .ls-card-title { font-family:'Playfair Display',serif; font-size:clamp(.88rem,1.8vw,1.05rem); font-weight:900; color:#1a2a1a; margin:0 0 8px; line-height:1.3; }
         .ls-desc { font-size:.825rem; color:#4a5a4a; line-height:1.7; margin:0 0 14px; white-space:pre-line; }
 
         /* ── Harga + CTA ── */
-        .ls-cta-row { display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap; margin-bottom:12px; }
+        .ls-cta-row { display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap; margin-bottom:12px; margin-top:auto; padding-top:14px; }
         .ls-price-badge { background:#f0fdf4; border:1.5px solid #86efac; border-radius:8px; padding:6px 14px; flex-shrink:0; }
         .ls-price-badge span.lb { display:block; font-size:.56rem; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:#166534; }
         .ls-price-badge span.vl { display:block; font-size:.8rem; font-weight:900; color:#14532d; white-space:nowrap; }
@@ -11688,7 +11688,7 @@ function LandscapePage({ onWaOpen, categories }) {
         {rows.map((row, ri) => {
           const h = heightMap[row.cols] || 360;
           return (
-            <div key={ri} style={{ display: "grid", gridTemplateColumns: `repeat(${row.cols}, 1fr)`, gap: 4, alignItems: "start" }}>
+            <div key={ri} style={{ display: "grid", gridTemplateColumns: `repeat(${row.cols}, 1fr)`, gap: 4, alignItems: "stretch" }}>
               {row.cats.map((cat) => (
                 <div key={cat.id} className="ls-wrap">
 
@@ -12055,7 +12055,7 @@ function RsInfoCard({ paket, fmt, onWaOpen }) {
   const [open, setOpen] = useState(false);
   return (
     <div className="ls-info-card">
-      <h3 className="ls-card-title">{paket.icon} {paket.title}</h3>
+      <h3 className="ls-card-title">{paket.icon ? `${paket.icon} ` : ""}{paket.title}</h3>
       <p className="ls-desc">{paket.desc}</p>
 
       <div className="ls-cta-row">
@@ -12129,19 +12129,20 @@ function RumahSubsidiPage({ onWaOpen, paketData }) {
         }
         @keyframes lsDropIn { from { opacity:0; transform:translateY(-8px); } to { opacity:1; transform:translateY(0); } }
 
-        .ls-wrap { position:relative; }
+        .ls-wrap { position:relative; display:flex; flex-direction:column; height:100%; }
         .ls-img-box { position:relative; overflow:hidden; }
         .ls-img-box:hover .ls-mag-overlay-btn { opacity:1 !important; }
 
-        .ls-cat-badge { position:absolute; top:14px; left:14px; z-index:4; }
-        .ls-price-pill { position:absolute; top:14px; right:14px; z-index:4; background:rgba(201,170,113,.93); backdrop-filter:blur(6px); color:#1a2a1a; font-size:.62rem; font-weight:900; letter-spacing:.06em; padding:5px 12px; border-radius:20px; white-space:nowrap; }
+        .ls-cat-badge { position:absolute; top:14px; left:14px; right:100px; z-index:4; }
+        .ls-cat-badge > div { max-width: 100%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+        .ls-price-pill { position:absolute; top:14px; right:14px; z-index:4; background:rgba(201,170,113,.93); backdrop-filter:blur(6px); color:#1a2a1a; font-size:.62rem; font-weight:900; letter-spacing:.06em; padding:5px 12px; border-radius:20px; white-space:nowrap; max-width:120px; overflow:hidden; text-overflow:ellipsis; }
         .ls-mag-overlay-btn { opacity:0; transition:opacity .3s; position:absolute; bottom:16px; right:14px; z-index:4; }
 
-        .ls-info-card { background:#fff; padding:20px 18px 22px; }
-        .ls-card-title { font-family:'Playfair Display',serif; font-size:clamp(.88rem,1.8vw,1.05rem); font-weight:900; color:#2E3D3F; margin:0 0 8px; line-height:1.3; }
+        .ls-info-card { background:#fff; padding:20px 18px 22px; display:flex; flex-direction:column; flex:1; }
+        .ls-card-title { font-family:'Playfair Display',serif; font-size:clamp(.88rem,1.8vw,1.05rem); font-weight:900; color:#2E3D3F; margin:0 0 8px; line-height:1.3; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
         .ls-desc { font-size:.825rem; color:#5A6A6C; line-height:1.7; margin:0 0 14px; white-space:pre-line; }
 
-        .ls-cta-row { display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap; margin-bottom:12px; }
+        .ls-cta-row { display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap; margin-bottom:12px; margin-top:auto; padding-top:14px; }
         .ls-price-badge { background:#f0fdf4; border:1.5px solid #86efac; border-radius:8px; padding:6px 14px; flex-shrink:0; }
         .ls-price-badge span.lb { display:block; font-size:.56rem; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:#166534; }
         .ls-price-badge span.vl { display:block; font-size:.8rem; font-weight:900; color:#14532d; white-space:nowrap; }
@@ -12202,7 +12203,7 @@ function RumahSubsidiPage({ onWaOpen, paketData }) {
         {rows.map((row, ri) => {
           const h = heightMap[row.cols] || 360;
           return (
-            <div key={ri} style={{ display: "grid", gridTemplateColumns: `repeat(${row.cols}, 1fr)`, gap: 4, alignItems: "start" }}>
+            <div key={ri} style={{ display: "grid", gridTemplateColumns: `repeat(${row.cols}, 1fr)`, gap: 4, alignItems: "stretch" }}>
               {row.items.map((paket) => (
                 <div key={paket.id} className="ls-wrap">
                   <div className="ls-img-box" style={{ height: h, position: "relative", overflow: "hidden" }}>
@@ -12210,7 +12211,7 @@ function RumahSubsidiPage({ onWaOpen, paketData }) {
 
                     <div className="ls-cat-badge">
                       <div style={{ background: "rgba(13,31,24,.78)", backdropFilter: "blur(8px)", color: "#C9AA71", fontSize: "0.62rem", fontWeight: 800, letterSpacing: ".1em", textTransform: "uppercase", padding: "5px 13px", borderRadius: 20, display: "flex", alignItems: "center", gap: 6 }}>
-                        <span>{paket.icon}</span>{paket.title}
+                        {paket.icon && <span>{paket.icon}</span>}<span>{paket.title}</span>
                       </div>
                     </div>
 
@@ -12241,7 +12242,7 @@ function RumahSubsidiPage({ onWaOpen, paketData }) {
 
               <div className="ls-cat-badge">
                 <div style={{ background: "rgba(13,31,24,.82)", backdropFilter: "blur(8px)", color: "#C9AA71", fontSize: "0.6rem", fontWeight: 800, letterSpacing: ".1em", textTransform: "uppercase", padding: "4px 11px", borderRadius: 20, display: "flex", alignItems: "center", gap: 5 }}>
-                  <span>{paket.icon}</span>{paket.title}
+                  {paket.icon && <span>{paket.icon}</span>}<span>{paket.title}</span>
                 </div>
               </div>
 
@@ -12409,7 +12410,7 @@ const KOST_PAKET_DATA = [
     title: "Pembangunan Kost Total (Turnkey)",
     desc: "Solusi lengkap dari nol hingga siap sewa — desain, RAB, pembangunan struktur, interior, hingga furnishing seluruh kamar dikerjakan satu tim tanpa Anda perlu repot.",
     startFrom: 350000000,
-    satuan: "unit bangunan",
+    satuan: "unit",
     slideDir: "down",
     includes: [
       { icon: "", item: "Survei lahan, desain & RAB lengkap gratis" },
@@ -12468,19 +12469,20 @@ function PembangunanKostPage({ onWaOpen, paketData }) {
         }
         @keyframes lsDropIn { from { opacity:0; transform:translateY(-8px); } to { opacity:1; transform:translateY(0); } }
 
-        .ls-wrap { position:relative; }
+        .ls-wrap { position:relative; display:flex; flex-direction:column; height:100%; }
         .ls-img-box { position:relative; overflow:hidden; }
         .ls-img-box:hover .ls-mag-overlay-btn { opacity:1 !important; }
 
-        .ls-cat-badge { position:absolute; top:14px; left:14px; z-index:4; }
-        .ls-price-pill { position:absolute; top:14px; right:14px; z-index:4; background:rgba(201,170,113,.93); backdrop-filter:blur(6px); color:#1a2a1a; font-size:.62rem; font-weight:900; letter-spacing:.06em; padding:5px 12px; border-radius:20px; white-space:nowrap; }
+        .ls-cat-badge { position:absolute; top:14px; left:14px; right:100px; z-index:4; }
+        .ls-cat-badge > div { max-width: 100%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+        .ls-price-pill { position:absolute; top:14px; right:14px; z-index:4; background:rgba(201,170,113,.93); backdrop-filter:blur(6px); color:#1a2a1a; font-size:.62rem; font-weight:900; letter-spacing:.06em; padding:5px 12px; border-radius:20px; white-space:nowrap; max-width:120px; overflow:hidden; text-overflow:ellipsis; }
         .ls-mag-overlay-btn { opacity:0; transition:opacity .3s; position:absolute; bottom:16px; right:14px; z-index:4; }
 
-        .ls-info-card { background:#fff; padding:20px 18px 22px; }
-        .ls-card-title { font-family:'Playfair Display',serif; font-size:clamp(.88rem,1.8vw,1.05rem); font-weight:900; color:#2E3D3F; margin:0 0 8px; line-height:1.3; }
+        .ls-info-card { background:#fff; padding:20px 18px 22px; display:flex; flex-direction:column; flex:1; }
+        .ls-card-title { font-family:'Playfair Display',serif; font-size:clamp(.88rem,1.8vw,1.05rem); font-weight:900; color:#2E3D3F; margin:0 0 8px; line-height:1.3; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
         .ls-desc { font-size:.825rem; color:#5A6A6C; line-height:1.7; margin:0 0 14px; white-space:pre-line; }
 
-        .ls-cta-row { display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap; margin-bottom:12px; }
+        .ls-cta-row { display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap; margin-bottom:12px; margin-top:auto; padding-top:14px; }
         .ls-price-badge { background:#f0fdf4; border:1.5px solid #86efac; border-radius:8px; padding:6px 14px; flex-shrink:0; }
         .ls-price-badge span.lb { display:block; font-size:.56rem; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:#166534; }
         .ls-price-badge span.vl { display:block; font-size:.8rem; font-weight:900; color:#14532d; white-space:nowrap; }
@@ -12541,7 +12543,7 @@ function PembangunanKostPage({ onWaOpen, paketData }) {
         {rows.map((row, ri) => {
           const h = heightMap[row.cols] || 360;
           return (
-            <div key={ri} style={{ display: "grid", gridTemplateColumns: `repeat(${row.cols}, 1fr)`, gap: 4, alignItems: "start" }}>
+            <div key={ri} style={{ display: "grid", gridTemplateColumns: `repeat(${row.cols}, 1fr)`, gap: 4, alignItems: "stretch" }}>
               {row.items.map((paket) => (
                 <div key={paket.id} className="ls-wrap">
                   <div className="ls-img-box" style={{ height: h, position: "relative", overflow: "hidden" }}>
@@ -12549,7 +12551,7 @@ function PembangunanKostPage({ onWaOpen, paketData }) {
 
                     <div className="ls-cat-badge">
                       <div style={{ background: "rgba(13,31,24,.78)", backdropFilter: "blur(8px)", color: "#C9AA71", fontSize: "0.62rem", fontWeight: 800, letterSpacing: ".1em", textTransform: "uppercase", padding: "5px 13px", borderRadius: 20, display: "flex", alignItems: "center", gap: 6 }}>
-                        <span>{paket.icon}</span>{paket.title}
+                        {paket.icon && <span>{paket.icon}</span>}<span>{paket.title}</span>
                       </div>
                     </div>
 
@@ -12580,7 +12582,7 @@ function PembangunanKostPage({ onWaOpen, paketData }) {
 
               <div className="ls-cat-badge">
                 <div style={{ background: "rgba(13,31,24,.82)", backdropFilter: "blur(8px)", color: "#C9AA71", fontSize: "0.6rem", fontWeight: 800, letterSpacing: ".1em", textTransform: "uppercase", padding: "4px 11px", borderRadius: 20, display: "flex", alignItems: "center", gap: 5 }}>
-                  <span>{paket.icon}</span>{paket.title}
+                  {paket.icon && <span>{paket.icon}</span>}<span>{paket.title}</span>
                 </div>
               </div>
 
