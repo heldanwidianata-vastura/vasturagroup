@@ -1059,6 +1059,7 @@ const DEFAULT_DATA = {
   reviewTokens: [],
   landscapeCategories: [],
   rumahSubsidiPaket: [],
+  pembangunanKostPaket: [],
   temaData: [],
   homeServices: [],
   aboutStats: [],
@@ -9475,6 +9476,7 @@ const PAGE_TO_PATH = {
   kanopi: "/kanopi",
   aluminium: "/aluminium",
   landscape: "/landscape-taman",
+  kost: "/pembangunan-kost",
   /* Sub-halaman Interior */
   "interior/kamar-tidur":    "/interior/kamar-tidur",
   "interior/kamar-mandi":    "/interior/kamar-mandi",
@@ -9517,6 +9519,7 @@ const ADMIN_TAB_TO_SLUG = {
   produk_furnitur: "furnitur",
   paket_landscape: "landscape",
   paket_rumahsubsidi: "rumah-subsidi",
+  paket_kost: "pembangunan-kost",
   set_temarumah: "tema-rumah",
   reviews: "reviews",
   users: "users",
@@ -12266,6 +12269,345 @@ function RumahSubsidiPage({ onWaOpen, paketData }) {
   );
 }
 
+/* ═══════════════════════════════════════════════════════════════════
+   PROGRAM PEMBANGUNAN KOST — Magazine Mixing Grid
+   (1 kolom | 3 kolom | 2 kolom, ulangi per 6 paket)
+   Struktur & komponen (RsMiniSlide, RsInfoCard, PaketGridManager) di-reuse
+   persis dari section "Program Renovasi Rumah Subsidi" di atas.
+═══════════════════════════════════════════════════════════════════ */
+
+/* ── Data Paket Pembangunan Kost ── */
+const KOST_PAKET_DATA = [
+  {
+    id: "kost-1-lantai",
+    icon: "",
+    title: "Pembangunan Kost 1 Lantai",
+    desc: "Bangun kost baru 1 lantai dari nol — struktur kokoh, kamar fungsional, dan tata ruang efisien untuk memaksimalkan jumlah kamar sewa di lahan Anda.",
+    startFrom: 45000000,
+    satuan: "kamar",
+    slideDir: "right",
+    includes: [
+      { icon: "", item: "Survei lahan & konsultasi denah gratis" },
+      { icon: "", item: "Desain layout kamar & sirkulasi optimal" },
+      { icon: "", item: "Struktur pondasi & dinding bata ringan" },
+      { icon: "", item: "Rangka atap baja ringan + genteng" },
+      { icon: "", item: "Instalasi listrik & air per kamar" },
+      { icon: "", item: "Pintu, jendela & kunci pengaman standar" },
+      { icon: "", item: "Finishing plester, aci & cat dasar" },
+      { icon: "", item: "Garansi struktur 6 bulan" },
+    ],
+    slides: [
+      { img: "https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=800&q=80", tema: "Bangunan Kost 1 Lantai", desc: "Tampak depan kost 1 lantai dengan deretan kamar rapi dan akses langsung ke jalan." },
+      { img: "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=800&q=80", tema: "Kamar Standar Baru", desc: "Kamar kost baru dengan ukuran efisien dan sirkulasi udara yang baik." },
+      { img: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&q=80", tema: "Struktur Bangunan", desc: "Proses pembangunan struktur dinding dan rangka atap kost baru." },
+      { img: "https://images.unsplash.com/photo-1449844908441-8829872d2607?w=800&q=80", tema: "Fasad Minimalis", desc: "Desain fasad depan kost yang sederhana namun tetap menarik bagi calon penyewa." },
+    ]
+  },
+  {
+    id: "kost-2-lantai",
+    icon: "",
+    title: "Pembangunan Kost 2 Lantai",
+    desc: "Maksimalkan kapasitas kamar dengan pembangunan kost 2 lantai — struktur beton bertulang, tangga permanen, dan perencanaan kamar yang lebih banyak dalam luas lahan yang sama.",
+    startFrom: 65000000,
+    satuan: "kamar",
+    slideDir: "up",
+    includes: [
+      { icon: "", item: "Survei lahan & perhitungan struktur 2 lantai" },
+      { icon: "", item: "Pondasi & kolom beton bertulang" },
+      { icon: "", item: "Tangga permanen & railing pengaman" },
+      { icon: "", item: "Dak beton / plat lantai 2" },
+      { icon: "", item: "Instalasi listrik & air 2 lantai" },
+      { icon: "", item: "Kamar mandi per lantai / per kamar" },
+      { icon: "", item: "Finishing plester, aci & cat eksterior" },
+      { icon: "", item: "Garansi struktur 12 bulan" },
+    ],
+    slides: [
+      { img: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&q=80", tema: "Bangunan Kost 2 Lantai", desc: "Kost 2 lantai dengan fasad modern dan kapasitas kamar lebih banyak." },
+      { img: "https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=800&q=80", tema: "Struktur Beton Bertulang", desc: "Pengerjaan kolom dan dak beton sebagai struktur utama lantai dua." },
+      { img: "https://images.unsplash.com/photo-1560448204-603b3fc33ddc?w=800&q=80", tema: "Koridor & Tangga", desc: "Tangga permanen dengan railing aman menghubungkan lantai 1 dan 2." },
+      { img: "https://images.unsplash.com/photo-1600210492493-0946911123ea?w=800&q=80", tema: "Kamar Lantai Atas", desc: "Kamar kost di lantai 2 dengan sirkulasi udara dan pencahayaan alami." },
+    ]
+  },
+  {
+    id: "kost-kamar-mandi-dalam",
+    icon: "",
+    title: "Kost Kamar Mandi Dalam",
+    desc: "Tingkatkan nilai sewa dengan kamar ber-kamar mandi dalam — instalasi plumbing rapi, keramik lantai & dinding, serta sekat kedap air untuk kenyamanan penghuni.",
+    startFrom: 9500000,
+    satuan: "kamar",
+    slideDir: "left",
+    includes: [
+      { icon: "", item: "Survei instalasi air & desain sekat kamar mandi" },
+      { icon: "", item: "Sekat dinding bata ringan kedap air" },
+      { icon: "", item: "Instalasi pipa air bersih & limbah" },
+      { icon: "", item: "Keramik lantai & dinding kamar mandi" },
+      { icon: "", item: "Pemasangan kloset jongkok / duduk" },
+      { icon: "", item: "Waterproofing area basah" },
+      { icon: "", item: "Ventilasi udara kamar mandi" },
+      { icon: "", item: "Garansi instalasi air 60 hari" },
+    ],
+    slides: [
+      { img: "https://images.unsplash.com/photo-1620626011761-996317b8d101?w=800&q=80", tema: "Kamar Mandi Dalam Baru", desc: "Kamar mandi dalam yang bersih dan fungsional untuk tiap unit kamar kost." },
+      { img: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=800&q=80", tema: "Instalasi Pipa Air", desc: "Pemasangan jalur pipa air bersih dan limbah sebelum pengeramikan." },
+      { img: "https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=800&q=80", tema: "Sekat Kamar Mandi", desc: "Pembangunan sekat dinding kedap air untuk area kamar mandi dalam." },
+      { img: "https://images.unsplash.com/photo-1556909114-44e3e70034e2?w=800&q=80", tema: "Sanitasi Rapi", desc: "Pemasangan kloset dan perlengkapan sanitasi yang rapi dan higienis." },
+    ]
+  },
+  {
+    id: "kost-full-furnished",
+    icon: "",
+    title: "Kost Eksklusif Full Furnished",
+    desc: "Wujudkan kost eksklusif siap huni — lengkap dengan kasur, lemari, meja, AC, dan interior modern yang membuat kamar Anda lebih menarik dan bernilai sewa lebih tinggi.",
+    startFrom: 18500000,
+    satuan: "kamar",
+    slideDir: "down",
+    includes: [
+      { icon: "", item: "Konsultasi konsep interior & tata ruang" },
+      { icon: "", item: "Kasur, springbed & perlengkapan tidur" },
+      { icon: "", item: "Lemari pakaian & meja belajar/kerja" },
+      { icon: "", item: "Instalasi AC & titik listrik tambahan" },
+      { icon: "", item: "Tirai jendela & lampu dekoratif" },
+      { icon: "", item: "Cat interior tema modern minimalis" },
+      { icon: "", item: "Pemasangan seluruh furnitur di lokasi" },
+      { icon: "", item: "Garansi pemasangan furnitur 30 hari" },
+    ],
+    slides: [
+      { img: "https://images.unsplash.com/photo-1588046130717-0eb0c9a3ba15?w=800&q=80", tema: "Kamar Full Furnished", desc: "Kamar kost lengkap dengan furnitur siap huni bergaya modern minimalis." },
+      { img: "https://images.unsplash.com/photo-1578898887932-dce23a595ad4?w=800&q=80", tema: "Interior Modern", desc: "Penataan interior kamar dengan sentuhan warna netral dan pencahayaan hangat." },
+      { img: "https://images.unsplash.com/photo-1616594039964-ae9021a400a0?w=800&q=80", tema: "Area Kerja & Istirahat", desc: "Meja kerja dan area istirahat yang tertata rapi dalam satu kamar kost." },
+      { img: "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=800&q=80", tema: "Sentuhan Akhir Dekorasi", desc: "Detail dekorasi dan pencahayaan yang membuat kamar kost terasa lebih hidup." },
+    ]
+  },
+  {
+    id: "kost-renovasi-upgrade",
+    icon: "",
+    title: "Renovasi & Upgrade Kost Lama",
+    desc: "Segarkan kost lama Anda agar lebih kompetitif — perbaikan struktur, pengecatan ulang, upgrade kamar mandi, hingga penambahan fasilitas agar tarif sewa bisa dinaikkan.",
+    startFrom: 7500000,
+    satuan: "kamar",
+    slideDir: "left",
+    includes: [
+      { icon: "", item: "Survei kondisi bangunan & rekomendasi upgrade" },
+      { icon: "", item: "Perbaikan dinding, plafon & atap bocor" },
+      { icon: "", item: "Pengecatan ulang interior & eksterior" },
+      { icon: "", item: "Upgrade keramik lantai & kamar mandi" },
+      { icon: "", item: "Perbaikan instalasi listrik lama" },
+      { icon: "", item: "Penggantian pintu & kunci kamar" },
+      { icon: "", item: "Penataan ulang koridor & area bersama" },
+      { icon: "", item: "Garansi pengerjaan 3 bulan" },
+    ],
+    slides: [
+      { img: "https://images.unsplash.com/photo-1503387837-b154d5074bd2?w=800&q=80", tema: "Sebelum Renovasi", desc: "Kondisi kost lama sebelum proses renovasi dan upgrade dimulai." },
+      { img: "https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=800&q=80", tema: "Proses Renovasi", desc: "Tim tukang mengerjakan perbaikan struktur dan finishing kost lama." },
+      { img: "https://images.unsplash.com/photo-1562259949-e8e7689d7828?w=800&q=80", tema: "Cat & Fasad Baru", desc: "Tampilan fasad kost yang lebih segar setelah pengecatan ulang." },
+      { img: "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=800&q=80", tema: "Kamar Siap Sewa", desc: "Kamar kost hasil upgrade yang lebih layak dan siap disewakan kembali." },
+    ]
+  },
+  {
+    id: "kost-total-turnkey",
+    icon: "",
+    title: "Pembangunan Kost Total (Turnkey)",
+    desc: "Solusi lengkap dari nol hingga siap sewa — desain, RAB, pembangunan struktur, interior, hingga furnishing seluruh kamar dikerjakan satu tim tanpa Anda perlu repot.",
+    startFrom: 350000000,
+    satuan: "unit bangunan",
+    slideDir: "down",
+    includes: [
+      { icon: "", item: "Survei lahan, desain & RAB lengkap gratis" },
+      { icon: "", item: "Pembangunan struktur dari pondasi hingga atap" },
+      { icon: "", item: "Instalasi listrik, air & sanitasi seluruh unit" },
+      { icon: "", item: "Kamar mandi dalam di setiap kamar" },
+      { icon: "", item: "Interior & furnitur siap huni per kamar" },
+      { icon: "", item: "Area bersama: koridor, parkir & pagar" },
+      { icon: "", item: "Pendampingan hingga serah terima kunci" },
+      { icon: "", item: "Garansi bangunan 12 bulan penuh" },
+    ],
+    slides: [
+      { img: "https://images.unsplash.com/photo-1600566752355-35792bedcfea?w=800&q=80", tema: "Kost Baru Siap Sewa", desc: "Hasil akhir bangunan kost yang rapi, modern, dan siap dioperasikan." },
+      { img: "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=800&q=80", tema: "Fasad Bangunan Utuh", desc: "Tampak depan bangunan kost turnkey dengan desain fasad yang menarik." },
+      { img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80", tema: "Area Depan & Pagar", desc: "Penataan area depan, pagar, dan akses masuk bangunan kost." },
+      { img: "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=800&q=80", tema: "Koridor Antar Kamar", desc: "Koridor penghubung antar kamar yang bersih dan tertata rapi." },
+      { img: "https://images.unsplash.com/photo-1556912167-f556f1f39fdf?w=800&q=80", tema: "Interior Siap Huni", desc: "Salah satu kamar dalam kondisi siap huni, lengkap dengan furnitur dasar." },
+    ]
+  },
+];
+
+/* ── Halaman Program Pembangunan Kost (Magazine Mixing Grid) ──
+   Reuse RsMiniSlide & RsInfoCard dari section Rumah Subsidi di atas —
+   struktur & style class (ls-*) sengaja identik supaya konsisten. */
+function PembangunanKostPage({ onWaOpen, paketData }) {
+  useEffect(() => { window.scrollTo(0, 0); }, []);
+  const fmt = (n) => "Rp " + n.toLocaleString("id-ID") + ",-";
+  const paket_ = ((paketData && paketData.length) ? paketData : KOST_PAKET_DATA).filter(p => !p.hidden);
+
+  // Susun paket ke rows sesuai RS_MAG_LAYOUT (1 | 3 | 2), berulang jika >6 paket
+  const rows = [];
+  let pos = 0;
+  let layoutIdx = 0;
+  while (pos < paket_.length) {
+    const cols = RS_MAG_LAYOUT[layoutIdx % RS_MAG_LAYOUT.length];
+    const slice = paket_.slice(pos, pos + cols);
+    if (slice.length > 0) rows.push({ cols: slice.length, items: slice });
+    pos += cols;
+    layoutIdx++;
+  }
+  const heightMap = { 1: 480, 2: 400, 3: 340 };
+
+  return (
+    <div className="fade-in" style={{ background: "#FAF7F0", minHeight: "100vh" }}>
+      <style>{`
+        @keyframes rsSlideInRight  { from { transform: translateX(-100%); } to { transform: translateX(0); } }
+        @keyframes rsSlideOutRight { from { transform: translateX(0); } to { transform: translateX(100%); } }
+        @keyframes rsSlideInUp     { from { transform: translateY(100%); } to { transform: translateY(0); } }
+        @keyframes rsSlideOutUp    { from { transform: translateY(0); } to { transform: translateY(-100%); } }
+        @keyframes rsSlideInLeft   { from { transform: translateX(100%); } to { transform: translateX(0); } }
+        @keyframes rsSlideOutLeft  { from { transform: translateX(0); } to { transform: translateX(-100%); } }
+        @keyframes rsSlideInDown   { from { transform: translateY(-100%); } to { transform: translateY(0); } }
+        @keyframes rsSlideOutDown  { from { transform: translateY(0); } to { transform: translateY(100%); } }
+        .rsSlideInRight,.rsSlideOutRight,.rsSlideInUp,.rsSlideOutUp,.rsSlideInLeft,.rsSlideOutLeft,.rsSlideInDown,.rsSlideOutDown {
+          animation-duration: .4s; animation-timing-function: ease; animation-fill-mode: forwards; z-index: 1;
+        }
+        @keyframes lsDropIn { from { opacity:0; transform:translateY(-8px); } to { opacity:1; transform:translateY(0); } }
+
+        .ls-wrap { position:relative; }
+        .ls-img-box { position:relative; overflow:hidden; }
+        .ls-img-box:hover .ls-mag-overlay-btn { opacity:1 !important; }
+
+        .ls-cat-badge { position:absolute; top:14px; left:14px; z-index:4; }
+        .ls-price-pill { position:absolute; top:14px; right:14px; z-index:4; background:rgba(201,170,113,.93); backdrop-filter:blur(6px); color:#1a2a1a; font-size:.62rem; font-weight:900; letter-spacing:.06em; padding:5px 12px; border-radius:20px; white-space:nowrap; }
+        .ls-mag-overlay-btn { opacity:0; transition:opacity .3s; position:absolute; bottom:16px; right:14px; z-index:4; }
+
+        .ls-info-card { background:#fff; padding:20px 18px 22px; }
+        .ls-card-title { font-family:'Playfair Display',serif; font-size:clamp(.88rem,1.8vw,1.05rem); font-weight:900; color:#2E3D3F; margin:0 0 8px; line-height:1.3; }
+        .ls-desc { font-size:.825rem; color:#5A6A6C; line-height:1.7; margin:0 0 14px; white-space:pre-line; }
+
+        .ls-cta-row { display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap; margin-bottom:12px; }
+        .ls-price-badge { background:#f0fdf4; border:1.5px solid #86efac; border-radius:8px; padding:6px 14px; flex-shrink:0; }
+        .ls-price-badge span.lb { display:block; font-size:.56rem; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:#166534; }
+        .ls-price-badge span.vl { display:block; font-size:.8rem; font-weight:900; color:#14532d; white-space:nowrap; }
+        .ls-cta-btn { background:#2E3D3F; color:#fff; border:none; border-radius:8px; padding:9px 16px; font-size:.73rem; font-weight:800; cursor:pointer; white-space:nowrap; transition:background .2s; flex:1; min-width:130px; text-align:center; }
+        .ls-cta-btn:hover { background:#8B6914; }
+
+        .ls-toggle-btn { width:100%; display:flex; align-items:center; justify-content:center; gap:8px; background:#f4faf6; border:1.5px solid #bbf7d0; border-radius:8px; padding:9px 14px; font-size:.75rem; font-weight:800; color:#166534; cursor:pointer; transition:all .2s; }
+        .ls-toggle-btn:hover { background:#dcfce7; border-color:#4ade80; }
+        .ls-toggle-btn span:first-child { font-size:.65rem; }
+
+        .ls-includes-box { margin-top:12px; border-top:2px dashed #bbf7d0; padding-top:14px; animation:lsDropIn .22s ease; }
+        .ls-includes-title { font-size:.6rem; font-weight:900; letter-spacing:.14em; text-transform:uppercase; color:#2d6a4f; margin:0 0 10px; }
+        .ls-includes-grid { display:grid; grid-template-columns:1fr 1fr; gap:6px 12px; }
+        .ls-include-item { display:flex; align-items:flex-start; gap:7px; }
+        .ls-include-item span.ic { font-size:.82rem; flex-shrink:0; margin-top:1px; }
+        .ls-include-item span.tx { font-size:.73rem; color:#2E3D3F; line-height:1.45; }
+
+        @media (max-width: 767px) {
+          .ls-desktop-grid { display:none !important; }
+          .ls-mobile-list { display:flex !important; flex-direction:column; gap:4px; padding:4px 0 0; }
+          .ls-mobile-item { width:100%; }
+          .ls-mobile-slide { height:260px !important; }
+          .ls-includes-grid { grid-template-columns:1fr; }
+          .ls-cta-row { flex-direction:column; align-items:stretch; }
+          .ls-cta-btn { text-align:center; }
+          .ls-price-pill { font-size:.56rem; padding:4px 9px; }
+        }
+        @media (min-width: 768px) {
+          .ls-mobile-list { display:none !important; }
+          .ls-desktop-grid { display:flex !important; }
+        }
+      `}</style>
+
+      {/* HERO */}
+      <div style={{ background: "linear-gradient(135deg,#2E3D3F 0%,#3D5254 60%,#8B6914 100%)", padding: "64px 5% 56px", textAlign: "center", position: "relative", overflow: "hidden" }}>
+        <div style={{ position: "absolute", inset: 0, opacity: 0.07, backgroundImage: "radial-gradient(circle,#fff 1px,transparent 1px)", backgroundSize: "36px 36px", pointerEvents: "none" }} />
+        <div style={{ position: "relative", zIndex: 1, maxWidth: 680, margin: "0 auto" }}>
+          <div style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "rgba(255,255,255,.1)", borderRadius: 20, padding: "5px 16px", marginBottom: 18 }}>
+            <span style={{ fontSize: "0.65rem", fontWeight: 800, letterSpacing: ".16em", textTransform: "uppercase", color: "#C9AA71" }}>VASTURA GROUP · PROGRAM PEMBANGUNAN</span>
+          </div>
+          <div style={{ fontSize: "clamp(2rem,7vw,3.5rem)", marginBottom: 10 }}></div>
+          <h1 style={{ fontFamily: "'Playfair Display',serif", fontSize: "clamp(1.75rem,5vw,2.75rem)", fontWeight: 900, color: "#fff", margin: "0 0 14px", lineHeight: 1.2 }}>Pembangunan Kost</h1>
+          <p style={{ fontSize: "clamp(.875rem,2vw,1rem)", color: "rgba(255,255,255,.75)", lineHeight: 1.8, margin: "0 0 26px" }}>
+            Wujudkan bisnis kost yang menguntungkan — dari pembangunan baru 1-2 lantai, kamar mandi dalam, hingga full furnished, dikerjakan tim berpengalaman dengan harga bersaing.
+          </p>
+          <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
+            {paket_.map(p => (
+              <span key={p.id} style={{ background: "rgba(255,255,255,.1)", color: "rgba(255,255,255,.85)", fontSize: "0.7rem", fontWeight: 700, padding: "5px 14px", borderRadius: 20, border: "1px solid rgba(255,255,255,.15)" }}>
+                {p.icon} {p.title.replace("Pembangunan ", "")}
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* DESKTOP: Magazine Mixing Grid */}
+      <div className="ls-desktop-grid" style={{ flexDirection: "column", gap: 4, padding: "4px 0 0" }}>
+        {rows.map((row, ri) => {
+          const h = heightMap[row.cols] || 360;
+          return (
+            <div key={ri} style={{ display: "grid", gridTemplateColumns: `repeat(${row.cols}, 1fr)`, gap: 4, alignItems: "start" }}>
+              {row.items.map((paket) => (
+                <div key={paket.id} className="ls-wrap">
+                  <div className="ls-img-box" style={{ height: h, position: "relative", overflow: "hidden" }}>
+                    <RsMiniSlide slides={paket.slides} slideDir={paket.slideDir} height={`${h}px`} />
+
+                    <div className="ls-cat-badge">
+                      <div style={{ background: "rgba(13,31,24,.78)", backdropFilter: "blur(8px)", color: "#C9AA71", fontSize: "0.62rem", fontWeight: 800, letterSpacing: ".1em", textTransform: "uppercase", padding: "5px 13px", borderRadius: 20, display: "flex", alignItems: "center", gap: 6 }}>
+                        <span>{paket.icon}</span>{paket.title}
+                      </div>
+                    </div>
+
+                    <div className="ls-price-pill">Mulai {fmt(paket.startFrom)} / {paket.satuan}</div>
+
+                    <div className="ls-mag-overlay-btn">
+                      <button onClick={() => onWaOpen && onWaOpen({ key: "layanan", vars: { judul_layanan: paket.title } })}
+                        style={{ background: "#C9AA71", color: "#1a2a1a", border: "none", borderRadius: 8, padding: "9px 18px", fontSize: "0.75rem", fontWeight: 800, cursor: "pointer", whiteSpace: "nowrap", boxShadow: "0 4px 14px rgba(0,0,0,.3)" }}>
+                        Tanya Harga & Detail
+                      </button>
+                    </div>
+                  </div>
+
+                  <RsInfoCard paket={paket} fmt={fmt} onWaOpen={onWaOpen} />
+                </div>
+              ))}
+            </div>
+          );
+        })}
+      </div>
+
+      {/* MOBILE: 1 Kolom Penuh */}
+      <div className="ls-mobile-list">
+        {paket_.map((paket) => (
+          <div key={paket.id} className="ls-mobile-item ls-wrap">
+            <div className="ls-img-box ls-mobile-slide" style={{ position: "relative", overflow: "hidden", height: 260 }}>
+              <RsMiniSlide slides={paket.slides} slideDir={paket.slideDir} height="260px" />
+
+              <div className="ls-cat-badge">
+                <div style={{ background: "rgba(13,31,24,.82)", backdropFilter: "blur(8px)", color: "#C9AA71", fontSize: "0.6rem", fontWeight: 800, letterSpacing: ".1em", textTransform: "uppercase", padding: "4px 11px", borderRadius: 20, display: "flex", alignItems: "center", gap: 5 }}>
+                  <span>{paket.icon}</span>{paket.title}
+                </div>
+              </div>
+
+              <div className="ls-price-pill">Mulai {fmt(paket.startFrom)} / {paket.satuan}</div>
+            </div>
+
+            <RsInfoCard paket={paket} fmt={fmt} onWaOpen={onWaOpen} />
+          </div>
+        ))}
+      </div>
+
+      {/* CTA BOTTOM */}
+      <div style={{ padding: "60px 5%", textAlign: "center", background: "#FAF7F0" }}>
+        <div style={{ maxWidth: 600, margin: "0 auto", background: "linear-gradient(135deg,#2E3D3F 0%,#8B6914 100%)", borderRadius: 20, padding: "48px 32px", color: "#fff" }}>
+          <div style={{ fontSize: "0.7rem", letterSpacing: ".14em", textTransform: "uppercase", color: "#C9AA71", fontWeight: 700, marginBottom: 12 }}>Konsultasi Gratis</div>
+          <h3 style={{ fontFamily: "'Playfair Display',serif", fontSize: "clamp(1.25rem,3vw,1.75rem)", fontWeight: 900, margin: "0 0 12px" }}>Wujudkan Kost Impian Anda</h3>
+          <p style={{ color: "rgba(255,255,255,.75)", fontSize: "0.9rem", margin: "0 0 28px", lineHeight: 1.7 }}>Tim kami siap survei lahan, menghitung RAB, dan membangun kost Anda dari awal hingga siap disewakan.</p>
+          <button onClick={() => onWaOpen && onWaOpen({ key: "konsultasi", vars: {} })}
+            style={{ background: "#C9AA71", color: "#2E3D3F", border: "none", borderRadius: 10, padding: "15px 36px", fontSize: "0.95rem", fontWeight: 800, cursor: "pointer", letterSpacing: ".05em" }}>
+            Hubungi Tim Pembangunan Kami
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 /* ════════════════════════════════════════════ WA TEMPLATE HELPER ════════════════════════════════════════════ */
 /**
  * buildWaMsg(templates, key, vars)
@@ -14485,7 +14827,7 @@ function NavDropdownGaleri({ page, navigateTo, navDropdownGaleri }) {
       <button className={`nav-link${isActive3 ? " active" : ""}`}
         onClick={() => setDdOpen3(v => !v)}
         style={{ border: "none", background: "none", cursor: "pointer", display: "flex", alignItems: "center", gap: 4, padding: "4px 2px" }}>
-        Program Renovasi <span style={{ fontSize: "0.6rem", opacity: 0.7, transition: "transform .2s", display: "inline-block", transform: ddOpen3 ? "rotate(180deg)" : "rotate(0deg)" }}>▼</span>
+        Program Renovasi & Pembangunan <span style={{ fontSize: "0.6rem", opacity: 0.7, transition: "transform .2s", display: "inline-block", transform: ddOpen3 ? "rotate(180deg)" : "rotate(0deg)" }}>▼</span>
       </button>
       {ddOpen3 && (
         <div style={{ position: "absolute", top: "calc(100% + 6px)", right: 0, minWidth: 200,
@@ -16331,6 +16673,7 @@ export default function BricksyTravel() {
   // Dropdown: Program Renovasi -- Rumah Subsidi & Landscape & Taman
   const navDropdownGaleri = [
     { key: "shop",      label: "Paket Rumah Subsidi" },
+    { key: "kost",      label: "Pembangunan Kost" },
     { key: "landscape", label: data.content.nav13 || "Landscape & Taman" },
   ];
   // All keys that are "active" as pages for highlight purposes
@@ -17102,7 +17445,7 @@ export default function BricksyTravel() {
                 <MobileLayananAccordion page={page} navigateTo={navigateTo} setMobileMenu={setMobileMenu} navDropdownLayanan={navDropdownLayanan} />
 
                 {/* -- Mobile: Program Renovasi -- */}
-                <div style={{ padding:"10px 18px 4px", fontSize:"0.6rem", fontWeight:800, letterSpacing:".18em", textTransform:"uppercase", color:"#8B6914", opacity:0.8 }}>Program Renovasi</div>
+                <div style={{ padding:"10px 18px 4px", fontSize:"0.6rem", fontWeight:800, letterSpacing:".18em", textTransform:"uppercase", color:"#8B6914", opacity:0.8 }}>Program Renovasi & Pembangunan</div>
                 {navDropdownGaleri.filter(item=>item.key!=="landscape").map(item=>(
                   <button key={item.key} onClick={()=>{ navigateTo(item.key); setMobileMenu(false); }}
                     style={{ fontSize:".8rem", letterSpacing:".12em", textTransform:"uppercase", fontFamily:"'Jost',sans-serif",
@@ -17562,6 +17905,9 @@ export default function BricksyTravel() {
               {/* PROGRAM RENOVASI RUMAH SUBSIDI -- Magazine Mixing Grid */}
               {page === "shop" && <RumahSubsidiPage onWaOpen={openWaPicker} paketData={data.rumahSubsidiPaket} />}
 
+              {/* PROGRAM PEMBANGUNAN KOST -- Magazine Mixing Grid */}
+              {page === "kost" && <PembangunanKostPage onWaOpen={openWaPicker} paketData={data.pembangunanKostPaket} />}
+
               {/* NEWS / DESTINATIONS */}
               {["news", "destinations"].includes(page) && (
                 <SectionPage
@@ -17651,6 +17997,7 @@ export default function BricksyTravel() {
                     { id: "produk_furnitur",    label: "Produk Furnitur",       show: isAdmin },
                     { id: "paket_landscape",    label: "Paket Landscape",        show: isAdmin },
                     { id: "paket_rumahsubsidi", label: "Paket Rumah Subsidi",    show: isAdmin },
+                    { id: "paket_kost",         label: "Paket Pembangunan Kost", show: isAdmin },
                   ]
                 },
                 /* ── Tema Rumah ── */
@@ -18248,6 +18595,22 @@ export default function BricksyTravel() {
                   defaultItems={RS_PAKET_DATA}
                   showSlideDir
                   ctaHint="Kelola foto, judul, deskripsi, harga, dan arah animasi slideshow setiap paket renovasi rumah subsidi (layout magazine mixing grid 1-3-2 kolom)."
+                />
+              )}
+
+              {/* PAKET PEMBANGUNAN KOST (Magazine Grid) */}
+              {adminTab === "paket_kost" && isAdmin && (
+                <PaketGridManager
+                  data={data}
+                  save={save}
+                  notify={notify}
+                  storeKey="pembangunanKostPaket"
+                  title="Paket Pembangunan Kost (Halaman Mixing Grid)"
+                  icon=""
+                  accentColor="#5C4033"
+                  defaultItems={KOST_PAKET_DATA}
+                  showSlideDir
+                  ctaHint="Kelola foto, judul, deskripsi, harga, dan arah animasi slideshow setiap paket pembangunan kost (layout magazine mixing grid 1-3-2 kolom)."
                 />
               )}
 
