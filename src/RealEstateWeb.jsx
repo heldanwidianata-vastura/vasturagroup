@@ -11605,8 +11605,11 @@ function LandscapePage({ onWaOpen, categories }) {
 
         /* ── Wrap cell ── */
         .ls-wrap { position:relative; display:flex; flex-direction:column; height:100%; }
-        .ls-img-box { position:relative; overflow:hidden; }
+        .ls-img-box { position:relative; overflow:hidden; border-radius:14px; margin-bottom:12px; box-shadow:0 6px 16px rgba(20,30,25,.12); transition:box-shadow .35s ease, transform .35s ease; }
+        .ls-img-box:hover { box-shadow:0 18px 36px rgba(20,30,25,.24); transform:translateY(-5px); }
         .ls-img-box:hover .ls-mag-overlay-btn { opacity:1 !important; }
+        .ls-img-box img { transition:transform .6s ease; }
+        .ls-img-box:hover img { transform:scale(1.09); }
 
         /* ── Overlay badge & pill ── */
         .ls-cat-badge { position:absolute; top:14px; left:14px; z-index:3; }
@@ -11642,7 +11645,7 @@ function LandscapePage({ onWaOpen, categories }) {
         /* ── MOBILE: 1 kolom penuh, slideshow height lebih pendek ── */
         @media (max-width: 767px) {
           .ls-desktop-grid { display:none !important; }
-          .ls-mobile-list { display:flex !important; flex-direction:column; gap:4px; padding:4px 0 0; }
+          .ls-mobile-list { display:flex !important; flex-direction:column; gap:8px; padding:8px 0 0; }
           .ls-mobile-item { width:100%; }
           .ls-mobile-slide { height:260px !important; }
           .ls-includes-grid { grid-template-columns:1fr; }
@@ -11684,11 +11687,11 @@ function LandscapePage({ onWaOpen, categories }) {
           DESKTOP: Magazine Grid (1 | 3 | 2 kolom)
           Tersembunyi di mobile via CSS
       ================================================== */}
-      <div className="ls-desktop-grid" style={{ flexDirection: "column", gap: 4, padding: "4px 0 0" }}>
+      <div className="ls-desktop-grid" style={{ flexDirection: "column", gap: 8, padding: "8px 0 0" }}>
         {rows.map((row, ri) => {
           const h = heightMap[row.cols] || 360;
           return (
-            <div key={ri} style={{ display: "grid", gridTemplateColumns: `repeat(${row.cols}, 1fr)`, gap: 4, alignItems: "stretch" }}>
+            <div key={ri} style={{ display: "grid", gridTemplateColumns: `repeat(${row.cols}, 1fr)`, gap: 8, alignItems: "stretch" }}>
               {row.cats.map((cat) => (
                 <div key={cat.id} className="ls-wrap">
 
@@ -12130,8 +12133,11 @@ function RumahSubsidiPage({ onWaOpen, paketData }) {
         @keyframes lsDropIn { from { opacity:0; transform:translateY(-8px); } to { opacity:1; transform:translateY(0); } }
 
         .ls-wrap { position:relative; display:flex; flex-direction:column; height:100%; }
-        .ls-img-box { position:relative; overflow:hidden; }
+        .ls-img-box { position:relative; overflow:hidden; border-radius:14px; margin-bottom:12px; box-shadow:0 6px 16px rgba(20,30,25,.12); transition:box-shadow .35s ease, transform .35s ease; }
+        .ls-img-box:hover { box-shadow:0 18px 36px rgba(20,30,25,.24); transform:translateY(-5px); }
         .ls-img-box:hover .ls-mag-overlay-btn { opacity:1 !important; }
+        .ls-img-box img { transition:transform .6s ease; }
+        .ls-img-box:hover img { transform:scale(1.09); }
 
         .ls-cat-badge { position:absolute; top:14px; left:14px; right:100px; z-index:4; }
         .ls-cat-badge > div { max-width: 100%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
@@ -12162,7 +12168,7 @@ function RumahSubsidiPage({ onWaOpen, paketData }) {
 
         @media (max-width: 767px) {
           .ls-desktop-grid { display:none !important; }
-          .ls-mobile-list { display:flex !important; flex-direction:column; gap:4px; padding:4px 0 0; }
+          .ls-mobile-list { display:flex !important; flex-direction:column; gap:8px; padding:8px 0 0; }
           .ls-mobile-item { width:100%; }
           .ls-mobile-slide { height:260px !important; }
           .ls-includes-grid { grid-template-columns:1fr; }
@@ -12199,11 +12205,11 @@ function RumahSubsidiPage({ onWaOpen, paketData }) {
       </div>
 
       {/* DESKTOP: Magazine Mixing Grid */}
-      <div className="ls-desktop-grid" style={{ flexDirection: "column", gap: 4, padding: "4px 0 0" }}>
+      <div className="ls-desktop-grid" style={{ flexDirection: "column", gap: 8, padding: "8px 0 0" }}>
         {rows.map((row, ri) => {
           const h = heightMap[row.cols] || 360;
           return (
-            <div key={ri} style={{ display: "grid", gridTemplateColumns: `repeat(${row.cols}, 1fr)`, gap: 4, alignItems: "stretch" }}>
+            <div key={ri} style={{ display: "grid", gridTemplateColumns: `repeat(${row.cols}, 1fr)`, gap: 8, alignItems: "stretch" }}>
               {row.items.map((paket) => (
                 <div key={paket.id} className="ls-wrap">
                   <div className="ls-img-box" style={{ height: h, position: "relative", overflow: "hidden" }}>
@@ -12470,8 +12476,11 @@ function PembangunanKostPage({ onWaOpen, paketData }) {
         @keyframes lsDropIn { from { opacity:0; transform:translateY(-8px); } to { opacity:1; transform:translateY(0); } }
 
         .ls-wrap { position:relative; display:flex; flex-direction:column; height:100%; }
-        .ls-img-box { position:relative; overflow:hidden; }
+        .ls-img-box { position:relative; overflow:hidden; border-radius:14px; margin-bottom:12px; box-shadow:0 6px 16px rgba(20,30,25,.12); transition:box-shadow .35s ease, transform .35s ease; }
+        .ls-img-box:hover { box-shadow:0 18px 36px rgba(20,30,25,.24); transform:translateY(-5px); }
         .ls-img-box:hover .ls-mag-overlay-btn { opacity:1 !important; }
+        .ls-img-box img { transition:transform .6s ease; }
+        .ls-img-box:hover img { transform:scale(1.09); }
 
         .ls-cat-badge { position:absolute; top:14px; left:14px; right:100px; z-index:4; }
         .ls-cat-badge > div { max-width: 100%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
@@ -12502,7 +12511,7 @@ function PembangunanKostPage({ onWaOpen, paketData }) {
 
         @media (max-width: 767px) {
           .ls-desktop-grid { display:none !important; }
-          .ls-mobile-list { display:flex !important; flex-direction:column; gap:4px; padding:4px 0 0; }
+          .ls-mobile-list { display:flex !important; flex-direction:column; gap:8px; padding:8px 0 0; }
           .ls-mobile-item { width:100%; }
           .ls-mobile-slide { height:260px !important; }
           .ls-includes-grid { grid-template-columns:1fr; }
@@ -12539,11 +12548,11 @@ function PembangunanKostPage({ onWaOpen, paketData }) {
       </div>
 
       {/* DESKTOP: Magazine Mixing Grid */}
-      <div className="ls-desktop-grid" style={{ flexDirection: "column", gap: 4, padding: "4px 0 0" }}>
+      <div className="ls-desktop-grid" style={{ flexDirection: "column", gap: 8, padding: "8px 0 0" }}>
         {rows.map((row, ri) => {
           const h = heightMap[row.cols] || 360;
           return (
-            <div key={ri} style={{ display: "grid", gridTemplateColumns: `repeat(${row.cols}, 1fr)`, gap: 4, alignItems: "stretch" }}>
+            <div key={ri} style={{ display: "grid", gridTemplateColumns: `repeat(${row.cols}, 1fr)`, gap: 8, alignItems: "stretch" }}>
               {row.items.map((paket) => (
                 <div key={paket.id} className="ls-wrap">
                   <div className="ls-img-box" style={{ height: h, position: "relative", overflow: "hidden" }}>
