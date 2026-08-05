@@ -22,7 +22,7 @@ function CrudField({ fd, form, setForm, accent }) {
   if (fd.type === "toggle") {
     const checked = form[fd.key] !== undefined ? !!form[fd.key] : (fd.default !== undefined ? fd.default : true);
     return (
-      <div style={{ marginBottom: 14, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, background: "#FAF7F0", border: "1.5px solid #E8DCC8", borderRadius: 10, padding: "12px 16px" }}>
+      <div className="adm-toggle-row" style={{ marginBottom: 14, background: "#FAF7F0", border: "1.5px solid #E8DCC8", borderRadius: 10, padding: "12px 16px" }}>
         <div>
           <div style={{ fontSize: 13, fontWeight: 700, color: "#2E3D3F" }}>{fd.label}</div>
           {fd.desc && <div style={{ fontSize: 11.5, color: "#8B9A9C", marginTop: 2 }}>{fd.desc}</div>}
@@ -42,7 +42,7 @@ function CrudField({ fd, form, setForm, accent }) {
     const removeItem = (i) => setVal({ items: val.items.filter((_, idx) => idx !== i) });
     return (
       <div style={{ marginBottom: 14, background: "#FAF7F0", border: "1.5px solid #E8DCC8", borderRadius: 10, padding: "14px 16px" }}>
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, marginBottom: val.aktif ? 14 : 0 }}>
+        <div className="adm-toggle-row" style={{ marginBottom: val.aktif ? 14 : 0 }}>
           <div>
             <div style={{ fontSize: 13, fontWeight: 700, color: "#2E3D3F" }}>{fd.label}</div>
             <div style={{ fontSize: 11.5, color: "#8B9A9C", marginTop: 2 }}>Aktifkan untuk isi rincian harga per kombinasi material (per m²). Harga TERENDAH dari daftar ini otomatis jadi harga utama di kartu produk sebelum diklik; rincian lengkap muncul di halaman Lihat Detail.</div>
@@ -2429,6 +2429,52 @@ const GS = () => (
       input,textarea,select{font-size:16px!important} /* prevent iOS zoom */
     }
 
+    /* == Paket Grid Manager (form CRUD Landscape / Rumah Subsidi / Kost) — mobile friendly == */
+    .pgm-form-card{padding:26px}
+    .pgm-row-icon-title{display:grid;grid-template-columns:90px 1fr;gap:14px;margin-bottom:16px}
+    .pgm-row-fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin-bottom:22px}
+    .pgm-actions{display:flex;gap:10px;flex-wrap:wrap}
+    .pgm-actions button{flex:1;min-width:120px}
+    .pgm-toggle-row{display:flex;align-items:center;justify-content:space-between;gap:12px}
+    @media(max-width:640px){
+      .pgm-form-card{padding:16px}
+      .pgm-row-icon-title{grid-template-columns:64px 1fr;gap:10px;margin-bottom:14px}
+      .pgm-row-fields{grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px}
+      .pgm-actions{position:sticky;bottom:0;background:#fff;padding:10px 0 2px;margin:14px -16px -16px;padding-left:16px;padding-right:16px;box-shadow:0 -4px 12px rgba(0,0,0,.06)}
+      .pgm-actions button{min-width:0;flex:1 1 45%}
+      .pgm-toggle-row{flex-wrap:wrap}
+      .pgm-toggle-row > div:first-child{flex:1 1 100%}
+    }
+    @media(max-width:400px){
+      .pgm-row-fields{grid-template-columns:1fr}
+    }
+
+    /* == Utility responsif generik untuk SEMUA form Control Panel == */
+    .adm-form-card{padding:28px}
+    .adm-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    .adm-grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+    .adm-grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+    .adm-actions{display:flex;gap:10px;flex-wrap:wrap}
+    .adm-actions button{flex:1;min-width:120px}
+    .adm-toggle-row{display:flex;align-items:center;justify-content:space-between;gap:12px}
+    @media(max-width:640px){
+      .adm-form-card{padding:16px}
+      .adm-grid-2{grid-template-columns:1fr;gap:12px}
+      .adm-grid-3{grid-template-columns:1fr 1fr;gap:10px}
+      .adm-grid-4{grid-template-columns:1fr 1fr;gap:8px}
+      .adm-actions{position:sticky;bottom:0;background:#fff;padding:10px 16px 2px;margin:14px -16px -16px;box-shadow:0 -4px 12px rgba(0,0,0,.06)}
+      .adm-actions button{min-width:0;flex:1 1 45%}
+      .adm-toggle-row{flex-wrap:wrap}
+      .adm-toggle-row > div:first-child{flex:1 1 100%}
+    }
+    @media(max-width:400px){
+      .adm-grid-3{grid-template-columns:1fr}
+    }
+    .adm-section-card{padding:22px 24px}
+    @media(max-width:640px){.adm-section-card{padding:16px 14px}}
+    .adm-input-btn-row{display:flex;gap:8px}
+    @media(max-width:420px){.adm-input-btn-row{flex-direction:column}.adm-input-btn-row button{width:100%}}
+
     /* Reduced motion */
     @media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
 
@@ -2773,6 +2819,8 @@ const GS = () => (
     @media(max-width:640px){
       .cms-editor-left{padding:16px 12px!important}
       .cms-editor-right{padding:12px!important}
+      .cms-topbar{flex-wrap:wrap;gap:10px!important;padding:12px 16px!important}
+      .cms-topbar>div{flex-wrap:wrap}
     }
 
     /* ── Admin main padding on small phones ── */
@@ -3770,7 +3818,7 @@ function CMSEditor({ post, onSave, onCancel, section, onSectionChange, user, not
       )}
 
       {/* CMS Top Bar */}
-      <div style={{ background: "linear-gradient(130deg,#2E3D3F 0%,#3D5254 45%,#8B6914 78%,#C9AA71 100%)", padding: "14px 24px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+      <div className="cms-topbar" style={{ background: "linear-gradient(130deg,#2E3D3F 0%,#3D5254 45%,#8B6914 78%,#C9AA71 100%)", padding: "14px 24px", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
         <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
           <span style={{ color: "#fff", fontSize: 14, fontWeight: 500 }}>
             {post?.id ? "Edit Post" : "Add New Post"} — <span style={{ color: "#C9AA71" }}>{SECTION_LABELS[section] || section}</span>
@@ -7236,9 +7284,9 @@ function TeamAdmin({ data, save, notify, uploadToCloudinary, embedded = false })
 
       {/* Form Edit */}
       {editId && (
-        <div style={{ background: "#fff", borderRadius: 12, padding: "28px", boxShadow: "0 4px 20px rgba(0,0,0,.08)", marginBottom: 28, borderTop: "4px solid #C9AA71" }}>
+        <div className="adm-form-card" style={{ background: "#fff", borderRadius: 12, boxShadow: "0 4px 20px rgba(0,0,0,.08)", marginBottom: 28, borderTop: "4px solid #C9AA71" }}>
           <h2 style={{ fontSize: 16, fontWeight: 700, color: "#2E3D3F", marginBottom: 20 }}>{editId === "new" ? "Tambah Anggota Tim" : "Edit Anggota Tim"}</h2>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginBottom: 16 }}>
+          <div className="adm-grid-2" style={{ marginBottom: 16 }}>
             {[
               { label: "Nama *", key: "name", placeholder: "Budi Santoso" },
               { label: "Jabatan", key: "role", placeholder: "Wedding Coordinator" },
@@ -7268,7 +7316,7 @@ function TeamAdmin({ data, save, notify, uploadToCloudinary, embedded = false })
                 placeholder="https://..." style={{ width: "100%", padding: "8px 12px", border: "1.5px solid #D4C4A0", borderRadius: 6, fontSize: 12, outline: "none" }} />
             </div>
           </div>
-          <div style={{ display: "flex", gap: 10 }}>
+          <div className="adm-actions">
             <button onClick={saveMember} style={{ padding: "10px 22px", background: "linear-gradient(130deg,#2E3D3F 0%,#3D5254 45%,#8B6914 78%,#C9AA71 100%)", color: "#fff", border: "none", borderRadius: 8, fontSize: 13, fontWeight: 700, cursor: "pointer" }}>Simpan</button>
             <button onClick={cancelEdit} style={{ padding: "10px 18px", background: "#FAF7F0", color: "#5A6A6C", border: "1px solid #D4C4A0", borderRadius: 8, fontSize: 13, cursor: "pointer" }}>Batal</button>
           </div>
@@ -8438,7 +8486,7 @@ function formatHargaRp(raw) {
 /* ── Wrapper kartu section ── */
 function AboutAdminSection({ title, accent = "#8B6914", desc, children }) {
   return (
-    <div style={{ background: "#fff", borderRadius: 8, padding: "22px 24px", marginBottom: 24, boxShadow: "0 2px 8px rgba(0,0,0,.06)", borderTop: `4px solid ${accent}` }}>
+    <div className="adm-section-card" style={{ background: "#fff", borderRadius: 8, marginBottom: 24, boxShadow: "0 2px 8px rgba(0,0,0,.06)", borderTop: `4px solid ${accent}` }}>
       <h3 style={{ fontSize: 16, fontWeight: 700, color: "#2E3D3F", marginBottom: 4 }}>{title}</h3>
       {desc && <p style={{ fontSize: 12, color: "#5A6A6C", marginBottom: 20, lineHeight: 1.6 }}>{desc}</p>}
       {children}
@@ -8796,7 +8844,7 @@ function LayananHeroImagePanel({ data, save, notify }) {
   return (
     <div>
       <label style={{ fontSize: 11, fontWeight: 700, color: "#5A6A6C", letterSpacing: "0.8px", textTransform: "uppercase", display: "block", marginBottom: 8 }}>URL Foto Hero</label>
-      <div style={{ display: "flex", gap: 8, marginBottom: 12 }}>
+      <div className="adm-input-btn-row" style={{ marginBottom: 12 }}>
         <input
           value={imgUrl}
           onChange={e => setImgUrl(e.target.value)}
@@ -9312,7 +9360,7 @@ function AdminReviews({ data, save, notify }) {
     <h1 style={{ fontSize: 24, fontWeight: 500, color: "#2E3D3F", marginBottom: 28 }}>Kelola Ulasan</h1>
 
     {/* Generate Review Link */}
-    <div style={{ background: "#fff", borderRadius: 8, padding: "22px 24px", marginBottom: 24, boxShadow: "0 2px 8px rgba(0,0,0,.06)", borderTop: "4px solid #C9AA71" }}>
+    <div className="adm-section-card" style={{ background: "#fff", borderRadius: 8, marginBottom: 24, boxShadow: "0 2px 8px rgba(0,0,0,.06)", borderTop: "4px solid #C9AA71" }}>
       <h3 style={{ fontSize: 15, fontWeight: 600, color: "#2E3D3F", marginBottom: 6 }}>Buat Link Form Ulasan</h3>
       <p style={{ fontSize: 12, color: "#5A6A6C", marginBottom: 16, lineHeight: 1.6 }}>
         Buat link sekali pakai untuk dikirimkan ke klien. Link hanya bisa digunakan satu kali — setelah diisi, link akan hangus otomatis.
@@ -9341,7 +9389,7 @@ function AdminReviews({ data, save, notify }) {
     </div>
 
     {/* Active Tokens */}
-    <div style={{ background: "#fff", borderRadius: 8, padding: "22px 24px", marginBottom: 24, boxShadow: "0 2px 8px rgba(0,0,0,.06)" }}>
+    <div className="adm-section-card" style={{ background: "#fff", borderRadius: 8, marginBottom: 24, boxShadow: "0 2px 8px rgba(0,0,0,.06)" }}>
       <h3 style={{ fontSize: 14, fontWeight: 600, color: "#2E3D3F", marginBottom: 14 }}>Token Aktif ({tokens.filter(t => !t.used).length})</h3>
       {tokens.length === 0 ? (
         <p style={{ fontSize: 13, color: "#5A6A6C" }}>Belum ada token dibuat.</p>
@@ -9368,7 +9416,7 @@ function AdminReviews({ data, save, notify }) {
     </div>
 
     {/* Reviews List */}
-    <div style={{ background: "#fff", borderRadius: 8, padding: "22px 24px", boxShadow: "0 2px 8px rgba(0,0,0,.06)" }}>
+    <div className="adm-section-card" style={{ background: "#fff", borderRadius: 8, boxShadow: "0 2px 8px rgba(0,0,0,.06)" }}>
       <h3 style={{ fontSize: 14, fontWeight: 600, color: "#2E3D3F", marginBottom: 14 }}>
         Ulasan Masuk ({reviews.length})
         {reviews.filter(r => !r.approved).length > 0 && (
@@ -12970,13 +13018,13 @@ function PaketGridManager({ data, save, notify, storeKey, title, icon, accentCol
 
       {/* == FORM EDIT / TAMBAH == */}
       {editId && (
-        <div style={{ background: "#fff", borderRadius: 12, padding: "26px", boxShadow: "0 4px 20px rgba(0,0,0,.08)", marginBottom: 28, borderTop: `4px solid ${accentColor}` }}>
+        <div className="pgm-form-card" style={{ background: "#fff", borderRadius: 12, boxShadow: "0 4px 20px rgba(0,0,0,.08)", marginBottom: 28, borderTop: `4px solid ${accentColor}` }}>
           <h2 style={{ fontSize: 16, fontWeight: 700, color: "#2E3D3F", marginBottom: 20 }}>
             {editId === "new" ? "Tambah Paket Baru" : "Edit Paket"}
           </h2>
 
           {/* Icon + Title */}
-          <div style={{ display: "grid", gridTemplateColumns: "90px 1fr", gap: 14, marginBottom: 16 }}>
+          <div className="pgm-row-icon-title">
             <div>
               <label style={labelStyle}>Ikon</label>
               <input value={form.icon || ""} onChange={e => setForm(p => ({ ...p, icon: e.target.value }))}
@@ -13000,7 +13048,7 @@ function PaketGridManager({ data, save, notify, storeKey, title, icon, accentCol
           </div>
 
           {/* Harga + Satuan + slideDir */}
-          <div style={{ display: "grid", gridTemplateColumns: showSlideDir ? "1fr 1fr 1fr" : "1fr 1fr", gap: 14, marginBottom: 22 }}>
+          <div className="pgm-row-fields">
             <div>
               <label style={labelStyle}>Harga Mulai Dari (Rp)</label>
               <input type="number" value={form.startFrom || 0} onChange={e => setForm(p => ({ ...p, startFrom: Number(e.target.value) }))}
@@ -13026,7 +13074,7 @@ function PaketGridManager({ data, save, notify, storeKey, title, icon, accentCol
           </div>
 
           {/* -- Toggle Tampilkan Harga -- */}
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, background: "#FAF7F0", border: "1.5px solid #E8DCC8", borderRadius: 10, padding: "12px 16px", marginBottom: 14 }}>
+          <div className="pgm-toggle-row" style={{ background: "#FAF7F0", border: "1.5px solid #E8DCC8", borderRadius: 10, padding: "12px 16px", marginBottom: 14 }}>
             <div>
               <div style={{ fontSize: 13, fontWeight: 700, color: "#2E3D3F" }}>Tampilkan Harga</div>
               <div style={{ fontSize: 11.5, color: "#8B9A9C", marginTop: 2 }}>Nonaktifkan untuk sembunyikan harga — kartu akan menampilkan tombol Konsultasi Sekarang penuh sebagai gantinya.</div>
@@ -13038,7 +13086,7 @@ function PaketGridManager({ data, save, notify, storeKey, title, icon, accentCol
           </div>
 
           {/* -- Toggle Tampil / Sembunyikan Paket di Halaman Publik -- */}
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, background: "#FAF7F0", border: "1.5px solid #E8DCC8", borderRadius: 10, padding: "12px 16px", marginBottom: 22 }}>
+          <div className="pgm-toggle-row" style={{ background: "#FAF7F0", border: "1.5px solid #E8DCC8", borderRadius: 10, padding: "12px 16px", marginBottom: 22 }}>
             <div>
               <div style={{ fontSize: 13, fontWeight: 700, color: "#2E3D3F" }}>Tampil di Halaman Publik</div>
               <div style={{ fontSize: 11.5, color: "#8B9A9C", marginTop: 2 }}>Nonaktifkan untuk menyembunyikan item ini dari halaman publik — datanya tetap tersimpan, tidak dihapus.</div>
@@ -13101,7 +13149,7 @@ function PaketGridManager({ data, save, notify, storeKey, title, icon, accentCol
             </div>
           </div>
 
-          <div style={{ display: "flex", gap: 10 }}>
+          <div className="pgm-actions">
             <button onClick={saveItem} style={{ padding: "10px 22px", background: `linear-gradient(130deg,${accentColor} 0%,#8B6914 100%)`, color: "#fff", border: "none", borderRadius: 8, fontSize: 13, fontWeight: 700, cursor: "pointer" }}>Simpan Paket</button>
             <button onClick={cancelEdit} style={{ padding: "10px 18px", background: "#FAF7F0", color: "#5A6A6C", border: "1px solid #D4C4A0", borderRadius: 8, fontSize: 13, cursor: "pointer" }}>Batal</button>
           </div>
@@ -15161,7 +15209,7 @@ function TemaEditForm({ temaOrig, editIdx, activeTemas, data, save, notify, onBa
       {/* Identitas */}
       <div style={SS}>
         {ST("", "Identitas Tema")}
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
+        <div className="adm-grid-2">
           <div>{inp("No. Urut", "no", false, "01")}</div>
           <div style={{ marginBottom: 14 }}>
             <div style={{ fontSize: 11, fontWeight: 700, color: "#5A6A6C", marginBottom: 5, textTransform: "uppercase", letterSpacing: ".04em" }}>
@@ -15470,7 +15518,7 @@ function TemaEditForm({ temaOrig, editIdx, activeTemas, data, save, notify, onBa
               <button onClick={() => upd("detail.harga.paket", draft.detail.harga.paket.filter((_, j) => j !== pi))}
                 style={{ padding: "4px 10px", background: "#fee2e2", color: "#dc2626", border: "none", borderRadius: 8, cursor: "pointer", fontWeight: 700, fontSize: 12 }}>Hapus</button>
             </div>
-            <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr 1fr", gap: 8, marginBottom: 8 }}>
+            <div className="pgm-row-fields" style={{ marginBottom: 8 }}>
               <input type="text" value={p.nama || ""} onChange={e => { const a = [...draft.detail.harga.paket]; a[pi] = { ...a[pi], nama: e.target.value }; upd("detail.harga.paket", a); }}
                 placeholder="Nama paket" style={{ padding: "8px 12px", border: "1.5px solid #D5C9B0", borderRadius: 8, fontSize: 13 }} />
               <input type="text" value={p.luas || ""} onChange={e => { const a = [...draft.detail.harga.paket]; a[pi] = { ...a[pi], luas: e.target.value }; upd("detail.harga.paket", a); }}
@@ -17954,6 +18002,9 @@ export default function BricksyTravel() {
 
           <div style={{ display: "flex", minHeight: "calc(100vh - 56px)" }}>
 
+            {/* -- Overlay mobile: tap di luar sidebar untuk menutup -- */}
+            <div className={`sidebar-overlay${sidebarOpen ? " open" : ""}`} onClick={() => setSidebarOpen(false)} />
+
             {/* -- Sidebar -- */}
             <div className={`admin-sidebar${sidebarOpen ? " open" : ""}`} style={{ background: "#2E3D3F", width: 220, flexShrink: 0, overflowY: "auto", padding: "12px 0" }}>
 
@@ -18766,9 +18817,9 @@ export default function BricksyTravel() {
 
                   {/* Add User Form */}
                   {userMgmtOpen && (
-                    <div style={{ background: "#fff", borderRadius: 10, padding: "24px 28px", marginBottom: 24, boxShadow: "0 2px 10px rgba(0,0,0,.07)", borderTop: "4px solid #27ae60" }}>
+                    <div className="adm-form-card" style={{ background: "#fff", borderRadius: 10, marginBottom: 24, boxShadow: "0 2px 10px rgba(0,0,0,.07)", borderTop: "4px solid #27ae60" }}>
                       <h3 style={{ fontSize: 14, fontWeight: 600, color: "#2E3D3F", marginBottom: 18 }}>Tambah Akun Baru</h3>
-                      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
+                      <div className="adm-grid-2">
                         {[
                           { label: "Nama Lengkap", key: "name", placeholder: "Nama lengkap", type: "text" },
                           { label: "Username", key: "username", placeholder: "username (tanpa spasi)", type: "text" },
@@ -18791,7 +18842,7 @@ export default function BricksyTravel() {
                           </select>
                         </div>
                       </div>
-                      <div style={{ display: "flex", gap: 10, marginTop: 18 }}>
+                      <div className="adm-actions" style={{ marginTop: 18 }}>
                         <button onClick={() => {
                           const { username, password, role, email, name } = userMgmtForm;
                           if (!username.trim() || !password.trim()) return notify("Username dan password wajib diisi.", "error");
@@ -19080,7 +19131,7 @@ export default function BricksyTravel() {
                           </div>
                         ) : (
                           <div>
-                            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0 20px" }}>
+                            <div className="adm-grid-2">
                               <div>{inp("Nama", "name")}</div>
                               <div>{inp("Email", "email", "email")}</div>
                               <div>{inp("No. HP", "phone", "tel")}</div>
@@ -19106,7 +19157,7 @@ export default function BricksyTravel() {
                             {/* Ganti Password */}
                             <div style={{ marginTop: 4, marginBottom: 20, background: "#FAF7F0", borderRadius: 10, padding: "18px 20px" }}>
                               <div style={{ fontSize: 13, fontWeight: 700, color: "#2E3D3F", marginBottom: 14 }}>Ganti Password</div>
-                              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "0 16px" }}>
+                              <div className="adm-grid-3">
                                 {inp("Password Lama", "oldPass", "password", "••••••••")}
                                 {inp("Password Baru", "newPass", "password", "Min. 6 karakter")}
                                 {inp("Konfirmasi Baru", "confirmPass", "password", "Ulangi password")}
@@ -19114,7 +19165,7 @@ export default function BricksyTravel() {
                               <div style={{ fontSize: 11, color: "#5A6A6C" }}>Kosongkan jika tidak ingin mengganti password.</div>
                             </div>
 
-                            <div style={{ display: "flex", gap: 10 }}>
+                            <div className="adm-actions">
                               <button onClick={saveProfileFn}
                                 style={{ padding: "10px 26px", background: "linear-gradient(130deg,#2E3D3F,#8B6914)", color: "#fff", border: "none", borderRadius: 8, fontSize: 14, fontWeight: 700, cursor: "pointer" }}>
                                 Simpan Perubahan
@@ -19143,10 +19194,10 @@ export default function BricksyTravel() {
                   {/* ======================================================= */}
                   {/* SECTION: LOGO */}
                   {/* ======================================================= */}
-                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20, marginBottom: 24 }}>
+                  <div className="adm-grid-2" style={{ marginBottom: 24 }}>
 
                     {/* -- Logo Navbar / Header -- */}
-                    <div style={{ background: "#fff", borderRadius: 8, padding: "22px 24px", boxShadow: "0 2px 8px rgba(0,0,0,.06)", borderTop: "4px solid #C9AA71" }}>
+                    <div className="adm-section-card" style={{ background: "#fff", borderRadius: 8, boxShadow: "0 2px 8px rgba(0,0,0,.06)", borderTop: "4px solid #C9AA71" }}>
                       <h3 style={{ fontSize: 15, fontWeight: 700, color: "#2E3D3F", marginBottom: 4 }}>Logo Navbar / Header</h3>
                       <p style={{ fontSize: 12, color: "#5A6A6C", marginBottom: 14, lineHeight: 1.6 }}>
                         Tampil di navigasi atas dan admin panel. PNG transparan, rasio 3:1 atau 4:1 direkomendasikan.
@@ -19168,7 +19219,7 @@ export default function BricksyTravel() {
                         }}
                         onError={() => notify("Gagal upload logo navbar.", "error")} />
                       <label style={{ fontSize: 11, fontWeight: 600, color: "#5A6A6C", letterSpacing: "1px", textTransform: "uppercase", display: "block", marginTop: 10, marginBottom: 4 }}>Atau URL</label>
-                      <div style={{ display: "flex", gap: 8 }}>
+                      <div className="adm-input-btn-row">
                         <input placeholder="https://..." defaultValue={data.content.logoImage}
                           id="logo-navbar-url-input"
                           style={{ flex: 1, padding: "8px 10px", border: "1px solid #D4C4A0", borderRadius: 6, fontSize: 12, outline: "none" }} />
@@ -19182,7 +19233,7 @@ export default function BricksyTravel() {
                     </div>
 
                     {/* -- Logo Footer -- */}
-                    <div style={{ background: "#fff", borderRadius: 8, padding: "22px 24px", boxShadow: "0 2px 8px rgba(0,0,0,.06)", borderTop: "4px solid #3D5254" }}>
+                    <div className="adm-section-card" style={{ background: "#fff", borderRadius: 8, boxShadow: "0 2px 8px rgba(0,0,0,.06)", borderTop: "4px solid #3D5254" }}>
                       <h3 style={{ fontSize: 15, fontWeight: 700, color: "#2E3D3F", marginBottom: 4 }}>Logo Footer</h3>
                       <p style={{ fontSize: 12, color: "#5A6A6C", marginBottom: 14, lineHeight: 1.6 }}>
                         Tampil di bagian bawah halaman (section Kontak). Jika kosong, akan menggunakan Logo Navbar sebagai fallback.
@@ -19204,7 +19255,7 @@ export default function BricksyTravel() {
                         }}
                         onError={() => notify("Gagal upload logo footer.", "error")} />
                       <label style={{ fontSize: 11, fontWeight: 600, color: "#5A6A6C", letterSpacing: "1px", textTransform: "uppercase", display: "block", marginTop: 10, marginBottom: 4 }}>Atau URL</label>
-                      <div style={{ display: "flex", gap: 8 }}>
+                      <div className="adm-input-btn-row">
                         <input placeholder="https://..." defaultValue={data.content.footerLogoImage}
                           id="logo-footer-url-input"
                           style={{ flex: 1, padding: "8px 10px", border: "1px solid #D4C4A0", borderRadius: 6, fontSize: 12, outline: "none" }} />
@@ -19222,7 +19273,7 @@ export default function BricksyTravel() {
                   {/* ======================================================= */}
                   {/* SECTION: FOTO BERJALAN (RUNNING) HOME */}
                   {/* ======================================================= */}
-                  <div style={{ background: "#fff", borderRadius: 8, padding: "22px 24px", marginBottom: 24, boxShadow: "0 2px 8px rgba(0,0,0,.06)", borderTop: "4px solid #3498db" }}>
+                  <div className="adm-section-card" style={{ background: "#fff", borderRadius: 8, marginBottom: 24, boxShadow: "0 2px 8px rgba(0,0,0,.06)", borderTop: "4px solid #3498db" }}>
                     <h3 style={{ fontSize: 16, fontWeight: 700, color: "#2E3D3F", marginBottom: 4 }}>Foto Berjalan (Running) Home</h3>
                     <p style={{ fontSize: 12, color: "#5A6A6C", marginBottom: 20, lineHeight: 1.6 }}>
                       Foto yang berjalan otomatis (scroll) di halaman Home, section "Koleksi Kami". Tampilan adalah <strong>campuran</strong> foto yang Anda upload manual di sini <strong>+</strong> foto yang diambil otomatis dari katalog Interior, Eksterior, dan Furnitur. Upload manual jumlahnya bebas / tidak terbatas.
@@ -19238,9 +19289,9 @@ export default function BricksyTravel() {
                           notify(`${urls.length} foto running ditambahkan!`);
                         }}
                         onError={() => notify("Sebagian foto gagal diupload.", "error")} />
-                      <div style={{ display: "flex", gap: 6 }}>
+                      <div className="adm-input-btn-row" style={{ flex: "1 1 320px" }}>
                         <input id="running-img-url" placeholder="atau tempel URL gambar..."
-                          style={{ padding: "8px 10px", border: "1px solid #D4C4A0", borderRadius: 6, fontSize: 12, outline: "none", minWidth: 240 }} />
+                          style={{ flex: 1, padding: "8px 10px", border: "1px solid #D4C4A0", borderRadius: 6, fontSize: 12, outline: "none", minWidth: 0 }} />
                         <button onClick={() => {
                           const inputEl = document.getElementById("running-img-url");
                           const url = inputEl?.value?.trim();
@@ -19281,7 +19332,7 @@ export default function BricksyTravel() {
                   {/* ======================================================= */}
                   {/* SECTION: LAYANAN SECTION HOME */}
                   {/* ======================================================= */}
-                  <div style={{ background: "#fff", borderRadius: 8, padding: "22px 24px", marginBottom: 24, boxShadow: "0 2px 8px rgba(0,0,0,.06)", borderTop: "4px solid #8B6914" }}>
+                  <div className="adm-section-card" style={{ background: "#fff", borderRadius: 8, marginBottom: 24, boxShadow: "0 2px 8px rgba(0,0,0,.06)", borderTop: "4px solid #8B6914" }}>
                     <h3 style={{ fontSize: 16, fontWeight: 700, color: "#2E3D3F", marginBottom: 4 }}>Layanan Section Home</h3>
                     <p style={{ fontSize: 12, color: "#5A6A6C", marginBottom: 20, lineHeight: 1.6 }}>
                       Atur foto & teks kartu pada section "Layanan VASTURA GROUP Kami" di halaman Home.
@@ -19315,7 +19366,7 @@ export default function BricksyTravel() {
                   {/* ======================================================= */}
                   {/* SECTION: KONTEN TEKS HALAMAN HOME */}
                   {/* ======================================================= */}
-                  <div style={{ background: "#fff", borderRadius: 8, padding: "22px 24px", marginBottom: 24, boxShadow: "0 2px 8px rgba(0,0,0,.06)", borderTop: "4px solid #27ae60" }}>
+                  <div className="adm-section-card" style={{ background: "#fff", borderRadius: 8, marginBottom: 24, boxShadow: "0 2px 8px rgba(0,0,0,.06)", borderTop: "4px solid #27ae60" }}>
                     <h3 style={{ fontSize: 16, fontWeight: 700, color: "#2E3D3F", marginBottom: 4 }}>Konten Teks Halaman Home</h3>
                     <p style={{ fontSize: 12, color: "#5A6A6C", marginBottom: 20, lineHeight: 1.6 }}>
                       Edit semua teks yang tampil di halaman utama — judul hero, subtitle, teks banner, section konsultasi, dan lainnya.
@@ -19361,7 +19412,7 @@ export default function BricksyTravel() {
                   {/* ======================================================= */}
                   {/* SECTION: KONTEN ABOUT & CONTACT */}
                   {/* ======================================================= */}
-                  <div style={{ background: "#fff", borderRadius: 8, padding: "22px 24px", marginBottom: 24, boxShadow: "0 2px 8px rgba(0,0,0,.06)", borderTop: "4px solid #e67e22" }}>
+                  <div className="adm-section-card" style={{ background: "#fff", borderRadius: 8, marginBottom: 24, boxShadow: "0 2px 8px rgba(0,0,0,.06)", borderTop: "4px solid #e67e22" }}>
                     <h3 style={{ fontSize: 16, fontWeight: 700, color: "#2E3D3F", marginBottom: 4 }}>Konten Kontak</h3>
                     <p style={{ fontSize: 12, color: "#5A6A6C", marginBottom: 20, lineHeight: 1.6 }}>
                       Edit informasi kontak, jam operasional, dan link media sosial. Untuk teks halaman About Us (Hero, Visi Misi, Susunan Tim, Layanan), buka menu <strong>Setting Halaman About</strong>.
@@ -19404,7 +19455,7 @@ export default function BricksyTravel() {
                   {/* ======================================================= */}
                   {/* SECTION: TEMPLATE WHATSAPP */}
                   {/* ======================================================= */}
-                  <div style={{ background: "#fff", borderRadius: 8, padding: "22px 24px", marginBottom: 24, boxShadow: "0 2px 8px rgba(0,0,0,.06)", borderTop: "4px solid #25d366" }}>
+                  <div className="adm-section-card" style={{ background: "#fff", borderRadius: 8, marginBottom: 24, boxShadow: "0 2px 8px rgba(0,0,0,.06)", borderTop: "4px solid #25d366" }}>
                     <h3 style={{ fontSize: 15, fontWeight: 700, color: "#2E3D3F", marginBottom: 4 }}>Template Pesan WhatsApp</h3>
                     <p style={{ fontSize: 12, color: "#5A6A6C", marginBottom: 6, lineHeight: 1.6 }}>
                       Hanya <strong>satu template</strong> ini yang dipakai oleh <strong>semua</strong> tombol WhatsApp di seluruh situs
@@ -19458,7 +19509,7 @@ export default function BricksyTravel() {
                   </div>
 
                   {/* Founding Year */}
-                  <div style={{ background: "#fff", borderRadius: 8, padding: "22px 24px", marginBottom: 24, boxShadow: "0 2px 8px rgba(0,0,0,.06)", borderTop: "4px solid #C9AA71" }}>
+                  <div className="adm-section-card" style={{ background: "#fff", borderRadius: 8, marginBottom: 24, boxShadow: "0 2px 8px rgba(0,0,0,.06)", borderTop: "4px solid #C9AA71" }}>
                     <h3 style={{ fontSize: 15, fontWeight: 500, color: "#2E3D3F", marginBottom: 6 }}>Tahun Berdiri Perusahaan</h3>
                     <p style={{ fontSize: 12, color: "#5A6A6C", marginBottom: 16, lineHeight: 1.6 }}>
                       Tahun ini digunakan untuk teks "sejak [tahun]", statistik "X Tahun Pengalaman", dan label dekorasi halaman.
@@ -19484,7 +19535,7 @@ export default function BricksyTravel() {
                   </div>
 
                   {/* Hero Display Mode */}
-                  <div style={{ background: "#fff", borderRadius: 8, padding: "22px 24px", marginBottom: 24, boxShadow: "0 2px 8px rgba(0,0,0,.06)", borderTop: "4px solid #8e44ad" }}>
+                  <div className="adm-section-card" style={{ background: "#fff", borderRadius: 8, marginBottom: 24, boxShadow: "0 2px 8px rgba(0,0,0,.06)", borderTop: "4px solid #8e44ad" }}>
                     <h3 style={{ fontSize: 15, fontWeight: 500, color: "#2E3D3F", marginBottom: 6 }}>Mode Tampilan Hero Beranda</h3>
                     <p style={{ fontSize: 12, color: "#5A6A6C", marginBottom: 20, lineHeight: 1.6 }}>
                       Pilih mode tampilan bagian hero halaman utama: <strong>Video Background</strong> (video looping), <strong>Gambar Statis</strong> (satu foto diam), atau <strong>Slideshow Otomatis</strong> (berganti dari artikel).
