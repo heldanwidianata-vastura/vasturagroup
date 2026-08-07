@@ -10,6 +10,32 @@ function autoGrowTextarea(el) {
   el.style.height = el.scrollHeight + "px";
 }
 
+/* ── AutoGrowField: pengganti <input type="text"> yang saat di-fokus akan MELEBAR KE BAWAH
+   (menampilkan seluruh teks yang diketik, wrap multi-baris) supaya mudah dikoreksi/di-cek ulang,
+   lalu OTOMATIS MENGECIL kembali ke tampilan 1 baris saat blur / pindah field. Dipakai di semua
+   form Control Panel untuk field teks pendek (judul, item, label, dsb). Field number/select/toggle
+   TIDAK memakai ini karena isinya sudah pendek & tidak perlu di-expand. */
+function AutoGrowField({ style, className = "", multiline = false, onFocus, onBlur, onKeyDown, ...rest }) {
+  const handleFocus = (e) => { autoGrowTextarea(e.target); onFocus && onFocus(e); };
+  const handleBlur = (e) => { e.target.style.height = ""; onBlur && onBlur(e); };
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter" && !multiline) { e.preventDefault(); e.target.blur(); }
+    onKeyDown && onKeyDown(e);
+  };
+  return (
+    <textarea
+      rows={1}
+      className={`agf-field ${className}`}
+      style={style}
+      onFocus={handleFocus}
+      onBlur={handleBlur}
+      onInput={e => autoGrowTextarea(e.target)}
+      onKeyDown={handleKeyDown}
+      {...rest}
+    />
+  );
+}
+
 /* ─────────────── CRUD FIELD (dipakai SubLayananAdmin) ───────────────
    PENTING: komponen ini SENGAJA didefinisikan di top-level (bukan di dalam
    SubLayananAdmin), karena kalau didefinisikan ulang di setiap render, React
@@ -56,7 +82,7 @@ function CrudField({ fd, form, setForm, accent }) {
           <>
             {(val.items || []).map((it, i) => (
               <div key={i} style={{ display: "flex", gap: 8, marginBottom: 8, alignItems: "center", flexWrap: "wrap" }}>
-                <input type="text" value={it.label || ""} placeholder="contoh: Polycarbonate Twinwall + Baja Ringan"
+                <AutoGrowField value={it.label || ""} placeholder="contoh: Polycarbonate Twinwall + Baja Ringan"
                   onChange={e => updateItem(i, { label: e.target.value })}
                   style={{ flex: "1 1 220px", padding: "8px 10px", border: "1.5px solid #D5C9B0", borderRadius: 8, fontSize: 12.5, boxSizing: "border-box" }} />
                 <input type="number" value={it.min || 0} placeholder="Harga min"
@@ -83,10 +109,12 @@ function CrudField({ fd, form, setForm, accent }) {
       {fd.type === "textarea"
         ? <textarea rows={3} placeholder={fd.placeholder || ""} value={form[fd.key] || ""}
             ref={autoGrowTextarea}
+            onFocus={e => autoGrowTextarea(e.target)}
             onInput={e => autoGrowTextarea(e.target)}
+            onBlur={e => { e.target.style.height = ""; }}
             onChange={e => setForm(p => ({ ...p, [fd.key]: e.target.value }))}
             style={{ width: "100%", padding: "10px 12px", border: "1.5px solid #D5C9B0", borderRadius: 8, fontSize: 14, resize: "none", overflow: "hidden", fontFamily: "inherit", boxSizing: "border-box" }} />
-        : <input type="text" placeholder={fd.placeholder || ""} value={form[fd.key] || ""}
+        : <AutoGrowField placeholder={fd.placeholder || ""} value={form[fd.key] || ""}
             onChange={e => setForm(p => ({ ...p, [fd.key]: e.target.value }))}
             style={{ width: "100%", padding: "10px 12px", border: "1.5px solid #D5C9B0", borderRadius: 8, fontSize: 14, boxSizing: "border-box" }} />
       }
@@ -2472,6 +2500,10 @@ const GS = () => (
     }
     .adm-section-card{padding:22px 24px}
     @media(max-width:640px){.adm-section-card{padding:16px 14px}}
+
+    /* == AutoGrowField: input 1-baris yang expand saat fokus, mengecil lagi saat blur == */
+    .agf-field{resize:none;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;font-family:inherit;box-sizing:border-box;line-height:1.4;transition:box-shadow .15s ease;width:100%;display:block}
+    .agf-field:focus{white-space:pre-wrap;overflow:visible;word-break:break-word;box-shadow:0 0 0 3px rgba(139,105,20,.14);position:relative;z-index:2;outline:none}
     .adm-input-btn-row{display:flex;gap:8px}
     @media(max-width:420px){.adm-input-btn-row{flex-direction:column}.adm-input-btn-row button{width:100%}}
 
@@ -3901,7 +3933,7 @@ function CMSEditor({ post, onSave, onCancel, section, onSectionChange, user, not
                         placeholder="Tulis konten paragraf di sini..."
                       />
                     ) : (
-                      <input value={editBlockVal} onChange={e => setEditBlockVal(e.target.value)}
+                      <AutoGrowField value={editBlockVal} onChange={e => setEditBlockVal(e.target.value)}
                         autoFocus
                         style={{ width: "100%", padding: "10px 12px", border: "1px solid #C9AA71", borderRadius: 6, fontSize: 13, outline: "none", boxSizing: "border-box" }} />
                     )}
@@ -4014,7 +4046,7 @@ function CMSEditor({ post, onSave, onCancel, section, onSectionChange, user, not
                     style={{ width: "100%", padding: "10px 12px", border: "1px solid #D4C4A0",
                       borderRadius: 6, fontSize: 13, outline: "none", resize: "none", overflow: "hidden", marginBottom: 8, lineHeight: 1.6 }} />
                 ) : (
-                  <input value={addVal} onChange={e => setAddVal(e.target.value)}
+                  <AutoGrowField value={addVal} onChange={e => setAddVal(e.target.value)}
                     placeholder={
                       addType === "heading" ? "Section heading..." :
                       addType === "image" ? "https://example.com/image.jpg" :
@@ -4026,7 +4058,7 @@ function CMSEditor({ post, onSave, onCancel, section, onSectionChange, user, not
                 )}
 
                 {addType === "image" && (
-                  <input value={addCaption} onChange={e => setAddCaption(e.target.value)}
+                  <AutoGrowField value={addCaption} onChange={e => setAddCaption(e.target.value)}
                     placeholder="Image caption (optional)"
                     style={{ width: "100%", padding: "8px 12px", border: "1px solid #D4C4A0",
                       borderRadius: 6, fontSize: 12, outline: "none", marginBottom: 8 }} />
@@ -7293,14 +7325,14 @@ function TeamAdmin({ data, save, notify, uploadToCloudinary, embedded = false })
             ].map(f => (
               <div key={f.key}>
                 <label style={{ display: "block", fontSize: 11, fontWeight: 600, color: "#5A6A6C", letterSpacing: "1px", textTransform: "uppercase", marginBottom: 6 }}>{f.label}</label>
-                <input value={form[f.key] || ""} onChange={e => setForm(p => ({ ...p, [f.key]: e.target.value }))}
+                <AutoGrowField value={form[f.key] || ""} onChange={e => setForm(p => ({ ...p, [f.key]: e.target.value }))}
                   placeholder={f.placeholder} style={{ width: "100%", padding: "9px 12px", border: "1.5px solid #D4C4A0", borderRadius: 6, fontSize: 13, outline: "none" }} />
               </div>
             ))}
           </div>
           <div style={{ marginBottom: 16 }}>
             <label style={{ display: "block", fontSize: 11, fontWeight: 600, color: "#5A6A6C", letterSpacing: "1px", textTransform: "uppercase", marginBottom: 6 }}>Quotes / Motto</label>
-            <input value={form.quotes || ""} onChange={e => setForm(p => ({ ...p, quotes: e.target.value }))}
+            <AutoGrowField value={form.quotes || ""} onChange={e => setForm(p => ({ ...p, quotes: e.target.value }))}
               placeholder="Setiap momen spesial layak dirayakan dengan sempurna."
               style={{ width: "100%", padding: "9px 12px", border: "1.5px solid #D4C4A0", borderRadius: 6, fontSize: 13, outline: "none" }} />
           </div>
@@ -12875,15 +12907,15 @@ function WaAdminManager({ admins = [], onSave, notify }) {
           </div>
           <div>
             <label style={labelStyle}>Nama Admin</label>
-            <input style={inputStyle} value={admin.name} onChange={e => update(admin.id, "name", e.target.value)} placeholder="cth: Heldan Widianata" />
+            <AutoGrowField style={inputStyle} value={admin.name} onChange={e => update(admin.id, "name", e.target.value)} placeholder="cth: Heldan Widianata" />
           </div>
           <div>
             <label style={labelStyle}>Jabatan</label>
-            <input style={inputStyle} value={admin.jabatan || ""} onChange={e => update(admin.id, "jabatan", e.target.value)} placeholder="cth: Chief Executive Officer" />
+            <AutoGrowField style={inputStyle} value={admin.jabatan || ""} onChange={e => update(admin.id, "jabatan", e.target.value)} placeholder="cth: Chief Executive Officer" />
           </div>
           <div>
             <label style={labelStyle}>Nomor WA Link (format: https://wa.me/628xxx)</label>
-            <input style={inputStyle} value={admin.wa} onChange={e => update(admin.id, "wa", e.target.value)} placeholder="https://wa.me/628123456789" />
+            <AutoGrowField style={inputStyle} value={admin.wa} onChange={e => update(admin.id, "wa", e.target.value)} placeholder="https://wa.me/628123456789" />
           </div>
         </div>
       ))}
@@ -12919,11 +12951,11 @@ function SosmedManager({ content, onSave, notify }) {
       <label style={{ fontSize: 11, fontWeight: 700, color: "#5A6A6C", letterSpacing: "1px", textTransform: "uppercase", display: "block", marginBottom: 14 }}>Link Sosial Media</label>
       <div style={{ marginBottom: 12 }}>
         <label style={labelStyle}>Instagram URL</label>
-        <input style={inputStyle} value={ig} onChange={e => { setIg(e.target.value); setDirty(true); }} placeholder="https://instagram.com/username" />
+        <AutoGrowField style={inputStyle} value={ig} onChange={e => { setIg(e.target.value); setDirty(true); }} placeholder="https://instagram.com/username" />
       </div>
       <div style={{ marginBottom: 12 }}>
         <label style={labelStyle}>Facebook URL</label>
-        <input style={inputStyle} value={fb} onChange={e => { setFb(e.target.value); setDirty(true); }} placeholder="https://facebook.com/username" />
+        <AutoGrowField style={inputStyle} value={fb} onChange={e => { setFb(e.target.value); setDirty(true); }} placeholder="https://facebook.com/username" />
       </div>
       {dirty && (
         <button onClick={handleSave} style={{ width: "100%", padding: "10px", background: "#2E3D3F", color: "#fff", border: "none", borderRadius: 7, fontWeight: 700, fontSize: 13, cursor: "pointer" }}>
@@ -13032,7 +13064,7 @@ function PaketGridManager({ data, save, notify, storeKey, title, icon, accentCol
             </div>
             <div>
               <label style={labelStyle}>Judul Paket *</label>
-              <input value={form.title || ""} onChange={e => setForm(p => ({ ...p, title: e.target.value }))}
+              <AutoGrowField value={form.title || ""} onChange={e => setForm(p => ({ ...p, title: e.target.value }))}
                 placeholder="contoh: Renovasi Cat & Dinding" style={inputStyle} />
             </div>
           </div>
@@ -13106,10 +13138,10 @@ function PaketGridManager({ data, save, notify, storeKey, title, icon, accentCol
             {(form.includes || []).length === 0 && <p style={{ fontSize: 12, color: "#5A6A6C", margin: 0 }}>Belum ada item. Klik "+ Tambah Item".</p>}
             <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
               {(form.includes || []).map((inc, i) => (
-                <div key={i} style={{ display: "flex", gap: 8, alignItems: "center" }}>
+                <div key={i} style={{ display: "flex", gap: 8, alignItems: "flex-start" }}>
                   <input value={inc.icon} onChange={e => updateInclude(i, "icon", e.target.value)}
                     style={{ ...inputStyle, width: 52, textAlign: "center", flexShrink: 0 }} placeholder="" />
-                  <input value={inc.item} onChange={e => updateInclude(i, "item", e.target.value)}
+                  <AutoGrowField value={inc.item} onChange={e => updateInclude(i, "item", e.target.value)}
                     style={{ ...inputStyle, flex: 1 }} placeholder="Deskripsi item yang termasuk..." />
                   <button onClick={() => removeInclude(i)} style={{ flexShrink: 0, padding: "8px 10px", background: "#fee2e2", color: "#dc2626", border: "none", borderRadius: 6, cursor: "pointer", fontSize: 12 }}></button>
                 </div>
@@ -13135,14 +13167,16 @@ function PaketGridManager({ data, save, notify, storeKey, title, icon, accentCol
                     onDone={urls => { updateSlide(i, "img", urls[0]); notify("Foto berhasil diupload!"); }}
                     onError={msg => notify(msg, "error")}
                     style={{ fontSize: 11, padding: "7px 10px" }} />
-                  <input value={s.img || ""} onChange={e => updateSlide(i, "img", e.target.value)}
+                  <AutoGrowField value={s.img || ""} onChange={e => updateSlide(i, "img", e.target.value)}
                     placeholder="atau paste URL foto..." style={{ ...inputStyle, fontSize: 11, marginTop: 6 }} />
-                  <input value={s.tema || ""} onChange={e => updateSlide(i, "tema", e.target.value)}
+                  <AutoGrowField value={s.tema || ""} onChange={e => updateSlide(i, "tema", e.target.value)}
                     placeholder="Nama tema foto" style={{ ...inputStyle, fontSize: 12, marginTop: 6 }} />
                   <textarea value={s.desc || ""} onChange={e => updateSlide(i, "desc", e.target.value)}
                     placeholder="Keterangan singkat foto..." rows={2}
                     ref={autoGrowTextarea}
+                    onFocus={e => autoGrowTextarea(e.target)}
                     onInput={e => autoGrowTextarea(e.target)}
+                    onBlur={e => { e.target.style.height = ""; }}
                     style={{ ...inputStyle, fontSize: 12, marginTop: 6, resize: "none", overflow: "hidden", fontFamily: "inherit" }} />
                 </div>
               ))}
@@ -15176,9 +15210,11 @@ function TemaEditForm({ temaOrig, editIdx, activeTemas, data, save, notify, onBa
       {multiline
         ? <textarea value={path.split(".").reduce((o, k) => o?.[k], draft) || ""} onChange={e => upd(path, e.target.value)} placeholder={placeholder} rows={3}
             ref={autoGrowTextarea}
+            onFocus={e => autoGrowTextarea(e.target)}
             onInput={e => autoGrowTextarea(e.target)}
+            onBlur={e => { e.target.style.height = ""; }}
             style={{ width: "100%", padding: "9px 12px", border: "1.5px solid #D5C9B0", borderRadius: 8, fontSize: 13, boxSizing: "border-box", resize: "none", overflow: "hidden", fontFamily: "inherit" }} />
-        : <input type="text" value={path.split(".").reduce((o, k) => o?.[k], draft) || ""} onChange={e => upd(path, e.target.value)} placeholder={placeholder}
+        : <AutoGrowField value={path.split(".").reduce((o, k) => o?.[k], draft) || ""} onChange={e => upd(path, e.target.value)} placeholder={placeholder}
             style={{ width: "100%", padding: "9px 12px", border: "1.5px solid #D5C9B0", borderRadius: 8, fontSize: 13, boxSizing: "border-box" }} />
       }
     </div>
@@ -15291,7 +15327,7 @@ function TemaEditForm({ temaOrig, editIdx, activeTemas, data, save, notify, onBa
                     </div>
                   )}
                   <div style={{ padding: "4px 6px 3px" }}>
-                    <input type="text" value={ph.label || ""} onClick={e => e.stopPropagation()} onChange={e => updateSlideLabel(i, e.target.value)}
+                    <AutoGrowField value={ph.label || ""} onClick={e => e.stopPropagation()} onChange={e => updateSlideLabel(i, e.target.value)}
                       placeholder={`Foto ${i + 1}`}
                       style={{ width: "100%", fontSize: 10, padding: "2px 5px", border: "1px solid #D5C9B0", borderRadius: 4, boxSizing: "border-box" }} />
                   </div>
@@ -15349,7 +15385,7 @@ function TemaEditForm({ temaOrig, editIdx, activeTemas, data, save, notify, onBa
           {denahLantai.map((lantai, li) => (
             <div key={li} style={{ background: "#FAF7F0", border: "1.5px solid #E8DCC8", borderRadius: 10, padding: "14px 16px", marginBottom: 10 }}>
               <div style={{ display: "flex", gap: 8, alignItems: "center", marginBottom: 10 }}>
-                <input type="text" value={lantai.label} onChange={e => updateLantaiLabel(li, e.target.value)}
+                <AutoGrowField value={lantai.label} onChange={e => updateLantaiLabel(li, e.target.value)}
                   placeholder="Lantai 1" style={{ flex: 1, padding: "8px 12px", border: "1.5px solid #D5C9B0", borderRadius: 8, fontSize: 13, fontWeight: 700 }} />
                 {denahLantai.length > 1 && (
                   <button onClick={() => removeLantai(li)}
@@ -15410,7 +15446,7 @@ function TemaEditForm({ temaOrig, editIdx, activeTemas, data, save, notify, onBa
           <div key={fi} style={{ display: "flex", gap: 8, marginBottom: 8, alignItems: "center" }}>
             <input type="text" value={f.icon || ""} onChange={e => { const a = [...draft.fitur]; a[fi] = { ...a[fi], icon: e.target.value }; upd("fitur", a); }}
               placeholder="" style={{ width: 50, padding: "8px", border: "1.5px solid #D5C9B0", borderRadius: 8, fontSize: 16, textAlign: "center" }} />
-            <input type="text" value={f.label || ""} onChange={e => { const a = [...draft.fitur]; a[fi] = { ...a[fi], label: e.target.value }; upd("fitur", a); }}
+            <AutoGrowField value={f.label || ""} onChange={e => { const a = [...draft.fitur]; a[fi] = { ...a[fi], label: e.target.value }; upd("fitur", a); }}
               placeholder="Label fitur" style={{ flex: 1, padding: "8px 12px", border: "1.5px solid #D5C9B0", borderRadius: 8, fontSize: 13 }} />
             <button onClick={() => { const a = draft.fitur.filter((_, j) => j !== fi); upd("fitur", a); }}
               style={{ padding: "8px 10px", background: "#fee2e2", color: "#dc2626", border: "none", borderRadius: 8, cursor: "pointer", fontWeight: 700, fontSize: 12 }}>✕</button>
@@ -15427,7 +15463,7 @@ function TemaEditForm({ temaOrig, editIdx, activeTemas, data, save, notify, onBa
         <div style={{ fontSize: 11, fontWeight: 700, color: "#5A6A6C", marginBottom: 8, textTransform: "uppercase", letterSpacing: ".04em" }}>Poin Eksterior</div>
         {(draft.detail?.exterior?.poin || []).map((p, pi) => (
           <div key={pi} style={{ display: "flex", gap: 8, marginBottom: 6 }}>
-            <input type="text" value={p} onChange={e => { const a = [...draft.detail.exterior.poin]; a[pi] = e.target.value; upd("detail.exterior.poin", a); }}
+            <AutoGrowField value={p} onChange={e => { const a = [...draft.detail.exterior.poin]; a[pi] = e.target.value; upd("detail.exterior.poin", a); }}
               style={{ flex: 1, padding: "7px 12px", border: "1.5px solid #D5C9B0", borderRadius: 8, fontSize: 13 }} />
             <button onClick={() => upd("detail.exterior.poin", draft.detail.exterior.poin.filter((_, j) => j !== pi))}
               style={{ padding: "7px 10px", background: "#fee2e2", color: "#dc2626", border: "none", borderRadius: 8, cursor: "pointer", fontWeight: 700 }}>✕</button>
@@ -15476,7 +15512,7 @@ function TemaEditForm({ temaOrig, editIdx, activeTemas, data, save, notify, onBa
         <div style={{ fontSize: 11, fontWeight: 700, color: "#5A6A6C", marginBottom: 8, textTransform: "uppercase", letterSpacing: ".04em" }}>Poin Interior</div>
         {(draft.detail?.interior?.poin || []).map((p, pi) => (
           <div key={pi} style={{ display: "flex", gap: 8, marginBottom: 6 }}>
-            <input type="text" value={p} onChange={e => { const a = [...draft.detail.interior.poin]; a[pi] = e.target.value; upd("detail.interior.poin", a); }}
+            <AutoGrowField value={p} onChange={e => { const a = [...draft.detail.interior.poin]; a[pi] = e.target.value; upd("detail.interior.poin", a); }}
               style={{ flex: 1, padding: "7px 12px", border: "1.5px solid #D5C9B0", borderRadius: 8, fontSize: 13 }} />
             <button onClick={() => upd("detail.interior.poin", draft.detail.interior.poin.filter((_, j) => j !== pi))}
               style={{ padding: "7px 10px", background: "#fee2e2", color: "#dc2626", border: "none", borderRadius: 8, cursor: "pointer", fontWeight: 700 }}>✕</button>
@@ -15493,13 +15529,13 @@ function TemaEditForm({ temaOrig, editIdx, activeTemas, data, save, notify, onBa
 
         <div style={{ fontSize: 11, fontWeight: 700, color: "#5A6A6C", marginBottom: 8, textTransform: "uppercase", letterSpacing: ".04em" }}>Daftar Ruangan (data internal, tidak tampil di publik)</div>
         {(draft.detail?.denah?.ruangan || []).map((r, ri) => (
-          <div key={ri} style={{ display: "flex", gap: 8, marginBottom: 8, alignItems: "center" }}>
+          <div key={ri} style={{ display: "flex", gap: 8, marginBottom: 8, alignItems: "center", flexWrap: "wrap" }}>
             <input type="text" value={r.ikon || ""} onChange={e => { const a = [...draft.detail.denah.ruangan]; a[ri] = { ...a[ri], ikon: e.target.value }; upd("detail.denah.ruangan", a); }}
               placeholder="" style={{ width: 50, padding: "8px", border: "1.5px solid #D5C9B0", borderRadius: 8, fontSize: 16, textAlign: "center" }} />
-            <input type="text" value={r.nama || ""} onChange={e => { const a = [...draft.detail.denah.ruangan]; a[ri] = { ...a[ri], nama: e.target.value }; upd("detail.denah.ruangan", a); }}
-              placeholder="Nama ruangan" style={{ flex: 2, padding: "8px 12px", border: "1.5px solid #D5C9B0", borderRadius: 8, fontSize: 13 }} />
+            <AutoGrowField value={r.nama || ""} onChange={e => { const a = [...draft.detail.denah.ruangan]; a[ri] = { ...a[ri], nama: e.target.value }; upd("detail.denah.ruangan", a); }}
+              placeholder="Nama ruangan" style={{ flex: "2 1 120px", padding: "8px 12px", border: "1.5px solid #D5C9B0", borderRadius: 8, fontSize: 13 }} />
             <input type="text" value={r.ukuran || ""} onChange={e => { const a = [...draft.detail.denah.ruangan]; a[ri] = { ...a[ri], ukuran: e.target.value }; upd("detail.denah.ruangan", a); }}
-              placeholder="5 × 6 m" style={{ flex: 1, padding: "8px 12px", border: "1.5px solid #D5C9B0", borderRadius: 8, fontSize: 13 }} />
+              placeholder="5 × 6 m" style={{ flex: "1 1 90px", padding: "8px 12px", border: "1.5px solid #D5C9B0", borderRadius: 8, fontSize: 13 }} />
             <button onClick={() => upd("detail.denah.ruangan", draft.detail.denah.ruangan.filter((_, j) => j !== ri))}
               style={{ padding: "8px 10px", background: "#fee2e2", color: "#dc2626", border: "none", borderRadius: 8, cursor: "pointer", fontWeight: 700 }}>✕</button>
           </div>
@@ -15519,7 +15555,7 @@ function TemaEditForm({ temaOrig, editIdx, activeTemas, data, save, notify, onBa
                 style={{ padding: "4px 10px", background: "#fee2e2", color: "#dc2626", border: "none", borderRadius: 8, cursor: "pointer", fontWeight: 700, fontSize: 12 }}>Hapus</button>
             </div>
             <div className="pgm-row-fields" style={{ marginBottom: 8 }}>
-              <input type="text" value={p.nama || ""} onChange={e => { const a = [...draft.detail.harga.paket]; a[pi] = { ...a[pi], nama: e.target.value }; upd("detail.harga.paket", a); }}
+              <AutoGrowField value={p.nama || ""} onChange={e => { const a = [...draft.detail.harga.paket]; a[pi] = { ...a[pi], nama: e.target.value }; upd("detail.harga.paket", a); }}
                 placeholder="Nama paket" style={{ padding: "8px 12px", border: "1.5px solid #D5C9B0", borderRadius: 8, fontSize: 13 }} />
               <input type="text" value={p.luas || ""} onChange={e => { const a = [...draft.detail.harga.paket]; a[pi] = { ...a[pi], luas: e.target.value }; upd("detail.harga.paket", a); }}
                 placeholder="60–80 m²" style={{ padding: "8px 12px", border: "1.5px solid #D5C9B0", borderRadius: 8, fontSize: 13 }} />
@@ -15529,7 +15565,7 @@ function TemaEditForm({ temaOrig, editIdx, activeTemas, data, save, notify, onBa
             <div style={{ fontSize: 11, fontWeight: 700, color: "#5A6A6C", marginBottom: 6 }}>SUDAH TERMASUK:</div>
             {(p.termasuk || []).map((t, ti) => (
               <div key={ti} style={{ display: "flex", gap: 6, marginBottom: 5 }}>
-                <input type="text" value={t} onChange={e => { const a = [...draft.detail.harga.paket]; const tr = [...a[pi].termasuk]; tr[ti] = e.target.value; a[pi] = { ...a[pi], termasuk: tr }; upd("detail.harga.paket", a); }}
+                <AutoGrowField value={t} onChange={e => { const a = [...draft.detail.harga.paket]; const tr = [...a[pi].termasuk]; tr[ti] = e.target.value; a[pi] = { ...a[pi], termasuk: tr }; upd("detail.harga.paket", a); }}
                   style={{ flex: 1, padding: "6px 10px", border: "1.5px solid #D5C9B0", borderRadius: 8, fontSize: 12 }} />
                 <button onClick={() => { const a = [...draft.detail.harga.paket]; const tr = a[pi].termasuk.filter((_, j) => j !== ti); a[pi] = { ...a[pi], termasuk: tr }; upd("detail.harga.paket", a); }}
                   style={{ padding: "6px 8px", background: "#fee2e2", color: "#dc2626", border: "none", borderRadius: 6, cursor: "pointer", fontWeight: 700 }}>✕</button>
@@ -18827,9 +18863,14 @@ export default function BricksyTravel() {
                         ].map(f => (
                           <div key={f.key}>
                             <label style={{ fontSize: 10, fontWeight: 700, color: "#5A6A6C", letterSpacing: "1px", textTransform: "uppercase", display: "block", marginBottom: 5 }}>{f.label}</label>
-                            <input type={f.type} placeholder={f.placeholder} value={userMgmtForm[f.key]}
-                              onChange={e => setUserMgmtForm(p => ({ ...p, [f.key]: e.target.value }))}
-                              style={{ width: "100%", padding: "9px 11px", border: "1px solid #D4C4A0", borderRadius: 6, fontSize: 13, outline: "none", boxSizing: "border-box" }} />
+                            {f.type === "password"
+                              ? <input type={f.type} placeholder={f.placeholder} value={userMgmtForm[f.key]}
+                                  onChange={e => setUserMgmtForm(p => ({ ...p, [f.key]: e.target.value }))}
+                                  style={{ width: "100%", padding: "9px 11px", border: "1px solid #D4C4A0", borderRadius: 6, fontSize: 13, outline: "none", boxSizing: "border-box" }} />
+                              : <AutoGrowField placeholder={f.placeholder} value={userMgmtForm[f.key]}
+                                  onChange={e => setUserMgmtForm(p => ({ ...p, [f.key]: e.target.value }))}
+                                  style={{ width: "100%", padding: "9px 11px", border: "1px solid #D4C4A0", borderRadius: 6, fontSize: 13, outline: "none", boxSizing: "border-box" }} />
+                            }
                           </div>
                         ))}
                         <div>
@@ -19082,9 +19123,14 @@ export default function BricksyTravel() {
                 const inp = (label, key, type = "text", placeholder = "") => (
                   <div style={{ marginBottom: 16 }}>
                     <label style={{ display: "block", fontSize: 11, fontWeight: 700, color: "#5A6A6C", textTransform: "uppercase", letterSpacing: ".06em", marginBottom: 6 }}>{label}</label>
-                    <input type={type} value={profileEdit[key] ?? ""} placeholder={placeholder || label}
-                      onChange={e => setProfileEdit(p => ({ ...p, [key]: e.target.value }))}
-                      style={{ width: "100%", padding: "10px 14px", border: "1.5px solid #E8DCC8", borderRadius: 8, fontSize: 14, outline: "none", background: "#fff", boxSizing: "border-box" }} />
+                    {type === "password"
+                      ? <input type={type} value={profileEdit[key] ?? ""} placeholder={placeholder || label}
+                          onChange={e => setProfileEdit(p => ({ ...p, [key]: e.target.value }))}
+                          style={{ width: "100%", padding: "10px 14px", border: "1.5px solid #E8DCC8", borderRadius: 8, fontSize: 14, outline: "none", background: "#fff", boxSizing: "border-box" }} />
+                      : <AutoGrowField value={profileEdit[key] ?? ""} placeholder={placeholder || label}
+                          onChange={e => setProfileEdit(p => ({ ...p, [key]: e.target.value }))}
+                          style={{ width: "100%", padding: "10px 14px", border: "1.5px solid #E8DCC8", borderRadius: 8, fontSize: 14, outline: "none", background: "#fff", boxSizing: "border-box" }} />
+                    }
                   </div>
                 );
 
