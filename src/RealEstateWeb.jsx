@@ -1088,6 +1088,8 @@ const DEFAULT_DATA = {
   landscapeCategories: [],
   rumahSubsidiPaket: [],
   pembangunanKostPaket: [],
+  pembangunanCafePaket: [],
+  pembangunanRukoPaket: [],
   temaData: [],
   homeServices: [],
   aboutStats: [],
@@ -9557,6 +9559,8 @@ const PAGE_TO_PATH = {
   aluminium: "/aluminium",
   landscape: "/landscape-taman",
   kost: "/pembangunan-kost",
+  cafe: "/pembangunan-cafe",
+  ruko: "/pembangunan-ruko",
   /* Sub-halaman Interior */
   "interior/kamar-tidur":    "/interior/kamar-tidur",
   "interior/kamar-mandi":    "/interior/kamar-mandi",
@@ -9600,6 +9604,8 @@ const ADMIN_TAB_TO_SLUG = {
   paket_landscape: "landscape",
   paket_rumahsubsidi: "rumah-subsidi",
   paket_kost: "pembangunan-kost",
+  paket_cafe: "pembangunan-cafe",
+  paket_ruko: "pembangunan-ruko",
   set_temarumah: "tema-rumah",
   reviews: "reviews",
   users: "users",
@@ -10605,6 +10611,9 @@ function TemaPhotoSlideshow({ slug, nama, cmsData, duration = 3500, fallbackImg 
   /* Gunakan foto dari CMS override jika ada, fallback ke hardcoded TEMA_PHOTOS */
   const cmsPhotos = cmsData?.temaPhotosOverride?.[slug];
   let photosRaw = (cmsPhotos && cmsPhotos.length > 0) ? cmsPhotos : (TEMA_PHOTOS[slug] || []);
+  /* Buang slot foto yang URL-nya kosong/blank (data lama yang mungkin kadung tersimpan) —
+     supaya slide manapun (termasuk slide pertama) tidak pernah tampil kotak kosong ke pengunjung. */
+  photosRaw = photosRaw.filter(p => p && p.img && p.img.trim());
   /* FIX: kalau slug dari data CMS tidak cocok/kosong (mis. field slug hilang saat diedit admin),
      coba cari ulang lewat nama tema supaya foto tetap ketemu (jangan sampai hilang di Home
      padahal masih ada di halaman detail Tema Rumah). */
@@ -10686,7 +10695,9 @@ function TemaPhotoSlideshow({ slug, nama, cmsData, duration = 3500, fallbackImg 
   };
 
   if (photos.length === 0) return (
-    <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", background: "#E8DCC8", fontSize: "2.5rem" }}></div>
+    <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", background: "#E8DCC8" }}>
+      <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#A89070" strokeWidth="1.5"><path d="M3 10.5L12 3l9 7.5" strokeLinecap="round" strokeLinejoin="round"/><path d="M5 9.5V20a1 1 0 001 1h12a1 1 0 001-1V9.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+    </div>
   );
 
   const cur = photos[idx];
@@ -10703,7 +10714,9 @@ function TemaPhotoSlideshow({ slug, nama, cmsData, duration = 3500, fallbackImg 
     >
       {/* Image — tanpa key, jadi browser cuma ganti src elemen yang sama (tidak ada blank/kedip) */}
       {imgBroken ? (
-        <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", background: "#E8DCC8", fontSize: "2.5rem" }}></div>
+        <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", background: "#E8DCC8" }}>
+          <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#A89070" strokeWidth="1.5"><path d="M3 10.5L12 3l9 7.5" strokeLinecap="round" strokeLinejoin="round"/><path d="M5 9.5V20a1 1 0 001 1h12a1 1 0 001-1V9.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+        </div>
       ) : (
         <img src={cur.img} alt={publicCaption(cur.label) || nama || "Foto tema rumah"}
           draggable={false}
@@ -12689,6 +12702,682 @@ function PembangunanKostPage({ onWaOpen, paketData }) {
           <div style={{ fontSize: "0.7rem", letterSpacing: ".14em", textTransform: "uppercase", color: "#C9AA71", fontWeight: 700, marginBottom: 12 }}>Konsultasi Gratis</div>
           <h3 style={{ fontFamily: "'Playfair Display',serif", fontSize: "clamp(1.25rem,3vw,1.75rem)", fontWeight: 900, margin: "0 0 12px" }}>Wujudkan Kost Impian Anda</h3>
           <p style={{ color: "rgba(255,255,255,.75)", fontSize: "0.9rem", margin: "0 0 28px", lineHeight: 1.7 }}>Tim kami siap survei lahan, menghitung RAB, dan membangun kost Anda dari awal hingga siap disewakan.</p>
+          <button onClick={() => onWaOpen && onWaOpen({ key: "konsultasi", vars: {} })}
+            style={{ background: "#C9AA71", color: "#2E3D3F", border: "none", borderRadius: 10, padding: "15px 36px", fontSize: "0.95rem", fontWeight: 800, cursor: "pointer", letterSpacing: ".05em" }}>
+            Hubungi Tim Pembangunan Kami
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   PROGRAM PEMBANGUNAN CAFE — Magazine Mixing Grid
+   Struktur & komponen identik dengan section Pembangunan Kost di atas.
+═══════════════════════════════════════════════════════════════════ */
+
+/* ── Data Paket Pembangunan Cafe ── */
+const CAFE_PAKET_DATA = [
+  {
+    id: "cafe-sederhana",
+    icon: "",
+    title: "Pembangunan Cafe Sederhana",
+    desc: "Bangun cafe baru dengan konsep simpel dan efisien — cocok untuk pemula bisnis kuliner, struktur ringan, cepat selesai, dan hemat biaya tanpa mengorbankan kenyamanan pengunjung.",
+    startFrom: 55000000,
+    satuan: "unit",
+    slideDir: "right",
+    includes: [
+      { icon: "", item: "Survei lahan & konsultasi konsep gratis" },
+      { icon: "", item: "Desain layout kasir, dapur & area duduk" },
+      { icon: "", item: "Struktur rangka baja ringan / kayu" },
+      { icon: "", item: "Dinding partisi & jendela kaca depan" },
+      { icon: "", item: "Instalasi listrik & titik stop kontak" },
+      { icon: "", item: "Lantai keramik / vinyl anti licin" },
+      { icon: "", item: "Finishing cat interior & eksterior" },
+      { icon: "", item: "Garansi struktur 6 bulan" },
+    ],
+    slides: [
+      { img: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&q=80", tema: "Cafe Sederhana Baru", desc: "Bangunan cafe kecil dengan konsep simpel, nyaman untuk nongkrong santai." },
+      { img: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800&q=80", tema: "Area Kasir & Dapur", desc: "Tata letak kasir dan dapur yang efisien untuk operasional harian." },
+      { img: "https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=800&q=80", tema: "Ruang Duduk Utama", desc: "Area duduk utama dengan pencahayaan alami dari jendela kaca depan." },
+      { img: "https://images.unsplash.com/photo-1507652313519-d4e9174996dd?w=800&q=80", tema: "Fasad Depan Cafe", desc: "Tampilan fasad depan yang ramah dan mengundang pengunjung." },
+    ]
+  },
+  {
+    id: "cafe-2-lantai",
+    icon: "",
+    title: "Pembangunan Cafe 2 Lantai",
+    desc: "Maksimalkan kapasitas pengunjung dengan cafe 2 lantai — struktur beton bertulang, tangga permanen, dan ruang tambahan di lantai atas untuk area VIP atau meeting.",
+    startFrom: 120000000,
+    satuan: "unit",
+    slideDir: "up",
+    includes: [
+      { icon: "", item: "Survei lahan & perhitungan struktur 2 lantai" },
+      { icon: "", item: "Pondasi & kolom beton bertulang" },
+      { icon: "", item: "Tangga permanen & railing pengaman" },
+      { icon: "", item: "Dak beton / plat lantai 2" },
+      { icon: "", item: "Instalasi listrik & air 2 lantai" },
+      { icon: "", item: "Toilet pengunjung per lantai" },
+      { icon: "", item: "Finishing plester, aci & cat eksterior" },
+      { icon: "", item: "Garansi struktur 12 bulan" },
+    ],
+    slides: [
+      { img: "https://images.unsplash.com/photo-1523301343968-6a6ebf63c672?w=800&q=80", tema: "Cafe 2 Lantai", desc: "Bangunan cafe 2 lantai dengan kapasitas pengunjung lebih banyak." },
+      { img: "https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=800&q=80", tema: "Struktur Beton Bertulang", desc: "Pengerjaan kolom dan dak beton sebagai struktur utama lantai dua." },
+      { img: "https://images.unsplash.com/photo-1523217162808-bba68bde2d61?w=800&q=80", tema: "Area Lantai Atas", desc: "Ruang tambahan di lantai atas untuk area VIP atau meeting santai." },
+      { img: "https://images.unsplash.com/photo-1503174971373-b1f69850bded?w=800&q=80", tema: "Tangga & Koridor", desc: "Tangga permanen dengan railing aman menghubungkan lantai 1 dan 2." },
+    ]
+  },
+  {
+    id: "cafe-interior-estetik",
+    icon: "",
+    title: "Interior Cafe Estetik & Instagramable",
+    desc: "Ciptakan cafe dengan interior estetik yang bikin pengunjung betah berlama-lama dan mau foto-foto — furnitur custom, pencahayaan hangat, dan sudut foto yang menarik.",
+    startFrom: 45000000,
+    satuan: "paket",
+    slideDir: "left",
+    includes: [
+      { icon: "", item: "Konsultasi konsep & moodboard interior" },
+      { icon: "", item: "Furnitur meja & kursi custom" },
+      { icon: "", item: "Instalasi lampu gantung & pencahayaan hangat" },
+      { icon: "", item: "Dinding aksen (bata ekspos / wallpaper tema)" },
+      { icon: "", item: "Sudut foto instagramable (photo corner)" },
+      { icon: "", item: "Tanaman hias & elemen dekorasi" },
+      { icon: "", item: "Signage & branding interior" },
+      { icon: "", item: "Garansi pemasangan 30 hari" },
+    ],
+    slides: [
+      { img: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=800&q=80", tema: "Interior Estetik", desc: "Suasana interior cafe yang hangat dan nyaman untuk bersantai." },
+      { img: "https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=800&q=80", tema: "Sudut Foto Instagramable", desc: "Photo corner yang dirancang khusus untuk konten media sosial pengunjung." },
+      { img: "https://images.unsplash.com/photo-1521017432531-fbd92d768814?w=800&q=80", tema: "Pencahayaan Hangat", desc: "Lampu gantung dan pencahayaan yang menciptakan suasana cozy." },
+      { img: "https://images.unsplash.com/photo-1453614512568-c4024d13c247?w=800&q=80", tema: "Furnitur Custom", desc: "Meja dan kursi custom yang selaras dengan konsep cafe." },
+    ]
+  },
+  {
+    id: "cafe-outdoor-seating",
+    icon: "",
+    title: "Outdoor Seating & Taman Cafe",
+    desc: "Tambahkan area duduk outdoor yang asri — gazebo, pergola, dan taman kecil yang membuat pengunjung nyaman menikmati suasana sambil ngopi di udara terbuka.",
+    startFrom: 28000000,
+    satuan: "paket",
+    slideDir: "down",
+    includes: [
+      { icon: "", item: "Desain layout area outdoor & taman" },
+      { icon: "", item: "Gazebo / pergola kayu atau baja ringan" },
+      { icon: "", item: "Meja & kursi outdoor tahan cuaca" },
+      { icon: "", item: "Penataan tanaman & taman kecil" },
+      { icon: "", item: "Paving block / decking area duduk" },
+      { icon: "", item: "Lampu taman & pencahayaan malam" },
+      { icon: "", item: "Payung / kanopi peneduh tambahan" },
+      { icon: "", item: "Garansi pengerjaan 3 bulan" },
+    ],
+    slides: [
+      { img: "https://images.unsplash.com/photo-1447933601403-0c6688de566e?w=800&q=80", tema: "Area Outdoor Cafe", desc: "Area duduk outdoor yang asri dengan sentuhan taman hijau." },
+      { img: "https://images.unsplash.com/photo-1600607687644-aac4c3eac7f4?w=800&q=80", tema: "Gazebo & Pergola", desc: "Gazebo kayu yang menjadi tempat favorit pengunjung menikmati suasana." },
+      { img: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&q=80", tema: "Penataan Taman", desc: "Taman kecil yang menyegarkan di sekitar area duduk outdoor." },
+      { img: "https://images.unsplash.com/photo-1600210492486-715a3316d0dc?w=800&q=80", tema: "Suasana Malam Hari", desc: "Pencahayaan lampu taman yang menciptakan suasana hangat di malam hari." },
+    ]
+  },
+  {
+    id: "cafe-renovasi-upgrade",
+    icon: "",
+    title: "Renovasi & Upgrade Cafe Lama",
+    desc: "Segarkan tampilan cafe lama Anda agar lebih kompetitif — perbaikan struktur, pengecatan ulang, upgrade interior, hingga penataan ulang layout agar lebih efisien.",
+    startFrom: 25000000,
+    satuan: "paket",
+    slideDir: "left",
+    includes: [
+      { icon: "", item: "Survei kondisi bangunan & rekomendasi upgrade" },
+      { icon: "", item: "Perbaikan dinding, plafon & atap bocor" },
+      { icon: "", item: "Pengecatan ulang interior & eksterior" },
+      { icon: "", item: "Upgrade furnitur & tata letak baru" },
+      { icon: "", item: "Perbaikan instalasi listrik lama" },
+      { icon: "", item: "Penataan ulang pencahayaan" },
+      { icon: "", item: "Upgrade signage & branding depan" },
+      { icon: "", item: "Garansi pengerjaan 3 bulan" },
+    ],
+    slides: [
+      { img: "https://images.unsplash.com/photo-1493606371202-6346f1ca5733?w=800&q=80", tema: "Sebelum Renovasi", desc: "Kondisi cafe lama sebelum proses renovasi dan upgrade dimulai." },
+      { img: "https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=800&q=80", tema: "Proses Renovasi", desc: "Tim tukang mengerjakan perbaikan struktur dan finishing cafe lama." },
+      { img: "https://images.unsplash.com/photo-1562259949-e8e7689d7828?w=800&q=80", tema: "Cat & Fasad Baru", desc: "Tampilan fasad cafe yang lebih segar setelah pengecatan ulang." },
+      { img: "https://images.unsplash.com/photo-1445116572660-236099ec97a0?w=800&q=80", tema: "Cafe Siap Beroperasi", desc: "Cafe hasil upgrade yang lebih menarik dan siap menerima pengunjung." },
+    ]
+  },
+  {
+    id: "cafe-total-turnkey",
+    icon: "",
+    title: "Pembangunan Cafe Total (Turnkey)",
+    desc: "Solusi lengkap dari nol hingga siap buka — desain, RAB, pembangunan struktur, interior, furnitur, hingga signage dikerjakan satu tim tanpa Anda perlu repot.",
+    startFrom: 250000000,
+    satuan: "unit",
+    slideDir: "down",
+    includes: [
+      { icon: "", item: "Survei lahan, desain & RAB lengkap gratis" },
+      { icon: "", item: "Pembangunan struktur dari pondasi hingga atap" },
+      { icon: "", item: "Instalasi listrik, air & dapur lengkap" },
+      { icon: "", item: "Interior & furnitur siap operasional" },
+      { icon: "", item: "Area outdoor & signage depan" },
+      { icon: "", item: "Toilet pengunjung & area staff" },
+      { icon: "", item: "Pendampingan hingga hari pembukaan" },
+      { icon: "", item: "Garansi bangunan 12 bulan penuh" },
+    ],
+    slides: [
+      { img: "https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=800&q=80", tema: "Cafe Baru Siap Buka", desc: "Hasil akhir bangunan cafe yang rapi, modern, dan siap dioperasikan." },
+      { img: "https://images.unsplash.com/photo-1600566752355-35792bedcfea?w=800&q=80", tema: "Fasad Bangunan Utuh", desc: "Tampak depan bangunan cafe turnkey dengan desain fasad yang menarik." },
+      { img: "https://images.unsplash.com/photo-1521017432531-fbd92d768814?w=800&q=80", tema: "Interior Lengkap", desc: "Interior cafe yang sudah lengkap dengan furnitur dan pencahayaan." },
+      { img: "https://images.unsplash.com/photo-1447933601403-0c6688de566e?w=800&q=80", tema: "Area Outdoor & Signage", desc: "Area outdoor dan signage depan yang siap menyambut pengunjung." },
+      { img: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=800&q=80", tema: "Dapur & Kasir Siap Operasi", desc: "Area dapur dan kasir yang tertata rapi dan siap beroperasi." },
+    ]
+  },
+];
+
+/* ── Halaman Program Pembangunan Cafe (Magazine Mixing Grid) ──
+   Reuse RsMiniSlide & RsInfoCard — struktur & style class (ls-*) identik. */
+function PembangunanCafePage({ onWaOpen, paketData }) {
+  useEffect(() => { window.scrollTo(0, 0); }, []);
+  const fmt = (n) => "Rp " + n.toLocaleString("id-ID") + ",-";
+  const paket_ = ((paketData && paketData.length) ? paketData : CAFE_PAKET_DATA).filter(p => !p.hidden);
+
+  const rows = [];
+  let pos = 0;
+  let layoutIdx = 0;
+  while (pos < paket_.length) {
+    const cols = RS_MAG_LAYOUT[layoutIdx % RS_MAG_LAYOUT.length];
+    const slice = paket_.slice(pos, pos + cols);
+    if (slice.length > 0) rows.push({ cols: slice.length, items: slice });
+    pos += cols;
+    layoutIdx++;
+  }
+  const heightMap = { 1: 480, 2: 400, 3: 340 };
+
+  return (
+    <div className="fade-in" style={{ background: "#FAF7F0", minHeight: "100vh" }}>
+      <style>{`
+        @keyframes rsSlideInRight  { from { transform: translateX(-100%); } to { transform: translateX(0); } }
+        @keyframes rsSlideOutRight { from { transform: translateX(0); } to { transform: translateX(100%); } }
+        @keyframes rsSlideInUp     { from { transform: translateY(100%); } to { transform: translateY(0); } }
+        @keyframes rsSlideOutUp    { from { transform: translateY(0); } to { transform: translateY(-100%); } }
+        @keyframes rsSlideInLeft   { from { transform: translateX(100%); } to { transform: translateX(0); } }
+        @keyframes rsSlideOutLeft  { from { transform: translateX(0); } to { transform: translateX(-100%); } }
+        @keyframes rsSlideInDown   { from { transform: translateY(-100%); } to { transform: translateY(0); } }
+        @keyframes rsSlideOutDown  { from { transform: translateY(0); } to { transform: translateY(100%); } }
+        .rsSlideInRight,.rsSlideOutRight,.rsSlideInUp,.rsSlideOutUp,.rsSlideInLeft,.rsSlideOutLeft,.rsSlideInDown,.rsSlideOutDown {
+          animation-duration: .4s; animation-timing-function: ease; animation-fill-mode: forwards; z-index: 1;
+        }
+        @keyframes lsDropIn { from { opacity:0; transform:translateY(-8px); } to { opacity:1; transform:translateY(0); } }
+
+        .ls-wrap { position:relative; display:flex; flex-direction:column; height:100%; }
+        .ls-img-box { position:relative; overflow:hidden; border-radius:14px; margin-bottom:12px; box-shadow:0 6px 16px rgba(20,30,25,.12); transition:box-shadow .35s ease, transform .35s ease; }
+        .ls-img-box:hover { box-shadow:0 18px 36px rgba(20,30,25,.24); transform:translateY(-5px); }
+        .ls-img-box:hover .ls-mag-overlay-btn { opacity:1 !important; }
+        .ls-img-box img { transition:transform .6s ease; }
+        .ls-img-box:hover img { transform:scale(1.09); }
+
+        .ls-cat-badge { position:absolute; top:14px; left:14px; right:100px; z-index:4; }
+        .ls-cat-badge > div { max-width: 100%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+        .ls-price-pill { position:absolute; top:14px; right:14px; z-index:4; background:rgba(201,170,113,.93); backdrop-filter:blur(6px); color:#1a2a1a; font-size:.62rem; font-weight:900; letter-spacing:.06em; padding:5px 12px; border-radius:20px; white-space:nowrap; max-width:120px; overflow:hidden; text-overflow:ellipsis; }
+        .ls-mag-overlay-btn { opacity:0; transition:opacity .3s; position:absolute; bottom:16px; right:14px; z-index:4; }
+
+        .ls-info-card { background:#fff; padding:20px 18px 22px; display:flex; flex-direction:column; flex:1; }
+        .ls-card-title { font-family:'Playfair Display',serif; font-size:clamp(.88rem,1.8vw,1.05rem); font-weight:900; color:#2E3D3F; margin:0 0 8px; line-height:1.3; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+        .ls-desc { font-size:.825rem; color:#5A6A6C; line-height:1.7; margin:0 0 14px; white-space:pre-line; }
+
+        .ls-cta-row { display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap; margin-bottom:12px; margin-top:auto; padding-top:14px; }
+        .ls-price-badge { background:#f0fdf4; border:1.5px solid #86efac; border-radius:8px; padding:6px 14px; flex-shrink:0; }
+        .ls-price-badge span.lb { display:block; font-size:.56rem; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:#166534; }
+        .ls-price-badge span.vl { display:block; font-size:.8rem; font-weight:900; color:#14532d; white-space:nowrap; }
+        .ls-cta-btn { background:#2E3D3F; color:#fff; border:none; border-radius:8px; padding:9px 16px; font-size:.73rem; font-weight:800; cursor:pointer; white-space:nowrap; transition:background .2s; flex:1; min-width:130px; text-align:center; }
+        .ls-cta-btn:hover { background:#8B6914; }
+
+        .ls-toggle-btn { width:100%; display:flex; align-items:center; justify-content:center; gap:8px; background:#f4faf6; border:1.5px solid #bbf7d0; border-radius:8px; padding:9px 14px; font-size:.75rem; font-weight:800; color:#166534; cursor:pointer; transition:all .2s; }
+        .ls-toggle-btn:hover { background:#dcfce7; border-color:#4ade80; }
+        .ls-toggle-btn span:first-child { font-size:.65rem; }
+
+        .ls-includes-box { margin-top:12px; border-top:2px dashed #bbf7d0; padding-top:14px; animation:lsDropIn .22s ease; }
+        .ls-includes-title { font-size:.6rem; font-weight:900; letter-spacing:.14em; text-transform:uppercase; color:#2d6a4f; margin:0 0 10px; }
+        .ls-includes-grid { display:grid; grid-template-columns:1fr 1fr; gap:6px 12px; }
+        .ls-include-item { display:flex; align-items:flex-start; gap:7px; }
+        .ls-include-item span.ic { font-size:.82rem; flex-shrink:0; margin-top:1px; }
+        .ls-include-item span.tx { font-size:.73rem; color:#2E3D3F; line-height:1.45; }
+
+        @media (max-width: 767px) {
+          .ls-desktop-grid { display:none !important; }
+          .ls-mobile-list { display:flex !important; flex-direction:column; gap:8px; padding:8px 0 0; }
+          .ls-mobile-item { width:100%; }
+          .ls-mobile-slide { height:260px !important; }
+          .ls-includes-grid { grid-template-columns:1fr; }
+          .ls-cta-row { flex-direction:column; align-items:stretch; }
+          .ls-cta-btn { text-align:center; }
+          .ls-price-pill { font-size:.56rem; padding:4px 9px; }
+        }
+        @media (min-width: 768px) {
+          .ls-mobile-list { display:none !important; }
+          .ls-desktop-grid { display:flex !important; }
+        }
+      `}</style>
+
+      {/* HERO */}
+      <div style={{ background: "linear-gradient(135deg,#2E3D3F 0%,#3D5254 60%,#8B6914 100%)", padding: "64px 5% 56px", textAlign: "center", position: "relative", overflow: "hidden" }}>
+        <div style={{ position: "absolute", inset: 0, opacity: 0.07, backgroundImage: "radial-gradient(circle,#fff 1px,transparent 1px)", backgroundSize: "36px 36px", pointerEvents: "none" }} />
+        <div style={{ position: "relative", zIndex: 1, maxWidth: 680, margin: "0 auto" }}>
+          <div style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "rgba(255,255,255,.1)", borderRadius: 20, padding: "5px 16px", marginBottom: 18 }}>
+            <span style={{ fontSize: "0.65rem", fontWeight: 800, letterSpacing: ".16em", textTransform: "uppercase", color: "#C9AA71" }}>VASTURA GROUP · PROGRAM PEMBANGUNAN</span>
+          </div>
+          <h1 style={{ fontFamily: "'Playfair Display',serif", fontSize: "clamp(1.75rem,5vw,2.75rem)", fontWeight: 900, color: "#fff", margin: "0 0 14px", lineHeight: 1.2 }}>Pembangunan Cafe</h1>
+          <p style={{ fontSize: "clamp(.875rem,2vw,1rem)", color: "rgba(255,255,255,.75)", lineHeight: 1.8, margin: "0 0 26px" }}>
+            Wujudkan bisnis cafe yang menarik pengunjung — dari konsep sederhana, 2 lantai, interior estetik, hingga outdoor seating, dikerjakan tim berpengalaman dengan harga bersaing.
+          </p>
+          <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
+            {paket_.map(p => (
+              <span key={p.id} style={{ background: "rgba(255,255,255,.1)", color: "rgba(255,255,255,.85)", fontSize: "0.7rem", fontWeight: 700, padding: "5px 14px", borderRadius: 20, border: "1px solid rgba(255,255,255,.15)" }}>
+                {p.icon} {p.title.replace("Pembangunan ", "")}
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* DESKTOP: Magazine Mixing Grid */}
+      <div className="ls-desktop-grid" style={{ flexDirection: "column", gap: 8, padding: "8px 0 0" }}>
+        {rows.map((row, ri) => {
+          const h = heightMap[row.cols] || 360;
+          return (
+            <div key={ri} style={{ display: "grid", gridTemplateColumns: `repeat(${row.cols}, 1fr)`, gap: 8, alignItems: "stretch" }}>
+              {row.items.map((paket) => (
+                <div key={paket.id} className="ls-wrap">
+                  <div className="ls-img-box" style={{ height: h, position: "relative", overflow: "hidden" }}>
+                    <RsMiniSlide slides={paket.slides} slideDir={paket.slideDir} height={`${h}px`} />
+
+                    <div className="ls-cat-badge">
+                      <div style={{ background: "rgba(13,31,24,.78)", backdropFilter: "blur(8px)", color: "#C9AA71", fontSize: "0.62rem", fontWeight: 800, letterSpacing: ".1em", textTransform: "uppercase", padding: "5px 13px", borderRadius: 20, display: "flex", alignItems: "center", gap: 6 }}>
+                        {paket.icon && <span>{paket.icon}</span>}<span>{paket.title}</span>
+                      </div>
+                    </div>
+
+                    <div className="ls-price-pill">Mulai {fmt(paket.startFrom)} / {paket.satuan}</div>
+
+                    <div className="ls-mag-overlay-btn">
+                      <button onClick={() => onWaOpen && onWaOpen({ key: "layanan", vars: { judul_layanan: paket.title } })}
+                        style={{ background: "#C9AA71", color: "#1a2a1a", border: "none", borderRadius: 8, padding: "9px 18px", fontSize: "0.75rem", fontWeight: 800, cursor: "pointer", whiteSpace: "nowrap", boxShadow: "0 4px 14px rgba(0,0,0,.3)" }}>
+                        Tanya Harga & Detail
+                      </button>
+                    </div>
+                  </div>
+
+                  <RsInfoCard paket={paket} fmt={fmt} onWaOpen={onWaOpen} />
+                </div>
+              ))}
+            </div>
+          );
+        })}
+      </div>
+
+      {/* MOBILE: 1 Kolom Penuh */}
+      <div className="ls-mobile-list">
+        {paket_.map((paket) => (
+          <div key={paket.id} className="ls-mobile-item ls-wrap">
+            <div className="ls-img-box ls-mobile-slide" style={{ position: "relative", overflow: "hidden", height: 260 }}>
+              <RsMiniSlide slides={paket.slides} slideDir={paket.slideDir} height="260px" />
+
+              <div className="ls-cat-badge">
+                <div style={{ background: "rgba(13,31,24,.82)", backdropFilter: "blur(8px)", color: "#C9AA71", fontSize: "0.6rem", fontWeight: 800, letterSpacing: ".1em", textTransform: "uppercase", padding: "4px 11px", borderRadius: 20, display: "flex", alignItems: "center", gap: 5 }}>
+                  {paket.icon && <span>{paket.icon}</span>}<span>{paket.title}</span>
+                </div>
+              </div>
+
+              <div className="ls-price-pill">Mulai {fmt(paket.startFrom)} / {paket.satuan}</div>
+            </div>
+
+            <RsInfoCard paket={paket} fmt={fmt} onWaOpen={onWaOpen} />
+          </div>
+        ))}
+      </div>
+
+      {/* CTA BOTTOM */}
+      <div style={{ padding: "60px 5%", textAlign: "center", background: "#FAF7F0" }}>
+        <div style={{ maxWidth: 600, margin: "0 auto", background: "linear-gradient(135deg,#2E3D3F 0%,#8B6914 100%)", borderRadius: 20, padding: "48px 32px", color: "#fff" }}>
+          <div style={{ fontSize: "0.7rem", letterSpacing: ".14em", textTransform: "uppercase", color: "#C9AA71", fontWeight: 700, marginBottom: 12 }}>Konsultasi Gratis</div>
+          <h3 style={{ fontFamily: "'Playfair Display',serif", fontSize: "clamp(1.25rem,3vw,1.75rem)", fontWeight: 900, margin: "0 0 12px" }}>Wujudkan Cafe Impian Anda</h3>
+          <p style={{ color: "rgba(255,255,255,.75)", fontSize: "0.9rem", margin: "0 0 28px", lineHeight: 1.7 }}>Tim kami siap survei lahan, menghitung RAB, dan membangun cafe Anda dari awal hingga siap buka.</p>
+          <button onClick={() => onWaOpen && onWaOpen({ key: "konsultasi", vars: {} })}
+            style={{ background: "#C9AA71", color: "#2E3D3F", border: "none", borderRadius: 10, padding: "15px 36px", fontSize: "0.95rem", fontWeight: 800, cursor: "pointer", letterSpacing: ".05em" }}>
+            Hubungi Tim Pembangunan Kami
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   PROGRAM PEMBANGUNAN RUKO — Magazine Mixing Grid
+   Struktur & komponen identik dengan section Pembangunan Kost di atas.
+═══════════════════════════════════════════════════════════════════ */
+
+/* ── Data Paket Pembangunan Ruko ── */
+const RUKO_PAKET_DATA = [
+  {
+    id: "ruko-2-lantai",
+    icon: "",
+    title: "Pembangunan Ruko 2 Lantai",
+    desc: "Bangun ruko baru 2 lantai dari nol — lantai bawah untuk area usaha/toko, lantai atas untuk kantor atau hunian, struktur kokoh dan tahan lama.",
+    startFrom: 180000000,
+    satuan: "unit",
+    slideDir: "right",
+    includes: [
+      { icon: "", item: "Survei lahan & konsultasi denah gratis" },
+      { icon: "", item: "Desain layout area usaha & lantai atas" },
+      { icon: "", item: "Pondasi & struktur beton bertulang" },
+      { icon: "", item: "Tangga permanen & railing pengaman" },
+      { icon: "", item: "Rolling door / pintu depan usaha" },
+      { icon: "", item: "Instalasi listrik & air 2 lantai" },
+      { icon: "", item: "Finishing plester, aci & cat eksterior" },
+      { icon: "", item: "Garansi struktur 12 bulan" },
+    ],
+    slides: [
+      { img: "https://images.unsplash.com/photo-1497366811353-6870744d04b2?w=800&q=80", tema: "Ruko 2 Lantai Baru", desc: "Bangunan ruko 2 lantai dengan fasad modern, siap untuk usaha & hunian." },
+      { img: "https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=800&q=80", tema: "Struktur Beton Bertulang", desc: "Pengerjaan kolom dan dak beton sebagai struktur utama lantai dua." },
+      { img: "https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&q=80", tema: "Area Usaha Lantai 1", desc: "Lantai dasar yang luas dan terbuka, siap dijadikan area toko atau usaha." },
+      { img: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=800&q=80", tema: "Fasad Ruko Modern", desc: "Tampilan fasad depan ruko yang profesional dan menarik perhatian." },
+    ]
+  },
+  {
+    id: "ruko-3-lantai",
+    icon: "",
+    title: "Pembangunan Ruko 3 Lantai",
+    desc: "Maksimalkan fungsi lahan dengan ruko 3 lantai — kombinasi area usaha, kantor, dan hunian dalam satu bangunan, struktur beton bertulang yang kokoh.",
+    startFrom: 320000000,
+    satuan: "unit",
+    slideDir: "up",
+    includes: [
+      { icon: "", item: "Survei lahan & perhitungan struktur 3 lantai" },
+      { icon: "", item: "Pondasi tiang pancang / cakar ayam" },
+      { icon: "", item: "Kolom & balok beton bertulang seluruh lantai" },
+      { icon: "", item: "Tangga permanen 3 lantai & railing" },
+      { icon: "", item: "Instalasi listrik, air & sanitasi 3 lantai" },
+      { icon: "", item: "Toilet di setiap lantai" },
+      { icon: "", item: "Finishing plester, aci & cat eksterior" },
+      { icon: "", item: "Garansi struktur 12 bulan" },
+    ],
+    slides: [
+      { img: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800&q=80", tema: "Ruko 3 Lantai", desc: "Bangunan ruko 3 lantai untuk kebutuhan usaha, kantor, dan hunian sekaligus." },
+      { img: "https://images.unsplash.com/photo-1503387837-b154d5074bd2?w=800&q=80", tema: "Struktur Bertingkat", desc: "Struktur kolom dan balok beton yang kokoh menopang 3 lantai." },
+      { img: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&q=80", tema: "Proses Pembangunan", desc: "Tahapan pembangunan struktur ruko bertingkat dari dasar hingga atap." },
+      { img: "https://images.unsplash.com/photo-1449844908441-8829872d2607?w=800&q=80", tema: "Fasad Bangunan", desc: "Desain fasad ruko 3 lantai yang rapi dan profesional." },
+    ]
+  },
+  {
+    id: "ruko-gudang-belakang",
+    icon: "",
+    title: "Ruko dengan Gudang Belakang",
+    desc: "Tambahkan area gudang di bagian belakang ruko — solusi praktis untuk menyimpan stok barang dagangan tanpa mengganggu area usaha di depan.",
+    startFrom: 45000000,
+    satuan: "paket",
+    slideDir: "left",
+    includes: [
+      { icon: "", item: "Survei lahan & desain layout gudang" },
+      { icon: "", item: "Struktur rangka baja ringan / beton" },
+      { icon: "", item: "Rak penyimpanan barang built-in" },
+      { icon: "", item: "Akses pintu penghubung ke area usaha" },
+      { icon: "", item: "Ventilasi udara & pencahayaan gudang" },
+      { icon: "", item: "Lantai cor / keramik anti licin" },
+      { icon: "", item: "Pintu belakang untuk akses bongkar muat" },
+      { icon: "", item: "Garansi pengerjaan 3 bulan" },
+    ],
+    slides: [
+      { img: "https://images.unsplash.com/photo-1553413077-190dd305871c?w=800&q=80", tema: "Gudang Belakang", desc: "Area gudang yang tertata rapi untuk penyimpanan stok barang dagangan." },
+      { img: "https://images.unsplash.com/photo-1553413077-190dd305871c?w=800&q=80", tema: "Rak Penyimpanan", desc: "Rak built-in yang memaksimalkan kapasitas penyimpanan barang." },
+      { img: "https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=800&q=80", tema: "Akses Bongkar Muat", desc: "Pintu belakang yang memudahkan proses bongkar muat barang." },
+      { img: "https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&q=80", tema: "Konektivitas ke Area Usaha", desc: "Akses pintu penghubung yang praktis antara gudang dan area usaha depan." },
+    ]
+  },
+  {
+    id: "ruko-fasad-signage",
+    icon: "",
+    title: "Fasad & Signage Ruko",
+    desc: "Perkuat identitas usaha dengan fasad depan yang menarik dan signage yang mencolok — meningkatkan visibilitas ruko Anda dari jalan raya.",
+    startFrom: 18000000,
+    satuan: "paket",
+    slideDir: "down",
+    includes: [
+      { icon: "", item: "Konsultasi desain fasad & branding" },
+      { icon: "", item: "Cladding / ACM panel fasad depan" },
+      { icon: "", item: "Signage huruf timbul / neon box" },
+      { icon: "", item: "Kanopi depan pelindung pejalan kaki" },
+      { icon: "", item: "Lampu sorot fasad malam hari" },
+      { icon: "", item: "Pengecatan ulang fasad sesuai brand" },
+      { icon: "", item: "Pemasangan kaca etalase depan" },
+      { icon: "", item: "Garansi pemasangan 30 hari" },
+    ],
+    slides: [
+      { img: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800&q=80", tema: "Fasad Ruko Menarik", desc: "Tampilan fasad depan yang mencolok dan meningkatkan visibilitas usaha." },
+      { img: "https://images.unsplash.com/photo-1580587771525-78b9dba3b914?w=800&q=80", tema: "Signage & Branding", desc: "Signage huruf timbul yang memperkuat identitas brand usaha." },
+      { img: "https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=800&q=80", tema: "Kanopi Depan", desc: "Kanopi pelindung yang menambah kenyamanan pengunjung di depan ruko." },
+      { img: "https://images.unsplash.com/photo-1497366811353-6870744d04b2?w=800&q=80", tema: "Suasana Malam Hari", desc: "Lampu sorot fasad yang membuat ruko tetap menonjol di malam hari." },
+    ]
+  },
+  {
+    id: "ruko-renovasi-upgrade",
+    icon: "",
+    title: "Renovasi & Upgrade Ruko Lama",
+    desc: "Segarkan ruko lama Anda agar lebih kompetitif — perbaikan struktur, pengecatan ulang, upgrade fasad, hingga penataan ulang area usaha.",
+    startFrom: 35000000,
+    satuan: "paket",
+    slideDir: "left",
+    includes: [
+      { icon: "", item: "Survei kondisi bangunan & rekomendasi upgrade" },
+      { icon: "", item: "Perbaikan dinding, plafon & atap bocor" },
+      { icon: "", item: "Pengecatan ulang interior & eksterior" },
+      { icon: "", item: "Upgrade fasad & signage depan" },
+      { icon: "", item: "Perbaikan instalasi listrik lama" },
+      { icon: "", item: "Penataan ulang area usaha" },
+      { icon: "", item: "Perbaikan lantai & keramik" },
+      { icon: "", item: "Garansi pengerjaan 3 bulan" },
+    ],
+    slides: [
+      { img: "https://images.unsplash.com/photo-1493606371202-6346f1ca5733?w=800&q=80", tema: "Sebelum Renovasi", desc: "Kondisi ruko lama sebelum proses renovasi dan upgrade dimulai." },
+      { img: "https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=800&q=80", tema: "Proses Renovasi", desc: "Tim tukang mengerjakan perbaikan struktur dan finishing ruko lama." },
+      { img: "https://images.unsplash.com/photo-1562259949-e8e7689d7828?w=800&q=80", tema: "Fasad Baru", desc: "Tampilan fasad ruko yang lebih segar setelah pengecatan dan upgrade." },
+      { img: "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=800&q=80", tema: "Ruko Siap Beroperasi", desc: "Ruko hasil upgrade yang lebih layak dan siap dipakai kembali untuk usaha." },
+    ]
+  },
+  {
+    id: "ruko-total-turnkey",
+    icon: "",
+    title: "Pembangunan Ruko Total (Turnkey)",
+    desc: "Solusi lengkap dari nol hingga siap pakai — desain, RAB, pembangunan struktur, fasad, interior, hingga signage dikerjakan satu tim tanpa Anda perlu repot.",
+    startFrom: 450000000,
+    satuan: "unit",
+    slideDir: "down",
+    includes: [
+      { icon: "", item: "Survei lahan, desain & RAB lengkap gratis" },
+      { icon: "", item: "Pembangunan struktur dari pondasi hingga atap" },
+      { icon: "", item: "Instalasi listrik, air & sanitasi seluruh lantai" },
+      { icon: "", item: "Fasad & signage depan siap pakai" },
+      { icon: "", item: "Interior dasar area usaha & hunian" },
+      { icon: "", item: "Gudang & area parkir" },
+      { icon: "", item: "Pendampingan hingga serah terima kunci" },
+      { icon: "", item: "Garansi bangunan 12 bulan penuh" },
+    ],
+    slides: [
+      { img: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=800&q=80", tema: "Ruko Baru Siap Pakai", desc: "Hasil akhir bangunan ruko yang rapi, modern, dan siap dioperasikan." },
+      { img: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=800&q=80", tema: "Fasad Bangunan Utuh", desc: "Tampak depan bangunan ruko turnkey dengan desain fasad yang menarik." },
+      { img: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800&q=80", tema: "Signage & Branding", desc: "Signage depan yang siap memperkuat identitas usaha Anda." },
+      { img: "https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&q=80", tema: "Area Usaha Siap Operasi", desc: "Area usaha yang sudah tertata rapi dan siap menerima pelanggan." },
+      { img: "https://images.unsplash.com/photo-1553413077-190dd305871c?w=800&q=80", tema: "Gudang & Parkir", desc: "Area gudang dan parkir yang melengkapi fungsi bangunan ruko." },
+    ]
+  },
+];
+
+/* ── Halaman Program Pembangunan Ruko (Magazine Mixing Grid) ──
+   Reuse RsMiniSlide & RsInfoCard — struktur & style class (ls-*) identik. */
+function PembangunanRukoPage({ onWaOpen, paketData }) {
+  useEffect(() => { window.scrollTo(0, 0); }, []);
+  const fmt = (n) => "Rp " + n.toLocaleString("id-ID") + ",-";
+  const paket_ = ((paketData && paketData.length) ? paketData : RUKO_PAKET_DATA).filter(p => !p.hidden);
+
+  const rows = [];
+  let pos = 0;
+  let layoutIdx = 0;
+  while (pos < paket_.length) {
+    const cols = RS_MAG_LAYOUT[layoutIdx % RS_MAG_LAYOUT.length];
+    const slice = paket_.slice(pos, pos + cols);
+    if (slice.length > 0) rows.push({ cols: slice.length, items: slice });
+    pos += cols;
+    layoutIdx++;
+  }
+  const heightMap = { 1: 480, 2: 400, 3: 340 };
+
+  return (
+    <div className="fade-in" style={{ background: "#FAF7F0", minHeight: "100vh" }}>
+      <style>{`
+        @keyframes rsSlideInRight  { from { transform: translateX(-100%); } to { transform: translateX(0); } }
+        @keyframes rsSlideOutRight { from { transform: translateX(0); } to { transform: translateX(100%); } }
+        @keyframes rsSlideInUp     { from { transform: translateY(100%); } to { transform: translateY(0); } }
+        @keyframes rsSlideOutUp    { from { transform: translateY(0); } to { transform: translateY(-100%); } }
+        @keyframes rsSlideInLeft   { from { transform: translateX(100%); } to { transform: translateX(0); } }
+        @keyframes rsSlideOutLeft  { from { transform: translateX(0); } to { transform: translateX(-100%); } }
+        @keyframes rsSlideInDown   { from { transform: translateY(-100%); } to { transform: translateY(0); } }
+        @keyframes rsSlideOutDown  { from { transform: translateY(0); } to { transform: translateY(100%); } }
+        .rsSlideInRight,.rsSlideOutRight,.rsSlideInUp,.rsSlideOutUp,.rsSlideInLeft,.rsSlideOutLeft,.rsSlideInDown,.rsSlideOutDown {
+          animation-duration: .4s; animation-timing-function: ease; animation-fill-mode: forwards; z-index: 1;
+        }
+        @keyframes lsDropIn { from { opacity:0; transform:translateY(-8px); } to { opacity:1; transform:translateY(0); } }
+
+        .ls-wrap { position:relative; display:flex; flex-direction:column; height:100%; }
+        .ls-img-box { position:relative; overflow:hidden; border-radius:14px; margin-bottom:12px; box-shadow:0 6px 16px rgba(20,30,25,.12); transition:box-shadow .35s ease, transform .35s ease; }
+        .ls-img-box:hover { box-shadow:0 18px 36px rgba(20,30,25,.24); transform:translateY(-5px); }
+        .ls-img-box:hover .ls-mag-overlay-btn { opacity:1 !important; }
+        .ls-img-box img { transition:transform .6s ease; }
+        .ls-img-box:hover img { transform:scale(1.09); }
+
+        .ls-cat-badge { position:absolute; top:14px; left:14px; right:100px; z-index:4; }
+        .ls-cat-badge > div { max-width: 100%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+        .ls-price-pill { position:absolute; top:14px; right:14px; z-index:4; background:rgba(201,170,113,.93); backdrop-filter:blur(6px); color:#1a2a1a; font-size:.62rem; font-weight:900; letter-spacing:.06em; padding:5px 12px; border-radius:20px; white-space:nowrap; max-width:120px; overflow:hidden; text-overflow:ellipsis; }
+        .ls-mag-overlay-btn { opacity:0; transition:opacity .3s; position:absolute; bottom:16px; right:14px; z-index:4; }
+
+        .ls-info-card { background:#fff; padding:20px 18px 22px; display:flex; flex-direction:column; flex:1; }
+        .ls-card-title { font-family:'Playfair Display',serif; font-size:clamp(.88rem,1.8vw,1.05rem); font-weight:900; color:#2E3D3F; margin:0 0 8px; line-height:1.3; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+        .ls-desc { font-size:.825rem; color:#5A6A6C; line-height:1.7; margin:0 0 14px; white-space:pre-line; }
+
+        .ls-cta-row { display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap; margin-bottom:12px; margin-top:auto; padding-top:14px; }
+        .ls-price-badge { background:#f0fdf4; border:1.5px solid #86efac; border-radius:8px; padding:6px 14px; flex-shrink:0; }
+        .ls-price-badge span.lb { display:block; font-size:.56rem; font-weight:800; letter-spacing:.1em; text-transform:uppercase; color:#166534; }
+        .ls-price-badge span.vl { display:block; font-size:.8rem; font-weight:900; color:#14532d; white-space:nowrap; }
+        .ls-cta-btn { background:#2E3D3F; color:#fff; border:none; border-radius:8px; padding:9px 16px; font-size:.73rem; font-weight:800; cursor:pointer; white-space:nowrap; transition:background .2s; flex:1; min-width:130px; text-align:center; }
+        .ls-cta-btn:hover { background:#8B6914; }
+
+        .ls-toggle-btn { width:100%; display:flex; align-items:center; justify-content:center; gap:8px; background:#f4faf6; border:1.5px solid #bbf7d0; border-radius:8px; padding:9px 14px; font-size:.75rem; font-weight:800; color:#166534; cursor:pointer; transition:all .2s; }
+        .ls-toggle-btn:hover { background:#dcfce7; border-color:#4ade80; }
+        .ls-toggle-btn span:first-child { font-size:.65rem; }
+
+        .ls-includes-box { margin-top:12px; border-top:2px dashed #bbf7d0; padding-top:14px; animation:lsDropIn .22s ease; }
+        .ls-includes-title { font-size:.6rem; font-weight:900; letter-spacing:.14em; text-transform:uppercase; color:#2d6a4f; margin:0 0 10px; }
+        .ls-includes-grid { display:grid; grid-template-columns:1fr 1fr; gap:6px 12px; }
+        .ls-include-item { display:flex; align-items:flex-start; gap:7px; }
+        .ls-include-item span.ic { font-size:.82rem; flex-shrink:0; margin-top:1px; }
+        .ls-include-item span.tx { font-size:.73rem; color:#2E3D3F; line-height:1.45; }
+
+        @media (max-width: 767px) {
+          .ls-desktop-grid { display:none !important; }
+          .ls-mobile-list { display:flex !important; flex-direction:column; gap:8px; padding:8px 0 0; }
+          .ls-mobile-item { width:100%; }
+          .ls-mobile-slide { height:260px !important; }
+          .ls-includes-grid { grid-template-columns:1fr; }
+          .ls-cta-row { flex-direction:column; align-items:stretch; }
+          .ls-cta-btn { text-align:center; }
+          .ls-price-pill { font-size:.56rem; padding:4px 9px; }
+        }
+        @media (min-width: 768px) {
+          .ls-mobile-list { display:none !important; }
+          .ls-desktop-grid { display:flex !important; }
+        }
+      `}</style>
+
+      {/* HERO */}
+      <div style={{ background: "linear-gradient(135deg,#2E3D3F 0%,#3D5254 60%,#8B6914 100%)", padding: "64px 5% 56px", textAlign: "center", position: "relative", overflow: "hidden" }}>
+        <div style={{ position: "absolute", inset: 0, opacity: 0.07, backgroundImage: "radial-gradient(circle,#fff 1px,transparent 1px)", backgroundSize: "36px 36px", pointerEvents: "none" }} />
+        <div style={{ position: "relative", zIndex: 1, maxWidth: 680, margin: "0 auto" }}>
+          <div style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "rgba(255,255,255,.1)", borderRadius: 20, padding: "5px 16px", marginBottom: 18 }}>
+            <span style={{ fontSize: "0.65rem", fontWeight: 800, letterSpacing: ".16em", textTransform: "uppercase", color: "#C9AA71" }}>VASTURA GROUP · PROGRAM PEMBANGUNAN</span>
+          </div>
+          <h1 style={{ fontFamily: "'Playfair Display',serif", fontSize: "clamp(1.75rem,5vw,2.75rem)", fontWeight: 900, color: "#fff", margin: "0 0 14px", lineHeight: 1.2 }}>Pembangunan Ruko</h1>
+          <p style={{ fontSize: "clamp(.875rem,2vw,1rem)", color: "rgba(255,255,255,.75)", lineHeight: 1.8, margin: "0 0 26px" }}>
+            Wujudkan ruko yang kokoh dan strategis untuk usaha Anda — dari 2-3 lantai, gudang belakang, fasad & signage, hingga renovasi ruko lama, dikerjakan tim berpengalaman.
+          </p>
+          <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
+            {paket_.map(p => (
+              <span key={p.id} style={{ background: "rgba(255,255,255,.1)", color: "rgba(255,255,255,.85)", fontSize: "0.7rem", fontWeight: 700, padding: "5px 14px", borderRadius: 20, border: "1px solid rgba(255,255,255,.15)" }}>
+                {p.icon} {p.title.replace("Pembangunan ", "")}
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* DESKTOP: Magazine Mixing Grid */}
+      <div className="ls-desktop-grid" style={{ flexDirection: "column", gap: 8, padding: "8px 0 0" }}>
+        {rows.map((row, ri) => {
+          const h = heightMap[row.cols] || 360;
+          return (
+            <div key={ri} style={{ display: "grid", gridTemplateColumns: `repeat(${row.cols}, 1fr)`, gap: 8, alignItems: "stretch" }}>
+              {row.items.map((paket) => (
+                <div key={paket.id} className="ls-wrap">
+                  <div className="ls-img-box" style={{ height: h, position: "relative", overflow: "hidden" }}>
+                    <RsMiniSlide slides={paket.slides} slideDir={paket.slideDir} height={`${h}px`} />
+
+                    <div className="ls-cat-badge">
+                      <div style={{ background: "rgba(13,31,24,.78)", backdropFilter: "blur(8px)", color: "#C9AA71", fontSize: "0.62rem", fontWeight: 800, letterSpacing: ".1em", textTransform: "uppercase", padding: "5px 13px", borderRadius: 20, display: "flex", alignItems: "center", gap: 6 }}>
+                        {paket.icon && <span>{paket.icon}</span>}<span>{paket.title}</span>
+                      </div>
+                    </div>
+
+                    <div className="ls-price-pill">Mulai {fmt(paket.startFrom)} / {paket.satuan}</div>
+
+                    <div className="ls-mag-overlay-btn">
+                      <button onClick={() => onWaOpen && onWaOpen({ key: "layanan", vars: { judul_layanan: paket.title } })}
+                        style={{ background: "#C9AA71", color: "#1a2a1a", border: "none", borderRadius: 8, padding: "9px 18px", fontSize: "0.75rem", fontWeight: 800, cursor: "pointer", whiteSpace: "nowrap", boxShadow: "0 4px 14px rgba(0,0,0,.3)" }}>
+                        Tanya Harga & Detail
+                      </button>
+                    </div>
+                  </div>
+
+                  <RsInfoCard paket={paket} fmt={fmt} onWaOpen={onWaOpen} />
+                </div>
+              ))}
+            </div>
+          );
+        })}
+      </div>
+
+      {/* MOBILE: 1 Kolom Penuh */}
+      <div className="ls-mobile-list">
+        {paket_.map((paket) => (
+          <div key={paket.id} className="ls-mobile-item ls-wrap">
+            <div className="ls-img-box ls-mobile-slide" style={{ position: "relative", overflow: "hidden", height: 260 }}>
+              <RsMiniSlide slides={paket.slides} slideDir={paket.slideDir} height="260px" />
+
+              <div className="ls-cat-badge">
+                <div style={{ background: "rgba(13,31,24,.82)", backdropFilter: "blur(8px)", color: "#C9AA71", fontSize: "0.6rem", fontWeight: 800, letterSpacing: ".1em", textTransform: "uppercase", padding: "4px 11px", borderRadius: 20, display: "flex", alignItems: "center", gap: 5 }}>
+                  {paket.icon && <span>{paket.icon}</span>}<span>{paket.title}</span>
+                </div>
+              </div>
+
+              <div className="ls-price-pill">Mulai {fmt(paket.startFrom)} / {paket.satuan}</div>
+            </div>
+
+            <RsInfoCard paket={paket} fmt={fmt} onWaOpen={onWaOpen} />
+          </div>
+        ))}
+      </div>
+
+      {/* CTA BOTTOM */}
+      <div style={{ padding: "60px 5%", textAlign: "center", background: "#FAF7F0" }}>
+        <div style={{ maxWidth: 600, margin: "0 auto", background: "linear-gradient(135deg,#2E3D3F 0%,#8B6914 100%)", borderRadius: 20, padding: "48px 32px", color: "#fff" }}>
+          <div style={{ fontSize: "0.7rem", letterSpacing: ".14em", textTransform: "uppercase", color: "#C9AA71", fontWeight: 700, marginBottom: 12 }}>Konsultasi Gratis</div>
+          <h3 style={{ fontFamily: "'Playfair Display',serif", fontSize: "clamp(1.25rem,3vw,1.75rem)", fontWeight: 900, margin: "0 0 12px" }}>Wujudkan Ruko Impian Anda</h3>
+          <p style={{ color: "rgba(255,255,255,.75)", fontSize: "0.9rem", margin: "0 0 28px", lineHeight: 1.7 }}>Tim kami siap survei lahan, menghitung RAB, dan membangun ruko Anda dari awal hingga siap dipakai.</p>
           <button onClick={() => onWaOpen && onWaOpen({ key: "konsultasi", vars: {} })}
             style={{ background: "#C9AA71", color: "#2E3D3F", border: "none", borderRadius: 10, padding: "15px 36px", fontSize: "0.95rem", fontWeight: 800, cursor: "pointer", letterSpacing: ".05em" }}>
             Hubungi Tim Pembangunan Kami
@@ -15185,15 +15874,19 @@ function TemaEditForm({ temaOrig, editIdx, activeTemas, data, save, notify, onBa
     if (slugClash) { notify("Slug sudah dipakai tema lain, gunakan slug unik."); return; }
     setSaving(true);
     try {
+      /* Buang slot foto yang URL-nya kosong/blank sebelum disimpan — slot kosong
+         inilah yang bikin slide pertama tampil blank permanen di Home walau
+         foto lain sudah diganti/digeser (slot kosongnya sendiri tidak pernah terhapus). */
+      const cleanImgs = (slideshowImgs || []).filter(p => p && p.img && p.img.trim());
       /* Simpan imgs[] dan img (foto pertama sebagai fallback) ke dalam draft */
-      const imgFirst = slideshowImgs[0]?.img || draft.img || "";
+      const imgFirst = cleanImgs[0]?.img || draft.img || "";
       const finalDraft = {
-        ...draft, imgs: slideshowImgs, img: imgFirst,
+        ...draft, imgs: cleanImgs, img: imgFirst,
         detail: { ...draft.detail, denah: { ...draft.detail.denah, lantai: denahLantai } },
       };
       const nextTemas = activeTemas.map((t, i) => i === editIdx ? finalDraft : t);
       /* Juga update temaPhotosOverride agar slideshow kartu ikut berubah */
-      const nextOverride = { ...(data.temaPhotosOverride || {}), [draft.slug]: slideshowImgs };
+      const nextOverride = { ...(data.temaPhotosOverride || {}), [draft.slug]: cleanImgs };
       await save({ ...data, temaData: nextTemas, temaPhotosOverride: nextOverride });
       notify("Tema berhasil disimpan!");
       onBack();
@@ -16769,6 +17462,8 @@ export default function BricksyTravel() {
   const navDropdownGaleri = [
     { key: "shop",      label: "Paket Rumah Subsidi" },
     { key: "kost",      label: "Pembangunan Kost" },
+    { key: "cafe",      label: "Pembangunan Cafe" },
+    { key: "ruko",      label: "Pembangunan Ruko" },
     { key: "landscape", label: data.content.nav13 || "Landscape & Taman" },
   ];
   // All keys that are "active" as pages for highlight purposes
@@ -18003,6 +18698,12 @@ export default function BricksyTravel() {
               {/* PROGRAM PEMBANGUNAN KOST -- Magazine Mixing Grid */}
               {page === "kost" && <PembangunanKostPage onWaOpen={openWaPicker} paketData={data.pembangunanKostPaket} />}
 
+              {/* PROGRAM PEMBANGUNAN CAFE -- Magazine Mixing Grid */}
+              {page === "cafe" && <PembangunanCafePage onWaOpen={openWaPicker} paketData={data.pembangunanCafePaket} />}
+
+              {/* PROGRAM PEMBANGUNAN RUKO -- Magazine Mixing Grid */}
+              {page === "ruko" && <PembangunanRukoPage onWaOpen={openWaPicker} paketData={data.pembangunanRukoPaket} />}
+
               {/* NEWS / DESTINATIONS */}
               {["news", "destinations"].includes(page) && (
                 <SectionPage
@@ -18096,6 +18797,8 @@ export default function BricksyTravel() {
                     { id: "paket_landscape",    label: "Paket Landscape",        show: isAdmin },
                     { id: "paket_rumahsubsidi", label: "Paket Rumah Subsidi",    show: isAdmin },
                     { id: "paket_kost",         label: "Paket Pembangunan Kost", show: isAdmin },
+                    { id: "paket_cafe",         label: "Paket Pembangunan Cafe", show: isAdmin },
+                    { id: "paket_ruko",         label: "Paket Pembangunan Ruko", show: isAdmin },
                   ]
                 },
                 /* ── Tema Rumah ── */
@@ -18709,6 +19412,38 @@ export default function BricksyTravel() {
                   defaultItems={KOST_PAKET_DATA}
                   showSlideDir
                   ctaHint="Kelola foto, judul, deskripsi, harga, dan arah animasi slideshow setiap paket pembangunan kost (layout magazine mixing grid 1-3-2 kolom)."
+                />
+              )}
+
+              {/* PAKET PEMBANGUNAN CAFE (Magazine Grid) */}
+              {adminTab === "paket_cafe" && isAdmin && (
+                <PaketGridManager
+                  data={data}
+                  save={save}
+                  notify={notify}
+                  storeKey="pembangunanCafePaket"
+                  title="Paket Pembangunan Cafe (Halaman Mixing Grid)"
+                  icon=""
+                  accentColor="#8B6914"
+                  defaultItems={CAFE_PAKET_DATA}
+                  showSlideDir
+                  ctaHint="Kelola foto, judul, deskripsi, harga, dan arah animasi slideshow setiap paket pembangunan cafe (layout magazine mixing grid 1-3-2 kolom)."
+                />
+              )}
+
+              {/* PAKET PEMBANGUNAN RUKO (Magazine Grid) */}
+              {adminTab === "paket_ruko" && isAdmin && (
+                <PaketGridManager
+                  data={data}
+                  save={save}
+                  notify={notify}
+                  storeKey="pembangunanRukoPaket"
+                  title="Paket Pembangunan Ruko (Halaman Mixing Grid)"
+                  icon=""
+                  accentColor="#3D5254"
+                  defaultItems={RUKO_PAKET_DATA}
+                  showSlideDir
+                  ctaHint="Kelola foto, judul, deskripsi, harga, dan arah animasi slideshow setiap paket pembangunan ruko (layout magazine mixing grid 1-3-2 kolom)."
                 />
               )}
 
