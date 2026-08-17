@@ -15,6 +15,23 @@ function autoGrowTextarea(el) {
    lalu OTOMATIS MENGECIL kembali ke tampilan 1 baris saat blur / pindah field. Dipakai di semua
    form Control Panel untuk field teks pendek (judul, item, label, dsb). Field number/select/toggle
    TIDAK memakai ini karena isinya sudah pendek & tidak perlu di-expand. */
+/* ── CardImg: gambar dengan skeleton shimmer per-kartu (grid/katalog) —
+   tiap instance punya status loading sendiri-sendiri karena dipakai di dalam .map(). ── */
+function CardImg({ src, alt, style, onError, className }) {
+  const [loaded, setLoaded] = useState(false);
+  useEffect(() => { setLoaded(false); }, [src]);
+  const mergedTransition = style?.transition ? `${style.transition}, opacity .4s ease` : "opacity .4s ease";
+  return (
+    <>
+      {!loaded && <div className="img-skeleton" />}
+      <img src={src} alt={alt} loading="lazy" className={className}
+        style={{ ...style, opacity: loaded ? 1 : 0, transition: mergedTransition }}
+        onLoad={() => setLoaded(true)}
+        onError={e => { setLoaded(true); onError && onError(e); }} />
+    </>
+  );
+}
+
 function AutoGrowField({ style, className = "", multiline = false, onFocus, onBlur, onKeyDown, ...rest }) {
   const handleFocus = (e) => { autoGrowTextarea(e.target); onFocus && onFocus(e); };
   const handleBlur = (e) => { e.target.style.height = ""; onBlur && onBlur(e); };
@@ -2453,10 +2470,31 @@ const GS = () => (
     .login-modal{background:#fff;border-radius:8px;padding:48px 44px;width:90%;max-width:400px;position:relative;box-shadow:0 20px 60px rgba(0,0,0,.2)}
     @media(max-width:480px){.login-modal{padding:32px 22px}}
 
+    /* == Skeleton loading foto: kotak shimmer halus selagi gambar dimuat, ==
+       == supaya tidak terasa "kedip" blank putih saat koneksi lambat.  == */
+    @keyframes skeletonShimmer { 0% { background-position: -400px 0; } 100% { background-position: 400px 0; } }
+    .img-skeleton {
+      position: absolute; inset: 0;
+      background: linear-gradient(90deg, #E8DCC8 25%, #F2EBDA 37%, #E8DCC8 63%);
+      background-size: 800px 100%;
+      animation: skeletonShimmer 1.4s ease-in-out infinite;
+      transition: opacity .35s ease;
+    }
+    .img-fade-in { transition: opacity .4s ease; }
+    .img-skeleton-dark { background: linear-gradient(90deg, #0d1520 25%, #1c2836 37%, #0d1520 63%); background-size: 800px 100%; }
+
     /* Touch-friendly tap targets */
     @media(max-width:768px){
       button,a,[role=button]{min-height:40px}
       input,textarea,select{font-size:16px!important} /* prevent iOS zoom */
+    }
+
+    /* Tombol Login navbar: di desktop teksnya baru muncul saat hover (elegan, hemat ruang),
+       tapi di perangkat sentuh (tablet layar besar) tidak ada hover sama sekali —
+       jadi paksa selalu tampil penuh dengan tulisan "LOGIN" supaya jelas fungsinya. */
+    @media (hover:none) {
+      .login-collapse-btn { width:90px !important; padding-right:14px !important; gap:7px !important; background:var(--re-black) !important; color:#fff !important; }
+      .login-collapse-btn .lcb-text { opacity:1 !important; max-width:80px !important; }
     }
 
     /* == Paket Grid Manager (form CRUD Landscape / Rumah Subsidi / Kost) — mobile friendly == */
@@ -7805,6 +7843,10 @@ const HERO_TRANSITIONS = ["fade", "slideLeft", "slideUp", "zoomIn", "zoomOut", "
 
 function HeroSlideshow({ data, navigateTo }) {
   const heroMode = data.content?.heroMode || "video";
+  /* Skeleton loading: lacak src foto hero yang sudah pernah selesai dimuat,
+     supaya shimmer cuma tampil sekali per foto (bukan tiap kali slide berulang). */
+  const [heroLoadedSrcs, setHeroLoadedSrcs] = useState(() => new Set());
+  const markHeroLoaded = (src) => setHeroLoadedSrcs(prev => prev.has(src) ? prev : new Set(prev).add(src));
 
   // -- Compute slides -- useMemo agar tidak re-create array tiap render (penyebab kedip) --
   const slides = useMemo(() => {
@@ -7875,6 +7917,29 @@ function HeroSlideshow({ data, navigateTo }) {
     }, 700);
   }, [startTimer]);
 
+  /* -- Swipe touch: hero paling atas & paling sering dilihat pertama kali,
+     jadi wajib bisa digeser jari seperti slideshow lain di situs ini. -- */
+  const goToDelta = useCallback((dir) => {
+    if (animatingRef.current || slidesLenRef.current < 2) return;
+    const next = (currentRef.current + dir + slidesLenRef.current) % slidesLenRef.current;
+    goTo(next);
+  }, [goTo]);
+  const heroTouchRef = useRef({ down: false, startX: 0, moved: false });
+  const onHeroTouchStart = (e) => {
+    if (slidesLen < 2) return;
+    heroTouchRef.current = { down: true, startX: e.touches[0].clientX, moved: false };
+  };
+  const onHeroTouchMove = (e) => {
+    if (!heroTouchRef.current.down) return;
+    if (Math.abs(e.touches[0].clientX - heroTouchRef.current.startX) > 4) heroTouchRef.current.moved = true;
+  };
+  const onHeroTouchEnd = (e) => {
+    if (!heroTouchRef.current.down || slidesLen < 2) return;
+    const dx = e.changedTouches[0].clientX - heroTouchRef.current.startX;
+    heroTouchRef.current.down = false;
+    if (Math.abs(dx) > 40) goToDelta(dx < 0 ? 1 : -1);
+  };
+
   useEffect(() => {
     startTimer();
     return () => clearInterval(timerRef.current);
@@ -7888,7 +7953,12 @@ function HeroSlideshow({ data, navigateTo }) {
     return (
       <section style={{ position: "relative", width: "100%", height: "clamp(560px,88vh,800px)", overflow: "hidden", background: "#04080f" }}>
         {staticSrc && (
-          <img src={staticSrc} alt="Hero" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
+          <>
+            {!heroLoadedSrcs.has(staticSrc) && <div className="img-skeleton img-skeleton-dark" />}
+            <img src={staticSrc} alt="Hero" loading="eager"
+              onLoad={() => markHeroLoaded(staticSrc)}
+              style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", opacity: heroLoadedSrcs.has(staticSrc) ? 1 : 0, transition: "opacity .4s ease" }} />
+          </>
         )}
         <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom, rgba(10,20,35,.35) 0%, rgba(10,20,35,.78) 100%)" }} />
         <div style={{ position: "absolute", inset: 0, zIndex: 10, display: "flex", alignItems: "center", justifyContent: "center", padding: "0 6%", textAlign: "center" }}>
@@ -7966,7 +8036,8 @@ function HeroSlideshow({ data, navigateTo }) {
   const animating = prev !== null; // derived -- true selama transisi berlangsung
 
   return (
-    <section className="hero-slideshow-section" style={{ position: "relative", width: "100%", height: "clamp(560px,88vh,800px)", overflow: "hidden", background: "#04080f" }}>
+    <section className="hero-slideshow-section" style={{ position: "relative", width: "100%", height: "clamp(560px,88vh,800px)", overflow: "hidden", background: "#04080f", touchAction: slidesLen > 1 ? "pan-y" : "auto" }}
+      onTouchStart={onHeroTouchStart} onTouchMove={onHeroTouchMove} onTouchEnd={onHeroTouchEnd}>
       <style>{`
         @keyframes heroTxtIn { from { opacity:0; transform:translateY(28px); } to { opacity:1; transform:none; } }
         @keyframes heroDotPulse { 0%,100%{transform:scale(1);opacity:.8;} 50%{transform:scale(1.3);opacity:1;} }
@@ -8004,7 +8075,10 @@ function HeroSlideshow({ data, navigateTo }) {
         )}
         {/* Current slide (enter) */}
         <div style={getEnterStyle(anim)}>
-          <img loading="lazy" src={sl.src} alt={sl.title} className="hero-slide-img-idle" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
+          {!heroLoadedSrcs.has(sl.src) && <div className="img-skeleton img-skeleton-dark" />}
+          <img loading="eager" src={sl.src} alt={sl.title} className="hero-slide-img-idle"
+            onLoad={() => markHeroLoaded(sl.src)}
+            style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", opacity: heroLoadedSrcs.has(sl.src) ? 1 : 0, transition: "opacity .4s ease" }} />
           <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom, rgba(10,20,35,.35) 0%, rgba(10,20,35,.78) 100%)" }} />
         </div>
       </div>
@@ -10631,6 +10705,10 @@ function TemaPhotoSlideshow({ slug, nama, cmsData, duration = 3500, fallbackImg 
      ikon rumah, jangan biarkan blank kosong ke pengunjung website. */
   const [imgBroken, setImgBroken] = useState(false);
   useEffect(() => { setImgBroken(false); }, [idx, photos]);
+  /* Skeleton loading: lacak src foto yang sudah pernah selesai dimuat,
+     supaya shimmer cuma tampil sekali per foto (bukan tiap kali slide berulang). */
+  const [loadedSrcs, setLoadedSrcs] = useState(() => new Set());
+  const markLoaded = (src) => setLoadedSrcs(prev => prev.has(src) ? prev : new Set(prev).add(src));
 
   /* AUTO-SLIDE DIMATIKAN: foto TIDAK berpindah sendiri lagi.
      Berpindah HANYA lewat drag mouse (klik-tahan lalu geser), atau lewat
@@ -10718,10 +10796,14 @@ function TemaPhotoSlideshow({ slug, nama, cmsData, duration = 3500, fallbackImg 
           <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#A89070" strokeWidth="1.5"><path d="M3 10.5L12 3l9 7.5" strokeLinecap="round" strokeLinejoin="round"/><path d="M5 9.5V20a1 1 0 001 1h12a1 1 0 001-1V9.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
         </div>
       ) : (
-        <img src={cur.img} alt={publicCaption(cur.label) || nama || "Foto tema rumah"}
-          draggable={false}
-          style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", pointerEvents: "none" }}
-          onError={() => setImgBroken(true)} />
+        <>
+          {!loadedSrcs.has(cur.img) && <div className="img-skeleton" />}
+          <img src={cur.img} alt={publicCaption(cur.label) || nama || "Foto tema rumah"}
+            draggable={false}
+            style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", pointerEvents: "none", opacity: loadedSrcs.has(cur.img) ? 1 : 0, transition: "opacity .4s ease" }}
+            onLoad={() => markLoaded(cur.img)}
+            onError={() => setImgBroken(true)} />
+        </>
       )}
 
       {/* Overlay bottom gradient */}
@@ -11707,7 +11789,9 @@ function LandscapePage({ onWaOpen, categories }) {
         /* ── Overlay badge & pill ── */
         .ls-cat-badge { position:absolute; top:14px; left:14px; z-index:3; }
         .ls-price-pill { position:absolute; top:14px; right:14px; z-index:3; background:rgba(201,170,113,.93); backdrop-filter:blur(6px); color:#1a2a1a; font-size:.62rem; font-weight:900; letter-spacing:.06em; padding:5px 12px; border-radius:20px; white-space:nowrap; }
-        .ls-mag-overlay-btn { opacity:0; transition:opacity .3s; position:absolute; bottom:16px; right:14px; z-index:4; }
+        .ls-mag-overlay-btn { opacity:1; transition:opacity .3s; position:absolute; bottom:16px; right:14px; z-index:4; }
+        /* Sembunyikan-sampai-hover HANYA untuk perangkat yang benar2 punya mouse/hover (desktop). Touch-only (HP & tablet) selalu tampil, karena tidak ada gestur hover di layar sentuh. */
+        @media (hover:hover) and (pointer:fine) { .ls-mag-overlay-btn { opacity:0; } }
 
         /* ── Kartu putih ── */
         .ls-info-card { background:#fff; padding:20px 18px 22px; display:flex; flex-direction:column; flex:1; }
@@ -12079,6 +12163,11 @@ function RsMiniSlide({ slides, slideDir = "right", height = "100%" }) {
   const clearRef = useRef(null);
   const idxRef = useRef(0);
   const touchRef = useRef({ down: false, startX: 0, moved: false });
+  /* Skeleton loading: lacak index foto yang sudah pernah selesai dimuat,
+     supaya shimmer cuma tampil sekali per foto (bukan tiap kali slide berulang). */
+  const [loadedSet, setLoadedSet] = useState(() => new Set());
+  const markLoaded = (i) => setLoadedSet(prev => prev.has(i) ? prev : new Set(prev).add(i));
+  const curLoaded = loadedSet.has(idx);
 
   const advance = useCallback((step = 1) => {
     const current = idxRef.current;
@@ -12130,10 +12219,12 @@ function RsMiniSlide({ slides, slideDir = "right", height = "100%" }) {
           style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }}
           onError={e => { e.target.style.display = "none"; }} />
       )}
+      {!curLoaded && <div className="img-skeleton" />}
       <img key={`c${idx}`} src={sl.img} alt={sl.tema}
         className={animating ? dirIn[slideDir] : ""}
-        style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }}
-        onError={e => { e.target.style.display = "none"; }} />
+        style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", opacity: curLoaded ? 1 : 0, transition: "opacity .4s ease" }}
+        onLoad={() => markLoaded(idx)}
+        onError={e => { e.target.style.display = "none"; markLoaded(idx); }} />
       {/* Gradient overlay + caption */}
       <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(0,0,0,.75) 0%, rgba(0,0,0,.05) 55%, transparent 100%)", pointerEvents: "none", zIndex: 2 }} />
       <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, padding: "16px 14px 14px", zIndex: 2 }}>
@@ -12235,7 +12326,9 @@ function RumahSubsidiPage({ onWaOpen, paketData }) {
         .ls-cat-badge { position:absolute; top:14px; left:14px; right:100px; z-index:4; }
         .ls-cat-badge > div { max-width: 100%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
         .ls-price-pill { position:absolute; top:14px; right:14px; z-index:4; background:rgba(201,170,113,.93); backdrop-filter:blur(6px); color:#1a2a1a; font-size:.62rem; font-weight:900; letter-spacing:.06em; padding:5px 12px; border-radius:20px; white-space:nowrap; max-width:120px; overflow:hidden; text-overflow:ellipsis; }
-        .ls-mag-overlay-btn { opacity:0; transition:opacity .3s; position:absolute; bottom:16px; right:14px; z-index:4; }
+        .ls-mag-overlay-btn { opacity:1; transition:opacity .3s; position:absolute; bottom:16px; right:14px; z-index:4; }
+        /* Sembunyikan-sampai-hover HANYA untuk perangkat yang benar2 punya mouse/hover (desktop). Touch-only (HP & tablet) selalu tampil, karena tidak ada gestur hover di layar sentuh. */
+        @media (hover:hover) and (pointer:fine) { .ls-mag-overlay-btn { opacity:0; } }
 
         .ls-info-card { background:#fff; padding:20px 18px 22px; display:flex; flex-direction:column; flex:1; }
         .ls-card-title { font-family:'Playfair Display',serif; font-size:clamp(.88rem,1.8vw,1.05rem); font-weight:900; color:#2E3D3F; margin:0 0 8px; line-height:1.3; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
@@ -12578,7 +12671,9 @@ function PembangunanKostPage({ onWaOpen, paketData }) {
         .ls-cat-badge { position:absolute; top:14px; left:14px; right:100px; z-index:4; }
         .ls-cat-badge > div { max-width: 100%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
         .ls-price-pill { position:absolute; top:14px; right:14px; z-index:4; background:rgba(201,170,113,.93); backdrop-filter:blur(6px); color:#1a2a1a; font-size:.62rem; font-weight:900; letter-spacing:.06em; padding:5px 12px; border-radius:20px; white-space:nowrap; max-width:120px; overflow:hidden; text-overflow:ellipsis; }
-        .ls-mag-overlay-btn { opacity:0; transition:opacity .3s; position:absolute; bottom:16px; right:14px; z-index:4; }
+        .ls-mag-overlay-btn { opacity:1; transition:opacity .3s; position:absolute; bottom:16px; right:14px; z-index:4; }
+        /* Sembunyikan-sampai-hover HANYA untuk perangkat yang benar2 punya mouse/hover (desktop). Touch-only (HP & tablet) selalu tampil, karena tidak ada gestur hover di layar sentuh. */
+        @media (hover:hover) and (pointer:fine) { .ls-mag-overlay-btn { opacity:0; } }
 
         .ls-info-card { background:#fff; padding:20px 18px 22px; display:flex; flex-direction:column; flex:1; }
         .ls-card-title { font-family:'Playfair Display',serif; font-size:clamp(.88rem,1.8vw,1.05rem); font-weight:900; color:#2E3D3F; margin:0 0 8px; line-height:1.3; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
@@ -12917,7 +13012,9 @@ function PembangunanCafePage({ onWaOpen, paketData }) {
         .ls-cat-badge { position:absolute; top:14px; left:14px; right:100px; z-index:4; }
         .ls-cat-badge > div { max-width: 100%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
         .ls-price-pill { position:absolute; top:14px; right:14px; z-index:4; background:rgba(201,170,113,.93); backdrop-filter:blur(6px); color:#1a2a1a; font-size:.62rem; font-weight:900; letter-spacing:.06em; padding:5px 12px; border-radius:20px; white-space:nowrap; max-width:120px; overflow:hidden; text-overflow:ellipsis; }
-        .ls-mag-overlay-btn { opacity:0; transition:opacity .3s; position:absolute; bottom:16px; right:14px; z-index:4; }
+        .ls-mag-overlay-btn { opacity:1; transition:opacity .3s; position:absolute; bottom:16px; right:14px; z-index:4; }
+        /* Sembunyikan-sampai-hover HANYA untuk perangkat yang benar2 punya mouse/hover (desktop). Touch-only (HP & tablet) selalu tampil, karena tidak ada gestur hover di layar sentuh. */
+        @media (hover:hover) and (pointer:fine) { .ls-mag-overlay-btn { opacity:0; } }
 
         .ls-info-card { background:#fff; padding:20px 18px 22px; display:flex; flex-direction:column; flex:1; }
         .ls-card-title { font-family:'Playfair Display',serif; font-size:clamp(.88rem,1.8vw,1.05rem); font-weight:900; color:#2E3D3F; margin:0 0 8px; line-height:1.3; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
@@ -13255,7 +13352,9 @@ function PembangunanRukoPage({ onWaOpen, paketData }) {
         .ls-cat-badge { position:absolute; top:14px; left:14px; right:100px; z-index:4; }
         .ls-cat-badge > div { max-width: 100%; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
         .ls-price-pill { position:absolute; top:14px; right:14px; z-index:4; background:rgba(201,170,113,.93); backdrop-filter:blur(6px); color:#1a2a1a; font-size:.62rem; font-weight:900; letter-spacing:.06em; padding:5px 12px; border-radius:20px; white-space:nowrap; max-width:120px; overflow:hidden; text-overflow:ellipsis; }
-        .ls-mag-overlay-btn { opacity:0; transition:opacity .3s; position:absolute; bottom:16px; right:14px; z-index:4; }
+        .ls-mag-overlay-btn { opacity:1; transition:opacity .3s; position:absolute; bottom:16px; right:14px; z-index:4; }
+        /* Sembunyikan-sampai-hover HANYA untuk perangkat yang benar2 punya mouse/hover (desktop). Touch-only (HP & tablet) selalu tampil, karena tidak ada gestur hover di layar sentuh. */
+        @media (hover:hover) and (pointer:fine) { .ls-mag-overlay-btn { opacity:0; } }
 
         .ls-info-card { background:#fff; padding:20px 18px 22px; display:flex; flex-direction:column; flex:1; }
         .ls-card-title { font-family:'Playfair Display',serif; font-size:clamp(.88rem,1.8vw,1.05rem); font-weight:900; color:#2E3D3F; margin:0 0 8px; line-height:1.3; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
@@ -14225,7 +14324,7 @@ function FurniturPage({ data, onWaOpen }) {
               {/* Image */}
               <div className="fur-img-wrap" style={{ height:220, overflow:"hidden", background:"#F5EDD8", position:"relative" }}>
                 {prod._img ? (
-                  <img src={prod._img} alt={prod.nama} style={{ width:"100%", height:"100%", objectFit:"cover", display:"block" }} loading="lazy"
+                  <CardImg src={prod._img} alt={prod.nama} style={{ width:"100%", height:"100%", objectFit:"cover", display:"block" }}
                     onError={e=>{e.target.style.display="none"; e.target.nextSibling.style.display="flex";}} />
                 ) : null}
                 <div style={{ display: prod._img ? "none" : "flex", position:"absolute", inset:0, alignItems:"center", justifyContent:"center", fontSize:48, background:"#F5EDD8" }}></div>
@@ -14332,9 +14431,9 @@ function FurniturDetailPage({ product, onBack, onWaOpen, formatRp }) {
 
           {/* ── Galeri Foto ── */}
           <div>
-            <div style={{ borderRadius: 16, overflow: "hidden", boxShadow: "0 10px 32px rgba(0,0,0,.12)", background: "#F5EDD8", aspectRatio: "4/3" }}>
+            <div style={{ borderRadius: 16, overflow: "hidden", boxShadow: "0 10px 32px rgba(0,0,0,.12)", background: "#F5EDD8", aspectRatio: "4/3", position: "relative" }}>
               {mainImg ? (
-                <img src={mainImg} alt={product.nama} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} onError={e => e.target.style.display = "none"} />
+                <CardImg src={mainImg} alt={product.nama} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} onError={e => e.target.style.display = "none"} />
               ) : (
                 <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 64 }}></div>
               )}
@@ -14502,7 +14601,7 @@ function SubPageCatalog({ pageKey, heroColor, heroIcon, title, subtitle, breadcr
               {/* Foto */}
               <div style={{ position:"relative", height:200, overflow:"hidden", background:"#E8DCC8" }}>
                 {item.img ? (
-                  <img src={item.img} alt={item.nama} loading="lazy"
+                  <CardImg src={item.img} alt={item.nama}
                     style={{ width:"100%", height:"100%", objectFit:"cover", transition:"transform .5s", transform:hoverId===item.id?"scale(1.07)":"scale(1)" }}
                     onError={e=>{e.target.parentElement.style.background="#E8DCC8"; e.target.style.display="none";}} />
                 ) : (
@@ -15518,7 +15617,9 @@ function NavDropdownLayanan({ page, navigateTo, navDropdownLayanan }) {
           <div style={{ position:"relative" }}
             onMouseEnter={()=>setSubOpen("interior")}
             onMouseLeave={()=>setSubOpen(null)}>
-            <button style={btn(page.startsWith("interior"))} onMouseEnter={e=>{e.currentTarget.style.background="#FAF7F0";}} onMouseLeave={e=>{e.currentTarget.style.background=page.startsWith("interior")?"#FAF7F0":"transparent";}}>
+            <button style={btn(page.startsWith("interior"))}
+              onClick={()=>setSubOpen(v=>v==="interior"?null:"interior")}
+              onMouseEnter={e=>{e.currentTarget.style.background="#FAF7F0";}} onMouseLeave={e=>{e.currentTarget.style.background=page.startsWith("interior")?"#FAF7F0":"transparent";}}>
               <span>Interior</span><span style={{fontSize:"0.63rem",fontWeight:800,color:"#fff",background:"#8B6914",padding:"4px 12px",borderRadius:5,letterSpacing:".06em"}}>BUKA</span>
             </button>
             {subOpen==="interior" && (
@@ -15548,7 +15649,9 @@ function NavDropdownLayanan({ page, navigateTo, navDropdownLayanan }) {
           <div style={{ position:"relative" }}
             onMouseEnter={()=>setSubOpen("eksterior")}
             onMouseLeave={()=>setSubOpen(null)}>
-            <button style={btn(page.startsWith("eksterior"))} onMouseEnter={e=>{e.currentTarget.style.background="#FAF7F0";}} onMouseLeave={e=>{e.currentTarget.style.background=page.startsWith("eksterior")?"#FAF7F0":"transparent";}}>
+            <button style={btn(page.startsWith("eksterior"))}
+              onClick={()=>setSubOpen(v=>v==="eksterior"?null:"eksterior")}
+              onMouseEnter={e=>{e.currentTarget.style.background="#FAF7F0";}} onMouseLeave={e=>{e.currentTarget.style.background=page.startsWith("eksterior")?"#FAF7F0":"transparent";}}>
               <span>Eksterior</span><span style={{fontSize:"0.63rem",fontWeight:800,color:"#fff",background:"#8B6914",padding:"4px 12px",borderRadius:5,letterSpacing:".06em"}}>BUKA</span>
             </button>
             {subOpen==="eksterior" && (
