@@ -17,6 +17,76 @@ function autoGrowTextarea(el) {
    TIDAK memakai ini karena isinya sudah pendek & tidak perlu di-expand. */
 /* ── CardImg: gambar dengan skeleton shimmer per-kartu (grid/katalog) —
    tiap instance punya status loading sendiri-sendiri karena dipakai di dalam .map(). ── */
+/* ── MagazineBreakSection: selingan konten (fitur/CTA WA/quote) di antara
+   baris-baris magazine grid — dipakai di halaman Kost, Cafe, Ruko, Landscape
+   supaya alur "1 paket → teks → 3 paket → teks → 2 paket → teks" tidak
+   monoton berjejer foto terus-menerus, dan selingannya tetap relevan
+   dengan topik halaman & perusahaan (bukan filler generik). ── */
+function MagazineBreakSection({ variant, eyebrow, title, text, features, onWaOpen, waText, waVars, palette = {} }) {
+  const p = {
+    bg: palette.bg || "#FAF7F0",
+    dark: palette.dark || "#2E3D3F",
+    accent: palette.accent || "#8B6914",
+    text: palette.text || "#2E3D3F",
+    muted: palette.muted || "#5A6A6C",
+  };
+  if (variant === "feature") {
+    return (
+      <div className="mgbreak" style={{ background: p.bg }}>
+        {eyebrow && <div className="mgbreak-eyebrow" style={{ color: p.accent }}>{eyebrow}</div>}
+        {title && <h3 className="mgbreak-title" style={{ color: p.text }}>{title}</h3>}
+        <div className="mgbreak-feature-grid">
+          {features.map((f, i) => (
+            <div key={i} className="mgbreak-feature-item">
+              <div className="mgbreak-feature-num" style={{ color: p.accent }}>{String(i + 1).padStart(2, "0")}</div>
+              <div className="mgbreak-feature-title" style={{ color: p.text }}>{f.title}</div>
+              <div className="mgbreak-feature-desc" style={{ color: p.muted }}>{f.desc}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+  if (variant === "cta") {
+    return (
+      <div className="mgbreak" style={{ background: p.dark }}>
+        <div className="mgbreak-cta">
+          {eyebrow && <div className="mgbreak-eyebrow" style={{ color: p.accent }}>{eyebrow}</div>}
+          <h3 className="mgbreak-title" style={{ color: "#fff" }}>{title}</h3>
+          <p className="mgbreak-cta-text" style={{ color: "rgba(255,255,255,.8)" }}>{text}</p>
+          <button className="mgbreak-cta-btn" style={{ background: p.accent, color: p.dark }}
+            onClick={() => onWaOpen && onWaOpen({ key: "konsultasi", vars: waVars || {} })}>
+            {waText || "Hubungi via WhatsApp"}
+          </button>
+        </div>
+      </div>
+    );
+  }
+  if (variant === "quote") {
+    return (
+      <div className="mgbreak" style={{ background: p.bg }}>
+        <div className="mgbreak-quote">
+          <div className="mgbreak-quote-mark" style={{ color: p.accent }}>&ldquo;</div>
+          <p className="mgbreak-quote-text" style={{ color: p.text }}>{text}</p>
+          {title && <div className="mgbreak-quote-attrib" style={{ color: p.muted }}>{title}</div>}
+        </div>
+      </div>
+    );
+  }
+  if (variant === "info") {
+    return (
+      <div className="mgbreak" style={{ background: p.bg }}>
+        <div className="mgbreak-info">
+          {eyebrow && <div className="mgbreak-eyebrow" style={{ color: p.accent }}>{eyebrow}</div>}
+          <h3 className="mgbreak-title" style={{ color: p.text, marginBottom: 14 }}>{title}</h3>
+          <p className="mgbreak-info-text" style={{ color: p.muted }}>{text}</p>
+        </div>
+      </div>
+    );
+  }
+  return null;
+}
+
 function CardImg({ src, alt, style, onError, className }) {
   const [loaded, setLoaded] = useState(false);
   useEffect(() => { setLoaded(false); }, [src]);
@@ -2482,6 +2552,29 @@ const GS = () => (
     }
     .img-fade-in { transition: opacity .4s ease; }
     .img-skeleton-dark { background: linear-gradient(90deg, #0d1520 25%, #1c2836 37%, #0d1520 63%); background-size: 800px 100%; }
+
+    /* == MagazineBreakSection: selingan teks antar baris paket == */
+    .mgbreak { padding: 56px 6% 60px; }
+    .mgbreak-eyebrow { font-size: 0.68rem; font-weight: 800; letter-spacing: .18em; text-transform: uppercase; text-align: center; margin-bottom: 10px; }
+    .mgbreak-title { font-family: 'Playfair Display',serif; font-weight: 900; text-align: center; font-size: clamp(1.3rem,3vw,1.9rem); margin: 0 0 30px; line-height: 1.3; }
+    .mgbreak-feature-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 32px; max-width: 980px; margin: 0 auto; }
+    .mgbreak-feature-item { text-align: center; }
+    .mgbreak-feature-num { font-family: 'Playfair Display',serif; font-size: 2rem; font-weight: 900; opacity: .38; margin-bottom: 4px; }
+    .mgbreak-feature-title { font-size: 1rem; font-weight: 800; margin-bottom: 8px; }
+    .mgbreak-feature-desc { font-size: 0.85rem; line-height: 1.7; opacity: .82; max-width: 260px; margin: 0 auto; }
+    .mgbreak-cta { text-align: center; max-width: 580px; margin: 0 auto; }
+    .mgbreak-cta-text { font-size: 0.92rem; line-height: 1.8; margin: 0 0 26px; }
+    .mgbreak-cta-btn { border: none; border-radius: 10px; padding: 14px 34px; font-size: 0.9rem; font-weight: 800; cursor: pointer; letter-spacing: .04em; }
+    .mgbreak-quote { max-width: 640px; margin: 0 auto; text-align: center; }
+    .mgbreak-quote-mark { font-family: 'Playfair Display',serif; font-size: 3.4rem; line-height: 1; opacity: .28; margin-bottom: -8px; }
+    .mgbreak-quote-text { font-family: 'Playfair Display',serif; font-style: italic; font-size: clamp(1rem,2.2vw,1.28rem); line-height: 1.65; margin: 0 0 14px; }
+    .mgbreak-quote-attrib { font-size: 0.72rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+    .mgbreak-info { max-width: 620px; margin: 0 auto; text-align: center; }
+    .mgbreak-info-text { font-size: 0.9rem; line-height: 1.85; margin: 0; }
+    @media (max-width: 767px) {
+      .mgbreak { padding: 40px 6% 44px; }
+      .mgbreak-feature-grid { grid-template-columns: 1fr; gap: 26px; }
+    }
 
     /* Touch-friendly tap targets */
     @media(max-width:768px){
@@ -11772,6 +11865,23 @@ function LandscapePage({ onWaOpen, categories }) {
   // Tinggi slideshow berdasar jumlah kolom di baris tersebut (desktop)
   const heightMap = { 1: 520, 2: 420, 3: 360 };
 
+  /* Selingan konten antar baris kategori — fitur taman & pengenalan tanaman,
+     relevan langsung dengan topik halaman Landscape & Taman. */
+  const LANDSCAPE_BREAKS = [
+    { variant: "feature", eyebrow: "Kenapa Taman Penting", title: "Kenapa Taman Penting untuk Hunian Anda",
+      features: [
+        { title: "Udara Lebih Sejuk", desc: "Tanaman menyerap panas dan menghasilkan oksigen, membuat suhu di sekitar rumah terasa jauh lebih sejuk sepanjang hari." },
+        { title: "Nilai Estetika Naik", desc: "Taman yang tertata rapi jadi elemen pertama yang dilihat tamu — meningkatkan kesan pertama sekaligus nilai jual properti." },
+        { title: "Ruang Relaksasi Keluarga", desc: "Halaman hijau memberi ruang bernafas — tempat berkumpul, bermain anak, atau sekadar duduk santai sore hari." },
+      ] },
+    { variant: "info", eyebrow: "Mengenal Tanaman", title: "Palem Kuning (Dypsis lutescens)",
+      text: "Berasal dari Madagaskar, palem kuning populer sebagai pagar hidup dan tanaman peneduh karena tumbuh rimbun secara berumpun, tahan panas, dan minim perawatan — pilihan favorit untuk taman tropis modern." },
+    { variant: "info", eyebrow: "Mengenal Tanaman", title: "Monstera Deliciosa",
+      text: "Tanaman berdaun besar berlubang khas ini berasal dari hutan tropis Amerika Tengah. Selain jadi elemen dekoratif yang kuat secara visual, Monstera juga tahan di area teduh — cocok untuk taman minimalis maupun sudut rumah yang kurang sinar matahari langsung." },
+  ];
+  const landscapePalette = { bg: "#FAF7F0", dark: "#0d2b1a", accent: "#40916c", text: "#2E3D3F", muted: "#5A6A6C" };
+  const landscapeBreakBoundaries = rows.reduce((acc, r) => { acc.push((acc[acc.length - 1] || 0) + r.cols); return acc; }, []);
+
   return (
     <div style={{ background: "#0d1f18", minHeight: "100vh" }}>
       <style>{`
@@ -11864,11 +11974,12 @@ function LandscapePage({ onWaOpen, categories }) {
           DESKTOP: Magazine Grid (1 | 3 | 2 kolom)
           Tersembunyi di mobile via CSS
       ================================================== */}
-      <div className="ls-desktop-grid" style={{ flexDirection: "column", gap: 8, padding: "8px 0 0" }}>
+      <div className="ls-desktop-grid" style={{ flexDirection: "column", gap: 0, padding: "8px 0 0" }}>
         {rows.map((row, ri) => {
           const h = heightMap[row.cols] || 360;
           return (
-            <div key={ri} style={{ display: "grid", gridTemplateColumns: `repeat(${row.cols}, 1fr)`, gap: 8, alignItems: "stretch" }}>
+            <React.Fragment key={ri}>
+            <div style={{ display: "grid", gridTemplateColumns: `repeat(${row.cols}, 1fr)`, gap: 8, alignItems: "stretch", marginBottom: 8 }}>
               {row.cats.map((cat) => (
                 <div key={cat.id} className="ls-wrap">
 
@@ -11900,6 +12011,8 @@ function LandscapePage({ onWaOpen, categories }) {
                 </div>
               ))}
             </div>
+            <MagazineBreakSection {...LANDSCAPE_BREAKS[ri % LANDSCAPE_BREAKS.length]} onWaOpen={onWaOpen} palette={landscapePalette} />
+            </React.Fragment>
           );
         })}
       </div>
@@ -11909,8 +12022,9 @@ function LandscapePage({ onWaOpen, categories }) {
           Tersembunyi di desktop via CSS
       ================================================== */}
       <div className="ls-mobile-list">
-        {cats_.map((cat) => (
-          <div key={cat.id} className="ls-mobile-item ls-wrap">
+        {cats_.map((cat, pi) => (
+          <React.Fragment key={cat.id}>
+          <div className="ls-mobile-item ls-wrap">
 
             {/* Foto slideshow -- tinggi lebih pendek di mobile */}
             <div className="ls-img-box ls-mobile-slide" style={{ position: "relative", overflow: "hidden", height: 260 }}>
@@ -11930,6 +12044,10 @@ function LandscapePage({ onWaOpen, categories }) {
             {/* Kartu putih dengan dropdown includes */}
             <LsInfoCard cat={cat} fmt={fmt} onWaOpen={onWaOpen} />
           </div>
+          {landscapeBreakBoundaries.includes(pi + 1) && (
+            <MagazineBreakSection {...LANDSCAPE_BREAKS[landscapeBreakBoundaries.indexOf(pi + 1) % LANDSCAPE_BREAKS.length]} onWaOpen={onWaOpen} palette={landscapePalette} />
+          )}
+          </React.Fragment>
         ))}
       </div>
 
@@ -12300,6 +12418,25 @@ function RumahSubsidiPage({ onWaOpen, paketData }) {
   }
   const heightMap = { 1: 480, 2: 400, 3: 340 };
 
+  /* Selingan konten antar baris paket — relevan dengan renovasi rumah subsidi & Vastura Group */
+  const RS_BREAKS = [
+    { variant: "feature", eyebrow: "Kenapa Direnovasi", title: "Kenapa Renovasi Rumah Subsidi Penting?",
+      features: [
+        { title: "Ruang Terasa Lebih Luas", desc: "Rumah subsidi umumnya berukuran mungil — renovasi tepat bisa memaksimalkan tata ruang tanpa perlu menambah luas tanah." },
+        { title: "Nilai Jual Ikut Naik", desc: "Rumah subsidi yang sudah direnovasi rapi punya nilai jual dan sewa yang jauh lebih tinggi dibanding kondisi standar developer." },
+        { title: "Lebih Nyaman Ditinggali", desc: "Perbaikan sirkulasi udara, pencahayaan, dan kualitas material membuat rumah terasa jauh lebih layak huni sehari-hari." },
+      ] },
+    { variant: "cta", eyebrow: "Rumah Subsidi Anda Terasa Sempit?",
+      title: "Konsultasikan Rencana Renovasi Anda",
+      text: "Tim kami siap survei kondisi rumah dan memberi rekomendasi renovasi paling sesuai dengan bujet Anda — gratis, tanpa kewajiban apapun.",
+      waText: "Konsultasi Gratis via WhatsApp", waVars: { judul_layanan: "Renovasi Rumah Subsidi" } },
+    { variant: "quote",
+      text: "Banyak orang mengira rumah subsidi harus tetap sederhana selamanya. Padahal dengan renovasi yang tepat sasaran, rumah subsidi bisa terasa senyaman dan serapi hunian kelas menengah — tanpa perlu bongkar total.",
+      title: "Vastura Group · Tim Renovasi Rumah Subsidi" },
+  ];
+  const rsPalette = { bg: "#FAF7F0", dark: "#2E3D3F", accent: "#8B6914", text: "#2E3D3F", muted: "#5A6A6C" };
+  const rsBreakBoundaries = rows.reduce((acc, r) => { acc.push((acc[acc.length - 1] || 0) + r.cols); return acc; }, []);
+
   return (
     <div className="fade-in" style={{ background: "#FAF7F0", minHeight: "100vh" }}>
       <style>{`
@@ -12391,11 +12528,12 @@ function RumahSubsidiPage({ onWaOpen, paketData }) {
       </div>
 
       {/* DESKTOP: Magazine Mixing Grid */}
-      <div className="ls-desktop-grid" style={{ flexDirection: "column", gap: 8, padding: "8px 0 0" }}>
+      <div className="ls-desktop-grid" style={{ flexDirection: "column", gap: 0, padding: "8px 0 0" }}>
         {rows.map((row, ri) => {
           const h = heightMap[row.cols] || 360;
           return (
-            <div key={ri} style={{ display: "grid", gridTemplateColumns: `repeat(${row.cols}, 1fr)`, gap: 8, alignItems: "stretch" }}>
+            <React.Fragment key={ri}>
+            <div style={{ display: "grid", gridTemplateColumns: `repeat(${row.cols}, 1fr)`, gap: 8, alignItems: "stretch", marginBottom: 8 }}>
               {row.items.map((paket) => (
                 <div key={paket.id} className="ls-wrap">
                   <div className="ls-img-box" style={{ height: h, position: "relative", overflow: "hidden" }}>
@@ -12421,14 +12559,17 @@ function RumahSubsidiPage({ onWaOpen, paketData }) {
                 </div>
               ))}
             </div>
+            <MagazineBreakSection {...RS_BREAKS[ri % RS_BREAKS.length]} onWaOpen={onWaOpen} palette={rsPalette} />
+            </React.Fragment>
           );
         })}
       </div>
 
       {/* MOBILE: 1 Kolom Penuh */}
       <div className="ls-mobile-list">
-        {paket_.map((paket) => (
-          <div key={paket.id} className="ls-mobile-item ls-wrap">
+        {paket_.map((paket, pi) => (
+          <React.Fragment key={paket.id}>
+          <div className="ls-mobile-item ls-wrap">
             <div className="ls-img-box ls-mobile-slide" style={{ position: "relative", overflow: "hidden", height: 260 }}>
               <RsMiniSlide slides={paket.slides} slideDir={paket.slideDir} height="260px" />
 
@@ -12443,6 +12584,10 @@ function RumahSubsidiPage({ onWaOpen, paketData }) {
 
             <RsInfoCard paket={paket} fmt={fmt} onWaOpen={onWaOpen} />
           </div>
+          {rsBreakBoundaries.includes(pi + 1) && (
+            <MagazineBreakSection {...RS_BREAKS[rsBreakBoundaries.indexOf(pi + 1) % RS_BREAKS.length]} onWaOpen={onWaOpen} palette={rsPalette} />
+          )}
+          </React.Fragment>
         ))}
       </div>
 
@@ -12645,6 +12790,26 @@ function PembangunanKostPage({ onWaOpen, paketData }) {
   }
   const heightMap = { 1: 480, 2: 400, 3: 340 };
 
+  /* Selingan konten antar baris paket — relevan dengan bisnis kost & Vastura Group */
+  const KOST_BREAKS = [
+    { variant: "feature", eyebrow: "Kenapa Berinvestasi", title: "Kenapa Bisnis Kost Selalu Menjanjikan?",
+      features: [
+        { title: "Permintaan Selalu Ada", desc: "Selama ada kampus, kawasan industri, atau perkantoran di sekitar, kebutuhan hunian sewa tidak pernah surut sepanjang tahun." },
+        { title: "Passive Income Bulanan", desc: "Berbeda dari jual-beli properti, kost menghasilkan pemasukan rutin tiap bulan tanpa harus melepas aset Anda." },
+        { title: "Nilai Tanah Terus Naik", desc: "Selain uang sewa, nilai lahan dan bangunan kost Anda ikut meningkat seiring berkembangnya kawasan sekitarnya." },
+      ] },
+    { variant: "cta", eyebrow: "Punya Lahan Menganggur?",
+      title: "Yuk Diskusikan Potensi Lahan Anda",
+      text: "Tim kami siap survei gratis dan menghitungkan estimasi ROI sebelum Anda memutuskan membangun. Tidak ada kewajiban apapun — cukup ngobrol dulu.",
+      waText: "Konsultasi Gratis via WhatsApp", waVars: { judul_layanan: "Pembangunan Kost" } },
+    { variant: "quote",
+      text: "Kami percaya kost yang baik bukan cuma soal kamar yang banyak, tapi bangunan yang kokoh dan nyaman ditinggali bertahun-tahun — supaya penghuni betah dan pemilik tenang.",
+      title: "Vastura Group · Tim Pembangunan Kost" },
+  ];
+  const kostPalette = { bg: "#FAF7F0", dark: "#2E3D3F", accent: "#8B6914", text: "#2E3D3F", muted: "#5A6A6C" };
+  /* Batas indeks kumulatif tiap baris — dipakai versi mobile untuk tahu selingan mana yang jatuh setelah item ke berapa */
+  const kostBreakBoundaries = rows.reduce((acc, r) => { acc.push((acc[acc.length - 1] || 0) + r.cols); return acc; }, []);
+
   return (
     <div className="fade-in" style={{ background: "#FAF7F0", minHeight: "100vh" }}>
       <style>{`
@@ -12736,11 +12901,12 @@ function PembangunanKostPage({ onWaOpen, paketData }) {
       </div>
 
       {/* DESKTOP: Magazine Mixing Grid */}
-      <div className="ls-desktop-grid" style={{ flexDirection: "column", gap: 8, padding: "8px 0 0" }}>
+      <div className="ls-desktop-grid" style={{ flexDirection: "column", gap: 0, padding: "8px 0 0" }}>
         {rows.map((row, ri) => {
           const h = heightMap[row.cols] || 360;
           return (
-            <div key={ri} style={{ display: "grid", gridTemplateColumns: `repeat(${row.cols}, 1fr)`, gap: 8, alignItems: "stretch" }}>
+            <React.Fragment key={ri}>
+            <div style={{ display: "grid", gridTemplateColumns: `repeat(${row.cols}, 1fr)`, gap: 8, alignItems: "stretch", marginBottom: 8 }}>
               {row.items.map((paket) => (
                 <div key={paket.id} className="ls-wrap">
                   <div className="ls-img-box" style={{ height: h, position: "relative", overflow: "hidden" }}>
@@ -12766,14 +12932,17 @@ function PembangunanKostPage({ onWaOpen, paketData }) {
                 </div>
               ))}
             </div>
+            <MagazineBreakSection {...KOST_BREAKS[ri % KOST_BREAKS.length]} onWaOpen={onWaOpen} palette={kostPalette} />
+            </React.Fragment>
           );
         })}
       </div>
 
       {/* MOBILE: 1 Kolom Penuh */}
       <div className="ls-mobile-list">
-        {paket_.map((paket) => (
-          <div key={paket.id} className="ls-mobile-item ls-wrap">
+        {paket_.map((paket, pi) => (
+          <React.Fragment key={paket.id}>
+          <div className="ls-mobile-item ls-wrap">
             <div className="ls-img-box ls-mobile-slide" style={{ position: "relative", overflow: "hidden", height: 260 }}>
               <RsMiniSlide slides={paket.slides} slideDir={paket.slideDir} height="260px" />
 
@@ -12788,6 +12957,10 @@ function PembangunanKostPage({ onWaOpen, paketData }) {
 
             <RsInfoCard paket={paket} fmt={fmt} onWaOpen={onWaOpen} />
           </div>
+          {kostBreakBoundaries.includes(pi + 1) && (
+            <MagazineBreakSection {...KOST_BREAKS[kostBreakBoundaries.indexOf(pi + 1) % KOST_BREAKS.length]} onWaOpen={onWaOpen} palette={kostPalette} />
+          )}
+          </React.Fragment>
         ))}
       </div>
 
@@ -12986,6 +13159,25 @@ function PembangunanCafePage({ onWaOpen, paketData }) {
   }
   const heightMap = { 1: 480, 2: 400, 3: 340 };
 
+  /* Selingan konten antar baris paket — relevan dengan bisnis cafe & Vastura Group */
+  const CAFE_BREAKS = [
+    { variant: "feature", eyebrow: "Resep Cafe Ramai Pengunjung", title: "Elemen Cafe yang Bikin Pengunjung Betah",
+      features: [
+        { title: "Lokasi Mudah Diakses", desc: "Cafe yang strategis — dekat jalan utama atau kawasan ramai — jauh lebih mudah menjaring pengunjung baru setiap harinya." },
+        { title: "Suasana Instagramable", desc: "Interior yang estetik membuat pengunjung betah berlama-lama, sekaligus jadi promosi gratis lewat unggahan media sosial mereka." },
+        { title: "Sirkulasi Udara & Cahaya", desc: "Cafe yang sejuk dan terang secara alami terasa jauh lebih nyaman dibanding ruangan pengap, apapun konsep dekorasinya." },
+      ] },
+    { variant: "cta", eyebrow: "Mau Buka Cafe Sendiri?",
+      title: "Ceritakan Konsep Cafe Impian Anda",
+      text: "Dari cafe mungil di ruko sempit sampai konsep outdoor yang luas — tim kami siap bantu wujudkan dari survei lokasi sampai hari pembukaan.",
+      waText: "Konsultasi Gratis via WhatsApp", waVars: { judul_layanan: "Pembangunan Cafe" } },
+    { variant: "quote",
+      text: "Ngopi bukan cuma soal rasa kopinya — tapi juga soal ruang yang membuat orang mau kembali lagi. Kami bangun cafe dengan memikirkan pengalaman pengunjung, bukan cuma bangunannya saja.",
+      title: "Vastura Group · Tim Pembangunan Cafe" },
+  ];
+  const cafePalette = { bg: "#FAF7F0", dark: "#2E3D3F", accent: "#8B6914", text: "#2E3D3F", muted: "#5A6A6C" };
+  const cafeBreakBoundaries = rows.reduce((acc, r) => { acc.push((acc[acc.length - 1] || 0) + r.cols); return acc; }, []);
+
   return (
     <div className="fade-in" style={{ background: "#FAF7F0", minHeight: "100vh" }}>
       <style>{`
@@ -13076,11 +13268,12 @@ function PembangunanCafePage({ onWaOpen, paketData }) {
       </div>
 
       {/* DESKTOP: Magazine Mixing Grid */}
-      <div className="ls-desktop-grid" style={{ flexDirection: "column", gap: 8, padding: "8px 0 0" }}>
+      <div className="ls-desktop-grid" style={{ flexDirection: "column", gap: 0, padding: "8px 0 0" }}>
         {rows.map((row, ri) => {
           const h = heightMap[row.cols] || 360;
           return (
-            <div key={ri} style={{ display: "grid", gridTemplateColumns: `repeat(${row.cols}, 1fr)`, gap: 8, alignItems: "stretch" }}>
+            <React.Fragment key={ri}>
+            <div style={{ display: "grid", gridTemplateColumns: `repeat(${row.cols}, 1fr)`, gap: 8, alignItems: "stretch", marginBottom: 8 }}>
               {row.items.map((paket) => (
                 <div key={paket.id} className="ls-wrap">
                   <div className="ls-img-box" style={{ height: h, position: "relative", overflow: "hidden" }}>
@@ -13106,14 +13299,17 @@ function PembangunanCafePage({ onWaOpen, paketData }) {
                 </div>
               ))}
             </div>
+            <MagazineBreakSection {...CAFE_BREAKS[ri % CAFE_BREAKS.length]} onWaOpen={onWaOpen} palette={cafePalette} />
+            </React.Fragment>
           );
         })}
       </div>
 
       {/* MOBILE: 1 Kolom Penuh */}
       <div className="ls-mobile-list">
-        {paket_.map((paket) => (
-          <div key={paket.id} className="ls-mobile-item ls-wrap">
+        {paket_.map((paket, pi) => (
+          <React.Fragment key={paket.id}>
+          <div className="ls-mobile-item ls-wrap">
             <div className="ls-img-box ls-mobile-slide" style={{ position: "relative", overflow: "hidden", height: 260 }}>
               <RsMiniSlide slides={paket.slides} slideDir={paket.slideDir} height="260px" />
 
@@ -13128,6 +13324,10 @@ function PembangunanCafePage({ onWaOpen, paketData }) {
 
             <RsInfoCard paket={paket} fmt={fmt} onWaOpen={onWaOpen} />
           </div>
+          {cafeBreakBoundaries.includes(pi + 1) && (
+            <MagazineBreakSection {...CAFE_BREAKS[cafeBreakBoundaries.indexOf(pi + 1) % CAFE_BREAKS.length]} onWaOpen={onWaOpen} palette={cafePalette} />
+          )}
+          </React.Fragment>
         ))}
       </div>
 
@@ -13326,6 +13526,25 @@ function PembangunanRukoPage({ onWaOpen, paketData }) {
   }
   const heightMap = { 1: 480, 2: 400, 3: 340 };
 
+  /* Selingan konten antar baris paket — relevan dengan bisnis ruko & Vastura Group */
+  const RUKO_BREAKS = [
+    { variant: "feature", eyebrow: "Kenapa Berinvestasi", title: "Kenapa Ruko Jadi Pilihan Investasi Properti",
+      features: [
+        { title: "Fungsi Ganda", desc: "Lantai bawah untuk usaha, lantai atas untuk kantor atau hunian — satu bangunan, dua fungsi sekaligus dalam satu lahan." },
+        { title: "Lokasi Bernilai Tinggi", desc: "Ruko umumnya dibangun di jalur komersial ramai, membuat nilai propertinya cenderung naik lebih cepat dibanding hunian biasa." },
+        { title: "Cocok Berbagai Usaha", desc: "Dari toko retail, kantor, klinik, hingga gudang kecil — desain ruko mudah disesuaikan dengan jenis usaha apapun." },
+      ] },
+    { variant: "cta", eyebrow: "Sudah Punya Lahan Komersial?",
+      title: "Konsultasikan Rencana Ruko Anda",
+      text: "Tim kami siap survei lokasi dan menghitungkan estimasi biaya sebelum Anda memutuskan membangun — gratis, tanpa kewajiban apapun.",
+      waText: "Konsultasi Gratis via WhatsApp", waVars: { judul_layanan: "Pembangunan Ruko" } },
+    { variant: "quote",
+      text: "Ruko yang baik dibangun untuk bertahan puluhan tahun — bukan cuma soal tampilan depan yang menarik, tapi struktur yang benar-benar bisa diandalkan untuk usaha jangka panjang.",
+      title: "Vastura Group · Tim Pembangunan Ruko" },
+  ];
+  const rukoPalette = { bg: "#FAF7F0", dark: "#2E3D3F", accent: "#3D5254", text: "#2E3D3F", muted: "#5A6A6C" };
+  const rukoBreakBoundaries = rows.reduce((acc, r) => { acc.push((acc[acc.length - 1] || 0) + r.cols); return acc; }, []);
+
   return (
     <div className="fade-in" style={{ background: "#FAF7F0", minHeight: "100vh" }}>
       <style>{`
@@ -13416,11 +13635,12 @@ function PembangunanRukoPage({ onWaOpen, paketData }) {
       </div>
 
       {/* DESKTOP: Magazine Mixing Grid */}
-      <div className="ls-desktop-grid" style={{ flexDirection: "column", gap: 8, padding: "8px 0 0" }}>
+      <div className="ls-desktop-grid" style={{ flexDirection: "column", gap: 0, padding: "8px 0 0" }}>
         {rows.map((row, ri) => {
           const h = heightMap[row.cols] || 360;
           return (
-            <div key={ri} style={{ display: "grid", gridTemplateColumns: `repeat(${row.cols}, 1fr)`, gap: 8, alignItems: "stretch" }}>
+            <React.Fragment key={ri}>
+            <div style={{ display: "grid", gridTemplateColumns: `repeat(${row.cols}, 1fr)`, gap: 8, alignItems: "stretch", marginBottom: 8 }}>
               {row.items.map((paket) => (
                 <div key={paket.id} className="ls-wrap">
                   <div className="ls-img-box" style={{ height: h, position: "relative", overflow: "hidden" }}>
@@ -13446,14 +13666,17 @@ function PembangunanRukoPage({ onWaOpen, paketData }) {
                 </div>
               ))}
             </div>
+            <MagazineBreakSection {...RUKO_BREAKS[ri % RUKO_BREAKS.length]} onWaOpen={onWaOpen} palette={rukoPalette} />
+            </React.Fragment>
           );
         })}
       </div>
 
       {/* MOBILE: 1 Kolom Penuh */}
       <div className="ls-mobile-list">
-        {paket_.map((paket) => (
-          <div key={paket.id} className="ls-mobile-item ls-wrap">
+        {paket_.map((paket, pi) => (
+          <React.Fragment key={paket.id}>
+          <div className="ls-mobile-item ls-wrap">
             <div className="ls-img-box ls-mobile-slide" style={{ position: "relative", overflow: "hidden", height: 260 }}>
               <RsMiniSlide slides={paket.slides} slideDir={paket.slideDir} height="260px" />
 
@@ -13468,6 +13691,10 @@ function PembangunanRukoPage({ onWaOpen, paketData }) {
 
             <RsInfoCard paket={paket} fmt={fmt} onWaOpen={onWaOpen} />
           </div>
+          {rukoBreakBoundaries.includes(pi + 1) && (
+            <MagazineBreakSection {...RUKO_BREAKS[rukoBreakBoundaries.indexOf(pi + 1) % RUKO_BREAKS.length]} onWaOpen={onWaOpen} palette={rukoPalette} />
+          )}
+          </React.Fragment>
         ))}
       </div>
 
