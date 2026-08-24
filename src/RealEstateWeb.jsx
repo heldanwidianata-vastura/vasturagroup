@@ -6186,7 +6186,7 @@ const LAYANAN_LIST = [
   { key: "eksterior", icon: "", label: "Eksterior", desc: "Desain eksterior menarik, kokoh dan estetis.", color: "#3D5254", category: "traveling", img: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&q=80" },
   { key: "rab", icon: "", label: "Desain & RAB", desc: "Desain arsitektur lengkap dengan RAB yang akurat.", color: "#8B6914", category: "traveling", img: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=600&q=80" },
   { key: "landscape", icon: "", label: "Landscape", desc: "Taman indah dan asri yang menyatu dengan hunian Anda.", color: "#2E7D32", category: "traveling", img: "https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=600&q=80" },
-  { key: "aluminium", icon: "", label: "Aluminium", desc: "Kusen, pintu & jendela aluminium berkualitas tinggi.", color: "#3D5254", category: "event", img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80" },
+  { key: "aluminium", icon: "", label: "Aluminium", desc: "Kusen, pintu & jendela aluminium berkualitas tinggi.", color: "#3D5254", category: "event", img: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&q=80" },
   { key: "kanopi", icon: "", label: "Kanopi", desc: "Kanopi kuat, modern dan tahan segala cuaca.", color: "#8B6914", category: "event", img: "https://images.unsplash.com/photo-1600566752355-35792bedcfea?w=600&q=80" },
 ];
 
@@ -6691,7 +6691,7 @@ function ServicesPage({ content, services, navigateTo, activePaket, onOpenPaket,
   const GALERI_LIST = [
     { label: "RUMAH MINIMALIS", img: "https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=600&q=80" },
     { label: "INTERIOR MODERN", img: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=600&q=80" },
-    { label: "PAGAR LASER CUTTING", img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80" },
+    { label: "PAGAR LASER CUTTING", img: "https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=600&q=80" },
     { label: "KANOPI ALDERON", img: "https://images.unsplash.com/photo-1600566752355-35792bedcfea?w=600&q=80" },
     { label: "KOLAM & TAMAN", img: "https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=600&q=80" },
     { label: "PINTU ALUMINIUM", img: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=600&q=80" },
@@ -7011,12 +7011,12 @@ const ABOUT_LAYANAN_DEFAULT = [
   { icon: "", title: "Eksterior",    desc: "Desain eksterior menarik, kokoh dan estetis.",                          img: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&q=80", slug: "eksterior" },
   { icon: "", title: "Desain & RAB", desc: "Desain arsitektur lengkap dengan RAB yang akurat.",                     img: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=600&q=80", slug: "desain-rab" },
   { icon: "", title: "Landscape",    desc: "Taman indah dan asri yang menyatu dengan hunian Anda.",                 img: "https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=600&q=80", slug: "landscape" },
-  { icon: "", title: "Aluminium",    desc: "Kusen, pintu & jendela aluminium berkualitas tinggi.",                  img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80", slug: "aluminium" },
+  { icon: "", title: "Aluminium",    desc: "Kusen, pintu & jendela aluminium berkualitas tinggi.",                  img: "https://images.unsplash.com/photo-1562259949-e8e7689d7828?w=600&q=80", slug: "aluminium" },
   { icon: "", title: "Kanopi",       desc: "Kanopi kuat, modern dan tahan segala cuaca.",                           img: "https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?w=600&q=80", slug: "kanopi" },
 ];
 
 /* ─────────────── ABOUT PAGE ─────────────── */
-function AboutPage({ content, images, teamMembers, aboutStats, aboutMisiList, aboutWhyList, aboutLayananList, navigateTo, onWaOpen }) {
+function AboutPage({ content, images, teamMembers, aboutStats, aboutMisiList, aboutWhyList, aboutLayananList, navigateTo, onWaOpen, temaData, cmsData, openTemaDetail }) {
   const [contactForm, setContactForm] = useState({ name: "", email: "", phone: "", subject: "", message: "" });
   const [contactSent, setContactSent] = useState(false);
 
@@ -7045,6 +7045,15 @@ function AboutPage({ content, images, teamMembers, aboutStats, aboutMisiList, ab
   const misi    = (aboutMisiList&& aboutMisiList.length> 0) ? aboutMisiList: ABOUT_MISI_DEFAULT;
   const values  = (aboutWhyList && aboutWhyList.length > 0) ? aboutWhyList : ABOUT_WHY_DEFAULT;
   const layananCards = (aboutLayananList && aboutLayananList.length > 0) ? aboutLayananList : ABOUT_LAYANAN_DEFAULT;
+
+  /* Kartu "Tema Pilihan Kami" — ambil acak dari data Tema Rumah (Control Panel),
+     menggantikan kartu Susunan Tim. Diacak sekali per kunjungan halaman (bukan
+     tiap render) supaya tidak berubah-ubah saat pengunjung sedang melihat. */
+  const featuredTemas = useMemo(() => {
+    const source = ((temaData && temaData.length > 0) ? temaData : TEMA_DATA).filter(t => !t.hidden);
+    const shuffled = [...source].sort(() => Math.random() - 0.5);
+    return shuffled.slice(0, 4);
+  }, []);
 
   const goToLayanan = (slug) => {
     if (typeof navigateTo !== "function") return;
@@ -7152,40 +7161,31 @@ function AboutPage({ content, images, teamMembers, aboutStats, aboutMisiList, ab
         </div>
       </div>
 
-      {/* -- SUSUNAN TIM -- */}
+      {/* -- TEMA PILIHAN KAMI (acak dari data Tema Rumah, menggantikan kartu tim) -- */}
       <div style={{ padding: "80px 5%" }}>
         <div style={{ maxWidth: 1200, margin: "0 auto" }}>
           <div style={{ textAlign: "center", marginBottom: 52 }}>
-            <div style={{ fontSize: "0.6875rem", letterSpacing: "2px", color: "#8B6914", textTransform: "uppercase", fontWeight: 700, marginBottom: 12 }}>{content.aboutTeamLabel || "Orang-Orang di Balik Layanan"}</div>
-            <h2 className="display" style={{ fontSize: "clamp(1.75rem,4vw,2.75rem)", fontWeight: 900, color: "#2E3D3F" }}>{content.aboutTeamTitle || "Susunan Tim Kami"}</h2>
+            <div style={{ fontSize: "0.6875rem", letterSpacing: "2px", color: "#8B6914", textTransform: "uppercase", fontWeight: 700, marginBottom: 12 }}>{content.aboutTeamLabel || "Karya & Inspirasi Kami"}</div>
+            <h2 className="display" style={{ fontSize: "clamp(1.75rem,4vw,2.75rem)", fontWeight: 900, color: "#2E3D3F" }}>{content.aboutTeamTitle || "Tema Rumah Pilihan Kami"}</h2>
           </div>
-          {(!teamMembers || teamMembers.length === 0) ? (
-            <div style={{ textAlign: "center", padding: "40px 0", color: "#5A6A6C" }}>Susunan tim belum diisi. Hubungi administrator.</div>
+          {featuredTemas.length === 0 ? (
+            <div style={{ textAlign: "center", padding: "40px 0", color: "#5A6A6C" }}>Data tema rumah belum diisi. Hubungi administrator.</div>
           ) : (
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: 28 }}>
-              {teamMembers.map((member, i) => (
-                <div key={member.id || i} className="hover-lift" style={{ background: "#fff", borderRadius: 14, overflow: "hidden", boxShadow: "0 4px 16px rgba(13,59,102,.08)", textAlign: "center", transition: "all .3s" }}>
-                  {/* Photo */}
+              {featuredTemas.map((tema) => (
+                <div key={tema.id || tema.slug} className="hover-lift" style={{ background: "#fff", borderRadius: 14, overflow: "hidden", boxShadow: "0 4px 16px rgba(13,59,102,.08)", textAlign: "center", transition: "all .3s", cursor: openTemaDetail ? "pointer" : "default" }}
+                  onClick={() => openTemaDetail && openTemaDetail(tema.slug)}>
+                  {/* Foto tema (auto-skip kalau ada foto rusak, konsisten dengan kartu di Home) */}
                   <div style={{ height: 220, overflow: "hidden", background: "linear-gradient(130deg,#2E3D3F 0%,#3D5254 50%,#8B6914 100%)", position: "relative" }}>
-                    {member.photo ? (
-                      <img loading="lazy" src={member.photo} alt={member.name}
-                        style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "top center", display: "block", transition: "transform .4s ease" }}
-                        onMouseEnter={e => e.target.style.transform = "scale(1.05)"}
-                        onMouseLeave={e => e.target.style.transform = "scale(1)"}
-                        onError={e => { e.target.style.display = "none"; e.target.parentNode.querySelector(".team-fallback").style.display = "flex"; }} />
-                    ) : null}
-                    <div className="team-fallback" style={{ position: "absolute", inset: 0, display: member.photo ? "none" : "flex", alignItems: "center", justifyContent: "center", flexDirection: "column", gap: 8 }}>
-                      <div style={{ width: 72, height: 72, borderRadius: "50%", background: "rgba(255,255,255,.15)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 36 }}></div>
-                      <span style={{ fontSize: "0.7rem", color: "rgba(255,255,255,.5)", letterSpacing: "1px", textTransform: "uppercase" }}>No Photo</span>
-                    </div>
+                    <TemaPhotoSlideshow slug={tema.slug} nama={tema.nama} cmsData={cmsData} fallbackImg={tema.img} />
                     {/* Name overlay at bottom */}
                     <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: 60, background: "linear-gradient(to top, rgba(13,59,102,.75), transparent)", pointerEvents: "none" }} />
                   </div>
                   <div style={{ padding: "20px 20px 24px" }}>
-                    <h3 style={{ fontSize: "1rem", fontFamily: "'Playfair Display',serif", fontWeight: 800, color: "#2E3D3F", marginBottom: 4 }}>{member.name}</h3>
-                    <div style={{ fontSize: "0.8125rem", color: "#8B6914", fontWeight: 600, marginBottom: 12 }}>{member.role}</div>
-                    {member.quotes && (
-                      <p style={{ fontSize: "0.8125rem", color: "#5A6A6C", fontStyle: "italic", lineHeight: 1.65, whiteSpace: "pre-line" }}>"{member.quotes}"</p>
+                    <h3 style={{ fontSize: "1rem", fontFamily: "'Playfair Display',serif", fontWeight: 800, color: "#2E3D3F", marginBottom: 4 }}>{tema.nama}</h3>
+                    <div style={{ fontSize: "0.8125rem", color: "#8B6914", fontWeight: 600, marginBottom: 12 }}>{tema.tagline || "Tema Rumah"}</div>
+                    {tema.deskripsi && (
+                      <p style={{ fontSize: "0.8125rem", color: "#5A6A6C", fontStyle: "italic", lineHeight: 1.65, display: "-webkit-box", WebkitLineClamp: 3, WebkitBoxOrient: "vertical", overflow: "hidden" }}>{tema.deskripsi}</p>
                     )}
                   </div>
                 </div>
@@ -8989,10 +8989,11 @@ function AboutPageAdmin({ data, save, notify, uploadToCloudinary }) {
         </div>
       </AboutAdminSection>
 
-      <AboutAdminSection title="Susunan Tim" accent="#8B6914" desc="Label, judul, dan daftar anggota tim (foto, nama, jabatan, kutipan) yang tampil di halaman About.">
-        <AboutTextField data={data} save={save} notify={notify} label="Label Kecil" fieldKey="aboutTeamLabel" placeholder="Orang-Orang di Balik Layanan" />
-        <AboutTextField data={data} save={save} notify={notify} label="Judul Section" fieldKey="aboutTeamTitle" placeholder="Susunan Tim Kami" />
+      <AboutAdminSection title="Susunan Tim" accent="#8B6914" desc="Label & judul section di sini dipakai untuk section 'Tema Rumah Pilihan Kami' di halaman About (kartu tema diambil otomatis-acak dari data Tema Rumah). Data anggota tim di bawah ini TIDAK lagi ditampilkan ke publik — datanya tetap tersimpan kalau nanti mau diaktifkan lagi.">
+        <AboutTextField data={data} save={save} notify={notify} label="Label Kecil" fieldKey="aboutTeamLabel" placeholder="Karya & Inspirasi Kami" />
+        <AboutTextField data={data} save={save} notify={notify} label="Judul Section" fieldKey="aboutTeamTitle" placeholder="Tema Rumah Pilihan Kami" />
         <div style={{ marginTop: 14, background: "#FAF7F0", borderRadius: 10, padding: 16, border: "1px dashed #D5C9B0" }}>
+          <div style={{ fontSize: 12, color: "#8B6914", fontWeight: 700, marginBottom: 10 }}>Data anggota tim (tidak tampil publik saat ini)</div>
           <TeamAdmin data={data} save={save} notify={notify} uploadToCloudinary={uploadToCloudinary} embedded />
         </div>
       </AboutAdminSection>
@@ -10388,7 +10389,7 @@ const TEMA_DATA = [
       { icon: "", label: "Kesan Maskulin" }, { icon: "", label: "Material Ekspos" },
       { icon: "", label: "Tahan Lama" }, { icon: "", label: "Desain Unik" },
     ],
-    img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=900&q=80",
+    img: "https://images.unsplash.com/photo-1600566752355-35792bedcfea?w=900&q=80",
     warna: "#6b7c8a",
     deskripsi: "Industrial mengambil estetika pabrik dan gudang lama — beton ekspos, pipa besi terbuka, bata merah mentah — dan mentransformasinya menjadi hunian yang berkarakter kuat. Setiap 'ketidaksempurnaan' material menjadi elemen desain yang disengaja.",
     detail: {
@@ -10748,7 +10749,7 @@ const TEMA_PHOTOS = {
     { img: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=900&q=80", label: "Reading Nook Cozy" },
   ],
   "industrial": [
-    { img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=900&q=80", label: "Eksterior Industrial Raw" },
+    { img: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=900&q=80", label: "Eksterior Industrial Raw" },
     { img: "https://images.unsplash.com/photo-1560448204-603b3fc33ddc?w=900&q=80", label: "Interior Beton Ekspos" },
     { img: "https://images.unsplash.com/photo-1567016432779-094069958ea5?w=900&q=80", label: "Ruang Tamu Industrial" },
     { img: "https://images.unsplash.com/photo-1600121848594-d8644e57abab?w=900&q=80", label: "Dapur Industrial Chic" },
@@ -10794,10 +10795,24 @@ function TemaPhotoSlideshow({ slug, nama, cmsData, duration = 3500, fallbackImg 
   const photos = photosRaw.length > 0 ? photosRaw : (fallbackImg ? [{ img: fallbackImg, label: nama || "" }] : []);
   const [idx, setIdx] = useState(0);
   const dragRef = useRef({ down: false, startX: 0, moved: false });
-  /* Kalau foto yang lagi aktif gagal dimuat (rusak/link putus), tampilkan fallback
-     ikon rumah, jangan biarkan blank kosong ke pengunjung website. */
-  const [imgBroken, setImgBroken] = useState(false);
-  useEffect(() => { setImgBroken(false); }, [idx, photos]);
+  /* Kalau foto yang lagi aktif gagal dimuat (link rusak/putus), JANGAN cuma
+     tampilkan kotak kosong — otomatis lompat ke foto lain yang masih valid
+     di galeri yang sama, supaya pengunjung tetap lihat foto selama minimal
+     1 foto di galeri itu hidup. Kotak fallback cuma tampil kalau BENAR-BENAR
+     semua foto di galeri itu rusak. */
+  const [brokenSet, setBrokenSet] = useState(() => new Set());
+  useEffect(() => { setBrokenSet(new Set()); }, [slug]);
+  const allBroken = photos.length > 0 && brokenSet.size >= photos.length;
+  const handleImgError = () => {
+    if (brokenSet.has(idx)) return;
+    const next = new Set(brokenSet);
+    next.add(idx);
+    setBrokenSet(next);
+    for (let step = 1; step <= photos.length; step++) {
+      const tryIdx = (idx + step) % photos.length;
+      if (!next.has(tryIdx)) { setIdx(tryIdx); break; }
+    }
+  };
   /* Skeleton loading: lacak src foto yang sudah pernah selesai dimuat,
      supaya shimmer cuma tampil sekali per foto (bukan tiap kali slide berulang). */
   const [loadedSrcs, setLoadedSrcs] = useState(() => new Set());
@@ -10884,7 +10899,7 @@ function TemaPhotoSlideshow({ slug, nama, cmsData, duration = 3500, fallbackImg 
       onTouchEnd={handleTouchEnd}
     >
       {/* Image — tanpa key, jadi browser cuma ganti src elemen yang sama (tidak ada blank/kedip) */}
-      {imgBroken ? (
+      {allBroken || !cur || brokenSet.has(idx) ? (
         <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", background: "#E8DCC8" }}>
           <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#A89070" strokeWidth="1.5"><path d="M3 10.5L12 3l9 7.5" strokeLinecap="round" strokeLinejoin="round"/><path d="M5 9.5V20a1 1 0 001 1h12a1 1 0 001-1V9.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
         </div>
@@ -10895,7 +10910,7 @@ function TemaPhotoSlideshow({ slug, nama, cmsData, duration = 3500, fallbackImg 
             draggable={false}
             style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", pointerEvents: "none", opacity: loadedSrcs.has(cur.img) ? 1 : 0, transition: "opacity .4s ease" }}
             onLoad={() => markLoaded(cur.img)}
-            onError={() => setImgBroken(true)} />
+            onError={handleImgError} />
         </>
       )}
 
@@ -11580,7 +11595,7 @@ const LANDSCAPE_CATEGORIES = [
       { icon: "", item: "Garansi perawatan 30 hari setelah pemasangan" },
     ],
     slides: [
-      { img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80", tema: "Minimalis Modern", desc: "Taman depan bersih dengan jalur batu andesit, tanaman hias rendah, dan lampu sorot tersembunyi. Cocok untuk rumah bergaya kontemporer." },
+      { img: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&q=80", tema: "Minimalis Modern", desc: "Taman depan bersih dengan jalur batu andesit, tanaman hias rendah, dan lampu sorot tersembunyi. Cocok untuk rumah bergaya kontemporer." },
       { img: "https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=800&q=80", tema: "Tropis Resort", desc: "Nuansa villa tropis di depan rumah -- palm mini, heliconia, dan kerikil putih menciptakan ambiance resort yang mewah." },
       { img: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&q=80", tema: "Japanese Zen", desc: "Taman gaya Jepang dengan batu stepping, lumut hijau, bambu, dan air mengalir. Tenang dan meditatif setiap hari." },
       { img: "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=800&q=80", tema: "Teras Santai Bohemian", desc: "Area teras dengan pergola rotan, tanaman merambat, dan kursi outdoor. Tempat bersantai paling favorit di sore hari." },
@@ -11661,7 +11676,7 @@ const LANDSCAPE_CATEGORIES = [
     ],
     slides: [
       { img: "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=800&q=80", tema: "Living Wall Interior", desc: "Dinding hidup di dalam ruangan -- sistem irigasi otomatis tersembunyi, media tanam hidroponik, dan pilihan 30+ jenis tanaman hias." },
-      { img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80", tema: "Facade Vertical Garden", desc: "Tampak depan rumah yang memukau dengan vertical garden fasad. Tanaman tahan UV dan cuaca, perawatan minimal." },
+      { img: "https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=800&q=80", tema: "Facade Vertical Garden", desc: "Tampak depan rumah yang memukau dengan vertical garden fasad. Tanaman tahan UV dan cuaca, perawatan minimal." },
       { img: "https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=800&q=80", tema: "Herb Wall Kitchen", desc: "Dinding herba aromatik di area dapur -- basil, mint, rosemary, thyme. Segar, wangi, dan bisa dipetik kapan saja." },
       { img: "https://images.unsplash.com/photo-1524758631624-e2822e304c36?w=800&q=80", tema: "Office Green Wall", desc: "Vertical garden di area kerja atau lobby kantor. Terbukti meningkatkan produktivitas dan mengurangi stres karyawan." },
       { img: "https://images.unsplash.com/photo-1600210492493-0946911123ea?w=800&q=80", tema: "Tropical Statement Wall", desc: "Komposisi tanaman tropis dramatis -- monstera, philodendron, dan pakis raksasa. Bold dan instagrammable." },
@@ -11687,7 +11702,7 @@ const LANDSCAPE_CATEGORIES = [
     ],
     slides: [
       { img: "https://images.unsplash.com/photo-1523301343968-6a6ebf63c672?w=800&q=80", tema: "Kolam Koi Jepang", desc: "Kolam koi bergaya Jepang lengkap dengan filter biologis, batu suiseki, jembatan mini kayu, dan ikan koi pilihan warna-warni." },
-      { img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80", tema: "Waterfall Minimalis", desc: "Air terjun dinding batu alam yang elegan. Suara gemericik konstan menciptakan ambiance premium di halaman rumah Anda." },
+      { img: "https://images.unsplash.com/photo-1562259949-e8e7689d7828?w=800&q=80", tema: "Waterfall Minimalis", desc: "Air terjun dinding batu alam yang elegan. Suara gemericik konstan menciptakan ambiance premium di halaman rumah Anda." },
       { img: "https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=800&q=80", tema: "Fountain Klasik", desc: "Air mancur tengah taman bergaya klasik Eropa -- patung lion head, mangkuk bertingkat, dan pencahayaan bawah air berwarna." },
       { img: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=800&q=80", tema: "Kolam Renang Natural", desc: "Natural pool dengan border batu andesit, filter tanaman, dan waterfall tepi -- kolam yang menyatu sempurna dengan taman." },
       { img: "https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=800&q=80", tema: "Air Mancur Modern", desc: "Instalasi air mancur geometris modern dari stainless steel. Jet air presisi dengan sistem kontrol otomatis dan LED underwater." },
@@ -11723,7 +11738,7 @@ const LANDSCAPE_CATEGORIES = [
 ];
 
 const ELEMEN_PREMIUM = [
-  { icon: "", title: "Batu Alam & Kerikil", desc: "Batu andesit, batu candi, kerikil warna — untuk jalur taman, dinding, dan aksen dekoratif.", img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&q=80" },
+  { icon: "", title: "Batu Alam & Kerikil", desc: "Batu andesit, batu candi, kerikil warna — untuk jalur taman, dinding, dan aksen dekoratif.", img: "https://images.unsplash.com/photo-1600566752355-35792bedcfea?w=400&q=80" },
   { icon: "", title: "Tanaman Pilihan Premium", desc: "Seleksi tanaman sesuai iklim lokal — tahan panas, mudah dirawat, dan bernilai estetis tinggi.", img: "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=400&q=80" },
   { icon: "", title: "Pergola & Gazebo", desc: "Struktur atap taman dari kayu ulin atau besi untuk area duduk yang nyaman di luar ruangan.", img: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=400&q=80" },
   { icon: "", title: "Tanaman Hias Eksotis", desc: "Koleksi tanaman hias langka dan eksotis — heliconia, bromelia, monstera deliciosa, agave.", img: "https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=400&q=80" },
@@ -12762,7 +12777,7 @@ const KOST_PAKET_DATA = [
     slides: [
       { img: "https://images.unsplash.com/photo-1600566752355-35792bedcfea?w=800&q=80", tema: "Kost Baru Siap Sewa", desc: "Hasil akhir bangunan kost yang rapi, modern, dan siap dioperasikan." },
       { img: "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=800&q=80", tema: "Fasad Bangunan Utuh", desc: "Tampak depan bangunan kost turnkey dengan desain fasad yang menarik." },
-      { img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80", tema: "Area Depan & Pagar", desc: "Penataan area depan, pagar, dan akses masuk bangunan kost." },
+      { img: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&q=80", tema: "Area Depan & Pagar", desc: "Penataan area depan, pagar, dan akses masuk bangunan kost." },
       { img: "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=800&q=80", tema: "Koridor Antar Kamar", desc: "Koridor penghubung antar kamar yang bersih dan tertata rapi." },
       { img: "https://images.unsplash.com/photo-1556912167-f556f1f39fdf?w=800&q=80", tema: "Interior Siap Huni", desc: "Salah satu kamar dalam kondisi siap huni, lengkap dengan furnitur dasar." },
     ]
@@ -15146,7 +15161,7 @@ const CATALOG_DATA = {
       {id:"rk1", nama:"Family Room Modern", style:"Cozy", material:"Sofa Fabric + Kayu", desc:"Open plan yang luas dengan sofa modular, TV wall custom, dan pencahayaan hangat.", harga:18000000, fitur:["Modular Sofa","TV Wall","Warm Lighting"], img:"https://images.unsplash.com/photo-1567016432779-094069958ea5?w=600&q=80", poin:["Survey lokasi & konsultasi desain gratis sebelum pengerjaan","Material utama: Sofa Fabric + Kayu","Modular Sofa","TV Wall","Warm Lighting","Pengerjaan oleh tenaga ahli berpengalaman","Garansi purna pengerjaan dari tim VASTURA GROUP"]},
       {id:"rk2", nama:"Living Room Luxury", style:"Premium", material:"Marmer + Velvet", desc:"Ruang keluarga prestisius. Plafon coffered, sofa velvet, dan lampu gantung kristal.", harga:65000000, fitur:["Coffered Ceiling","Crystal Chandelier","Marble Floor"], img:"https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=600&q=80", poin:["Survey lokasi & konsultasi desain gratis sebelum pengerjaan","Material utama: Marmer + Velvet","Coffered Ceiling","Crystal Chandelier","Marble Floor","Pengerjaan oleh tenaga ahli berpengalaman","Garansi purna pengerjaan dari tim VASTURA GROUP"]},
       {id:"rk3", nama:"Family Room Scandinavian", style:"Hygge", material:"Kayu + Linen + Wol", desc:"Konsep hygge — nyaman di setiap sudut. Karpet wol, sofa linen, dan reading corner.", harga:14000000, fitur:["Hygge Concept","Wool Rug","Reading Nook"], img:"https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&q=80", poin:["Survey lokasi & konsultasi desain gratis sebelum pengerjaan","Material utama: Kayu + Linen + Wol","Hygge Concept","Wool Rug","Reading Nook","Pengerjaan oleh tenaga ahli berpengalaman","Garansi purna pengerjaan dari tim VASTURA GROUP"]},
-      {id:"rk4", nama:"Living Room Industrial", style:"Bold", material:"Beton + Besi + Kulit", desc:"Karakter kuat. Sofa kulit, kopi table besi, dinding bata ekspos, dan lampu track.", harga:20000000, fitur:["Leather Sofa","Brick Wall","Track Lights"], img:"https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80", poin:["Survey lokasi & konsultasi desain gratis sebelum pengerjaan","Material utama: Beton + Besi + Kulit","Leather Sofa","Brick Wall","Track Lights","Pengerjaan oleh tenaga ahli berpengalaman","Garansi purna pengerjaan dari tim VASTURA GROUP"]},
+      {id:"rk4", nama:"Living Room Industrial", style:"Bold", material:"Beton + Besi + Kulit", desc:"Karakter kuat. Sofa kulit, kopi table besi, dinding bata ekspos, dan lampu track.", harga:20000000, fitur:["Leather Sofa","Brick Wall","Track Lights"], img:"https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=600&q=80", poin:["Survey lokasi & konsultasi desain gratis sebelum pengerjaan","Material utama: Beton + Besi + Kulit","Leather Sofa","Brick Wall","Track Lights","Pengerjaan oleh tenaga ahli berpengalaman","Garansi purna pengerjaan dari tim VASTURA GROUP"]},
       {id:"rk5", nama:"Ruang Keluarga Tropis", style:"Breezy", material:"Rotan + Kayu + Bambu", desc:"Sejuk dan alami. Material rotan, tanaman indoor besar, dan sirkulasi udara optimal.", harga:12000000, fitur:["Rattan Furniture","Indoor Plants","Natural Ventilation"], img:"https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=600&q=80", poin:["Survey lokasi & konsultasi desain gratis sebelum pengerjaan","Material utama: Rotan + Kayu + Bambu","Rattan Furniture","Indoor Plants","Natural Ventilation","Pengerjaan oleh tenaga ahli berpengalaman","Garansi purna pengerjaan dari tim VASTURA GROUP"]},
       {id:"rk6", nama:"Ruang Keluarga Japandi", style:"Zen", material:"Kayu Light + Linen", desc:"Minim tapi bernyawa. Furnitur rendah, palet monokrom, dan elemen Zen yang menenangkan.", harga:16000000, fitur:["Low Furniture","Monochrome","Zen Elements"], img:"https://images.unsplash.com/photo-1592078615290-033ee584e267?w=600&q=80", poin:["Survey lokasi & konsultasi desain gratis sebelum pengerjaan","Material utama: Kayu Light + Linen","Low Furniture","Monochrome","Zen Elements","Pengerjaan oleh tenaga ahli berpengalaman","Garansi purna pengerjaan dari tim VASTURA GROUP"]},
     ]
@@ -15196,7 +15211,7 @@ const CATALOG_DATA = {
     heroIcon:"", title:"Pagar Rumah", subtitle:"Keamanan dan keindahan dalam satu desain — pagar yang kokoh, estetis, dan meningkatkan nilai properti.",
     breadcrumb:[{label:"Beranda",page:"home"},{label:"Eksterior"},{label:"Pagar"}],
     items:[
-      {id:"pg1", nama:"Pagar Hollow Minimalis", style:"Modern", material:"Besi Hollow 4x4cm", desc:"Garis tegas, simpel, dan elegan. Finishing powder coat anti karat tersedia berbagai warna.", harga:850000, fitur:["Anti Karat","Custom Warna","Powder Coat"], img:"https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80", poin:["Survey lokasi & konsultasi desain gratis sebelum pengerjaan","Material utama: Besi Hollow 4x4cm","Anti Karat","Custom Warna","Powder Coat","Pengerjaan oleh tenaga ahli berpengalaman","Garansi purna pengerjaan dari tim VASTURA GROUP"]},
+      {id:"pg1", nama:"Pagar Hollow Minimalis", style:"Modern", material:"Besi Hollow 4x4cm", desc:"Garis tegas, simpel, dan elegan. Finishing powder coat anti karat tersedia berbagai warna.", harga:850000, fitur:["Anti Karat","Custom Warna","Powder Coat"], img:"https://images.unsplash.com/photo-1562259949-e8e7689d7828?w=600&q=80", poin:["Survey lokasi & konsultasi desain gratis sebelum pengerjaan","Material utama: Besi Hollow 4x4cm","Anti Karat","Custom Warna","Powder Coat","Pengerjaan oleh tenaga ahli berpengalaman","Garansi purna pengerjaan dari tim VASTURA GROUP"]},
       {id:"pg2", nama:"Pagar Besi Tempa Klasik", style:"Classic", material:"Besi Tempa Solid", desc:"Ornamen klasik yang tak lekang waktu. Cocok untuk rumah bergaya Eropa atau klasik.", harga:1200000, fitur:["Ornamen Custom","Besi Solid","Cat Duco"], img:"https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=600&q=80", poin:["Survey lokasi & konsultasi desain gratis sebelum pengerjaan","Material utama: Besi Tempa Solid","Ornamen Custom","Besi Solid","Cat Duco","Pengerjaan oleh tenaga ahli berpengalaman","Garansi purna pengerjaan dari tim VASTURA GROUP"]},
       {id:"pg3", nama:"Pagar Panel Kayu WPC", style:"Natural", material:"WPC + Rangka Besi", desc:"Tampilan kayu tanpa perawatan intensif. WPC anti rayap, anti UV, dan tahan air.", harga:950000, fitur:["Anti Rayap","Anti UV","Tahan Air"], img:"https://images.unsplash.com/photo-1570129477492-45c003edd2be?w=600&q=80", poin:["Survey lokasi & konsultasi desain gratis sebelum pengerjaan","Material utama: WPC + Rangka Besi","Anti Rayap","Anti UV","Tahan Air","Pengerjaan oleh tenaga ahli berpengalaman","Garansi purna pengerjaan dari tim VASTURA GROUP"]},
       {id:"pg4", nama:"Pagar Stainless Steel", style:"Premium", material:"Stainless 304 Mirror", desc:"Tampilan premium dan mewah. Anti karat permanen, mudah dibersihkan, dan tahan lama.", harga:1800000, fitur:["Mirror Polish","Anti Karat","Prestige Look"], img:"https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=600&q=80", poin:["Survey lokasi & konsultasi desain gratis sebelum pengerjaan","Material utama: Stainless 304 Mirror","Mirror Polish","Anti Karat","Prestige Look","Pengerjaan oleh tenaga ahli berpengalaman","Garansi purna pengerjaan dari tim VASTURA GROUP"]},
@@ -15212,7 +15227,7 @@ const CATALOG_DATA = {
       {id:"kn1", nama:"Kanopi Polycarbonate", style:"Popular", material:"Baja Ringan + Polycarbonate", desc:"Paling populer — tembus cahaya, ringan, dan tahan UV. Tersedia berbagai warna polycarbonate.", harga:280000, fitur:["Tembus Cahaya","UV Protection","Berbagai Warna"], img:"https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=600&q=80", poin:["Survey lokasi & konsultasi desain gratis sebelum pengerjaan","Material utama: Baja Ringan + Polycarbonate","Tembus Cahaya","UV Protection","Berbagai Warna","Pengerjaan oleh tenaga ahli berpengalaman","Garansi purna pengerjaan dari tim VASTURA GROUP"]},
       {id:"kn2", nama:"Kanopi Alderon/UPVC", style:"Premium", material:"UPVC + Rangka Baja", desc:"Material UPVC berkualitas — tidak perlu cat ulang, anti karat, dan ringan tapi kuat.", harga:380000, fitur:["No Repaint","Anti Karat","Low Maintenance"], img:"https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=600&q=80", poin:["Survey lokasi & konsultasi desain gratis sebelum pengerjaan","Material utama: UPVC + Rangka Baja","No Repaint","Anti Karat","Low Maintenance","Pengerjaan oleh tenaga ahli berpengalaman","Garansi purna pengerjaan dari tim VASTURA GROUP"]},
       {id:"kn3", nama:"Kanopi Atap Kaca Tempered", style:"Luxury", material:"Kaca 8mm + Hollow", desc:"Tampilan premium dan modern. Kaca tempered 8mm aman dan estetis untuk carport mewah.", harga:650000, fitur:["Kaca 8mm","Safety Glass","Modern Look"], img:"https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?w=600&q=80", poin:["Survey lokasi & konsultasi desain gratis sebelum pengerjaan","Material utama: Kaca 8mm + Hollow","Kaca 8mm","Safety Glass","Modern Look","Pengerjaan oleh tenaga ahli berpengalaman","Garansi purna pengerjaan dari tim VASTURA GROUP"]},
-      {id:"kn4", nama:"Kanopi Spandek Metal", style:"Industrial", material:"Spandek Zincalume", desc:"Kuat dan tahan lama. Material spandek zincalume tahan karat dan cuaca ekstrem.", harga:220000, fitur:["Tahan Karat","Waterproof","Durable"], img:"https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80", poin:["Survey lokasi & konsultasi desain gratis sebelum pengerjaan","Material utama: Spandek Zincalume","Tahan Karat","Waterproof","Durable","Pengerjaan oleh tenaga ahli berpengalaman","Garansi purna pengerjaan dari tim VASTURA GROUP"]},
+      {id:"kn4", nama:"Kanopi Spandek Metal", style:"Industrial", material:"Spandek Zincalume", desc:"Kuat dan tahan lama. Material spandek zincalume tahan karat dan cuaca ekstrem.", harga:220000, fitur:["Tahan Karat","Waterproof","Durable"], img:"https://images.unsplash.com/photo-1600566752355-35792bedcfea?w=600&q=80", poin:["Survey lokasi & konsultasi desain gratis sebelum pengerjaan","Material utama: Spandek Zincalume","Tahan Karat","Waterproof","Durable","Pengerjaan oleh tenaga ahli berpengalaman","Garansi purna pengerjaan dari tim VASTURA GROUP"]},
       {id:"kn5", nama:"Kanopi Custom Laser Cut", style:"Artistic", material:"Plat Besi 2mm", desc:"Ornamen plat besi dengan pola custom dipotong laser. Unik dan bernilai seni tinggi.", harga:450000, fitur:["Custom Pattern","Laser Cut","Artistic"], img:"https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&q=80", poin:["Survey lokasi & konsultasi desain gratis sebelum pengerjaan","Material utama: Plat Besi 2mm","Custom Pattern","Laser Cut","Artistic","Pengerjaan oleh tenaga ahli berpengalaman","Garansi purna pengerjaan dari tim VASTURA GROUP"]},
       {id:"kn6", nama:"Pergola Kayu + Atap Kaca", style:"Elegant", material:"Kayu Ulin + Kaca", desc:"Pergola taman yang elegan. Kayu ulin kuat dan kaca transparan menciptakan nuansa resort.", harga:850000, fitur:["Kayu Ulin","Taman Resort","Glass Roof"], img:"https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=600&q=80", poin:["Survey lokasi & konsultasi desain gratis sebelum pengerjaan","Material utama: Kayu Ulin + Kaca","Kayu Ulin","Taman Resort","Glass Roof","Pengerjaan oleh tenaga ahli berpengalaman","Garansi purna pengerjaan dari tim VASTURA GROUP"]},
     ]
@@ -15257,7 +15272,7 @@ const CATALOG_DATA = {
       {id:"pl4", nama:"Plafon Tray / Recessed", style:"Elegant", material:"Gypsum Board + Spotlight", desc:"Plafon tengah menjorok ke dalam (tray) dengan pencahayaan tersembunyi di tepinya. Fokus di tengah ruangan.", harga:165000, fitur:["Recessed Light","Focal Point","Elegant"], img:"https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=600&q=80", poin:["Survey lokasi & konsultasi desain gratis sebelum pengerjaan","Material utama: Gypsum Board + Spotlight","Recessed Light","Focal Point","Elegant","Pengerjaan oleh tenaga ahli berpengalaman","Garansi purna pengerjaan dari tim VASTURA GROUP"]},
       {id:"pl5", nama:"Plafon Kayu / Wood Slat", style:"Natural Warm", material:"Kayu Pinus / Jati / SPC", desc:"Bilah kayu horizontal yang hangat dan natural. Memberikan tekstur dan kehangatan pada langit-langit ruangan.", harga:275000, fitur:["Tekstur Natural","Warm Vibes","Sound Absorb"], img:"https://images.unsplash.com/photo-1600585154526-990dced4db0d?w=600&q=80", poin:["Survey lokasi & konsultasi desain gratis sebelum pengerjaan","Material utama: Kayu Pinus / Jati / SPC","Tekstur Natural","Warm Vibes","Sound Absorb","Pengerjaan oleh tenaga ahli berpengalaman","Garansi purna pengerjaan dari tim VASTURA GROUP"]},
       {id:"pl6", nama:"Plafon PVC Motif", style:"Budget Friendly", material:"PVC Panel 30cm", desc:"Panel PVC bermotif kayu, marmer, atau polos. Tahan lembab, anti rayap, dan pemasangan cepat.", harga:65000, fitur:["Anti Lembab","Anti Rayap","Cepat Pasang"], img:"https://images.unsplash.com/photo-1600121848594-d8644e57abab?w=600&q=80", poin:["Survey lokasi & konsultasi desain gratis sebelum pengerjaan","Material utama: PVC Panel 30cm","Anti Lembab","Anti Rayap","Cepat Pasang","Pengerjaan oleh tenaga ahli berpengalaman","Garansi purna pengerjaan dari tim VASTURA GROUP"]},
-      {id:"pl7", nama:"Plafon Ekspos Industrial", style:"Industrial Chic", material:"Beton Ekspos / Cat Gelap", desc:"Langit-langit tanpa penutup — pipa, rangka besi, dan beton dibiarkan terlihat. Bold dan berkarakter kuat.", harga:95000, fitur:["Bold Statement","No Gypsum","Raw Aesthetic"], img:"https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80", poin:["Survey lokasi & konsultasi desain gratis sebelum pengerjaan","Material utama: Beton Ekspos / Cat Gelap","Bold Statement","No Gypsum","Raw Aesthetic","Pengerjaan oleh tenaga ahli berpengalaman","Garansi purna pengerjaan dari tim VASTURA GROUP"]},
+      {id:"pl7", nama:"Plafon Ekspos Industrial", style:"Industrial Chic", material:"Beton Ekspos / Cat Gelap", desc:"Langit-langit tanpa penutup — pipa, rangka besi, dan beton dibiarkan terlihat. Bold dan berkarakter kuat.", harga:95000, fitur:["Bold Statement","No Gypsum","Raw Aesthetic"], img:"https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&q=80", poin:["Survey lokasi & konsultasi desain gratis sebelum pengerjaan","Material utama: Beton Ekspos / Cat Gelap","Bold Statement","No Gypsum","Raw Aesthetic","Pengerjaan oleh tenaga ahli berpengalaman","Garansi purna pengerjaan dari tim VASTURA GROUP"]},
       {id:"pl8", nama:"Plafon Stretched Ceiling", style:"Premium Futuristic", material:"PVC Membran Stretch", desc:"Membran PVC elastis yang ditarik sempurna — bisa transparan, mirror, atau dicetak gambar bintang/langit.", harga:320000, fitur:["Motif Custom","Mirror Option","Seamless"], img:"https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?w=600&q=80", poin:["Survey lokasi & konsultasi desain gratis sebelum pengerjaan","Material utama: PVC Membran Stretch","Motif Custom","Mirror Option","Seamless","Pengerjaan oleh tenaga ahli berpengalaman","Garansi purna pengerjaan dari tim VASTURA GROUP"]},
       {id:"pl9", nama:"Plafon Gypsum Ornamental", style:"Klasik Mewah", material:"Gypsum + Ornamen Cetak", desc:"Plafon dengan ornamen bunga, roset, dan border ukiran gypsum cetak. Cocok untuk ruang tamu dan ruang makan formal.", harga:195000, fitur:["Ornamen Cetak","Klasik Elegan","Rosette Center"], img:"https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=600&q=80", poin:["Survey lokasi & konsultasi desain gratis sebelum pengerjaan","Material utama: Gypsum + Ornamen Cetak","Ornamen Cetak","Klasik Elegan","Rosette Center","Pengerjaan oleh tenaga ahli berpengalaman","Garansi purna pengerjaan dari tim VASTURA GROUP"]},
     ]
@@ -15274,7 +15289,7 @@ const CATALOG_DATA = {
       {id:"btv4", nama:"Backdrop TV Panel 3D Motif", style:"Contemporary", material:"Gypsum / PVC Panel 3D", desc:"Panel bermotif geometris 3D yang memberi dimensi dan bayangan menarik pada dinding TV tanpa perlu cat tambahan.", harga:275000, fitur:["Motif Geometris","Efek Bayangan","Pemasangan Cepat"], img:"https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=600&q=80", poin:["Survey lokasi & konsultasi desain gratis sebelum pengerjaan","Material utama: Gypsum / PVC Panel 3D","Motif Geometris","Efek Bayangan","Pemasangan Cepat","Pengerjaan oleh tenaga ahli berpengalaman","Garansi purna pengerjaan dari tim VASTURA GROUP"]},
       {id:"btv5", nama:"Backdrop TV Marmer Mewah", style:"Luxury", material:"Marmer Import / Marmer Motif", desc:"Kesan elegan dan mewah dengan urat marmer alami, biasa dipadukan rak TV melayang dan lampu sorot.", harga:550000, fitur:["Urat Marmer Natural","Kesan Premium","Floating TV Console"], img:"https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600&q=80", poin:["Survey lokasi & konsultasi desain gratis sebelum pengerjaan","Material utama: Marmer Import / Marmer Motif","Urat Marmer Natural","Kesan Premium","Floating TV Console","Pengerjaan oleh tenaga ahli berpengalaman","Garansi purna pengerjaan dari tim VASTURA GROUP"]},
       {id:"btv6", nama:"Backdrop TV Gypsum Multi Level", style:"Modern Luxury", material:"Gypsum Board Bertingkat", desc:"Panel gypsum bertingkat dengan permainan level maju-mundur, dilengkapi hidden lamp untuk kesan dramatis.", harga:295000, fitur:["Multi Level","Hidden Lamp","Dramatic Look"], img:"https://images.unsplash.com/photo-1560448204-603b3fc33ddc?w=600&q=80", poin:["Survey lokasi & konsultasi desain gratis sebelum pengerjaan","Material utama: Gypsum Board Bertingkat","Multi Level","Hidden Lamp","Dramatic Look","Pengerjaan oleh tenaga ahli berpengalaman","Garansi purna pengerjaan dari tim VASTURA GROUP"]},
-      {id:"btv7", nama:"Backdrop TV Industrial Besi + Kayu", style:"Industrial Chic", material:"Besi Hollow + Kayu Solid", desc:"Kombinasi rangka besi hitam dan kayu solid untuk tampilan industrial yang berkarakter dan maskulin.", harga:340000, fitur:["Rak Pajangan","Bold Statement","Kombinasi Material"], img:"https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80", poin:["Survey lokasi & konsultasi desain gratis sebelum pengerjaan","Material utama: Besi Hollow + Kayu Solid","Rak Pajangan","Bold Statement","Kombinasi Material","Pengerjaan oleh tenaga ahli berpengalaman","Garansi purna pengerjaan dari tim VASTURA GROUP"]},
+      {id:"btv7", nama:"Backdrop TV Industrial Besi + Kayu", style:"Industrial Chic", material:"Besi Hollow + Kayu Solid", desc:"Kombinasi rangka besi hitam dan kayu solid untuk tampilan industrial yang berkarakter dan maskulin.", harga:340000, fitur:["Rak Pajangan","Bold Statement","Kombinasi Material"], img:"https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=600&q=80", poin:["Survey lokasi & konsultasi desain gratis sebelum pengerjaan","Material utama: Besi Hollow + Kayu Solid","Rak Pajangan","Bold Statement","Kombinasi Material","Pengerjaan oleh tenaga ahli berpengalaman","Garansi purna pengerjaan dari tim VASTURA GROUP"]},
       {id:"btv8", nama:"Backdrop TV Wallpaper 3D Custom", style:"Budget Friendly", material:"Wallpaper 3D / Custom Print", desc:"Solusi hemat biaya dengan wallpaper motif 3D custom — bisa motif kayu, batu, atau desain sesuai request.", harga:120000, fitur:["Custom Motif","Hemat Biaya","Pemasangan 1 Hari"], img:"https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=600&q=80", poin:["Survey lokasi & konsultasi desain gratis sebelum pengerjaan","Material utama: Wallpaper 3D / Custom Print","Custom Motif","Hemat Biaya","Pemasangan 1 Hari","Pengerjaan oleh tenaga ahli berpengalaman","Garansi purna pengerjaan dari tim VASTURA GROUP"]},
       {id:"btv9", nama:"Backdrop TV + Rak Fireplace Combo", style:"Statement Piece", material:"Multipleks + Gypsum + Electric Fireplace", desc:"Backdrop TV dipadukan dengan tungku api elektrik (electric fireplace) sebagai focal point mewah ruang keluarga.", harga:750000, fitur:["Electric Fireplace","Focal Point","Built-in Storage"], img:"https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=600&q=80", poin:["Survey lokasi & konsultasi desain gratis sebelum pengerjaan","Material utama: Multipleks + Gypsum + Electric Fireplace","Electric Fireplace","Focal Point","Built-in Storage","Pengerjaan oleh tenaga ahli berpengalaman","Garansi purna pengerjaan dari tim VASTURA GROUP"]},
     ]
@@ -18998,6 +19013,9 @@ export default function BricksyTravel() {
                   aboutMisiList={data.aboutMisiList || []}
                   aboutWhyList={data.aboutWhyList || []}
                   aboutLayananList={data.aboutLayananList || []}
+                  temaData={data.temaData || []}
+                  cmsData={data}
+                  openTemaDetail={openTemaDetail}
                   navigateTo={navigateTo}
                   onWaOpen={openWaPicker}
                 />
