@@ -7419,6 +7419,9 @@ function TeamAdmin({ data, save, notify, uploadToCloudinary, embedded = false })
   const [editId, setEditId] = useState(null);
   const [form, setForm] = useState({});
   const members = data.teamMembers || [];
+  const { ordered: orderedMembers, draggingIdx, onDragStart, onDragEnter, onDragOver, onDragEnd, moveUp, moveDown } =
+    useDragReorder(members, async (next) => { await save({ ...data, teamMembers: next }); notify("Urutan tim berhasil disimpan!"); });
+  const [reorderMode, setReorderMode] = useState(false);
 
   const openNew = () => { setForm({ id: Date.now(), name: "", role: "", quotes: "", photo: "" }); setEditId("new"); };
   const openEdit = (m) => { setForm({ ...m }); setEditId(m.id); };
@@ -7489,9 +7492,21 @@ function TeamAdmin({ data, save, notify, uploadToCloudinary, embedded = false })
       )}
 
       {/* List */}
+      <ReorderModeToggle active={reorderMode} onToggle={() => setReorderMode(v => !v)} />
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(260px,1fr))", gap: 16 }}>
-        {members.map(m => (
-          <div key={m.id} style={{ background: "#fff", borderRadius: 12, padding: "20px", boxShadow: "0 2px 8px rgba(0,0,0,.06)", display: "flex", flexDirection: "column", gap: 12, alignItems: "center", textAlign: "center" }}>
+        {orderedMembers.map((m, idx) => (
+          <div key={m.id}
+            draggable
+            onDragStart={onDragStart(idx)}
+            onDragEnter={onDragEnter(idx)}
+            onDragOver={onDragOver}
+            onDragEnd={onDragEnd}
+            style={{ background: "#fff", borderRadius: 12, padding: "20px", boxShadow: "0 2px 8px rgba(0,0,0,.06)", display: "flex", flexDirection: "column", gap: 12, alignItems: "center", textAlign: "center", opacity: draggingIdx === idx ? 0.4 : 1 }}>
+            <div style={{ alignSelf: "flex-end", marginTop: -10, marginBottom: -10 }}>
+              {reorderMode
+                ? <OrderArrows idx={idx} count={orderedMembers.length} onUp={moveUp} onDown={moveDown} />
+                : <DragHandle style={{ width: 20, height: 20 }} />}
+            </div>
             <div style={{ width: 72, height: 72, borderRadius: "50%", overflow: "hidden", background: "#FAF7F0", border: "2px solid #E8DCC8", flexShrink: 0 }}>
               {m.photo ? <img loading="lazy" src={m.photo} alt={m.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 30 }}></div>}
             </div>
@@ -8880,6 +8895,9 @@ function AboutLayananCardEditor({ index, item, data, save, notify, uploadToCloud
 
 function AboutLayananListEditor({ data, save, notify, uploadToCloudinary }) {
   const list = (data.aboutLayananList && data.aboutLayananList.length > 0) ? data.aboutLayananList : ABOUT_LAYANAN_DEFAULT;
+  const { ordered: orderedList, draggingIdx, onDragStart, onDragEnter, onDragOver, onDragEnd, moveUp, moveDown } =
+    useDragReorder(list, async (next) => { await save({ ...data, aboutLayananList: next }); notify("Urutan kartu layanan berhasil disimpan!"); });
+  const [reorderMode, setReorderMode] = useState(false);
 
   const addItem = () => {
     const next = list.map(x => ({ ...x }));
@@ -8895,9 +8913,23 @@ function AboutLayananListEditor({ data, save, notify, uploadToCloudinary }) {
 
   return (
     <div>
+      <ReorderModeToggle active={reorderMode} onToggle={() => setReorderMode(v => !v)} />
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 14, marginBottom: 16 }}>
-        {list.map((item, idx) => (
-          <AboutLayananCardEditor key={idx} index={idx} item={item} data={data} save={save} notify={notify} uploadToCloudinary={uploadToCloudinary} />
+        {orderedList.map((item, idx) => (
+          <div key={idx}
+            draggable
+            onDragStart={onDragStart(idx)}
+            onDragEnter={onDragEnter(idx)}
+            onDragOver={onDragOver}
+            onDragEnd={onDragEnd}
+            style={{ opacity: draggingIdx === idx ? 0.4 : 1, position: "relative" }}>
+            <div style={{ display: "flex", justifyContent: "flex-end" }}>
+              {reorderMode
+                ? <OrderArrows idx={idx} count={orderedList.length} onUp={moveUp} onDown={moveDown} />
+                : <DragHandle style={{ width: 20, height: 20 }} />}
+            </div>
+            <AboutLayananCardEditor index={idx} item={item} data={data} save={save} notify={notify} uploadToCloudinary={uploadToCloudinary} />
+          </div>
         ))}
       </div>
       <button onClick={addItem} style={{ padding: "9px 16px", background: "#2ecc71", color: "#fff", border: "none", borderRadius: 6, fontSize: 12, fontWeight: 700, cursor: "pointer" }}>+ Tambah Kartu Layanan</button>
@@ -9085,6 +9117,83 @@ function LayananHeroImagePanel({ data, save, notify }) {
    Dipakai oleh: Home, LayananKami, DesainRab, TemaRumah,
                  Interior, Pagar, Kanopi, Aluminium, Landscape
    ══════════════════════════════════════════════════════════ */
+/* ─── Drag-reorder helpers (dipakai di semua panel admin yang punya daftar urutan tampil publik) ─── */
+function moveArrayItem(arr, from, to) {
+  const copy = arr.slice();
+  const [moved] = copy.splice(from, 1);
+  copy.splice(to, 0, moved);
+  return copy;
+}
+function DragHandle({ style = {} }) {
+  return (
+    <span title="Tahan & geser untuk mengubah urutan" style={{ cursor: "grab", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", width: 22, height: 32, color: "#A89070", touchAction: "none", ...style }}>
+      <svg width="14" height="20" viewBox="0 0 14 20" fill="currentColor">
+        <circle cx="4" cy="3" r="1.6" /><circle cx="10" cy="3" r="1.6" />
+        <circle cx="4" cy="10" r="1.6" /><circle cx="10" cy="10" r="1.6" />
+        <circle cx="4" cy="17" r="1.6" /><circle cx="10" cy="17" r="1.6" />
+      </svg>
+    </span>
+  );
+}
+/* Hook generik: kelola drag-reorder untuk sebuah array item + auto-persist saat drag selesai. */
+function useDragReorder(items, onCommit) {
+  const [ordered, setOrdered] = useState(items);
+  useEffect(() => { setOrdered(items); }, [items]);
+  const dragIdxRef = useRef(null);
+  const [draggingIdx, setDraggingIdx] = useState(null);
+  const onDragStart = (idx) => (e) => { dragIdxRef.current = idx; setDraggingIdx(idx); e.dataTransfer.effectAllowed = "move"; };
+  const onDragEnter = (idx) => (e) => {
+    e.preventDefault();
+    if (dragIdxRef.current === null || dragIdxRef.current === idx) return;
+    setOrdered(prev => moveArrayItem(prev, dragIdxRef.current, idx));
+    dragIdxRef.current = idx;
+  };
+  const onDragOver = (e) => e.preventDefault();
+  const onDragEnd = async () => {
+    setDraggingIdx(null); dragIdxRef.current = null;
+    const changed = ordered.length === items.length && ordered.some((it, i) => (it.id ?? it.slug ?? i) !== (items[i]?.id ?? items[i]?.slug ?? i));
+    if (changed) {
+      try { await onCommit(ordered); }
+      catch { setOrdered(items); }
+    }
+  };
+  /* Geser 1 posisi via tombol panah (dipakai mode "Atur Posisi" khusus smartphone) — commit langsung. */
+  const moveStep = async (idx, dir) => {
+    const target = idx + dir;
+    if (target < 0 || target >= ordered.length) return;
+    const next = moveArrayItem(ordered, idx, target);
+    setOrdered(next);
+    try { await onCommit(next); }
+    catch { setOrdered(items); }
+  };
+  const moveUp = (idx) => moveStep(idx, -1);
+  const moveDown = (idx) => moveStep(idx, 1);
+  return { ordered, draggingIdx, onDragStart, onDragEnter, onDragOver, onDragEnd, moveUp, moveDown };
+}
+/* Tombol panah naik/turun — dipakai saat mode "Atur Posisi" aktif (khusus tampilan smartphone). */
+function OrderArrows({ idx, count, onUp, onDown }) {
+  const btnStyle = (disabled) => ({ width: 26, height: 20, border: "1px solid #D5C9B0", background: disabled ? "#F5EDD8" : "#fff", borderRadius: 5, cursor: disabled ? "default" : "pointer", color: "#5A6A6C", fontSize: 10, opacity: disabled ? 0.4 : 1, lineHeight: 1, padding: 0 });
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 3, flexShrink: 0 }}>
+      <button type="button" onClick={() => onUp(idx)} disabled={idx === 0} style={btnStyle(idx === 0)}>▲</button>
+      <button type="button" onClick={() => onDown(idx)} disabled={idx === count - 1} style={btnStyle(idx === count - 1)}>▼</button>
+    </div>
+  );
+}
+/* Tombol "Atur Posisi" — hanya tampil di layar smartphone (drag-and-drop tidak nyaman di layar sentuh). */
+function ReorderModeToggle({ active, onToggle, accent = "#8B6914" }) {
+  const isMobile = useIsMobile();
+  if (!isMobile) return null;
+  return (
+    <button type="button" onClick={onToggle}
+      style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, width: "100%", padding: "10px 14px", marginBottom: 12,
+        background: active ? accent : "#FAF7F0", color: active ? "#fff" : "#5A6A6C", border: `1.5px solid ${active ? accent : "#D5C9B0"}`,
+        borderRadius: 8, fontSize: 13, fontWeight: 700, cursor: "pointer" }}>
+      {active ? "✓ Selesai Atur Posisi" : "⇅ Atur Posisi"}
+    </button>
+  );
+}
+
 function SubLayananAdmin({
 
   title, icon, accentColor = "#C9AA71",
@@ -9235,6 +9344,11 @@ function SubLayananAdmin({
   /* ── Buka form tambah ── */
   const openAdd = () => { setForm(emptyForm()); setEditItem(null); setMode("add"); window.scrollTo({ top: 0, behavior: "smooth" }); };
 
+  /* ── Drag-reorder daftar item: urutan di sini = urutan tampil di halaman publik ── */
+  const { ordered: orderedItems, draggingIdx, onDragStart, onDragEnter, onDragOver, onDragEnd, moveUp, moveDown } =
+    useDragReorder(items, async (next) => { await save({ ...data, [crudKey]: next }); notify("Urutan berhasil disimpan!"); });
+  const [reorderMode, setReorderMode] = useState(false);
+
   /* Field component di-hoist ke top-level module scope (lihat CrudField) supaya
      tidak dibuat ulang setiap render — mencegah bug kursor hilang saat mengetik. */
 
@@ -9276,6 +9390,9 @@ function SubLayananAdmin({
 
       {/* Tombol reset ke data hardcoded dipindah ke paling bawah halaman (lihat akhir list) */}
 
+      {/* Tombol Atur Posisi — khusus tampilan smartphone */}
+      <ReorderModeToggle active={reorderMode} onToggle={() => setReorderMode(v => !v)} accent={accent} />
+
       {/* Daftar item */}
       {items.length === 0 ? (
         <div style={{ textAlign: "center", padding: "40px 20px", border: "1.5px dashed #D5C9B0", borderRadius: 12, color: "#A89070", fontSize: 14 }}>
@@ -9283,10 +9400,19 @@ function SubLayananAdmin({
         </div>
       ) : (
         <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-          {items.map((item, idx) => { const isHidden = !!item.hidden; return (
-            <div key={item.id || idx} style={{ background: "#fff", border: `1.5px solid ${isHidden ? "#E5C07B" : "#E8DCC8"}`, borderRadius: 12, overflow: "hidden", opacity: isHidden ? 0.72 : 1, transition: "opacity .15s" }}>
+          {orderedItems.map((item, idx) => { const isHidden = !!item.hidden; return (
+            <div key={item.id || idx}
+              draggable
+              onDragStart={onDragStart(idx)}
+              onDragEnter={onDragEnter(idx)}
+              onDragOver={onDragOver}
+              onDragEnd={onDragEnd}
+              style={{ background: "#fff", border: `1.5px solid ${isHidden ? "#E5C07B" : "#E8DCC8"}`, borderRadius: 12, overflow: "hidden", opacity: draggingIdx === idx ? 0.4 : isHidden ? 0.72 : 1, transition: "opacity .15s" }}>
               {/* Row item */}
               <div style={{ display: "flex", alignItems: "center", gap: 12, padding: "12px 14px", flexWrap: "wrap" }}>
+                {reorderMode
+                  ? <OrderArrows idx={idx} count={orderedItems.length} onUp={moveUp} onDown={moveDown} />
+                  : <DragHandle />}
                 {item._img
                   ? <img src={item._img} alt="" style={{ width: 54, height: 44, objectFit: "cover", borderRadius: 7, flexShrink: 0 }} />
                   : <div style={{ width: 54, height: 44, background: "#F5EDD8", borderRadius: 7, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20, flexShrink: 0 }}>{icon}</div>
@@ -11449,7 +11575,7 @@ function InteriorPage({ onWaOpen }) {
         items: [
           { icon: "", title: "Plafon Modern", desc: "Desain plafon kreatif — drop ceiling, gypsum, kayu, dan pencahayaan tersembunyi (hidden lamp)." },
           { icon: "", title: "Kitchen Set", desc: "Dapur impian dengan kabinet custom, material tahan lama, dan ergonomis untuk memasak." },
-          { icon: "", title: "Backdrop TV", desc: "Feature wall TV yang menjadi focal point ruangan — material batu alam, kayu, panel 3D, dll." },
+          { icon: "", title: "Backdrop", desc: "Feature wall TV yang menjadi focal point ruangan — material batu alam, kayu, panel 3D, dll." },
           { icon: "", title: "Teras", desc: "Desain teras yang menyambut — kombinasi material, pencahayaan, dan tanaman hias yang harmonis." },
           { icon: "", title: "Ruang Tamu", desc: "Furnitur elegan, layout optimal, dan dekorasi yang menciptakan kesan pertama yang kuat." },
           { icon: "", title: "Ruang Keluarga", desc: "Ruang hangat dan fungsional untuk quality time keluarga dengan konsep cozy living." },
@@ -14008,6 +14134,9 @@ function PaketGridManager({ data, save, notify, storeKey, title, icon, accentCol
   const items = (data[storeKey] && data[storeKey].length) ? data[storeKey] : defaultItems;
   const [editId, setEditId] = useState(null);
   const [form, setForm] = useState({});
+  const { ordered: orderedItems, draggingIdx, onDragStart, onDragEnter, onDragOver, onDragEnd, moveUp, moveDown } =
+    useDragReorder(items, async (next) => { await save({ ...data, [storeKey]: next }); notify("Urutan berhasil disimpan!"); });
+  const [reorderMode, setReorderMode] = useState(false);
 
   const blankItem = () => ({
     id: `paket-${Date.now()}`,
@@ -14222,9 +14351,22 @@ function PaketGridManager({ data, save, notify, storeKey, title, icon, accentCol
 
       {/* == LIST PAKET == */}
       {!editId && (
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(280px,1fr))", gap: 16 }}>
-          {items.map(it => (
-            <div key={it.id} style={{ background: "#fff", borderRadius: 12, padding: "18px", boxShadow: "0 2px 8px rgba(0,0,0,.06)", display: "flex", flexDirection: "column", gap: 10, opacity: it.hidden ? 0.6 : 1, border: it.hidden ? "1.5px dashed #D5C9B0" : "1.5px solid transparent" }}>
+        <div>
+          <ReorderModeToggle active={reorderMode} onToggle={() => setReorderMode(v => !v)} accent={accentColor} />
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(280px,1fr))", gap: 16 }}>
+          {orderedItems.map((it, idx) => (
+            <div key={it.id}
+              draggable
+              onDragStart={onDragStart(idx)}
+              onDragEnter={onDragEnter(idx)}
+              onDragOver={onDragOver}
+              onDragEnd={onDragEnd}
+              style={{ background: "#fff", borderRadius: 12, padding: "18px", boxShadow: "0 2px 8px rgba(0,0,0,.06)", display: "flex", flexDirection: "column", gap: 10, opacity: draggingIdx === idx ? 0.4 : it.hidden ? 0.6 : 1, border: it.hidden ? "1.5px dashed #D5C9B0" : "1.5px solid transparent" }}>
+              <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: -4 }}>
+                {reorderMode
+                  ? <OrderArrows idx={idx} count={orderedItems.length} onUp={moveUp} onDown={moveDown} />
+                  : <DragHandle style={{ width: 20, height: 20 }} />}
+              </div>
               <div style={{ height: 110, borderRadius: 8, overflow: "hidden", background: "#FAF7F0", display: "flex", alignItems: "center", justifyContent: "center", position: "relative" }}>
                 {it.slides?.[0]?.img ? <img loading="lazy" src={it.slides[0].img} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} onError={e => e.target.style.display = "none"} /> : <span style={{ fontSize: 30 }}>{it.icon}</span>}
                 {it.hidden && (
@@ -14256,6 +14398,7 @@ function PaketGridManager({ data, save, notify, storeKey, title, icon, accentCol
               <p>Belum ada paket. Klik "+ Tambah Paket Baru" untuk mulai.</p>
             </div>
           )}
+          </div>
         </div>
       )}
     </div>
@@ -14354,7 +14497,7 @@ function MobileLayananAccordion({ page, navigateTo, setMobileMenu, navDropdownLa
               {[
                 {key:"interior/plafon-modern",  label:"Plafon Modern"},
                 {key:"interior/kitchen-set",    label:"Kitchen Set"},
-                {key:"interior/backdrop-tv",    label:"Backdrop TV"},
+                {key:"interior/backdrop-tv",    label:"Backdrop"},
                 {key:"interior/kamar-tidur",    label:"Kamar Tidur"},
                 {key:"interior/kamar-mandi",    label:"Kamar Mandi"},
                 {key:"interior/ruang-keluarga", label:"Ruang Keluarga"},
@@ -15279,8 +15422,8 @@ const CATALOG_DATA = {
   },
   "interior/backdrop-tv": {
     heroColor:"linear-gradient(135deg,#1c1c1c 0%,#3a2f1f 50%,#8B6914 100%)",
-    heroIcon:"", title:"Backdrop TV", subtitle:"Feature wall di belakang TV yang menjadi pusat perhatian ruang keluarga — estetis, modern, dan bisa dipadukan dengan LED serta hiasan lainnya.",
-    breadcrumb:[{label:"Beranda",page:"home"},{label:"Interior",page:"interior"},{label:"Backdrop TV"}],
+    heroIcon:"", title:"Backdrop", subtitle:"Feature wall di belakang TV yang menjadi pusat perhatian ruang keluarga — estetis, modern, dan bisa dipadukan dengan LED serta hiasan lainnya.",
+    breadcrumb:[{label:"Beranda",page:"home"},{label:"Interior",page:"interior"},{label:"Backdrop"}],
     satuan:"m²",
     items:[
       {id:"btv1", nama:"Backdrop TV Minimalis HPL", style:"Clean", material:"HPL + Multipleks", desc:"Panel dinding bersih dengan warna solid atau motif kayu HPL. Cocok untuk ruang keluarga minimalis modern.", harga:250000, fitur:["Rapi & Presisi","Motif Kayu/Solid","Anti Gores"], img:"https://images.unsplash.com/photo-1615874959474-d609969a20ed?w=600&q=80", poin:["Survey lokasi & konsultasi desain gratis sebelum pengerjaan","Material utama: HPL + Multipleks","Rapi & Presisi","Motif Kayu/Solid","Anti Gores","Pengerjaan oleh tenaga ahli berpengalaman","Garansi purna pengerjaan dari tim VASTURA GROUP"]},
@@ -15869,7 +16012,7 @@ function NavDropdownLayanan({ page, navigateTo, navDropdownLayanan }) {
                 {[
                   {key:"interior/plafon-modern",  label:"Plafon Modern"},
                   {key:"interior/kitchen-set",    label:"Kitchen Set"},
-                  {key:"interior/backdrop-tv",    label:"Backdrop TV"},
+                  {key:"interior/backdrop-tv",    label:"Backdrop"},
                   {key:"interior/kamar-tidur",    label:"Kamar Tidur"},
                   {key:"interior/kamar-mandi",    label:"Kamar Mandi"},
                   {key:"interior/ruang-keluarga", label:"Ruang Keluarga"},
@@ -16637,6 +16780,9 @@ function TemaRumahAdminPanel({ data, save, notify, uploadToCloudinary }) {
   const [loadingDefault, setLoadingDefault] = useState(false);
 
   const activeTemas = (data.temaData && data.temaData.length > 0) ? data.temaData : TEMA_DATA;
+  const { ordered: orderedTemas, draggingIdx: draggingTemaIdx, onDragStart: onTemaDragStart, onDragEnter: onTemaDragEnter, onDragOver: onTemaDragOver, onDragEnd: onTemaDragEnd, moveUp: moveTemaUp, moveDown: moveTemaDown } =
+    useDragReorder(activeTemas, async (next) => { await save({ ...data, temaData: next }); notify("Urutan tema berhasil disimpan!"); });
+  const [reorderModeTema, setReorderModeTema] = useState(false);
 
   /* Template kosong untuk tema baru — struktur lengkap & konsisten dengan tema yang sudah ada,
      supaya otomatis kompatibel dengan halaman publik (single-scroll), eksterior grid, denah multi-lantai, dst. */
@@ -16790,8 +16936,18 @@ function TemaRumahAdminPanel({ data, save, notify, uploadToCloudinary }) {
                 style={{ display: "flex", alignItems: "center", gap: 8, padding: "11px 18px", background: "#2ecc71", color: "#fff", border: "none", borderRadius: 10, fontSize: 14, fontWeight: 800, cursor: "pointer", marginBottom: 16 }}>
                 Tambah Tema Baru
               </button>
-              {activeTemas.map((tema, i) => { const isHidden = !!tema.hidden; return (
-                <div key={tema.slug} style={{ background: "#fff", border: `1.5px solid ${isHidden ? "#E5C07B" : "#E8DCC8"}`, borderRadius: 12, padding: "16px 18px", marginBottom: 12, display: "flex", alignItems: "center", gap: 14, flexWrap: "wrap", opacity: isHidden ? 0.72 : 1 }}>
+              <ReorderModeToggle active={reorderModeTema} onToggle={() => setReorderModeTema(v => !v)} />
+              {orderedTemas.map((tema, i) => { const isHidden = !!tema.hidden; return (
+                <div key={tema.slug}
+                  draggable
+                  onDragStart={onTemaDragStart(i)}
+                  onDragEnter={onTemaDragEnter(i)}
+                  onDragOver={onTemaDragOver}
+                  onDragEnd={onTemaDragEnd}
+                  style={{ background: "#fff", border: `1.5px solid ${isHidden ? "#E5C07B" : "#E8DCC8"}`, borderRadius: 12, padding: "16px 18px", marginBottom: 12, display: "flex", alignItems: "center", gap: 14, flexWrap: "wrap", opacity: draggingTemaIdx === i ? 0.4 : isHidden ? 0.72 : 1 }}>
+                  {reorderModeTema
+                    ? <OrderArrows idx={i} count={orderedTemas.length} onUp={moveTemaUp} onDown={moveTemaDown} />
+                    : <DragHandle />}
                   <img src={tema.img} alt={tema.nama} style={{ width: 70, height: 52, objectFit: "cover", borderRadius: 8, flexShrink: 0 }} onError={e => e.target.style.display = "none"} />
                   <div style={{ flex: 1, minWidth: 140 }}>
                     <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
@@ -19120,7 +19276,7 @@ export default function BricksyTravel() {
                   items: [
                     { id: "int_plafon",         label: "Plafon",          show: isAdmin },
                     { id: "int_kitchen_set",    label: "Kitchen Set",     show: isAdmin },
-                    { id: "int_backdrop_tv",    label: "Backdrop TV",     show: isAdmin },
+                    { id: "int_backdrop_tv",    label: "Backdrop",     show: isAdmin },
                     { id: "int_kamar_tidur",    label: "Kamar Tidur",     show: isAdmin },
                     { id: "int_kamar_mandi",    label: "Kamar Mandi",     show: isAdmin },
                     { id: "int_ruang_keluarga", label: "Ruang Keluarga",  show: isAdmin },
@@ -19529,7 +19685,7 @@ export default function BricksyTravel() {
               {/* SETTING BACKDROP TV */}
               {adminTab === "int_backdrop_tv" && isAdmin && (
                 <SubLayananAdmin
-                  title="Backdrop TV"
+                  title="Backdrop"
                   icon=""
                   accentColor="#8B6914"
                   storeKey="int_backdrop_tv"
@@ -19537,11 +19693,11 @@ export default function BricksyTravel() {
                   save={save}
                   notify={notify}
                   uploadToCloudinary={uploadToCloudinary}
-                  pageDesc="Kelola katalog produk backdrop TV — tambah, edit, hapus kartu produk yang tampil di halaman Backdrop TV."
+                  pageDesc="Kelola katalog produk backdrop — tambah, edit, hapus kartu produk yang tampil di halaman Backdrop."
                   sections={[]}
                   imageGroups={[]}
                   crudKey="intBackdropTvItems"
-                  crudLabel="Produk Backdrop TV"
+                  crudLabel="Produk Backdrop"
                   crudFields={[
                     { key:"nama",     label:"Nama Produk",  type:"text",     placeholder:"contoh: Backdrop TV Kayu + Hidden LED" },
                     { key:"style",    label:"Style / Tag",  type:"text",     placeholder:"contoh: Modern Warm, Luxury, Industrial Chic..." },
