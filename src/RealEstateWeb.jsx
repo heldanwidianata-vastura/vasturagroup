@@ -7008,7 +7008,6 @@ function TeamAdmin({ data, save, notify, uploadToCloudinary, embedded = false })
   const members = data.teamMembers || [];
   const { ordered: orderedMembers, draggingIdx, onDragStart, onDragEnter, onDragOver, onDragEnd, moveUp, moveDown } =
     useDragReorder(members, async (next) => { await save({ ...data, teamMembers: next }); notify("Urutan tim berhasil disimpan!"); });
-  const [reorderMode, setReorderMode] = useState(false);
 
   const openNew = () => { setForm({ id: Date.now(), name: "", role: "", quotes: "", photo: "" }); setEditId("new"); };
   const openEdit = (m) => { setForm({ ...m }); setEditId(m.id); };
@@ -7079,7 +7078,6 @@ function TeamAdmin({ data, save, notify, uploadToCloudinary, embedded = false })
       )}
 
       {/* List */}
-      <ReorderModeToggle active={reorderMode} onToggle={() => setReorderMode(v => !v)} />
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(260px,1fr))", gap: 16 }}>
         {orderedMembers.map((m, idx) => (
           <div key={m.id}
@@ -7090,9 +7088,7 @@ function TeamAdmin({ data, save, notify, uploadToCloudinary, embedded = false })
             onDragEnd={onDragEnd}
             style={{ background: "#fff", borderRadius: 12, padding: "20px", boxShadow: "0 2px 8px rgba(0,0,0,.06)", display: "flex", flexDirection: "column", gap: 12, alignItems: "center", textAlign: "center", opacity: draggingIdx === idx ? 0.4 : 1 }}>
             <div style={{ alignSelf: "flex-end", marginTop: -10, marginBottom: -10 }}>
-              {reorderMode
-                ? <OrderArrows idx={idx} count={orderedMembers.length} onUp={moveUp} onDown={moveDown} />
-                : <DragHandle style={{ width: 20, height: 20 }} />}
+              <OrderControls idx={idx} count={orderedMembers.length} onUp={moveUp} onDown={moveDown} />
             </div>
             <div style={{ width: 72, height: 72, borderRadius: "50%", overflow: "hidden", background: "#FAF7F0", border: "2px solid #E8DCC8", flexShrink: 0 }}>
               {m.photo ? <img loading="lazy" src={m.photo} alt={m.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 30 }}></div>}
@@ -8484,7 +8480,6 @@ function AboutLayananListEditor({ data, save, notify, uploadToCloudinary }) {
   const list = (data.aboutLayananList && data.aboutLayananList.length > 0) ? data.aboutLayananList : ABOUT_LAYANAN_DEFAULT;
   const { ordered: orderedList, draggingIdx, onDragStart, onDragEnter, onDragOver, onDragEnd, moveUp, moveDown } =
     useDragReorder(list, async (next) => { await save({ ...data, aboutLayananList: next }); notify("Urutan kartu layanan berhasil disimpan!"); });
-  const [reorderMode, setReorderMode] = useState(false);
 
   const addItem = () => {
     const next = list.map(x => ({ ...x }));
@@ -8500,7 +8495,6 @@ function AboutLayananListEditor({ data, save, notify, uploadToCloudinary }) {
 
   return (
     <div>
-      <ReorderModeToggle active={reorderMode} onToggle={() => setReorderMode(v => !v)} />
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 14, marginBottom: 16 }}>
         {orderedList.map((item, idx) => (
           <div key={idx}
@@ -8511,9 +8505,7 @@ function AboutLayananListEditor({ data, save, notify, uploadToCloudinary }) {
             onDragEnd={onDragEnd}
             style={{ opacity: draggingIdx === idx ? 0.4 : 1, position: "relative" }}>
             <div style={{ display: "flex", justifyContent: "flex-end" }}>
-              {reorderMode
-                ? <OrderArrows idx={idx} count={orderedList.length} onUp={moveUp} onDown={moveDown} />
-                : <DragHandle style={{ width: 20, height: 20 }} />}
+              <OrderControls idx={idx} count={orderedList.length} onUp={moveUp} onDown={moveDown} />
             </div>
             <AboutLayananCardEditor index={idx} item={item} data={data} save={save} notify={notify} uploadToCloudinary={uploadToCloudinary} />
           </div>
@@ -8768,18 +8760,21 @@ function OrderArrows({ idx, count, onUp, onDown }) {
   );
 }
 /* Tombol "Atur Posisi" — hanya tampil di layar smartphone (drag-and-drop tidak nyaman di layar sentuh). */
-function ReorderModeToggle({ active, onToggle, accent = "#8B6914" }) {
-  const isMobile = useIsMobile();
-  if (!isMobile) return null;
+/* Tombol "Atur Posisi" — tampil di semua perangkat (desktop & smartphone). Saat aktif, tiap item
+   menampilkan tombol panah naik/turun sebagai alternatif drag-and-drop (drag tetap berfungsi juga). */
+/* Kontrol urutan gabungan — grip untuk drag (mouse) + tombol panah naik/turun (klik), tampil bersamaan
+   di semua perangkat. Drag tetap berfungsi lewat atribut draggable pada baris, arrow untuk klik langsung. */
+function OrderControls({ idx, count, onUp, onDown }) {
   return (
-    <button type="button" onClick={onToggle}
-      style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, width: "100%", padding: "10px 14px", marginBottom: 12,
-        background: active ? accent : "#FAF7F0", color: active ? "#fff" : "#5A6A6C", border: `1.5px solid ${active ? accent : "#D5C9B0"}`,
-        borderRadius: 8, fontSize: 13, fontWeight: 700, cursor: "pointer" }}>
-      {active ? "✓ Selesai Atur Posisi" : "⇅ Atur Posisi"}
-    </button>
+    <div style={{ display: "flex", alignItems: "center", gap: 6, flexShrink: 0 }}>
+      <DragHandle />
+      <OrderArrows idx={idx} count={count} onUp={onUp} onDown={onDown} />
+    </div>
   );
 }
+
+/* Catatan: label "Atur Posisi" toggle dihapus — drag handle & tombol panah kini selalu tampil
+   bersamaan (lihat OrderControls di atas) sehingga tidak perlu mode terpisah lagi. */
 
 function SubLayananAdmin({
 
@@ -8934,7 +8929,6 @@ function SubLayananAdmin({
   /* ── Drag-reorder daftar item: urutan di sini = urutan tampil di halaman publik ── */
   const { ordered: orderedItems, draggingIdx, onDragStart, onDragEnter, onDragOver, onDragEnd, moveUp, moveDown } =
     useDragReorder(items, async (next) => { await save({ ...data, [crudKey]: next }); notify("Urutan berhasil disimpan!"); });
-  const [reorderMode, setReorderMode] = useState(false);
 
   /* Field component di-hoist ke top-level module scope (lihat CrudField) supaya
      tidak dibuat ulang setiap render — mencegah bug kursor hilang saat mengetik. */
@@ -8977,9 +8971,6 @@ function SubLayananAdmin({
 
       {/* Tombol reset ke data hardcoded dipindah ke paling bawah halaman (lihat akhir list) */}
 
-      {/* Tombol Atur Posisi — khusus tampilan smartphone */}
-      <ReorderModeToggle active={reorderMode} onToggle={() => setReorderMode(v => !v)} accent={accent} />
-
       {/* Daftar item */}
       {items.length === 0 ? (
         <div style={{ textAlign: "center", padding: "40px 20px", border: "1.5px dashed #D5C9B0", borderRadius: 12, color: "#A89070", fontSize: 14 }}>
@@ -8997,9 +8988,7 @@ function SubLayananAdmin({
               style={{ background: "#fff", border: `1.5px solid ${isHidden ? "#E5C07B" : "#E8DCC8"}`, borderRadius: 12, overflow: "hidden", opacity: draggingIdx === idx ? 0.4 : isHidden ? 0.72 : 1, transition: "opacity .15s" }}>
               {/* Row item */}
               <div style={{ display: "flex", alignItems: "center", gap: 12, padding: "12px 14px", flexWrap: "wrap" }}>
-                {reorderMode
-                  ? <OrderArrows idx={idx} count={orderedItems.length} onUp={moveUp} onDown={moveDown} />
-                  : <DragHandle />}
+                <OrderControls idx={idx} count={orderedItems.length} onUp={moveUp} onDown={moveDown} />
                 {item._img
                   ? <img loading="lazy" src={item._img} alt="" style={{ width: 54, height: 44, objectFit: "cover", borderRadius: 7, flexShrink: 0 }} />
                   : <div style={{ width: 54, height: 44, background: "#F5EDD8", borderRadius: 7, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20, flexShrink: 0 }}>{icon}</div>
@@ -13723,7 +13712,6 @@ function PaketGridManager({ data, save, notify, storeKey, title, icon, accentCol
   const [form, setForm] = useState({});
   const { ordered: orderedItems, draggingIdx, onDragStart, onDragEnter, onDragOver, onDragEnd, moveUp, moveDown } =
     useDragReorder(items, async (next) => { await save({ ...data, [storeKey]: next }); notify("Urutan berhasil disimpan!"); });
-  const [reorderMode, setReorderMode] = useState(false);
 
   const blankItem = () => ({
     id: `paket-${Date.now()}`,
@@ -13939,7 +13927,6 @@ function PaketGridManager({ data, save, notify, storeKey, title, icon, accentCol
       {/* == LIST PAKET == */}
       {!editId && (
         <div>
-          <ReorderModeToggle active={reorderMode} onToggle={() => setReorderMode(v => !v)} accent={accentColor} />
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(280px,1fr))", gap: 16 }}>
           {orderedItems.map((it, idx) => (
             <div key={it.id}
@@ -13950,9 +13937,7 @@ function PaketGridManager({ data, save, notify, storeKey, title, icon, accentCol
               onDragEnd={onDragEnd}
               style={{ background: "#fff", borderRadius: 12, padding: "18px", boxShadow: "0 2px 8px rgba(0,0,0,.06)", display: "flex", flexDirection: "column", gap: 10, opacity: draggingIdx === idx ? 0.4 : it.hidden ? 0.6 : 1, border: it.hidden ? "1.5px dashed #D5C9B0" : "1.5px solid transparent" }}>
               <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: -4 }}>
-                {reorderMode
-                  ? <OrderArrows idx={idx} count={orderedItems.length} onUp={moveUp} onDown={moveDown} />
-                  : <DragHandle style={{ width: 20, height: 20 }} />}
+                <OrderControls idx={idx} count={orderedItems.length} onUp={moveUp} onDown={moveDown} />
               </div>
               <div style={{ height: 110, borderRadius: 8, overflow: "hidden", background: "#FAF7F0", display: "flex", alignItems: "center", justifyContent: "center", position: "relative" }}>
                 {it.slides?.[0]?.img ? <img loading="lazy" src={it.slides[0].img} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} onError={e => e.target.style.display = "none"} /> : <span style={{ fontSize: 30 }}>{it.icon}</span>}
@@ -16369,7 +16354,6 @@ function TemaRumahAdminPanel({ data, save, notify, uploadToCloudinary }) {
   const activeTemas = (data.temaData && data.temaData.length > 0) ? data.temaData : TEMA_DATA;
   const { ordered: orderedTemas, draggingIdx: draggingTemaIdx, onDragStart: onTemaDragStart, onDragEnter: onTemaDragEnter, onDragOver: onTemaDragOver, onDragEnd: onTemaDragEnd, moveUp: moveTemaUp, moveDown: moveTemaDown } =
     useDragReorder(activeTemas, async (next) => { await save({ ...data, temaData: next }); notify("Urutan tema berhasil disimpan!"); });
-  const [reorderModeTema, setReorderModeTema] = useState(false);
 
   /* Template kosong untuk tema baru — struktur lengkap & konsisten dengan tema yang sudah ada,
      supaya otomatis kompatibel dengan halaman publik (single-scroll), eksterior grid, denah multi-lantai, dst. */
@@ -16523,7 +16507,6 @@ function TemaRumahAdminPanel({ data, save, notify, uploadToCloudinary }) {
                 style={{ display: "flex", alignItems: "center", gap: 8, padding: "11px 18px", background: "#2ecc71", color: "#fff", border: "none", borderRadius: 10, fontSize: 14, fontWeight: 800, cursor: "pointer", marginBottom: 16 }}>
                 Tambah Tema Baru
               </button>
-              <ReorderModeToggle active={reorderModeTema} onToggle={() => setReorderModeTema(v => !v)} />
               {orderedTemas.map((tema, i) => { const isHidden = !!tema.hidden; return (
                 <div key={tema.slug}
                   draggable
@@ -16532,9 +16515,7 @@ function TemaRumahAdminPanel({ data, save, notify, uploadToCloudinary }) {
                   onDragOver={onTemaDragOver}
                   onDragEnd={onTemaDragEnd}
                   style={{ background: "#fff", border: `1.5px solid ${isHidden ? "#E5C07B" : "#E8DCC8"}`, borderRadius: 12, padding: "16px 18px", marginBottom: 12, display: "flex", alignItems: "center", gap: 14, flexWrap: "wrap", opacity: draggingTemaIdx === i ? 0.4 : isHidden ? 0.72 : 1 }}>
-                  {reorderModeTema
-                    ? <OrderArrows idx={i} count={orderedTemas.length} onUp={moveTemaUp} onDown={moveTemaDown} />
-                    : <DragHandle />}
+                  <OrderControls idx={i} count={orderedTemas.length} onUp={moveTemaUp} onDown={moveTemaDown} />
                   <img loading="lazy" src={tema.img} alt={tema.nama} style={{ width: 70, height: 52, objectFit: "cover", borderRadius: 8, flexShrink: 0 }} onError={e => e.target.style.display = "none"} />
                   <div style={{ flex: 1, minWidth: 140 }}>
                     <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
