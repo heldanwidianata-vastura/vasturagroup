@@ -9448,7 +9448,7 @@ const PATH_TO_PAGE = Object.fromEntries(Object.entries(PAGE_TO_PATH).map(([k, v]
 
 /* ── Mapping Control Panel: adminTab ↔ slug URL ───────────────────────────
    Setiap tab/menu di Control Panel punya slug URL sendiri, contoh:
-   control-panel/plafon, control-panel/kamar-tidur, control-panel/backdrop-tv
+   control-panel/plafon, control-panel/kamar-tidur, control-panel/backdrop
    dst. Sehingga setiap bagian bisa di-bookmark / dibagikan / dibuka langsung,
    dan tombol Back/Forward browser jalan sesuai bagian yang sedang dibuka. ── */
 const ADMIN_TAB_TO_SLUG = {
@@ -9461,7 +9461,7 @@ const ADMIN_TAB_TO_SLUG = {
   settings: "pengaturan-sistem",
   int_plafon: "plafon",
   int_kitchen_set: "kitchen-set",
-  int_backdrop_tv: "backdrop-tv",
+  int_backdrop_tv: "backdrop",
   int_kamar_tidur: "kamar-tidur",
   int_kamar_mandi: "kamar-mandi",
   int_ruang_keluarga: "ruang-keluarga",
@@ -14031,7 +14031,7 @@ function MobileLayananAccordion({ page, navigateTo, setMobileMenu, navDropdownLa
   });
 
   const isLayananActive = [...topPages,
-    "interior/kamar-tidur","interior/kamar-mandi","interior/ruang-keluarga","interior/ruang-tamu","interior/kitchen-set","interior/ruang-kerja","interior/plafon-modern","interior/backdrop-tv",
+    "interior/kamar-tidur","interior/kamar-mandi","interior/ruang-keluarga","interior/ruang-tamu","interior/kitchen-set","interior/ruang-kerja","interior/plafon-modern","interior/backdrop",
     "eksterior/pagar","eksterior/kanopi","eksterior/kusen-partisi","eksterior/taman-landscape",
   ].some(k=>k===page);
 
@@ -14069,7 +14069,7 @@ function MobileLayananAccordion({ page, navigateTo, setMobileMenu, navDropdownLa
               {[
                 {key:"interior/plafon-modern",  label:"Plafon Modern"},
                 {key:"interior/kitchen-set",    label:"Kitchen Set"},
-                {key:"interior/backdrop-tv",    label:"Backdrop"},
+                {key:"interior/backdrop",    label:"Backdrop"},
                 {key:"interior/kamar-tidur",    label:"Kamar Tidur"},
                 {key:"interior/kamar-mandi",    label:"Kamar Mandi"},
                 {key:"interior/ruang-keluarga", label:"Ruang Keluarga"},
@@ -14992,7 +14992,7 @@ const CATALOG_DATA = {
       {id:"pl9", nama:"Plafon Gypsum Ornamental", style:"Klasik Mewah", material:"Gypsum + Ornamen Cetak", desc:"Plafon dengan ornamen bunga, roset, dan border ukiran gypsum cetak. Cocok untuk ruang tamu dan ruang makan formal.", harga:195000, fitur:["Ornamen Cetak","Klasik Elegan","Rosette Center"], img:"https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=600&q=80", poin:["Survey lokasi & konsultasi desain gratis sebelum pengerjaan","Material utama: Gypsum + Ornamen Cetak","Ornamen Cetak","Klasik Elegan","Rosette Center","Pengerjaan oleh tenaga ahli berpengalaman","Garansi purna pengerjaan dari tim VASTURA GROUP"]},
     ]
   },
-  "interior/backdrop-tv": {
+  "interior/backdrop": {
     heroColor:"linear-gradient(135deg,#1c1c1c 0%,#3a2f1f 50%,#8B6914 100%)",
     heroIcon:"", title:"Backdrop", subtitle:"Feature wall di belakang TV yang menjadi pusat perhatian ruang keluarga — estetis, modern, dan bisa dipadukan dengan LED serta hiasan lainnya.",
     breadcrumb:[{label:"Beranda",page:"home"},{label:"Interior",page:"interior"},{label:"Backdrop"}],
@@ -15243,7 +15243,7 @@ const INT_PAGE_CRUD_KEY = {
   "interior/kitchen-set":    "intKitchenSetItems",
   "interior/ruang-kerja":    "intRuangKerjaItems",
   "interior/plafon-modern":  "intPlafonItems",
-  "interior/backdrop-tv":    "intBackdropTvItems",
+  "interior/backdrop":    "intBackdropTvItems",
   "eksterior/pagar":         "extPagarItems",
   "eksterior/kanopi":        "extKanopiItems",
   "eksterior/kusen-partisi": "extAluminiumItems",
@@ -15538,7 +15538,7 @@ function NavDropdownLayanan({ page, navigateTo, navDropdownLayanan }) {
     return () => document.removeEventListener("mousedown", h);
   }, []);
 
-  const subIntPages = ["interior/kamar-tidur","interior/kamar-mandi","interior/ruang-keluarga","interior/ruang-tamu","interior/kitchen-set","interior/ruang-kerja","interior/plafon-modern","interior/backdrop-tv"];
+  const subIntPages = ["interior/kamar-tidur","interior/kamar-mandi","interior/ruang-keluarga","interior/ruang-tamu","interior/kitchen-set","interior/ruang-kerja","interior/plafon-modern","interior/backdrop"];
   const subExtPages = ["eksterior/pagar","eksterior/kanopi","eksterior/kusen-partisi","eksterior/taman-landscape"];
   const topPages    = ["services","desainrab"];
   const isActive    = [...topPages,...subIntPages,...subExtPages,"interior","pagar","kanopi","aluminium","landscape","furnitur"].some(k => k === page);
@@ -15584,7 +15584,7 @@ function NavDropdownLayanan({ page, navigateTo, navDropdownLayanan }) {
                 {[
                   {key:"interior/plafon-modern",  label:"Plafon Modern"},
                   {key:"interior/kitchen-set",    label:"Kitchen Set"},
-                  {key:"interior/backdrop-tv",    label:"Backdrop"},
+                  {key:"interior/backdrop",    label:"Backdrop"},
                   {key:"interior/kamar-tidur",    label:"Kamar Tidur"},
                   {key:"interior/kamar-mandi",    label:"Kamar Mandi"},
                   {key:"interior/ruang-keluarga", label:"Ruang Keluarga"},
@@ -18758,7 +18758,7 @@ export default function BricksyTravel() {
               {page === "landscape"   && <LandscapePage   onWaOpen={openWaPicker} categories={data.landscapeCategories} />}
               {page === "furnitur"    && <FurniturPage    data={data} onWaOpen={openWaPicker} />}
               {/* -- Sub-halaman Interior -- */}
-              {["interior/kamar-tidur","interior/kamar-mandi","interior/ruang-keluarga","interior/ruang-tamu","interior/kitchen-set","interior/ruang-kerja","interior/plafon-modern","interior/backdrop-tv"].includes(page) &&
+              {["interior/kamar-tidur","interior/kamar-mandi","interior/ruang-keluarga","interior/ruang-tamu","interior/kitchen-set","interior/ruang-kerja","interior/plafon-modern","interior/backdrop"].includes(page) &&
                 <SubInteriorPage pageKey={page} onWaOpen={openWaPicker} navigateTo={navigateTo} data={data} itemSlug={catalogItemSlug} openItem={openCatalogItem} closeItem={closeCatalogItem} />}
               {/* -- Sub-halaman Eksterior -- */}
               {["eksterior/pagar","eksterior/kanopi","eksterior/kusen-partisi","eksterior/taman-landscape"].includes(page) &&
@@ -19279,7 +19279,7 @@ export default function BricksyTravel() {
                   ]}
                   crudHasImage
                   crudHasGallery={true}
-                  defaultItems={CATALOG_DATA["interior/backdrop-tv"].items.map(item => ({
+                  defaultItems={CATALOG_DATA["interior/backdrop"].items.map(item => ({
                     id: item.id, nama: item.nama, style: item.style || "", material: item.material || "",
                     harga: item.harga ? String(item.harga) : "",
                     desc: item.desc || "", fitur: (item.fitur||[]).join(", "), poin: (item.poin||[]).join("\n"), _img: item.img || "",
