@@ -847,7 +847,7 @@ function HeroStaticImagePanel({ data, save, notify }) {
         }}
         onError={() => notify("Gagal upload. Coba lagi.", "error")} />
       {data.content.heroStaticImage && (
-        <img src={data.content.heroStaticImage} alt="Hero Preview"
+        <img loading="lazy" src={data.content.heroStaticImage} alt="Hero Preview"
           style={{ width: "100%", maxHeight: 180, objectFit: "cover", borderRadius: 8, border: "1px solid #d8b4fe", marginTop: 10 }}
           onError={e => e.target.style.display = "none"} />
       )}
@@ -1733,9 +1733,7 @@ const DEFAULT_DATA = {
 /* ─────────────── GLOBAL STYLES ─────────────── */
 const GS = () => (
   <style>{`
-    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;0,900;1,700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Cinzel:wght@700;900&family=Montserrat:wght@700;800;900&family=Raleway:wght@700;800;900&family=Oswald:wght@600;700&family=Bebas+Neue&family=Lora:wght@700&family=Josefin+Sans:wght@700&family=Inter:wght@700;800;900&display=swap');
-    /* Noto Emoji: font emoji monokrom (hitam-putih) -- menggantikan seluruh emoji berwarna di seluruh halaman */
-    @import url('https://fonts.googleapis.com/css2?family=Noto+Emoji:wght@400..700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;0,900;1,700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Cormorant+Upright:wght@300;400;500;600;700&family=Jost:wght@300;400;500;600;700&display=swap');
 
     /* ── FORCE LIGHT MODE — kebal dark mode OS/browser (semua platform) ── */
     :root {
@@ -2627,7 +2625,6 @@ const GS = () => (
        Palette: White dominant, Grey/Black accents
        Ornaments: selendang, flare, smoke
     ════════════════════════════════════════════ */
-    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Upright:wght@300;400;500;600;700&family=Jost:wght@300;400;500;600;700&display=swap');
 
     :root {
       --re-white: #ffffff;
@@ -5777,6 +5774,38 @@ const LAYANAN_LIST = [
   { key: "kanopi", icon: "", label: "Kanopi", desc: "Kanopi kuat, modern dan tahan segala cuaca.", color: "#8B6914", category: "event", img: "https://images.unsplash.com/photo-1600566752355-35792bedcfea?w=600&q=80" },
 ];
 
+/* ── Kategori & Keunggulan (statis — module scope) ── */
+const STATIC_CATEGORIES = [
+  { key: "traveling", label: "Gedung & Rumah", color: "#8B6914" },
+  { key: "event",     label: "Exterior", color: "#3D5254" },
+  { key: "wedding",   label: "Interior", color: "#C9AA71" },
+];
+const KEUNGGULAN = [
+  { icon: "", label: "Tim Profesional", desc: "Tenaga ahli berpengalaman di bidangnya" },
+  { icon: "", label: "Proses Cepat", desc: "Pengerjaan tepat waktu dan terukur" },
+  { icon: "", label: "Budget Transparan", desc: "RAB jelas dan tanpa biaya tersembunyi" },
+  { icon: "", label: "Material Berkualitas", desc: "Menggunakan bahan terbaik dan tahan lama" },
+  { icon: "", label: "Garansi Pekerjaan", desc: "Garansi hingga 1 tahun setelah proyek selesai" },
+  { icon: "", label: "Konsultasi Gratis", desc: "Konsultasi gratis sebelum proyek dimulai" },
+];
+
+/* ── Galeri Proyek Data (statis — dipindah ke module scope agar tidak dibuat ulang tiap render) ── */
+const GALERI_LIST = [
+  { label: "RUMAH MINIMALIS", img: "https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=600&q=80" },
+  { label: "INTERIOR MODERN", img: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=600&q=80" },
+  { label: "PAGAR LASER CUTTING", img: "https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=600&q=80" },
+  { label: "KANOPI ALDERON", img: "https://images.unsplash.com/photo-1600566752355-35792bedcfea?w=600&q=80" },
+  { label: "KOLAM & TAMAN", img: "https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=600&q=80" },
+  { label: "PINTU ALUMINIUM", img: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=600&q=80" },
+];
+
+/* ── Testimonial Data (statis) ── */
+const TESTIMONI = [
+  { text: "Hasil desain sesuai ekspektasi, tim sangat profesional dan komunikatif. Proyek selesai tepat waktu dan rapi.", stars: 5, name: "Budi Santoso", role: "Pemilik Rumah" },
+  { text: "Sangat puas dengan hasil interior rumah kami. Desainnya elegan dan fungsional, pengerjaan juga rapi.", stars: 5, name: "Dewi Lestari", role: "Ibu Rumah Tangga" },
+  { text: "Pembuatan kanopi dan pagar sangat berkualitas. Harganya juga kompetitif. Recommended!", stars: 5, name: "Andi Setiawan", role: "Wiraswasta" },
+];
+
 function ServicesPage({ content, services, navigateTo, activePaket, onOpenPaket, onClosePaket, onWaOpen }) {
   const [selectedService, setSelectedService] = useState(null);
   const [hoveredCard, setHoveredCard] = useState(null);
@@ -5784,25 +5813,12 @@ function ServicesPage({ content, services, navigateTo, activePaket, onOpenPaket,
 
   /* ── Static layanan list — defined at module scope as LAYANAN_LIST ── */
 
-  const KEUNGGULAN = [
-    { icon: "", label: "Tim Profesional", desc: "Tenaga ahli berpengalaman di bidangnya" },
-    { icon: "", label: "Proses Cepat", desc: "Pengerjaan tepat waktu dan terukur" },
-    { icon: "", label: "Budget Transparan", desc: "RAB jelas dan tanpa biaya tersembunyi" },
-    { icon: "", label: "Material Berkualitas", desc: "Menggunakan bahan terbaik dan tahan lama" },
-    { icon: "", label: "Garansi Pekerjaan", desc: "Garansi hingga 1 tahun setelah proyek selesai" },
-    { icon: "", label: "Konsultasi Gratis", desc: "Konsultasi gratis sebelum proyek dimulai" },
-  ];
-
   /* ── Old category-based state (kept for detail page backward compat) ── */
   const [activeCategory, setActiveCategory] = useState("traveling");
   const [colLayout, setColLayout] = useState(2); // 1 | 2 | 3
   const [activePaketTypeId, setActivePaketTypeId] = useState(null);
 
-  const CATEGORIES = [
-    { key: "traveling", label: "Gedung & Rumah", color: "#8B6914" },
-    { key: "event",     label: "Exterior", color: "#3D5254" },
-    { key: "wedding",   label: "Interior", color: "#C9AA71" },
-  ];
+  const CATEGORIES = STATIC_CATEGORIES;
 
   const openDetail = (svc) => {
     if (onOpenPaket) onOpenPaket(svc);
@@ -6275,23 +6291,6 @@ function ServicesPage({ content, services, navigateTo, activePaket, onOpenPaket,
   /* ── Services List — Vastura Full Page (pixel-perfect dari desain) ── */
   const filteredServices = activeCategory ? services.filter(s => s.category === activeCategory) : [];
 
-  /* ── Galeri Proyek Data ── */
-  const GALERI_LIST = [
-    { label: "RUMAH MINIMALIS", img: "https://images.unsplash.com/photo-1568605114967-8130f3a36994?w=600&q=80" },
-    { label: "INTERIOR MODERN", img: "https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=600&q=80" },
-    { label: "PAGAR LASER CUTTING", img: "https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=600&q=80" },
-    { label: "KANOPI ALDERON", img: "https://images.unsplash.com/photo-1600566752355-35792bedcfea?w=600&q=80" },
-    { label: "KOLAM & TAMAN", img: "https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?w=600&q=80" },
-    { label: "PINTU ALUMINIUM", img: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=600&q=80" },
-  ];
-
-  /* ── Testimonial Data ── */
-  const TESTIMONI = [
-    { text: "Hasil desain sesuai ekspektasi, tim sangat profesional dan komunikatif. Proyek selesai tepat waktu dan rapi.", stars: 5, name: "Budi Santoso", role: "Pemilik Rumah" },
-    { text: "Sangat puas dengan hasil interior rumah kami. Desainnya elegan dan fungsional, pengerjaan juga rapi.", stars: 5, name: "Dewi Lestari", role: "Ibu Rumah Tangga" },
-    { text: "Pembuatan kanopi dan pagar sangat berkualitas. Harganya juga kompetitif. Recommended!", stars: 5, name: "Andi Setiawan", role: "Wiraswasta" },
-  ];
-
   return (
     <div className="fade-in" style={{ minHeight: "100vh", background: "#fff", fontFamily: "'Sora', 'DM Sans', sans-serif" }}>
       <style>{`
@@ -6326,7 +6325,7 @@ function ServicesPage({ content, services, navigateTo, activePaket, onOpenPaket,
       ====================================== */}
       <div style={{ position:"relative", height:"clamp(420px,65vw,640px)", overflow:"hidden", background:"#1a2526" }}>
         {/* Hero BG image */}
-        <img
+        <img loading="lazy"
           src={content?.servicesHeroImage || "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1400&q=85"}
           alt="Vastura Hero"
           style={{ position:"absolute", inset:0, width:"100%", height:"100%", objectFit:"cover", objectPosition:"center", opacity:.72 }}
@@ -6412,7 +6411,7 @@ function ServicesPage({ content, services, navigateTo, activePaket, onOpenPaket,
                   style={{ borderRadius:14, overflow:"hidden", background:"#fff", boxShadow:"0 4px 18px rgba(0,0,0,.07)", border:"1px solid #F0EAE0" }}>
                   {/* Image */}
                   <div style={{ position:"relative", height:150, overflow:"hidden", background:"#e8e0d0" }}>
-                    <img
+                    <img loading="lazy"
                       src={lay.img}
                       alt={lay.label}
                       className="sv-card-img"
@@ -6478,7 +6477,7 @@ function ServicesPage({ content, services, navigateTo, activePaket, onOpenPaket,
           <div className="sv-marquee-track">
             {[...GALERI_LIST, ...GALERI_LIST, ...GALERI_LIST, ...GALERI_LIST].map((g, i) => (
               <div key={i} className="sv-mgcard">
-                <img src={g.img} alt={g.label} onError={e => { e.target.style.display="none"; }} />
+                <img loading="lazy" src={g.img} alt={g.label} onError={e => { e.target.style.display="none"; }} />
                 <div className="sv-mgcard-overlay">
                   <span style={{ fontSize:"0.65rem", fontWeight:800, letterSpacing:"1.5px", color:"#fff", textTransform:"uppercase", textShadow:"0 1px 4px rgba(0,0,0,.6)", lineHeight:1.3 }}>{g.label}</span>
                 </div>
@@ -6542,7 +6541,7 @@ function ServicesPage({ content, services, navigateTo, activePaket, onOpenPaket,
       ====================================== */}
       <section style={{ position:"relative", overflow:"hidden" }}>
         {/* BG foto */}
-        <img
+        <img loading="lazy"
           src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1400&q=80"
           alt="CTA BG"
           style={{ position:"absolute", inset:0, width:"100%", height:"100%", objectFit:"cover" }}
@@ -7260,7 +7259,7 @@ function HomeIntroSlideshow({ data }) {
       <style>{`@keyframes introImgSlide { from { opacity:0; transform:scale(1.05); } to { opacity:1; transform:scale(1); } }`}</style>
       {allImgs.map((img, i) => (
         i === cur ? (
-          <img key={i} src={img.src} alt={img.label}
+          <img loading="lazy" key={i} src={img.src} alt={img.label}
             style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", objectFit: "cover", display: "block", animation: "introImgSlide .7s cubic-bezier(.22,1,.36,1) both", zIndex: 1 }}
             onError={e => { e.target.style.opacity = "0"; }} />
         ) : null
@@ -8452,7 +8451,7 @@ function AboutLayananCardEditor({ index, item, data, save, notify, uploadToCloud
   return (
     <div style={{ background: "#FAF7F0", borderRadius: 8, padding: 12, border: "1px solid #E8DCC8" }}>
       {item.img ? (
-        <img src={item.img} alt={item.title} style={{ width: "100%", height: 110, objectFit: "cover", borderRadius: 6, marginBottom: 8, border: "1px solid #D4C4A0" }}
+        <img loading="lazy" src={item.img} alt={item.title} style={{ width: "100%", height: 110, objectFit: "cover", borderRadius: 6, marginBottom: 8, border: "1px solid #D4C4A0" }}
           onError={e => e.target.style.display = "none"} />
       ) : (
         <div style={{ width: "100%", height: 110, background: "#E8DCC8", borderRadius: 6, marginBottom: 8, display: "flex", alignItems: "center", justifyContent: "center", color: "#5A6A6C", fontSize: 11 }}>Belum ada foto</div>
@@ -8549,7 +8548,7 @@ function AboutHeroBgEditor({ data, save, notify }) {
       {[0, 1, 2, 3].map(idx => (
         <div key={idx} style={{ background: "#FAF7F0", borderRadius: 8, padding: 8, border: "1px solid #E8DCC8" }}>
           {heroImgs[idx] ? (
-            <img src={heroImgs[idx]} alt="" style={{ width: "100%", height: 78, objectFit: "cover", borderRadius: 5, marginBottom: 6 }} onError={e => e.target.style.display = "none"} />
+            <img loading="lazy" src={heroImgs[idx]} alt="" style={{ width: "100%", height: 78, objectFit: "cover", borderRadius: 5, marginBottom: 6 }} onError={e => e.target.style.display = "none"} />
           ) : (
             <div style={{ width: "100%", height: 78, background: "#E8DCC8", borderRadius: 5, marginBottom: 6, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, color: "#8B9A9C" }}>Foto {idx + 1}</div>
           )}
@@ -8692,7 +8691,7 @@ function LayananHeroImagePanel({ data, save, notify }) {
         }}
         onError={() => notify("Gagal upload. Coba lagi.", "error")} />
       {data.content.servicesHeroImage && (
-        <img src={data.content.servicesHeroImage} alt="Preview Hero Layanan"
+        <img loading="lazy" src={data.content.servicesHeroImage} alt="Preview Hero Layanan"
           style={{ width: "100%", maxHeight: 220, objectFit: "cover", borderRadius: 8, border: "1px solid #E8DCC8", marginTop: 12 }}
           onError={e => e.target.style.display = "none"} />
       )}
@@ -9002,7 +9001,7 @@ function SubLayananAdmin({
                   ? <OrderArrows idx={idx} count={orderedItems.length} onUp={moveUp} onDown={moveDown} />
                   : <DragHandle />}
                 {item._img
-                  ? <img src={item._img} alt="" style={{ width: 54, height: 44, objectFit: "cover", borderRadius: 7, flexShrink: 0 }} />
+                  ? <img loading="lazy" src={item._img} alt="" style={{ width: 54, height: 44, objectFit: "cover", borderRadius: 7, flexShrink: 0 }} />
                   : <div style={{ width: 54, height: 44, background: "#F5EDD8", borderRadius: 7, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20, flexShrink: 0 }}>{icon}</div>
                 }
                 <div style={{ flex: 1, minWidth: 120 }}>
@@ -9114,7 +9113,7 @@ function SubLayananAdmin({
             <div style={{ fontSize: 13, fontWeight: 700, color: "#5A6A6C", marginBottom: 8 }}>Foto Produk</div>
             <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
               {form._img
-                ? <img src={form._img} alt="" style={{ width: 90, height: 70, objectFit: "cover", borderRadius: 8, border: "1.5px solid #E8DCC8" }} />
+                ? <img loading="lazy" src={form._img} alt="" style={{ width: 90, height: 70, objectFit: "cover", borderRadius: 8, border: "1.5px solid #E8DCC8" }} />
                 : <div style={{ width: 90, height: 70, background: "#F5EDD8", borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 28, border: "1.5px dashed #D5C9B0" }}>{icon}</div>
               }
               <div style={{ flex: 1 }}>
@@ -9159,7 +9158,7 @@ function SubLayananAdmin({
               <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(80px,1fr))", gap: 8, marginBottom: 10 }}>
                 {(form.imgs || []).map((g, i) => (
                   <div key={i} style={{ position: "relative", borderRadius: 8, overflow: "hidden", border: "1.5px solid #E8DCC8" }}>
-                    <img src={g.img} alt="" style={{ width: "100%", height: 64, objectFit: "cover", display: "block" }} onError={e => e.target.style.display = "none"} />
+                    <img loading="lazy" src={g.img} alt="" style={{ width: "100%", height: 64, objectFit: "cover", display: "block" }} onError={e => e.target.style.display = "none"} />
                     <button onClick={() => removeGalleryImg(i)}
                       style={{ position: "absolute", top: 3, right: 3, width: 18, height: 18, background: "rgba(220,38,38,.85)", color: "#fff", border: "none", borderRadius: "50%", cursor: "pointer", fontSize: 10, fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✕</button>
                   </div>
@@ -9844,9 +9843,9 @@ function DesainRabPage({ onWaOpen }) {
           <div style={{ display:"flex", gap:32, alignItems:"flex-start", flexWrap:"wrap" }}>
             {/* Left image collage */}
             <div style={{ flex:"0 0 clamp(260px,40%,440px)", display:"grid", gridTemplateColumns:"1fr 1fr", gridTemplateRows:"auto auto", gap:8, borderRadius:14, overflow:"hidden" }}>
-              <img src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=500&q=80" alt="d1" style={{ gridColumn:"1/3", width:"100%", height:180, objectFit:"cover", display:"block" }} />
-              <img src="https://images.unsplash.com/photo-1600566752355-35792bedcfea?w=300&q=80" alt="d2" style={{ width:"100%", height:130, objectFit:"cover", display:"block" }} />
-              <img src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=300&q=80" alt="d3" style={{ width:"100%", height:130, objectFit:"cover", display:"block" }} />
+              <img loading="lazy" src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=500&q=80" alt="d1" style={{ gridColumn:"1/3", width:"100%", height:180, objectFit:"cover", display:"block" }} />
+              <img loading="lazy" src="https://images.unsplash.com/photo-1600566752355-35792bedcfea?w=300&q=80" alt="d2" style={{ width:"100%", height:130, objectFit:"cover", display:"block" }} />
+              <img loading="lazy" src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=300&q=80" alt="d3" style={{ width:"100%", height:130, objectFit:"cover", display:"block" }} />
             </div>
             {/* Right 2-col features */}
             <div style={{ flex:"1 1 340px" }}>
@@ -9899,7 +9898,7 @@ function DesainRabPage({ onWaOpen }) {
             {[...GALERI, ...GALERI, ...GALERI, ...GALERI].map((g, i) => (
               <div key={i} className="dr-gcard">
                 <div style={{ overflow:"hidden" }}>
-                  <img src={g.img} alt={g.label} onError={e=>{e.target.style.display="none";}} />
+                  <img loading="lazy" src={g.img} alt={g.label} onError={e=>{e.target.style.display="none";}} />
                 </div>
                 <div style={{ padding:"12px 14px 14px", background:"#fff" }}>
                   <div style={{ fontWeight:800, fontSize:"0.8125rem", color:"#1a2526", lineHeight:1.35, marginBottom:4 }}>{g.label}</div>
@@ -9996,7 +9995,7 @@ function DesainRabPage({ onWaOpen }) {
 
       {/* == CTA BANNER == */}
       <section style={{ position:"relative", overflow:"hidden" }}>
-        <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1400&q=80" alt="CTA" style={{ position:"absolute", inset:0, width:"100%", height:"100%", objectFit:"cover" }} />
+        <img loading="lazy" src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=1400&q=80" alt="CTA" style={{ position:"absolute", inset:0, width:"100%", height:"100%", objectFit:"cover" }} />
         <div style={{ position:"absolute", inset:0, background:"rgba(20,30,30,.85)" }} />
         <div style={{ position:"relative", zIndex:1, padding:"clamp(48px,7vw,80px) 5%", display:"flex", alignItems:"center", justifyContent:"space-between", flexWrap:"wrap", gap:24, maxWidth:1200, margin:"0 auto" }}>
           <div>
@@ -10620,7 +10619,7 @@ function TemaPhotoSlideshow({ slug, nama, cmsData, duration = 3500, fallbackImg 
       ) : (
         <>
           {!loadedSrcs.has(cur.img) && <div className="img-skeleton" />}
-          <img src={cur.img} alt={publicCaption(cur.label) || nama || "Foto tema rumah"}
+          <img loading="lazy" src={cur.img} alt={publicCaption(cur.label) || nama || "Foto tema rumah"}
             draggable={false}
             style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", pointerEvents: "none", opacity: loadedSrcs.has(cur.img) ? 1 : 0, transition: "opacity .4s ease" }}
             onLoad={() => markLoaded(cur.img)}
@@ -10785,7 +10784,7 @@ function TemaDetailPage({ slug, onWaOpen, onBack, temaList }) {
 
       {/* Hero */}
       <div style={{ position: "relative", height: 400, overflow: "hidden" }}>
-        <img src={tema.img} alt={tema.nama} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} onError={e => e.target.style.display = "none"} />
+        <img loading="lazy" src={tema.img} alt={tema.nama} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} onError={e => e.target.style.display = "none"} />
         <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to right,rgba(10,20,20,.88) 38%,rgba(10,20,20,.25) 100%)" }} />
         <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", justifyContent: "flex-end", padding: "36px 5%" }}>
           <div style={{ fontSize: "0.65rem", letterSpacing: "0.15em", textTransform: "uppercase", color: tema.warna, fontWeight: 800, marginBottom: 7 }}>TEMA RUMAH · {tema.no}</div>
@@ -10842,7 +10841,7 @@ function TemaDetailPage({ slug, onWaOpen, onBack, temaList }) {
                   gridRow: i % 5 === 0 ? "span 2" : "span 1",
                   aspectRatio: i % 5 === 0 ? "16/13" : "4/3",
                 }}>
-                  <img src={p.img} alt={publicCaption(p.label) || tema.nama}
+                  <img loading="lazy" src={p.img} alt={publicCaption(p.label) || tema.nama}
                     style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", transition: "transform .45s ease" }}
                     onError={e => e.target.parentElement.style.display = "none"}
                     onMouseEnter={e => { e.currentTarget.style.transform = "scale(1.12)"; }}
@@ -10904,7 +10903,7 @@ function TemaDetailPage({ slug, onWaOpen, onBack, temaList }) {
                   <div style={{ display: "grid", gridTemplateColumns: lantai.imgs.length === 1 ? "1fr" : "repeat(auto-fit,minmax(320px,1fr))", gap: 16 }}>
                     {lantai.imgs.map((img, ii) => (
                       <div key={ii} style={{ borderRadius: 14, overflow: "hidden", boxShadow: "0 8px 28px rgba(0,0,0,.12)", border: "1px solid #F5EDD8" }}>
-                        <img src={img} alt={`${lantai.label} - foto ${ii + 1}`} style={{ width: "100%", height: "auto", display: "block", objectFit: "contain", background: "#fff" }} onError={e => e.target.style.display = "none"} />
+                        <img loading="lazy" src={img} alt={`${lantai.label} - foto ${ii + 1}`} style={{ width: "100%", height: "auto", display: "block", objectFit: "contain", background: "#fff" }} onError={e => e.target.style.display = "none"} />
                       </div>
                     ))}
                   </div>
@@ -11075,7 +11074,7 @@ function TemaRumahPage({ onWaOpen, temaSlug, openTemaDetail, closeTemaDetail, cm
       `}</style>
       {/* Hero */}
       <div style={{ position: "relative", minHeight: 460, overflow: "hidden", background: "#0f1f1f" }}>
-        <img src={heroImg} alt="Tema Rumah Hero"
+        <img loading="lazy" src={heroImg} alt="Tema Rumah Hero"
           style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", opacity: 0.42 }}
           onError={e => e.target.style.display = "none"} />
         <div style={{ position: "absolute", inset: 0, background: "linear-gradient(90deg,rgba(10,25,20,.93) 44%,rgba(10,25,20,.18) 100%)" }} />
@@ -11493,7 +11492,7 @@ function LsMiniSlide({ slides, height = "100%" }) {
     <div style={{ position: "relative", width: "100%", height, overflow: "hidden", touchAction: slides.length > 1 ? "pan-y" : "auto" }}
       onTouchStart={onTouchStart} onTouchMove={onTouchMoveH} onTouchEnd={onTouchEndH}>
       <style>{`@keyframes lmFade{from{opacity:0;transform:scale(1.05)}to{opacity:1;transform:scale(1)}}`}</style>
-      <img key={idx} src={sl.img} alt={sl.tema}
+      <img loading="lazy" key={idx} src={sl.img} alt={sl.tema}
         style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", animation: "lmFade .55s ease" }}
         onError={e => { e.target.style.display = "none"; }} />
       {/* Gradient overlay */}
@@ -12061,13 +12060,13 @@ function RsMiniSlide({ slides, slideDir = "right", height = "100%" }) {
     <div style={{ position: "relative", width: "100%", height, overflow: "hidden", background: "#1a1a1a", touchAction: slides.length > 1 ? "pan-y" : "auto" }}
       onTouchStart={onTouchStart} onTouchMove={onTouchMoveH} onTouchEnd={onTouchEndH}>
       {prevIdx !== null && animating && (
-        <img key={`p${prevIdx}`} src={slides[prevIdx].img} alt={slides[prevIdx].tema}
+        <img loading="lazy" key={`p${prevIdx}`} src={slides[prevIdx].img} alt={slides[prevIdx].tema}
           className={dirOut[slideDir]}
           style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }}
           onError={e => { e.target.style.display = "none"; }} />
       )}
       {!curLoaded && <div className="img-skeleton" />}
-      <img key={`c${idx}`} src={sl.img} alt={sl.tema}
+      <img loading="lazy" key={`c${idx}`} src={sl.img} alt={sl.tema}
         className={animating ? dirIn[slideDir] : ""}
         style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", opacity: curLoaded ? 1 : 0, transition: "opacity .4s ease" }}
         onLoad={() => markLoaded(idx)}
@@ -14417,7 +14416,7 @@ function FurniturDetailPage({ product, onBack, onWaOpen, formatRp }) {
                 {gallery.map((g, i) => (
                   <button key={i} onClick={() => setActiveImg(i)}
                     style={{ padding: 0, border: i === activeImg ? `2.5px solid ${accentGold}` : "2.5px solid transparent", borderRadius: 9, overflow: "hidden", cursor: "pointer", background: "none", aspectRatio: "1/1" }}>
-                    <img src={g.img} alt={g.label || `Foto ${i + 1}`} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} onError={e => e.target.parentElement.style.display = "none"} />
+                    <img loading="lazy" src={g.img} alt={g.label || `Foto ${i + 1}`} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} onError={e => e.target.parentElement.style.display = "none"} />
                   </button>
                 ))}
               </div>
@@ -14733,7 +14732,7 @@ function SubPageCatalogDetailPage({ item, pageKey, onBack, onWaOpen, formatHarga
           <div>
             <div style={{ borderRadius: 16, overflow: "hidden", boxShadow: "0 10px 32px rgba(0,0,0,.12)", background: "#F5EDD8", aspectRatio: "4/3", position: "relative" }}>
               {mainImg ? (
-                <img src={mainImg} alt={item.nama} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} onError={e => e.target.style.display = "none"} />
+                <img loading="lazy" src={mainImg} alt={item.nama} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} onError={e => e.target.style.display = "none"} />
               ) : (
                 <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 64 }}>{item.icon || ""}</div>
               )}
@@ -14749,7 +14748,7 @@ function SubPageCatalogDetailPage({ item, pageKey, onBack, onWaOpen, formatHarga
                 {gallery.map((g, i) => (
                   <button key={i} onClick={() => setActiveImg(i)}
                     style={{ padding: 0, border: i === activeImg ? `2.5px solid ${accentGold}` : "2.5px solid transparent", borderRadius: 9, overflow: "hidden", cursor: "pointer", background: "none", aspectRatio: "1/1" }}>
-                    <img src={g.img} alt={g.label || `Foto ${i + 1}`} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} onError={e => e.target.parentElement.style.display = "none"} />
+                    <img loading="lazy" src={g.img} alt={g.label || `Foto ${i + 1}`} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} onError={e => e.target.parentElement.style.display = "none"} />
                   </button>
                 ))}
               </div>
@@ -15431,7 +15430,7 @@ function RunningPhotoRow({ items, direction = "right", speedPxPerSec = 45 }) {
       `}</style>
       <div ref={trackRef} className="photo-strip-track" style={{ animation: ready ? `${anim} ${duration}s linear infinite` : "none" }}>
         {items.concat(items).map((src, i) => (
-          <img key={i} src={src} alt={`Foto ${i+1}`} className="photo-strip-img"
+          <img loading="lazy" key={i} src={src} alt={`Foto ${i+1}`} className="photo-strip-img"
             onError={e=>{ e.target.style.display="none"; }} />
         ))}
       </div>
@@ -15471,7 +15470,7 @@ function HomeServiceCardEditor({ index, svc, data, save, notify }) {
   return (
     <div style={{ background: "#FAF7F0", borderRadius: 8, padding: 12, border: "1px solid #E8DCC8" }}>
       {svc.img ? (
-        <img src={svc.img} alt={svc.title} style={{ width: "100%", height: 120, objectFit: "cover", borderRadius: 6, marginBottom: 8, border: "1px solid #D4C4A0" }}
+        <img loading="lazy" src={svc.img} alt={svc.title} style={{ width: "100%", height: 120, objectFit: "cover", borderRadius: 6, marginBottom: 8, border: "1px solid #D4C4A0" }}
           onError={e => e.target.style.display = "none"} />
       ) : (
         <div style={{ width: "100%", height: 120, background: "#E8DCC8", borderRadius: 6, marginBottom: 8, display: "flex", alignItems: "center", justifyContent: "center", color: "#5A6A6C", fontSize: 11 }}>Belum ada foto</div>
@@ -15760,7 +15759,7 @@ function TemaHeroImgRow({ data, save, notify, uploadToCloudinary }) {
   return (
     <div style={{ marginTop:24, background:"#fff", border:"1.5px solid #E8DCC8", borderRadius:10, padding:"16px 18px" }}>
       <div style={{ fontSize:13, fontWeight:700, color:"#5A6A6C", marginBottom:8 }}>Foto Background Hero Tema Rumah</div>
-      {url && <img src={url} alt="" style={{ width:"100%", maxHeight:160, objectFit:"cover", borderRadius:8, marginBottom:10 }} />}
+      {url && <img loading="lazy" src={url} alt="" style={{ width:"100%", maxHeight:160, objectFit:"cover", borderRadius:8, marginBottom:10 }} />}
       <div style={{ display:"flex", gap:10, flexWrap:"wrap" }}>
         <label style={{ padding:"9px 18px", background:"#3498db", color:"#fff", borderRadius:8, fontSize:13, fontWeight:700, cursor:"pointer" }}>
           {upl ? "Upload..." : "Upload Foto"}
@@ -16049,7 +16048,7 @@ function TemaEditForm({ temaOrig, editIdx, activeTemas, data, save, notify, onBa
           {slideshowImgs.length > 0 && (
             <div style={{ position: "relative", width: "100%", height: 160, borderRadius: 10, overflow: "hidden", marginBottom: 10, background: "#E8DCC8" }}>
               {slideshowImgs[slideshowPrev]?.img && !brokenImgUrls.has(slideshowImgs[slideshowPrev].img) ? (
-                <img
+                <img loading="lazy"
                   key={slideshowPrev}
                   src={slideshowImgs[slideshowPrev]?.img}
                   alt=""
@@ -16088,7 +16087,7 @@ function TemaEditForm({ temaOrig, editIdx, activeTemas, data, save, notify, onBa
                 <div key={i} style={{ position: "relative", borderRadius: 8, overflow: "hidden", border: slideshowPrev === i ? "2.5px solid #C9AA71" : "1.5px solid #E8DCC8", cursor: "pointer" }}
                   onClick={() => setSlideshowPrev(i)}>
                   {ph.img && !brokenImgUrls.has(ph.img) ? (
-                    <img src={ph.img} alt={ph.label} style={{ width: "100%", height: 70, objectFit: "cover", display: "block" }} onError={() => markImgBroken(ph.img)} />
+                    <img loading="lazy" src={ph.img} alt={ph.label} style={{ width: "100%", height: 70, objectFit: "cover", display: "block" }} onError={() => markImgBroken(ph.img)} />
                   ) : (
                     <div style={{ width: "100%", height: 70, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 2, background: "#FDF3F0" }}>
                       <span style={{ fontSize: 16 }}></span>
@@ -16166,7 +16165,7 @@ function TemaEditForm({ temaOrig, editIdx, activeTemas, data, save, notify, onBa
                 <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(90px,1fr))", gap: 8, marginBottom: 10 }}>
                   {lantai.imgs.map((img, ii) => (
                     <div key={ii} style={{ position: "relative", borderRadius: 8, overflow: "hidden", border: "1.5px solid #E8DCC8" }}>
-                      <img src={img} alt={`${lantai.label} ${ii + 1}`} style={{ width: "100%", height: 70, objectFit: "cover", display: "block" }} onError={e => e.target.style.display = "none"} />
+                      <img loading="lazy" src={img} alt={`${lantai.label} ${ii + 1}`} style={{ width: "100%", height: 70, objectFit: "cover", display: "block" }} onError={e => e.target.style.display = "none"} />
                       <button onClick={() => removeDenahImg(li, ii)}
                         style={{ position: "absolute", top: 3, right: 3, width: 20, height: 20, background: "rgba(220,38,38,.85)", color: "#fff", border: "none", borderRadius: "50%", cursor: "pointer", fontSize: 11, fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>✕</button>
                     </div>
@@ -16536,7 +16535,7 @@ function TemaRumahAdminPanel({ data, save, notify, uploadToCloudinary }) {
                   {reorderModeTema
                     ? <OrderArrows idx={i} count={orderedTemas.length} onUp={moveTemaUp} onDown={moveTemaDown} />
                     : <DragHandle />}
-                  <img src={tema.img} alt={tema.nama} style={{ width: 70, height: 52, objectFit: "cover", borderRadius: 8, flexShrink: 0 }} onError={e => e.target.style.display = "none"} />
+                  <img loading="lazy" src={tema.img} alt={tema.nama} style={{ width: 70, height: 52, objectFit: "cover", borderRadius: 8, flexShrink: 0 }} onError={e => e.target.style.display = "none"} />
                   <div style={{ flex: 1, minWidth: 140 }}>
                     <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
                       <div style={{ fontWeight: 800, fontSize: 15, color: "#2E3D3F" }}>{tema.no} · {tema.nama}</div>
@@ -18533,7 +18532,7 @@ export default function BricksyTravel() {
                         )}
                       </video>
                     ) : data.content?.heroMode === "static" ? (
-                      <img
+                      <img loading="lazy"
                         className="re-hero-img"
                         src={data.content?.heroStaticImage || ""}
                         alt="Hero Background"
@@ -18621,7 +18620,7 @@ export default function BricksyTravel() {
 
                   {/* == QUOTE / PARALLAX IMAGE == */}
                   <section className="re-quote-img re-scale-in">
-                    <img
+                    <img loading="lazy"
                       src="https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?w=1600&q=85&auto=format&fit=crop"
                       alt="Interior Modern"
                     />
@@ -18673,7 +18672,7 @@ export default function BricksyTravel() {
                         {((data.homeServices && data.homeServices.length > 0) ? data.homeServices : HOME_SERVICES_DEFAULT).map((svc, i) => (
                           <div key={i} className={`re-service-card ${i%2===0 ? "re-slide-left" : "re-slide-right"} delay-${(i%5)+1}`}>
                             <div className="re-service-card-img">
-                              <img src={svc.img} alt={svc.title} />
+                              <img loading="lazy" src={svc.img} alt={svc.title} />
                             </div>
                             <div className="re-service-card-body">
                               <div className="re-service-num">{svc.num || String(i+1).padStart(2,"0")}</div>
@@ -18727,7 +18726,7 @@ export default function BricksyTravel() {
 
                   {/* == CLOSING HERO == */}
                   <section className="re-closing-hero re-scale-in">
-                    <img
+                    <img loading="lazy"
                       src="https://images.unsplash.com/photo-1540518614846-7eded433c457?w=1600&q=85&auto=format&fit=crop"
                       alt="Dream Home"
                     />
@@ -19969,7 +19968,7 @@ export default function BricksyTravel() {
                       <div style={{ background: "#fff", borderRadius: 12, padding: "28px 24px", boxShadow: "0 2px 10px rgba(0,0,0,.06)", textAlign: "center" }}>
                         <div style={{ position: "relative", display: "inline-block", marginBottom: 16 }}>
                           {(profileEdit.photo || user.photo) ? (
-                            <img src={profileEdit.photo || user.photo} alt="Foto Profil"
+                            <img loading="lazy" src={profileEdit.photo || user.photo} alt="Foto Profil"
                               style={{ width: 100, height: 100, borderRadius: "50%", objectFit: "cover", border: "3px solid #C9AA71" }}
                               onError={e => { e.target.style.display = "none"; }} />
                           ) : (
@@ -20189,7 +20188,7 @@ export default function BricksyTravel() {
                       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(160px, 1fr))", gap: 12 }}>
                         {data.images.running.map((img, idx) => (
                           <div key={idx} style={{ background: "#FAF7F0", borderRadius: 8, padding: 8, border: "1px solid #E8DCC8" }}>
-                            <img src={img} alt={`Running ${idx+1}`} style={{ width: "100%", height: 90, objectFit: "cover", borderRadius: 5, marginBottom: 6, border: "1px solid #D4C4A0" }}
+                            <img loading="lazy" src={img} alt={`Running ${idx+1}`} style={{ width: "100%", height: 90, objectFit: "cover", borderRadius: 5, marginBottom: 6, border: "1px solid #D4C4A0" }}
                               onError={e => e.target.style.display = "none"} />
                             <button onClick={() => {
                               const next = data.images.running.filter((_, i) => i !== idx);
