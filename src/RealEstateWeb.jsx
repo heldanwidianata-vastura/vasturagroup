@@ -436,14 +436,21 @@ const _fbApp    = initializeApp(firebaseConfig);
 const _analytics = getAnalytics(_fbApp);
 const _db       = getFirestore(_fbApp);
 
-const FS_COLLECTION = import.meta.env.VITE_FS_COLLECTION || "vasturagroup";
+/* PENTING: nama collection Firestore di-hardcode (BUKAN dari env var) supaya SELALU sama
+   persis di setiap deploy. Sebelumnya nilai ini bergantung pada import.meta.env.VITE_FS_COLLECTION
+   yang di-inline saat BUILD TIME oleh Vite — kalau env var itu tidak ter-set konsisten di setiap
+   deploy (mis. lupa dikonfigurasi ulang di Vercel, atau beda antara Production/Preview), setiap
+   build baru bisa diam-diam membaca/menulis ke collection Firestore yang BERBEDA (sering kali
+   collection kosong) → aplikasi terlihat seperti "reset ke default", padahal data asli masih utuh
+   tersimpan di collection lama. Dikunci ke satu nilai tetap agar tidak terjadi lagi. */
+const FS_COLLECTION = "vasturagroup";
 
-/* ── Firestore helpers ── */
+/* ── Firestore helpers ──
+   fsGet TIDAK menelan error secara diam-diam — kalau gagal (bukan sekadar dokumen belum ada),
+   error dilempar ke pemanggil supaya bisa ditampilkan ke user, bukan diam-diam jatuh ke default. */
 async function fsGet(docId) {
-  try {
-    const snap = await getDoc(doc(_db, FS_COLLECTION, docId));
-    return snap.exists() ? snap.data() : null;
-  } catch { return null; }
+  const snap = await getDoc(doc(_db, FS_COLLECTION, docId));
+  return snap.exists() ? snap.data() : null;
 }
 async function fsSet(docId, payload) {
   const timeout = new Promise((_, reject) =>
@@ -9403,7 +9410,9 @@ function AdminReviews({ data, save, notify }) {
 
 // --- Session persistence (sessionStorage) --------------------------
 // Sesi bertahan saat reload, tapi otomatis bersih saat browser ditutup
-const SESSION_KEY = import.meta.env.VITE_SESSION_KEY || "re_session";
+// (di-hardcode juga — pola sama seperti FS_COLLECTION, supaya admin tidak ke-logout
+//  tak terduga tiap deploy kalau env var-nya kebetulan tidak ter-set konsisten)
+const SESSION_KEY = "re_session";
 const sessionSave = (u) => {
   try { sessionStorage.setItem(SESSION_KEY, JSON.stringify(u)); } catch {}
 };
@@ -16583,6 +16592,7 @@ export default function BricksyTravel() {
   const [data, setData] = useState(DEFAULT_DATA);
   const dataRef = useRef(DEFAULT_DATA); // selalu up-to-date, aman dipakai di closure stale (popstate)
   const [isLoading, setIsLoading] = useState(true);
+  const [fsLoadError, setFsLoadError] = useState(false); // true jika Firestore gagal dibaca sama sekali (bukan sekadar kosong)
   const [user, setUser] = useState(() => sessionLoad()); // ← restore session saat reload
   // Fix #3: gunakan lazy initializer agar window.location dibaca saat render, bukan module load
   const [page, setPage] = useState(() => getInitialPage()); // home | about | news | shop | destinations | services
@@ -16948,14 +16958,22 @@ export default function BricksyTravel() {
         } catch {}
 
         // 2. Load Firestore di background → update data jika lebih baru
-        const fsData = await fsGet("main");
-        if (fsData?.payload) {
-          const parsed = JSON.parse(fsData.payload);
-          const merged = mergeWithDefaults(parsed, DEFAULT_DATA);
-          setData(merged);
-          dataRef.current = merged;
-          // Sync ke localStorage untuk fast-path berikutnya
-          try { localStorage.setItem("realestate-cache-v2", fsData.payload); } catch {}
+        try {
+          const fsData = await fsGet("main");
+          if (fsData?.payload) {
+            const parsed = JSON.parse(fsData.payload);
+            const merged = mergeWithDefaults(parsed, DEFAULT_DATA);
+            setData(merged);
+            dataRef.current = merged;
+            // Sync ke localStorage untuk fast-path berikutnya
+            try { localStorage.setItem("realestate-cache-v2", fsData.payload); } catch {}
+          }
+        } catch (fsErr) {
+          // Firestore benar-benar gagal dibaca (bukan sekadar dokumen kosong) — kemungkinan
+          // masalah koneksi/izin/konfigurasi. Tampilkan peringatan alih-alih diam-diam pakai default,
+          // supaya tidak disalahartikan sebagai "data hilang".
+          console.error("[RealEstate] Firestore gagal diakses:", fsErr);
+          setFsLoadError(true);
         }
       } catch (e) {
         console.warn("[RealEstate] Gagal load data, pakai default.", e);
@@ -17554,6 +17572,15 @@ export default function BricksyTravel() {
   return (
     <div className="page-wrap" style={{ position: "relative", minHeight: "100vh" }}>
       <GS />
+
+      {/* -- PERINGATAN: Firestore gagal diakses (bukan sekadar kosong) -- tampil ke semua orang
+           supaya jelas ini masalah koneksi/konfigurasi, BUKAN data yang hilang/ter-reset. -- */}
+      {fsLoadError && (
+        <div style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 99999, background: "#fef3c7", color: "#78350f", padding: "10px 16px", fontSize: 13, fontWeight: 600, textAlign: "center", borderBottom: "1px solid #f59e0b" }}>
+          ⚠️ Gagal terhubung ke server data (Firestore). Konten yang tampil saat ini mungkin bukan versi terbaru.
+          Data Anda tidak hilang — coba muat ulang halaman, atau hubungi developer jika masalah berlanjut.
+        </div>
+      )}
 
       {/* -- LOADING SKELETON -- */}
       {isLoading && !reviewTokenParam && (
@@ -19909,22 +19936,26 @@ export default function BricksyTravel() {
               {adminTab === "profil" && (() => {
                 const saveProfileFn = async () => {
                   const { name, phone, email, desc, photo, oldPass, newPass, confirmPass } = profileEdit;
-                  // Ganti password
-                  if (oldPass || newPass || confirmPass) {
-                    const stored = await fsGet(`profile-${user.username}`);
-                    const currentPass = stored?._password || user.password;
-                    if (oldPass !== currentPass) { notify("Password lama salah.", "error"); return; }
-                    if (newPass.length < 6) { notify("Password baru minimal 6 karakter.", "error"); return; }
-                    if (newPass !== confirmPass) { notify("Konfirmasi password tidak cocok.", "error"); return; }
+                  try {
+                    // Ganti password
+                    if (oldPass || newPass || confirmPass) {
+                      const stored = await fsGet(`profile-${user.username}`);
+                      const currentPass = stored?._password || user.password;
+                      if (oldPass !== currentPass) { notify("Password lama salah.", "error"); return; }
+                      if (newPass.length < 6) { notify("Password baru minimal 6 karakter.", "error"); return; }
+                      if (newPass !== confirmPass) { notify("Konfirmasi password tidak cocok.", "error"); return; }
+                    }
+                    const prev = await fsGet(`profile-${user.username}`) || {};
+                    const patch = { ...prev, name: name || user.name, phone: phone || user.phone, email: email || user.email, desc: desc || user.desc, photo: photo || user.photo };
+                    if (profileEdit.newPass) patch._password = profileEdit.newPass;
+                    await fsSet(`profile-${user.username}`, patch);
+                    setUser(u => ({ ...u, name: patch.name, phone: patch.phone, email: patch.email, desc: patch.desc, photo: patch.photo }));
+                    setProfileEdit(p => ({ ...p, oldPass: "", newPass: "", confirmPass: "" }));
+                    setProfileEditMode(false);
+                    notify("Profil berhasil disimpan!");
+                  } catch (err) {
+                    notify("Gagal menyimpan profil: " + (err?.message || "Periksa koneksi."), "error");
                   }
-                  const prev = await fsGet(`profile-${user.username}`) || {};
-                  const patch = { ...prev, name: name || user.name, phone: phone || user.phone, email: email || user.email, desc: desc || user.desc, photo: photo || user.photo };
-                  if (profileEdit.newPass) patch._password = profileEdit.newPass;
-                  await fsSet(`profile-${user.username}`, patch);
-                  setUser(u => ({ ...u, name: patch.name, phone: patch.phone, email: patch.email, desc: patch.desc, photo: patch.photo }));
-                  setProfileEdit(p => ({ ...p, oldPass: "", newPass: "", confirmPass: "" }));
-                  setProfileEditMode(false);
-                  notify("Profil berhasil disimpan!");
                 };
 
                 const inp = (label, key, type = "text", placeholder = "") => (
