@@ -8839,7 +8839,17 @@ function SubLayananAdmin({
   crudHasGallery = false,
   defaultItems = null,
 }) {
-  const items     = data[crudKey] || [];
+  /* PENTING: fallback ke defaultItems di sini HANYA untuk tampilan (tidak pernah otomatis
+     ditulis ke Firestore). Ini memperbaiki bug serius: sebelumnya ada useEffect yang otomatis
+     men-save() defaultItems ke Firestore begitu komponen ini mount dan `items` kosong — termasuk
+     saat kosong itu cuma KEADAAN SEMENTARA (data asli dari Firestore belum selesai dimuat saat
+     tab admin ini dibuka). Race condition itu bisa diam-diam MENIMPA seluruh data yang sudah
+     dikonfigurasi dengan data contoh, persis seperti yang dikeluhkan user. Sekarang: kalau
+     Firestore benar-benar sudah punya data → itu yang dipakai (dan TIDAK PERNAH ditimpa otomatis).
+     Kalau memang masih kosong (first-run atau admin sengaja hapus semua) → contoh ditampilkan
+     sebagai starting point yang bisa diedit, dan baru betulan tersimpan ke Firestore saat admin
+     melakukan aksi eksplisit (edit/hapus/tambah/atur urutan) — bukan otomatis saat halaman dibuka. */
+  const items     = (data[crudKey] && data[crudKey].length > 0) ? data[crudKey] : (defaultItems || []);
   const accent    = accentColor;
 
   /* Kategori yang sudah pernah dipakai di daftar item ini → jadi opsi dropdown untuk field type "category" */
@@ -8860,27 +8870,6 @@ function SubLayananAdmin({
   const [saving, setSaving]     = useState(false);
   const [delTarget, setDelTarget] = useState(null);
   const [seeding, setSeeding]   = useState(false);
-  const [seedDone, setSeedDone] = useState(false);
-
-  /* ── Auto-seed: langsung muat data hardcoded saat mount jika list masih kosong ── */
-  useEffect(() => {
-    if (!defaultItems || defaultItems.length === 0) return;
-    if (items.length > 0) return;          // sudah ada data, skip
-    if (seedDone || seeding) return;
-    // jalankan seed otomatis
-    const run = async () => {
-      setSeeding(true);
-      try {
-        const seeded = defaultItems.map((it, i) => ({ ...it, id: it.id || String(Date.now() + i) }));
-        await save({ ...data, [crudKey]: seeded });
-        notify("Data awal berhasil dimuat otomatis!");
-        setSeedDone(true);
-      } catch { notify("Gagal memuat data awal — coba refresh."); }
-      setSeeding(false);
-    };
-    run();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);   // hanya saat mount
 
   /* ── Seed manual (tetap tersedia lewat tombol di bawah list jika diperlukan) ── */
   const handleSeed = async () => {
@@ -8891,7 +8880,6 @@ function SubLayananAdmin({
       const seeded = defaultItems.map((it, i) => ({ ...it, id: it.id || String(Date.now() + i) }));
       await save({ ...data, [crudKey]: seeded });
       notify("Data berhasil dimuat!");
-      setSeedDone(true);
     } catch { notify("Gagal memuat data."); }
     setSeeding(false);
   };
