@@ -9252,6 +9252,130 @@ function SubLayananAdmin({
 }
 
 /* ─────────────── ADMIN REVIEWS COMPONENT ─────────────── */
+/* ═══════════════════════════════════════════════════════════════════
+   BACKUP & RESTORE DATA WEBSITE
+   Download seluruh isi data website (data object utuh, sama seperti yang
+   tersimpan di Firestore dokumen "main") sebagai file JSON yang bisa
+   disimpan di komputer/HP admin, dan mengembalikannya kapan saja lewat
+   Restore jika suatu saat data di server bermasalah (tertimpa, terhapus,
+   dsb). Ini murni client-side (download/upload file) — tidak menyentuh
+   server sampai admin benar-benar menekan tombol Restore.
+═══════════════════════════════════════════════════════════════════ */
+function BackupDataPanel({ data, save, notify }) {
+  const [restoring, setRestoring] = useState(false);
+  const [preview, setPreview] = useState(null); // { fileName, parsed } — menunggu konfirmasi restore
+  const fileInputRef = useRef(null);
+
+  const handleDownload = () => {
+    try {
+      const json = JSON.stringify(data, null, 2);
+      const blob = new Blob([json], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const now = new Date();
+      const stamp = now.toISOString().slice(0, 16).replace(/[T:]/g, "-");
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `vastura-backup-${stamp}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      notify("Backup berhasil diunduh!");
+    } catch (err) {
+      notify("Gagal membuat file backup: " + (err?.message || "Terjadi kesalahan."));
+    }
+  };
+
+  const handleFileSelect = (e) => {
+    const file = e.target.files?.[0];
+    e.target.value = ""; // reset supaya bisa pilih file yang sama lagi kalau perlu
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      try {
+        const parsed = JSON.parse(ev.target.result);
+        if (typeof parsed !== "object" || parsed === null || Array.isArray(parsed)) {
+          notify("File tidak valid — bukan file backup JSON yang benar.");
+          return;
+        }
+        setPreview({ fileName: file.name, parsed });
+      } catch {
+        notify("Gagal membaca file — pastikan ini file backup .json yang benar dan tidak rusak.");
+      }
+    };
+    reader.onerror = () => notify("Gagal membaca file.");
+    reader.readAsText(file);
+  };
+
+  const handleConfirmRestore = async () => {
+    if (!preview) return;
+    setRestoring(true);
+    try {
+      await save(preview.parsed); // save() sudah otomatis merge dengan DEFAULT_DATA
+      notify("Data berhasil di-restore dari backup!");
+      setPreview(null);
+    } catch (err) {
+      notify("Gagal restore: " + (err?.message || "Periksa koneksi lalu coba lagi."));
+    }
+    setRestoring(false);
+  };
+
+  return (
+    <div className="fade-in">
+      <h1 style={{ fontSize: 24, fontWeight: 500, color: "#2E3D3F", marginBottom: 6 }}>Backup & Restore Data</h1>
+      <p style={{ fontSize: 13, color: "#5A6A6C", marginBottom: 28, lineHeight: 1.6, maxWidth: 640 }}>
+        Unduh seluruh isi website (konten, katalog produk, paket, halaman About, dll.) sebagai satu file cadangan.
+        Simpan file ini di komputer/HP kamu secara berkala — kalau suatu saat data di server bermasalah, kamu bisa
+        mengembalikannya sendiri lewat Restore di bawah tanpa perlu menunggu bantuan siapa pun.
+      </p>
+
+      {/* -- Download Backup -- */}
+      <div style={{ background: "#fff", borderRadius: 10, boxShadow: "0 2px 8px rgba(0,0,0,.06)", borderTop: "4px solid #27ae60", padding: 22, marginBottom: 20, maxWidth: 640 }}>
+        <h3 style={{ fontSize: 15, fontWeight: 700, color: "#2E3D3F", marginBottom: 6 }}>⬇ Download Backup Sekarang</h3>
+        <p style={{ fontSize: 12.5, color: "#5A6A6C", marginBottom: 16, lineHeight: 1.6 }}>
+          Mengunduh kondisi data website SAAT INI (yang sedang tampil di situs kamu sekarang) sebagai file .json.
+        </p>
+        <button onClick={handleDownload}
+          style={{ background: "#27ae60", color: "#fff", border: "none", borderRadius: 8, padding: "12px 24px", fontSize: 14, fontWeight: 700, cursor: "pointer" }}>
+          ⬇ Backup Semua Data Website
+        </button>
+      </div>
+
+      {/* -- Restore dari Backup -- */}
+      <div style={{ background: "#fff", borderRadius: 10, boxShadow: "0 2px 8px rgba(0,0,0,.06)", borderTop: "4px solid #c0392b", padding: 22, maxWidth: 640 }}>
+        <h3 style={{ fontSize: 15, fontWeight: 700, color: "#2E3D3F", marginBottom: 6 }}>⬆ Restore dari File Backup</h3>
+        <p style={{ fontSize: 12.5, color: "#5A6A6C", marginBottom: 16, lineHeight: 1.6 }}>
+          <strong>Perhatian:</strong> ini akan MENGGANTI seluruh data website yang sedang aktif sekarang dengan isi file backup yang kamu pilih. Pastikan file yang dipilih benar sebelum konfirmasi.
+        </p>
+        <input ref={fileInputRef} type="file" accept="application/json,.json" onChange={handleFileSelect} style={{ display: "none" }} />
+        <button onClick={() => fileInputRef.current?.click()}
+          style={{ background: "#FAF7F0", color: "#2E3D3F", border: "1.5px solid #D5C9B0", borderRadius: 8, padding: "12px 24px", fontSize: 14, fontWeight: 700, cursor: "pointer" }}>
+          Pilih File Backup (.json)
+        </button>
+
+        {preview && (
+          <div style={{ marginTop: 18, padding: 16, background: "#FEF3C7", border: "1.5px solid #f59e0b", borderRadius: 8 }}>
+            <div style={{ fontSize: 13, fontWeight: 700, color: "#78350f", marginBottom: 6 }}>⚠️ Konfirmasi Restore</div>
+            <p style={{ fontSize: 12.5, color: "#78350f", marginBottom: 12, lineHeight: 1.6 }}>
+              File <strong>{preview.fileName}</strong> siap di-restore. Ini akan MENGGANTI seluruh data website yang aktif sekarang. Tindakan ini tidak bisa dibatalkan kecuali kamu punya backup lain.
+            </p>
+            <div style={{ display: "flex", gap: 10 }}>
+              <button onClick={handleConfirmRestore} disabled={restoring}
+                style={{ background: "#c0392b", color: "#fff", border: "none", borderRadius: 8, padding: "10px 20px", fontSize: 13, fontWeight: 700, cursor: restoring ? "default" : "pointer", opacity: restoring ? 0.6 : 1 }}>
+                {restoring ? "Me-restore..." : "Ya, Restore Sekarang"}
+              </button>
+              <button onClick={() => setPreview(null)} disabled={restoring}
+                style={{ background: "transparent", color: "#78350f", border: "1.5px solid #f59e0b", borderRadius: 8, padding: "10px 20px", fontSize: 13, fontWeight: 700, cursor: "pointer" }}>
+                Batal
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 function AdminReviews({ data, save, notify }) {
   const reviews = data.reviews || [];
   const tokens = data.reviewTokens || [];
@@ -9529,6 +9653,7 @@ const ADMIN_TAB_TO_SLUG = {
   set_temarumah: "tema-rumah",
   reviews: "reviews",
   users: "users",
+  backup: "backup",
 };
 const ADMIN_SLUG_TO_TAB = Object.fromEntries(Object.entries(ADMIN_TAB_TO_SLUG).map(([k, v]) => [v, k]));
 /** Bangun path URL /control-panel/<slug> dari sebuah adminTab id */
@@ -19308,6 +19433,13 @@ export default function BricksyTravel() {
                     { id: "set_temarumah",    label: "Setting Tema Rumah", show: isAdmin },
                   ]
                 },
+                // ── Backup & Restore Data ──
+                {
+                  group: "BACKUP & DATA",
+                  items: [
+                    { id: "backup", label: "Backup & Restore Data", show: isAdmin },
+                  ]
+                },
                 /* ── Manajemen ── */
                 {
                   group: "MANAJEMEN",
@@ -20505,6 +20637,9 @@ export default function BricksyTravel() {
 
               {/* REVIEWS ADMIN */}
               {adminTab === "reviews" && isAdmin && <AdminReviews data={data} save={save} notify={notify} />}
+
+              {/* BACKUP & RESTORE DATA */}
+              {adminTab === "backup" && isAdmin && <BackupDataPanel data={data} save={save} notify={notify} />}
 
               {/* SETTINGS */}
               {adminTab === "settings" && isAdmin && (
