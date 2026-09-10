@@ -3143,6 +3143,27 @@ const formatDate = (d) => {
   catch { return d; }
 };
 
+/* ─────────────── Sanitizer sederhana untuk konten rich-text (paragraph blocks) ───────────────
+   Konten ini ditulis lewat CMS oleh akun admin/content_writer, jadi risikonya lebih ke
+   "akun staf disalahgunakan / kredensial bocor" ketimbang input publik langsung — tapi karena
+   di-render lewat dangerouslySetInnerHTML, tetap perlu dibersihkan dari <script>, event handler
+   (onclick, onerror, dst), dan skema javascript: supaya tidak jadi celah XSS tersimpan yang bisa
+   kena ke SEMUA pengunjung situs. Ini sanitizer ringan berbasis denylist (tanpa dependency baru) —
+   kalau proyek ini nanti nambah npm package, disarankan ganti ke DOMPurify untuk proteksi lebih kuat. */
+function sanitizeRichHtml(html) {
+  if (!html || typeof html !== "string") return "";
+  return html
+    .replace(/<script[\s\S]*?<\/script>/gi, "")
+    .replace(/<style[\s\S]*?<\/style>/gi, "")
+    .replace(/<iframe[\s\S]*?<\/iframe>/gi, "")
+    .replace(/<(object|embed|link|meta)\b[^>]*>/gi, "")
+    .replace(/\son\w+\s*=\s*"[^"]*"/gi, "")
+    .replace(/\son\w+\s*=\s*'[^']*'/gi, "")
+    .replace(/\son\w+\s*=\s*[^\s>]+/gi, "")
+    .replace(/(href|src)\s*=\s*"(\s*javascript:[^"]*)"/gi, '$1="#"')
+    .replace(/(href|src)\s*=\s*'(\s*javascript:[^']*)'/gi, "$1='#'");
+}
+
 /* ─────────────── RICH TEXT RENDERER ─────────────── */
 function RichRenderer({ blocks }) {
   if (!blocks || !blocks.length) return <p style={{ color: "#5A6A6C", fontStyle: "italic" }}>No content yet.</p>;
@@ -3151,7 +3172,7 @@ function RichRenderer({ blocks }) {
       {blocks.map((b, i) => {
         if (b.type === "paragraph") return (
           <div key={i} style={{ fontSize: "1rem", lineHeight: 1.85, color: "#2E3D3F" }}
-            dangerouslySetInnerHTML={{ __html: b.value }} />
+            dangerouslySetInnerHTML={{ __html: sanitizeRichHtml(b.value) }} />
         );
         if (b.type === "heading") return (
           <h2 key={i} className="display" style={{ fontSize: "1.625rem", fontWeight: 800, color: "#2E3D3F", marginTop: 12 }}>{b.value}</h2>
@@ -3726,7 +3747,7 @@ function CMSEditor({ post, onSave, onCancel, section, onSectionChange, user, not
                   </div>
                 ) : b.type === "paragraph" ? (
                   <div style={{ fontSize: 13, color: "#3D5254", lineHeight: 1.6, wordBreak: "break-word" }}
-                    dangerouslySetInnerHTML={{ __html: b.value }} />
+                    dangerouslySetInnerHTML={{ __html: sanitizeRichHtml(b.value) }} />
                 ) : (
                   <p style={{ fontSize: 13, color: "#3D5254", lineHeight: 1.6, wordBreak: "break-word" }}>
                     {b.value}
@@ -8384,7 +8405,7 @@ function AboutStatsEditor({ data, save, notify }) {
     <div>
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(180px,1fr))", gap: 10, marginBottom: 12 }}>
         {list.map((s, idx) => (
-          <div key={idx} style={{ background: "#FAF7F0", borderRadius: 8, padding: 10, border: "1px solid #E8DCC8" }}>
+          <div key={`${idx}::${s.num || ""}::${s.label || ""}`} style={{ background: "#FAF7F0", borderRadius: 8, padding: 10, border: "1px solid #E8DCC8" }}>
             <input defaultValue={s.num} onBlur={e => patch(idx, "num", e.target.value)} placeholder="500+"
               style={{ width: "100%", padding: "6px 8px", border: "1px solid #D4C4A0", borderRadius: 5, fontSize: 13, fontWeight: 700, marginBottom: 6, boxSizing: "border-box" }} />
             <input defaultValue={s.label} onBlur={e => patch(idx, "label", e.target.value)} placeholder="Klien Puas"
@@ -8415,7 +8436,7 @@ function AboutMisiEditor({ data, save, notify }) {
   return (
     <div>
       {list.map((m, idx) => (
-        <div key={idx} style={{ display: "flex", gap: 8, marginBottom: 8, alignItems: "center" }}>
+        <div key={`${idx}::${m}`} style={{ display: "flex", gap: 8, marginBottom: 8, alignItems: "center" }}>
           <span style={{ color: "#8B6914", fontWeight: 700, flexShrink: 0 }}>✓</span>
           <input defaultValue={m} onBlur={e => patch(idx, e.target.value)}
             style={{ flex: 1, padding: "8px 10px", border: "1px solid #D4C4A0", borderRadius: 6, fontSize: 13, boxSizing: "border-box" }} />
@@ -8445,7 +8466,7 @@ function AboutWhyUsEditor({ data, save, notify }) {
     <div>
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(220px,1fr))", gap: 10, marginBottom: 12 }}>
         {list.map((v, idx) => (
-          <div key={idx} style={{ background: "#FAF7F0", borderRadius: 8, padding: 10, border: "1px solid #E8DCC8" }}>
+          <div key={`${idx}::${v.title || ""}::${v.desc || ""}`} style={{ background: "#FAF7F0", borderRadius: 8, padding: 10, border: "1px solid #E8DCC8" }}>
             <input defaultValue={v.icon} onBlur={e => patch(idx, "icon", e.target.value)} placeholder=""
               style={{ width: "100%", padding: "6px 8px", border: "1px solid #D4C4A0", borderRadius: 5, fontSize: 18, marginBottom: 6, boxSizing: "border-box", textAlign: "center" }} />
             <input defaultValue={v.title} onBlur={e => patch(idx, "title", e.target.value)} placeholder="Judul keunggulan"
@@ -8546,7 +8567,7 @@ function AboutLayananListEditor({ data, save, notify, uploadToCloudinary }) {
     <div>
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 14, marginBottom: 16 }}>
         {orderedList.map((item, idx) => (
-          <div key={idx}
+          <div key={`${idx}::${item.title || ""}::${item.img || ""}`}
             draggable
             onDragStart={onDragStart(idx)}
             onDragEnter={onDragEnter(idx)}
@@ -17107,6 +17128,12 @@ export default function BricksyTravel() {
   const dataRef = useRef(DEFAULT_DATA); // selalu up-to-date, aman dipakai di closure stale (popstate)
   const [isLoading, setIsLoading] = useState(true);
   const [fsLoadError, setFsLoadError] = useState(false); // true jika Firestore gagal dibaca sama sekali (bukan sekadar kosong)
+  /* dataReady BEDA dari isLoading: isLoading cuma soal tampilan (biar halaman langsung muncul,
+     tidak nunggu). dataReady baru true setelah percobaan baca Firestore BENAR-BENAR selesai
+     (berhasil ataupun gagal). Ini dipakai untuk mengunci Control Panel — mencegah admin bisa
+     klik Edit/Simpan/Hapus memakai data lama/default SEBELUM data asli dari Firestore sempat
+     termuat, yang selama ini jadi celah race-condition penyebab data tertimpa. */
+  const [dataReady, setDataReady] = useState(false);
   const [user, setUser] = useState(() => sessionLoad()); // ← restore session saat reload
   // Fix #3: gunakan lazy initializer agar window.location dibaca saat render, bukan module load
   const [page, setPage] = useState(() => getInitialPage()); // home | about | news | shop | destinations | services
@@ -17400,9 +17427,12 @@ export default function BricksyTravel() {
         // Array services: gabungkan data Firebase + item DEFAULT yang id-nya belum ada.
         // JUGA: merge field baru (facilities, destinations, services) ke tiap item lama
         // yang tersimpan di Firebase namun belum punya field tersebut.
-        if (sv.length === 0) {
-          result[key] = dv; // Firebase kosong → seed penuh dari DEFAULT
-        } else {
+        // CATATAN: dulu ada cabang "kalau sv kosong, langsung ganti seluruhnya dengan default"
+        // di sini — itu pola yang SAMA seperti bug auto-seed yang sudah diperbaiki di tempat
+        // lain, jadi dihapus. Sekarang array kosong tetap diproses lewat logika per-id yang
+        // sama di bawah (aman: hanya MENAMBAHKAN paket default yang id-nya belum ada, tidak
+        // pernah mengganti/menghapus apa pun yang sudah tersimpan).
+        {
           const defaultById = Object.fromEntries(dv.map(s => [s.id, s]));
           const merged = sv.map(savedItem => {
             const def = defaultById[savedItem.id];
@@ -17489,8 +17519,11 @@ export default function BricksyTravel() {
           console.error("[RealEstate] Firestore gagal diakses:", fsErr);
           setFsLoadError(true);
         }
+        // Percobaan baca Firestore sudah tuntas (berhasil atau gagal) → aman membuka Control Panel.
+        setDataReady(true);
       } catch (e) {
         console.warn("[RealEstate] Gagal load data, pakai default.", e);
+        setDataReady(true);
       }
     })();
   }, []);
@@ -17688,7 +17721,24 @@ export default function BricksyTravel() {
         setLoginErr("Username atau password salah.");
         return;
       }
-      let savedPass = u.password;
+      // Cek status aktif/nonaktif dari panel "Kelola Pengguna" (data.users) — sebelumnya toggle
+      // "Nonaktifkan" di panel itu cuma kosmetik dan TIDAK benar-benar memblokir login, jadi akun
+      // yang sudah dinonaktifkan tetap bisa masuk seolah-olah masih aktif. Sekarang benar dicek.
+      const userRecord = (data.users || []).find(x => x.username === loginForm.username);
+      if (userRecord && userRecord.active === false) {
+        clearInterval(tick);
+        setLoginProgress(100);
+        await new Promise(r => setTimeout(r, 220));
+        setLoginLoading(false); setLoginProgress(0);
+        setLoginErr("Akun ini telah dinonaktifkan. Hubungi administrator.");
+        return;
+      }
+      // Urutan sumber password (yang paling baru/spesifik menang):
+      // 1. profile-<username>._password → hasil ganti password sendiri lewat halaman Profil
+      // 2. data.users[].password        → hasil admin set password lewat panel "Kelola Pengguna"
+      //    (sebelumnya field ini tersimpan tapi TIDAK PERNAH benar-benar dipakai untuk cek login)
+      // 3. HARDCODED_USERS.password     → password default/asli akun ini
+      let savedPass = userRecord?.password || u.password;
       let profile = { name: u.name, phone: u.phone, email: u.email, desc: u.desc, photo: u.photo };
       try {
         const r = await fsGet(`profile-${u.username}`);
@@ -17710,6 +17760,10 @@ export default function BricksyTravel() {
       setLoginProgress(100);
       await new Promise(r => setTimeout(r, 340));
       const sessionUser = { ...u, ...profile };
+      delete sessionUser.password; // JANGAN simpan password (walau ter-hash sekalipun) ke sessionStorage —
+                                    // itu bisa dibaca lewat DevTools atau lewat XSS apa pun yang berhasil jalan.
+                                    // Password cuma perlu dicek sesaat waktu proses login di atas, tidak perlu
+                                    // ikut terbawa di objek user yang disimpan/dipakai sepanjang sesi.
       setUser(sessionUser);
       sessionSave(sessionUser);
       setShowLogin(false); setLoginErr(""); setLoginForm({ username: "", password: "" });
@@ -19347,7 +19401,18 @@ export default function BricksyTravel() {
       )}
 
       {/* ADMIN PANEL */}
-      {showAdmin && !reviewTokenParam && (
+      {showAdmin && !reviewTokenParam && !dataReady && (
+        // Data dari Firestore belum selesai dicek — TAHAN dulu seluruh Control Panel supaya
+        // tidak mungkin ada aksi (edit/simpan/hapus) yang kejalan berbasis data lama/default
+        // sebelum data asli benar-benar termuat. Ini menutup celah race-condition yang
+        // sebelumnya menyebabkan konfigurasi tertimpa.
+        <div style={{ minHeight: "100vh", background: "#F7F5F0", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 16 }}>
+          <div style={{ width: 40, height: 40, border: "3px solid #E8DCC8", borderTopColor: "#8B6914", borderRadius: "50%", animation: "spin 0.8s linear infinite" }} />
+          <div style={{ color: "#5A6A6C", fontSize: 14, fontWeight: 600 }}>Memuat data dari server, mohon tunggu...</div>
+          <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+        </div>
+      )}
+      {showAdmin && !reviewTokenParam && dataReady && (
         <div style={{ minHeight: "100vh", background: "#F7F5F0", paddingTop: 56 }}>
 
           {/* -- Top bar -- */}
@@ -20508,7 +20573,10 @@ export default function BricksyTravel() {
                     // Ganti password
                     if (oldPass || newPass || confirmPass) {
                       const stored = await fsGet(`profile-${user.username}`);
-                      const currentPass = stored?._password || user.password;
+                      // user.password sengaja tidak lagi disimpan di sesi (lihat catatan di flow login) —
+                      // fallback-nya ambil dari HARDCODED_USERS (password default akun ini) kalau
+                      // belum pernah ganti password sebelumnya (belum ada stored._password).
+                      const currentPass = stored?._password || HARDCODED_USERS.find(h => h.username === user.username)?.password;
                       if (oldPass !== currentPass) { notify("Password lama salah.", "error"); return; }
                       if (newPass.length < 6) { notify("Password baru minimal 6 karakter.", "error"); return; }
                       if (newPass !== confirmPass) { notify("Konfirmasi password tidak cocok.", "error"); return; }
@@ -20794,7 +20862,7 @@ export default function BricksyTravel() {
                     </p>
                     <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: 14, marginBottom: 16 }}>
                       {((data.homeServices && data.homeServices.length > 0) ? data.homeServices : HOME_SERVICES_DEFAULT).map((svc, idx) => (
-                        <HomeServiceCardEditor key={idx} index={idx} svc={svc} data={data} save={save} notify={notify} />
+                        <HomeServiceCardEditor key={`${idx}::${svc.title || ""}::${svc.img || ""}`} index={idx} svc={svc} data={data} save={save} notify={notify} />
                       ))}
                     </div>
                     <button onClick={() => {
