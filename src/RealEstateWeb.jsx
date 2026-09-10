@@ -458,7 +458,7 @@ const ROLES = {
 };
 
 const HARDCODED_USERS = [
-  { username: "Administrator", password: "Admin123",  role: "admin",             name: "Administrator", phone: "", email: "Heldanwidiananta12@gmail.com", desc: "", photo: "" },
+  { username: "Administrator", password: "Admin123",  role: "admin",             name: "Administrator", phone: "", email: "heldanwidianata12@gmail.com", desc: "", photo: "" },
   { username: "writer1",       password: "writer123", role: "content_writer",    name: "Writer 1",      phone: "", email: "", desc: "", photo: "" },
   { username: "cs1",           password: "cs123",     role: "customer_services", name: "CS 1",          phone: "", email: "", desc: "", photo: "" },
 ];
