@@ -457,9 +457,9 @@ const ROLES = {
 };
 
 const HARDCODED_USERS = [
-  { username: "administrator", password: import.meta.env.VITE_ADMIN_PASSWORD     || "admin123",  role: "admin",             name: "Administrator", phone: "", email: "", desc: "", photo: "" },
-  { username: "writer1",       password: import.meta.env.VITE_WRITER_PASSWORD    || "writer123", role: "content_writer",    name: "Writer 1",      phone: "", email: "", desc: "", photo: "" },
-  { username: "cs1",           password: import.meta.env.VITE_CS_PASSWORD        || "cs123",     role: "customer_services", name: "CS 1",          phone: "", email: "", desc: "", photo: "" },
+  { username: "Administrator", password: "Admin123",  role: "admin",             name: "Administrator", phone: "", email: "Heldanwidiananta12@gmail.com", desc: "", photo: "" },
+  { username: "writer1",       password: "writer123", role: "content_writer",    name: "Writer 1",      phone: "", email: "", desc: "", photo: "" },
+  { username: "cs1",           password: "cs123",     role: "customer_services", name: "CS 1",          phone: "", email: "", desc: "", photo: "" },
 ];
 
 /* ─── Firebase Config ─── */
@@ -493,6 +493,28 @@ const FS_COLLECTION = "vasturagroup";
 async function fsGet(docId) {
   const snap = await getDoc(doc(_db, FS_COLLECTION, docId));
   return snap.exists() ? snap.data() : null;
+}
+/* fsGetWithRetry: dipakai KHUSUS untuk load data utama saat halaman pertama kali dibuka.
+   Firestore sendiri strongly-consistent (kalau berhasil dibaca, hasilnya pasti akurat/lengkap —
+   tidak ada istilah "kebaca tapi cuma sebagian"), jadi retry ini bukan untuk menunggu data
+   "muncul pelan-pelan". Yang sebenarnya perlu ditoleransi adalah PERMINTAANNYA GAGAL/TIMEOUT
+   duluan — ini realistis terjadi di Firestore tier gratis kalau koneksi lambat atau server lagi
+   cold-start. Jadi: kalau gagal, coba lagi beberapa kali dengan jeda yang makin lama, BARU kalau
+   semua percobaan itu tetap gagal, baru dianggap benar-benar tidak bisa diakses. */
+async function fsGetWithRetry(docId, { retries = 4, baseDelayMs = 1500 } = {}) {
+  let lastErr;
+  for (let attempt = 0; attempt <= retries; attempt++) {
+    try {
+      return await fsGet(docId);
+    } catch (err) {
+      lastErr = err;
+      if (attempt < retries) {
+        const delay = Math.round(baseDelayMs * Math.pow(1.6, attempt));
+        await new Promise(r => setTimeout(r, delay));
+      }
+    }
+  }
+  throw lastErr;
 }
 async function fsSet(docId, payload) {
   const timeout = new Promise((_, reject) =>
@@ -17502,8 +17524,12 @@ export default function BricksyTravel() {
         } catch {}
 
         // 2. Load Firestore di background → update data jika lebih baru
+        //    Pakai fsGetWithRetry: kalau gagal (bukan sekadar dokumen kosong), coba lagi
+        //    sampai 4x dengan jeda makin lama (total budget waktu tunggu ±14 detik) sebelum
+        //    benar-benar menyerah — supaya server gratisan yang lambat/cold-start dapat
+        //    kesempatan lebih banyak sebelum dianggap gagal.
         try {
-          const fsData = await fsGet("main");
+          const fsData = await fsGetWithRetry("main", { retries: 4, baseDelayMs: 1500 });
           if (fsData?.payload) {
             const parsed = JSON.parse(fsData.payload);
             const merged = mergeWithDefaults(parsed, DEFAULT_DATA);
@@ -17513,10 +17539,10 @@ export default function BricksyTravel() {
             try { localStorage.setItem("realestate-cache-v2", fsData.payload); } catch {}
           }
         } catch (fsErr) {
-          // Firestore benar-benar gagal dibaca (bukan sekadar dokumen kosong) — kemungkinan
-          // masalah koneksi/izin/konfigurasi. Tampilkan peringatan alih-alih diam-diam pakai default,
-          // supaya tidak disalahartikan sebagai "data hilang".
-          console.error("[RealEstate] Firestore gagal diakses:", fsErr);
+          // Sudah dicoba berkali-kali dan tetap gagal — kemungkinan besar memang masalah
+          // koneksi/izin/konfigurasi, bukan sekadar lambat. Tampilkan peringatan alih-alih
+          // diam-diam pakai default, supaya tidak disalahartikan sebagai "data hilang".
+          console.error("[RealEstate] Firestore gagal diakses setelah beberapa kali percobaan:", fsErr);
           setFsLoadError(true);
         }
         // Percobaan baca Firestore sudah tuntas (berhasil atau gagal) → aman membuka Control Panel.
@@ -17711,7 +17737,7 @@ export default function BricksyTravel() {
     const tick = setInterval(() => setLoginProgress(p => p < 85 ? p + Math.random() * 18 : p), 180);
     try {
       await new Promise(r => setTimeout(r, 420)); // natural delay
-      const u = HARDCODED_USERS.find(x => x.username === loginForm.username);
+      const u = HARDCODED_USERS.find(x => x.username.toLowerCase() === loginForm.username.trim().toLowerCase());
       setLoginProgress(55);
       if (!u) {
         clearInterval(tick);
@@ -17724,7 +17750,7 @@ export default function BricksyTravel() {
       // Cek status aktif/nonaktif dari panel "Kelola Pengguna" (data.users) — sebelumnya toggle
       // "Nonaktifkan" di panel itu cuma kosmetik dan TIDAK benar-benar memblokir login, jadi akun
       // yang sudah dinonaktifkan tetap bisa masuk seolah-olah masih aktif. Sekarang benar dicek.
-      const userRecord = (data.users || []).find(x => x.username === loginForm.username);
+      const userRecord = (data.users || []).find(x => x.username.toLowerCase() === loginForm.username.trim().toLowerCase());
       if (userRecord && userRecord.active === false) {
         clearInterval(tick);
         setLoginProgress(100);
@@ -17782,7 +17808,7 @@ export default function BricksyTravel() {
     let found = null;
     // Search in HARDCODED_USERS first
     if (forgotSearchBy === "username") {
-      found = HARDCODED_USERS.find(x => x.username === forgotUser.trim()) || null;
+      found = HARDCODED_USERS.find(x => x.username.toLowerCase() === forgotUser.trim().toLowerCase()) || null;
     } else if (forgotSearchBy === "email") {
       found = HARDCODED_USERS.find(x => x.email && x.email.toLowerCase() === forgotUser.trim().toLowerCase()) || null;
     } else {
@@ -17809,7 +17835,7 @@ export default function BricksyTravel() {
   const forgotStep2 = async () => {
     setForgotErr("");
     const targetUser = forgotFoundUser || forgotUser.trim();
-    const u = HARDCODED_USERS.find(x => x.username === targetUser);
+    const u = HARDCODED_USERS.find(x => x.username.toLowerCase() === targetUser.toLowerCase());
     // Ambil email dari Firestore atau hardcoded
     let storedEmail = u?.email || "";
     try {
