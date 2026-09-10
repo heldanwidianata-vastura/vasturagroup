@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef, useCallback, useMemo, Suspense, laz
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getFirestore, doc, getDoc, setDoc } from "firebase/firestore";
+import { getAuth, GoogleAuthProvider, signInWithPopup, signOut as fbSignOut, setPersistence, browserSessionPersistence } from "firebase/auth";
 
 /* ── Auto-grow helper: textarea otomatis memanjang sesuai isi teks, tanpa terpotong/scroll ── */
 function autoGrowTextarea(el) {
@@ -477,6 +478,7 @@ const firebaseConfig = {
 const _fbApp    = initializeApp(firebaseConfig);
 const _analytics = getAnalytics(_fbApp);
 const _db       = getFirestore(_fbApp);
+const _auth     = getAuth(_fbApp);
 
 /* PENTING: nama collection Firestore di-hardcode (BUKAN dari env var) supaya SELALU sama
    persis di setiap deploy. Sebelumnya nilai ini bergantung pada import.meta.env.VITE_FS_COLLECTION
@@ -17179,6 +17181,7 @@ export default function BricksyTravel() {
   const [loginErr, setLoginErr] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loginLoading, setLoginLoading] = useState(false);
+  const [googleLoginLoading, setGoogleLoginLoading] = useState(false);
   const [loginProgress, setLoginProgress] = useState(0);
   const [comingSoonPopup, setComingSoonPopup] = useState(false);
   // Forgot password flow: null | "input_user" | "input_email" | "input_otp" | "input_newpass"
@@ -17890,9 +17893,75 @@ export default function BricksyTravel() {
     setForgotNewPass({ val: "", confirm: "" }); setForgotErr("");
   };
 
+  /* ── Login dengan Google (Firebase Authentication) ──
+     Akun Google TIDAK otomatis jadi admin — hanya email yang cocok dengan salah satu
+     staf terdaftar (HARDCODED_USERS atau data.users hasil "Kelola Pengguna") yang boleh
+     masuk. Kalau tidak cocok, langsung sign-out dari Firebase Auth dan ditolak. */
+  const googleLogin = async () => {
+    if (googleLoginLoading) return;
+    setLoginErr("");
+    setGoogleLoginLoading(true);
+    try {
+      // Sesi Google mengikuti pola sesi yang sudah ada di app ini: hilang saat browser ditutup,
+      // bukan tersimpan permanen — konsisten dengan login username/password.
+      try { await setPersistence(_auth, browserSessionPersistence); } catch {}
+      const provider = new GoogleAuthProvider();
+      const result = await signInWithPopup(_auth, provider);
+      const gUser = result.user;
+      const gEmail = (gUser.email || "").trim().toLowerCase();
+      if (!gEmail) {
+        await fbSignOut(_auth).catch(() => {});
+        setLoginErr("Akun Google ini tidak punya email yang bisa diverifikasi.");
+        return;
+      }
+      // 1. Cocokkan ke daftar staf resmi (HARDCODED_USERS)
+      let matched = HARDCODED_USERS.find(u => (u.email || "").toLowerCase() === gEmail);
+      // 2. Kalau tidak ketemu, cek juga data.users (mis. email di-update lewat panel "Kelola Pengguna")
+      if (!matched) {
+        const rec = (data.users || []).find(u => (u.email || "").toLowerCase() === gEmail);
+        if (rec) matched = HARDCODED_USERS.find(u => u.username.toLowerCase() === rec.username.toLowerCase());
+      }
+      if (!matched) {
+        await fbSignOut(_auth).catch(() => {});
+        setLoginErr(`Akun Google (${gUser.email}) belum terdaftar sebagai staf. Hubungi administrator.`);
+        return;
+      }
+      // Cek status aktif/nonaktif (sama seperti login username/password)
+      const userRecord = (data.users || []).find(x => x.username.toLowerCase() === matched.username.toLowerCase());
+      if (userRecord && userRecord.active === false) {
+        await fbSignOut(_auth).catch(() => {});
+        setLoginErr("Akun ini telah dinonaktifkan. Hubungi administrator.");
+        return;
+      }
+      // Profil (nama/foto/dll) — ambil override dari Firestore kalau ada, fallback ke foto profil Google
+      let profile = { name: matched.name, phone: matched.phone, email: matched.email, desc: matched.desc, photo: matched.photo };
+      try {
+        const r = await fsGet(`profile-${matched.username}`);
+        if (r) profile = { name: r.name ?? profile.name, phone: r.phone ?? profile.phone, email: r.email ?? profile.email, desc: r.desc ?? profile.desc, photo: r.photo ?? profile.photo };
+      } catch {}
+      const sessionUser = { ...matched, ...profile, photo: profile.photo || gUser.photoURL || "", loginMethod: "google" };
+      delete sessionUser.password; // sama seperti login biasa — jangan simpan password ke sesi
+      setUser(sessionUser);
+      sessionSave(sessionUser);
+      setShowLogin(false);
+      setLoginErr("");
+      notify(`Selamat datang, ${sessionUser.name || gUser.displayName || "Admin"}!`);
+    } catch (err) {
+      if (err?.code === "auth/popup-closed-by-user" || err?.code === "auth/cancelled-popup-request") {
+        // User membatalkan sendiri (menutup popup) — tidak perlu tampilkan sebagai error.
+      } else if (err?.code === "auth/unauthorized-domain") {
+        setLoginErr("Domain situs ini belum diizinkan untuk Google Login. Tambahkan domainnya di Firebase Console → Authentication → Settings → Authorized domains.");
+      } else {
+        setLoginErr("Login Google gagal: " + (err?.message || "Terjadi kesalahan, coba lagi."));
+      }
+    }
+    setGoogleLoginLoading(false);
+  };
+
   const logout = () => {
     setUser(null);
     sessionClear();
+    fbSignOut(_auth).catch(() => {}); // jaga-jaga kalau sesi ini berasal dari Google Login
     closeAdmin();
     notify("Logged out.");
   };
@@ -18395,8 +18464,8 @@ export default function BricksyTravel() {
               Coming Soon
             </h2>
             <p style={{ fontSize: 14, color: "#5A6A6C", lineHeight: 1.7, marginBottom: 24 }}>
-              Login dengan Google dan Apple ID sedang dalam tahap pengembangan.<br/>
-              Gunakan <strong>username & password</strong> untuk saat ini.
+              Login dengan Apple ID sedang dalam tahap pengembangan.<br/>
+              Gunakan <strong>username & password</strong> atau <strong>Google</strong> untuk saat ini.
             </p>
             {/* Progress dots */}
             <div style={{ display: "flex", justifyContent: "center", gap: 7, marginBottom: 24 }}>
@@ -18588,20 +18657,26 @@ export default function BricksyTravel() {
 
                 {/* -- Google & Apple -- */}
                 <div style={{ display: "flex", gap: 10, marginBottom: 4 }}>
-                  <button onClick={() => setComingSoonPopup(true)}
+                  <button onClick={googleLogin} disabled={googleLoginLoading}
                     style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 9,
                       padding: "10px 0", background: "#fff", border: "1.5px solid #E8DCC8", borderRadius: 8,
-                      fontSize: 13, fontWeight: 600, color: "#2E3D3F", cursor: "pointer", transition: "all .18s" }}
-                    onMouseEnter={e => { e.currentTarget.style.background = "#FAFAFA"; e.currentTarget.style.borderColor = "#bbb"; e.currentTarget.style.boxShadow = "0 2px 10px rgba(0,0,0,.08)"; }}
+                      fontSize: 13, fontWeight: 600, color: "#2E3D3F", cursor: googleLoginLoading ? "default" : "pointer", transition: "all .18s",
+                      opacity: googleLoginLoading ? 0.65 : 1 }}
+                    onMouseEnter={e => { if (!googleLoginLoading) { e.currentTarget.style.background = "#FAFAFA"; e.currentTarget.style.borderColor = "#bbb"; e.currentTarget.style.boxShadow = "0 2px 10px rgba(0,0,0,.08)"; } }}
                     onMouseLeave={e => { e.currentTarget.style.background = "#fff"; e.currentTarget.style.borderColor = "#E8DCC8"; e.currentTarget.style.boxShadow = "none"; }}>
-                    <svg width="18" height="18" viewBox="0 0 48 48">
-                      <path fill="#EA4335" d="M24 9.5c3.2 0 5.6 1.1 7.3 2.8l5.4-5.4C33.5 3.5 29.1 1.5 24 1.5 14.8 1.5 7 7.4 3.8 15.6l6.3 4.9C11.7 14 17.4 9.5 24 9.5z"/>
-                      <path fill="#34A853" d="M46.1 24.6c0-1.7-.1-3-.4-4.4H24v8.3h12.5c-.6 3-2.3 5.5-4.8 7.2l7.3 5.7c4.3-4 6.1-9.8 6.1-16.8z"/>
-                      <path fill="#FBBC05" d="M10.2 28.5A14.4 14.4 0 0 1 9.5 24c0-1.6.3-3.1.7-4.5l-6.3-4.9A22.6 22.6 0 0 0 1.5 24c0 3.7.9 7.2 2.4 10.3l6.3-4.9z"/>
-                      <path fill="#4285F4" d="M24 46.5c5.1 0 9.4-1.7 12.6-4.6l-7.3-5.7c-1.7 1.1-3.9 1.8-5.3 1.8-6.6 0-12.2-4.5-14-10.5l-6.3 4.9C7 40.6 14.8 46.5 24 46.5z"/>
-                    </svg>
-                    Google
+                    {googleLoginLoading ? (
+                      <span style={{ width: 16, height: 16, border: "2px solid #E8DCC8", borderTopColor: "#8B6914", borderRadius: "50%", display: "inline-block", animation: "spin .8s linear infinite" }} />
+                    ) : (
+                      <svg width="18" height="18" viewBox="0 0 48 48">
+                        <path fill="#EA4335" d="M24 9.5c3.2 0 5.6 1.1 7.3 2.8l5.4-5.4C33.5 3.5 29.1 1.5 24 1.5 14.8 1.5 7 7.4 3.8 15.6l6.3 4.9C11.7 14 17.4 9.5 24 9.5z"/>
+                        <path fill="#34A853" d="M46.1 24.6c0-1.7-.1-3-.4-4.4H24v8.3h12.5c-.6 3-2.3 5.5-4.8 7.2l7.3 5.7c4.3-4 6.1-9.8 6.1-16.8z"/>
+                        <path fill="#FBBC05" d="M10.2 28.5A14.4 14.4 0 0 1 9.5 24c0-1.6.3-3.1.7-4.5l-6.3-4.9A22.6 22.6 0 0 0 1.5 24c0 3.7.9 7.2 2.4 10.3l6.3-4.9z"/>
+                        <path fill="#4285F4" d="M24 46.5c5.1 0 9.4-1.7 12.6-4.6l-7.3-5.7c-1.7 1.1-3.9 1.8-5.3 1.8-6.6 0-12.2-4.5-14-10.5l-6.3 4.9C7 40.6 14.8 46.5 24 46.5z"/>
+                      </svg>
+                    )}
+                    {googleLoginLoading ? "Memproses..." : "Google"}
                   </button>
+                  <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
                   <button onClick={() => setComingSoonPopup(true)}
                     style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 9,
                       padding: "10px 0", background: "#000", border: "1.5px solid #000", borderRadius: 8,
