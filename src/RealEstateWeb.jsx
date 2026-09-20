@@ -12366,23 +12366,59 @@ const RsMiniSlide = React.forwardRef(function RsMiniSlide({ slides, slideDir = "
   );
 });
 
-/* ── RsSlideDots: tombol navigasi bulat di BAWAH kotak gambar (bukan menimpa
-   gambar) — klik untuk lompat langsung ke foto tertentu di RsMiniSlide. ── */
-function RsSlideDots({ count, active, onSelect }) {
-  if (!count || count < 2) return null;
+/* ── RsSlideThumbs: strip MINI THUMBNAIL seluruh foto slideshow, diletakkan di BAWAH
+   kotak gambar (bukan menimpa gambar) — klik thumbnail untuk lompat langsung ke foto
+   tersebut di RsMiniSlide. Thumbnail aktif ditandai border emas & otomatis digulir ke
+   tengah strip saat slideshow berganti sendiri (tanpa menggeser scroll halaman). ── */
+const RS_THUMB_CSS = `
+        .rs-thumbs { position:relative; overflow-x:auto; overflow-y:hidden; padding:10px 6px 8px; scrollbar-width:thin; scrollbar-color:#d8cdb8 transparent; -webkit-overflow-scrolling:touch; }
+        .rs-thumbs-inner { display:flex; gap:6px; width:max-content; margin:0 auto; }
+        .rs-thumb { position:relative; flex:0 0 auto; width:64px; height:46px; padding:0; border:2px solid transparent; border-radius:8px; overflow:hidden; background:#E8DCC8; cursor:pointer; opacity:.6; transition:opacity .2s ease, transform .2s ease, box-shadow .2s ease, border-color .2s ease; }
+        .rs-thumb img { width:100%; height:100%; object-fit:cover; display:block; }
+        .rs-thumb:hover { opacity:1; transform:translateY(-2px); box-shadow:0 3px 8px rgba(0,0,0,.18); }
+        .rs-thumb:active { transform:translateY(0) scale(.96); }
+        .rs-thumb:focus-visible { opacity:1; outline:2px solid #2E3D3F; outline-offset:2px; border-radius:8px; }
+        .rs-thumb.active { opacity:1; border-color:#8B6914; box-shadow:0 0 0 1px rgba(139,105,20,.35); }
+        @media (max-width: 767px) { .rs-thumb { width:60px; height:44px; } }
+        @media (prefers-reduced-motion: reduce) { .rs-thumb { transition:none; } .rs-thumb:hover, .rs-thumb:active { transform:none; } }
+`;
+
+function RsSlideThumbs({ slides, active, onSelect }) {
+  const stripRef = useRef(null);
+  const btnRefs = useRef([]);
+  const total = slides ? slides.length : 0;
+
+  /* Gulir strip (horizontal saja) supaya thumbnail aktif selalu terlihat di tengah,
+     tanpa scrollIntoView agar halaman tidak ikut tergeser vertikal tiap 3 detik. */
+  useEffect(() => {
+    const strip = stripRef.current;
+    const btn = btnRefs.current[active];
+    if (!strip || !btn || strip.scrollWidth <= strip.clientWidth) return;
+    const reduce = typeof window !== "undefined" && window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    strip.scrollTo({ left: btn.offsetLeft - (strip.clientWidth - btn.offsetWidth) / 2, behavior: reduce ? "auto" : "smooth" });
+  }, [active, total]);
+
+  if (total < 2) return null;
   return (
-    <div className="rs-slide-dots">
-      {Array.from({ length: count }).map((_, i) => (
-        <button key={i} type="button" aria-label={`Lihat foto ${i + 1}`}
-          className={`rs-slide-dot${i === active ? " active" : ""}`}
-          onClick={() => onSelect(i)} />
-      ))}
+    <div className="rs-thumbs" ref={stripRef} role="group" aria-label="Pilih foto galeri paket">
+      <div className="rs-thumbs-inner">
+        {slides.map((sl, i) => (
+          <button key={i} type="button"
+            ref={el => { btnRefs.current[i] = el; }}
+            className={`rs-thumb${i === active ? " active" : ""}`}
+            aria-label={`Lihat foto ${i + 1} dari ${total}${sl.tema ? `: ${sl.tema}` : ""}`}
+            aria-current={i === active ? "true" : undefined}
+            onClick={() => onSelect(i)}>
+            <CardImg src={sl.img} alt={sl.tema || `Foto ${i + 1}`} />
+          </button>
+        ))}
+      </div>
     </div>
   );
 }
 
 /* ── RsPaketVisual: kotak gambar slideshow + badge kategori + harga (+ tombol WA
-   di versi desktop), DIIKUTI dots navigasi yang diletakkan di luar/bawah kotak
+   di versi desktop), DIIKUTI strip mini thumbnail yang diletakkan di luar/bawah kotak
    gambar supaya tidak pernah menutupi foto. Dipakai di halaman Renovasi Rumah
    Subsidi, Pembangunan Kost, Cafe, dan Ruko (desktop & mobile). ── */
 function RsPaketVisual({ paket, fmt, onWaOpen, height, mobile }) {
@@ -12412,7 +12448,7 @@ function RsPaketVisual({ paket, fmt, onWaOpen, height, mobile }) {
           </div>
         )}
       </div>
-      <RsSlideDots count={paket.slides?.length} active={activeIdx} onSelect={(i) => slideRef.current && slideRef.current.goTo(i)} />
+      <RsSlideThumbs slides={paket.slides} active={activeIdx} onSelect={(i) => slideRef.current && slideRef.current.goTo(i)} />
     </>
   );
 }
@@ -12537,10 +12573,7 @@ function RumahSubsidiPage({ onWaOpen, paketData }) {
         .ls-toggle-btn span:first-child { font-size:.65rem; }
 
         .ls-includes-box { margin-top:12px; border-top:2px dashed #bbf7d0; padding-top:14px; animation:lsDropIn .22s ease; }
-        .rs-slide-dots { display:flex; justify-content:center; gap:6px; padding:9px 0 0; }
-        .rs-slide-dot { width:7px; height:7px; border-radius:50%; border:none; background:#d8cdb8; padding:0; cursor:pointer; transition:background .2s, transform .2s; }
-        .rs-slide-dot.active { background:#8B6914; transform:scale(1.35); }
-        .rs-slide-dot:hover { background:#b9ab84; }
+        ${RS_THUMB_CSS}
         .ls-includes-title { font-size:.6rem; font-weight:900; letter-spacing:.14em; text-transform:uppercase; color:#2d6a4f; margin:0 0 10px; }
         .ls-includes-grid { display:grid; grid-template-columns:1fr 1fr; gap:6px 12px; }
         .ls-include-item { display:flex; align-items:flex-start; gap:7px; }
@@ -12879,10 +12912,7 @@ function PembangunanKostPage({ onWaOpen, paketData }) {
         .ls-toggle-btn span:first-child { font-size:.65rem; }
 
         .ls-includes-box { margin-top:12px; border-top:2px dashed #bbf7d0; padding-top:14px; animation:lsDropIn .22s ease; }
-        .rs-slide-dots { display:flex; justify-content:center; gap:6px; padding:9px 0 0; }
-        .rs-slide-dot { width:7px; height:7px; border-radius:50%; border:none; background:#d8cdb8; padding:0; cursor:pointer; transition:background .2s, transform .2s; }
-        .rs-slide-dot.active { background:#8B6914; transform:scale(1.35); }
-        .rs-slide-dot:hover { background:#b9ab84; }
+        ${RS_THUMB_CSS}
         .ls-includes-title { font-size:.6rem; font-weight:900; letter-spacing:.14em; text-transform:uppercase; color:#2d6a4f; margin:0 0 10px; }
         .ls-includes-grid { display:grid; grid-template-columns:1fr 1fr; gap:6px 12px; }
         .ls-include-item { display:flex; align-items:flex-start; gap:7px; }
@@ -13215,10 +13245,7 @@ function PembangunanCafePage({ onWaOpen, paketData }) {
         .ls-toggle-btn span:first-child { font-size:.65rem; }
 
         .ls-includes-box { margin-top:12px; border-top:2px dashed #bbf7d0; padding-top:14px; animation:lsDropIn .22s ease; }
-        .rs-slide-dots { display:flex; justify-content:center; gap:6px; padding:9px 0 0; }
-        .rs-slide-dot { width:7px; height:7px; border-radius:50%; border:none; background:#d8cdb8; padding:0; cursor:pointer; transition:background .2s, transform .2s; }
-        .rs-slide-dot.active { background:#8B6914; transform:scale(1.35); }
-        .rs-slide-dot:hover { background:#b9ab84; }
+        ${RS_THUMB_CSS}
         .ls-includes-title { font-size:.6rem; font-weight:900; letter-spacing:.14em; text-transform:uppercase; color:#2d6a4f; margin:0 0 10px; }
         .ls-includes-grid { display:grid; grid-template-columns:1fr 1fr; gap:6px 12px; }
         .ls-include-item { display:flex; align-items:flex-start; gap:7px; }
@@ -13550,10 +13577,7 @@ function PembangunanRukoPage({ onWaOpen, paketData }) {
         .ls-toggle-btn span:first-child { font-size:.65rem; }
 
         .ls-includes-box { margin-top:12px; border-top:2px dashed #bbf7d0; padding-top:14px; animation:lsDropIn .22s ease; }
-        .rs-slide-dots { display:flex; justify-content:center; gap:6px; padding:9px 0 0; }
-        .rs-slide-dot { width:7px; height:7px; border-radius:50%; border:none; background:#d8cdb8; padding:0; cursor:pointer; transition:background .2s, transform .2s; }
-        .rs-slide-dot.active { background:#8B6914; transform:scale(1.35); }
-        .rs-slide-dot:hover { background:#b9ab84; }
+        ${RS_THUMB_CSS}
         .ls-includes-title { font-size:.6rem; font-weight:900; letter-spacing:.14em; text-transform:uppercase; color:#2d6a4f; margin:0 0 10px; }
         .ls-includes-grid { display:grid; grid-template-columns:1fr 1fr; gap:6px 12px; }
         .ls-include-item { display:flex; align-items:flex-start; gap:7px; }
