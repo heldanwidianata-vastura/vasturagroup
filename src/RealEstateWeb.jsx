@@ -88,6 +88,62 @@ function MagazineBreakSection({ variant, eyebrow, title, text, features, onWaOpe
   return null;
 }
 
+/* ── shuffleArray: acak urutan array (Fisher–Yates), tanpa mengubah array asli ── */
+function shuffleArray(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+/* ── PostingSlideshowBreak: satu baris foto slideshow otomatis (running) + running
+   text merah (mirip ticker promo) di bawahnya — menggantikan teks pemisah antar
+   baris paket di halaman Pembangunan & Renovasi. Foto diambil acak dari galeri
+   semua paket/postingan di halaman terkait; teks ticker berganti-ganti acak
+   seputar promosi/konsultasi/layanan Vastura Group. ── */
+function PostingSlideshowBreak({ images, tickerTexts }) {
+  if (!images || images.length === 0) return null;
+  const rowPhotos = [...images, ...images];
+  const texts = (tickerTexts && tickerTexts.length) ? tickerTexts : [];
+  const tickerLine = texts.length ? texts.join("   ★   ") : "";
+  return (
+    <div className="pss-wrap">
+      <style>{`
+        @keyframes pssScrollLeft { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+        @keyframes pssTickerScroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+        .pss-wrap { padding: 24px 0 0; overflow: hidden; }
+        .pss-row { display: flex; gap: 12px; width: max-content; will-change: transform; animation: pssScrollLeft 38s linear infinite; }
+        .pss-item { flex-shrink: 0; width: 220px; height: 150px; border-radius: 12px; overflow: hidden; box-shadow: 0 6px 16px rgba(20,30,25,.12); }
+        .pss-item img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .pss-ticker-wrap { margin-top: 18px; overflow: hidden; background: #fff; border-top: 2px solid #DC2626; border-bottom: 2px solid #DC2626; padding: 9px 0; }
+        .pss-ticker-track { display: flex; width: max-content; white-space: nowrap; animation: pssTickerScroll 22s linear infinite; }
+        .pss-ticker-seg { color: #DC2626; font-weight: 900; font-size: .82rem; letter-spacing: .04em; text-transform: uppercase; padding-right: 40px; }
+        @media (max-width: 767px) {
+          .pss-item { width: 140px; height: 100px; }
+          .pss-row { animation-duration: 26s; }
+          .pss-ticker-track { animation-duration: 16s; }
+          .pss-ticker-seg { font-size: .72rem; padding-right: 24px; }
+        }
+      `}</style>
+      <div className="pss-row">
+        {rowPhotos.map((src, i) => (
+          <div className="pss-item" key={"pss-" + i}><img src={src} alt="" loading="lazy" /></div>
+        ))}
+      </div>
+      {tickerLine && (
+        <div className="pss-ticker-wrap">
+          <div className="pss-ticker-track">
+            <span className="pss-ticker-seg">{tickerLine}</span>
+            <span className="pss-ticker-seg">{tickerLine}</span>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
 function CardImg({ src, alt, style, onError, className }) {
   const [loaded, setLoaded] = useState(false);
   useEffect(() => { setLoaded(false); }, [src]);
@@ -12355,23 +12411,15 @@ function RumahSubsidiPage({ onWaOpen, paketData }) {
   }
   const heightMap = { 1: 480, 2: 400, 3: 340 };
 
-  /* Selingan konten antar baris paket — relevan dengan renovasi rumah subsidi & Vastura Group */
-  const RS_BREAKS = [
-    { variant: "feature", eyebrow: "Kenapa Direnovasi", title: "Kenapa Renovasi Rumah Subsidi Penting?",
-      features: [
-        { title: "Ruang Terasa Lebih Luas", desc: "Rumah subsidi umumnya berukuran mungil — renovasi tepat bisa memaksimalkan tata ruang tanpa perlu menambah luas tanah." },
-        { title: "Nilai Jual Ikut Naik", desc: "Rumah subsidi yang sudah direnovasi rapi punya nilai jual dan sewa yang jauh lebih tinggi dibanding kondisi standar developer." },
-        { title: "Lebih Nyaman Ditinggali", desc: "Perbaikan sirkulasi udara, pencahayaan, dan kualitas material membuat rumah terasa jauh lebih layak huni sehari-hari." },
-      ] },
-    { variant: "cta", eyebrow: "Rumah Subsidi Anda Terasa Sempit?",
-      title: "Konsultasikan Rencana Renovasi Anda",
-      text: "Tim kami siap survei kondisi rumah dan memberi rekomendasi renovasi paling sesuai dengan bujet Anda — gratis, tanpa kewajiban apapun.",
-      waText: "Konsultasi Gratis via WhatsApp", waVars: { judul_layanan: "Renovasi Rumah Subsidi" } },
-    { variant: "quote",
-      text: "Banyak orang mengira rumah subsidi harus tetap sederhana selamanya. Padahal dengan renovasi yang tepat sasaran, rumah subsidi bisa terasa senyaman dan serapi hunian kelas menengah — tanpa perlu bongkar total.",
-      title: "Vastura Group · Tim Renovasi Rumah Subsidi" },
-  ];
-  const rsPalette = { bg: "#FAF7F0", dark: "#2E3D3F", accent: "#8B6914", text: "#2E3D3F", muted: "#5A6A6C" };
+  /* Pool foto untuk selingan slideshow antar baris paket — diacak dari galeri semua paket renovasi rumah subsidi */
+  const rsImagePool = useMemo(() => shuffleArray(paket_.flatMap(p => (p.slides || []).map(s => s.img))), [paket_]);
+  const rsTickerTexts = useMemo(() => shuffleArray([
+    "KONSULTASI GRATIS RENOVASI RUMAH SUBSIDI",
+    "VASTURA GROUP — TIM RENOVASI BERPENGALAMAN",
+    "GARANSI PENGERJAAN HINGGA 30 HARI",
+    "WUJUDKAN RUMAH SUBSIDI IMPIAN BERSAMA VASTURA GROUP",
+    "HUBUNGI KAMI VIA WHATSAPP UNTUK SURVEI GRATIS",
+  ]), []);
   const rsBreakBoundaries = rows.reduce((acc, r) => { acc.push((acc[acc.length - 1] || 0) + r.cols); return acc; }, []);
 
   return (
@@ -12496,7 +12544,7 @@ function RumahSubsidiPage({ onWaOpen, paketData }) {
                 </div>
               ))}
             </div>
-            <MagazineBreakSection {...RS_BREAKS[ri % RS_BREAKS.length]} onWaOpen={onWaOpen} palette={rsPalette} />
+            <PostingSlideshowBreak images={rsImagePool} tickerTexts={rsTickerTexts} />
             </React.Fragment>
           );
         })}
@@ -12522,7 +12570,7 @@ function RumahSubsidiPage({ onWaOpen, paketData }) {
             <RsInfoCard paket={paket} fmt={fmt} onWaOpen={onWaOpen} />
           </div>
           {rsBreakBoundaries.includes(pi + 1) && (
-            <MagazineBreakSection {...RS_BREAKS[rsBreakBoundaries.indexOf(pi + 1) % RS_BREAKS.length]} onWaOpen={onWaOpen} palette={rsPalette} />
+            <PostingSlideshowBreak images={rsImagePool} tickerTexts={rsTickerTexts} />
           )}
           </React.Fragment>
         ))}
@@ -12727,23 +12775,15 @@ function PembangunanKostPage({ onWaOpen, paketData }) {
   }
   const heightMap = { 1: 480, 2: 400, 3: 340 };
 
-  /* Selingan konten antar baris paket — relevan dengan bisnis kost & Vastura Group */
-  const KOST_BREAKS = [
-    { variant: "feature", eyebrow: "Kenapa Berinvestasi", title: "Kenapa Bisnis Kost Selalu Menjanjikan?",
-      features: [
-        { title: "Permintaan Selalu Ada", desc: "Selama ada kampus, kawasan industri, atau perkantoran di sekitar, kebutuhan hunian sewa tidak pernah surut sepanjang tahun." },
-        { title: "Passive Income Bulanan", desc: "Berbeda dari jual-beli properti, kost menghasilkan pemasukan rutin tiap bulan tanpa harus melepas aset Anda." },
-        { title: "Nilai Tanah Terus Naik", desc: "Selain uang sewa, nilai lahan dan bangunan kost Anda ikut meningkat seiring berkembangnya kawasan sekitarnya." },
-      ] },
-    { variant: "cta", eyebrow: "Punya Lahan Menganggur?",
-      title: "Yuk Diskusikan Potensi Lahan Anda",
-      text: "Tim kami siap survei gratis dan menghitungkan estimasi ROI sebelum Anda memutuskan membangun. Tidak ada kewajiban apapun — cukup ngobrol dulu.",
-      waText: "Konsultasi Gratis via WhatsApp", waVars: { judul_layanan: "Pembangunan Kost" } },
-    { variant: "quote",
-      text: "Kami percaya kost yang baik bukan cuma soal kamar yang banyak, tapi bangunan yang kokoh dan nyaman ditinggali bertahun-tahun — supaya penghuni betah dan pemilik tenang.",
-      title: "Vastura Group · Tim Pembangunan Kost" },
-  ];
-  const kostPalette = { bg: "#FAF7F0", dark: "#2E3D3F", accent: "#8B6914", text: "#2E3D3F", muted: "#5A6A6C" };
+  /* Pool foto untuk selingan slideshow antar baris paket — diacak dari galeri semua paket pembangunan kost */
+  const kostImagePool = useMemo(() => shuffleArray(paket_.flatMap(p => (p.slides || []).map(s => s.img))), [paket_]);
+  const kostTickerTexts = useMemo(() => shuffleArray([
+    "KONSULTASI GRATIS PEMBANGUNAN KOST",
+    "VASTURA GROUP — SOLUSI BISNIS KOST MENGUNTUNGKAN",
+    "SURVEI LOKASI GRATIS SEBELUM MEMBANGUN",
+    "BANGUN KOST ANDA BERSAMA TIM BERPENGALAMAN",
+    "HUBUNGI KAMI VIA WHATSAPP SEKARANG",
+  ]), []);
   /* Batas indeks kumulatif tiap baris — dipakai versi mobile untuk tahu selingan mana yang jatuh setelah item ke berapa */
   const kostBreakBoundaries = rows.reduce((acc, r) => { acc.push((acc[acc.length - 1] || 0) + r.cols); return acc; }, []);
 
@@ -12869,7 +12909,7 @@ function PembangunanKostPage({ onWaOpen, paketData }) {
                 </div>
               ))}
             </div>
-            <MagazineBreakSection {...KOST_BREAKS[ri % KOST_BREAKS.length]} onWaOpen={onWaOpen} palette={kostPalette} />
+            <PostingSlideshowBreak images={kostImagePool} tickerTexts={kostTickerTexts} />
             </React.Fragment>
           );
         })}
@@ -12895,7 +12935,7 @@ function PembangunanKostPage({ onWaOpen, paketData }) {
             <RsInfoCard paket={paket} fmt={fmt} onWaOpen={onWaOpen} />
           </div>
           {kostBreakBoundaries.includes(pi + 1) && (
-            <MagazineBreakSection {...KOST_BREAKS[kostBreakBoundaries.indexOf(pi + 1) % KOST_BREAKS.length]} onWaOpen={onWaOpen} palette={kostPalette} />
+            <PostingSlideshowBreak images={kostImagePool} tickerTexts={kostTickerTexts} />
           )}
           </React.Fragment>
         ))}
@@ -13096,23 +13136,14 @@ function PembangunanCafePage({ onWaOpen, paketData }) {
   }
   const heightMap = { 1: 480, 2: 400, 3: 340 };
 
-  /* Selingan konten antar baris paket — relevan dengan bisnis cafe & Vastura Group */
-  const CAFE_BREAKS = [
-    { variant: "feature", eyebrow: "Resep Cafe Ramai Pengunjung", title: "Elemen Cafe yang Bikin Pengunjung Betah",
-      features: [
-        { title: "Lokasi Mudah Diakses", desc: "Cafe yang strategis — dekat jalan utama atau kawasan ramai — jauh lebih mudah menjaring pengunjung baru setiap harinya." },
-        { title: "Suasana Instagramable", desc: "Interior yang estetik membuat pengunjung betah berlama-lama, sekaligus jadi promosi gratis lewat unggahan media sosial mereka." },
-        { title: "Sirkulasi Udara & Cahaya", desc: "Cafe yang sejuk dan terang secara alami terasa jauh lebih nyaman dibanding ruangan pengap, apapun konsep dekorasinya." },
-      ] },
-    { variant: "cta", eyebrow: "Mau Buka Cafe Sendiri?",
-      title: "Ceritakan Konsep Cafe Impian Anda",
-      text: "Dari cafe mungil di ruko sempit sampai konsep outdoor yang luas — tim kami siap bantu wujudkan dari survei lokasi sampai hari pembukaan.",
-      waText: "Konsultasi Gratis via WhatsApp", waVars: { judul_layanan: "Pembangunan Cafe" } },
-    { variant: "quote",
-      text: "Ngopi bukan cuma soal rasa kopinya — tapi juga soal ruang yang membuat orang mau kembali lagi. Kami bangun cafe dengan memikirkan pengalaman pengunjung, bukan cuma bangunannya saja.",
-      title: "Vastura Group · Tim Pembangunan Cafe" },
-  ];
-  const cafePalette = { bg: "#FAF7F0", dark: "#2E3D3F", accent: "#8B6914", text: "#2E3D3F", muted: "#5A6A6C" };
+  /* Pool foto untuk selingan slideshow antar baris paket — diacak dari galeri semua paket pembangunan cafe */
+  const cafeImagePool = useMemo(() => shuffleArray(paket_.flatMap(p => (p.slides || []).map(s => s.img))), [paket_]);
+  const cafeTickerTexts = useMemo(() => shuffleArray([
+    "KONSULTASI GRATIS PEMBANGUNAN CAFE",
+    "VASTURA GROUP — WUJUDKAN CAFE IMPIAN ANDA",
+    "DARI DESAIN HINGGA HARI PEMBUKAAN, KAMI SIAP BANTU",
+    "HUBUNGI TIM KAMI VIA WHATSAPP UNTUK SURVEI GRATIS",
+  ]), []);
   const cafeBreakBoundaries = rows.reduce((acc, r) => { acc.push((acc[acc.length - 1] || 0) + r.cols); return acc; }, []);
 
   return (
@@ -13236,7 +13267,7 @@ function PembangunanCafePage({ onWaOpen, paketData }) {
                 </div>
               ))}
             </div>
-            <MagazineBreakSection {...CAFE_BREAKS[ri % CAFE_BREAKS.length]} onWaOpen={onWaOpen} palette={cafePalette} />
+            <PostingSlideshowBreak images={cafeImagePool} tickerTexts={cafeTickerTexts} />
             </React.Fragment>
           );
         })}
@@ -13262,7 +13293,7 @@ function PembangunanCafePage({ onWaOpen, paketData }) {
             <RsInfoCard paket={paket} fmt={fmt} onWaOpen={onWaOpen} />
           </div>
           {cafeBreakBoundaries.includes(pi + 1) && (
-            <MagazineBreakSection {...CAFE_BREAKS[cafeBreakBoundaries.indexOf(pi + 1) % CAFE_BREAKS.length]} onWaOpen={onWaOpen} palette={cafePalette} />
+            <PostingSlideshowBreak images={cafeImagePool} tickerTexts={cafeTickerTexts} />
           )}
           </React.Fragment>
         ))}
@@ -13463,23 +13494,14 @@ function PembangunanRukoPage({ onWaOpen, paketData }) {
   }
   const heightMap = { 1: 480, 2: 400, 3: 340 };
 
-  /* Selingan konten antar baris paket — relevan dengan bisnis ruko & Vastura Group */
-  const RUKO_BREAKS = [
-    { variant: "feature", eyebrow: "Kenapa Berinvestasi", title: "Kenapa Ruko Jadi Pilihan Investasi Properti",
-      features: [
-        { title: "Fungsi Ganda", desc: "Lantai bawah untuk usaha, lantai atas untuk kantor atau hunian — satu bangunan, dua fungsi sekaligus dalam satu lahan." },
-        { title: "Lokasi Bernilai Tinggi", desc: "Ruko umumnya dibangun di jalur komersial ramai, membuat nilai propertinya cenderung naik lebih cepat dibanding hunian biasa." },
-        { title: "Cocok Berbagai Usaha", desc: "Dari toko retail, kantor, klinik, hingga gudang kecil — desain ruko mudah disesuaikan dengan jenis usaha apapun." },
-      ] },
-    { variant: "cta", eyebrow: "Sudah Punya Lahan Komersial?",
-      title: "Konsultasikan Rencana Ruko Anda",
-      text: "Tim kami siap survei lokasi dan menghitungkan estimasi biaya sebelum Anda memutuskan membangun — gratis, tanpa kewajiban apapun.",
-      waText: "Konsultasi Gratis via WhatsApp", waVars: { judul_layanan: "Pembangunan Ruko" } },
-    { variant: "quote",
-      text: "Ruko yang baik dibangun untuk bertahan puluhan tahun — bukan cuma soal tampilan depan yang menarik, tapi struktur yang benar-benar bisa diandalkan untuk usaha jangka panjang.",
-      title: "Vastura Group · Tim Pembangunan Ruko" },
-  ];
-  const rukoPalette = { bg: "#FAF7F0", dark: "#2E3D3F", accent: "#3D5254", text: "#2E3D3F", muted: "#5A6A6C" };
+  /* Pool foto untuk selingan slideshow antar baris paket — diacak dari galeri semua paket pembangunan ruko */
+  const rukoImagePool = useMemo(() => shuffleArray(paket_.flatMap(p => (p.slides || []).map(s => s.img))), [paket_]);
+  const rukoTickerTexts = useMemo(() => shuffleArray([
+    "KONSULTASI GRATIS PEMBANGUNAN RUKO",
+    "VASTURA GROUP — INVESTASI PROPERTI KOMERSIAL TERPERCAYA",
+    "STRUKTUR KOKOH UNTUK USAHA JANGKA PANJANG",
+    "HUBUNGI KAMI VIA WHATSAPP SEKARANG",
+  ]), []);
   const rukoBreakBoundaries = rows.reduce((acc, r) => { acc.push((acc[acc.length - 1] || 0) + r.cols); return acc; }, []);
 
   return (
@@ -13603,7 +13625,7 @@ function PembangunanRukoPage({ onWaOpen, paketData }) {
                 </div>
               ))}
             </div>
-            <MagazineBreakSection {...RUKO_BREAKS[ri % RUKO_BREAKS.length]} onWaOpen={onWaOpen} palette={rukoPalette} />
+            <PostingSlideshowBreak images={rukoImagePool} tickerTexts={rukoTickerTexts} />
             </React.Fragment>
           );
         })}
@@ -13629,7 +13651,7 @@ function PembangunanRukoPage({ onWaOpen, paketData }) {
             <RsInfoCard paket={paket} fmt={fmt} onWaOpen={onWaOpen} />
           </div>
           {rukoBreakBoundaries.includes(pi + 1) && (
-            <MagazineBreakSection {...RUKO_BREAKS[rukoBreakBoundaries.indexOf(pi + 1) % RUKO_BREAKS.length]} onWaOpen={onWaOpen} palette={rukoPalette} />
+            <PostingSlideshowBreak images={rukoImagePool} tickerTexts={rukoTickerTexts} />
           )}
           </React.Fragment>
         ))}
