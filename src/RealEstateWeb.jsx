@@ -1215,6 +1215,15 @@ const DEFAULT_POSTS = {
   ],
 };
 
+/* Migrasi teks lama -> teks baru untuk data yang SUDAH tersimpan di Firestore/localStorage.
+   Nilai tersimpan selalu menang atas DEFAULT_DATA, jadi tanpa ini teks lama tetap tampil di
+   web live. Hanya diganti bila nilainya PERSIS sama dengan teks lama — kalau admin sudah
+   mengubahnya sendiri lewat Control Panel, nilainya tidak disentuh. */
+const LEGACY_TEXT_MIGRATIONS = {
+  aboutTeamLabel: { from: "Orang-Orang di Balik Layanan", to: "" },
+  aboutTeamTitle: { from: "Susunan Tim Kami", to: "Vastura Group INDONESIA" },
+};
+
 const DEFAULT_DATA = {
   images: {
     hero: [
@@ -1257,8 +1266,8 @@ const DEFAULT_DATA = {
     aboutWhyTitle: "Why Choose Us",
     aboutWhyLabel: "Keunggulan Kami",
     aboutVisiText: "Menjadi perusahaan developer perumahan dan jasa desain terkemuka di Indonesia yang dikenal atas pelayanan profesional, kualitas konstruksi, dan kemampuan mewujudkan hunian impian bagi setiap klien.",
-    aboutTeamLabel: "Orang-Orang di Balik Layanan",
-    aboutTeamTitle: "Susunan Tim Kami",
+    aboutTeamLabel: "",
+    aboutTeamTitle: "Vastura Group INDONESIA",
     aboutLayananLabel: "LAYANAN KAMI",
     aboutLayananTitle: "Layanan Terbaik Untuk Anda",
     aboutV1Icon: "", aboutV1Title: "Desain Profesional", aboutV1Desc: "Tim arsitek & desainer interior berpengalaman untuk setiap proyek.",
@@ -6902,8 +6911,10 @@ function AboutPage({ content, images, teamMembers, aboutStats, aboutMisiList, ab
       <div style={{ padding: "80px 5%" }}>
         <div style={{ maxWidth: 1200, margin: "0 auto" }}>
           <div style={{ textAlign: "center", marginBottom: 52 }}>
-            <div style={{ fontSize: "0.6875rem", letterSpacing: "2px", color: "#8B6914", textTransform: "uppercase", fontWeight: 700, marginBottom: 12 }}>{content.aboutTeamLabel || "Karya & Inspirasi Kami"}</div>
-            <h2 className="display" style={{ fontSize: "clamp(1.75rem,4vw,2.75rem)", fontWeight: 900, color: "#2E3D3F" }}>{content.aboutTeamTitle || "Tema Rumah Pilihan Kami"}</h2>
+            {content.aboutTeamLabel && (
+              <div style={{ fontSize: "0.6875rem", letterSpacing: "2px", color: "#8B6914", textTransform: "uppercase", fontWeight: 700, marginBottom: 12 }}>{content.aboutTeamLabel}</div>
+            )}
+            <h2 className="display" style={{ fontSize: "clamp(1.75rem,4vw,2.75rem)", fontWeight: 900, color: "#2E3D3F" }}>{content.aboutTeamTitle || "Vastura Group INDONESIA"}</h2>
           </div>
           {featuredTemas.length === 0 ? (
             <div style={{ textAlign: "center", padding: "40px 0", color: "#5A6A6C" }}>Data tema rumah belum diisi. Hubungi administrator.</div>
@@ -8751,8 +8762,8 @@ function AboutPageAdmin({ data, save, notify, uploadToCloudinary }) {
       </AboutAdminSection>
 
       <AboutAdminSection title="Susunan Tim" accent="#8B6914" desc="Label & judul section di sini dipakai untuk section 'Tema Rumah Pilihan Kami' di halaman About (kartu tema diambil otomatis-acak dari data Tema Rumah). Data anggota tim di bawah ini TIDAK lagi ditampilkan ke publik — datanya tetap tersimpan kalau nanti mau diaktifkan lagi.">
-        <AboutTextField data={data} save={save} notify={notify} label="Label Kecil" fieldKey="aboutTeamLabel" placeholder="Karya & Inspirasi Kami" />
-        <AboutTextField data={data} save={save} notify={notify} label="Judul Section" fieldKey="aboutTeamTitle" placeholder="Tema Rumah Pilihan Kami" />
+        <AboutTextField data={data} save={save} notify={notify} label="Label Kecil" fieldKey="aboutTeamLabel" placeholder="Kosongkan jika tidak dipakai" />
+        <AboutTextField data={data} save={save} notify={notify} label="Judul Section" fieldKey="aboutTeamTitle" placeholder="Vastura Group INDONESIA" />
         <div style={{ marginTop: 14, background: "#FAF7F0", borderRadius: 10, padding: 16, border: "1px dashed #D5C9B0" }}>
           <div style={{ fontSize: 12, color: "#8B6914", fontWeight: 700, marginBottom: 10 }}>Data anggota tim (tidak tampil publik saat ini)</div>
           <TeamAdmin data={data} save={save} notify={notify} uploadToCloudinary={uploadToCloudinary} embedded />
@@ -17514,7 +17525,9 @@ export default function BricksyTravel() {
         }
       } else {
         // Primitif atau array lain → pakai nilai yang disimpan
-        result[key] = sv;
+        // (kecuali teks lama yang sudah dijadwalkan diganti, lihat LEGACY_TEXT_MIGRATIONS)
+        const mig = LEGACY_TEXT_MIGRATIONS[key];
+        result[key] = (mig && sv === mig.from) ? mig.to : sv;
       }
     }
     return result;
