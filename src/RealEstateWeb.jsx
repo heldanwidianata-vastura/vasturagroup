@@ -12265,8 +12265,11 @@ const RS_PAKET_DATA = [
 /* ── Pola baris magazine grid: 1 | 3 | 2 (ulangi jika >6 paket) ── */
 const RS_MAG_LAYOUT = [1, 3, 2];
 
-/* ── Mini Slideshow dengan animasi arah berbeda per paket ── */
-function RsMiniSlide({ slides, slideDir = "right", height = "100%" }) {
+/* ── Mini Slideshow dengan animasi arah berbeda per paket ──
+   forwardRef supaya komponen luar (dots navigasi di bawah gambar) bisa
+   memerintah pindah slide lewat ref.current.goTo(i), dan onIndexChange
+   dipakai supaya komponen luar tahu slide mana yang sedang aktif. ── */
+const RsMiniSlide = React.forwardRef(function RsMiniSlide({ slides, slideDir = "right", height = "100%", onIndexChange }, ref) {
   const [idx, setIdx] = useState(0);
   const [prevIdx, setPrevIdx] = useState(null);
   const [animating, setAnimating] = useState(false);
@@ -12295,6 +12298,21 @@ function RsMiniSlide({ slides, slideDir = "right", height = "100%" }) {
     clearInterval(timerRef.current);
     timerRef.current = setInterval(() => advance(1), 3000);
   }, [advance]);
+
+  const goTo = useCallback((i) => {
+    const current = idxRef.current;
+    if (i === current || i < 0 || i >= slides.length) return;
+    setPrevIdx(current);
+    setIdx(i);
+    idxRef.current = i;
+    setAnimating(true);
+    clearTimeout(clearRef.current);
+    clearRef.current = setTimeout(() => { setAnimating(false); setPrevIdx(null); }, 400);
+    startTimer();
+  }, [slides.length, startTimer]);
+
+  useImperativeHandle(ref, () => ({ goTo }), [goTo]);
+  useEffect(() => { onIndexChange && onIndexChange(idx); }, [idx, onIndexChange]);
 
   useEffect(() => { startTimer(); return () => { clearInterval(timerRef.current); clearTimeout(clearRef.current); }; }, [startTimer]);
 
@@ -12345,6 +12363,57 @@ function RsMiniSlide({ slides, slideDir = "right", height = "100%" }) {
       {/* Counter */}
       <div style={{ position: "absolute", top: 10, right: 10, background: "rgba(0,0,0,.45)", backdropFilter: "blur(4px)", color: "#C9AA71", fontSize: "0.58rem", fontWeight: 800, padding: "2px 8px", borderRadius: 20, zIndex: 3 }}>{idx + 1}/{slides.length}</div>
     </div>
+  );
+});
+
+/* ── RsSlideDots: tombol navigasi bulat di BAWAH kotak gambar (bukan menimpa
+   gambar) — klik untuk lompat langsung ke foto tertentu di RsMiniSlide. ── */
+function RsSlideDots({ count, active, onSelect }) {
+  if (!count || count < 2) return null;
+  return (
+    <div className="rs-slide-dots">
+      {Array.from({ length: count }).map((_, i) => (
+        <button key={i} type="button" aria-label={`Lihat foto ${i + 1}`}
+          className={`rs-slide-dot${i === active ? " active" : ""}`}
+          onClick={() => onSelect(i)} />
+      ))}
+    </div>
+  );
+}
+
+/* ── RsPaketVisual: kotak gambar slideshow + badge kategori + harga (+ tombol WA
+   di versi desktop), DIIKUTI dots navigasi yang diletakkan di luar/bawah kotak
+   gambar supaya tidak pernah menutupi foto. Dipakai di halaman Renovasi Rumah
+   Subsidi, Pembangunan Kost, Cafe, dan Ruko (desktop & mobile). ── */
+function RsPaketVisual({ paket, fmt, onWaOpen, height, mobile }) {
+  const [activeIdx, setActiveIdx] = useState(0);
+  const slideRef = useRef(null);
+  return (
+    <>
+      <div className={mobile ? "ls-img-box ls-mobile-slide" : "ls-img-box"}
+        style={mobile ? { position: "relative", overflow: "hidden", height: 260 } : { height, position: "relative", overflow: "hidden" }}>
+        <RsMiniSlide ref={slideRef} slides={paket.slides} slideDir={paket.slideDir}
+          height={mobile ? "260px" : `${height}px`} onIndexChange={setActiveIdx} />
+
+        <div className="ls-cat-badge">
+          <div style={{ background: "rgba(13,31,24,.78)", backdropFilter: "blur(8px)", color: "#C9AA71", fontSize: mobile ? "0.6rem" : "0.62rem", fontWeight: 800, letterSpacing: ".1em", textTransform: "uppercase", padding: mobile ? "4px 11px" : "5px 13px", borderRadius: 20, display: "flex", alignItems: "center", gap: mobile ? 5 : 6 }}>
+            {paket.icon && <span>{paket.icon}</span>}<span>{paket.title}</span>
+          </div>
+        </div>
+
+        <div className="ls-price-pill">Mulai {fmt(paket.startFrom)} / {paket.satuan}</div>
+
+        {!mobile && (
+          <div className="ls-mag-overlay-btn">
+            <button onClick={() => onWaOpen && onWaOpen({ key: "layanan", vars: { judul_layanan: paket.title } })}
+              style={{ background: "#C9AA71", color: "#1a2a1a", border: "none", borderRadius: 8, padding: "9px 18px", fontSize: "0.75rem", fontWeight: 800, cursor: "pointer", whiteSpace: "nowrap", boxShadow: "0 4px 14px rgba(0,0,0,.3)" }}>
+              Tanya Harga & Detail
+            </button>
+          </div>
+        )}
+      </div>
+      <RsSlideDots count={paket.slides?.length} active={activeIdx} onSelect={(i) => slideRef.current && slideRef.current.goTo(i)} />
+    </>
   );
 }
 
@@ -12468,6 +12537,10 @@ function RumahSubsidiPage({ onWaOpen, paketData }) {
         .ls-toggle-btn span:first-child { font-size:.65rem; }
 
         .ls-includes-box { margin-top:12px; border-top:2px dashed #bbf7d0; padding-top:14px; animation:lsDropIn .22s ease; }
+        .rs-slide-dots { display:flex; justify-content:center; gap:6px; padding:9px 0 0; }
+        .rs-slide-dot { width:7px; height:7px; border-radius:50%; border:none; background:#d8cdb8; padding:0; cursor:pointer; transition:background .2s, transform .2s; }
+        .rs-slide-dot.active { background:#8B6914; transform:scale(1.35); }
+        .rs-slide-dot:hover { background:#b9ab84; }
         .ls-includes-title { font-size:.6rem; font-weight:900; letter-spacing:.14em; text-transform:uppercase; color:#2d6a4f; margin:0 0 10px; }
         .ls-includes-grid { display:grid; grid-template-columns:1fr 1fr; gap:6px 12px; }
         .ls-include-item { display:flex; align-items:flex-start; gap:7px; }
@@ -12521,24 +12594,7 @@ function RumahSubsidiPage({ onWaOpen, paketData }) {
             <div style={{ display: "grid", gridTemplateColumns: `repeat(${row.cols}, 1fr)`, gap: 8, alignItems: "stretch", marginBottom: 8 }}>
               {row.items.map((paket) => (
                 <div key={paket.id} className="ls-wrap">
-                  <div className="ls-img-box" style={{ height: h, position: "relative", overflow: "hidden" }}>
-                    <RsMiniSlide slides={paket.slides} slideDir={paket.slideDir} height={`${h}px`} />
-
-                    <div className="ls-cat-badge">
-                      <div style={{ background: "rgba(13,31,24,.78)", backdropFilter: "blur(8px)", color: "#C9AA71", fontSize: "0.62rem", fontWeight: 800, letterSpacing: ".1em", textTransform: "uppercase", padding: "5px 13px", borderRadius: 20, display: "flex", alignItems: "center", gap: 6 }}>
-                        {paket.icon && <span>{paket.icon}</span>}<span>{paket.title}</span>
-                      </div>
-                    </div>
-
-                    <div className="ls-price-pill">Mulai {fmt(paket.startFrom)} / {paket.satuan}</div>
-
-                    <div className="ls-mag-overlay-btn">
-                      <button onClick={() => onWaOpen && onWaOpen({ key: "layanan", vars: { judul_layanan: paket.title } })}
-                        style={{ background: "#C9AA71", color: "#1a2a1a", border: "none", borderRadius: 8, padding: "9px 18px", fontSize: "0.75rem", fontWeight: 800, cursor: "pointer", whiteSpace: "nowrap", boxShadow: "0 4px 14px rgba(0,0,0,.3)" }}>
-                        Tanya Harga & Detail
-                      </button>
-                    </div>
-                  </div>
+                  <RsPaketVisual paket={paket} fmt={fmt} onWaOpen={onWaOpen} height={h} />
 
                   <RsInfoCard paket={paket} fmt={fmt} onWaOpen={onWaOpen} />
                 </div>
@@ -12555,17 +12611,7 @@ function RumahSubsidiPage({ onWaOpen, paketData }) {
         {paket_.map((paket, pi) => (
           <React.Fragment key={paket.id}>
           <div className="ls-mobile-item ls-wrap">
-            <div className="ls-img-box ls-mobile-slide" style={{ position: "relative", overflow: "hidden", height: 260 }}>
-              <RsMiniSlide slides={paket.slides} slideDir={paket.slideDir} height="260px" />
-
-              <div className="ls-cat-badge">
-                <div style={{ background: "rgba(13,31,24,.82)", backdropFilter: "blur(8px)", color: "#C9AA71", fontSize: "0.6rem", fontWeight: 800, letterSpacing: ".1em", textTransform: "uppercase", padding: "4px 11px", borderRadius: 20, display: "flex", alignItems: "center", gap: 5 }}>
-                  {paket.icon && <span>{paket.icon}</span>}<span>{paket.title}</span>
-                </div>
-              </div>
-
-              <div className="ls-price-pill">Mulai {fmt(paket.startFrom)} / {paket.satuan}</div>
-            </div>
+            <RsPaketVisual paket={paket} fmt={fmt} onWaOpen={onWaOpen} mobile />
 
             <RsInfoCard paket={paket} fmt={fmt} onWaOpen={onWaOpen} />
           </div>
@@ -12833,6 +12879,10 @@ function PembangunanKostPage({ onWaOpen, paketData }) {
         .ls-toggle-btn span:first-child { font-size:.65rem; }
 
         .ls-includes-box { margin-top:12px; border-top:2px dashed #bbf7d0; padding-top:14px; animation:lsDropIn .22s ease; }
+        .rs-slide-dots { display:flex; justify-content:center; gap:6px; padding:9px 0 0; }
+        .rs-slide-dot { width:7px; height:7px; border-radius:50%; border:none; background:#d8cdb8; padding:0; cursor:pointer; transition:background .2s, transform .2s; }
+        .rs-slide-dot.active { background:#8B6914; transform:scale(1.35); }
+        .rs-slide-dot:hover { background:#b9ab84; }
         .ls-includes-title { font-size:.6rem; font-weight:900; letter-spacing:.14em; text-transform:uppercase; color:#2d6a4f; margin:0 0 10px; }
         .ls-includes-grid { display:grid; grid-template-columns:1fr 1fr; gap:6px 12px; }
         .ls-include-item { display:flex; align-items:flex-start; gap:7px; }
@@ -12886,24 +12936,7 @@ function PembangunanKostPage({ onWaOpen, paketData }) {
             <div style={{ display: "grid", gridTemplateColumns: `repeat(${row.cols}, 1fr)`, gap: 8, alignItems: "stretch", marginBottom: 8 }}>
               {row.items.map((paket) => (
                 <div key={paket.id} className="ls-wrap">
-                  <div className="ls-img-box" style={{ height: h, position: "relative", overflow: "hidden" }}>
-                    <RsMiniSlide slides={paket.slides} slideDir={paket.slideDir} height={`${h}px`} />
-
-                    <div className="ls-cat-badge">
-                      <div style={{ background: "rgba(13,31,24,.78)", backdropFilter: "blur(8px)", color: "#C9AA71", fontSize: "0.62rem", fontWeight: 800, letterSpacing: ".1em", textTransform: "uppercase", padding: "5px 13px", borderRadius: 20, display: "flex", alignItems: "center", gap: 6 }}>
-                        {paket.icon && <span>{paket.icon}</span>}<span>{paket.title}</span>
-                      </div>
-                    </div>
-
-                    <div className="ls-price-pill">Mulai {fmt(paket.startFrom)} / {paket.satuan}</div>
-
-                    <div className="ls-mag-overlay-btn">
-                      <button onClick={() => onWaOpen && onWaOpen({ key: "layanan", vars: { judul_layanan: paket.title } })}
-                        style={{ background: "#C9AA71", color: "#1a2a1a", border: "none", borderRadius: 8, padding: "9px 18px", fontSize: "0.75rem", fontWeight: 800, cursor: "pointer", whiteSpace: "nowrap", boxShadow: "0 4px 14px rgba(0,0,0,.3)" }}>
-                        Tanya Harga & Detail
-                      </button>
-                    </div>
-                  </div>
+                  <RsPaketVisual paket={paket} fmt={fmt} onWaOpen={onWaOpen} height={h} />
 
                   <RsInfoCard paket={paket} fmt={fmt} onWaOpen={onWaOpen} />
                 </div>
@@ -12920,17 +12953,7 @@ function PembangunanKostPage({ onWaOpen, paketData }) {
         {paket_.map((paket, pi) => (
           <React.Fragment key={paket.id}>
           <div className="ls-mobile-item ls-wrap">
-            <div className="ls-img-box ls-mobile-slide" style={{ position: "relative", overflow: "hidden", height: 260 }}>
-              <RsMiniSlide slides={paket.slides} slideDir={paket.slideDir} height="260px" />
-
-              <div className="ls-cat-badge">
-                <div style={{ background: "rgba(13,31,24,.82)", backdropFilter: "blur(8px)", color: "#C9AA71", fontSize: "0.6rem", fontWeight: 800, letterSpacing: ".1em", textTransform: "uppercase", padding: "4px 11px", borderRadius: 20, display: "flex", alignItems: "center", gap: 5 }}>
-                  {paket.icon && <span>{paket.icon}</span>}<span>{paket.title}</span>
-                </div>
-              </div>
-
-              <div className="ls-price-pill">Mulai {fmt(paket.startFrom)} / {paket.satuan}</div>
-            </div>
+            <RsPaketVisual paket={paket} fmt={fmt} onWaOpen={onWaOpen} mobile />
 
             <RsInfoCard paket={paket} fmt={fmt} onWaOpen={onWaOpen} />
           </div>
@@ -13192,6 +13215,10 @@ function PembangunanCafePage({ onWaOpen, paketData }) {
         .ls-toggle-btn span:first-child { font-size:.65rem; }
 
         .ls-includes-box { margin-top:12px; border-top:2px dashed #bbf7d0; padding-top:14px; animation:lsDropIn .22s ease; }
+        .rs-slide-dots { display:flex; justify-content:center; gap:6px; padding:9px 0 0; }
+        .rs-slide-dot { width:7px; height:7px; border-radius:50%; border:none; background:#d8cdb8; padding:0; cursor:pointer; transition:background .2s, transform .2s; }
+        .rs-slide-dot.active { background:#8B6914; transform:scale(1.35); }
+        .rs-slide-dot:hover { background:#b9ab84; }
         .ls-includes-title { font-size:.6rem; font-weight:900; letter-spacing:.14em; text-transform:uppercase; color:#2d6a4f; margin:0 0 10px; }
         .ls-includes-grid { display:grid; grid-template-columns:1fr 1fr; gap:6px 12px; }
         .ls-include-item { display:flex; align-items:flex-start; gap:7px; }
@@ -13244,24 +13271,7 @@ function PembangunanCafePage({ onWaOpen, paketData }) {
             <div style={{ display: "grid", gridTemplateColumns: `repeat(${row.cols}, 1fr)`, gap: 8, alignItems: "stretch", marginBottom: 8 }}>
               {row.items.map((paket) => (
                 <div key={paket.id} className="ls-wrap">
-                  <div className="ls-img-box" style={{ height: h, position: "relative", overflow: "hidden" }}>
-                    <RsMiniSlide slides={paket.slides} slideDir={paket.slideDir} height={`${h}px`} />
-
-                    <div className="ls-cat-badge">
-                      <div style={{ background: "rgba(13,31,24,.78)", backdropFilter: "blur(8px)", color: "#C9AA71", fontSize: "0.62rem", fontWeight: 800, letterSpacing: ".1em", textTransform: "uppercase", padding: "5px 13px", borderRadius: 20, display: "flex", alignItems: "center", gap: 6 }}>
-                        {paket.icon && <span>{paket.icon}</span>}<span>{paket.title}</span>
-                      </div>
-                    </div>
-
-                    <div className="ls-price-pill">Mulai {fmt(paket.startFrom)} / {paket.satuan}</div>
-
-                    <div className="ls-mag-overlay-btn">
-                      <button onClick={() => onWaOpen && onWaOpen({ key: "layanan", vars: { judul_layanan: paket.title } })}
-                        style={{ background: "#C9AA71", color: "#1a2a1a", border: "none", borderRadius: 8, padding: "9px 18px", fontSize: "0.75rem", fontWeight: 800, cursor: "pointer", whiteSpace: "nowrap", boxShadow: "0 4px 14px rgba(0,0,0,.3)" }}>
-                        Tanya Harga & Detail
-                      </button>
-                    </div>
-                  </div>
+                  <RsPaketVisual paket={paket} fmt={fmt} onWaOpen={onWaOpen} height={h} />
 
                   <RsInfoCard paket={paket} fmt={fmt} onWaOpen={onWaOpen} />
                 </div>
@@ -13278,17 +13288,7 @@ function PembangunanCafePage({ onWaOpen, paketData }) {
         {paket_.map((paket, pi) => (
           <React.Fragment key={paket.id}>
           <div className="ls-mobile-item ls-wrap">
-            <div className="ls-img-box ls-mobile-slide" style={{ position: "relative", overflow: "hidden", height: 260 }}>
-              <RsMiniSlide slides={paket.slides} slideDir={paket.slideDir} height="260px" />
-
-              <div className="ls-cat-badge">
-                <div style={{ background: "rgba(13,31,24,.82)", backdropFilter: "blur(8px)", color: "#C9AA71", fontSize: "0.6rem", fontWeight: 800, letterSpacing: ".1em", textTransform: "uppercase", padding: "4px 11px", borderRadius: 20, display: "flex", alignItems: "center", gap: 5 }}>
-                  {paket.icon && <span>{paket.icon}</span>}<span>{paket.title}</span>
-                </div>
-              </div>
-
-              <div className="ls-price-pill">Mulai {fmt(paket.startFrom)} / {paket.satuan}</div>
-            </div>
+            <RsPaketVisual paket={paket} fmt={fmt} onWaOpen={onWaOpen} mobile />
 
             <RsInfoCard paket={paket} fmt={fmt} onWaOpen={onWaOpen} />
           </div>
@@ -13550,6 +13550,10 @@ function PembangunanRukoPage({ onWaOpen, paketData }) {
         .ls-toggle-btn span:first-child { font-size:.65rem; }
 
         .ls-includes-box { margin-top:12px; border-top:2px dashed #bbf7d0; padding-top:14px; animation:lsDropIn .22s ease; }
+        .rs-slide-dots { display:flex; justify-content:center; gap:6px; padding:9px 0 0; }
+        .rs-slide-dot { width:7px; height:7px; border-radius:50%; border:none; background:#d8cdb8; padding:0; cursor:pointer; transition:background .2s, transform .2s; }
+        .rs-slide-dot.active { background:#8B6914; transform:scale(1.35); }
+        .rs-slide-dot:hover { background:#b9ab84; }
         .ls-includes-title { font-size:.6rem; font-weight:900; letter-spacing:.14em; text-transform:uppercase; color:#2d6a4f; margin:0 0 10px; }
         .ls-includes-grid { display:grid; grid-template-columns:1fr 1fr; gap:6px 12px; }
         .ls-include-item { display:flex; align-items:flex-start; gap:7px; }
@@ -13602,24 +13606,7 @@ function PembangunanRukoPage({ onWaOpen, paketData }) {
             <div style={{ display: "grid", gridTemplateColumns: `repeat(${row.cols}, 1fr)`, gap: 8, alignItems: "stretch", marginBottom: 8 }}>
               {row.items.map((paket) => (
                 <div key={paket.id} className="ls-wrap">
-                  <div className="ls-img-box" style={{ height: h, position: "relative", overflow: "hidden" }}>
-                    <RsMiniSlide slides={paket.slides} slideDir={paket.slideDir} height={`${h}px`} />
-
-                    <div className="ls-cat-badge">
-                      <div style={{ background: "rgba(13,31,24,.78)", backdropFilter: "blur(8px)", color: "#C9AA71", fontSize: "0.62rem", fontWeight: 800, letterSpacing: ".1em", textTransform: "uppercase", padding: "5px 13px", borderRadius: 20, display: "flex", alignItems: "center", gap: 6 }}>
-                        {paket.icon && <span>{paket.icon}</span>}<span>{paket.title}</span>
-                      </div>
-                    </div>
-
-                    <div className="ls-price-pill">Mulai {fmt(paket.startFrom)} / {paket.satuan}</div>
-
-                    <div className="ls-mag-overlay-btn">
-                      <button onClick={() => onWaOpen && onWaOpen({ key: "layanan", vars: { judul_layanan: paket.title } })}
-                        style={{ background: "#C9AA71", color: "#1a2a1a", border: "none", borderRadius: 8, padding: "9px 18px", fontSize: "0.75rem", fontWeight: 800, cursor: "pointer", whiteSpace: "nowrap", boxShadow: "0 4px 14px rgba(0,0,0,.3)" }}>
-                        Tanya Harga & Detail
-                      </button>
-                    </div>
-                  </div>
+                  <RsPaketVisual paket={paket} fmt={fmt} onWaOpen={onWaOpen} height={h} />
 
                   <RsInfoCard paket={paket} fmt={fmt} onWaOpen={onWaOpen} />
                 </div>
@@ -13636,17 +13623,7 @@ function PembangunanRukoPage({ onWaOpen, paketData }) {
         {paket_.map((paket, pi) => (
           <React.Fragment key={paket.id}>
           <div className="ls-mobile-item ls-wrap">
-            <div className="ls-img-box ls-mobile-slide" style={{ position: "relative", overflow: "hidden", height: 260 }}>
-              <RsMiniSlide slides={paket.slides} slideDir={paket.slideDir} height="260px" />
-
-              <div className="ls-cat-badge">
-                <div style={{ background: "rgba(13,31,24,.82)", backdropFilter: "blur(8px)", color: "#C9AA71", fontSize: "0.6rem", fontWeight: 800, letterSpacing: ".1em", textTransform: "uppercase", padding: "4px 11px", borderRadius: 20, display: "flex", alignItems: "center", gap: 5 }}>
-                  {paket.icon && <span>{paket.icon}</span>}<span>{paket.title}</span>
-                </div>
-              </div>
-
-              <div className="ls-price-pill">Mulai {fmt(paket.startFrom)} / {paket.satuan}</div>
-            </div>
+            <RsPaketVisual paket={paket} fmt={fmt} onWaOpen={onWaOpen} mobile />
 
             <RsInfoCard paket={paket} fmt={fmt} onWaOpen={onWaOpen} />
           </div>
