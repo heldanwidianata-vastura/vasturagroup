@@ -107,7 +107,7 @@ function PostingSlideshowBreak({ images, tickerTexts }) {
   if (!images || images.length === 0) return null;
   const rowPhotos = [...images, ...images];
   const texts = (tickerTexts && tickerTexts.length) ? tickerTexts : [];
-  const tickerLine = texts.length ? texts.join("   ★   ") : "";
+  const tickerLine = texts.length ? texts.join("   -   ") : "";
   return (
     <div className="pss-wrap">
       <style>{`
@@ -12265,6 +12265,11 @@ const RS_PAKET_DATA = [
 /* ── Pola baris magazine grid: 1 | 3 | 2 (ulangi jika >6 paket) ── */
 const RS_MAG_LAYOUT = [1, 3, 2];
 
+/* Tinggi kotak foto besar (px): desktop per jumlah kolom baris, dan mobile 1 kolom.
+   Dipakai bersama oleh halaman Renovasi Rumah Subsidi, Kost, Cafe, dan Ruko. */
+const RS_IMG_HEIGHT_MAP = { 1: 620, 2: 520, 3: 440 };
+const RS_MOBILE_IMG_H = 340;
+
 /* ── Mini Slideshow dengan animasi arah berbeda per paket ──
    forwardRef supaya komponen luar (dots navigasi di bawah gambar) bisa
    memerintah pindah slide lewat ref.current.goTo(i), dan onIndexChange
@@ -12273,7 +12278,6 @@ const RsMiniSlide = React.forwardRef(function RsMiniSlide({ slides, slideDir = "
   const [idx, setIdx] = useState(0);
   const [prevIdx, setPrevIdx] = useState(null);
   const [animating, setAnimating] = useState(false);
-  const timerRef = useRef(null);
   const clearRef = useRef(null);
   const idxRef = useRef(0);
   const touchRef = useRef({ down: false, startX: 0, moved: false });
@@ -12294,11 +12298,6 @@ const RsMiniSlide = React.forwardRef(function RsMiniSlide({ slides, slideDir = "
     clearRef.current = setTimeout(() => { setAnimating(false); setPrevIdx(null); }, 400);
   }, [slides.length]);
 
-  const startTimer = useCallback(() => {
-    clearInterval(timerRef.current);
-    timerRef.current = setInterval(() => advance(1), 3000);
-  }, [advance]);
-
   const goTo = useCallback((i) => {
     const current = idxRef.current;
     if (i === current || i < 0 || i >= slides.length) return;
@@ -12308,13 +12307,13 @@ const RsMiniSlide = React.forwardRef(function RsMiniSlide({ slides, slideDir = "
     setAnimating(true);
     clearTimeout(clearRef.current);
     clearRef.current = setTimeout(() => { setAnimating(false); setPrevIdx(null); }, 400);
-    startTimer();
-  }, [slides.length, startTimer]);
+  }, [slides.length]);
 
   useImperativeHandle(ref, () => ({ goTo }), [goTo]);
   useEffect(() => { onIndexChange && onIndexChange(idx); }, [idx, onIndexChange]);
 
-  useEffect(() => { startTimer(); return () => { clearInterval(timerRef.current); clearTimeout(clearRef.current); }; }, [startTimer]);
+  /* AUTO-SLIDE DIMATIKAN: foto hanya berganti lewat klik thumbnail, tap, atau swipe. */
+  useEffect(() => () => clearTimeout(clearRef.current), []);
 
   /* MOBILE: tap gambar = foto berikutnya, geser jari = swipe sesuai arah
      (sebelumnya slideshow ini murni otomatis, tidak ada kontrol manual sama sekali) */
@@ -12331,8 +12330,8 @@ const RsMiniSlide = React.forwardRef(function RsMiniSlide({ slides, slideDir = "
     const dx = e.changedTouches[0].clientX - touchRef.current.startX;
     const wasTap = !touchRef.current.moved;
     touchRef.current.down = false;
-    if (Math.abs(dx) > 40) { advance(dx < 0 ? 1 : -1); startTimer(); }
-    else if (wasTap) { advance(1); startTimer(); }
+    if (Math.abs(dx) > 40) advance(dx < 0 ? 1 : -1);
+    else if (wasTap) advance(1);
   };
 
   const dirIn = { right: "rsSlideInRight", up: "rsSlideInUp", left: "rsSlideInLeft", down: "rsSlideInDown" };
@@ -12369,7 +12368,7 @@ const RsMiniSlide = React.forwardRef(function RsMiniSlide({ slides, slideDir = "
 /* ── RsSlideThumbs: strip MINI THUMBNAIL seluruh foto slideshow, diletakkan di BAWAH
    kotak gambar (bukan menimpa gambar) — klik thumbnail untuk lompat langsung ke foto
    tersebut di RsMiniSlide. Thumbnail aktif ditandai border emas & otomatis digulir ke
-   tengah strip saat slideshow berganti sendiri (tanpa menggeser scroll halaman). ── */
+   tengah strip saat foto berganti lewat klik/tap/swipe (tanpa menggeser scroll halaman). ── */
 const RS_THUMB_CSS = `
         .rs-thumbs { position:relative; overflow-x:auto; overflow-y:hidden; padding:10px 6px 8px; scrollbar-width:thin; scrollbar-color:#d8cdb8 transparent; -webkit-overflow-scrolling:touch; }
         .rs-thumbs-inner { display:flex; gap:6px; width:max-content; margin:0 auto; }
@@ -12427,9 +12426,9 @@ function RsPaketVisual({ paket, fmt, onWaOpen, height, mobile }) {
   return (
     <>
       <div className={mobile ? "ls-img-box ls-mobile-slide" : "ls-img-box"}
-        style={mobile ? { position: "relative", overflow: "hidden", height: 260 } : { height, position: "relative", overflow: "hidden" }}>
+        style={mobile ? { position: "relative", overflow: "hidden", height: RS_MOBILE_IMG_H } : { height, position: "relative", overflow: "hidden" }}>
         <RsMiniSlide ref={slideRef} slides={paket.slides} slideDir={paket.slideDir}
-          height={mobile ? "260px" : `${height}px`} onIndexChange={setActiveIdx} />
+          height={mobile ? `${RS_MOBILE_IMG_H}px` : `${height}px`} onIndexChange={setActiveIdx} />
 
         <div className="ls-cat-badge">
           <div style={{ background: "rgba(13,31,24,.78)", backdropFilter: "blur(8px)", color: "#C9AA71", fontSize: mobile ? "0.6rem" : "0.62rem", fontWeight: 800, letterSpacing: ".1em", textTransform: "uppercase", padding: mobile ? "4px 11px" : "5px 13px", borderRadius: 20, display: "flex", alignItems: "center", gap: mobile ? 5 : 6 }}>
@@ -12514,14 +12513,13 @@ function RumahSubsidiPage({ onWaOpen, paketData }) {
     pos += cols;
     layoutIdx++;
   }
-  const heightMap = { 1: 480, 2: 400, 3: 340 };
+  const heightMap = RS_IMG_HEIGHT_MAP;
 
   /* Pool foto untuk selingan slideshow antar baris paket — diacak dari galeri semua paket renovasi rumah subsidi */
   const rsImagePool = useMemo(() => shuffleArray(paket_.flatMap(p => (p.slides || []).map(s => s.img))), [paket_]);
   const rsTickerTexts = useMemo(() => shuffleArray([
     "KONSULTASI GRATIS RENOVASI RUMAH SUBSIDI",
     "VASTURA GROUP — TIM RENOVASI BERPENGALAMAN",
-    "GARANSI PENGERJAAN HINGGA 30 HARI",
     "WUJUDKAN RUMAH SUBSIDI IMPIAN BERSAMA VASTURA GROUP",
     "HUBUNGI KAMI VIA WHATSAPP UNTUK SURVEI GRATIS",
   ]), []);
@@ -12584,7 +12582,7 @@ function RumahSubsidiPage({ onWaOpen, paketData }) {
           .ls-desktop-grid { display:none !important; }
           .ls-mobile-list { display:flex !important; flex-direction:column; gap:8px; padding:8px 0 0; }
           .ls-mobile-item { width:100%; }
-          .ls-mobile-slide { height:260px !important; }
+          .ls-mobile-slide { height:${RS_MOBILE_IMG_H}px !important; }
           .ls-includes-grid { grid-template-columns:1fr; }
           .ls-cta-row { flex-direction:column; align-items:stretch; }
           .ls-cta-btn { text-align:center; }
@@ -12852,7 +12850,7 @@ function PembangunanKostPage({ onWaOpen, paketData }) {
     pos += cols;
     layoutIdx++;
   }
-  const heightMap = { 1: 480, 2: 400, 3: 340 };
+  const heightMap = RS_IMG_HEIGHT_MAP;
 
   /* Pool foto untuk selingan slideshow antar baris paket — diacak dari galeri semua paket pembangunan kost */
   const kostImagePool = useMemo(() => shuffleArray(paket_.flatMap(p => (p.slides || []).map(s => s.img))), [paket_]);
@@ -12923,7 +12921,7 @@ function PembangunanKostPage({ onWaOpen, paketData }) {
           .ls-desktop-grid { display:none !important; }
           .ls-mobile-list { display:flex !important; flex-direction:column; gap:8px; padding:8px 0 0; }
           .ls-mobile-item { width:100%; }
-          .ls-mobile-slide { height:260px !important; }
+          .ls-mobile-slide { height:${RS_MOBILE_IMG_H}px !important; }
           .ls-includes-grid { grid-template-columns:1fr; }
           .ls-cta-row { flex-direction:column; align-items:stretch; }
           .ls-cta-btn { text-align:center; }
@@ -13187,7 +13185,7 @@ function PembangunanCafePage({ onWaOpen, paketData }) {
     pos += cols;
     layoutIdx++;
   }
-  const heightMap = { 1: 480, 2: 400, 3: 340 };
+  const heightMap = RS_IMG_HEIGHT_MAP;
 
   /* Pool foto untuk selingan slideshow antar baris paket — diacak dari galeri semua paket pembangunan cafe */
   const cafeImagePool = useMemo(() => shuffleArray(paket_.flatMap(p => (p.slides || []).map(s => s.img))), [paket_]);
@@ -13256,7 +13254,7 @@ function PembangunanCafePage({ onWaOpen, paketData }) {
           .ls-desktop-grid { display:none !important; }
           .ls-mobile-list { display:flex !important; flex-direction:column; gap:8px; padding:8px 0 0; }
           .ls-mobile-item { width:100%; }
-          .ls-mobile-slide { height:260px !important; }
+          .ls-mobile-slide { height:${RS_MOBILE_IMG_H}px !important; }
           .ls-includes-grid { grid-template-columns:1fr; }
           .ls-cta-row { flex-direction:column; align-items:stretch; }
           .ls-cta-btn { text-align:center; }
@@ -13519,7 +13517,7 @@ function PembangunanRukoPage({ onWaOpen, paketData }) {
     pos += cols;
     layoutIdx++;
   }
-  const heightMap = { 1: 480, 2: 400, 3: 340 };
+  const heightMap = RS_IMG_HEIGHT_MAP;
 
   /* Pool foto untuk selingan slideshow antar baris paket — diacak dari galeri semua paket pembangunan ruko */
   const rukoImagePool = useMemo(() => shuffleArray(paket_.flatMap(p => (p.slides || []).map(s => s.img))), [paket_]);
@@ -13588,7 +13586,7 @@ function PembangunanRukoPage({ onWaOpen, paketData }) {
           .ls-desktop-grid { display:none !important; }
           .ls-mobile-list { display:flex !important; flex-direction:column; gap:8px; padding:8px 0 0; }
           .ls-mobile-item { width:100%; }
-          .ls-mobile-slide { height:260px !important; }
+          .ls-mobile-slide { height:${RS_MOBILE_IMG_H}px !important; }
           .ls-includes-grid { grid-template-columns:1fr; }
           .ls-cta-row { flex-direction:column; align-items:stretch; }
           .ls-cta-btn { text-align:center; }
